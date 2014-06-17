@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>myData</title>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/config.js"></script>
+	<script src="js/stm.js"></script>
+	<script src="js/retina.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/html2canvas.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/stmbrowse.css">
+	<script>
+stm.init({ url: stm.Config.mgrast_api }, 1, "MG-RAST");
+Retina.init( { library_resource: "js/" } ).then( function() {
+    Retina.add_widget({"name": "session", "resource": "widgets/",  "filename": "widget.session.js"});
+    Retina.load_widget("session").then( function() {
+	Retina.Widget.create('session', {"target": document.getElementById("session_space")});
+    });
+    jQuery.get('data/sessionExample.dump', function(data) {
+	var new_data = JSON.parse(data.replace(/\n/g, ""));
+	for (var h in new_data) {
+	    if (new_data.hasOwnProperty(h)) {
+		stm.load_data({ data: new_data[h], type: h});
+	    }
+	}
+    }, 'text');
+    Retina.add_widget({"name": "mydata", "resource": "widgets/",  "filename": "widget.mydata.js"});
+    Retina.load_widget("mydata").then( function() {
+	Retina.Widget.create('mydata', {"target": document.getElementById("content")});
+    });
+});
+	</script>
+  </head>
+
+  <body style="margin-top: 60px;" id="hans">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+	<div class="container" style="width: 100%; padding-left: 10px;">
+          <img src="images/MGRAST_logo.png" style="float: left; background: black; margin-left: -10px; height: 55px;">
+    	  <a class="brand" href="#" style="color: white; cursor: default; margin-top: 8px; margin-left: 30px;">myData</a>
+          <span id="session_space" style="float: right; margin-right: 20px;"></span>
+	  <span id="login_space"></span>
+	</div>
+      </div>
+    </div>
+    <div id="content" style="padding-bottom: 100px; padding-left: 10px; padding-right: 10px;"></div>
+  </body>
+  
+</html>
