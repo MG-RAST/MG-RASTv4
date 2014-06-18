@@ -10,9 +10,9 @@
     
     // load all required widgets and renderers
     widget.setup = function () {
-	return [ Retina.add_widget({"name": "mgbrowse", "resource": "./widgets/",  "filename": "widget.mgbrowse.js"}),
+	return [ Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"}),
 		 Retina.load_widget("mgbrowse"),
-		 Retina.add_widget({"name": "RendererController", "resource": "./widgets/",  "filename": "widget.RendererController.js"}),
+		 Retina.add_widget({"name": "RendererController", "resource": "Retina/widgets/",  "filename": "widget.RendererController.js"}),
 		 Retina.load_widget("RendererController")
 	       ];
     };
@@ -79,10 +79,10 @@
 </div>\
 <hr>\
 <div style="display: none;">\
-  <button class="btn btn-mini pull-right" style="padding: 0 2px;" onclick="this.parentNode.style.display=\'none\';this.parentNode.nextSibling.style.display=\'\';"><img src="images/expand.png" style="width: 16px;"></button><h4>load data</h4>\
+  <button class="btn btn-mini pull-right" style="padding: 0 2px;" onclick="this.parentNode.style.display=\'none\';this.parentNode.nextSibling.style.display=\'\';"><img src="Retina/images/expand.png" style="width: 16px;"></button><h4>load data</h4>\
 </div>\
 <div>\
-  <button class="btn btn-mini pull-right" style="padding: 0 2px;" onclick="this.parentNode.style.display=\'none\';this.parentNode.previousSibling.style.display=\'\';"><img src="images/contract.png" style="width: 16px;"></button><h4>load data</h4>\
+  <button class="btn btn-mini pull-right" style="padding: 0 2px;" onclick="this.parentNode.style.display=\'none\';this.parentNode.previousSibling.style.display=\'\';"><img src="Retina/images/contract.png" style="width: 16px;"></button><h4>load data</h4>\
   <div class="form-inline" style="margin-bottom: 10px;">\
     <b>name</b><input type="text" placeholder="pick a name" style="margin-left: 10px; margin-right: 10px; width: 185px;" id="dataContainerName"><b>source</b> <select style="margin-left: 10px; margin-right: 10px;" id="profile_source"><optgroup label="protein databases"><option>M5NR</option><option>RefSeq</option><option>GenBank</option><option>IMG</option><option>SEED</option><option>TrEMBL</option><option>SwissProt</option><option>PATRIC</option><option>KEGG</option></optgroup><optgroup label="RNA databases"><option>M5RNA</option><option>RDP</option><option>Greengenes</option><option>LSU</option><option>SSU</option></optgroup><optgroup label="ontology databases"><option>Subsystems</option><option>NOG</option><option>COG</option><option>KO</option></optgroup></select> <b>type</b> <select id="profile_type" style="margin-left: 10px;"><option>organism</option><option>function</option><option>feature</option></select>\
   </div>\
@@ -116,7 +116,7 @@
 
 	var container = document.getElementById('data_containers');
 
-	var html = "<img src='images/data.png' class='tool' style='float: left; margin-bottom: 20px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].dataLoader();'>";
+	var html = "<img src='Retina/images/data.png' class='tool' style='float: left; margin-bottom: 20px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].dataLoader();'>";
 
 	if (widget.selectedContainer) {
 	    html += widget.displaySelectedContainer();
@@ -131,7 +131,7 @@
 
 	var container = document.getElementById('manipulation');
 
-	container.innerHTML = "<img src='images/filter.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].manipulate(\"filter\");'><img src='images/shuffle.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].manipulate(\"transform\");'><img src='images/tree_ltr.png' class='tool' style='width: 32px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].manipulate(\"merge\");'>";
+	container.innerHTML = "<img src='Retina/images/filter.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].manipulate(\"filter\");'><img src='Retina/images/shuffle.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].manipulate(\"transform\");'><img src='Retina/images/tree_ltr.png' class='tool' style='width: 32px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].manipulate(\"merge\");'>";
     };
 
     widget.manipulate = function (type) {
@@ -277,7 +277,7 @@
 
 	var container = document.getElementById('visualize');
 
-	container.innerHTML = "<img src='images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");'><img src='images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");'><img src='images/stats.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"linechart\");'><img src='images/bars2.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");'><img src='images/areachart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"areachart\");'><img src='images/icon_pcoa.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"dotplot\");'><img src='images/icon_boxplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"boxplot\");'><img src='images/icon_deviationplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"deviationplot\");'><img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");'><img src='images/spinner.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donut\");'>";
+	container.innerHTML = "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");'><img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");'><img src='Retina/images/stats.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"linechart\");'><img src='Retina/images/bars2.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");'><img src='Retina/images/areachart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"areachart\");'><img src='images/icon_pcoa.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"dotplot\");'><img src='images/icon_boxplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"boxplot\");'><img src='images/icon_deviationplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"deviationplot\");'><img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");'><img src='Retina/images/spinner.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donut\");'>";
     };
 
     // draw a demo version of the selected visualization
@@ -571,7 +571,7 @@
 	div.setAttribute('id', id);
 	div.setAttribute('class', 'prog');
 	div.setAttribute('style', 'clear: both;');
-	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: 100%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
+	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: 100%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
 	progressContainer.appendChild(div);
     };
 

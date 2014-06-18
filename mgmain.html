@@ -8,14 +8,16 @@
     <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
 
     <!-- default js -->
-    <script src="js/jquery.min.js"></script>
+    <script src="Retina/js/jquery.min.js"></script>
+    <script src="Retina/js/stm.js"></script>
+    <script src="Retina/js/retina.js"></script>
+    <script src="Retina/js/bootstrap.min.js"></script>
+
+    <!-- config  -->
     <script src="js/config.js"></script>
-    <script src="js/stm.js"></script>
-    <script src="js/retina.js"></script>
-    <script src="js/bootstrap.min.js"></script>
 
     <!-- bootstrap style -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
 
     <!-- webapp initialization -->
     <script>
@@ -25,7 +27,7 @@
 	} else {
 	    stm.init(stm.Config.mgrast_api, true, "MG-RAST");
 	}
-	Retina.init( { library_resource: "js/" } ).then( function() {
+	Retina.init( { library_resource: "Retina/js/" } ).then( function() {
 	    
 	    var page  = Retina.cgiParam("mgpage");
 
@@ -41,7 +43,7 @@
 		var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
 								     "sidebar": document.getElementById("sidebar") });
 
-		Retina.add_widget({"name": "login", "resource": "widgets/",  "filename": "widget.login.js"});
+		Retina.add_widget({"name": "login", "resource": "Retina/widgets/",  "filename": "widget.login.js"});
 		Retina.load_widget("login").then( function() {
 		    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
 		    				    "callback": mgp.loginAction,
@@ -50,7 +52,7 @@
 		    								    "prefix": "mggo4711" } } });
 		});
 
-		Retina.add_widget({"name": "session", "resource": "widgets/",  "filename": "widget.session.js"});
+		Retina.add_widget({"name": "session", "resource": "Retina/widgets/",  "filename": "widget.session.js"});
 		Retina.load_widget("session").then( function() {
 		    Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
 		});
@@ -154,10 +156,10 @@
 	  
 	  <!-- navigation icons -->
 	  <div class="icorow">
-	    <div class="icospan" id="icon_search"><img src="images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
-	    <div class="icospan" id="icon_pipeline"><img src="images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Status Monitor</span></div>
-	    <div class="icospan" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="images/dna.png" class="ico" title="Publications"><span>Publications</span></div>
-	    <div class="icospan" id="icon_analysis"><img src="images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
+	    <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
+	    <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Status Monitor</span></div>
+	    <div class="icospan" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="Retina/images/dna.png" class="ico" title="Publications"><span>Publications</span></div>
+	    <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
 	  </div>
 	  
 	  <!-- user info / login section -->

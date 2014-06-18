@@ -10,9 +10,9 @@
     
     widget.setup = function () {
 	return [ 
- 	    Retina.add_renderer({"name": "table", "resource": "./renderers/",  "filename": "renderer.table.js" }),
+ 	    Retina.add_renderer({"name": "table", "resource": "Retina//renderers/",  "filename": "renderer.table.js" }),
   	    Retina.load_renderer("table"),
- 	    Retina.add_renderer({"name": "listselect", "resource": "./renderers/",  "filename": "renderer.listselect.js" }),
+ 	    Retina.add_renderer({"name": "listselect", "resource": "Retina//renderers/",  "filename": "renderer.listselect.js" }),
   	    Retina.load_renderer("listselect")
 	];
     };
@@ -43,7 +43,7 @@
 		    callback: widget.callback || null,
 		    asynch_limit: 100,
 		    synchronous: false,
-		    navigation_url: stm.Config.mgrast_api+'/metagenome?match=all&verbosity=mixs',
+		    navigation_url: RetinaConfig.mgrast_api+'/metagenome?match=all&verbosity=mixs',
 		    data: [],
 		    filter: result_columns,
 		    multiple: (widget.multiple === false) ? false : true,
@@ -67,7 +67,7 @@
 		    sort_autodetect: false,
 		    synchronous: false,
 		    invisible_columns: {0:1,2:1,6:1,7:1,8:1,11:1,12:1,15:1,16:1,17:1},
-		    navigation_url: stm.Config.mgrast_api+'/metagenome?match=all&verbosity=mixs',
+		    navigation_url: RetinaConfig.mgrast_api+'/metagenome?match=all&verbosity=mixs',
 		    data: { data: [], header: result_columns }
 		});
 	    }
