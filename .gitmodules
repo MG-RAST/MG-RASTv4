@@ -1,0 +1,3 @@
+[submodule "Retina"]
+	path = Retina
+	url = git@github.com:MG-RAST/Retina.git
