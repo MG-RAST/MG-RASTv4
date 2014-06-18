@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <!-- title and icon -->
+    <title>MG-RAST</title>
+    <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
+
+    <!-- default js -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/stm.js"></script>
+    <script src="js/retina.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+    <!-- webapp initialization -->
+    <script>
+    jQuery( document ).ready(function(){
+	if (window.opener && window.opener.stm) {
+	    window.stm = window.opener.stm;
+	} else {
+	    stm.init(stm.Config.mgrast_api, true, "MG-RAST");
+	}
+	Retina.init( { library_resource: "js/" } ).then( function() {
+	    
+	    var page  = Retina.cgiParam("mgpage");
+
+	    var icons = { "overview": "publications" };
+	    var iconame = icons[page] ? icons[page] : page;
+
+	    var ico = document.getElementById('icon_'+iconame);
+	    ico.className = "icospan icoactivespan";
+	    ico.firstChild.className = "ico icoactive";
+
+	    Retina.add_widget({"name": "metagenome_"+page, "resource": "widgets/",  "filename": "widget.metagenome_"+page+".js"});
+	    Retina.load_widget("metagenome_"+page).then( function() {
+		var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
+								     "sidebar": document.getElementById("sidebar") });
+
+		Retina.add_widget({"name": "login", "resource": "widgets/",  "filename": "widget.login.js"});
+		Retina.load_widget("login").then( function() {
+		    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    				    "callback": mgp.loginAction,
+		    				    "authResources": { "default": "MG-RAST",
+		    						       "MG-RAST": { "icon": "MGRAST_favicon.ico",
+		    								    "prefix": "mggo4711" } } });
+		});
+
+		Retina.add_widget({"name": "session", "resource": "widgets/",  "filename": "widget.session.js"});
+		Retina.load_widget("session").then( function() {
+		    Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
+		});
+		
+	    });
+	});
+    });
+    </script>
+
+    <style>
+	.ico {
+	padding: 10px;
+	border-radius: 10px;
+	background-image: linear-gradient(to bottom, #CCCCCC, #AAAAAA);
+	margin-bottom: 5px;
+	opacity: 0.5;
+	cursor: pointer;
+	width: 32px;
+	}
+
+	.ico:hover {
+	opacity: 1;
+	}
+	
+	.icorow {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5px;
+	width: 500px;
+	}
+
+	.icorow > div {
+	float: left;
+	}
+	
+	.icospan {
+	text-align: center;
+	color: #666;
+	}
+
+	.icospan > span {
+	margin-left: 5px;
+	color: white;
+	display: none;
+	font-size: 20px;
+	font-weight: 200;
+	}
+	
+	.icoactive {
+	opacity: 1;
+	cursor: default;
+	}
+
+	.icoactivespan > span {
+	display: inline;
+	}
+
+	.sidebar {
+	float: right;
+	position: absolute;
+	top: 100px;
+	bottom: 40px;
+	right: 40px;
+	box-shadow: 4px 4px 4px #666666;
+	padding: 0;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	overflow-y: auto;
+	}
+
+	.tab-pane {
+	padding-left: 10px;
+	padding-right: 10px;
+	}
+
+	.borderlayout {
+	bottom: 40px;
+	left: 40px;
+	overflow-y: auto;
+	position: absolute;
+	right: 460px;
+	top: 70px;
+        overflow-x: auto;
+	}
+
+	#content {
+	margin-top: 10px;
+	}
+    </style>
+  </head>
+
+  <body style="margin-top: 60px; margin-bottom: 100px;">
+
+    <!-- header bar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" style="box-shadow: 0 3px 3px #BBBBBB;">
+      <div class="navbar-inner">
+	<div class="container" style="width: 100%;">
+
+	  <!-- logo and title -->
+          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px;">
+	  
+	  <!-- navigation icons -->
+	  <div class="icorow">
+	    <div class="icospan" id="icon_search"><img src="images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
+	    <div class="icospan" id="icon_pipeline"><img src="images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Status Monitor</span></div>
+	    <div class="icospan" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="images/dna.png" class="ico" title="Publications"><span>Publications</span></div>
+	    <div class="icospan" id="icon_analysis"><img src="images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
+	  </div>
+	  
+	  <!-- user info / login section -->
+	  <span id="login_space"></span>
+
+	  <!-- session management -->
+	  <span id="session_space" style="float: right; margin-right: 10px;"></span>
+	</div>
+      </div>
+    </div>
+
+    <!--border layout -->
+    <div class="borderlayout">
+      
+      <!-- main content -->
+      <div id="content"></div>
+      
+    </div>
+    
+      <!-- sidebar content -->
+      <div id="sidebar" class="sidebar span5"></div>
+      
+  </body>
+</html>
