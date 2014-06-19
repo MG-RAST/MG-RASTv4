@@ -9,15 +9,15 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "listselect", "resource": "./renderers/",  "filename": "renderer.listselect.js" }),
+	return [ Retina.add_renderer({"name": "listselect", "resource": "Retina/renderers/",  "filename": "renderer.listselect.js" }),
                  Retina.load_renderer("listselect"),
-	         Retina.add_renderer({"name": "paragraph", "resource": "./renderers/",  "filename": "renderer.paragraph.js" }),
+	         Retina.add_renderer({"name": "paragraph", "resource": "Retina/renderers/",  "filename": "renderer.paragraph.js" }),
 		 Retina.load_renderer("paragraph"),
-		 Retina.add_renderer({"name": "graph", "resource": "./renderers/",  "filename": "renderer.graph.js" }),
+		 Retina.add_renderer({"name": "graph", "resource": "Retina/renderers/",  "filename": "renderer.graph.js" }),
 		 Retina.load_renderer("graph"),
-		 Retina.add_renderer({"name": "plot", "resource": "./renderers/",  "filename": "renderer.plot.js" }),
+		 Retina.add_renderer({"name": "plot", "resource": "Retina/renderers/",  "filename": "renderer.plot.js" }),
  		 Retina.load_renderer("plot"),
- 		 Retina.add_renderer({"name": "table", "resource": "./renderers/",  "filename": "renderer.table.js" }),
+ 		 Retina.add_renderer({"name": "table", "resource": "Retina/renderers/",  "filename": "renderer.table.js" }),
   		 Retina.load_renderer("table"),
 		 Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"}),
 		 Retina.load_widget("mgbrowse")
@@ -39,7 +39,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
     <h3>Metagenome Selector</h3>\
   </div>\
-  <div class="modal-body" style="padding-left: 20px;"><div id="mg_modal_body"><div style="margin-left: auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px; width: 50px;"><img style="" src="./images/waiting.gif"></div></div></div>\
+  <div class="modal-body" style="padding-left: 20px;"><div id="mg_modal_body"><div style="margin-left: auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div></div></div>\
   <div class="modal-footer">\
     <button class="btn btn-danger pull-left" data-dismiss="modal" aria-hidden="true">Cancel</button>\
   </div>\
@@ -56,7 +56,7 @@
         if (wparams.id) {
 	    jQuery('#mg_modal').modal('hide');
 	    
-	    wparams.target.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="./images/waiting.gif"></div>';
+	    wparams.target.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
 
 	    // check if required data is loaded (use stats)
 	    if (! ( stm.DataStore.hasOwnProperty('metagenome') &&

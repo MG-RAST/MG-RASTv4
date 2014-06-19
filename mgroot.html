@@ -8,14 +8,14 @@
     <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
 
     <!-- default js -->
-    <script src="js/jquery.min.js"></script>
+    <script src="Retina/js/jquery.min.js"></script>
     <script src="js/config.js"></script>
-    <script src="js/stm.js"></script>
-    <script src="js/retina.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="Retina/js/stm.js"></script>
+    <script src="Retina/js/retina.js"></script>
+    <script src="Retina/js/bootstrap.min.js"></script>
 
     <!-- bootstrap style -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
 
     <!-- webapp initialization -->
     <script>
@@ -29,8 +29,8 @@
 	});
 
 	stm.init(stm.Config.mgrast_api, true, "MG-RAST");
-	Retina.init( { library_resource: "js/" } ).then( function() {
-	    Retina.add_widget({"name": "login", "resource": "widgets/",  "filename": "widget.login.js"});
+	Retina.init( { library_resource: "Retina/js/" } ).then( function() {
+	    Retina.add_widget({"name": "login", "resource": "Retina/widgets/",  "filename": "widget.login.js"});
 	    Retina.load_widget("login").then( function() {
 		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
 	    					"authResources": { "default": "MG-RAST",
@@ -38,7 +38,7 @@
 	    									"prefix": "mggo4711" } } });
 	    });
 	    
-	    Retina.add_widget({"name": "session", "resource": "widgets/",  "filename": "widget.session.js"});
+	    Retina.add_widget({"name": "session", "resource": "Retina/widgets/",  "filename": "widget.session.js"});
 	    Retina.load_widget("session").then( function() {
 		Retina.Widget.create('session', {"target": document.getElementById('session_space')});
 	    });
@@ -235,15 +235,15 @@
 
 	<!-- navigation icons -->
 	<div class="icorow">
-	  <div class="icospan" id="icon_search"><img src="images/search.png" class="ico" title="Search" onclick="window.open('mgmain.html?mgpage=search');"><br><span>Search</span></div>
-	  <div class="icospan" id="icon_pipeline"><img src="images/settings3.png" class="ico" title="Jobs" onclick="window.open('mgmain.html?mgpage=pipeline');"><br><span>Submission</span></div>
-	  <div class="icospan" id="icon_publications"><img src="images/dna.png" class="ico" title="Publications" onclick="window.open('mgmain.html?mgpage=overview');"><br><span>Publications</span></div>
-	  <div class="icospan" id="icon_analysis"><img src="images/notebook.png" class="ico" title="Analysis" onclick="window.open('mgmain.html?mgpage=analysis');"><br><span>Analysis</span></div>
+	  <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.open('mgmain.html?mgpage=search');"><br><span>Search</span></div>
+	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.open('mgmain.html?mgpage=pipeline');"><br><span>Submission</span></div>
+	  <div class="icospan" id="icon_publications"><img src="Retina/images/dna.png" class="ico" title="Publications" onclick="window.open('mgmain.html?mgpage=overview');"><br><span>Publications</span></div>
+	  <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.open('mgmain.html?mgpage=analysis');"><br><span>Analysis</span></div>
 
-	  <div class="icospan" id="icon_search"><img src="images/file-pdf.png" class="ico" title="Handbook"><br><span>Handbook</span></div>
-	  <div class="icospan" id="icon_pipeline"><img src="images/wizard.png" class="ico" title="Tutorials"><br><span>Tutorials</span></div>
-	  <div class="icospan" id="icon_publications"><img src="images/bubbles.png" class="ico" title="Forum"><br><span>Forum</span></div>
-	  <div class="icospan" id="icon_analysis"><img src="images/envelop.png" class="ico" title="Feedback"><br><span>Feedback</span></div>
+	  <div class="icospan" id="icon_search"><img src="Retina/images/file-pdf.png" class="ico" title="Handbook"><br><span>Handbook</span></div>
+	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/wizard.png" class="ico" title="Tutorials"><br><span>Tutorials</span></div>
+	  <div class="icospan" id="icon_publications"><img src="Retina/images/bubbles.png" class="ico" title="Forum"><br><span>Forum</span></div>
+	  <div class="icospan" id="icon_analysis"><img src="Retina/images/envelop.png" class="ico" title="Feedback"><br><span>Feedback</span></div>
 	</div>
       
 	<!-- news -->
@@ -262,19 +262,19 @@
 	  <p class="newsheadline rotate">Recent</p>
 	  <div class="recent">
 	    <p><strong>Analysis</strong></p>
-	    <img src="images/notebook.png" class="ico ico-small" title="Analysis">
+	    <img src="Retina/images/notebook.png" class="ico ico-small" title="Analysis">
 	    <br>
 	    my analysis abcd
 	  </div>
 	  <div class="recent">
 	    <p><strong>Metagenome</strong></p>
-	    <img src="images/dna.png" class="ico ico-small" title="Publication">		
+	    <img src="Retina/images/dna.png" class="ico ico-small" title="Publication">		
 	    <br>
 	    Metagenome 1234
 	  </div>
 	  <div class="recent">
 	    <p><strong>Download</strong></p>
-	    <img src="images/settings3.png" class="ico ico-small" title="Jobs">
+	    <img src="Retina/images/settings3.png" class="ico ico-small" title="Jobs">
 	    <br>
 	    Metagenome 1234
 	  </div>

@@ -9,7 +9,7 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "table", "resource": "./renderers/",  "filename": "renderer.table.js" }),
+	return [ Retina.add_renderer({"name": "table", "resource": "Retina/renderers/",  "filename": "renderer.table.js" }),
   		 Retina.load_renderer("table") ];
     };
     
@@ -97,7 +97,7 @@
   }\
 </style>\
 <h3 style="margin-left: 10px;">\
-  <img style="height: 20px; position: relative; bottom: 2px; margin-right: 10px;" src="images/search.png">\
+  <img style="height: 20px; position: relative; bottom: 2px; margin-right: 10px;" src="Retina/images/search.png">\
   Advanced Search\
 </h3>\
 <div id="advanced_div" style="margin-left: 10px; margin-right: 10px;">\
@@ -262,8 +262,8 @@
                     style_d = "border: 1px solid #0088CC; border-radius: 7px; padding: 2px 1px 1px;";
 		}
             }
-            html += "<th style='min-width: "+widths[i]+"px;'>"+fnames[i]+"&nbsp;<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"images/up-arrow.gif\" style=\"cursor: pointer;"+style_a+"\" />"+
-                "<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"images/down-arrow.gif\" style=\"cursor: pointer;"+style_d+"\" />";
+            html += "<th style='min-width: "+widths[i]+"px;'>"+fnames[i]+"&nbsp;<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;"+style_a+"\" />"+
+                "<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;"+style_d+"\" />";
 	    
             html += "</th>";
 	}

@@ -9,7 +9,7 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "table", "resource": "./renderers/",  "filename": "renderer.table.js" }),
+	return [ Retina.add_renderer({"name": "table", "resource": "Retina/renderers/",  "filename": "renderer.table.js" }),
   		 Retina.load_renderer("table") ];
     };
     
@@ -27,7 +27,7 @@
 
 	// check if we have a user
 	if (widget.user) {
-	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="./images/waiting.gif"></div>';
+	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
 	    
 	    //jQuery.get('http://api.metagenomics.anl.gov/1/pipeline?verbosity=full&user=travis&auth=JusBm9T9FQPePNzdaZVgrVRpz', function(data) {
 	    jQuery.get('http://140.221.84.145:8000/job?query&info.user=mgrastprod&recent=200', function(data) {
@@ -187,42 +187,42 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 		if (job.tasks[i].state == 'completed') {
 		    html += '\
 <div class="pill donepill">\
-  <img class="miniicon" src="images/ok.png">\
+  <img class="miniicon" src="Retina/images/ok.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].completeddate)+'</span>\
 </div>';
 		} else if (job.tasks[i].state == 'in-progress') {
 		    html += '\
 <div class="pill runningpill">\
-  <img class="miniicon" src="images/settings3.png">\
+  <img class="miniicon" src="Retina/images/settings3.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].starteddate)+'</span>\
 </div>';
 		} else if (job.tasks[i].state == 'queued') {
 		    html += '\
 <div class="pill queuedpill">\
-  <img class="miniicon" src="images/clock.png">\
+  <img class="miniicon" src="Retina/images/clock.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">(in queue)</span>\
 </div>';
 		} else if (job.tasks[i].state == 'error') {
 		    html += '\
 <div class="pill errorpill">\
-  <img class="miniicon" src="images/remove.png">\
+  <img class="miniicon" src="Retina/images/remove.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].createddate)+'</span>\
 </div>';
 		} else if (job.tasks[i].state == 'pending') {
 		    html += '\
 <div class="pill pendingpill">\
-  <img class="miniicon" src="images/clock.png">\
+  <img class="miniicon" src="Retina/images/clock.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">(not started)</span>\
 </div>';
 		} else if (job.tasks[i].state == 'suspend') {
 		    html += '\
 <div class="pill errorpill">\
-  <img class="miniicon" src="images/remove.png">\
+  <img class="miniicon" src="Retina/images/remove.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].createddate)+'</span>\
 </div>';
@@ -279,17 +279,17 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 		currentStage--;
 	    }
 	    if (stages[currentStage].state == "completed") {
-		return '<img class="miniicon" src="images/ok.png"><span class="green">completed</span>';
+		return '<img class="miniicon" src="Retina/images/ok.png"><span class="green">completed</span>';
 	    } else if (stages[currentStage].state == "in-progress") {
-		return '<img class="miniicon" src="images/settings3.png"><span class="blue">running</span>';
+		return '<img class="miniicon" src="Retina/images/settings3.png"><span class="blue">running</span>';
 	    } else if (stages[currentStage].state == "queued") {
-		return '<img class="miniicon" src="images/clock.png"><span class="orange">queued</span>';
+		return '<img class="miniicon" src="Retina/images/clock.png"><span class="orange">queued</span>';
 	    } else if (stages[currentStage].state == "pending") {
-		return '<img class="miniicon" src="images/clock.png"><span class="gray">pending</span>';
+		return '<img class="miniicon" src="Retina/images/clock.png"><span class="gray">pending</span>';
 	    } else if (stages[currentStage].state == "error") {
-		return '<img class="miniicon" src="images/remove.png"><span class="red">error</span>';
+		return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">error</span>';
 	    } else if (stages[currentStage].state == "suspend") {
-		return '<img class="miniicon" src="images/remove.png"><span class="red">suspended</span>';
+		return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">suspended</span>';
 	    } else {
 		console.log("unhandled state: "+stages[currentStage].state);
 		return "";
