@@ -586,7 +586,7 @@
 		var keys = Retina.keys(stm.DataStore.dataContainer).sort();
 		var html = "<table><tr>";
 		for (var i=0; i<keys.length; i++) {
-		    html += "<td style='text-align: center; vertical-align: top;'><div style='width: 75px; word-wrap: break-word;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].fillContainers();'><img src='images/data.png' class='tool'><br>"+keys[i]+"</div></td>";
+		    html += "<td style='text-align: center; vertical-align: top;'><div style='width: 75px; word-wrap: break-word;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].fillContainers();'><img src='Retina/images/data.png' class='tool'><br>"+keys[i]+"</div></td>";
 		}
 		html += "</tr></table>";
 		container.innerHTML = html;
