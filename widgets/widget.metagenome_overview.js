@@ -62,7 +62,7 @@
 	    if (! ( stm.DataStore.hasOwnProperty('metagenome') &&
 	            stm.DataStore.metagenome.hasOwnProperty(wparams.id) &&
 	            stm.DataStore.metagenome[wparams.id].hasOwnProperty('statistics') )) {
-		var url = stm.Config.mgrast_api + '/metagenome/'+wparams.id+'?verbosity=full';
+		var url = RetinaConfig.mgrast_api + '/metagenome/'+wparams.id+'?verbosity=full';
 		if (stm.Authentication) {
 		    url += "&auth=" + stm.Authentication;
 		}

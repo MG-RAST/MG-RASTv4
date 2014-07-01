@@ -4,35 +4,34 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Metagenome Collection Data</title>
     <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
-	<script src="js/jquery.min.js"></script>
+	<script src="Retina/js/jquery.min.js"></script>
 	<script src="js/config.js"></script>
-	<script src="js/stm.js"></script>
-	<script src="js/retina.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<script src="Retina/js/stm.js"></script>
+	<script src="Retina/js/retina.js"></script>
+	<script src="Retina/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
 	<script>
-    stm.init(stm.Config.mgrast_api).then( function() {
-	    Retina.init( { library_resource: "js/" } ).then( function() {
-		    Retina.add_widget({"name": "login", "resource": "widgets/",  "filename": "widget.login.js"});
-	        Retina.load_widget("login").then( function() {
-		        Retina.Widget.create('login', {"target": document.getElementById("login_space")});
-		    });
-	        Retina.add_widget({"name": "collection_overview", "resource": "widgets/",  "filename": "widget.collection_overview.js"});
-	        Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"});
-	        Retina.load_widget("collection_overview").then( function() {
-		        var val = document.URL;
-		        var param = "metagenomes";
-		        var mgids = [];
-		        if (val.indexOf(param) > -1) {
-		            var url = val.substr(val.indexOf(param));
-		            mgids = url.replace(param+"=","").split(';');
-		        }
-		        Retina.load_widget('mgbrowse').then(function () {
-		            Retina.Widget.create('collection_overview', {"target": document.getElementById("content"), "ids": mgids});
-		        });
-	        });
-	    });
+    stm.init(stm.Config.mgrast_api, true, "MG-RAST");
+Retina.init( { library_resource: "Retina/js/" } ).then( function() {
+    Retina.add_widget({"name": "login", "resource": "Retina/widgets/",  "filename": "widget.login.js"});
+    Retina.load_widget("login").then( function() {
+	Retina.Widget.create('login', {"target": document.getElementById("login_space")});
     });
+    Retina.add_widget({"name": "collection_overview", "resource": "widgets/",  "filename": "widget.collection_overview.js"});
+    Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"});
+    Retina.load_widget("collection_overview").then( function() {
+	var val = document.URL;
+	var param = "metagenomes";
+	var mgids = [];
+	if (val.indexOf(param) > -1) {
+	    var url = val.substr(val.indexOf(param));
+	    mgids = url.replace(param+"=","").split(';');
+	}
+	Retina.load_widget('mgbrowse').then(function () {
+	    Retina.Widget.create('collection_overview', {"target": document.getElementById("content"), "ids": mgids});
+	});
+    });
+});
 	</script>
   </head>
 
