@@ -25,11 +25,11 @@
 	if (window.opener && window.opener.stm) {
 	    window.stm = window.opener.stm;
 	} else {
-	    stm.init(stm.Config.mgrast_api, true, "MG-RAST");
+	    stm.init(RetinaConfig.mgrast_api, true, "MG-RAST");
 	}
 	Retina.init( { library_resource: "Retina/js/" } ).then( function() {
 	    
-	    var page  = Retina.cgiParam("mgpage");
+	    var page  = Retina.cgiParam("mgpage") || "search";
 
 	    var icons = { "overview": "publications" };
 	    var iconame = icons[page] ? icons[page] : page;
