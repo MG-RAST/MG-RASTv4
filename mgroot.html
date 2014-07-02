@@ -8,19 +8,40 @@
     <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
 
     <!-- default js -->
-    <script src="Retina/js/jquery.min.js"></script>
-    <script src="js/config.js"></script>
-    <script src="Retina/js/stm.js"></script>
-    <script src="Retina/js/retina.js"></script>
-    <script src="Retina/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="Retina/js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="Retina/js/stm.js"></script>
+    <script type="text/javascript" src="Retina/js/retina.js"></script>
+    <script type="text/javascript" src="Retina/js/bootstrap.min.js"></script>
+
+    <!-- newsfeed read via google jsapi -->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    google.load("feeds", "1");
+function showNewsFeed () {
+    var feed = new google.feeds.Feed("http://press.igsb.anl.gov/mg-rast/feed/");
+    feed.load(function(result) {
+	if (!result.error) {
+	    var html = '<table class="table table-condensed" style="width: 100%; font-size: 12px;">';
+	    for (var i = 0; i < result.feed.entries.length; i++) {
+		var entry = result.feed.entries[i];
+		var date = entry.publishedDate.replace(/^(\w+,\s\d+\s\w+\s\d+).+$/, "$1");
+		html += '<tr><td style="white-space: nowrap;">'+date+'</td><td><a href="'+entry.link+'" target=_blank>'+entry.title+'</a></td></tr>';
+	    }
+	    html += "</table>";
+	    document.getElementById("newsfeed").innerHTML = html;
+	}});
+}
+google.setOnLoadCallback(showNewsFeed); 
+    </script>
 
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
 
     <!-- webapp initialization -->
-    <script>
+    <script type="text/javascript">
     jQuery( document ).ready(function(){
-
+	// keybind for searchbox
 	document.getElementById('searchtext').addEventListener("keypress", function(event){
 	    event=event || window.event;
 	    if(event.keyCode=='13') {
@@ -28,7 +49,32 @@
 	    }
 	});
 
-	stm.init(stm.Config.mgrast_api, true, "MG-RAST");
+	// server status info
+	jQuery.getJSON("http://api.metagenomics.anl.gov/server/MG-RAST", function (data) {
+	    // check if the server is down
+	    if (data.status != "ok") {
+		document.getElementById('searchdiv').style.display = "none";
+		document.getElementById('navdiv').style.display = "none";
+		document.getElementById('error').innerHTML = data.info;
+		document.getElementById('error').style.display = "";
+	    }
+	    // check if there is an info message
+	    else if (data.info) {
+		document.getElementById('info').innerHTML = data.info;
+		document.getElementById('info').style.display = "";
+	    }
+
+	    // print server version
+	    document.getElementById('version').innerHTML = "version "+data.version;
+
+	    // print server stats
+	    var bp = (parseInt(data.basepairs) / 1000000000000).formatString(2);
+	    var seq = parseInt(parseInt(data.sequences) / 1000000000).formatString();
+	    document.getElementById('load').innerHTML = parseInt(data.metagenomes).formatString()+" metagenomes containing "+seq+" billion sequences and "+bp+" Tbp processed.";
+	});
+
+	// webapp initialization
+	stm.init(RetinaConfig.mgrast_api, true, "MG-RAST");
 	Retina.init( { library_resource: "Retina/js/" } ).then( function() {
 	    Retina.add_widget({"name": "login", "resource": "Retina/widgets/",  "filename": "widget.login.js"});
 	    Retina.load_widget("login").then( function() {
@@ -54,7 +100,7 @@
 	margin-bottom: 5px;
 	opacity: 0.8;
 	cursor: pointer;
-	width: 64px;
+	width: 32px;
 	}
 
 	.ico-small {
@@ -86,7 +132,6 @@
 	.icospan > span {
 	margin-left: 5px;
 	color: white;
-	//display: none;
 	font-size: 20px;
 	font-weight: 200;
 	}
@@ -137,9 +182,10 @@
 	.myData {
 	background-color: white;
 	width: 550px;
-	height: 285px;
+	height: 170px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 50px;
 	clear: both;
 	border-radius: 10px;
 	padding-top: 10px;
@@ -147,8 +193,8 @@
 	padding-right: 10px;
 	position: relative;
 	top: 30px;
-	box-shadow: 4px 4px 4px #666666;
 	border: 1px solid #666666;
+	overflow-y: auto;
 	}
 
 	.recent {
@@ -164,29 +210,17 @@
 
 	.newsheadline {
 	font-weight: bold;
-	margin-top: 5px;
-	float: left;
+	text-align: center;
+	margin-top: -5px; 
+	margin-bottom: 5px;
 	}
 
 	.rotate {
-	-webkit-transform: rotate(90deg);
-	-moz-transform: rotate(90deg);
-	-ms-transform: rotate(90deg);
-	-o-transform: rotate(90deg);
 	transform: rotate(90deg);
-	
-	-webkit-transform-origin: 20% 50%;
-	-moz-transform-origin: 20% 50%;
-	-ms-transform-origin: 20% 50%;
-	-o-transform-origin: 20% 50%;
 	transform-origin: 20% 50%;
 	}
 
 	.cite {
-	-webkit-transform: rotate(-25deg);
-	-moz-transform: rotate(-25deg);
-	-ms-transform: rotate(-25deg);
-	-o-transform: rotate(-25deg);
 	transform: rotate(-25deg);
 	background-color: #222222;
 	border: 3px solid #808080;
@@ -219,72 +253,47 @@
     </div>
     
     <div class="content">
-    
-	<div style="width: 480px; margin-left: auto; margin-right: auto;">
-
-	  <!-- logo -->
-	  <img src="images/MGRAST_logo.png" style="height: 120px;"><div class="cite">cite us</div>
-
-	  <!-- search -->
-	  <div class="input-append" style="margin-top: 10px; width: 400px; margin-left: auto; margin-right: auto; display: block;">
-	    <input class="search span4" type="text" style="padding-left: 10px;border-radius: 14px 0 0 14px;" placeholder="search MG-RAST" id="searchtext">
-	    <button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="window.open('mgmain.html?mgpage=search&search='+document.getElementById('searchtext').value);" id="searchbutton">search</button>
-	  </div>
-	  
+      
+      <div style="width: 480px; margin-left: auto; margin-right: auto;">
+	
+	<!-- logo -->
+	<img src="images/MGRAST_logo.png" style="height: 120px;"><div class="cite" onclick="window.open('http://www.biomedcentral.com/1471-2105/9/386');">cite us</div>
+	<p style="color: gray; margin-bottom: 0px; position: relative; bottom: 30px; text-align: center;" id="version"></p>
+	<p style="color: gray; margin-bottom: 0px; position: relative; bottom: 30px; font-size: 12px; text-align: center;" id="load"></p>
+	
+	<!-- status messages -->
+	<div id="info" class="alert alert-info" style="display: none;"></div>
+	<div id="error" class="alert alert-error" style="display: none;"></div>
+	
+	<!-- search -->
+	<div id="searchdiv" class="input-append" style="margin-top: 10px; width: 400px; margin-left: auto; margin-right: auto; display: block;">
+	  <input class="search span4" type="text" style="padding-left: 10px;border-radius: 14px 0 0 14px;" placeholder="search MG-RAST" id="searchtext">
+	  <button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="window.open('mgmain.html?mgpage=search&search='+document.getElementById('searchtext').value);" id="searchbutton">search</button>
 	</div>
-
+	
 	<!-- navigation icons -->
-	<div class="icorow">
+	<div id="navdiv" class="icorow" style="position: relative; right: 40px;">
 	  <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.open('mgmain.html?mgpage=search');"><br><span>Search</span></div>
-	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.open('mgmain.html?mgpage=pipeline');"><br><span>Submission</span></div>
+	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Submission" onclick="window.open('mgmain.html?mgpage=pipeline');"><br><span>Submission</span></div>
 	  <div class="icospan" id="icon_publications"><img src="Retina/images/dna.png" class="ico" title="Publications" onclick="window.open('mgmain.html?mgpage=overview');"><br><span>Publications</span></div>
 	  <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.open('mgmain.html?mgpage=analysis');"><br><span>Analysis</span></div>
-
-	  <div class="icospan" id="icon_search"><img src="Retina/images/file-pdf.png" class="ico" title="Handbook"><br><span>Handbook</span></div>
-	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/wizard.png" class="ico" title="Tutorials"><br><span>Tutorials</span></div>
+	  
+	  <div class="icospan" id="icon_search"><img src="Retina/images/file-pdf.png" class="ico" title="Handbook" onclick="window.open('ftp://ftp.metagenomics.anl.gov/data/manual/mg-rast-manual.pdf');"><br><span>Handbook</span></div>
+	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/wizard.png" class="ico" title="Tutorials" onclick="window.open('https://www.youtube.com/channel/UCoBKJ-yYJu5HK1szy3my91A');"><br><span>Tutorials</span></div>
 	  <div class="icospan" id="icon_publications"><img src="Retina/images/bubbles.png" class="ico" title="Forum"><br><span>Forum</span></div>
 	  <div class="icospan" id="icon_analysis"><img src="Retina/images/envelop.png" class="ico" title="Feedback"><br><span>Feedback</span></div>
 	</div>
+	
+      </div>
       
-	<!-- news -->
-	<div class="myData">
-	  <p class="newsheadline rotate">News</p>
-	  
-	  <div style="float: left; width: 10px; height: 100px;"></div>
-
-	  <button class="btn btn-small" style="width: 500px; margin-bottom: 2px;"><table><tr><td style="padding-right: 10px; text-align: left; font-weight: bold;">03/20/2014 11:22</td><td style="text-align: left;">Your submission 1234 has <span style="color: green;">completed computing</span>.</td></tr></table></button>
-	  <button class="btn btn-small" style="width: 500px; margin-bottom: 2px;"><table><tr><td style="padding-right: 10px; text-align: left; font-weight: bold;">03/19/2014 09:03</td><td style="text-align: left;">Your submission 4321 has <span style="color: red;">failed computing</span>.</td></tr></table></button>
-	  <button class="btn btn-small" style="width: 500px; margin-bottom: 2px;"><table><tr><td style="padding-right: 10px; text-align: left; font-weight: bold;">03/18/2014 14:18</td><td style="text-align: left;">Your publication abcd had a visitor (13 total).</td></tr></table></button>
-	  <button class="btn btn-small" style="width: 500px; margin-bottom: 2px;"><table><tr><td style="padding-right: 10px; text-align: left; font-weight: bold;">03/18/2014 04:30</td><td style="text-align: left;">MG-RAST was updated to version 4.0.</td></tr></table></button>
-
-	  <div style="clear: both; height: 10px;"></div>
-
-	  <p class="newsheadline rotate">Recent</p>
-	  <div class="recent">
-	    <p><strong>Analysis</strong></p>
-	    <img src="Retina/images/notebook.png" class="ico ico-small" title="Analysis">
-	    <br>
-	    my analysis abcd
-	  </div>
-	  <div class="recent">
-	    <p><strong>Metagenome</strong></p>
-	    <img src="Retina/images/dna.png" class="ico ico-small" title="Publication">		
-	    <br>
-	    Metagenome 1234
-	  </div>
-	  <div class="recent">
-	    <p><strong>Download</strong></p>
-	    <img src="Retina/images/settings3.png" class="ico ico-small" title="Jobs">
-	    <br>
-	    Metagenome 1234
-	  </div>
-
-	  <table width=100%><tr><td align=center><button class="btn btn-success" style="margin-top: 10px;">go to myData</button></td></tr></table>
-
-	</div>
-
+      <!-- news -->
+      <div class="myData">
+	<p class="newsheadline">News</p>
+	<div id="newsfeed"><img src="Retina/images/waiting.gif" style="margin-top: 40px; margin-left: 250px;"></div>
+      </div>
+      
     </div>
-
+    
     <div class="footer">
       <div style="width: 200px; margin-left: auto; margin-right: auto; text-align: center;">
 	<a href="#" style="color: gray;">Legal Information | Funding</a>
