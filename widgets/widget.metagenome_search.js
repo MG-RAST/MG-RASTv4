@@ -319,7 +319,7 @@
 	    widget.offset = 0;
 	}
 
-	var api_url = stm.Config.mgrast_api + '/metagenome?verbosity=mixs&';
+	var api_url = RetinaConfig.mgrast_api + '/metagenome?verbosity=mixs&';
 			
 	// metadata function organism
 	var type = [];

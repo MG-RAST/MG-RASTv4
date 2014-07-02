@@ -33,6 +33,8 @@
 	
 	wparams.target = wparams.target || wparams.main;
 
+	wparams.target.setAttribute('style', "overflow-x: hidden; padding-right: 20px;");
+
 	wparams.target.innerHTML = '\
 <div id="mg_modal" class="modal show fade" tabindex="-1" style="width: 500px;" role="dialog">\
   <div class="modal-header">\
@@ -508,7 +510,7 @@
     	}
     	var pwidth  = 250;
     	var pheight = 250;
-    	var lwidth  = Math.max(pwidth, annMax*7.5);
+    	var lwidth  = Math.min(300, annMax*7.5);
     	var lheight = pieData.length * 23;
     	var width   = pwidth+lwidth;
     	var height  = (lheight > pheight) ? Math.min(lheight, pheight+(pheight/2)) : pheight;
