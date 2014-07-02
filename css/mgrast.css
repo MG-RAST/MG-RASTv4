@@ -1,0 +1,78 @@
+.ico {
+    padding: 10px;
+    border-radius: 10px;
+    background-image: linear-gradient(to bottom, #CCCCCC, #AAAAAA);
+    margin-bottom: 5px;
+    opacity: 0.5;
+    cursor: pointer;
+    width: 32px;
+}
+
+.ico:hover {
+    opacity: 1;
+}
+	
+.icorow {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    width: 500px;
+}
+
+.icorow > div {
+    float: left;
+}
+	
+.icospan {
+    text-align: center;
+    color: #666;
+}
+
+.icospan > span {
+    margin-left: 5px;
+    color: white;
+    display: none;
+    font-size: 20px;
+    font-weight: 200;
+}
+	
+.icoactive {
+    opacity: 1;
+    cursor: default;
+}
+
+.icoactivespan > span {
+    display: inline;
+}
+
+.sidebar {
+    float: right;
+    position: absolute;
+    top: 100px;
+    bottom: 40px;
+    right: 40px;
+    box-shadow: 4px 4px 4px #666666;
+    padding: 0;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    overflow-y: auto;
+}
+
+.tab-pane {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.borderlayout {
+    bottom: 40px;
+    left: 40px;
+    overflow-y: auto;
+    position: absolute;
+    right: 460px;
+    top: 70px;
+    overflow-x: auto;
+}
+
+#content {
+    margin-top: 10px;
+}

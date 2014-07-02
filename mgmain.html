@@ -18,6 +18,7 @@
 
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/mgrast.css">
 
     <!-- webapp initialization -->
     <script>
@@ -35,8 +36,10 @@
 	    var iconame = icons[page] ? icons[page] : page;
 
 	    var ico = document.getElementById('icon_'+iconame);
-	    ico.className = "icospan icoactivespan";
-	    ico.firstChild.className = "ico icoactive";
+	    if (ico) {
+		ico.className = "icospan icoactivespan";
+		ico.firstChild.className = "ico icoactive";
+	    }
 
 	    Retina.add_widget({"name": "metagenome_"+page, "resource": "widgets/",  "filename": "widget.metagenome_"+page+".js"});
 	    Retina.load_widget("metagenome_"+page).then( function() {
@@ -152,7 +155,7 @@
 	<div class="container" style="width: 100%;">
 
 	  <!-- logo and title -->
-          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px;">
+          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgroot.html';">
 	  
 	  <!-- navigation icons -->
 	  <div class="icorow">
