@@ -81,7 +81,8 @@ google.setOnLoadCallback(showNewsFeed);
 		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
 	    					"authResources": { "default": "MG-RAST",
 	    							   "MG-RAST": { "icon": "MGRAST_favicon.ico",
-	    									"prefix": "mggo4711" } } });
+	    									"prefix": "mggo4711" } },
+						"registerEnabled": true });
 	    });
 	    
 	    Retina.add_widget({"name": "session", "resource": "Retina/widgets/",  "filename": "widget.session.js"});
