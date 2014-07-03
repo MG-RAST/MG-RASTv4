@@ -316,7 +316,6 @@
 	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": demo_data[type].renderer, "settings": demo_data[type].settings });
 
 	if (widget.selectedContainer) {
-	    console.log('hello world');
 	    widget.updateVis();
 	}
     };
