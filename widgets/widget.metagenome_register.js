@@ -4,7 +4,7 @@
                 title: "Metagenome Account Registration Widget",
                 name: "metagenome_register",
                 author: "Tobias Paczian",
-                requires: [ ]
+                requires: [ "http://www.google.com/recaptcha/api/js/recaptcha_ajax.js" ]
         }
     });
     
@@ -93,19 +93,15 @@
       </label>\
     </div>\
   </div>\
-  <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z"></script>\
-  <noscript>\
-    <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z" height="300" width="500" frameborder="0"></iframe>\
-    <br>\
-    <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>\
-    <input type="hidden" name="recaptcha_response_field" value="manual_challenge">\
-  </noscript>\
+  <div id="recap"></div>\
   <button type="submit" class="btn pull-right">register</button>\
 </form>\
 ';
 
 	// set the output area
 	content.innerHTML = html;
+
+	Recaptcha.create("6LfbRfYSAAAAAA2xPI95x5LIKvpW-Zl9Fz5Li5m-", "recap");
     };
 
     widget.countryCodes = {
