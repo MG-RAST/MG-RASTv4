@@ -139,8 +139,8 @@
 	}).render();
 
 	// // set up recaptcha
-	Recaptcha.create("6LfbRfYSAAAAAA2xPI95x5LIKvpW-Zl9Fz5Li5m-", "recap");
-
+	Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");//6LfbRfYSAAAAAA2xPI95x5LIKvpW-Zl9Fz5Li5m-
+ 	
 	// set up country typeahead
 	jQuery('#inputCountry').typeahead({ source: Retina.values(widget.countryCodes) });
 
