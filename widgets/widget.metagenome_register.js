@@ -73,7 +73,7 @@
   <div class="control-group">\
     <label class="control-label" for="inputOrganization">Organization</label>\
     <div class="controls">\
-      <span id="inputOrganiszationSpan" style="display: inline-block"></span><span class="help-inline">enter the full name of your organization</span>\
+      <span id="inputOrganiszationSpan" style="display: inline-block"></span><span class="help-inline">Enter the full name of your organization / university</span>\
     </div>\
   </div>\
   <div class="control-group">\
@@ -210,7 +210,8 @@
 	    	"organization": document.getElementById('inputOrganization').value,
 	    	"lru": document.getElementById('inputURL').value,
 	    	"country": document.getElementById('inputCountry').value,
-	    	"mailinglist": document.getElementById('inputMailinglist').checked
+	    	"mailinglist": document.getElementById('inputMailinglist').checked,
+		"response": Recaptcha.get_response()
 	    }, function (result) {
 		console.log(result);
 	    }).fail(function(result){
@@ -423,7 +424,7 @@
 	if (widget.org_urls.hasOwnProperty(org)) {
 	    document.getElementById('inputURL').value = widget.org_urls[org].replace(/^http\:\/\//, "");
 	    if (document.getElementById('inputCountry').value.length) {
-		document.getElementById('submit').focus();
+		Recaptcha.focus_reponse_field();
 	    } else {
 		document.getElementById('inputCountry').focus();
 	    }
