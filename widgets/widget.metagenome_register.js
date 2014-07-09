@@ -144,7 +144,7 @@
 	}).render();
 
 	// set up recaptcha
-	widget.recaptcha = Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
+	Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
  	
 	// set up country typeahead
 	jQuery('#inputCountry').typeahead({ source: Retina.values(widget.countryCodes) });
@@ -201,7 +201,7 @@
 	    }
 	}
 	if (valid) {
-	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+widget.recaptcha.get_challenge(), {
+	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+Recaptcha.get_challenge(), {
 	    	"email": document.getElementById('inputPrimaryEmail').value,
 		"email2": document.getElementById('inputSecondaryEmail').value,
 	    	"firstname": document.getElementById('inputFirstname').value,
