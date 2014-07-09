@@ -80,10 +80,12 @@ google.setOnLoadCallback(showNewsFeed);
 	    Retina.add_widget({"name": "login", "resource": "Retina/widgets/",  "filename": "widget.login.js"});
 	    Retina.load_widget("login").then( function() {
 		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-	    					"authResources": { "default": "MG-RAST",
-	    							   "MG-RAST": { "icon": "MGRAST_favicon.ico",
-	    									"prefix": "mggo4711" } },
+						"authResources": { "default": "MG-RAST",
+								   "MG-RAST": { "icon": "MGRAST_favicon.ico",
+										"prefix": "mggo4711" } },
 						"registerEnabled": true,
+						"helpEnabled": true,
+						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
 						"registerLink": "mgmain.html?mgpage=register",
 						"forgotEnabled": true,
 						"forgotLink": "mgmain.html?mgpage=register&forgot=1" });
@@ -91,7 +93,7 @@ google.setOnLoadCallback(showNewsFeed);
 	    
 	    Retina.add_widget({"name": "session", "resource": "Retina/widgets/",  "filename": "widget.session.js"});
 	    Retina.load_widget("session").then( function() {
-		Retina.Widget.create('session', {"target": document.getElementById('session_space')});
+		Retina.Widget.create('session', {"target": document.getElementById('session_space'), noInfo: true});
 	    });
 	});
     });
@@ -154,7 +156,7 @@ google.setOnLoadCallback(showNewsFeed);
     
     <div class="footer">
       <div style="width: 200px; margin-left: auto; margin-right: auto; text-align: center;">
-	<a href="#" style="color: gray;">Legal Information | Funding</a>
+	<a href="legal.html" target=_blank style="color: gray;">Terms of Service | Funding</a>
       </div>
     </div>
   </body>

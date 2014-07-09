@@ -45,6 +45,8 @@
 		ico.firstChild.className = "ico icoactive";
 	    }
 
+	    document.title = page.charAt(0).toUpperCase()+page.substr(1);
+
 	    Retina.add_widget({"name": "metagenome_"+page, "resource": "widgets/",  "filename": "widget.metagenome_"+page+".js"});
 	    Retina.load_widget("metagenome_"+page).then( function() {
 		var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
@@ -59,6 +61,8 @@
 		    								    "prefix": "mggo4711" } },
 						    "registerEnabled": true,
 						    "registerLink": "mgmain.html?mgpage=register",
+						    "helpEnabled": true,
+						    "helpLink": "http://blog.metagenomics.anl.gov/howto/",
 						    "forgotEnabled": true,
 						    "forgotLink": "mgmain.html?mgpage=register&forgot=1" });
 		});
