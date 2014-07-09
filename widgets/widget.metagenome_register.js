@@ -23,10 +23,19 @@
 	    widget.sidebar = wparams.sidebar;
 	}
 	var content = widget.main;
-	content.style.maxWidth = "1070px";
-	content.parentNode.style.right = "0px";
 	var sidebar = widget.sidebar;
-	sidebar.setAttribute('style', 'display: none;');
+
+	sidebar.innerHTML = '\
+<div style="padding-left: 20px; padding-right: 20px;">\
+  <h3><img src="Retina/images/info.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">why register?</h3>\
+  <p>MG-RAST is a free resource, but the data you upload is private to you. Even though we encourage making data public as soon as possible, it will stay private until you decide to share it with the world. To do so, you need to be able to securely authenticate yourself.</p>\
+  <p style="margin-bottom: 35px;">Our past experience has also shown that the computation on metagenomic data is a complicated process. Sometimes we need to feedback error or other information to you. This is only possible if we have a valid email to contact you.</p>\
+  <hr>\
+  <h3><img src="Retina/images/info.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">can I share my account?</h3>\
+  <p>No, you should never share your account with anyone, nor should you create group accounts. MG-RAST offers easy to use mechanisms to securely share data with other users.</p>\
+  <p>You can also create a group of registered users and share data with that group. Even in a classroom situation, you should always create separate accounts for each user.</p>\
+</div>\
+';
 	
 	var html = '\
 <h3>Register a new Account</h3>\
@@ -34,7 +43,7 @@
   <div class="control-group">\
     <label class="control-label" for="inputFirstname">First Name</label>\
     <div class="controls">\
-      <input type="text" id="inputFirstname" placeholder="firstname" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);">\
+      <input type="text" id="inputFirstname" placeholder="firstname" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline" id="namecheck"></span>\
     </div>\
   </div>\
   <div class="control-group">\
@@ -62,18 +71,6 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="inputPassword">Password</label>\
-    <div class="controls">\
-      <input type="password" id="inputPassword" placeholder="password" autocomplete="off" onkeyup="Retina.WidgetInstances.metagenome_register[1].checkPasswordStrength();" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline">Password strength: <span id="passwordStrength" style="color: red;">none</span></span>\
-    </div>\
-  </div>\
-  <div class="control-group">\
-    <label class="control-label" for="inputVerifyPassword">Verify Password</label>\
-    <div class="controls">\
-      <input type="password" id="inputVerifyPassword" placeholder="verify password" onblur="Retina.WidgetInstances.metagenome_register[1].checkVerifyPassword();" class="span4"><span class="help-inline">this must match your password</span>\
-    </div>\
-  </div>\
-  <div class="control-group">\
     <label class="control-label" for="inputOrganization">Organization</label>\
     <div class="controls">\
       <span id="inputOrganiszationSpan" style="display: inline-block"></span><span class="help-inline">enter the full name of your organization</span>\
@@ -83,14 +80,8 @@
     <label class="control-label" for="inputURL">URL</label>\
     <div class="controls">\
       <div class="input-prepend">\
-        <div class="btn-group">\
-          <button class="btn dropdown-toggle span1" data-toggle="dropdown" id="httpmode" type="button">http://</button>\
-          <ul class="dropdown-menu">\
-            <li><a onclick="document.getElementById(\'httpmode\').innerHTML=\'http://\';" style="cursor: pointer;">http://</a></li>\
-            <li><a onclick="document.getElementById(\'httpmode\').innerHTML=\'https://\';" style="cursor: pointer;">https://</a></li>\
-          </ul>\
-        </div>\
-        <input type="text" id="inputURL" placeholder="URL" style="width: 228px;" onblur="Retina.WidgetInstances.metagenome_register[1].checkURL();">\
+        <span class="add-on">http://</span>\
+        <input type="text" id="inputURL" placeholder="URL" style="width: 238px;" onblur="Retina.WidgetInstances.metagenome_register[1].checkURL();">\
       </div>\
       <span class="help-inline" style="margin-left: -4px;" id="urlcheck">enter the homepage URL of your organization</span>\
     </div>\
@@ -104,7 +95,7 @@
   <div class="control-group">\
     <div class="controls">\
       <label class="checkbox">\
-        <input type="checkbox" checked> Add me to the MG-RAST mailing-list<span class="help-inline">(We encourage you to subscribe as the list is used to inform you about major changes to the MG-RAST service and announces MG-RAST workshops. Email originates from the MG-RAST team only and is quite rare.)</span>\
+        <input type="checkbox" checked id="inputMailinglist"> Add me to the MG-RAST mailing-list<span class="help-inline">(We encourage you to subscribe as the list is used to inform you about major changes to the MG-RAST service and announces MG-RAST workshops. Email originates from the MG-RAST team only and is quite rare.)</span>\
       </label>\
     </div>\
   </div>\
@@ -112,6 +103,20 @@
   <button type="button" class="btn pull-right" onclick="Retina.WidgetInstances.metagenome_register[1].performRegistration();" id="submit">register</button>\
 </form>\
 ';
+
+  // <div class="control-group">\
+  //   <label class="control-label" for="inputPassword">Password</label>\
+  //   <div class="controls">\
+  //     <input type="password" id="inputPassword" placeholder="password" autocomplete="off" onkeyup="Retina.WidgetInstances.metagenome_register[1].checkPasswordStrength();" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline">Password strength: <span id="passwordStrength" style="color: red;">none</span></span>\
+  //   </div>\
+  // </div>\
+  // <div class="control-group">\
+  //   <label class="control-label" for="inputVerifyPassword">Verify Password</label>\
+  //   <div class="controls">\
+  //     <input type="password" id="inputVerifyPassword" placeholder="verify password" onblur="Retina.WidgetInstances.metagenome_register[1].checkVerifyPassword();" class="span4"><span class="help-inline">this must match your password</span>\
+  //   </div>\
+  // </div>\
+
 
 	// set the output area
 	content.innerHTML = html;
@@ -138,8 +143,8 @@
 	    callback: Retina.WidgetInstances.metagenome_register[1].checkOrganization
 	}).render();
 
-	// // set up recaptcha
-	Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");//6LfbRfYSAAAAAA2xPI95x5LIKvpW-Zl9Fz5Li5m-
+	// set up recaptcha
+	widget.recaptcha = Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
  	
 	// set up country typeahead
 	jQuery('#inputCountry').typeahead({ source: Retina.values(widget.countryCodes) });
@@ -179,7 +184,7 @@
 	// check all fields for validity
 	var valid = true;
 	
-	var fields = [ "inputCountry", "inputOrganization", "inputVerifyPassword", "inputPassword", "inputSecondaryEmail", "inputPrimaryEmail", "inputLogin", "inputLastname", "inputFirstname" ];
+	var fields = [ "inputCountry", "inputOrganization", "inputSecondaryEmail", "inputPrimaryEmail", "inputLogin", "inputLastname", "inputFirstname" ];
 	var optional = { "inputOrganization": true,
 			 "inputSecondaryEmail": true };
 
@@ -196,7 +201,21 @@
 	    }
 	}
 	if (valid) {
-	    alert("submitting");
+	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+widget.recaptcha.get_challenge(), {
+	    	"email": document.getElementById('inputPrimaryEmail').value,
+		"email2": document.getElementById('inputSecondaryEmail').value,
+	    	"firstname": document.getElementById('inputFirstname').value,
+	    	"lastname": document.getElementById('inputLastname').value,
+	    	"login": document.getElementById('inputLogin').value,
+	    	"organization": document.getElementById('inputOrganization').value,
+	    	"lru": document.getElementById('inputURL').value,
+	    	"country": document.getElementById('inputCountry').value,
+	    	"mailinglist": document.getElementById('inputMailinglist').checked
+	    }, function (result) {
+		console.log(result);
+	    }).fail(function(result){
+		console.log(result);
+	    });
 	} else {
 	    alert('You need to enter valid values for the red marked fields');
 	}
@@ -205,6 +224,13 @@
     widget.checkNotEmpty = function (box) {
 	if (box.value.length) {
 	    box.parentNode.parentNode.setAttribute('class', 'control-group');
+	    if (document.getElementById('inputFirstname').value == document.getElementById('inputLastname').value) {
+		document.getElementById('inputFirstname').parentNode.parentNode.className = "control-group error";
+		document.getElementById('inputLastname').parentNode.parentNode.className = "control-group error";
+		document.getElementById('namecheck').innerHTML = "firstname and lastname may not be identical";
+	    } else {
+		document.getElementById('namecheck').innerHTML = "";
+	    }
 	}
     };
 
@@ -221,6 +247,21 @@
 	    p.nextSibling.innerHTML = "primary and secondary email address cannot be the same";
 	    return;
 	}
+	jQuery.ajax({ url: RetinaConfig.mgrast_api+"/user/"+encodeURIComponent(p.value),
+		      error: function(response) {
+			  var result = response.responseJSON;
+			  var p = document.getElementById('inputPrimaryEmail');
+			  if (result && result.hasOwnProperty("ERROR") && result.ERROR == "insufficient permissions for user call") {
+			      p.nextSibling.innerHTML = "email already taken";
+			      p.parentNode.parentNode.setAttribute('class', 'control-group error');
+			      return "error";
+			  } else {
+			      p.parentNode.parentNode.setAttribute('class', 'control-group success');
+			      p.nextSibling.innerHTML = "email valid";
+			      return "ok";
+			  }
+		      }
+		    });
 	p.parentNode.parentNode.className = "control-group";
 	p.nextSibling.innerHTML = "preferrably your eMail at your organization";
     };
@@ -258,7 +299,7 @@
 		return "error";
 	    }
 
-	    jQuery.ajax({ url: "http://api.metagenomics.anl.gov/user/"+login.value,
+	    jQuery.ajax({ url: RetinaConfig.mgrast_api+"/user/"+login.value,
 			  error: function(response) {
 			      var result = response.responseJSON;
 			      if (result && result.hasOwnProperty("ERROR") && result.ERROR == "insufficient permissions for user call") {
@@ -278,74 +319,73 @@
 	}
     };
 
-    widget.checkPasswordStrength = function () {
-	var widget = Retina.WidgetInstances.metagenome_register[1];
+    // widget.checkPasswordStrength = function () {
+    // 	var widget = Retina.WidgetInstances.metagenome_register[1];
 	
-	var pass = document.getElementById('inputPassword');
-	var strength = 0;
-	if (pass.value.length > 7) {
-	    strength += 5;
-	}
-	if (pass.value.length > 1) {
-	    strength++;
-	}
-	if (pass.value.length > 15) {
-	    strength++;
-	}
-	if (pass.value.match(/[^\w\d]+/)) {
-	    strength++;
-	}
-	if (pass.value.toLowerCase() != pass.value) {
-	    strength++;
-	}
-	if (pass.value.match(/\d+/) && pass.value.match(/\w+/)) {
-	    strength++;
-	}
-	var result = document.getElementById('passwordStrength');
-	if (strength == 0) {
-	    result.setAttribute('style', 'color: red;');
-	    result.innerHTML = "none";
-	} else if (strength < 5) {
-	    result.setAttribute('style', 'color: orange;');
-	    result.innerHTML = "very weak";
-	} else if (strength < 6) {
-	    result.setAttribute('style', 'color: orange;');
-	    result.innerHTML = "weak";
-	} else if (strength < 7) {
-	    result.setAttribute('style', 'color: green;');
-	    result.innerHTML = "ok";
-	}  else if (strength < 8) {
-	    result.setAttribute('style', 'color: green;');
-	    result.innerHTML = "good";
-	} else if (strength < 9) {
-	    result.setAttribute('style', 'color: green;');
-	    result.innerHTML = "strong";
-	} else if (strength < 10) {
-	    result.setAttribute('style', 'color: green;');
-	    result.innerHTML = "very strong";
-	} else if (strength < 11) {
-	    result.setAttribute('style', 'color: green;');
-	    result.innerHTML = "awesome!";
-	}
-    };
+    // 	var pass = document.getElementById('inputPassword');
+    // 	var strength = 0;
+    // 	if (pass.value.length > 7) {
+    // 	    strength += 5;
+    // 	}
+    // 	if (pass.value.length > 1) {
+    // 	    strength++;
+    // 	}
+    // 	if (pass.value.length > 15) {
+    // 	    strength++;
+    // 	}
+    // 	if (pass.value.match(/[^\w\d]+/)) {
+    // 	    strength++;
+    // 	}
+    // 	if (pass.value.toLowerCase() != pass.value) {
+    // 	    strength++;
+    // 	}
+    // 	if (pass.value.match(/\d+/) && pass.value.match(/\w+/)) {
+    // 	    strength++;
+    // 	}
+    // 	var result = document.getElementById('passwordStrength');
+    // 	if (strength == 0) {
+    // 	    result.setAttribute('style', 'color: red;');
+    // 	    result.innerHTML = "none";
+    // 	} else if (strength < 5) {
+    // 	    result.setAttribute('style', 'color: orange;');
+    // 	    result.innerHTML = "very weak";
+    // 	} else if (strength < 6) {
+    // 	    result.setAttribute('style', 'color: orange;');
+    // 	    result.innerHTML = "weak";
+    // 	} else if (strength < 7) {
+    // 	    result.setAttribute('style', 'color: green;');
+    // 	    result.innerHTML = "ok";
+    // 	}  else if (strength < 8) {
+    // 	    result.setAttribute('style', 'color: green;');
+    // 	    result.innerHTML = "good";
+    // 	} else if (strength < 9) {
+    // 	    result.setAttribute('style', 'color: green;');
+    // 	    result.innerHTML = "strong";
+    // 	} else if (strength < 10) {
+    // 	    result.setAttribute('style', 'color: green;');
+    // 	    result.innerHTML = "very strong";
+    // 	} else if (strength < 11) {
+    // 	    result.setAttribute('style', 'color: green;');
+    // 	    result.innerHTML = "awesome!";
+    // 	}
+    // };
 
-    widget.checkVerifyPassword = function () {
-	var widget = Retina.WidgetInstances.metagenome_register[1];
+    // widget.checkVerifyPassword = function () {
+    // 	var widget = Retina.WidgetInstances.metagenome_register[1];
 	
-	var pass = document.getElementById('inputPassword');
-	var very = document.getElementById('inputVerifyPassword');
-	if (pass.value == very.value) {
-	    very.parentNode.parentNode.setAttribute('class', 'control-group');
-	} else {
-	    very.parentNode.parentNode.setAttribute('class', 'control-group error');
-	}
-    };
+    // 	var pass = document.getElementById('inputPassword');
+    // 	var very = document.getElementById('inputVerifyPassword');
+    // 	if (pass.value == very.value) {
+    // 	    very.parentNode.parentNode.setAttribute('class', 'control-group');
+    // 	} else {
+    // 	    very.parentNode.parentNode.setAttribute('class', 'control-group error');
+    // 	}
+    // };
 
     widget.checkURL = function (check) {
 	var widget = Retina.WidgetInstances.metagenome_register[1];
 	
 	var url = document.getElementById('inputURL');
-	var prefix = document.getElementById('httpmode').innerHTML;
 
 	if (url.value.length) {
 	    if (check) {
@@ -370,7 +410,7 @@
 	    }
 	    url.parentNode.parentNode.parentNode.setAttribute('class', 'control-group warning');
 	    document.getElementById('urlcheck').innerHTML = 'checking url...';
-	    jQuery.getScript(prefix+url.value).done(function(err){console.log(err);});
+	    jQuery.getScript("http://"+url.value).done(function(err){console.log(err);});
 	    window.setTimeout("Retina.WidgetInstances.metagenome_register[1].checkURL(true)", 3000);
 	} else {
 	    url.parentNode.parentNode.parentNode.setAttribute('class', 'control-group');
@@ -381,15 +421,7 @@
     widget.checkOrganization = function (org) {
 	var widget = Retina.WidgetInstances.metagenome_register[1];
 	if (widget.org_urls.hasOwnProperty(org)) {
-	    var url = "";
-	    if (widget.org_urls[org].match(/^https\:\/\//)) {
-		document.getElementById('httpmode').innerHTML = "https://";
-		url = widget.org_urls[org].replace(/^https\:\/\//, "")
-	    } else {
-		document.getElementById('httpmode').innerHTML = "http://";
-		url = widget.org_urls[org].replace(/^http\:\/\//, "")
-	    }
-	    document.getElementById('inputURL').value = url;
+	    document.getElementById('inputURL').value = widget.org_urls[org].replace(/^http\:\/\//, "");
 	    if (document.getElementById('inputCountry').value.length) {
 		document.getElementById('submit').focus();
 	    } else {
