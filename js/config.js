@@ -7,7 +7,8 @@ var RetinaConfig = {
     "authResources": { "default": "KBase",
 		       "KBase": { "icon": "KBase_favicon.ico",
 				  "prefix": "kbgo4711" } },
-    "mgrast_api": "http://dunkirk.mcs.anl.gov/~paczian/MG-RAST/site/CGI/api.cgi", //"http://api.metagenomics.anl.gov",
+    "mgrast_api": "http://api.metagenomics.anl.gov",
+    "mgrast_api_dev": "http://dunkirk.mcs.anl.gov/~paczian/MG-RAST/site/CGI/api.cgi",
     "authentication": true,
     "shock_url": "http://shock.metagenomics.anl.gov"
 };
