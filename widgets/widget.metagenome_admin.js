@@ -46,7 +46,7 @@
 		invisible_columns: {},
 		data_manipulation: Retina.WidgetInstances.metagenome_admin[1].dataManipulation,
 		minwidths: [150,150,150,80,150,150,85],
-		navigation_url: RetinaConfig.mgrast_api_dev+'/user?verbosity=minimal',
+		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
 		data: { data: [], header: result_columns }
 	    });
 	    widget.result_table.render();
@@ -69,7 +69,7 @@
 
     widget.userDetails = function (id) {
 	var widget = Retina.WidgetInstances.metagenome_admin[1];
-	jQuery.ajax({ url: RetinaConfig.mgrast_api_dev + "/user/" + id + "?verbosity=full",
+	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + id + "?verbosity=full",
 		      dataType: "json",
 		      success: function(data) {
 			  var html = '<h4>'+data.firstname+' '+data.lastname+'</h4>\

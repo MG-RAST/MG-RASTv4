@@ -36,8 +36,34 @@
 
 	document.title = "Password Recovery";
 
-	widget.main.innerHTML = "hello world";
-	widget.sidebar.innerHTML = "schmello world";
+	widget.sidebar.style.paddingLeft = "20px";
+	widget.sidebar.style.paddingRight = "20px";
+	widget.sidebar.innerHTML = "<h3><img style='height: 20px; margin-right: 10px; margin-top: -4px;' src='Retina/images/info.png'>Password Reset fails?</h3><p>If you are trying to reset your password, but you do not remember the login / email combination you registered with, you need to contact our support to retrieve a new password.</p><p>We will need to verify that you are the owner of the account. The easiest way is for you to send an email originating from the account you registered with MG-RAST.</p><p>It helps us a lot you add information about your account, like metagenome or project ids you own, your full name or your organization.</p>";
+
+	var html = '\
+<h3>Reset your Password</h3>\
+<form class="form-horizontal">\
+  <div class="control-group">\
+    <label class="control-label" for="inputLogin">login</label>\
+    <div class="controls">\
+      <input type="text" id="inputLogin" placeholder="login" class="span4"><span class="help-inline">the login name you registered with</span>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <label class="control-label" for="inputEmail">email</label>\
+    <div class="controls">\
+      <input type="text" id="inputEmail" placeholder="email" class="span4"><span class="help-inline">the email address you registered with</span>\
+    </div>\
+  </div>\
+<div id="recap"></div>\
+  <button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_register[1].performPasswordReset();" id="submit">reset password</button>\
+</form>\
+';
+
+	widget.main.innerHTML = html;
+
+	// set up recaptcha
+	Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
     };
 
     widget.newAccount = function () {
@@ -194,6 +220,34 @@
 		}
 	    });
 	});
+    };
+
+    widget.performPasswordReset = function () {
+	var widget = Retina.WidgetInstances.metagenome_register[1];
+
+	if (Recaptcha.get_response() && document.getElementById('inputLogin').value && document.getElementById('inputEmail').value) {
+	    document.getElementById('submit').setAttribute('disabled', 'disabled');
+	    jQuery.post(RetinaConfig.mgrast_api+"/user/resetpassword", {
+	    	"email": document.getElementById('inputEmail').value,
+		"login": document.getElementById('inputLogin').value,
+	    	"challenge": Recaptcha.get_challenge(),
+	    	"response": Recaptcha.get_response()
+	    }, function (result) {
+		if (result.hasOwnProperty('ERROR')) {
+		    alert("Resetting your password failed: "+result.ERROR);
+		} else {
+		    Retina.WidgetInstances.metagenome_register[1].main.innerHTML = "<h3>Password Reset Successful</h3><p>Your password has been reset. You will receive an email at your registered email address containing further instructions.</p>";
+		}
+	    }).fail(function(result){
+		if (result.hasOwnProperty('ERROR')) {
+		    alert("Resetting your password failed: "+result.ERROR);
+		} else {
+		    alert('An error occured while resetting your password');
+		}
+	    });
+	} else {
+	    alert('You need to fill out login, password and the ReCaptcha field');
+	}
     };
 
     widget.performRegistration = function () {
