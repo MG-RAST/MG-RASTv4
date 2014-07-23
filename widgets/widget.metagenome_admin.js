@@ -46,7 +46,7 @@
 		invisible_columns: {},
 		data_manipulation: Retina.WidgetInstances.metagenome_admin[1].dataManipulation,
 		minwidths: [150,150,150,80,150,150,85],
-		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
+		navigation_url: RetinaConfig.mgrast_api_dev+'/user?verbosity=minimal',
 		data: { data: [], header: result_columns }
 	    });
 	    widget.result_table.render();
@@ -69,7 +69,7 @@
 
     widget.userDetails = function (id) {
 	var widget = Retina.WidgetInstances.metagenome_admin[1];
-	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + id + "?verbosity=full",
+	jQuery.ajax({ url: RetinaConfig.mgrast_api_dev + "/user/" + id + "?verbosity=full",
 		      dataType: "json",
 		      success: function(data) {
 			  var html = '<h4>'+data.firstname+' '+data.lastname+'</h4>\
@@ -85,7 +85,11 @@
 <table class="table table-hover">\
 <tr><td><b>name</b></td><td><b>type</b></td><td><b>id</b></td><td><b>granted</b></td><td><b>del</b></td></tr>';
 			  for (var i=0; i<data.rights.length; i++) {
-			      html += '<tr><td>'+data.rights[i].name+'</td><td>'+data.rights[i].data_type+'</td><td>'+data.rights[i].data_id+'</td><td>'+data.rights[i].granted+'</td><td>'+data.rights[i].delegated+'</td></tr>';
+			      var data_id = data.rights[i].data_id;
+			      if (data.rights[i].data_type == 'metagenome') {
+				  data_id = '<a href="mgmain.html?mgpage=overview&metagenome='+data_id+'" target=_blank>'+data_id+'</a>';
+			      }
+			      html += '<tr><td>'+data.rights[i].name+'</td><td>'+data.rights[i].data_type+'</td><td>'+data_id+'</td><td>'+data.rights[i].granted+'</td><td>'+data.rights[i].delegated+'</td></tr>';
 			  }
 			  html += '</table>\
 <h4>Groups</h4>\
