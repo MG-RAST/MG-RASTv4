@@ -22,10 +22,28 @@
 	    widget.main = wparams.main;
 	    widget.sidebar = wparams.sidebar;
 	}
-	var content = widget.main;
-	var sidebar = widget.sidebar;
 
-	sidebar.innerHTML = '\
+	if (Retina.cgiParam('forgot')) {
+	    widget.forgotPassword();
+	} else {
+	    widget.newAccount();
+	}
+
+    };
+
+    widget.forgotPassword = function () {
+	var widget = Retina.WidgetInstances.metagenome_register[1];
+
+	document.title = "Password Recovery";
+
+	widget.main.innerHTML = "hello world";
+	widget.sidebar.innerHTML = "schmello world";
+    };
+
+    widget.newAccount = function () {
+	var widget = Retina.WidgetInstances.metagenome_register[1];
+
+	widget.sidebar.innerHTML = '\
 <div style="padding-left: 20px; padding-right: 20px;">\
   <h3><img src="Retina/images/info.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">why register?</h3>\
   <p>MG-RAST is a free resource, but the data you upload is private to you. Even though we encourage making data public as soon as possible, it will stay private until you decide to share it with the world. To do so, you need to be able to securely authenticate yourself.</p>\
@@ -73,7 +91,7 @@
   <div class="control-group">\
     <label class="control-label" for="inputOrganization">Organization</label>\
     <div class="controls">\
-      <span id="inputOrganiszationSpan" style="display: inline-block"></span><span class="help-inline">Enter the full name of your organization / university</span>\
+      <span id="inputOrganiszationSpan" style="display: inline-block"></span><span class="help-inline">enter the full name of your organization / university</span>\
     </div>\
   </div>\
   <div class="control-group">\
@@ -119,7 +137,7 @@
 
 
 	// set the output area
-	content.innerHTML = html;
+	widget.main.innerHTML = html;
 
 	// add organization cvfield
 	var orgs = widget.organizations;
@@ -201,6 +219,7 @@
 	    }
 	}
 	if (valid) {
+	    document.getElementById('submit').setAttribute('disabled', 'disabled');
 	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+Recaptcha.get_challenge(), {
 	    	"email": document.getElementById('inputPrimaryEmail').value,
 		"email2": document.getElementById('inputSecondaryEmail').value,
@@ -213,9 +232,17 @@
 	    	"mailinglist": document.getElementById('inputMailinglist').checked,
 		"response": Recaptcha.get_response()
 	    }, function (result) {
-		console.log(result);
+		if (result.hasOwnProperty('ERROR')) {
+		    alert("Your registration failed: "+result.ERROR);
+		} else {
+		    Retina.WidgetInstances.metagenome_register[1].main.innerHTML = "<h3>Registration Successful</h3><p>Your registration has been submitted successfully. You should have received a confirmation at the registered primary email address.</p><p>An administrator will review your request at the earliest opportunity and you will receive a mail with further instructions.</p>";
+		}
 	    }).fail(function(result){
-		console.log(result);
+		if (result.hasOwnProperty('ERROR')) {
+		    alert("Your registration failed: "+result.ERROR);
+		} else {
+		    alert('An error occured during your registration');
+		}
 	    });
 	} else {
 	    alert('You need to enter valid values for the red marked fields');
@@ -424,7 +451,7 @@
 	if (widget.org_urls.hasOwnProperty(org)) {
 	    document.getElementById('inputURL').value = widget.org_urls[org].replace(/^http\:\/\//, "");
 	    if (document.getElementById('inputCountry').value.length) {
-		Recaptcha.focus_reponse_field();
+		Recaptcha.focus_response_field();
 	    } else {
 		document.getElementById('inputCountry').focus();
 	    }
