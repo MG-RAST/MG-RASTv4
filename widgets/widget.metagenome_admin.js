@@ -43,6 +43,7 @@
 		filter: result_table_filter,
 		sort_autodetect: true,
 		synchronous: false,
+		sort: "lastname",
 		invisible_columns: {},
 		data_manipulation: Retina.WidgetInstances.metagenome_admin[1].dataManipulation,
 		minwidths: [150,150,150,80,150,150,85],
