@@ -1,8 +1,8 @@
 (function () {
     widget = Retina.Widget.extend({
         about: {
-            title: "Metagenome Administrator Widget",
-            name: "metagenome_admin",
+            title: "Metagenome User Widget",
+            name: "metagenome_user",
             author: "Tobias Paczian",
             requires: []
         }
@@ -14,7 +14,7 @@
     };
     
     widget.display = function (wparams) {
-        var widget = Retina.WidgetInstances.metagenome_admin[1];
+        var widget = Retina.WidgetInstances.metagenome_user[1];
 
 	if (wparams && wparams.main) {
 	    widget.main = wparams.main;
@@ -22,56 +22,21 @@
 	}
 
 	if (widget.user) {
-	    widget.sidebar.style.width = "600px";
 	    widget.sidebar.style.display = "";
-	    widget.main.parentNode.style.right = "660px";
-	    widget.sidebar.innerHTML = "<div id='details' style='padding-left: 10px; padding-right: 10px;'></div>";
-	    widget.main.innerHTML = "<div id='usertable'></div>";
-	    var result_columns = [ "login", "firstname", "lastname", "email", "entry_date" ];
 
-	    var result_table_filter = widget.filter;
-	    if (result_table_filter == null) {
-		result_table_filter = {};
-		for (var i=0;i<result_columns.length;i++) {
-		    result_table_filter[i] = { "type": "text" };
-		}
-	    }
-	    widget.result_table = Retina.Renderer.create("table", {
-		target: document.getElementById('usertable'),
-		rows_per_page: 24,
-		filter_autodetect: false,
-		filter: result_table_filter,
-		sort_autodetect: true,
-		synchronous: false,
-		sort: "lastname",
-		invisible_columns: {},
-		data_manipulation: Retina.WidgetInstances.metagenome_admin[1].dataManipulation,
-		minwidths: [150,150,150,80,150,150,85],
-		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
-		data: { data: [], header: result_columns }
-	    });
-	    widget.result_table.render();
-	    widget.result_table.update({},1);
+	    widget.loadUser();
 
+	    widget.main.innerHTML = "<div id='user_detail'></div>";
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
 	}
     };
 
-    widget.dataManipulation = function (data) {
+    widget.loadUser = function () {
+	var widget = Retina.WidgetInstances.metagenome_user[1];
 	
-	for (var i=0; i<data.length; i++) {
-	    data[i].email = "<a href='mailto:"+data[i].email+"'>"+data[i].email+"</a>";
-	    data[i].login = "<a onclick='Retina.WidgetInstances.metagenome_admin[1].userDetails(\""+data[i].id+"\");' style='cursor: pointer;'>"+data[i].login+"</a>";
-	}
-
-	return data;
-    };
-
-    widget.userDetails = function (id) {
-	var widget = Retina.WidgetInstances.metagenome_admin[1];
-	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + id + "?verbosity=full",
+	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + widget.user.login + "?verbosity=full",
 		      dataType: "json",
 		      success: function(data) {
 			  var html = '<h4>'+data.firstname+' '+data.lastname+'</h4>\
@@ -109,7 +74,7 @@
 			  }
 			  html += '</table>';
 
-			  document.getElementById('details').innerHTML = html;
+			  document.getElementById('user_detail').innerHTML = html;
 		      },
 		      error: function(jqXHR, error) {
 			  console.log("error: unable to connect to API server");
@@ -117,11 +82,10 @@
 		      },
 		      headers: widget.authHeader
 		    });
-
     };
 
     widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.metagenome_admin[1];
+	var widget = Retina.WidgetInstances.metagenome_user[1];
 	if (data.user) {
 	    widget.user = data.user;
 	    widget.authHeader = { "Auth": data.token };
