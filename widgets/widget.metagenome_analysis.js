@@ -521,8 +521,8 @@
 					      if (evt.lengthComputable) {
 						  var bar = document.getElementById('progressbar'+this.bound);
 						  bar.parentNode.setAttribute('class', 'progress')
-						  var percentComplete = evt.loaded / evt.total;
-						  display.innerHTML = evt.loaded.byteSize;
+						  var percentComplete = parseInt(evt.loaded / evt.total * 100);
+						  display.innerHTML = evt.loaded.byteSize();
 						  bar.style.width = percentComplete +"%";
 					      } else {
 						  display.innerHTML = evt.loaded.byteSize();
@@ -570,7 +570,7 @@
 	div.setAttribute('id', id);
 	div.setAttribute('class', 'prog');
 	div.setAttribute('style', 'clear: both;');
-	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: 100%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
+	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: '+(done ? '100' : '0' )+'%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
 	progressContainer.appendChild(div);
     };
 
@@ -585,6 +585,10 @@
 		var keys = Retina.keys(stm.DataStore.dataContainer).sort();
 		var html = "<table><tr>";
 		for (var i=0; i<keys.length; i++) {
+		    if (! widget.selectedContainer) {
+			widget.selectedContainer = keys[i];
+			widget.fillContainers();
+		    }
 		    html += "<td style='text-align: center; vertical-align: top;'><div style='width: 75px; word-wrap: break-word;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].fillContainers();'><img src='Retina/images/data.png' class='tool'><br>"+keys[i]+"</div></td>";
 		}
 		html += "</tr></table>";
