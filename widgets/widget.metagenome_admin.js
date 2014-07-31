@@ -26,7 +26,43 @@
 	    widget.sidebar.style.display = "";
 	    widget.main.parentNode.style.right = "660px";
 	    widget.sidebar.innerHTML = "<div id='details' style='padding-left: 10px; padding-right: 10px;'></div>";
-	    widget.main.innerHTML = "<div id='usertable'></div>";
+
+	    // open content spaces
+	    var html = '<div class="accordion" id="accordionParent">';
+
+	     // statistics
+	    html += '\
+  <div class="accordion-group" style="border: none; margin-bottom: 0px;">\
+    <div>\
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionParent" href="#collapseTwo" style="color: gray; text-decoration: none;">\
+        <h3>Statistics</h3>\
+      </a>\
+    </div>\
+    <div id="collapseTwo" class="collapse in">\
+      <div id="statistics" style="margin-top: 2px;"></div>\
+    </div>\
+</div>';
+
+	    // users
+	    html += '\
+  <div class="accordion-group" style="border: none; margin-bottom: 0px;">\
+    <div>\
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionParent" href="#collapseOne" style="color: gray; text-decoration: none;">\
+        <h3>Users</h3>\
+      </a>\
+    </div>\
+    <div id="collapseOne" class="collapse">\
+      <div id="usertable" style="margin-top: 2px;"></div>\
+    </div>\
+</div>';
+
+	    // close content spaces
+	    html += '</div>';
+
+	    // set the main content html
+	    widget.main.innerHTML = html;
+
+	    // create the user table
 	    var result_columns = [ "login", "firstname", "lastname", "email", "entry_date" ];
 
 	    var result_table_filter = widget.filter;
@@ -36,22 +72,29 @@
 		    result_table_filter[i] = { "type": "text" };
 		}
 	    }
-	    widget.result_table = Retina.Renderer.create("table", {
-		target: document.getElementById('usertable'),
-		rows_per_page: 24,
-		filter_autodetect: false,
-		filter: result_table_filter,
-		sort_autodetect: true,
-		synchronous: false,
-		sort: "lastname",
-		invisible_columns: {},
-		data_manipulation: Retina.WidgetInstances.metagenome_admin[1].dataManipulation,
-		minwidths: [150,150,150,80,150,150,85],
-		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
-		data: { data: [], header: result_columns }
-	    });
+	    if (! widget.hasOwnProperty('result_table')) {
+		widget.result_table = Retina.Renderer.create("table", {
+		    target: document.getElementById('usertable'),
+		    rows_per_page: 24,
+		    filter_autodetect: false,
+		    filter: result_table_filter,
+		    sort_autodetect: true,
+		    synchronous: false,
+		    sort: "lastname",
+		    invisible_columns: {},
+		    data_manipulation: Retina.WidgetInstances.metagenome_admin[1].dataManipulation,
+		    minwidths: [150,150,150,80,150,150,85],
+		    navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
+		    data: { data: [], header: result_columns }
+		});
+	    } else {
+		widget.result_table.settings.target = document.getElementById('usertable');
+	    }
 	    widget.result_table.render();
 	    widget.result_table.update({},1);
+
+	    // call statistics computation
+	    widget.statistics();
 
 	} else {
 	    widget.sidebar.style.display = "none";
@@ -67,6 +110,24 @@
 	}
 
 	return data;
+    };
+
+    widget.statistics = function () {
+	var widget = Retina.WidgetInstances.metagenome_admin[1];
+	var now = new Date();
+	var thirty = new Date(now.getTime() - (1000 * 60 * 60 * 24 * 30));
+	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/?verbosity=minimal&limit=1000&entry_date=" + encodeURIComponent("["+Retina.dateString(thirty)),
+		      dataType: "json",
+		      success: function(data) {
+			  var html = "users registered in the last 30 days: "+data.data.length;
+			  document.getElementById('statistics').innerHTML = html;
+		      },
+		      error: function(jqXHR, error) {
+			  console.log("error: unable to connect to API server");
+			  console.log(error);
+		      },
+		      headers: widget.authHeader
+		    });
     };
 
     widget.userDetails = function (id) {
