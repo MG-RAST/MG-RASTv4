@@ -292,7 +292,13 @@
 	if (widget.selectedContainer) {
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	    var p = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
-	    var mdname = Retina.keys(p.rows[0].metadata)[0];
+	    var mdname = "";
+	    for (var i in p.rows[0].metadata) {
+		if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
+		    mdname = i;
+		}
+	    }
+	    p.mdname = mdname;
 	    var cols = p.rows[0].metadata[mdname];
 	    var matrixLevels = "";
 	    for (var i=0; i<cols.length; i++) {
@@ -331,7 +337,7 @@
 	
 	var matrixLevel = document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value;
 	var r = widget.currentVisualizationController;
-
+	
 	/* drilldown */
 	if (filter && filter.level !== null) {
 	    var sel = document.getElementById('matrixLevel');
@@ -347,8 +353,7 @@
 	}
 
 	/* drilldown */
-
-	if (r.params.type == 'matrix') {	
+	if (r.params.type == 'matrix') {
 	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
 	    r.data(1, { data: matrix.data,
 			rows: matrix.rows,
@@ -681,7 +686,8 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var colItem = params.dataColItem || Retina.keys(stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata)[0];
+	var cp = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
+	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	var palette = GooglePalette(c.items.length);
 	for (var i=0; i<c.items.length; i++) {
@@ -736,7 +742,8 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var colItem = params.dataColItem || Retina.keys(stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata)[0];
+	var cp = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
+	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	var palette = GooglePalette(c.items.length);
 	for (var i=0; i<c.items.length; i++) {
@@ -800,7 +807,8 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var colItem = params.dataColItem || Retina.keys(stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata)[0];
+	var cp = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
+	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	if (colIndex >= stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata[colItem].length) {
 	    colIndex--;
@@ -828,7 +836,6 @@
 		d[key][i] += val;
 	    }
 	}
-
 	matrix.rows = Retina.keys(d).sort();
 	for (var i=0; i<matrix.rows.length; i++) {
 	    matrix.data.push(d[matrix.rows[i]]);
