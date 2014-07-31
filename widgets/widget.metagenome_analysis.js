@@ -292,7 +292,13 @@
 	if (widget.selectedContainer) {
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	    var p = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
-	    var mdname = Retina.keys(p.rows[0].metadata)[0];
+	    var mdname = "";
+	    for (var i in p.rows[0].metadata) {
+		if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
+		    mdname = i;
+		}
+	    }
+	    p.mdname = mdname;
 	    var cols = p.rows[0].metadata[mdname];
 	    var matrixLevels = "";
 	    for (var i=0; i<cols.length; i++) {
@@ -316,7 +322,6 @@
 	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": demo_data[type].renderer, "settings": demo_data[type].settings });
 
 	if (widget.selectedContainer) {
-	    console.log('hello world');
 	    widget.updateVis();
 	}
     };
@@ -332,7 +337,7 @@
 	
 	var matrixLevel = document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value;
 	var r = widget.currentVisualizationController;
-
+	
 	/* drilldown */
 	if (filter && filter.level !== null) {
 	    var sel = document.getElementById('matrixLevel');
@@ -348,8 +353,7 @@
 	}
 
 	/* drilldown */
-
-	if (r.params.type == 'matrix') {	
+	if (r.params.type == 'matrix') {
 	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
 	    r.data(1, { data: matrix.data,
 			rows: matrix.rows,
@@ -522,8 +526,8 @@
 					      if (evt.lengthComputable) {
 						  var bar = document.getElementById('progressbar'+this.bound);
 						  bar.parentNode.setAttribute('class', 'progress')
-						  var percentComplete = evt.loaded / evt.total;
-						  display.innerHTML = evt.loaded.byteSize;
+						  var percentComplete = parseInt(evt.loaded / evt.total * 100);
+						  display.innerHTML = evt.loaded.byteSize();
 						  bar.style.width = percentComplete +"%";
 					      } else {
 						  display.innerHTML = evt.loaded.byteSize();
@@ -571,7 +575,7 @@
 	div.setAttribute('id', id);
 	div.setAttribute('class', 'prog');
 	div.setAttribute('style', 'clear: both;');
-	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: 100%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
+	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: '+(done ? '100' : '0' )+'%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
 	progressContainer.appendChild(div);
     };
 
@@ -586,6 +590,10 @@
 		var keys = Retina.keys(stm.DataStore.dataContainer).sort();
 		var html = "<table><tr>";
 		for (var i=0; i<keys.length; i++) {
+		    if (! widget.selectedContainer) {
+			widget.selectedContainer = keys[i];
+			widget.fillContainers();
+		    }
 		    html += "<td style='text-align: center; vertical-align: top;'><div style='width: 75px; word-wrap: break-word;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].fillContainers();'><img src='Retina/images/data.png' class='tool'><br>"+keys[i]+"</div></td>";
 		}
 		html += "</tr></table>";
@@ -678,7 +686,8 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var colItem = params.dataColItem || Retina.keys(stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata)[0];
+	var cp = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
+	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	var palette = GooglePalette(c.items.length);
 	for (var i=0; i<c.items.length; i++) {
@@ -733,7 +742,8 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var colItem = params.dataColItem || Retina.keys(stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata)[0];
+	var cp = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
+	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	var palette = GooglePalette(c.items.length);
 	for (var i=0; i<c.items.length; i++) {
@@ -797,7 +807,8 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var colItem = params.dataColItem || Retina.keys(stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata)[0];
+	var cp = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
+	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	if (colIndex >= stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source].rows[0].metadata[colItem].length) {
 	    colIndex--;
@@ -825,7 +836,6 @@
 		d[key][i] += val;
 	    }
 	}
-
 	matrix.rows = Retina.keys(d).sort();
 	for (var i=0; i<matrix.rows.length; i++) {
 	    matrix.data.push(d[matrix.rows[i]]);
