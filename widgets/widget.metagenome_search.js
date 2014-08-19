@@ -65,8 +65,8 @@
 	// set the output area
 	// search field
 	var html = "\
-<div class='row-fluid'>\
-  <div class='span4' style='margin-top: -5px;'>\
+<div>\
+  <div style='margin-top: -5px; width: 300px; float: left;'>\
     <div class='input-append'>\
       <input type='text' id='searchtext' style='border-radius: 15px 0 0 15px;' placeholder='enter search term'>\
       <button class='btn' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
@@ -75,7 +75,7 @@
 
 	// option buttons
 	html += "\
-  <div class='span3'>\
+  <div style='width: 175px; float: left;'>\
     <div class='btn-group' data-toggle='buttons-radio'>\
       <button class='btn btn-mini active' data-toggle='button' id='metadata_button'>metadata</button>\
       <button class='btn btn-mini' data-toggle='button' id='function_button'>function</button>\
@@ -85,11 +85,11 @@
 
 	// result text
 	html += "\
-  <div class='span5' style='font-size: 12px;' id='result_text'></div>\
+  <div style='font-size: 12px; float: left;' id='result_text'></div>\
 </div>";
 
 	// result section
-	html += "<div id='result' style='overflow-x: scroll;'></div>";
+	html += "<div id='result' style='overflow-x: scroll; clear: both;'></div>";
 
 	content.innerHTML = html;
 
