@@ -57,6 +57,7 @@
     border-color: #252525;
     background-repeat: repeat-x;
     width: 100%;
+    z-index: 10000;
 }
 
 .sidebar {
