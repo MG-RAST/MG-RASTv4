@@ -64,16 +64,32 @@
 	
 	// set the output area
 	// search field
-	var html = "<div class='input-append' style='float: left;'><input type='text' id='searchtext' style='border-radius: 15px 0 0 15px; margin-left: 10px;' placeholder='enter search term' class='span5'><button class='btn' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button></div>";
+	var html = "\
+<div class='row-fluid'>\
+  <div class='span4' style='margin-top: -5px;'>\
+    <div class='input-append'>\
+      <input type='text' id='searchtext' style='border-radius: 15px 0 0 15px;' placeholder='enter search term'>\
+      <button class='btn' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
+    </div>\
+  </div>";
 
 	// option buttons
-	html += "<div style='float: left; position: relative; top: 4px;'><p style='float: left; font-size: 11px; margin-left: 25px; margin-right: 5px; position: relative; top: 1px;'>search in</p><div class='btn-group' data-toggle='buttons-radio'><button class='btn btn-mini span1 active' data-toggle='button' id='metadata_button'>metadata</button><button class='btn btn-mini span1' data-toggle='button' id='function_button'>function</button><button class='btn btn-mini span1' data-toggle='button' id='organism_button'>organism</button></div></div>";
+	html += "\
+  <div class='span3'>\
+    <div class='btn-group' data-toggle='buttons-radio'>\
+      <button class='btn btn-mini active' data-toggle='button' id='metadata_button'>metadata</button>\
+      <button class='btn btn-mini' data-toggle='button' id='function_button'>function</button>\
+      <button class='btn btn-mini' data-toggle='button' id='organism_button'>organism</button>\
+    </div>\
+  </div>";
 
 	// result text
-	html += "<div style='float: left; font-size: 12px; left: 20px; position: relative; top: 5px;' id='result_text'></div>";
+	html += "\
+  <div class='span5' style='font-size: 12px;' id='result_text'></div>\
+</div>";
 
 	// result section
-	html += "<div id='result' style='clear: both; overflow-y: auto; position: absolute; top: 70px; bottom: 0px;'></div>";
+	html += "<div id='result' style='overflow-x: scroll;'></div>";
 
 	content.innerHTML = html;
 

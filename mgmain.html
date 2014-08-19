@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
 
     <!-- title and icon -->
     <title>MG-RAST</title>
@@ -43,7 +43,7 @@
 
 	    var ico = document.getElementById('icon_'+iconame);
 	    if (ico) {
-		ico.className = "icospan icoactivespan";
+		ico.className = "icosp icoactivesp";
 		ico.firstChild.className = "ico icoactive";
 	    }
 
@@ -80,42 +80,50 @@
     </script>
   </head>
 
-  <body style="margin-top: 60px; margin-bottom: 100px;">
+  <body style="padding: 0px;">
 
     <!-- header bar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" style="box-shadow: 0 3px 3px #BBBBBB;">
-      <div class="navbar-inner">
-	<div class="container" style="width: 100%;">
+    <div class="header">
 
-	  <!-- logo and title -->
-          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgroot.html';">
+      <!-- logo and title -->
+      <div style="width: 235px; float: left; margin-right: 25px;">
+        <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgroot.html';">
+      </div>
 	  
-	  <!-- navigation icons -->
-	  <div class="icorow">
-	    <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
-	    <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Status Monitor</span></div>
-	    <div class="icospan" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="Retina/images/dna.png" class="ico" title="Publications"><span>Publications</span></div>
-	    <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
-	  </div>
+      <!-- navigation icons -->
+      <div class="icorow">
+    	<div class="icosp" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
+    	<div class="icosp" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Status Monitor</span></div>
+    	<div class="icosp" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="Retina/images/dna.png" class="ico" title="Publications"><span>Publications</span></div>
+    	<div class="icosp" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
+      </div>
 	  
-	  <!-- user info / login section -->
-	  <span id="login_space"></span>
-
-	  <!-- session management -->
-	  <span id="session_space" style="float: right; margin-right: 10px;"></span>
-	</div>
+      <div style="width: 245px; float: right;">
+    	<!-- user info / login section -->
+    	<span id="login_space"></span>
+	
+    	<!-- session management -->
+    	<span id="session_space" style="float: right; margin-right: 10px;"></span>
       </div>
     </div>
 
+    <div style="height: 80px;" class="visible-desktop"></div>
+    <div style="height: 120px;" class="hidden-desktop"></div>
+    
     <!--border layout -->
-    <div class="borderlayout">
+    <div class="row-fluid">
       
       <!-- main content -->
-      <div id="content"></div>
-    </div>
-    
-      <!-- sidebar content -->
-      <div id="sidebar" class="sidebar span4 hidden-phone"></div>
+      <div id="content" class="span7 offset1"></div>
       
+      <!-- sidebar content -->
+      <div class="span3 sidebar">
+	<span style="float: right; margin-right: 5px; cursor: pointer;" status="on" onclick="if (this.getAttribute('status') == 'on') { this.setAttribute('status', 'off'); document.getElementById('content').className='span10 offset1'; this.parentNode.className='span1'; document.getElementById('sidebar').style.display='none'; this.firstChild.className='icon-plus'; this.style.cssFloat='left'; this.style.styleFloat='left'; } else { this.setAttribute('status', 'on'); document.getElementById('content').className='span7 offset1'; this.parentNode.className='span3 sidebar'; document.getElementById('sidebar').style.display=''; this.firstChild.className='icon-minus'; this.style.cssFloat='right'; this.style.styleFloat='right'; }"><icon class="icon-minus"></icon></span>
+	<div id="sidebar"></div>
+      </div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
   </body>
 </html>

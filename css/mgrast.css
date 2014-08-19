@@ -13,22 +13,21 @@
 }
 	
 .icorow {
-    margin-left: auto;
-    margin-right: auto;
     margin-top: 5px;
-    width: 500px;
+    width: 100%;
 }
 
 .icorow > div {
     float: left;
 }
 	
-.icospan {
-    text-align: center;
+.icosp {
+    text-align: left;
     color: #666;
+    width: 70px;
 }
 
-.icospan > span {
+.icosp > span {
     margin-left: 5px;
     color: white;
     display: none;
@@ -41,21 +40,32 @@
     cursor: default;
 }
 
-.icoactivespan > span {
+.icoactivesp {
+    width: 220px;
+}
+
+.icoactivesp > span {
     display: inline;
 }
 
+.header {
+    box-shadow: 0 3px 3px #BBBBBB;
+    top: 0px;
+    position: fixed;
+    background-image: linear-gradient(to bottom, #222, #111);
+    background-color: #1b1b1b;
+    border-color: #252525;
+    background-repeat: repeat-x;
+    width: 100%;
+}
+
 .sidebar {
-    float: right;
-    position: absolute;
-    top: 100px;
-    bottom: 40px;
-    right: 40px;
     box-shadow: 4px 4px 4px #666666;
     padding: 0;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
     overflow-y: auto;
+    padding-bottom: 10px;
 }
 
 .tab-pane {
@@ -63,16 +73,9 @@
     padding-right: 10px;
 }
 
-.borderlayout {
-    bottom: 40px;
-    left: 40px;
-    overflow-y: auto;
-    position: absolute;
-    right: 460px;
-    top: 70px;
-    overflow-x: auto;
-}
-
-#content {
-    margin-top: 10px;
+@media (max-width: 767px) {
+    .header {
+	position: absolute;
+        height: 105px;
+    }
 }
