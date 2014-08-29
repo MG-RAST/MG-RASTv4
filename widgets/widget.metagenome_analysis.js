@@ -883,8 +883,6 @@
 	return matrix;
     };
 
-    
-
     /*
       DATA SECTION
      */
