@@ -113,7 +113,7 @@
   }\
 </style>\
 <h3 style="margin-left: 10px;">\
-  <img style="height: 20px; position: relative; bottom: 2px; margin-right: 10px;" src="Retina/images/search.png">\
+  <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/search.png">\
   Advanced Search\
 </h3>\
 <div id="advanced_div" style="margin-left: 10px; margin-right: 10px;">\
@@ -131,12 +131,43 @@
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].refineSearch(\'add\');">add</button>\
     </div>\
   </div>\
-  <hr>\
   <div id="refine_search_terms"></div>\
+</div>\
+<hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
+<h3 style="margin-left: 10px;">\
+  <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/cart.png">\
+  Store Results <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
+</h3>\
+<div id="storeresults_div" style="margin-left: 10px; margin-right: 10px;">\
+  <p>Store the results of your search.</p>\
+  <div class="control-group">\
+    <label class="control-label" for="searchresult_name">name</label>\
+    <div class="controls">\
+      <input type="text" id="searchresult_name" style="width: 270px;" placeholder="enter name">\
+    </div>\
+  </div>\
+  <label><b>description</b></label>\
+  <div class="control-group">\
+    <div class="controls">\
+      <textarea id="searchresult_description" placeholder="enter description (optional)" style="width: 320px;" rows=3></textarea>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <div class="controls">\
+      <label class="checkbox">\
+        <input type="checkbox" checked id="searchresult_issmart"> <b>smart search</b> <sup style="color: gray; cursor: help;" id="smartsearch">[?]</sup>\
+      </label>\
+    </div>\
+  </div>\
+  <button class="btn pull-right" type="button" disabled>store</button>\
+  <div id="search_result_overview"></div>\
 </div>\
 ';
 	
 	sidebar.innerHTML = html_sidebar;
+
+	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Storing a result requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
+	jQuery("#smartsearch").popover({ trigger: "hover", content: "A smart search issues a new search based on the stored parameters whenever it is used, rather than storing the results."});
 
 	var keyselect = document.getElementById('advanced_search_key');
 	var keylist = widget.keylist;
@@ -218,7 +249,7 @@
 	    
 	    var button = document.createElement('button');
 	    button.className = "btn btn-small";
-	    button.setAttribute('style', "float: left; margin-right: 10px;");
+	    button.setAttribute('style', "float: left; margin-right: 10px; margin-bottom: 10px;");
 	    button.innerHTML = sname+" - "+sval+" <i class='icon icon-remove'></i>";
 	    button.title = "click to remove";
 	    button.setAttribute('id', 'advSearch_'+skey);
