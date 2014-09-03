@@ -9,8 +9,7 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "table", "resource": "Retina/renderers/",  "filename": "renderer.table.js" }),
-  		 Retina.load_renderer("table") ];
+	return [ Retina.load_renderer("table") ];
     };
     
     widget.query = "";

@@ -29,52 +29,50 @@
 	    if (window.opener && window.opener.stm) {
 		window.stm = window.opener.stm;
 	    } else {
-		stm.init(RetinaConfig.mgrast_api, true, "MG-RAST");
+		stm.init({});
+		stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
 	    }
 	} catch (err) {
-	    stm.init(RetinaConfig.mgrast_api, true, "MG-RAST");
+	    stm.init({});
+	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
 	}
-	Retina.init( { library_resource: "Retina/js/" } ).then( function() {
+	Retina.init({});
 	    
-	    var page  = Retina.cgiParam("mgpage") || "search";
+	var page  = Retina.cgiParam("mgpage") || "search";
+	
+	var icons = { "overview": "publications" };
+	var iconame = icons[page] ? icons[page] : page;
+	
+	var ico = document.getElementById('icon_'+iconame);
+	if (ico) {
+	    ico.className = "icosp icoactivesp";
+	    ico.firstChild.className = "ico icoactive";
+	}
+	
+	document.title = page.charAt(0).toUpperCase()+page.substr(1);
 
-	    var icons = { "overview": "publications" };
-	    var iconame = icons[page] ? icons[page] : page;
-
-	    var ico = document.getElementById('icon_'+iconame);
-	    if (ico) {
-		ico.className = "icosp icoactivesp";
-		ico.firstChild.className = "ico icoactive";
-	    }
-
-	    document.title = page.charAt(0).toUpperCase()+page.substr(1);
-
-	    Retina.add_widget({"name": "metagenome_"+page, "resource": "widgets/",  "filename": "widget.metagenome_"+page+".js"});
-	    Retina.load_widget("metagenome_"+page).then( function() {
-		var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
-								     "sidebar": document.getElementById("sidebar") });
-
-		Retina.add_widget({"name": "login", "resource": "Retina/widgets/",  "filename": "widget.login.js"});
-		Retina.load_widget("login").then( function() {
-		    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				    "callback": mgp.loginAction,
-		    				    "authResources": { "default": "MG-RAST",
-		    						       "MG-RAST": { "icon": "MGRAST_favicon.ico",
-		    								    "prefix": "mggo4711" } },
-						    "registerEnabled": true,
-						    "registerLink": "mgmain.html?mgpage=register",
-						    "helpEnabled": true,
-						    "helpLink": "http://blog.metagenomics.anl.gov/howto/",
-						    "forgotEnabled": true,
-						    "forgotLink": "mgmain.html?mgpage=register&forgot=1" });
-		});
-
-		Retina.add_widget({"name": "session", "resource": "Retina/widgets/",  "filename": "widget.session.js"});
-		Retina.load_widget("session").then( function() {
-		    Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-		});
-		
+	Retina.load_widget("metagenome_"+page).then( function() {
+	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
+								 "sidebar": document.getElementById("sidebar") });
+	    
+	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    				"callback": mgp.loginAction,
+		    				"authResources": { "default": "MG-RAST",
+		    						   "MG-RAST": { "icon": "MGRAST_favicon.ico",
+		    								"prefix": "mggo4711" } },
+						"registerEnabled": true,
+						"registerLink": "mgmain.html?mgpage=register",
+						"helpEnabled": true,
+						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
+						"forgotEnabled": true,
+						"forgotLink": "mgmain.html?mgpage=register&forgot=1" });
 	    });
+	    
+	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
+	    });
+	    
 	});
     });
     </script>

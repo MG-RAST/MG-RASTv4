@@ -11,8 +11,7 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "cvfield", "resource": "Retina/renderers/",  "filename": "renderer.cvfield.js" }),
-  		 Retina.load_renderer("cvfield") ];
+	return [ Retina.load_renderer("cvfield") ];
     };
     
     widget.display = function (wparams) {

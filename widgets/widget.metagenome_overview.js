@@ -9,17 +9,11 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "listselect", "resource": "Retina/renderers/",  "filename": "renderer.listselect.js" }),
-                 Retina.load_renderer("listselect"),
-	         Retina.add_renderer({"name": "paragraph", "resource": "Retina/renderers/",  "filename": "renderer.paragraph.js" }),
-		 Retina.load_renderer("paragraph"),
-		 Retina.add_renderer({"name": "graph", "resource": "Retina/renderers/",  "filename": "renderer.graph.js" }),
+	return [ Retina.load_renderer("listselect"),
+	         Retina.load_renderer("paragraph"),
 		 Retina.load_renderer("graph"),
-		 Retina.add_renderer({"name": "plot", "resource": "Retina/renderers/",  "filename": "renderer.plot.js" }),
- 		 Retina.load_renderer("plot"),
- 		 Retina.add_renderer({"name": "table", "resource": "Retina/renderers/",  "filename": "renderer.table.js" }),
-  		 Retina.load_renderer("table"),
-		 Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"}),
+		 Retina.load_renderer("plot"),
+ 		 Retina.load_renderer("table"),
 		 Retina.load_widget("mgbrowse")
 	       ];
     };

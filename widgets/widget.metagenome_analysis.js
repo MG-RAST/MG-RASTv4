@@ -10,10 +10,8 @@
     
     // load all required widgets and renderers
     widget.setup = function () {
-	return [ Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"}),
-		 Retina.load_widget("mgbrowse"),
-		 Retina.add_widget({"name": "RendererController", "resource": "Retina/widgets/",  "filename": "widget.RendererController.js"}),
-		 Retina.load_widget("RendererController")
+	return [ Retina.load_widget("mgbrowse"),
+		 Retina.load_widget({"name": "RendererController", "resource": "Retina/widgets/"})
 	       ];
     };
     
