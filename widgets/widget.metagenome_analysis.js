@@ -291,19 +291,23 @@
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	    var p = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
 	    var mdname = "";
-	    for (var i in p.rows[0].metadata) {
-		if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
-		    mdname = i;
+	    if (p.rows.length > 0) {
+		for (var i in p.rows[0].metadata) {
+		    if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
+			mdname = i;
+		    }
 		}
+		p.mdname = mdname;
+		var cols = p.rows[0].metadata[mdname];
+		var matrixLevels = "";
+		for (var i=0; i<cols.length; i++) {
+		    matrixLevels += "<option value='"+i+"'>"+i+"</option>";
+		}
+		
+		containerData = "<div class='form-inline' style='margin-bottom: 20px;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div><div id='visualizeBreadcrumbs' style='margin-bottom: 20px;'></div>";
+	    } else {
+		containerData = "<p>The selected data container does not contain any data rows.</p>";
 	    }
-	    p.mdname = mdname;
-	    var cols = p.rows[0].metadata[mdname];
-	    var matrixLevels = "";
-	    for (var i=0; i<cols.length; i++) {
-		matrixLevels += "<option value='"+i+"'>"+i+"</option>";
-	    }
-
-	    containerData = "<div class='form-inline' style='margin-bottom: 20px;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div><div id='visualizeBreadcrumbs' style='margin-bottom: 20px;'></div>";
 	}
 
 	var html = "<h4>visualize - "+demo_data[type].title+"</h4>"+containerData+"<div id='visualizeTarget'></div>";
@@ -327,6 +331,10 @@
     // draw the current visualization with updated parameters
     widget.updateVis = function (filter, reset) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	if (! document.getElementById('matrixLevel')) {
+	    return;
+	}
 
 	if (reset) {
 	    document.getElementById('matrixLevel').selectedIndex = 0;
@@ -482,10 +490,10 @@
 						  user: widget.user || "public" };
 	}
 	if (! stm.DataStore.hasOwnProperty('profile') ) {
-	    stm.DataStore.profile = [];
+	    stm.DataStore.profile = {};
 	}
 	if (! stm.DataStore.hasOwnProperty('inprogress')) {
-	    stm.DataStore.inprogress = [];
+	    stm.DataStore.inprogress = {};
 	}
 	for (i=0;i<ids.length;i++) {
 	    var id = ids[i].id+"_"+type+"_"+source;
