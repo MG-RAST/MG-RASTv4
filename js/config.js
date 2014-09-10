@@ -6,7 +6,10 @@ var RetinaConfig = {
     "globus_key": "kbgo4711",
     "authResources": { "default": "MG-RAST",
 		       "MG-RAST": { "icon": "MGRAST_favicon.ico",
-				    "prefix": "mggo4711" } },
+				    "prefix": "mggo4711",
+	"keyword": "auth",
+	"url": "http://api.metagenomics.anl.gov",
+	"useHeader": false } },
 		       /*{ "default": "KBase",
 		       "KBase": { "icon": "KBase_favicon.ico",
 				  "prefix": "kbgo4711" } },*/
