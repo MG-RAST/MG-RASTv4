@@ -80,9 +80,6 @@ google.setOnLoadCallback(showNewsFeed);
 	Retina.init({});
 	Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
 	    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-					    "authResources": { "default": "MG-RAST",
-							       "MG-RAST": { "icon": "MGRAST_favicon.ico",
-									    "prefix": "mggo4711" } },
 					    "registerEnabled": true,
 					    "helpEnabled": true,
 					    "helpLink": "http://blog.metagenomics.anl.gov/howto/",
