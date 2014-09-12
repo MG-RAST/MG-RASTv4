@@ -151,14 +151,7 @@
       <textarea id="searchresult_description" placeholder="enter description (optional)" style="width: 320px;" rows=3></textarea>\
     </div>\
   </div>\
-  <div class="control-group">\
-    <div class="controls">\
-      <label class="checkbox">\
-        <input type="checkbox" checked id="searchresult_issmart"> <b>smart search</b> <sup style="color: gray; cursor: help;" id="smartsearch">[?]</sup>\
-      </label>\
-    </div>\
-  </div>\
-  <button class="btn pull-right" type="button" disabled>store</button>\
+  <button class="btn pull-right" type="button" disabled id="storeSearchButton" onclick="Retina.WidgetInstances.metagenome_search[1].storeSearch();">store</button>\
   <div id="search_result_overview"></div>\
 </div>\
 ';
@@ -231,6 +224,7 @@
 	    var sname = skeyList.options[skeyList.selectedIndex].text;
 	    var sval = document.getElementById('advanced_search_value').value;
 	    widget.advancedOptions[skey] = sval;
+	    widget.checkStoreSearch();
 
 	    // check if this is the first button
 	    if (target.innerHTML == "") {
@@ -354,6 +348,7 @@
 	
 	// get params
 	widget.query = document.getElementById("searchtext").value;
+	widget.checkStoreSearch();
 	
 	if (! stm.DataStore.hasOwnProperty('search') ) {
 	    stm.DataStore.search = {};
@@ -422,6 +417,67 @@
 	widget.sortDir = direction;
 
 	widget.queryAPI();
+    };
+
+    widget.checkStoreSearch = function () {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	var btn = document.getElementById('storeSearchButton');
+	if (widget.user && (Retina.keys(widget.advancedOptions).length || widget.query)) {
+	    btn.removeAttribute("disabled");
+	} else {
+	    btn.setAttribute("disabled", "true");
+	}
+    };
+
+    widget.storeSearch = function () {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	var types = [];
+	var poss = [ 'metadata', 'organism', 'function' ];
+	for (var i=0; i<poss.length; i++) {
+	    var btn = document.getElementById(poss[i] + '_button');
+	    for (var h=0; h<btn.classList.length; h++) {
+		if (btn.classList[h] == 'active') {
+		    types.push(poss[i]);
+		    break;
+		}
+	    }
+	}
+	
+	var search = { type: "search",
+		       querytypes: types,
+		       name: document.getElementById('searchresult_name').value,
+		       description: document.getElementById('searchresult_description').value,
+		       query: widget.query,
+		       advancedOptions: widget.advancedOptions };
+
+	if (! stm.DataStore.hasOwnProperty('preferences')) {
+	    stm.DataStore.preferences = {};
+	}
+	if (! stm.DataStore.preferences.hasOwnProperty('search')) {
+	    stm.DataStore.preferences.search = {};
+	}
+	if (stm.DataStore.preferences.search.hasOwnProperty(search.name)) {
+	    alert('you already have a search store with that name');
+	} else {
+	    stm.DataStore.preferences.search[search.name] = search;
+	}
+	
+	alert('search stored');
+    };
+
+    // login widget sends an action (log-in or log-out)
+    widget.loginAction = function (params) {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+	if (params.token) {
+	    widget.user = params.user;
+	    widget.authHeader = { "Auth": params.token };
+	} else {
+	    widget.user = null;
+	    widget.authHeader = {};
+	}
+	widget.checkStoreSearch();
     };
     
 })();

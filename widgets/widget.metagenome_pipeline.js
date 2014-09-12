@@ -1,5 +1,5 @@
 (function () {
-    widget = Retina.Widget.extend({
+    var widget = Retina.Widget.extend({
         about: {
                 title: "Metagenome Pipeline Widget",
                 name: "metagenome_pipeline",
@@ -12,6 +12,9 @@
 	return [ Retina.load_renderer("table") ];
     };
     
+    widget.authHeader = {};
+    widget.user = null;
+
     widget.display = function (wparams) {
         widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
@@ -28,10 +31,16 @@
 	if (widget.user) {
 	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
 	    
-	    //jQuery.get('http://api.metagenomics.anl.gov/1/pipeline?verbosity=full&user=travis&auth=JusBm9T9FQPePNzdaZVgrVRpz', function(data) {
-	    jQuery.get('http://140.221.84.145:8000/job?query&info.user=mgrastprod&recent=200', function(data) {
-		Retina.WidgetInstances.metagenome_pipeline[1].showJobs(data);
-	    });
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: widget.authHeader, 
+		url: RetinaConfig.awe_url+'/job?query&info.user=mgrastprod&recent=200',
+		success: function (data) {
+		    Retina.WidgetInstances.metagenome_pipeline[1].showJobs(data);
+		}}).fail(function(xhr, error) {
+
+		});
 	}
 	// there is no user, show login required
 	else {
@@ -298,6 +307,19 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 
     widget.visibility = function (visibility) {
 
+    };
+
+    // login widget sends an action (log-in or log-out)
+    widget.loginAction = function (params) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	if (params.token) {
+	    widget.user = params.user;
+	    widget.authHeader = { "Auth": params.token };
+	} else {
+	    widget.user = null;
+	    widget.authHeader = {};
+	}
+	widget.display();
     };
 
 })();

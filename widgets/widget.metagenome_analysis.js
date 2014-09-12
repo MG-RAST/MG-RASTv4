@@ -85,7 +85,7 @@
     <b>name</b><input type="text" placeholder="pick a name" style="margin-left: 10px; margin-right: 10px; width: 185px;" id="dataContainerName"><b>source</b> <select style="margin-left: 10px; margin-right: 10px;" id="profile_source"><optgroup label="protein databases"><option>M5NR</option><option>RefSeq</option><option>GenBank</option><option>IMG</option><option>SEED</option><option>TrEMBL</option><option>SwissProt</option><option>PATRIC</option><option>KEGG</option></optgroup><optgroup label="RNA databases"><option>M5RNA</option><option>RDP</option><option>Greengenes</option><option>LSU</option><option>SSU</option></optgroup><optgroup label="ontology databases"><option>Subsystems</option><option>NOG</option><option>COG</option><option>KO</option></optgroup></select> <b>type</b> <select id="profile_type" style="margin-left: 10px;"><option>organism</option><option>function</option><option>feature</option></select>\
   </div>\
   <div>\
-    <div id="mgbrowse"></div>\
+    <div id="mgbrowse"><img src="Retina/images/waiting.gif" style="position: relative; top: 10px; left: 400px;"></div>\
   </div>\
 </div>\
 <hr>\
