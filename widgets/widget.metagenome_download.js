@@ -96,62 +96,151 @@
 	    var target = document.getElementById('metagenome_download');
 
 	    var html = "";
-	    
+
 	    for (var i=0; i<data.data.length; i++) {
 		var d = data.data[i];
-		if (d.file_size == null) {
+		if (d.file_size == null || ! pipelinedata.hasOwnProperty(d.stage_id)) {
 		    continue;
 		}
 		var sname = d.stage_name;
-		var subtitle = "";
-		if (d.stage_name.match(/\.passed$/)) {
-		    sname = d.stage_name.substr(0, d.stage_name.indexOf('.'));
-		    subtitle = "<p><b>passed</b></p>";
-		}
-		if (d.stage_name.match(/\.removed$/)) {
-		    subtitle = "<p><b>removed</b></p>";		
-		} else {
-		    html += "<div><h4>"+sname+"</h4>"+subtitle;
-		    if (pipelinedata.hasOwnProperty(d.stage_id)) {
-			var p = pipelinedata[d.stage_id];
-			html += "<p>"+p.input+"</p>";
-			html += "<p>"+p.description+"</p>";
-			for (var h=0; h<p.output.length; h++) {
-			    if (typeof p.output[h] == "string") {
-				html += "<p>"+p.output[h]+"</p>";
-			    } else {
-				html += "<p>"+p.output[h].description+"<br>Column fields are as follows:</p><ul><li>";
-				p.output[h].format.join("</li><li>");
-				html += "</li></ul>";
-			    }
+		var offset = "";
+		var p = pipelinedata[d.stage_id];
+		var files = Retina.keys(p.output).sort();
+		if (d.stage_name == files[0]) {
+		    html += "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>"+p.title+"</h4>";
+		    offset = " offset6";
+		    html += "<div class='span6'>";
+		    html += "<p>"+p.input+"</p>";
+		    html += "<p>"+p.description+"</p>";
+		    for (var h=0; h<files.length; h++) {
+			html += "<p>"+p.output[files[h]].description+"</p>";
+			if (p.output[files[h]].hasOwnProperty('fields')) {
+			    html += "<p>Column fields are as follows:</p><ul><li>";
+			    html += p.output[files[h]].format.join("</li><li>");
+			    html += "</li></ul>";
 			}
 		    }
+		    html += "</div>";
 		}
 		
-		html += "<a href='"+d.url+"' class='btn btn-primary'><img src='Retina/images/download.png' style='width: 16px; opacity: 0.5;'> download</a>"; 
+		var stats = "";
+		var statsbutton = "";
+		if (d.hasOwnProperty('statistics')) {
+		    statsbutton = "<button class='btn pull-right btn-mini' onclick='if(document.getElementById(\"stats_"+sname+"\").style.display==\"none\"){document.getElementById(\"stats_"+sname+"\").style.display=\"\";}else{document.getElementById(\"stats_"+sname+"\").style.display=\"none\";}'>statistics</button>";
+		    stats += "<div style='display:none;' id='stats_"+sname+"' class='span5"+offset+"'><table class='table table-condensed' style=''>";
+		    var keys = Retina.keys(d.statistics).sort();
+		    for (var h=0; h<keys.length; h++) {
+			var desc = keys[h].replace(/_/g, " ");
+			stats += "<tr><td><b>"+desc+"</b></td><td>"+d.statistics[keys[h]]+"</td>";	
+		    }		    
+		    stats += "</table></div>";
+		}
 		
-		html += "<table class='table'>";
-		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+"</td></tr>";
+		html += "<div class='span5'><table class='table table-condensed'>";
+		html += "<tr><td colspan=2><b>"+d.file_name+"</b></td></tr>";
+		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+statsbutton+"<a href='"+d.url+"' class='btn btn-primary btn-mini' style='float: right; margin-right: 10px;'>download</a></td></tr>";
 		html += "<tr><td><b>sequence format</b></td><td>"+d.seq_format+"</td></tr>";
 		html += "<tr><td><b>file format</b></td><td>"+d.file_format+"</td></tr>";
 		html += "<tr><td><b>MD5</b></td><td>"+d.file_md5+"</td></tr>";
-		html += "</table>";
-		
-		if (d.hasOwnProperty('statistics')) {
-		    html += "<button class='btn pull-right' onclick='if(this.innerHTML==\"show statistics\"){this.innerHTML=\"hide statistics\";this.nextSibling.style.display=\"\";}else{this.innerHTML=\"show statistics\";this.nextSibling.style.display=\"none\";}'>show statistics</button><div style='display:none;'>";
-		    html += "<h5>statistics</h5>";
-		    html += "<table class='table table-condensed'>";
-		    var keys = Retina.keys(d.statistics).sort();
-		    for (var h=0; h<keys.sort; h++) {
-			var desc = keys[h].replace(/_/g, " ");
-			html += "<tr><td><b>"+desc+"</b></td><td>"+d.statistics[keys[h]]+"</td>";	
-		    }		    
-		    html += "</table></div>";
-		}
+		html += "</table></div>";
+		html += stats;
 		html += "</div>";
 	    }
+	    html += widget.apiDownloadHTML();
+
 	    target.innerHTML = html;
 	});
+    };
+
+    widget.apiDownload = function () {
+	var widget = Retina.WidgetInstances.metagenome_download[1];
+
+	document.getElementById('download_progress').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 25px; position: relative; bottom: 5px; margin-left: 15px;'>";
+
+	var ann = document.getElementById('ann_type').options[document.getElementById('ann_type').selectedIndex].value;
+	var ont = document.getElementById('ont_source').options[document.getElementById('ont_source').selectedIndex].value;
+	var org = document.getElementById('org_source').options[document.getElementById('org_source').selectedIndex].value;
+	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+Retina.cgiParam('metagenome')+"?type="+ann+"&source="+(ann == "ontology" ? ont : org);
+	var filename = Retina.cgiParam('metagenome')+"_"+ann+"_"+(ann == "ontology" ? ont : org)+".tab";
+
+	jQuery.ajax( { url: url,
+		       headers: widget.authHeader,
+		       success: function(data) {
+			   stm.saveAs(data, filename);
+			   document.getElementById('download_progress').innerHTML = "";
+		       },
+		       error: function () {
+			   alert('there was an error retrieving the data');
+			   document.getElementById('download_progress').innerHTML = "";
+		       }
+		     } );
+    };
+    
+    widget.apiDownloadHTML = function () {
+	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>Annotation Download via API</h4>\
+    <table width='100%'><tr><td align='left'>\
+      <p>Annotated reads are available through the <a href='"+RetinaConfig.mgrast_api+"' target='_blank'>MG-RAST API</a>.<br>\
+         They are built dynamicly based on the chosen annotation type and source.<br>\
+         Column fields are as follows:<ol>\
+           <li>Query / read id, e.g. mgm4441681.3|12342588</li>\
+           <li>Hit id / md5, e.g. afcfe216e7d39b7c789d6760194b6deb</li>\
+           <li>percentage identity, e.g. 100.00</li>\
+           <li>alignment length, e.g. 107</li>\
+           <li>number of mismatches, e.g. 0</li>\
+           <li>number of gap openings, e.g. 0</li>\
+           <li>q.start, e.g. 1</li>\
+           <li>q.end, e.g. 107</li>\
+           <li>s.start, e.g. 1262</li>\
+           <li>s.end, e.g. 1156</li>\
+           <li>e-value, e.g. 1.7e-54</li>\
+           <li>score in bits, e.g. 210.0</li>\
+           <li>semicolon seperated list of annotation text(s) for the given type and source</li>\
+         </ol></p>\
+      <table>\
+        <tr><td>Annotation Type</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>Data Source</td><td></td><td></td></tr>\
+        <tr>\
+          <td>\
+            <select id='ann_type' onchange='\
+                var sel_type = this.options[this.selectedIndex].value;\
+                if (sel_type == \"ontology\") {\
+                  document.getElementById(\"ont_source\").style.display=\"\";\
+                  document.getElementById(\"org_source\").style.display=\"none\";\
+                } else {\
+                  document.getElementById(\"org_source\").style.display=\"\";\
+                  document.getElementById(\"ont_source\").style.display=\"none\";\
+                }'>\
+              <option>organism</option>\
+              <option>function</option>\
+              <option>ontology</option>\
+              <option>feature</option>\
+            </select></td>\
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>\
+          <td>\
+            <select id='org_source'>\
+              <option>RefSeq</option>\
+              <option>GenBank</option>\
+              <option>IMG</option>\
+              <option>SEED</option>\
+              <option>TrEMBL</option>\
+              <option>SwissProt</option>\
+              <option>PATRIC</option>\
+              <option>KEGG</option>\
+              <option>RDP</option>\
+              <option>Greengenes</option>\
+              <option>LSU</option>\
+              <option>SSU</option>\
+            </select>\
+            <select id='ont_source' style='display:none;'>\
+              <option>Subsystems</option>\
+              <option>NOG</option>\
+              <option>COG</option>\
+              <option>KO</option>\
+            </select></td>\
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>\
+          <td><button class='btn btn-primary' style='position: relative; bottom: 5px;' onclick='Retina.WidgetInstances.metagenome_download[1].apiDownload();'>download</button><span id='download_progress'></span></td>\
+        </tr>\
+      </table>\
+    </td></tr></table></div>";
     };
 
     widget.dataManipulation = function (data) {
