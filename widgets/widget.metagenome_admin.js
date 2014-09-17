@@ -4,12 +4,13 @@
             title: "Metagenome Administrator Widget",
             name: "metagenome_admin",
             author: "Tobias Paczian",
-            requires: []
+            requires: [ "rgbcolor.js" ]
         }
     });
     
     widget.setup = function () {
-	return [ Retina.load_renderer("table") ];
+	return [ Retina.load_renderer("table"),
+		 Retina.load_renderer("graph") ];
     };
     
     widget.display = function (wparams) {
@@ -34,7 +35,7 @@
   <div class="accordion-group" style="border: none; margin-bottom: 0px;">\
     <div>\
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionParent" href="#collapseTwo" style="color: gray; text-decoration: none;">\
-        <h3>Statistics</h3>\
+        <h3>Job Statistics for the last 30 days</h3>\
       </a>\
     </div>\
     <div id="collapseTwo" class="collapse in">\
@@ -94,12 +95,169 @@
 	    widget.result_table.update({},1);
 
 	    // call statistics computation
-	    widget.statistics();
-
+	    widget.getJobData();
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
 	}
+    };
+
+    widget.showJobData = function () {
+	var widget = Retina.WidgetInstances.metagenome_admin[1];
+
+	var target = document.getElementById('statistics');
+
+	var jobs = stm.DataStore.jobdata;
+	var submitted = 0;
+	var numsubmitted = 0;
+	var completed = 0;
+	var numcompleted = 0;
+	var tasks = {};
+	var dnum = {};
+	var dnumc = {};
+	var dsize = {};
+	var dsizec = {};
+	for (var i=0; i<jobs.length; i++) {
+	    var day = jobs[i].submittime.substr(0,10);
+	    if (! dnum.hasOwnProperty(day)) {
+		dnum[day] = 0;
+		dsize[day] = 0;
+	    }
+	    dnum[day]++;
+	    dsize[day] += jobs[i].size;
+	    if (! tasks.hasOwnProperty(jobs[i].task)) {
+		tasks[jobs[i].task] = 0;
+	    }
+	    tasks[jobs[i].task]++;
+	    if (jobs[i].completedtime == "0001-01-01T00:00:00Z") {
+		numsubmitted++;
+		submitted += jobs[i].size;
+	    } else {
+		var cday = jobs[i].completedtime.substr(0,10);
+		if (! dnumc.hasOwnProperty(cday)) {
+		    dnumc[cday] = 0;
+		    dsizec[cday] = 0;
+		}
+		dnumc[cday]++;
+		dsizec[cday] += jobs[i].size;
+		numcompleted++;
+		completed += jobs[i].size;
+	    }
+	}
+	var tot = submitted + completed;
+
+	var html = "<table class='table'>";
+	html += "<tr><td><b># submitted</b></td><td>"+(numsubmitted+numcompleted)+"</td></tr>";
+	html += "<tr><td><b># in queue</b></td><td>"+numsubmitted+"</td></tr>";
+	html += "<tr><td><b># completed</b></td><td>"+numcompleted+"</td></tr>";
+	html += "<tr><td><b>submitted</b></td><td>"+tot.byteSize()+"</td></tr>";
+	html += "<tr><td><b>in queue</b></td><td>"+submitted.byteSize()+"</td></tr>";
+	html += "<tr><td><b>completed</b></td><td>"+completed.byteSize()+"</td></tr>";
+
+	html += "</table><h4>currently running stages</h4><div id='state_graph'></div><h4># of submitted and completed jobs</h4><div id='day_graph'></div><h4>submitted and completed GB</h4><div id='dayc_graph'></div>";
+
+	target.innerHTML = html;
+
+	// state graph
+	var data = [ { name: "stages", data: [] } ];
+	var keys = Retina.keys(tasks).sort();
+	var xlabels = [];
+	for (var i=0; i<keys.length; i++) {
+	    var taskname = keys[i] > -1 ? stm.DataStore.jobtemplate.tasks[keys[i]].cmd.description : "complete";
+	    if (taskname == "preprocess" || taskname == "complete") {
+		continue;
+	    }
+	    xlabels.push(taskname);
+	    data[0].data.push(tasks[keys[i]]);
+	}
+	Retina.Renderer.create("graph", { target: document.getElementById('state_graph'),
+					  data: data,
+					  x_labels: xlabels,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-25",
+					  type: "column" }).render();
+
+	// daygraph
+	var days = Retina.keys(dnum);
+	for (var i in dnumc) {
+	    if (dnumc.hasOwnProperty(i)) {
+		if (! dnum.hasOwnProperty(i)) {
+		    dnum[i] = 0;
+		    dsize[i] = 0;
+		    days.push(i);
+		}
+	    }
+	}
+	for (var i in dnum) {
+	    if (dnum.hasOwnProperty(i)) {
+		if (! dnumc.hasOwnProperty(i)) {
+		    dnumc[i] = 0;
+		    dsizec[i] = 0;
+		}
+	    }
+	}
+	days = days.sort();
+	var daydata = [ { name: "#submitted", data: [] },
+			{ name: "#completed", data: [] } ];
+	var daycdata = [ { name: "submitted (GB)", data: [] },
+			 { name: "completed (GB)", data: [] } ];
+	for (var i=0; i<days.length; i++) {
+	    daydata[0].data.push(parseInt(dnum[days[i]] / 1000000000));
+	    daydata[1].data.push(parseInt(dnumc[days[i]] / 1000000000));
+	    daycdata[0].data.push(parseInt(dsize[days[i]] / 1000000000));
+	    daycdata[1].data.push(parseInt(dsizec[days[i]] / 1000000000));
+	}
+	Retina.Renderer.create("graph", { target: document.getElementById('day_graph'),
+					  data: daydata,
+					  x_labels: days,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-25",
+					  type: "column" }).render();
+	Retina.Renderer.create("graph", { target: document.getElementById('dayc_graph'),
+					  data: daycdata,
+					  x_labels: days,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-25",
+					  type: "column" }).render();
+    };
+
+    widget.dateString = function (period) {
+	var past = new Date(new Date().getTime() - period);
+	var d = past.getDate();
+	d = d < 10 ? "0" + d : d;
+	var m = past.getMonth() + 1;
+	m = m < 10 ? "0" + m : m;
+	var timestamp = past.getFullYear() + "-" + m + "-" + d;
+	return timestamp;
+    };
+
+    widget.getJobData = function () {
+	var widget = Retina.WidgetInstances.metagenome_admin[1];
+
+	var period = 1000 * 60 * 60 * 24 * 30; // 30 days
+	var timestamp = widget.dateString(period);
+	jQuery.ajax( { dataType: "json",
+		       url: RetinaConfig['awe_url']+"/job?query&date_start="+timestamp+"&verbosity=minimal&limit=10000",
+		       headers: widget.aweAuthHeader,
+		       success: function(data) {
+			   stm.DataStore.jobdata = data.data;
+			   jQuery.ajax( { dataType: "json",
+					  url: RetinaConfig['awe_url']+"/job/"+data.data[0].id,
+					  headers: widget.aweAuthHeader,
+					  success: function(data) {
+					      stm.DataStore.jobtemplate = data.data;
+					      var widget = Retina.WidgetInstances.metagenome_admin[1];
+					      widget.showJobData();
+					  },
+					  error: function () {
+					      alert('there was an error retrieving the data');
+					  }
+					} );
+		       },
+		       error: function () {
+			   alert('there was an error retrieving the data');
+		       }
+		     } );
     };
 
     widget.dataManipulation = function (data) {
@@ -110,24 +268,6 @@
 	}
 
 	return data;
-    };
-
-    widget.statistics = function () {
-	var widget = Retina.WidgetInstances.metagenome_admin[1];
-	var now = new Date();
-	var thirty = new Date(now.getTime() - (1000 * 60 * 60 * 24 * 30));
-	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/?verbosity=minimal&limit=1000&entry_date=" + encodeURIComponent("["+Retina.dateString(thirty)),
-		      dataType: "json",
-		      success: function(data) {
-			  var html = "users registered in the last 30 days: "+data.data.length;
-			  document.getElementById('statistics').innerHTML = html;
-		      },
-		      error: function(jqXHR, error) {
-			  console.log("error: unable to connect to API server");
-			  console.log(error);
-		      },
-		      headers: widget.authHeader
-		    });
     };
 
     widget.userDetails = function (id) {
@@ -186,9 +326,12 @@
 	if (data.user) {
 	    widget.user = data.user;
 	    widget.authHeader = { "Auth": data.token };
+	    widget.aweAuthHeader = { "Authorization": "OAuth "+data.token,
+				     "Datatoken": "OAuth "+data.token };
 	} else {
 	    widget.user = null;
 	    widget.authHeader = {};
+	    widget.aweAuthHeader = {};
 	}
 	widget.display();
     };
