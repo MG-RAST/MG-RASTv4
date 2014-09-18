@@ -105,19 +105,70 @@
     widget.showJobData = function () {
 	var widget = Retina.WidgetInstances.metagenome_admin[1];
 
+	// the target div
 	var target = document.getElementById('statistics');
 
+	// the job template
+	var template = stm.DataStore.jobtemplate;
+
+	// get the names for the task ids and initialize the task counter
+	var tasklabels = [];
+	var tasknames = {};
+	var taskcount = {};
+	for (var i=0; i<template.tasks.length; i++) {
+	    tasklabels[i] = template.tasks[i].cmd.description;
+	    tasknames[i] = template.tasks[i].cmd.description;
+	    taskcount[i] = 0;
+	}
+	tasknames["-1"] = "done";
+	tasklabels.push("done");
+
+	// all jobs
 	var jobs = stm.DataStore.jobdata;
+
+	// initialize counters
 	var submitted = 0;
 	var numsubmitted = 0;
 	var completed = 0;
 	var numcompleted = 0;
-	var tasks = {};
+	var tot = 0;
+	var totsize = 0;
+
 	var dnum = {};
 	var dnumc = {};
 	var dsize = {};
 	var dsizec = {};
+
+	var states = { "completed": 0,
+		       "in-progress": 0,
+		       "pending": 0,
+		       "queued": 0,
+		       "suspend": 0,
+		       "unknown": 0 };
+
+	// iterate over the jobs
 	for (var i=0; i<jobs.length; i++) {
+
+	    // do not look at deleted jobs
+	    if (jobs[i].state == "deleted") {
+		continue;
+	    }
+
+	    // count the current task (leave out preprocess for now)
+	    if (tasknames[jobs[i].task] != "preprocess") {
+		taskcount[jobs[i].task]++;
+	    }
+
+	    // count the current state
+	    states[jobs[i].state]++;
+
+	    // count the total number of jobs
+	    tot++;
+	    
+	    // count the total size
+	    totsize += jobs[i].size;
+
+	    // get the submittime date
 	    var day = jobs[i].submittime.substr(0,10);
 	    if (! dnum.hasOwnProperty(day)) {
 		dnum[day] = 0;
@@ -125,10 +176,8 @@
 	    }
 	    dnum[day]++;
 	    dsize[day] += jobs[i].size;
-	    if (! tasks.hasOwnProperty(jobs[i].task)) {
-		tasks[jobs[i].task] = 0;
-	    }
-	    tasks[jobs[i].task]++;
+
+	    // get the completedtime date
 	    if (jobs[i].completedtime == "0001-01-01T00:00:00Z") {
 		numsubmitted++;
 		submitted += jobs[i].size;
@@ -144,35 +193,43 @@
 		completed += jobs[i].size;
 	    }
 	}
-	var tot = submitted + completed;
 
 	var html = "<table class='table'>";
-	html += "<tr><td><b># submitted</b></td><td>"+(numsubmitted+numcompleted)+"</td></tr>";
+	html += "<tr><td><b># submitted</b></td><td>"+tot+"</td></tr>";
 	html += "<tr><td><b># in queue</b></td><td>"+numsubmitted+"</td></tr>";
 	html += "<tr><td><b># completed</b></td><td>"+numcompleted+"</td></tr>";
-	html += "<tr><td><b>submitted</b></td><td>"+tot.byteSize()+"</td></tr>";
+	html += "<tr><td><b>submitted</b></td><td>"+totsize.byteSize()+"</td></tr>";
 	html += "<tr><td><b>in queue</b></td><td>"+submitted.byteSize()+"</td></tr>";
 	html += "<tr><td><b>completed</b></td><td>"+completed.byteSize()+"</td></tr>";
 
-	html += "</table><h4>currently running stages</h4><div id='state_graph'></div><h4># of submitted and completed jobs</h4><div id='day_graph'></div><h4>submitted and completed GB</h4><div id='dayc_graph'></div>";
+	html += "</table><h4>currently running stages</h4><div id='task_graph'></div><h4># of submitted and completed jobs</h4><div id='day_graph'></div><h4>submitted and completed GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
 	target.innerHTML = html;
 
 	// state graph
-	var data = [ { name: "stages", data: [] } ];
-	var keys = Retina.keys(tasks).sort();
-	var xlabels = [];
-	for (var i=0; i<keys.length; i++) {
-	    var taskname = keys[i] > -1 ? stm.DataStore.jobtemplate.tasks[keys[i]].cmd.description : "complete";
-	    if (taskname == "preprocess" || taskname == "complete") {
-		continue;
+	var sdata = [ { name: "count", data: [] } ];
+	var slabels = [];
+	for (var i in states) {
+	    if (states.hasOwnProperty(i)) {
+		sdata[0].data.push(states[i]);
+		slabels.push(i+" ("+states[i]+")");
 	    }
-	    xlabels.push(taskname);
-	    data[0].data.push(tasks[keys[i]]);
 	}
 	Retina.Renderer.create("graph", { target: document.getElementById('state_graph'),
+					  x_labels: slabels,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-25",
+					  data: sdata }).render();
+	
+	// task graph
+	var data = [ { name: "count", data: [] } ];
+	for (var i=0; i<template.tasks.length; i++) {
+	    data[0].data.push(taskcount[i]);
+	}
+	data[0].data.push(taskcount["-1"]);
+	Retina.Renderer.create("graph", { target: document.getElementById('task_graph'),
 					  data: data,
-					  x_labels: xlabels,
+					  x_labels: tasklabels,
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
