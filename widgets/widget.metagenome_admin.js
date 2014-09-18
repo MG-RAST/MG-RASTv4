@@ -194,6 +194,24 @@
 	    }
 	}
 
+	var submittedtoday = 0;
+	var completedtoday = 0;
+	var nsubmittedtoday = 0;
+	var ncompletedtoday = 0;
+	var tnow = widget.dateString(0);
+	if (dnum.hasOwnProperty(tnow)) {
+	    nsubmittedtoday = dnum[tnow];
+	}
+	if (dnumc.hasOwnProperty(tnow)) {
+	    ncompletedtoday = dnumc[tnow];
+	}
+	if (dsize.hasOwnProperty(tnow)) {
+	    submittedtoday = dsize[tnow];
+	}
+	if (dsizec.hasOwnProperty(tnow)) {
+	    completedtoday = dsizec[tnow];
+	}
+
 	var html = "<table class='table'>";
 	html += "<tr><td><b># submitted</b></td><td>"+tot+"</td></tr>";
 	html += "<tr><td><b># in queue</b></td><td>"+numsubmitted+"</td></tr>";
@@ -201,6 +219,10 @@
 	html += "<tr><td><b>submitted</b></td><td>"+totsize.byteSize()+"</td></tr>";
 	html += "<tr><td><b>in queue</b></td><td>"+submitted.byteSize()+"</td></tr>";
 	html += "<tr><td><b>completed</b></td><td>"+completed.byteSize()+"</td></tr>";
+	html += "<tr><td><b># submitted today</b></td><td>"+nsubmittedtoday+"</td></tr>";
+	html += "<tr><td><b># completed today</b></td><td>"+ncompletedtoday+"</td></tr>";
+	html += "<tr><td><b>submitted today</b></td><td>"+submittedtoday.byteSize()+"</td></tr>";
+	html += "<tr><td><b>completed today</b></td><td>"+completedtoday.byteSize()+"</td></tr>";
 
 	html += "</table><h4>currently running stages</h4><div id='task_graph'></div><h4># of submitted and completed jobs</h4><div id='day_graph'></div><h4>submitted and completed GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
