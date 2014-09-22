@@ -13,6 +13,7 @@
     };
     
     widget.authHeader = {};
+    widget.aweAuthHeader = {};
     widget.user = null;
 
     widget.display = function (wparams) {
@@ -26,16 +27,19 @@
 	var sidebar = widget.sidebar;
 	
 	// set the output area
+	sidebar.parentNode.className = "span5 sidebar";
+	document.getElementById('sidebarResizer').style.display = "none";
+	content.className = "span5 offset1";
 
 	// check if we have a user
 	if (widget.user) {
 	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
-	    
+
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
-		headers: widget.authHeader, 
-		url: RetinaConfig.awe_url+'/job?query&info.user=mgrastprod&recent=200',
+		headers: widget.aweAuthHeader, 
+		url: RetinaConfig.awe_url+'/job?query&info.user='+widget.user.id+'&recent=200',
 		success: function (data) {
 		    Retina.WidgetInstances.metagenome_pipeline[1].showJobs(data);
 		}}).fail(function(xhr, error) {
@@ -48,6 +52,9 @@
 	}
     };
 
+    /*
+      MAIN CONTENT
+     */
     widget.showJobs = function (data) {
 	widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
@@ -120,27 +127,23 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 
 	// iterate over data rows
 	for (var i=0; i<data.length; i++) {
+	    if (data[i].state == "deleted") {
+		continue;
+	    }
 	    var stage = "complete";
 	    if (data[i].remaintasks > 0) {
 		stage = data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description;
 	    }
-	    html += "<tr style='cursor: pointer;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'><td>"+data[i].info.name+"</td><td>"+stage+"</td><td>"+widget.status(data[i].tasks)+"</td><td>"+widget.dots(data[i].tasks)+"</td></tr>";
+	    html += "<tr style='cursor: pointer;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'><td>"+data[i].info.name+"</td><td>"+stage+"</td><td>"+widget.status(data[i].state)+"</td><td>"+widget.dots(data[i].tasks)+"</td></tr>";
 	}
 	html += "</table>";
 
 	content.innerHTML = html;
     };
-
-    widget.loginAction = function (params) {
-	if ((params.action == 'login') && (params.result == 'success')) {
-	    Retina.WidgetInstances.metagenome_pipeline[1].user = true;
-	    Retina.WidgetInstances.metagenome_pipeline[1].display();
-	} else {
-	    Retina.WidgetInstances.metagenome_pipeline[1].user = null;
-	    Retina.WidgetInstances.metagenome_pipeline[1].display();
-	}
-    };
     
+    /*
+      SIDEBAR CONTENT
+     */
     widget.showJobDetails = function (id) {
 	widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
@@ -149,44 +152,82 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 
 	// create the html
 	var html = '\
-<h3 style="margin-left: 10px;">'+job.info.name+' ('+job.info.project+')</h3>\
+<h3 style="margin-left: 10px;">'+job.info.name+'</h3>\
 <ul class="nav nav-tabs" style="position: relative; left: -1px;">\
-  <li>\
+  <li class="active">\
     <a href="#status" data-toggle="tab">Status</a>\
   </li>\
-  <li class="active">\
-    <a href="#stage" data-toggle="tab">Pipeline</a>\
+  <li>\
+    <a href="#stage" data-toggle="tab" id="pheader">Pipeline</a>\
   </li>\
   <li>\
-    <a href="#settings" data-toggle="tab">Settings</a>\
-  </li>\
-  <li>\
-    <a href="#visibility" data-toggle="tab">Visibility</a>\
-  </li>\
-  <li>\
-    <a href="#priority" data-toggle="tab">Priority</a>\
+    <a href="#settings" data-toggle="tab" id="sheader">Settings</a>\
   </li>\
 </ul>\
 <div class="tab-content">\
-  <div id="visibility" class="tab-pane fade"></div>\
-  <div id="status" class="tab-pane fade"></div>\
-  <div id="stage" class="tab-pane fade active in">\
+  <div id="status" class="tab-pane fade active in">'+widget.statusDetails(job)+'</div>\
+  <div id="stage" class="tab-pane fade">\
 '+widget.stagePills(job)+'\
   </div>\
   <div id="settings" class="tab-pane fade"></div>\
-  <div id="priority" class="tab-pane fade"></div>\
 </div>';
 
 	widget.sidebar.innerHTML = html;
     };
     
-    widget.prettyAWEdate = function (date) {
-	date = date.replace(/T/, " ");
-	date = date.replace(/\.\d+\Z/, "");
-	return date;
+
+    widget.statusDetails = function (job) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	var average_wait_time = "10 days";
+
+	var html = "<p>The job <b>"+job.info.name+"</b> was submitted as part of the project <b>"+job.info.project+"</b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+
+	html += "<p>The current status is <b>"+job.state+"</b>, ";
+	if (job.state == "error") {
+	    html += "<p>The error message is:</p>";
+	    html += "<p>"+job.notes+"</p>";
+	} else {
+	    if (job.remaintasks > 0) {
+		if (job.remaintasks < 25) {
+		    html += job.remaintasks + " out of " + job.tasks.length + " tasks still need to run before it is complete. You can look at the details of the completed tasks in the <a href='#' onclick='document.getElementById(\"pheader\").click();'>Pipeline</a> tab.";
+		} else {
+		    html += "no task has started computation yet.";
+		}
+	    } else {
+		html += "the computation is finished. You can take a look at the overview page of this metagenome <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>here</a>.";
+	    }
+	    html += "</p>";
+	    
+	    if (job.remaintasks > 0) {
+		// time since submission
+		var time_passed = new Date().getTime() - Date.parse(job.info.submittime);
+		var day = parseInt(time_passed / (1000 * 60 * 60 * 24));
+		time_passed = time_passed - (day * 1000 * 60 * 60 * 24);
+		var hour = parseInt(time_passed / (1000 * 60 * 60));
+		time_passed = time_passed - (hour * 1000 * 60 * 60);
+		var minute = parseInt(time_passed / (1000 * 60));
+		var some_time = ((day > 0) ? day+" days " : "") + ((hour > 0) ? hour+" hours " : "") + minute+" minutes";
+		
+		var jsize = 0;
+		for (var i in job.tasks[0].inputs) {
+		    if (job.tasks[0].inputs.hasOwnProperty(i)) {
+			jsize = job.tasks[0].inputs[i].size.byteSize();
+			break;
+		    }
+		}
+		
+		html += "<p>The job has been in the pipeline for <b>"+some_time+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with a priority of <b>"+job.info.priority+"</b>. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
+		
+		html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
+	    }
+	}
+
+	return html;
     };
 
     widget.stagePills = function (job) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	var html = "<h4>this job has no tasks</h4>";
 	if (job.tasks.length > 0) {
@@ -194,17 +235,17 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	    for (var i=0; i<job.tasks.length; i++) {
 		if (job.tasks[i].state == 'completed') {
 		    html += '\
-<div class="pill donepill">\
+<div class="pill donepill clickable" onclick="Retina.WidgetInstances.metagenome_pipeline[1].stageDetails(this, \''+job.id+'\', '+i+');">\
   <img class="miniicon" src="Retina/images/ok.png">\
   '+job.tasks[i].cmd.description+'\
-  <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].completeddate)+'</span>\
-</div>';
+  <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].completeddate)+'</span>\
+</div><div style="display: none;"></div>';
 		} else if (job.tasks[i].state == 'in-progress') {
 		    html += '\
 <div class="pill runningpill">\
   <img class="miniicon" src="Retina/images/settings3.png">\
   '+job.tasks[i].cmd.description+'\
-  <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].starteddate)+'</span>\
+  <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].starteddate)+'</span>\
 </div>';
 		} else if (job.tasks[i].state == 'queued') {
 		    html += '\
@@ -218,7 +259,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 <div class="pill errorpill">\
   <img class="miniicon" src="Retina/images/remove.png">\
   '+job.tasks[i].cmd.description+'\
-  <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].createddate)+'</span>\
+  <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].createddate)+'</span>\
 </div>';
 		} else if (job.tasks[i].state == 'pending') {
 		    html += '\
@@ -232,7 +273,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 <div class="pill errorpill">\
   <img class="miniicon" src="Retina/images/remove.png">\
   '+job.tasks[i].cmd.description+'\
-  <span style="float: right;">'+Retina.WidgetInstances.metagenome_pipeline[1].prettyAWEdate(job.tasks[i].createddate)+'</span>\
+  <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].createddate)+'</span>\
 </div>';
 		} else {
 		    console.log('unhandled state: '+job.tasks[i].state);
@@ -241,6 +282,18 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	}
 
 	return html;
+    };
+
+    widget.stageDetails = function (pill, jid, stage) {
+
+    };
+
+    /*
+      HELPER FUNCTIONS
+     */
+    widget.prettyAWEdate = function (date) {
+	var pdate = new Date(Date.parse(date)).toLocaleString();
+	return pdate;
     };
 
     widget.dots = function (stages) {
@@ -270,43 +323,23 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	return dots;
     };
 
-    widget.status = function (stages) {
-	if (stages.length > 0) {
-	    var currentStage = 0;
-	    for (var i=0;i<stages.length;i++) {
-		if (stages[i].state == 'pending') {
-		    currentStage--;
-		    break;
-		}
-		currentStage++;
-	    }
-	    if (currentStage < 0) {
-		currentStage = 0;
-	    }
-	    if (currentStage == stages.length) {
-		currentStage--;
-	    }
-	    if (stages[currentStage].state == "completed") {
-		return '<img class="miniicon" src="Retina/images/ok.png"><span class="green">completed</span>';
-	    } else if (stages[currentStage].state == "in-progress") {
-		return '<img class="miniicon" src="Retina/images/settings3.png"><span class="blue">running</span>';
-	    } else if (stages[currentStage].state == "queued") {
-		return '<img class="miniicon" src="Retina/images/clock.png"><span class="orange">queued</span>';
-	    } else if (stages[currentStage].state == "pending") {
-		return '<img class="miniicon" src="Retina/images/clock.png"><span class="gray">pending</span>';
-	    } else if (stages[currentStage].state == "error") {
-		return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">error</span>';
-	    } else if (stages[currentStage].state == "suspend") {
-		return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">suspended</span>';
-	    } else {
-		console.log("unhandled state: "+stages[currentStage].state);
-		return "";
-	    }
+    widget.status = function (state) {
+	if (state == "completed") {
+	    return '<img class="miniicon" src="Retina/images/ok.png"><span class="green">completed</span>';
+	} else if (state == "in-progress") {
+	    return '<img class="miniicon" src="Retina/images/settings3.png"><span class="blue">running</span>';
+	} else if (state == "queued") {
+	    return '<img class="miniicon" src="Retina/images/clock.png"><span class="orange">queued</span>';
+	} else if (state == "pending") {
+	    return '<img class="miniicon" src="Retina/images/clock.png"><span class="gray">pending</span>';
+	} else if (state == "error") {
+	    return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">error</span>';
+	} else if (state == "suspend") {
+	    return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">suspended</span>';
+	} else {
+	    console.log("unhandled state: "+state);
+	    return "";
 	}
-    };
-
-    widget.visibility = function (visibility) {
-
     };
 
     // login widget sends an action (log-in or log-out)
@@ -315,11 +348,25 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	if (params.token) {
 	    widget.user = params.user;
 	    widget.authHeader = { "Auth": params.token };
+	    widget.aweAuthHeader = { "Authorization": "OAuth "+params.token,
+				     "Datatoken": "OAuth "+params.token };
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: widget.authHeader, 
+		url: RetinaConfig.mgrast_api+'/user/sonubioinfo', // widget.user.login
+		success: function (data) {
+		    Retina.WidgetInstances.metagenome_pipeline[1].user.id = data.id;
+		    Retina.WidgetInstances.metagenome_pipeline[1].display();
+		}}).fail(function(xhr, error) {
+		    
+		});
 	} else {
 	    widget.user = null;
 	    widget.authHeader = {};
+	    widget.aweAuthHeader = {};
+	    widget.display();
 	}
-	widget.display();
     };
 
 })();

@@ -34,6 +34,8 @@
 
     widget.loadUser = function () {
 	var widget = Retina.WidgetInstances.metagenome_user[1];
+
+	console.log(widget.user);
 	
 	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + widget.user.login + "?verbosity=full",
 		      dataType: "json",

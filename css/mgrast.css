@@ -80,3 +80,7 @@
         height: 105px;
     }
 }
+
+.clickable {
+    cursor: pointer;
+}

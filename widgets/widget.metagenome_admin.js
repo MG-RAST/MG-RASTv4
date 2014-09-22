@@ -39,7 +39,7 @@
       </a>\
     </div>\
     <div id="collapseTwo" class="collapse in">\
-      <div id="statistics" style="margin-top: 2px;"></div>\
+      <div id="statistics" style="margin-top: 2px;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>\
     </div>\
 </div>';
 
