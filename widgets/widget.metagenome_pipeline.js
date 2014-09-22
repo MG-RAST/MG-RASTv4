@@ -19,6 +19,10 @@
     widget.display = function (wparams) {
         widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
+	if (! stm.DataStore.hasOwnProperty('metagenome')) {
+	    stm.DataStore.metagenome = {};
+	}
+	
 	if (wparams && wparams.main) {
 	    widget.main = wparams.main;
 	    widget.sidebar = wparams.sidebar;
@@ -146,13 +150,37 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
      */
     widget.showJobDetails = function (id) {
 	widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	widget.sidebar.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 40%; margin-top: 50px; margin-bottom: 50px;'>";
 	
 	// get the job data from the DataStore
 	var job = stm.DataStore.job[id];
+	var jobid = id;
+
+	// get the metagenome data if available
+	var metagenome;
+	if (job.remaintasks == 0) {
+	    if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
+		metagenome = stm.DataStore.metagenome[job.info.userattr.id];
+	    } else {
+		jQuery.ajax({
+		    method: "GET",
+		    dataType: "json",
+		    headers: widget.authHeader, 
+		    url: RetinaConfig.mgrast_api+'/metagenome/'+job.info.userattr.id,
+		    success: function (data) {
+			stm.DataStore.metagenome[data.id] = data;
+			Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(jobid);
+		    }}).fail(function(xhr, error) {
+			Retina.WidgetInstances.metagenome_pipeline[1].sidebar.innerHTML = "<div class='alert alert-error'>could not retrieve detail data</div>";
+		    });
+		return;
+	    }
+	}
 
 	// create the html
 	var html = '\
-<h3 style="margin-left: 10px;">'+job.info.name+'</h3>\
+<h3 style="margin-left: 10px;">'+job.info.userattr.name+' ('+job.info.name+')</h3>\
 <ul class="nav nav-tabs" style="position: relative; left: -1px;">\
   <li class="active">\
     <a href="#status" data-toggle="tab">Status</a>\
@@ -166,22 +194,37 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 </ul>\
 <div class="tab-content">\
   <div id="status" class="tab-pane fade active in">'+widget.statusDetails(job)+'</div>\
-  <div id="stage" class="tab-pane fade">\
-'+widget.stagePills(job)+'\
-  </div>\
-  <div id="settings" class="tab-pane fade"></div>\
+  <div id="stage" class="tab-pane fade">'+widget.stagePills(job)+'</div>\
+  <div id="settings" class="tab-pane fade">'+widget.jobSettings(job)+'</div>\
 </div>';
 
 	widget.sidebar.innerHTML = html;
     };
     
+    widget.jobSettings = function (job) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	var html = "- fix stage availability before job completion -";
+
+	if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
+	    var settings = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters;
+	    html = "<table class='table table-condensed'>";
+	    var s = Retina.keys(settings).sort();
+	    for (var i=0; i<s.length; i++) {
+		html += "<tr><td><b>"+s[i]+"</b></td><td>"+settings[s[i]]+"</td></tr>";
+	    }
+	    html += "</table>";
+	}
+
+	return html;
+    };
 
     widget.statusDetails = function (job) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	var average_wait_time = "10 days";
 
-	var html = "<p>The job <b>"+job.info.name+"</b> was submitted as part of the project <b>"+job.info.project+"</b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b>"+job.info.project+"</b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
 	if (job.state == "error") {
@@ -195,20 +238,17 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 		    html += "no task has started computation yet.";
 		}
 	    } else {
-		html += "the computation is finished. You can take a look at the overview page of this metagenome <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>here</a>.";
+		// time from submission to completion
+		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
+		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
+		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+		
 	    }
 	    html += "</p>";
 	    
 	    if (job.remaintasks > 0) {
 		// time since submission
-		var time_passed = new Date().getTime() - Date.parse(job.info.submittime);
-		var day = parseInt(time_passed / (1000 * 60 * 60 * 24));
-		time_passed = time_passed - (day * 1000 * 60 * 60 * 24);
-		var hour = parseInt(time_passed / (1000 * 60 * 60));
-		time_passed = time_passed - (hour * 1000 * 60 * 60);
-		var minute = parseInt(time_passed / (1000 * 60));
-		var some_time = ((day > 0) ? day+" days " : "") + ((hour > 0) ? hour+" hours " : "") + minute+" minutes";
-		
+		var time_passed = widget.timePassed(Date.parse(job.info.submittime), new Date().getTime());
 		var jsize = 0;
 		for (var i in job.tasks[0].inputs) {
 		    if (job.tasks[0].inputs.hasOwnProperty(i)) {
@@ -217,7 +257,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 		    }
 		}
 		
-		html += "<p>The job has been in the pipeline for <b>"+some_time+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with a priority of <b>"+job.info.priority+"</b>. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
+		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with a priority of <b>"+job.info.priority+"</b>. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
 		
 		html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
 	    }
@@ -235,11 +275,11 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	    for (var i=0; i<job.tasks.length; i++) {
 		if (job.tasks[i].state == 'completed') {
 		    html += '\
-<div class="pill donepill clickable" onclick="Retina.WidgetInstances.metagenome_pipeline[1].stageDetails(this, \''+job.id+'\', '+i+');">\
+<div class="pill donepill clickable" onclick="if(document.getElementById(\'stageDetails'+i+'\').style.display==\'none\'){document.getElementById(\'stageDetails'+i+'\').style.display=\'\';}else{document.getElementById(\'stageDetails'+i+'\').style.display=\'none\';};">\
   <img class="miniicon" src="Retina/images/ok.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].completeddate)+'</span>\
-</div><div style="display: none;"></div>';
+</div><div style="display: none;" id="stageDetails'+i+'">'+widget.stageDetails(job.id, i)+'</div>';
 		} else if (job.tasks[i].state == 'in-progress') {
 		    html += '\
 <div class="pill runningpill">\
@@ -284,10 +324,37 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	return html;
     };
 
-    widget.stageDetails = function (pill, jid, stage) {
+    widget.stageDetails = function (jid, stage) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
+	var task = stm.DataStore.job[jid].tasks[stage];
+
+	var inputs = [];
+	for (var i in task.inputs) {
+	    if (task.inputs.hasOwnProperty(i)) {
+		inputs.push("<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].authenticatedDownload(\""+task.inputs[i].url+"_url&filename="+i+"\");'>"+i+"</a>");
+	    }
+	}
+	inputs = inputs.join('<br>');
+	var outputs = [];
+	for (var i in task.outputs) {
+	    if (task.outputs.hasOwnProperty(i)) {
+		outputs.push("<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].authenticatedDownload(\""+task.outputs[i].url+"_url&filename="+i+"\");'>"+i+"</a>");
+	    }
+	}
+	outputs = outputs.join('<br>');
+
+	var html = "<table class='table table-condensed'>";
+	html += "<tr><td><b>started</b></td><td>"+widget.prettyAWEdate(task.createddate)+"</td></tr>";
+	html += "<tr><td><b>completed</b></td><td>"+widget.prettyAWEdate(task.completeddate)+"</td></tr>";
+	html += "<tr><td><b>duration</b></td><td>"+widget.timePassed(Date.parse(task.createddate), Date.parse(task.completeddate))+"</td></tr>";
+	html += "<tr><td><b>inputs</b></td><td>"+inputs+"</td></tr>";
+	html += "<tr><td><b>outputs</b></td><td>"+outputs+"</td></tr>";
+	html += "</table>";
+	
+	return html;
     };
-
+    
     /*
       HELPER FUNCTIONS
      */
@@ -342,14 +409,50 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	}
     };
 
+    widget.timePassed = function (start, end) {
+	// time since submission
+	var time_passed = end - start;
+	var day = parseInt(time_passed / (1000 * 60 * 60 * 24));
+	time_passed = time_passed - (day * 1000 * 60 * 60 * 24);
+	var hour = parseInt(time_passed / (1000 * 60 * 60));
+	time_passed = time_passed - (hour * 1000 * 60 * 60);
+	var minute = parseInt(time_passed / (1000 * 60));
+	var some_time = ((day > 0) ? day+" days " : "") + ((hour > 0) ? hour+" hours " : "") + minute+" minutes";
+	return some_time;
+    };
+
+    widget.authenticatedDownload = function (url) {
+	jQuery.ajax({ url: url,
+		      dataType: "json",
+		      success: function(data) {
+			  if (data != null) {
+			      if (data.error != null) {
+				  console.log("error: "+data.error);
+			      }
+			      window.location = data.data.url;
+			  } else {
+			      console.log("error: invalid return structure from SHOCK server");
+			      console.log(data);
+			  }
+		      },
+		      error: function(jqXHR, error) {
+			  console.log( "error: unable to connect to SHOCK server" );
+			  console.log(error);
+		      },
+		      crossDomain: true,
+		      headers: widget.aweAuthHeader
+		    });
+    };
+
     // login widget sends an action (log-in or log-out)
     widget.loginAction = function (params) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	if (params.token) {
+	    widget.main.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
 	    widget.user = params.user;
 	    widget.authHeader = { "Auth": params.token };
-	    widget.aweAuthHeader = { "Authorization": "OAuth "+params.token,
-				     "Datatoken": "OAuth "+params.token };
+	    widget.aweAuthHeader = { "Authorization": "OAuth "+params.token };
+	    
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
