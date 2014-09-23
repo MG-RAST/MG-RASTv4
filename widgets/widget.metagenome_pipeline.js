@@ -16,6 +16,8 @@
     widget.aweAuthHeader = {};
     widget.user = null;
     widget.jobDataOffset;
+    widget.userID = null;
+    widget.adminUser = null;
 
     widget.display = function (wparams) {
        var  widget = Retina.WidgetInstances.metagenome_pipeline[1];
@@ -38,19 +40,24 @@
 
 	// check if we have a user
 	if (widget.user) {
-	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
+	    if (! widget.userID) {
+		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
+		widget.getUserId();
+		return;
+	    }
+	    content.innerHTML = '<div id="jobtable"></div>';
 
 	    // create the job table
-	    var result_columns = [ "job", "stage", "status", "tasks" ];
+	    var job_columns = [ "job", "stage", "status", "tasks" ];
 
-	    var result_table_filter = { 0: { "type": "text" },
-					2: { "type": "text" } };
-	    if (! widget.hasOwnProperty('result_table')) {
-		widget.result_table = Retina.Renderer.create("table", {
-		    target: content,
+	    var job_table_filter = { 0: { "type": "text" },
+				     2: { "type": "text" } };
+	    if (! widget.hasOwnProperty('job_table')) {
+		widget.job_table = Retina.Renderer.create("table", {
+		    target: document.getElementById('jobtable'),
 		    rows_per_page: 20,
 		    filter_autodetect: false,
-		    filter: result_table_filter,
+		    filter: job_table_filter,
 		    sort_autodetect: true,
 		    synchronous: false,
 		    sort: "job",
@@ -59,16 +66,51 @@
 		    asynch_column_mapping: { "job": "info.name",
 					     "status": "state" },
 		    headers: widget.aweAuthHeader,
-		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].dataManipulation,
+		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
 		    minwidths: [1,1,1,1],
-		    navigation_url: RetinaConfig.awe_url+'/job?query&info.user='+widget.user.id,
-		    data: { data: [], header: result_columns }
+		    navigation_url: RetinaConfig.awe_url+'/job?query&info.user='+widget.userID,
+		    data: { data: [], header: job_columns }
 		});
 	    } else {
-		widget.result_table.settings.target = content;
+		widget.job_table.settings.target = document.getElementById('jobtable');
 	    }
-	    widget.result_table.render();
-	    widget.result_table.update({},1);
+	    widget.job_table.render();
+	    widget.job_table.update({},1);
+
+	    if (Retina.cgiParam('admin')) {
+		var title = document.createElement('div');
+		title.innerHTML = "<h4 style='margin-top: 25px;'>change user</h4>";
+		content.appendChild(title);
+		var utable = document.createElement('div');
+		utable.setAttribute('id', 'usertable');
+		content.appendChild(utable);
+
+		// create the user table
+		if (! widget.hasOwnProperty('user_table')) {
+		    widget.user_table = Retina.Renderer.create("table", {
+			target: document.getElementById('usertable'),
+			rows_per_page: 5,
+			filter_autodetect: false,
+			filter: { 0: { "type": "text" },
+				  1: { "type": "text" },
+				  2: { "type": "text" },
+				  3: { "type": "text" },
+				  4: { "type": "text" } },
+			invisible_columns: { 3: true },
+			sort_autodetect: true,
+			synchronous: false,
+			sort: "lastname",
+			default_sort: "lastname",
+			data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].userTable,
+			navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
+			data: { data: [], header: [ "login", "firstname", "lastname", "email", "id" ] }
+		    });
+		} else {
+		    widget.user_table.settings.target = document.getElementById('usertable');
+		}
+		widget.user_table.render();
+		widget.user_table.update({},2);
+	    }
 	}
 	// there is no user, show login required
 	else {
@@ -79,7 +121,7 @@
     /*
       MAIN CONTENT
      */
-    widget.dataManipulation = function (data) {
+    widget.jobTable = function (data) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
 	// store the data in the DataStore
@@ -95,7 +137,11 @@
 	// iterate over data rows
 	for (var i=0; i<data.length; i++) {
 	    if (data[i].state == "deleted") {
-		
+		result_data.push({ "job": data[i].info.name,
+				   "stage": "-",
+				   "status": "deleted",
+				   "tasks": "-"
+				 });
 	    } else {
 		result_data.push({ "job": "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'>"+data[i].info.name+"</a>",
 				   "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
@@ -106,6 +152,24 @@
 	}
 
 	return result_data;
+    };
+
+    widget.userTable = function (data) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	for (var i=0; i<data.length; i++) {
+	    data[i].login = "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+data[i].id+"\");'>"+data[i].login+"</a>";
+	}
+
+	return data;
+    };
+
+    widget.changeDisplayUser = function (id) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	
+	widget.userID = id;
+	widget.job_table.settings.navigation_url = RetinaConfig.awe_url+'/job?query&info.user='+widget.userID;
+	widget.display();
     };
     
     /*
@@ -190,9 +254,9 @@
 	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b>"+job.info.project+"</b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
-	if (job.state == "error") {
-	    html += "<p>The error message is:</p>";
-	    html += "<p>"+job.notes+"</p>";
+	if (job.state == "suspend") {
+	    html += "the error message is:</p>";
+	    html += "<pre>"+job.notes+"</pre>";
 	} else {
 	    if (job.remaintasks > 0) {
 		if (job.remaintasks < 25) {
@@ -330,6 +394,9 @@
       HELPER FUNCTIONS
      */
     widget.prettyAWEdate = function (date) {
+	if (date == "0001-01-01T00:00:00Z") {
+	    return "-";
+	}
 	var pdate = new Date(Date.parse(date)).toLocaleString();
 	return pdate;
     };
@@ -419,28 +486,31 @@
     widget.loginAction = function (params) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	if (params.token) {
-	    widget.main.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
 	    widget.user = params.user;
 	    widget.authHeader = { "Auth": params.token };
 	    widget.aweAuthHeader = { "Authorization": "OAuth "+params.token };
-	    
-	    jQuery.ajax({
-		method: "GET",
-		dataType: "json",
-		headers: widget.authHeader, 
-		url: RetinaConfig.mgrast_api+'/user/amgomez',//sonubioinfo', // widget.user.login
-		success: function (data) {
-		    Retina.WidgetInstances.metagenome_pipeline[1].user.id = data.id;
-		    Retina.WidgetInstances.metagenome_pipeline[1].display();
-		}}).fail(function(xhr, error) {
-		    
-		});
 	} else {
 	    widget.user = null;
 	    widget.authHeader = {};
 	    widget.aweAuthHeader = {};
-	    widget.display();
 	}
+	widget.display();
+    };
+
+    widget.getUserId = function () {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: widget.authHeader, 
+	    url: RetinaConfig.mgrast_api+'/user/rebecca_waddell',// + (widget.adminUser || widget.user.login),
+	    success: function (data) {
+		Retina.WidgetInstances.metagenome_pipeline[1].userID = data.id;
+		Retina.WidgetInstances.metagenome_pipeline[1].display();
+	    }}).fail(function(xhr, error) {
+		
+	    });
     };
 
 })();
