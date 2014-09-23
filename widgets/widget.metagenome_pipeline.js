@@ -15,9 +15,10 @@
     widget.authHeader = {};
     widget.aweAuthHeader = {};
     widget.user = null;
+    widget.jobDataOffset;
 
     widget.display = function (wparams) {
-        widget = Retina.WidgetInstances.metagenome_pipeline[1];
+       var  widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	if (! stm.DataStore.hasOwnProperty('metagenome')) {
 	    stm.DataStore.metagenome = {};
@@ -39,16 +40,35 @@
 	if (widget.user) {
 	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
 
-	    jQuery.ajax({
-		method: "GET",
-		dataType: "json",
-		headers: widget.aweAuthHeader, 
-		url: RetinaConfig.awe_url+'/job?query&info.user='+widget.user.id+'&recent=200',
-		success: function (data) {
-		    Retina.WidgetInstances.metagenome_pipeline[1].showJobs(data);
-		}}).fail(function(xhr, error) {
+	    // create the job table
+	    var result_columns = [ "job", "stage", "status", "tasks" ];
 
+	    var result_table_filter = { 0: { "type": "text" },
+					2: { "type": "text" } };
+	    if (! widget.hasOwnProperty('result_table')) {
+		widget.result_table = Retina.Renderer.create("table", {
+		    target: content,
+		    rows_per_page: 20,
+		    filter_autodetect: false,
+		    filter: result_table_filter,
+		    sort_autodetect: true,
+		    synchronous: false,
+		    sort: "job",
+		    query_type: "equal",
+		    default_sort: "job",
+		    asynch_column_mapping: { "job": "info.name",
+					     "status": "state" },
+		    headers: widget.aweAuthHeader,
+		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].dataManipulation,
+		    minwidths: [1,1,1,1],
+		    navigation_url: RetinaConfig.awe_url+'/job?query&info.user='+widget.user.id,
+		    data: { data: [], header: result_columns }
 		});
+	    } else {
+		widget.result_table.settings.target = content;
+	    }
+	    widget.result_table.render();
+	    widget.result_table.update({},1);
 	}
 	// there is no user, show login required
 	else {
@@ -59,15 +79,9 @@
     /*
       MAIN CONTENT
      */
-    widget.showJobs = function (data) {
-	widget = Retina.WidgetInstances.metagenome_pipeline[1];
+    widget.dataManipulation = function (data) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
-	// get the html dom target
-	var content = widget.main;
-
-	// get the data
-	data = data.data;
-
 	// store the data in the DataStore
 	if (! stm.DataStore.hasOwnProperty('job')) {
 	    stm.DataStore.job = {};
@@ -76,80 +90,29 @@
 	    stm.DataStore.job[data[i].id] = data[i];
 	}
 
-	// css
-	var html = "<style>\
-.miniicon {\
-height: 16px;\
-margin-right: 5px;\
-}\
-.red {\
-color: red;\
-}\
-.blue {\
-color: blue;\
-}\
-.green {\
-color: #008000;\
-}\
-.orange {\
-color: orange;\
-}\
-.gray {\
-color: gray;\
-}\
-.pill {\
-border-radius: 4px;\
-color: #FFFFFF;\
-height: 26px;\
-margin-bottom: 2px;\
-padding-left: 10px;\
-padding-right: 10px;\
-padding-top: 5px;\
-}\
-.donepill {\
-background-image: linear-gradient(to bottom, #62C462, #51A351);\
-}\
-.runningpill {\
-background-image: linear-gradient(to bottom, #0088CC, #0044CC);\
-}\
-.errorpill {\
-background-image: linear-gradient(to bottom, #EE5F5B, #BD362F);\
-}\
-.queuedpill {\
-background-image: linear-gradient(to bottom, #FBB450, #F89406);\
-}\
-.pendingpill {\
-background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
-}\
-</style>";
-
-	// start table
-	html += "<table class='table table-hover'>";
-
-	// header row
-	html += "<tr><th>job</th><th>stage</th><th>status</th><th></th></tr>";
+	var result_data = [];
 
 	// iterate over data rows
 	for (var i=0; i<data.length; i++) {
 	    if (data[i].state == "deleted") {
-		continue;
+		
+	    } else {
+		result_data.push({ "job": "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'>"+data[i].info.name+"</a>",
+				   "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
+				   "status": widget.status(data[i].state),
+				   "tasks": widget.dots(data[i].tasks)
+				 });
 	    }
-	    var stage = "complete";
-	    if (data[i].remaintasks > 0) {
-		stage = data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description;
-	    }
-	    html += "<tr style='cursor: pointer;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'><td>"+data[i].info.name+"</td><td>"+stage+"</td><td>"+widget.status(data[i].state)+"</td><td>"+widget.dots(data[i].tasks)+"</td></tr>";
 	}
-	html += "</table>";
 
-	content.innerHTML = html;
+	return result_data;
     };
     
     /*
       SIDEBAR CONTENT
      */
     widget.showJobDetails = function (id) {
-	widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	widget.sidebar.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 40%; margin-top: 50px; margin-bottom: 50px;'>";
 	
@@ -204,7 +167,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
     widget.jobSettings = function (job) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
-	var html = "- fix stage availability before job completion -";
+	var html = "- fix metagenome resource availability before job completion -";
 
 	if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
 	    var settings = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters;
@@ -256,8 +219,10 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 			break;
 		    }
 		}
+
+		var jobpriority = "medium";
 		
-		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with a priority of <b>"+job.info.priority+"</b>. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
+		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with a <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
 		
 		html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
 	    }
@@ -332,14 +297,20 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	var inputs = [];
 	for (var i in task.inputs) {
 	    if (task.inputs.hasOwnProperty(i)) {
-		inputs.push("<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].authenticatedDownload(\""+task.inputs[i].url+"_url&filename="+i+"\");'>"+i+"</a>");
+		if (task.inputs[i].nofile || i == "mysql.tar" || i == "postgresql.tar") {
+		    continue;
+		}
+		inputs.push(i+" ("+task.inputs[i].size.byteSize()+")");
 	    }
 	}
 	inputs = inputs.join('<br>');
 	var outputs = [];
 	for (var i in task.outputs) {
 	    if (task.outputs.hasOwnProperty(i)) {
-		outputs.push("<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].authenticatedDownload(\""+task.outputs[i].url+"_url&filename="+i+"\");'>"+i+"</a>");
+		if (task.outputs[i].type == "update") {
+		    continue;
+		}
+		outputs.push(i+" ("+task.outputs[i].size.byteSize()+")"+(task.outputs[i]["delete"] ? " <i>temporary</i>" : ""));
 	    }
 	}
 	outputs = outputs.join('<br>');
@@ -394,7 +365,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	if (state == "completed") {
 	    return '<img class="miniicon" src="Retina/images/ok.png"><span class="green">completed</span>';
 	} else if (state == "in-progress") {
-	    return '<img class="miniicon" src="Retina/images/settings3.png"><span class="blue">running</span>';
+	    return '<img class="miniicon" src="Retina/images/settings3.png"><span class="blue">in-progress</span>';
 	} else if (state == "queued") {
 	    return '<img class="miniicon" src="Retina/images/clock.png"><span class="orange">queued</span>';
 	} else if (state == "pending") {
@@ -402,7 +373,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 	} else if (state == "error") {
 	    return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">error</span>';
 	} else if (state == "suspend") {
-	    return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">suspended</span>';
+	    return '<img class="miniicon" src="Retina/images/remove.png"><span class="red">suspend</span>';
 	} else {
 	    console.log("unhandled state: "+state);
 	    return "";
@@ -457,7 +428,7 @@ background-image: linear-gradient(to bottom, #BBBBBB, #666666);\
 		method: "GET",
 		dataType: "json",
 		headers: widget.authHeader, 
-		url: RetinaConfig.mgrast_api+'/user/sonubioinfo', // widget.user.login
+		url: RetinaConfig.mgrast_api+'/user/amgomez',//sonubioinfo', // widget.user.login
 		success: function (data) {
 		    Retina.WidgetInstances.metagenome_pipeline[1].user.id = data.id;
 		    Retina.WidgetInstances.metagenome_pipeline[1].display();
