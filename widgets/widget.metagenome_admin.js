@@ -106,7 +106,6 @@
       USERS
      */
     widget.dataManipulation = function (data) {
-	
 	for (var i=0; i<data.length; i++) {
 	    data[i].email = "<a href='mailto:"+data[i].email+"'>"+data[i].email+"</a>";
 	    data[i].login = "<a onclick='Retina.WidgetInstances.metagenome_admin[1].userDetails(\""+data[i].id+"\");' style='cursor: pointer;'>"+data[i].login+"</a>";
@@ -190,8 +189,16 @@
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
 
-	// all jobs
+	// all jobs of the last 30 days
 	var jobs = stm.DataStore.jobdata;
+
+	// jobs currently active in the pipeline
+	var jobsactive = stm.DataStore.activejobs;
+
+	var size_in_pipeline = 0;
+	for (var i=0; i<jobsactive.length; i++) {
+	    size_in_pipeline += jobsactive[i].size;
+	}
 
 	// initialize counters
 	var submitted = 0;
@@ -280,6 +287,7 @@
 	}
 
 	var html = "<table class='table'>";
+	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.byteSize()+"</td></tr>";
 	html += "<tr><td><b># submitted</b></td><td>"+tot+"</td></tr>";
 	html += "<tr><td><b># in queue</b></td><td>"+numsubmitted+"</td></tr>";
 	html += "<tr><td><b># completed</b></td><td>"+numcompleted+"</td></tr>";
@@ -382,28 +390,42 @@
 
 	var period = 1000 * 60 * 60 * 24 * 30; // 30 days
 	var timestamp = widget.dateString(period);
-	jQuery.ajax( { dataType: "json",
-		       url: RetinaConfig['awe_url']+"/job?query&date_start="+timestamp+"&verbosity=minimal&limit=10000",
-		       headers: widget.aweAuthHeader,
-		       success: function(data) {
-			   stm.DataStore.jobdata = data.data;
-			   jQuery.ajax( { dataType: "json",
-					  url: RetinaConfig['awe_url']+"/job/"+data.data[0].id,
-					  headers: widget.aweAuthHeader,
-					  success: function(data) {
-					      stm.DataStore.jobtemplate = data.data;
-					      var widget = Retina.WidgetInstances.metagenome_admin[1];
-					      widget.showJobData();
-					  },
-					  error: function () {
-					      alert('there was an error retrieving the data');
-					  }
-					} );
-		       },
-		       error: function () {
-			   alert('there was an error retrieving the data');
-		       }
-		     } );
+
+	var promises = [];
+	var prom = jQuery.Deferred();
+	promises.push(prom);
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['awe_url']+"/job?query&date_start="+timestamp+"&verbosity=minimal&limit=10000",
+				     headers: widget.aweAuthHeader,
+				     success: function(data) {
+					 stm.DataStore.jobdata = data.data;
+					 jQuery.ajax( { dataType: "json",
+					 		url: RetinaConfig['awe_url']+"/job/"+data.data[0].id,
+					 		headers: widget.aweAuthHeader,
+					 		success: function(data) {
+					 		    stm.DataStore.jobtemplate = data.data;
+					 		},
+					 		error: function () {
+					 		    alert('there was an error retrieving the data');
+					 		}
+					 	      } ).then(function(){ prom.resolve(); });
+				     },
+				     error: function () {
+					 alert('there was an error retrieving the data');
+				     }
+				   } ) );
+	
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['awe_url']+"/job?query&state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000",
+				     headers: widget.aweAuthHeader,
+				     success: function(data) {
+					 stm.DataStore.activejobs = data.data;
+				     },
+				     error: function () {
+					 alert('there was an error retrieving the data');
+				     }
+				   } ) );
+	jQuery.when.apply(this, promises).then(function() { Retina.WidgetInstances.metagenome_admin[1].showJobData(); });
     };
 
 

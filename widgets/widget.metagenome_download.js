@@ -177,7 +177,7 @@
     };
     
     widget.apiDownloadHTML = function () {
-	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>Annotation Download via API</h4>\
+	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>Annotation Download</h4>\
     <table width='100%'><tr><td align='left'>\
       <p>Annotated reads are available through the <a href='"+RetinaConfig.mgrast_api+"' target='_blank'>MG-RAST API</a>.<br>\
          They are built dynamicly based on the chosen annotation type and source.<br>\

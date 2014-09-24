@@ -12,6 +12,9 @@
 	return [ Retina.load_renderer("table") ];
     };
     
+    /*
+      GLOBAL VARIABLES
+    */
     widget.authHeader = {};
     widget.aweAuthHeader = {};
     widget.user = null;
@@ -19,6 +22,41 @@
     widget.userID = null;
     widget.adminUser = null;
 
+    widget.settingsMapping = [
+	[ "assembled", "sequence file is assembled" ],
+	[ "dereplicate", "remove artificial replicate sequences" ],
+	[ "screen_indexes", "remove any host specific species sequences" ],
+	[ "dynamic_trim", "remove low quality sequences" ],
+	[ "min_qual", "lowest phred score to count as a high-quality base" ],
+	[ "max_lqb", "trimmed to at most this many low phred score bases" ],
+	[ "filter_ln", "filter based on sequence length" ],
+	[ "deviation", "multiplicator of standard deviation for length cutoff" ],
+	[ "filter_ambig", "Filter based on sequence ambiguity base count" ],
+	[ "max_ambig", "maximum allowed number of ambiguous basepairs" ]
+    ];
+    
+    widget.screeningMapping = {
+	"h_sapiens": "H. sapiens, NCBI v36",
+	"m_musculus": "M. musculus, NCBI v37",
+	"b_taurus": "B. taurus, UMD v3.0",
+	"d_melanogaster": "D. melanogaster, Flybase, r5.22",
+	"a_thaliana": "A. thaliana, TAIR, TAIR9",
+	"e_coli": "E. coli, NCBI, st. 536",
+	"s_scrofa": "Sus scrofa, NCBI v10.2",
+	"none": "none"
+    };
+
+    widget.priorityMapping = {
+	"never": [ "lowest", "never" ],
+	"date": [ "low", "eventually" ],
+	"6months": [ "medium", "after 6 months" ],
+	"3months": [ "high", "after 3 months" ],
+	"immediately": [ "highest", "immediately" ]
+    };
+    
+    /*
+      DISPLAY
+     */
     widget.display = function (wparams) {
        var  widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
@@ -186,23 +224,21 @@
 
 	// get the metagenome data if available
 	var metagenome;
-	if (job.remaintasks == 0) {
-	    if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
-		metagenome = stm.DataStore.metagenome[job.info.userattr.id];
-	    } else {
-		jQuery.ajax({
-		    method: "GET",
-		    dataType: "json",
-		    headers: widget.authHeader, 
-		    url: RetinaConfig.mgrast_api+'/metagenome/'+job.info.userattr.id,
-		    success: function (data) {
-			stm.DataStore.metagenome[data.id] = data;
-			Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(jobid);
-		    }}).fail(function(xhr, error) {
-			Retina.WidgetInstances.metagenome_pipeline[1].sidebar.innerHTML = "<div class='alert alert-error'>could not retrieve detail data</div>";
-		    });
-		return;
-	    }
+	if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
+	    metagenome = stm.DataStore.metagenome[job.info.userattr.id];
+	} else {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: widget.authHeader, 
+		url: RetinaConfig.mgrast_api+'/metagenome/'+job.info.userattr.id,
+		success: function (data) {
+		    stm.DataStore.metagenome[data.id] = data;
+		    Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(jobid);
+		}}).fail(function(xhr, error) {
+		    Retina.WidgetInstances.metagenome_pipeline[1].sidebar.innerHTML = "<div class='alert alert-error'>could not retrieve detail data</div>";
+		});
+	    return;
 	}
 
 	// create the html
@@ -231,16 +267,52 @@
     widget.jobSettings = function (job) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
-	var html = "- fix metagenome resource availability before job completion -";
+	var html = "<h4>pipeline options</h4>";
 
 	if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
+	    html += "<table class='table table-condensed'>";
 	    var settings = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters;
-	    html = "<table class='table table-condensed'>";
-	    var s = Retina.keys(settings).sort();
-	    for (var i=0; i<s.length; i++) {
-		html += "<tr><td><b>"+s[i]+"</b></td><td>"+settings[s[i]]+"</td></tr>";
+	    var dyn = false;
+	    var len = false;
+	    var amb = false;
+	    for (var i=0; i<widget.settingsMapping.length; i++) {
+		if (settings.hasOwnProperty(widget.settingsMapping[i][0])) {
+		    var val = settings[widget.settingsMapping[i][0]];
+		    if (widget.settingsMapping[i][0] == "screen_indexes") {
+			val = widget.screeningMapping[val];
+		    } else if (widget.settingsMapping[i][0] == "dynamic_trim") {
+			if (val == "yes") {
+			    dyn = true;
+			}
+		    } else if (widget.settingsMapping[i][0] == "filter_ln") {
+			if (val == "yes") {
+			    len = true;
+			}
+		    } else if (widget.settingsMapping[i][0] == "filter_ambig") {
+			if (val == "yes") {
+			    amb = true;
+			}
+		    } else if (((widget.settingsMapping[i][0] == "max_lqb") || (widget.settingsMapping[i][0] == "min_qual")) && ! dyn) {
+			continue;
+		    } else if ((widget.settingsMapping[i][0] == "deviation") && ! len) {
+			continue;
+		    } else if ((widget.settingsMapping[i][0] == "max_ambig") && ! amb) {
+			continue;
+		    }
+		    html += "<tr><td><b>"+widget.settingsMapping[i][1]+"</b></td><td>"+val+"</td></tr>";
+		}
 	    }
 	    html += "</table>";
+	    
+	    var jobpriority = "lowest";
+	    var prio = "never";
+	    if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
+		prio = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.publish_priority;
+		jobpriority = widget.priorityMapping[prio][0];
+		prio = widget.priorityMapping[prio][1];
+	    }
+	    html += "<h4>priority setting</h4><p>Your choice on when to make your data publicly available was</p>";
+	    html += "<p style='padding-left: 100px;'><b>"+prio+"</b></p><p>This causes the priority of your job in the pipeline to be</p><p style='padding-left: 100px;'><b>"+jobpriority+"</b></p>";
 	}
 
 	return html;
@@ -249,7 +321,7 @@
     widget.statusDetails = function (job) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
-	var average_wait_time = "10 days";
+	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);
 
 	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b>"+job.info.project+"</b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
@@ -284,9 +356,12 @@
 		    }
 		}
 
-		var jobpriority = "medium";
+		var jobpriority = "lowest";
+		if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
+		    jobpriority = widget.priorityMapping[stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.publish_priority][0];
+		}
 		
-		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with a <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
+		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
 		
 		html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
 	    }
@@ -389,7 +464,7 @@
 	
 	return html;
     };
-    
+
     /*
       HELPER FUNCTIONS
      */
@@ -445,6 +520,16 @@
 	    console.log("unhandled state: "+state);
 	    return "";
 	}
+    };
+
+    widget.averageWaitTime = function (prio, size) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	var gb_per_day = 30;
+	var gb_queued_better_prio_or_date = 300;
+	var wait = (gb_queued_better_prio_or_date + (size / 1000000000)) / gb_per_day;
+	
+	return ((wait < 1) ? wait.formatString(1) : parseInt(wait))+ " days";
     };
 
     widget.timePassed = function (start, end) {
