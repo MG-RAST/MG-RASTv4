@@ -12,6 +12,8 @@
 	return [ Retina.load_renderer("table"),
 		 Retina.load_renderer("graph") ];
     };
+
+    widget.period = 1000 * 60 * 60 * 24 * 30; // 30 days
     
     widget.display = function (wparams) {
         var widget = Retina.WidgetInstances.metagenome_admin[1];
@@ -189,117 +191,127 @@
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
 
-	// all jobs of the last 30 days
-	var jobs = stm.DataStore.jobdata;
+	// all jobs submitted within the last 30 days (initially only the inactive ones)
+	var jobs30 = stm.DataStore.inactivejobs;
 
 	// jobs currently active in the pipeline
 	var jobsactive = stm.DataStore.activejobs;
 
-	var size_in_pipeline = 0;
-	for (var i=0; i<jobsactive.length; i++) {
-	    size_in_pipeline += jobsactive[i].size;
-	}
+	// timestamp of 30 days ago
+	var month = widget.dateString(widget.period);
+	var week = widget.dateString(1000 * 60 * 60 * 24 * 7);
+	var day = widget.dateString(1000 * 60 * 60 * 24);
 
-	// initialize counters
-	var submitted = 0;
-	var numsubmitted = 0;
-	var completed = 0;
-	var numcompleted = 0;
-	var tot = 0;
-	var totsize = 0;
-
-	var dnum = {};
-	var dnumc = {};
-	var dsize = {};
-	var dsizec = {};
-
-	var states = { "completed": 0,
-		       "in-progress": 0,
+	// initialize state counter
+	var states = { "in-progress": 0,
 		       "pending": 0,
 		       "queued": 0,
 		       "suspend": 0,
 		       "unknown": 0 };
 
-	// iterate over the jobs
-	for (var i=0; i<jobs.length; i++) {
+	var size_in_pipeline = 0;
 
-	    // do not look at deleted jobs
-	    if (jobs[i].state == "deleted") {
-		continue;
-	    }
+	// iterate over the active jobs
+	for (var i=0; i<jobsactive.length; i++) {
 
-	    // count the current task (leave out preprocess for now)
-	    if (tasknames[jobs[i].task] != "preprocess") {
-		taskcount[jobs[i].task]++;
-	    }
+	    // count the total size in the pipeline
+	    size_in_pipeline += jobsactive[i].size;
 
 	    // count the current state
-	    states[jobs[i].state]++;
+	    states[jobsactive[i].state]++;
 
-	    // count the total number of jobs
-	    tot++;
-	    
-	    // count the total size
-	    totsize += jobs[i].size;
-
-	    // get the submittime date
-	    var day = jobs[i].submittime.substr(0,10);
-	    if (! dnum.hasOwnProperty(day)) {
-		dnum[day] = 0;
-		dsize[day] = 0;
+	    // count the current task (leave out preprocess for now)
+	    if (tasknames[jobsactive[i].task] != "preprocess") {
+		taskcount[jobsactive[i].task]++;
 	    }
-	    dnum[day]++;
-	    dsize[day] += jobs[i].size;
 
-	    // get the completedtime date
-	    if (jobs[i].completedtime == "0001-01-01T00:00:00Z") {
-		numsubmitted++;
-		submitted += jobs[i].size;
-	    } else {
-		var cday = jobs[i].completedtime.substr(0,10);
-		if (! dnumc.hasOwnProperty(cday)) {
-		    dnumc[cday] = 0;
-		    dsizec[cday] = 0;
-		}
-		dnumc[cday]++;
-		dsizec[cday] += jobs[i].size;
-		numcompleted++;
-		completed += jobs[i].size;
+	    // get the active jobs for last 30 days
+	    if (jobsactive[i].submittime > month) {
+		jobs30.push(jobsactive[i]);
 	    }
 	}
+	var num_in_pipeline = jobsactive.length;
 
-	var submittedtoday = 0;
-	var completedtoday = 0;
-	var nsubmittedtoday = 0;
-	var ncompletedtoday = 0;
-	var tnow = widget.dateString(0);
-	if (dnum.hasOwnProperty(tnow)) {
-	    nsubmittedtoday = dnum[tnow];
+	// initialize vars
+	var submitted_today = 0;
+	var num_submitted_today = 0;
+	var completed_today = 0;
+	var num_completed_today = 0;
+	var submitted_week = 0;
+	var num_submitted_week = 0;
+	var completed_week = 0;
+	var num_completed_week = 0;
+	var submitted_month = 0;
+	var num_submitted_month = 0;
+	var completed_month = 0;
+	var num_completed_month = 0;
+
+	var completed_jobs = {};
+	var submitted_jobs = {};
+	var completed_bases = {};
+	var submitted_bases = {};
+
+	// iterate over all jobs of the last month
+	for (var i=0; i<jobs30.length; i++) {
+	    var submitted_day = jobs30[i].submittime.substr(0,10);
+	    var completed_day = jobs30[i].completedtime.substr(0,10);
+	    if (! submitted_jobs.hasOwnProperty(submitted_day)) {
+		submitted_jobs[submitted_day] = 0;
+		submitted_bases[submitted_day] = 0;
+	    }
+	    submitted_jobs[submitted_day]++;
+	    submitted_bases[submitted_day] += jobs30[i].size;
+	    if (! completed_jobs.hasOwnProperty(completed_day)) {
+		completed_jobs[completed_day] = 0;
+		completed_bases[completed_day] = 0;
+	    }
+	    completed_jobs[completed_day]++;
+	    completed_bases[completed_day] += jobs30[i].size;
+
+	    if (jobs30[i].submittime > month) {
+		num_submitted_month++;
+		submitted_month += jobs30[i].size;
+	    }
+	    if (jobs30[i].submittime > week) {
+		num_submitted_week++;
+		submitted_week += jobs30[i].size;
+	    }
+	    if (jobs30[i].submittime > day) {
+		num_submitted_today++;
+		submitted_today += jobs30[i].size;
+	    }
+	    if (jobs30[i].completedtime > month) {
+		num_completed_month++;
+		completed_month += jobs30[i].size;
+	    }
+	    if (jobs30[i].completedtime > week) {
+		num_completed_week++;
+		completed_week += jobs30[i].size;
+	    }
+	    if (jobs30[i].completedtime > day) {
+		num_completed_today++;
+		completed_today += jobs30[i].size;
+	    }
 	}
-	if (dnumc.hasOwnProperty(tnow)) {
-	    ncompletedtoday = dnumc[tnow];
-	}
-	if (dsize.hasOwnProperty(tnow)) {
-	    submittedtoday = dsize[tnow];
-	}
-	if (dsizec.hasOwnProperty(tnow)) {
-	    completedtoday = dsizec[tnow];
-	}
+	var submitted_week_per_day = submitted_week / 7;
+	var num_submitted_week_per_day = parseInt(num_submitted_week / 7);
+	var completed_week_per_day = completed_week / 7;
+	var num_completed_week_per_day = parseInt(num_completed_week / 7);
+	var submitted_month_per_day = submitted_month / 30;
+	var num_submitted_month_per_day = parseInt(num_submitted_month / 30);
+	var completed_month_per_day = completed_month / 30;
+	var num_completed_month_per_day = parseInt(num_completed_month / 30);
 
 	var html = "<table class='table'>";
-	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.byteSize()+"</td></tr>";
-	html += "<tr><td><b># submitted</b></td><td>"+tot+"</td></tr>";
-	html += "<tr><td><b># in queue</b></td><td>"+numsubmitted+"</td></tr>";
-	html += "<tr><td><b># completed</b></td><td>"+numcompleted+"</td></tr>";
-	html += "<tr><td><b>submitted</b></td><td>"+totsize.byteSize()+"</td></tr>";
-	html += "<tr><td><b>in queue</b></td><td>"+submitted.byteSize()+"</td></tr>";
-	html += "<tr><td><b>completed</b></td><td>"+completed.byteSize()+"</td></tr>";
-	html += "<tr><td><b># submitted today</b></td><td>"+nsubmittedtoday+"</td></tr>";
-	html += "<tr><td><b># completed today</b></td><td>"+ncompletedtoday+"</td></tr>";
-	html += "<tr><td><b>submitted today</b></td><td>"+submittedtoday.byteSize()+"</td></tr>";
-	html += "<tr><td><b>completed today</b></td><td>"+completedtoday.byteSize()+"</td></tr>";
+	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.baseSize()+" in "+num_in_pipeline+" jobs</td></tr>";
+	html += "<tr><td><b>submitted today</b></td><td>"+submitted_today.baseSize()+" in "+num_submitted_today+" jobs</td></tr>";
+	html += "<tr><td><b>completed today</b></td><td>"+completed_today.baseSize()+" in "+num_completed_today+" jobs</td></tr>";
+	html += "<tr><td><b>submitted this week</b></td><td>"+submitted_week.baseSize()+" (avg. "+submitted_week_per_day.baseSize()+" per day) in "+num_submitted_week+" jobs (avg. "+num_submitted_week_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>completed this week</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>submitted this month</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>completed this month</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
-	html += "</table><h4>currently running stages</h4><div id='task_graph'></div><h4># of submitted and completed jobs</h4><div id='day_graph'></div><h4>submitted and completed GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
+	html += "</table><h4>currently running stages</h4><div id='task_graph'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
 	target.innerHTML = html;
 
@@ -332,46 +344,36 @@
 					  type: "column" }).render();
 
 	// daygraph
-	var days = Retina.keys(dnum);
-	for (var i in dnumc) {
-	    if (dnumc.hasOwnProperty(i)) {
-		if (! dnum.hasOwnProperty(i)) {
-		    dnum[i] = 0;
-		    dsize[i] = 0;
-		    days.push(i);
-		}
-	    }
+	var days = [];
+	var one_day = 1000 * 60 * 60 * 24;
+	for (var i=0; i<30; i++) {
+	    days.push(widget.dateString((29 - i) * one_day));
 	}
-	for (var i in dnum) {
-	    if (dnum.hasOwnProperty(i)) {
-		if (! dnumc.hasOwnProperty(i)) {
-		    dnumc[i] = 0;
-		    dsizec[i] = 0;
-		}
-	    }
-	}
-	days = days.sort();
 	var daydata = [ { name: "#submitted", data: [] },
 			{ name: "#completed", data: [] } ];
 	var daycdata = [ { name: "submitted (GB)", data: [] },
 			 { name: "completed (GB)", data: [] } ];
+	var avgsizedata = [ { name: "average jobsize submitted", data: [] },
+			    { name: "average jobsize completed", data: [] } ];
 	for (var i=0; i<days.length; i++) {
-	    daydata[0].data.push(parseInt(dnum[days[i]] / 1000000000));
-	    daydata[1].data.push(parseInt(dnumc[days[i]] / 1000000000));
-	    daycdata[0].data.push(parseInt(dsize[days[i]] / 1000000000));
-	    daycdata[1].data.push(parseInt(dsizec[days[i]] / 1000000000));
+	    daydata[0].data.push(submitted_jobs.hasOwnProperty(days[i]) ? submitted_jobs[days[i]] : 0)
+	    daydata[1].data.push(completed_jobs.hasOwnProperty(days[i]) ? completed_jobs[days[i]] : 0);
+	    daycdata[0].data.push(submitted_bases.hasOwnProperty(days[i]) ? parseInt(submitted_bases[days[i]] / 1000000000) : 0);
+	    daycdata[1].data.push(completed_bases.hasOwnProperty(days[i]) ? parseInt(completed_bases[days[i]] / 1000000000) : 0);
 	}
 	Retina.Renderer.create("graph", { target: document.getElementById('day_graph'),
 					  data: daydata,
 					  x_labels: days,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
+					  width: 950,
+					  chartArea: [0.05, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-35",
 					  type: "column" }).render();
 	Retina.Renderer.create("graph", { target: document.getElementById('dayc_graph'),
 					  data: daycdata,
+					  width: 950,
 					  x_labels: days,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
+					  chartArea: [0.05, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-35",
 					  type: "column" }).render();
     };
 
@@ -388,17 +390,16 @@
     widget.getJobData = function () {
 	var widget = Retina.WidgetInstances.metagenome_admin[1];
 
-	var period = 1000 * 60 * 60 * 24 * 30; // 30 days
-	var timestamp = widget.dateString(period);
 
+	var timestamp = widget.dateString(widget.period);
 	var promises = [];
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['awe_url']+"/job?query&date_start="+timestamp+"&verbosity=minimal&limit=10000",
+				     url: RetinaConfig['awe_url']+"/job?query&date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend",
 				     headers: widget.aweAuthHeader,
 				     success: function(data) {
-					 stm.DataStore.jobdata = data.data;
+					 stm.DataStore.inactivejobs = data.data;
 					 jQuery.ajax( { dataType: "json",
 					 		url: RetinaConfig['awe_url']+"/job/"+data.data[0].id,
 					 		headers: widget.aweAuthHeader,
