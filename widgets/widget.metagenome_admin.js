@@ -186,7 +186,7 @@
 	for (var i=0; i<template.tasks.length; i++) {
 	    tasklabels[i] = template.tasks[i].cmd.description;
 	    tasknames[i] = template.tasks[i].cmd.description;
-	    taskcount[i] = 0;
+	    taskcount[i] = [ 0, 0 ];
 	}
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
@@ -221,9 +221,13 @@
 	    states[jobsactive[i].state]++;
 
 	    // count the current task (leave out preprocess for now)
-	    if (tasknames[jobsactive[i].task] != "preprocess") {
-		taskcount[jobsactive[i].task]++;
-	    }
+	    //if (tasknames[jobsactive[i].task] != "preprocess") {
+		if (jobsactive[i].state == "queued") {
+		    taskcount[jobsactive[i].task][0]++;
+		} else {
+		    taskcount[jobsactive[i].task][1]++;
+		}
+	    //}
 
 	    // get the active jobs for last 30 days
 	    if (jobsactive[i].submittime > month) {
@@ -311,7 +315,7 @@
 	html += "<tr><td><b>submitted this month</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>completed this month</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
-	html += "</table><h4>currently running stages</h4><div id='task_graph'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
+	html += "</table><h4>currently <span style='color: blue;'>running</span> and <span style='color: red;'>pending</span> stages</h4><div id='task_graph'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
 	target.innerHTML = html;
 
@@ -331,11 +335,12 @@
 					  data: sdata }).render();
 	
 	// task graph
-	var data = [ { name: "count", data: [] } ];
+	var data = [ { name: "running", data: [] },
+		     { name: "pending", data: [] } ];
 	for (var i=0; i<template.tasks.length; i++) {
-	    data[0].data.push(taskcount[i]);
+	    data[0].data.push(taskcount[i][0]);
+	    data[1].data.push(taskcount[i][1]);
 	}
-	data[0].data.push(taskcount["-1"]);
 	Retina.Renderer.create("graph", { target: document.getElementById('task_graph'),
 					  data: data,
 					  x_labels: tasklabels,
