@@ -396,15 +396,15 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['awe_url']+"/job?query&date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend",
-				     headers: widget.aweAuthHeader,
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend",
+				     headers: widget.authHeader,
 				     success: function(data) {
 					 stm.DataStore.inactivejobs = data.data;
 					 jQuery.ajax( { dataType: "json",
-					 		url: RetinaConfig['awe_url']+"/job/"+data.data[0].id,
-					 		headers: widget.aweAuthHeader,
+					 		url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
+					 		headers: widget.authHeader,
 					 		success: function(data) {
-					 		    stm.DataStore.jobtemplate = data.data;
+					 		    stm.DataStore.jobtemplate = data.data[0];
 					 		},
 					 		error: function () {
 					 		    alert('there was an error retrieving the data');
@@ -417,8 +417,8 @@
 				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['awe_url']+"/job?query&state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000",
-				     headers: widget.aweAuthHeader,
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000",
+				     headers: widget.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = data.data;
 				     },
@@ -436,12 +436,9 @@
 	if (data.user) {
 	    widget.user = data.user;
 	    widget.authHeader = { "Auth": data.token };
-	    widget.aweAuthHeader = { "Authorization": "OAuth "+data.token,
-				     "Datatoken": "OAuth "+data.token };
 	} else {
 	    widget.user = null;
 	    widget.authHeader = {};
-	    widget.aweAuthHeader = {};
 	}
 	widget.display();
     };

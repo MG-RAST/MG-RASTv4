@@ -16,10 +16,9 @@
       GLOBAL VARIABLES
     */
     widget.authHeader = {};
-    widget.aweAuthHeader = {};
     widget.user = null;
     widget.jobDataOffset;
-    widget.userID = null;
+    widget.userID = "rebecca_waddell";
     widget.adminUser = null;
 
     widget.settingsMapping = [
@@ -80,8 +79,7 @@
 	if (widget.user) {
 	    if (! widget.userID) {
 		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
-		widget.getUserId();
-		return;
+		widget.userID = widget.user.login;
 	    }
 	    content.innerHTML = '<div id="jobtable"></div>';
 
@@ -103,10 +101,10 @@
 		    default_sort: "job",
 		    asynch_column_mapping: { "job": "info.name",
 					     "status": "state" },
-		    headers: widget.aweAuthHeader,
+		    headers: widget.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
 		    minwidths: [1,1,1,1],
-		    navigation_url: RetinaConfig.awe_url+'/job?query&info.user='+widget.userID,
+		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID,
 		    data: { data: [], header: job_columns }
 		});
 	    } else {
@@ -117,7 +115,7 @@
 
 	    if (Retina.cgiParam('admin')) {
 		var title = document.createElement('div');
-		title.innerHTML = "<h4 style='margin-top: 25px;'>change user</h4>";
+		title.innerHTML = "<h4 style='margin-top: 25px;'>change user (currently: "+widget.userID+")</h4>";
 		content.appendChild(title);
 		var utable = document.createElement('div');
 		utable.setAttribute('id', 'usertable');
@@ -196,7 +194,7 @@
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	for (var i=0; i<data.length; i++) {
-	    data[i].login = "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+data[i].id+"\");'>"+data[i].login+"</a>";
+	    data[i].login = "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+data[i].login+"\");'>"+data[i].login+"</a>";
 	}
 
 	return data;
@@ -206,7 +204,7 @@
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
 	widget.userID = id;
-	widget.job_table.settings.navigation_url = RetinaConfig.awe_url+'/job?query&info.user='+widget.userID;
+	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID;
 	widget.display();
     };
     
@@ -544,58 +542,16 @@
 	return some_time;
     };
 
-    widget.authenticatedDownload = function (url) {
-	jQuery.ajax({ url: url,
-		      dataType: "json",
-		      success: function(data) {
-			  if (data != null) {
-			      if (data.error != null) {
-				  console.log("error: "+data.error);
-			      }
-			      window.location = data.data.url;
-			  } else {
-			      console.log("error: invalid return structure from SHOCK server");
-			      console.log(data);
-			  }
-		      },
-		      error: function(jqXHR, error) {
-			  console.log( "error: unable to connect to SHOCK server" );
-			  console.log(error);
-		      },
-		      crossDomain: true,
-		      headers: widget.aweAuthHeader
-		    });
-    };
-
     // login widget sends an action (log-in or log-out)
     widget.loginAction = function (params) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	if (params.token) {
 	    widget.user = params.user;
 	    widget.authHeader = { "Auth": params.token };
-	    widget.aweAuthHeader = { "Authorization": "OAuth "+params.token };
 	} else {
 	    widget.user = null;
 	    widget.authHeader = {};
-	    widget.aweAuthHeader = {};
 	}
 	widget.display();
     };
-
-    widget.getUserId = function () {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
-
-	jQuery.ajax({
-	    method: "GET",
-	    dataType: "json",
-	    headers: widget.authHeader, 
-	    url: RetinaConfig.mgrast_api+'/user/rebecca_waddell',// + (widget.adminUser || widget.user.login),
-	    success: function (data) {
-		Retina.WidgetInstances.metagenome_pipeline[1].userID = data.id;
-		Retina.WidgetInstances.metagenome_pipeline[1].display();
-	    }}).fail(function(xhr, error) {
-		
-	    });
-    };
-
 })();
