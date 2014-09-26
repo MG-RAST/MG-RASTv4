@@ -76,6 +76,8 @@
 
 	// check if we have a user
 	if (widget.user) {
+	    sidebar.innerHTML = "<h3 style='margin-left: 10px;'>Job Status Monitor</h3><p style='margin-left: 10px;'>Click on a job id in the lefthand table to get details on the status of that submission.</p>";
+	    
 	    if (! widget.userID) {
 		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
 		widget.userID = widget.user.login;
@@ -264,7 +266,7 @@
     widget.jobSettings = function (job) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
-	var html = "<h4>pipeline options</h4>";
+	var html = "<p>Below are the pipeline options and the choice on when the completed data will be made publicly available chosen at submission time.</p><h4>pipeline options</h4>";
 
 	if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
 	    html += "<table class='table table-condensed'>";
@@ -309,7 +311,7 @@
 		prio = widget.priorityMapping[prio][1];
 	    }
 	    html += "<h4>priority setting</h4><p>Your choice on when to make your data publicly available was</p>";
-	    html += "<p style='padding-left: 100px;'><b>"+prio+"</b></p><p>This causes the priority of your job in the pipeline to be</p><p style='padding-left: 100px;'><b>"+jobpriority+"</b></p>";
+	    html += "<div class='alert alert-info' style='width: 100px; text-align: center; margin-left: auto; margin-right: auto; padding: 8px 14px 8px 14px;'>"+prio+"</div><p>This causes the priority of your job in the pipeline to be</p><div class='alert alert-info' style='width: 100px; text-align: center; margin-left: auto; margin-right: auto; padding: 8px 14px 8px 14px;'>"+jobpriority+"</div>";
 	}
 
 	return html;
@@ -375,7 +377,7 @@
 
 	var html = "<h4>this job has no tasks</h4>";
 	if (job.tasks.length > 0) {
-	    html = "";
+	    html = "<p>Below are all tasks that are part of the MG-RAST pipeline for your submission.</p><ul><li><span style='color: green;'>Green bars</span>, indicating completed tasks, can be expanded via mouseclick</li><li><span style='color: blue;'>Blue bars</span> indicate tasks currently being computed on</li><li><span style='color: orange;'>Orange bars</span> represent the next tasks to be queued</li><li><span style='color: gray;'>Gray tasks</span> are waiting for completion of another task they depend on</li><li><span style='color: red;'>Red bars</span> indicate an error</li></ul>";
 	    for (var i=0; i<job.tasks.length; i++) {
 		if (job.tasks[i].state == 'completed') {
 		    html += '\
