@@ -12,8 +12,6 @@
 	return [ Retina.load_renderer("table"),
 		 Retina.load_renderer("graph") ];
     };
-
-    widget.period = 1000 * 60 * 60 * 24 * 30; // 30 days
     
     widget.display = function (wparams) {
         var widget = Retina.WidgetInstances.metagenome_admin[1];
@@ -198,7 +196,7 @@
 	var jobsactive = stm.DataStore.activejobs;
 
 	// timestamp of 30 days ago
-	var month = widget.dateString(widget.period);
+	var month = widget.dateString(1000 * 60 * 60 * 24 * 30);
 	var week = widget.dateString(1000 * 60 * 60 * 24 * 7);
 	var day = widget.dateString(1000 * 60 * 60 * 24);
 
@@ -220,19 +218,17 @@
 	    // count the current state
 	    states[jobsactive[i].state]++;
 
-	    // count the current task (leave out preprocess for now)
-	    //if (tasknames[jobsactive[i].task] != "preprocess") {
-		if (jobsactive[i].state == "queued") {
-		    taskcount[jobsactive[i].task][0]++;
-		    taskcount[jobsactive[i].task][2] += jobsactive[i].size;
-		} else {
-		    taskcount[jobsactive[i].task][1]++;
-		    taskcount[jobsactive[i].task][3] += jobsactive[i].size;
-		}
-	    //}
+	    // count the current task
+	    if (jobsactive[i].state == "in-progress") {
+		taskcount[jobsactive[i].task][0]++;
+		taskcount[jobsactive[i].task][2] += jobsactive[i].size;
+	    } else {
+		taskcount[jobsactive[i].task][1]++;
+		taskcount[jobsactive[i].task][3] += jobsactive[i].size;
+	    }
 
 	    // get the active jobs for last 30 days
-	    if (jobsactive[i].submittime > month) {
+	    if (jobsactive[i].submittime >= month) {
 		jobs30.push(jobsactive[i]);
 	    }
 	}
@@ -274,27 +270,27 @@
 	    completed_jobs[completed_day]++;
 	    completed_bases[completed_day] += jobs30[i].size;
 
-	    if (jobs30[i].submittime > month) {
+	    if (jobs30[i].submittime >= month) {
 		num_submitted_month++;
 		submitted_month += jobs30[i].size;
 	    }
-	    if (jobs30[i].submittime > week) {
+	    if (jobs30[i].submittime >= week) {
 		num_submitted_week++;
 		submitted_week += jobs30[i].size;
 	    }
-	    if (jobs30[i].submittime > day) {
+	    if (jobs30[i].submittime >= day) {
 		num_submitted_today++;
 		submitted_today += jobs30[i].size;
 	    }
-	    if (jobs30[i].completedtime > month) {
+	    if (jobs30[i].completedtime >= month) {
 		num_completed_month++;
 		completed_month += jobs30[i].size;
 	    }
-	    if (jobs30[i].completedtime > week) {
+	    if (jobs30[i].completedtime >= week) {
 		num_completed_week++;
 		completed_week += jobs30[i].size;
 	    }
-	    if (jobs30[i].completedtime > day) {
+	    if (jobs30[i].completedtime >= day) {
 		num_completed_today++;
 		completed_today += jobs30[i].size;
 	    }
@@ -317,7 +313,7 @@
 	html += "<tr><td><b>submitted this month</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>completed this month</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
-	html += "</table><h4>currently <span style='color: blue;'>running</span> and <span style='color: red;'>pending</span> stages</h4><div id='task_graph'></div><h4>currently <span style='color: blue;'>running</span> and <span style='color: red;'>pending</span> data in stages in GB</h4><div id='task_graph_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
+	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
 	target.innerHTML = html;
 
@@ -336,33 +332,53 @@
 					  x_labels_rotation: "-25",
 					  data: sdata }).render();
 	
-	// task graph
-	var data = [ { name: "running", data: [] },
-		     { name: "pending", data: [] } ];
+	// task graph s
+	var tdatar = [ { name: "running", data: [] } ];
 	for (var i=0; i<template.tasks.length; i++) {
-	    data[0].data.push(taskcount[i][0]);
-	    data[1].data.push(taskcount[i][1]);
+	    tdatar[0].data.push(taskcount[i][0]);
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('task_graph'),
-					  data: data,
+	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_running'),
+					  data: tdatar,
 					  x_labels: tasklabels,
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
 
-	// task GB graph
-	var data = [ { name: "running", data: [] },
-		     { name: "pending", data: [] } ];
+	var tdatap = [ { name: "pending", data: [] } ];
 	for (var i=0; i<template.tasks.length; i++) {
-	    data[0].data.push(parseInt(taskcount[i][2] / 1000000000));
-	    data[1].data.push(parseInt(taskcount[i][3] / 1000000000));
+	    tdatap[0].data.push(taskcount[i][1]);
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_GB'),
-					  data: data,
+	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_pending'),
+					  data: tdatap,
 					  x_labels: tasklabels,
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
+
+
+	// task GB graph s
+	var tdatars = [ { name: "running", data: [] } ];
+	for (var i=0; i<template.tasks.length; i++) {
+	    tdatars[0].data.push(parseInt(taskcount[i][2] / 1000000000));
+	}
+	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_running_GB'),
+					  data: tdatars,
+					  x_labels: tasklabels,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-25",
+					  type: "column" }).render();
+
+	var tdataps = [ { name: "running", data: [] } ];
+	for (var i=0; i<template.tasks.length; i++) {
+	    tdataps[0].data.push(parseInt(taskcount[i][3] / 1000000000));
+	}
+	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_pending_GB'),
+					  data: tdataps,
+					  x_labels: tasklabels,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-25",
+					  type: "column" }).render();
+
 
 	// daygraph
 	var days = [];
@@ -412,7 +428,7 @@
 	var widget = Retina.WidgetInstances.metagenome_admin[1];
 
 
-	var timestamp = widget.dateString(widget.period);
+	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
 	var promises = [];
 	var prom = jQuery.Deferred();
 	promises.push(prom);
