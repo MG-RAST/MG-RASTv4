@@ -138,7 +138,7 @@
 		
 		html += "<div class='span5'><table class='table table-condensed'>";
 		html += "<tr><td colspan=2><b>"+d.file_name+"</b></td></tr>";
-		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+statsbutton+"<a href='"+d.url+"' class='btn btn-primary btn-mini' style='float: right; margin-right: 10px;'>download</a></td></tr>";
+		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+statsbutton+"<button class='btn btn-primary btn-mini' style='float: right; margin-right: 10px;' onclick='Retina.WidgetInstances.metagenome_download[1].authenticatedDownload(this, \""+d.url+"\");'>download</button></td></tr>";
 		html += "<tr><td><b>sequence format</b></td><td>"+d.seq_format+"</td></tr>";
 		html += "<tr><td><b>file format</b></td><td>"+d.file_format+"</td></tr>";
 		html += "<tr><td><b>MD5</b></td><td>"+d.file_md5+"</td></tr>";
@@ -172,6 +172,23 @@
 		       error: function () {
 			   alert('there was an error retrieving the data');
 			   document.getElementById('download_progress').innerHTML = "";
+		       }
+		     } );
+    };
+
+    widget.authenticatedDownload = function (button, url) {
+	var widget = Retina.WidgetInstances.metagenome_download[1];
+
+	button.setAttribute('disabled', 'true');
+	jQuery.ajax( { url: url+"&link=1",
+		       headers: widget.authHeader,
+		       success: function(data) {
+			   button.removeAttribute('disabled');
+			   window.location = data.url;
+		       },
+		       error: function () {
+			   button.removeAttribute('disabled');
+			   alert('download failed');
 		       }
 		     } );
     };
