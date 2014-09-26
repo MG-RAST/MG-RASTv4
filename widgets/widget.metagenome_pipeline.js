@@ -19,7 +19,6 @@
     widget.user = null;
     widget.jobDataOffset;
     widget.userID = "rebecca_waddell";
-    widget.adminUser = null;
 
     widget.settingsMapping = [
 	[ "assembled", "sequence file is assembled" ],
@@ -361,7 +360,10 @@
 		
 		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
 		
-		html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
+		//html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
+
+		html += "<p>If you want to stop the computation of this job  and remove it from the system you can delete it using the button below.</p>";
+		html += "<p style='text-align: center;'><button class='btn btn-danger btn-small' onclick='Retina.WidgetInstances.metagenome_pipeline[1].deleteJob(\""+job.info.userattr.id+"\");'>delete</button></p>";
 	    }
 	}
 
@@ -461,6 +463,30 @@
 	html += "</table>";
 	
 	return html;
+    };
+
+    /*
+      ACTIONS
+     */
+    widget.deleteJob = function (job) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	if (prompt("Really delete job "+job+"? This cannot be undone. Type 'DELETE' to confirm", "") == "DELETE") {
+	    var reason = prompt("Why do you want to delete the job?", "- not specified -");
+	    jQuery.ajax({
+		method: "POST",
+		dataType: "json",
+		data: { "metagenome_id": job,
+			"reason": reason },
+		headers: widget.authHeader, 
+		url: RetinaConfig.mgrast_api+'/job/delete',
+		success: function (data) {
+		    alert("job deleted");
+		    Retina.WidgetInstances.metagenome_pipeline[1].display();
+		}}).fail(function(xhr, error) {
+		    console.log(error);
+		});
+	}
     };
 
     /*
