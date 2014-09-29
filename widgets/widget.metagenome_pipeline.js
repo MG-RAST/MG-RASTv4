@@ -235,7 +235,7 @@
 		    stm.DataStore.metagenome[data.id] = data;
 		    Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(jobid);
 		}}).fail(function(xhr, error) {
-		    Retina.WidgetInstances.metagenome_pipeline[1].sidebar.innerHTML = "<div class='alert alert-error'>could not retrieve detail data</div>";
+		    Retina.WidgetInstances.metagenome_pipeline[1].sidebar.innerHTML = "<div class='alert alert-error' style='margin: 20px;'>could not retrieve detail data</div>";
 		});
 	    return;
 	}
