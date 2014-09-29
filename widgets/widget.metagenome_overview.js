@@ -9,17 +9,11 @@
     });
     
     widget.setup = function () {
-	return [ Retina.add_renderer({"name": "listselect", "resource": "Retina/renderers/",  "filename": "renderer.listselect.js" }),
-                 Retina.load_renderer("listselect"),
-	         Retina.add_renderer({"name": "paragraph", "resource": "Retina/renderers/",  "filename": "renderer.paragraph.js" }),
-		 Retina.load_renderer("paragraph"),
-		 Retina.add_renderer({"name": "graph", "resource": "Retina/renderers/",  "filename": "renderer.graph.js" }),
+	return [ Retina.load_renderer("listselect"),
+	         Retina.load_renderer("paragraph"),
 		 Retina.load_renderer("graph"),
-		 Retina.add_renderer({"name": "plot", "resource": "Retina/renderers/",  "filename": "renderer.plot.js" }),
- 		 Retina.load_renderer("plot"),
- 		 Retina.add_renderer({"name": "table", "resource": "Retina/renderers/",  "filename": "renderer.table.js" }),
-  		 Retina.load_renderer("table"),
-		 Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"}),
+		 Retina.load_renderer("plot"),
+ 		 Retina.load_renderer("table"),
 		 Retina.load_widget("mgbrowse")
 	       ];
     };
@@ -294,15 +288,16 @@
 	    } catch (err) {
 	        organization = "-";
 	    }
-	    var data = { data:
-	           [ { title: "Metagenome Data Sheet for ID " + mg.id.substring(3)},
-		         { table: [ [ { header: "Metagenome Name" }, mg.name, { header: "NCBI Project ID" }, ncbi_id ],
-				            [ { header: "PI" }, pi_link, { header: "GOLD ID" }, gold_id ],
-				            [ { header: "Organization" }, organization, { header: "PubMed ID" }, pubmed_id ],
-				            [ { header: "Visibility" }, mg.status ]
-                           ] }
-		        ] };
-	    return data;
+	var downloadLink = "<a href='?mgpage=download&metagenome="+mg.id+"'><img src='Retina/images/download.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download'></a>";
+	var data = { data:
+	             [ { title: "Metagenome Data Sheet for ID " + mg.id.substring(3) + downloadLink },
+		       { table: [ [ { header: "Metagenome Name" }, mg.name, { header: "NCBI Project ID" }, ncbi_id ],
+				  [ { header: "PI" }, pi_link, { header: "GOLD ID" }, gold_id ],
+				  [ { header: "Organization" }, organization, { header: "PubMed ID" }, pubmed_id ],
+				  [ { header: "Visibility" }, mg.status ]
+				] }
+		     ] };
+	return data;
     };
     
     widget.metagenome_summary = function(index) {
@@ -338,7 +333,8 @@
 			     [ "<a href='#taxonomy_introtext'>Taxonomic Hits</a>" ],
 			     [ "<a href='#rank_abund_introtext'>Rank Abundance Plot</a>" ],
 			     [ "<a href='#rarefaction_introtext'>Rarefaction Curve</a>" ],
-			     [ "<a href='#metadata_table'>Full Metadata</a>" ]
+			     [ "<a href='#metadata_table'>Full Metadata</a>" ],
+			     [ "<a href='?mgpage=download&metagenome="+Retina.WidgetInstances.metagenome_overview[index].curr_mg.id+"' target=_blank>Downloads</a>" ]
 			 ] } }
 		       ] };
     };
@@ -772,51 +768,51 @@
 
     widget.analysis_statistics = function(index) {
         var stats = Retina.WidgetInstances.metagenome_overview[index].curr_mg.statistics.sequence_stats;
-	    return { width: "span6",
-		         style: "float: left;",
-		         data: [ { header: "Analysis Statistics" },
-			             { fancy_table: { data: [
-			                 [ { header: "Upload: bp Count" }, widget._to_num('bp_count_raw', stats)+" bp" ],
-			                 [ { header: "Upload: Sequences Count" }, widget._to_num('sequence_count_raw', stats) ],
-			                 [ { header: "Upload: Mean Sequence Length" }, widget._to_num('average_length_raw', stats)+" ± "+widget._to_num('standard_deviation_length_raw', stats)+" bp" ],
-			                 [ { header: "Upload: Mean GC percent" }, widget._to_num('average_gc_content_raw', stats)+" ± "+widget._to_num('standard_deviation_gc_content_raw', stats)+" %" ],
-			                 [ { header: "Artificial Duplicate Reads: Sequence Count" }, widget._to_num('sequence_count_dereplication_removed', stats) ],
-			                 [ { header: "Post QC: bp Count" }, widget._to_num('bp_count_preprocessed', stats)+" bp" ],
-			                 [ { header: "Post QC: Sequences Count" }, widget._to_num('sequence_count_preprocessed', stats) ],
-			                 [ { header: "Post QC: Mean Sequence Length" }, widget._to_num('average_length_preprocessed', stats)+" ± "+widget._to_num('standard_deviation_length_preprocessed', stats)+" bp" ],
-			                 [ { header: "Post QC: Mean GC percent" }, widget._to_num('average_gc_content_preprocessed', stats)+" ± "+widget._to_num('standard_deviation_gc_content_preprocessed', stats)+" %" ],
-			                 [ { header: "Processed: Predicted Protein Features" }, widget._to_num('sequence_count_processed_aa', stats) ],
-			                 [ { header: "Processed: Predicted rRNA Features" }, widget._to_num('sequence_count_processed_rna', stats) ],
-			                 [ { header: "Alignment: Identified Protein Features" }, widget._to_num('sequence_count_sims_aa', stats) ],
-			                 [ { header: "Alignment: Identified rRNA Features" }, widget._to_num('sequence_count_sims_rna', stats) ],
-			                 [ { header: "Annotation: Identified Functional Categories" }, widget._to_num('sequence_count_ontology', stats) ]
-			                 ] } }
-			            ] };
+	    return { width: "span5",
+		     style: "float: left;",
+		     data: [ { header: "Analysis Statistics" },
+			     { fancy_table: { data: [
+			         [ { header: "Upload: bp Count" }, widget._to_num('bp_count_raw', stats)+" bp" ],
+			         [ { header: "Upload: Sequences Count" }, widget._to_num('sequence_count_raw', stats) ],
+			         [ { header: "Upload: Mean Sequence Length" }, widget._to_num('average_length_raw', stats)+" ± "+widget._to_num('standard_deviation_length_raw', stats)+" bp" ],
+			         [ { header: "Upload: Mean GC percent" }, widget._to_num('average_gc_content_raw', stats)+" ± "+widget._to_num('standard_deviation_gc_content_raw', stats)+" %" ],
+			         [ { header: "Artificial Duplicate Reads: Sequence Count" }, widget._to_num('sequence_count_dereplication_removed', stats) ],
+			         [ { header: "Post QC: bp Count" }, widget._to_num('bp_count_preprocessed', stats)+" bp" ],
+			         [ { header: "Post QC: Sequences Count" }, widget._to_num('sequence_count_preprocessed', stats) ],
+			         [ { header: "Post QC: Mean Sequence Length" }, widget._to_num('average_length_preprocessed', stats)+" ± "+widget._to_num('standard_deviation_length_preprocessed', stats)+" bp" ],
+			         [ { header: "Post QC: Mean GC percent" }, widget._to_num('average_gc_content_preprocessed', stats)+" ± "+widget._to_num('standard_deviation_gc_content_preprocessed', stats)+" %" ],
+			         [ { header: "Processed: Predicted Protein Features" }, widget._to_num('sequence_count_processed_aa', stats) ],
+			         [ { header: "Processed: Predicted rRNA Features" }, widget._to_num('sequence_count_processed_rna', stats) ],
+			         [ { header: "Alignment: Identified Protein Features" }, widget._to_num('sequence_count_sims_aa', stats) ],
+			         [ { header: "Alignment: Identified rRNA Features" }, widget._to_num('sequence_count_sims_rna', stats) ],
+			         [ { header: "Annotation: Identified Functional Categories" }, widget._to_num('sequence_count_ontology', stats) ]
+			     ] } }
+			   ] };
     };
     
     widget.mixs_metadata = function(index, hide_link) {
         var md = Retina.WidgetInstances.metagenome_overview[index].curr_mg.mixs;
-        var data = { width: "span6",
-		             style: "float: right;",
-		             data: [ { header: "GSC MIxS Info" },
-			                 { fancy_table: { data: [
-			                     [ { header: "Investigation Type" }, md['sequence_type'] ],
-			                     [ { header: "Project Name" }, md['project'] ],
-			                     [ { header: "Latitude and Longitude" }, md['latitude']+" , "+md['longitude'] ],
-			                     [ { header: "Country and/or Sea, Location" }, md['country']+" , "+md['location'] ],
-			                     [ { header: "Collection Date" }, md['collection_date'] ],
-			                     [ { header: "Environment (Biome)" }, md['biome'] ],
-			                     [ { header: "Environment (Feature)" }, md['feature'] ],
-			                     [ { header: "Environment (Material)" }, md['material'] ],
-			                     [ { header: "Environmental Package" }, md['package'] ],
-			                     [ { header: "Sequencing Method" }, md['seq_method'] ]
-			                     ] }
-			                 }
-			            ] };
-		if (! hide_link) {
-		    data.data[1].fancy_table.data.push( [{header: "More Metadata"}, "<a href='#metadata_table'>click for full table</a>"] );
-	    }
-		return data;
+        var data = { width: "span5",
+		     style: "float: right;",
+		     data: [ { header: "GSC MIxS Info" },
+			     { fancy_table: { data: [
+			         [ { header: "Investigation Type" }, md['sequence_type'] ],
+			         [ { header: "Project Name" }, md['project'] ],
+			         [ { header: "Latitude and Longitude" }, md['latitude']+" , "+md['longitude'] ],
+			         [ { header: "Country and/or Sea, Location" }, md['country']+" , "+md['location'] ],
+			         [ { header: "Collection Date" }, md['collection_date'] ],
+			         [ { header: "Environment (Biome)" }, md['biome'] ],
+			         [ { header: "Environment (Feature)" }, md['feature'] ],
+			         [ { header: "Environment (Material)" }, md['material'] ],
+			         [ { header: "Environmental Package" }, md['package'] ],
+			         [ { header: "Sequencing Method" }, md['seq_method'] ]
+			     ] }
+			     }
+			   ] };
+	if (! hide_link) {
+	    data.data[1].fancy_table.data.push( [{header: "More Metadata"}, "<a href='#metadata_table'>click for full table</a>"] );
+	}
+	return data;
     };
     
     widget._to_per = function(n, d) {

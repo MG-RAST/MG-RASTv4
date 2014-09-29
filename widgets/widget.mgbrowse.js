@@ -10,10 +10,8 @@
     
     widget.setup = function () {
 	return [ 
- 	    Retina.add_renderer({"name": "table", "resource": "Retina//renderers/",  "filename": "renderer.table.js" }),
-  	    Retina.load_renderer("table"),
- 	    Retina.add_renderer({"name": "listselect", "resource": "Retina//renderers/",  "filename": "renderer.listselect.js" }),
-  	    Retina.load_renderer("listselect")
+ 	    Retina.load_renderer("table"),
+ 	    Retina.load_renderer("listselect")
 	];
     };
     

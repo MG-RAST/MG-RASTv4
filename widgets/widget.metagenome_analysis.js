@@ -10,10 +10,8 @@
     
     // load all required widgets and renderers
     widget.setup = function () {
-	return [ Retina.add_widget({"name": "mgbrowse", "resource": "widgets/",  "filename": "widget.mgbrowse.js"}),
-		 Retina.load_widget("mgbrowse"),
-		 Retina.add_widget({"name": "RendererController", "resource": "Retina/widgets/",  "filename": "widget.RendererController.js"}),
-		 Retina.load_widget("RendererController")
+	return [ Retina.load_widget("mgbrowse"),
+		 Retina.load_widget({"name": "RendererController", "resource": "Retina/widgets/"})
 	       ];
     };
     
@@ -87,7 +85,7 @@
     <b>name</b><input type="text" placeholder="pick a name" style="margin-left: 10px; margin-right: 10px; width: 185px;" id="dataContainerName"><b>source</b> <select style="margin-left: 10px; margin-right: 10px;" id="profile_source"><optgroup label="protein databases"><option>M5NR</option><option>RefSeq</option><option>GenBank</option><option>IMG</option><option>SEED</option><option>TrEMBL</option><option>SwissProt</option><option>PATRIC</option><option>KEGG</option></optgroup><optgroup label="RNA databases"><option>M5RNA</option><option>RDP</option><option>Greengenes</option><option>LSU</option><option>SSU</option></optgroup><optgroup label="ontology databases"><option>Subsystems</option><option>NOG</option><option>COG</option><option>KO</option></optgroup></select> <b>type</b> <select id="profile_type" style="margin-left: 10px;"><option>organism</option><option>function</option><option>feature</option></select>\
   </div>\
   <div>\
-    <div id="mgbrowse"></div>\
+    <div id="mgbrowse"><img src="Retina/images/waiting.gif" style="position: relative; top: 10px; left: 400px;"></div>\
   </div>\
 </div>\
 <hr>\
@@ -293,19 +291,23 @@
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	    var p = stm.DataStore.profile[c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source];
 	    var mdname = "";
-	    for (var i in p.rows[0].metadata) {
-		if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
-		    mdname = i;
+	    if (p.rows.length > 0) {
+		for (var i in p.rows[0].metadata) {
+		    if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
+			mdname = i;
+		    }
 		}
+		p.mdname = mdname;
+		var cols = p.rows[0].metadata[mdname];
+		var matrixLevels = "";
+		for (var i=0; i<cols.length; i++) {
+		    matrixLevels += "<option value='"+i+"'>"+i+"</option>";
+		}
+		
+		containerData = "<div class='form-inline' style='margin-bottom: 20px;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div><div id='visualizeBreadcrumbs' style='margin-bottom: 20px;'></div>";
+	    } else {
+		containerData = "<p>The selected data container does not contain any data rows.</p>";
 	    }
-	    p.mdname = mdname;
-	    var cols = p.rows[0].metadata[mdname];
-	    var matrixLevels = "";
-	    for (var i=0; i<cols.length; i++) {
-		matrixLevels += "<option value='"+i+"'>"+i+"</option>";
-	    }
-
-	    containerData = "<div class='form-inline' style='margin-bottom: 20px;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div><div id='visualizeBreadcrumbs' style='margin-bottom: 20px;'></div>";
 	}
 
 	var html = "<h4>visualize - "+demo_data[type].title+"</h4>"+containerData+"<div id='visualizeTarget'></div>";
@@ -329,6 +331,10 @@
     // draw the current visualization with updated parameters
     widget.updateVis = function (filter, reset) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	if (! document.getElementById('matrixLevel')) {
+	    return;
+	}
 
 	if (reset) {
 	    document.getElementById('matrixLevel').selectedIndex = 0;
@@ -484,10 +490,10 @@
 						  user: widget.user || "public" };
 	}
 	if (! stm.DataStore.hasOwnProperty('profile') ) {
-	    stm.DataStore.profile = [];
+	    stm.DataStore.profile = {};
 	}
 	if (! stm.DataStore.hasOwnProperty('inprogress')) {
-	    stm.DataStore.inprogress = [];
+	    stm.DataStore.inprogress = {};
 	}
 	for (i=0;i<ids.length;i++) {
 	    var id = ids[i].id+"_"+type+"_"+source;
