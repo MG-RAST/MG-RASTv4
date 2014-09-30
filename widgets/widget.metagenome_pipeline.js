@@ -18,7 +18,7 @@
     widget.authHeader = {};
     widget.user = null;
     widget.jobDataOffset;
-    widget.userID = "rebecca_waddell";
+    widget.userID = "AdamP";
 
     widget.settingsMapping = [
 	[ "assembled", "sequence file is assembled" ],
@@ -388,7 +388,7 @@
     widget.errorHandling = function (job) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
-	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.id)+"' target=_blank>contact our support team</a>.";
+	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
 
 	return html;
     };
