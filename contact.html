@@ -10,6 +10,7 @@
     <!-- default js -->
     <script src="Retina/js/jquery.min.js"></script>
     <script src="Retina/js/bootstrap.min.js"></script>
+    <script src="Retina/js/retina.js"></script>
 
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
@@ -21,6 +22,12 @@
     <script>
       jQuery( document ).ready(function(){
 	  window.myrecaptcha = Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
+	  if (Retina.cgiParam("msg")) {
+	      document.getElementById("inputMessage").value = decodeURIComponent(Retina.cgiParam("msg"));
+	  }
+	  if (Retina.cgiParam("sbj")) {
+	      document.getElementById("inputSubject").value = decodeURIComponent(Retina.cgiParam("sbj"));
+	  }
       });
     </script>
 
