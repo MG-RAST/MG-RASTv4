@@ -213,7 +213,7 @@
 	for (var i=0; i<jobsactive.length; i++) {
 
 	    // count the total size in the pipeline
-	    size_in_pipeline += jobsactive[i].size;
+	    size_in_pipeline += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 
 	    // count the current state
 	    states[jobsactive[i].state]++;
@@ -221,10 +221,10 @@
 	    // count the current task
 	    if (jobsactive[i].state == "in-progress") {
 		taskcount[jobsactive[i].task][0]++;
-		taskcount[jobsactive[i].task][2] += jobsactive[i].size;
+		taskcount[jobsactive[i].task][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 	    } else {
 		taskcount[jobsactive[i].task][1]++;
-		taskcount[jobsactive[i].task][3] += jobsactive[i].size;
+		taskcount[jobsactive[i].task][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 	    }
 
 	    // get the active jobs for last 30 days
@@ -262,37 +262,37 @@
 		submitted_bases[submitted_day] = 0;
 	    }
 	    submitted_jobs[submitted_day]++;
-	    submitted_bases[submitted_day] += jobs30[i].size;
+	    submitted_bases[submitted_day] += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    if (! completed_jobs.hasOwnProperty(completed_day)) {
 		completed_jobs[completed_day] = 0;
 		completed_bases[completed_day] = 0;
 	    }
 	    completed_jobs[completed_day]++;
-	    completed_bases[completed_day] += jobs30[i].size;
+	    completed_bases[completed_day] += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 
 	    if (jobs30[i].submittime >= month) {
 		num_submitted_month++;
-		submitted_month += jobs30[i].size;
+		submitted_month += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].submittime >= week) {
 		num_submitted_week++;
-		submitted_week += jobs30[i].size;
+		submitted_week += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].submittime >= day) {
 		num_submitted_today++;
-		submitted_today += jobs30[i].size;
+		submitted_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].completedtime >= month) {
 		num_completed_month++;
-		completed_month += jobs30[i].size;
+		completed_month += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].completedtime >= week) {
 		num_completed_week++;
-		completed_week += jobs30[i].size;
+		completed_week += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].completedtime >= day) {
 		num_completed_today++;
-		completed_today += jobs30[i].size;
+		completed_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	}
 	var submitted_week_per_day = submitted_week / 7;
@@ -433,7 +433,7 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 stm.DataStore.inactivejobs = data.data;
@@ -454,7 +454,7 @@
 				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = data.data;
