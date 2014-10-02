@@ -68,8 +68,10 @@
 	    html += "</table>";
 	    html += "<h4>description</h4><p>"+project.description+"</p>";
 	    html += "<h4>funding source</h4><p>"+project.funding_source+"</p>";
-	    html += "<h4>contact</h4><address><strong>Administrative</strong><br>"+project.metadata["administrative-contact_PI_firstname"]+" "+project.metadata["administrative-contact_PI_lastname"]+" ("+project.metadata["administrative-contact_PI_email"]+")<br>"+project.metadata["administrative-contact_PI_organization"]+" ("+project.metadata["administrative-contact_PI_organization_url"]+")<br>"+project.metadata["administrative-contact_PI_organization_address"]+", "+project.metadata["administrative-contact_PI_organization_country"]+"</address>";
-	    html += "<address><strong>Technical</strong><br>"+project.metadata.firstname+" "+project.metadata.lastname+" ("+project.metadata.email+")<br>"+project.metadata.organization+" ("+project.metadata.organization_url+")<br>"+project.metadata.organization_address+", "+project.metadata.organization_country+"</address>";
+	    html += "<h4>contact</h4><address><strong>Administrative</strong><br>";
+	    html += (project.metadata["PI_firstname"]||"-")+" "+(project.metadata["PI_lastname"]||"-")+" ("+(project.metadata["PI_email"]||"-")+")<br>"+(project.metadata["PI_organization"]||"-")+" ("+(project.metadata["PI_organization_url"]||"-")+")<br>";
+	    html += (project.metadata["PI_organization_address"]||"-")+", "+(project.metadata["PI_organization_country"]||"-")+"</address>";
+	    html += "<address><strong>Technical</strong><br>"+(project.metadata.firstname||"-")+" "+(project.metadata.lastname||"-")+" ("+(project.metadata.email||"-")+")<br>"+(project.metadata.organization||"-")+" ("+(project.metadata.organization_url||"-")+")<br>"+(project.metadata.organization_address||"-")+", "+(project.metadata.organization_country||"-")+"</address>";
 	    html += "<h4>metagenomes</h4><div id='metagenome_table'><img src='Retina/images/waiting.gif' style='margin-left: 40%;margin-top: 100px;'></div>";
 	    
 	    if (! stm.DataStore.hasOwnProperty('metagenome')) {
