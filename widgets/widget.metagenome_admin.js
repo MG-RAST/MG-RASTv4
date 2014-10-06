@@ -21,8 +21,8 @@
 	    widget.sidebar = wparams.sidebar;
 	}
 
-	sidebar.parentNode.style.display = "none";
-	content.className = "span10 offset1";
+	widget.sidebar.parentNode.style.display = "none";
+	widget.main.className = "span10 offset1";
 
 	if (widget.user) {
 	    widget.sidebar.style.width = "600px";
