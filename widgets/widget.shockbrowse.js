@@ -594,6 +594,11 @@
     widget.detail_section = function () {
 	var widget = Retina.WidgetInstances.shockbrowse[1];
 
+	if (widget.preserveDetail) {
+	    widget.preserveDeatil = false;
+	    return;
+	}
+
 	var section;
 	if (widget.sections.detailSection) {
 	    section = widget.sections.detailSection;
@@ -1404,7 +1409,7 @@
 		    section.appendChild(done);
 
 		    var checksum = document.createElement('div');
-		    checksum.innerHTML = "<h4>check md5-sum</h4><p>To check for file corruption paste the md5-sum of your local file into the textbox below and click <b>check</b>.</p><input type='text' disabled value='"+data.data.file.checksum.md5+"' class='span4'><div class='input-append'><input type='text' placeholder='paste md5 here' class='span4'><button class='btn' onclick='if(this.previousSibling.value==\""+data.data.file.checksum.md5+"\"){alert(\"file is OK\");}else{alert(\"file is corrupted!\");}'>check</button></div>";
+		    checksum.innerHTML = "<h4>check md5-sum</h4><p>To check for file corruption paste the md5-sum of your local file into the textbox below and click <b>check</b>.</p><input type='text' disabled value='"+data.data.file.checksum.md5+"' style='width: 240px;'><div class='input-append'><input type='text' placeholder='paste md5 here' style='width: 240px;'><button class='btn' onclick='if(this.previousSibling.value==\""+data.data.file.checksum.md5+"\"){alert(\"file is OK\");}else{alert(\"file is corrupted!\");}'>check</button></div>";
 		    section.appendChild(checksum);
 
 		    if (typeof Retina.WidgetInstances.shockbrowse[1].fileUploadCompletedCallback == 'function') {

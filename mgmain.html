@@ -40,7 +40,8 @@
 	    
 	var page  = Retina.cgiParam("mgpage") || "search";
 	
-	var icons = { "upload": "pipeline",
+	var icons = { "submission": "pipeline",
+		      "upload": "pipeline",
 		      "overview": "publications",
 		      "project": "publications",
 		      "download": "publications" };
@@ -91,7 +92,7 @@
       <!-- navigation icons -->
       <div class="icorow">
     	<div class="icosp" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
-    	<div class="icosp" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Status Monitor</span></div>
+    	<div class="icosp" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Submission</span></div>
     	<div class="icosp" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects"><span>Metagenomes</span></div>
     	<div class="icosp" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
       </div>

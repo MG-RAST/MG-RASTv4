@@ -1,5 +1,10 @@
 var RetinaConfig = {
-    "authResources": { "default": "MG-RAST",
+    "authResources": { "default": "KBase",
+		       "KBase": { "icon": "MGRAST_favicon.ico",
+				  "prefix": "kbgo4711",
+				  "keyword": "auth",
+				  "url": "http://api.metagenomics.anl.gov?verbosity=verbose",
+				    "useHeader": false },
 		       "MG-RAST": { "icon": "MGRAST_favicon.ico",
 				    "prefix": "mggo4711",
 				    "keyword": "auth",

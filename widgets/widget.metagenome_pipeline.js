@@ -82,7 +82,7 @@
 		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
 		widget.userID = widget.user.login;
 	    }
-	    content.innerHTML = '<div id="jobtable"></div>';
+	    content.innerHTML = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 150px;'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 150px;'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 150px;'>job status</a></div><div id='jobtable'></div>";
 
 	    // create the job table
 	    var job_columns = [ "job", "stage", "status", "tasks" ];
