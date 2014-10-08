@@ -24,12 +24,14 @@
 	widget.main.className = "span10 offset1";
 
 	if (widget.user) {
-            var html = '<h3>Job Statistics for the last 30 days</h3><div id="statistics" style="margin-top: 2px;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
+
+            var html = '<h3>Job Statistics for the last 30 days</h3><div><div id="gauge_today" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;">average Gigabasepair throughput per day (red mark shows submission)</div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
 
 	    widget.getJobData();
+
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
@@ -187,6 +189,35 @@
 	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
 	target.innerHTML = html;
+
+	// gauges
+	var gauges = ['today','week','month'];
+	for (var i=0; i<gauges.length; i++) {
+	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
+	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
+	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i], val] ]);
+	    var mt = [0,10,20,30,40,50,60,70,80,90,100];
+	    if (val > 100 || tick > 100) {
+		mt = [];
+		var v = (val > tick) ? val : tick;
+		var t = parseInt(v / 10);
+		for (var h=0; h<10; h++) {
+		    mt.push(h * t);
+		}
+		mt.push(v);
+	    }
+            var gauge_options = {
+		width: 300, height: 175,
+		redFrom: tick - 1, redTo: tick,
+		majorTicks: mt,
+		minorTicks: 0,
+		min: 0,
+		max: val > tick ? (val > 100 ? val : 100) : (tick > 100 ? tick : 100)
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('gauge_'+gauges[i]));
+            chart.draw(gauge_data, gauge_options);
+	}
 
 	// state graph
 	var sdata = [ { name: "count", data: [] } ];
