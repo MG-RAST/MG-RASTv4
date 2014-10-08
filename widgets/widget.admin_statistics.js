@@ -48,7 +48,7 @@
 	var target = document.getElementById('statistics');
 
 	// the job template
-	var template = stm.DataStore.jobtemplate;
+	var template = stm.DataStore.jobtemplate[1];
 
 	// get the names for the task ids and initialize the task counter
 	var tasklabels = [];
@@ -63,10 +63,18 @@
 	tasklabels.push("done");
 
 	// all jobs submitted within the last 30 days (initially only the inactive ones)
-	var jobs30 = stm.DataStore.inactivejobs;
+	var jobs30 = [];
+	var jk = Retina.keys(stm.DataStore.inactivejobs);
+	for (var i=0;i<jk.length;i++) {
+	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
+	}
 
 	// jobs currently active in the pipeline
-	var jobsactive = stm.DataStore.activejobs;
+	var jobsactive = [];
+	jk = Retina.keys(stm.DataStore.activejobs);
+	for (var i=0;i<jk.length;i++) {
+	    jobsactive.push(stm.DataStore.activejobs[jk[i]]);
+	}
 
 	// timestamp of 30 days ago
 	var month = widget.dateString(1000 * 60 * 60 * 24 * 30);
@@ -287,7 +295,7 @@
 	var days = [];
 	var one_day = 1000 * 60 * 60 * 24;
 	for (var i=0; i<30; i++) {
-	    days.push(widget.dateString((29 - i) * one_day));
+	    days.push(widget.dateString((29 - i) * one_day).substr(0,10));
 	}
 	var daydata = [ { name: "#submitted", data: [] },
 			{ name: "#completed", data: [] } ];
@@ -319,19 +327,24 @@
 
     widget.dateString = function (period) {
 	var past = new Date(new Date().getTime() - period);
-	var d = past.getDate();
-	d = d < 10 ? "0" + d : d;
-	var m = past.getMonth() + 1;
-	m = m < 10 ? "0" + m : m;
-	var timestamp = past.getFullYear() + "-" + m + "-" + d;
+	var d = past.getDate().padLeft();
+	var m = (past.getMonth() + 1).padLeft();
+	var hour = past.getHours().padLeft();
+	var minute = past.getMinutes().padLeft();
+	var second = past.getSeconds().padLeft();
+	var ms = past.getMilliseconds().padLeft(100);
+	var timestamp = past.getFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
 	return timestamp;
     };
 
     widget.getJobData = function () {
 	var widget = Retina.WidgetInstances.admin_statistics[1];
-
-
+	
 	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
+	if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[1]) {
+	    timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[1].update_time);
+	}
+	var utime = new Date().getTime();
 	var promises = [];
 	var prom = jQuery.Deferred();
 	promises.push(prom);
@@ -339,17 +352,26 @@
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
-					 stm.DataStore.inactivejobs = data.data;
-					 jQuery.ajax( { dataType: "json",
-					 		url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					 		headers: widget.authHeader,
-					 		success: function(data) {
-					 		    stm.DataStore.jobtemplate = data.data[0];
-					 		},
-					 		error: function () {
-					 		    alert('there was an error retrieving the data');
-					 		}
-					 	      } ).then(function(){ prom.resolve(); });
+					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
+					     stm.DataStore.inactivejobs = {};
+					 }
+					 for (var i=0; i<data.data.length; i++) {
+					     stm.DataStore.inactivejobs[data.data[i].id] = data.data[i];
+					 }
+					 if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
+					     prom.resolve();
+					 } else {
+					     jQuery.ajax( { dataType: "json",
+					 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
+					 		    headers: widget.authHeader,
+					 		    success: function(data) {
+					 			stm.DataStore.jobtemplate = { 1: data.data[0] };
+					 		    },
+					 		    error: function () {
+					 			alert('there was an error retrieving the data');
+					 		    }
+					 		  } ).then(function(){ prom.resolve(); });
+					 }
 				     },
 				     error: function () {
 					 alert('there was an error retrieving the data');
@@ -360,13 +382,20 @@
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
-					 stm.DataStore.activejobs = data.data;
+					 stm.DataStore.activejobs = {};
+					 for (var i=0; i<data.data.length; i++) {
+					     stm.DataStore.activejobs[data.data[i].id] = data.data[i];
+					 }
 				     },
 				     error: function () {
 					 alert('there was an error retrieving the data');
 				     }
 				   } ) );
-	jQuery.when.apply(this, promises).then(function() { Retina.WidgetInstances.admin_statistics[1].showJobData(); });
+	jQuery.when.apply(this, promises).then(function() {
+	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
+	    stm.dump(true, 'admin_statistics');
+	    Retina.WidgetInstances.admin_statistics[1].showJobData();
+	});
     };
 
 

@@ -31,43 +31,35 @@
     <!-- webapp initialization -->
     <script>
     jQuery( document ).ready(function(){
-	try {
-	    if (window.opener && window.opener.stm) {
-		window.stm = window.opener.stm;
-	    } else {
-		stm.init({});
-		stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	    }
-	} catch (err) {
-	    stm.init({});
+	stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
 	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	}
-	Retina.init({});
+	    Retina.init({});
 	    
-	var page  = Retina.cgiParam("mgpage") || "statistics";
-	
-	var ico = document.getElementById('icon_'+page);
-	if (ico) {
-	    ico.className = "icosp icoactivesp";
-	    ico.firstChild.className = "ico icoactive";
-	}
-	
-	document.title = page.charAt(0).toUpperCase()+page.substr(1);
-	
-	Retina.load_widget("admin_"+page).then( function() {
-	    var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
-							    "sidebar": document.getElementById("sidebar") });
+	    var page  = Retina.cgiParam("mgpage") || "statistics";
 	    
-	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
-		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				"callback": mgp.loginAction,
-					      });
+	    var ico = document.getElementById('icon_'+page);
+	    if (ico) {
+		ico.className = "icosp icoactivesp";
+		ico.firstChild.className = "ico icoactive";
+	    }
+	    
+	    document.title = page.charAt(0).toUpperCase()+page.substr(1);
+	    
+	    Retina.load_widget("admin_"+page).then( function() {
+		var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
+								"sidebar": document.getElementById("sidebar") });
+		
+		Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+		    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    				    "callback": mgp.loginAction,
+						  });
+		});
+		
+		Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+		    Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
+		});
+		
 	    });
-	    
-	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
-		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-	    });
-	    
 	});
     });
     </script>
