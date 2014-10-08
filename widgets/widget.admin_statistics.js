@@ -25,7 +25,7 @@
 
 	if (widget.user) {
 
-            var html = '<h3>Job Statistics for the last 30 days</h3><div><div id="gauge_today" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;">average Gigabasepair throughput per day (red mark shows submission)</div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
+            var html = '<h3>Job Statistics for the last 30 days</h3><div><div id="gauge_today" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -196,8 +196,8 @@
 	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
 	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
 	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i], val] ]);
-	    var mt = [0,10,20,30,40,50,60,70,80,90,100];
-	    if (val > 100 || tick > 100) {
+	    var mt = [0,20,40,60,80,100,120,140,160,180,200];
+	    if (val > 200 || tick > 200) {
 		mt = [];
 		var v = (val > tick) ? val : tick;
 		var t = parseInt(v / 10);
@@ -212,12 +212,13 @@
 		majorTicks: mt,
 		minorTicks: 0,
 		min: 0,
-		max: val > tick ? (val > 100 ? val : 100) : (tick > 100 ? tick : 100)
+		max: val > tick ? (val > 200 ? val : 200) : (tick > 200 ? tick : 200)
             };
 
             var chart = new google.visualization.Gauge(document.getElementById('gauge_'+gauges[i]));
             chart.draw(gauge_data, gauge_options);
 	}
+	document.getElementById('gauge_title').innerHTML = "average Gigabasepair throughput per day (red mark shows submission)";
 
 	// state graph
 	var sdata = [ { name: "count", data: [] } ];
