@@ -196,13 +196,13 @@
 	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
 	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
 	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i], val] ]);
-	    var mt = [0,20,40,60,80,100,120,140,160,180,200];
+	    var mt = ["0",20,40,60,80,100,120,140,160,180,200];
 	    if (val > 200 || tick > 200) {
 		mt = [];
 		var v = (val > tick) ? val : tick;
 		var t = parseInt(v / 10);
 		for (var h=0; h<10; h++) {
-		    mt.push(h * t);
+		    mt.push((h * t)+"");
 		}
 		mt.push(v);
 	    }
