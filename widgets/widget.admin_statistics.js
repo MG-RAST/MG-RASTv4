@@ -327,13 +327,13 @@
 
     widget.dateString = function (period) {
 	var past = new Date(new Date().getTime() - period);
-	var d = past.getDate().padLeft();
-	var m = (past.getMonth() + 1).padLeft();
-	var hour = past.getHours().padLeft();
-	var minute = past.getMinutes().padLeft();
-	var second = past.getSeconds().padLeft();
-	var ms = past.getMilliseconds().padLeft(100);
-	var timestamp = past.getFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
+	var d = past.getUTCDate().padLeft();
+	var m = (past.getUTCMonth() + 1).padLeft();
+	var hour = past.getUTCHours().padLeft();
+	var minute = past.getUTCMinutes().padLeft();
+	var second = past.getUTCSeconds().padLeft();
+	var ms = past.getUTCMilliseconds().padLeft(100);
+	var timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
 	return timestamp;
     };
 
@@ -341,9 +341,9 @@
 	var widget = Retina.WidgetInstances.admin_statistics[1];
 	
 	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
-	if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[1]) {
-	    timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[1].update_time);
-	}
+	// if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[1]) {
+	//     timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[1].update_time);
+	// }
 	var utime = new Date().getTime();
 	var promises = [];
 	var prom = jQuery.Deferred();
@@ -392,8 +392,8 @@
 				     }
 				   } ) );
 	jQuery.when.apply(this, promises).then(function() {
-	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
-	    stm.dump(true, 'admin_statistics');
+	    //stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
+	    //stm.dump(true, 'admin_statistics');
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
     };
