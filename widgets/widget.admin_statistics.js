@@ -104,6 +104,9 @@
 		taskcount[jobsactive[i].task][0]++;
 		taskcount[jobsactive[i].task][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 	    } else {
+		if (! taskcount.hasOwnProperty(jobsactive[i].task)) {
+		    taskcount[jobsactive[i].task] = [ 0, 0, 0, 0 ];
+		}
 		taskcount[jobsactive[i].task][1]++;
 		taskcount[jobsactive[i].task][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 	    }

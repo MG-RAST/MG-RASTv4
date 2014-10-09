@@ -21,10 +21,9 @@
 	}
 
 	if (widget.user) {
-	    widget.sidebar.style.width = "600px";
 	    widget.sidebar.style.display = "";
 	    widget.main.parentNode.style.right = "660px";
-	    widget.sidebar.innerHTML = "<div id='details' style='padding-left: 10px; padding-right: 10px;'></div>";
+	    widget.sidebar.innerHTML = "<div id='details' style='padding-left: 10px; padding-right: 10px;'><h4>User Details</h4><p>click on a user in the lefthand table to view the details here.</p></div>";
 
 	    var html = '<h3>Users</h3><div id="usertable" style="margin-top: 2px;"></div>';
 
@@ -32,7 +31,7 @@
 	    widget.main.innerHTML = html;
 
 	    // create the user table
-	    var result_columns = [ "login", "firstname", "lastname", "email", "entry_date", "id" ];
+	    var result_columns = [ "login", "firstname", "lastname", "email", "email2", "entry_date", "id" ];
 
 	    var result_table_filter = widget.filter;
 	    if (result_table_filter == null) {
@@ -44,7 +43,7 @@
 	    if (! widget.hasOwnProperty('result_table')) {
 		widget.result_table = Retina.Renderer.create("table", {
 		    target: document.getElementById('usertable'),
-		    rows_per_page: 24,
+		    rows_per_page: 20,
 		    filter_autodetect: false,
 		    filter: result_table_filter,
 		    sort_autodetect: true,
@@ -75,6 +74,7 @@
     widget.dataManipulation = function (data) {
 	for (var i=0; i<data.length; i++) {
 	    data[i].email = "<a href='mailto:"+data[i].email+"'>"+data[i].email+"</a>";
+	    data[i].email2 = data[i].email2 ? "<a href='mailto:"+data[i].email2+"'>"+data[i].email2+"</a>" : "-";
 	    data[i].login = "<a onclick='Retina.WidgetInstances.admin_users[1].userDetails(\""+data[i].id+"\");' style='cursor: pointer;'>"+data[i].login+"</a>";
 	}
 
