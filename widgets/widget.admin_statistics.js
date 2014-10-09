@@ -25,7 +25,7 @@
 
 	if (widget.user) {
 
-            var html = '<h3>Job Statistics for the last 30 days</h3><div><div id="gauge_today" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
+            var html = '<h3>Job Statistics for the last 30 days</h3><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -187,8 +187,8 @@
 
 	var html = "<table class='table'>";
 	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.baseSize()+" in "+num_in_pipeline+" jobs</td></tr>";
-	html += "<tr><td><b>submitted today</b></td><td>"+submitted_today.baseSize()+" in "+num_submitted_today+" jobs</td></tr>";
-	html += "<tr><td><b>completed today</b></td><td>"+completed_today.baseSize()+" in "+num_completed_today+" jobs</td></tr>";
+	html += "<tr><td><b>submitted last 24h</b></td><td>"+submitted_today.baseSize()+" in "+num_submitted_today+" jobs</td></tr>";
+	html += "<tr><td><b>completed last 24h</b></td><td>"+completed_today.baseSize()+" in "+num_completed_today+" jobs</td></tr>";
 	html += "<tr><td><b>submitted this week</b></td><td>"+submitted_week.baseSize()+" (avg. "+submitted_week_per_day.baseSize()+" per day) in "+num_submitted_week+" jobs (avg. "+num_submitted_week_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>completed this week</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>submitted this month</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
@@ -199,7 +199,7 @@
 	target.innerHTML = html;
 
 	// gauges
-	var gauges = ['today','week','month'];
+	var gauges = ['day','week','month'];
 	for (var i=0; i<gauges.length; i++) {
 	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
 	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
@@ -226,7 +226,7 @@
             var chart = new google.visualization.Gauge(document.getElementById('gauge_'+gauges[i]));
             chart.draw(gauge_data, gauge_options);
 	}
-	document.getElementById('gauge_title').innerHTML = "average Gigabasepair throughput per day (red mark shows submission)";
+	document.getElementById('gauge_title').innerHTML = "average Gigabasepair throughput per 24h period (red mark shows submission)";
 
 	// state graph
 	var sdata = [ { name: "count", data: [] } ];
@@ -341,9 +341,9 @@
 	var widget = Retina.WidgetInstances.admin_statistics[1];
 	
 	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
-	// if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[1]) {
-	//     timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[1].update_time);
-	// }
+	if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[1]) {
+	     timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[1].update_time);
+	}
 	var utime = new Date().getTime();
 	var promises = [];
 	var prom = jQuery.Deferred();
@@ -392,8 +392,8 @@
 				     }
 				   } ) );
 	jQuery.when.apply(this, promises).then(function() {
-	    //stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
-	    //stm.dump(true, 'admin_statistics');
+	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
+	    stm.dump(true, 'admin_statistics');
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
     };

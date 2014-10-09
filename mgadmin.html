@@ -31,8 +31,7 @@
     <!-- webapp initialization -->
     <script>
     jQuery( document ).ready(function(){
-	//stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
-	stm.init({});
+	stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
 	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
 	    Retina.init({});
 	    
@@ -61,7 +60,7 @@
 		});
 		
 	    });
-	//});
+	});
     });
     </script>
   </head>
