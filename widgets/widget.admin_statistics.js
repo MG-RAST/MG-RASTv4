@@ -215,7 +215,7 @@
 		mt.push(v);
 	    }
             var gauge_options = {
-		width: 300, height: 175,
+		width: 325, height: 200,
 		redFrom: tick - 1, redTo: tick,
 		majorTicks: mt,
 		minorTicks: 0,
