@@ -31,16 +31,14 @@
 	    html += "<button class='btn btn-mini' title='refresh' style='margin-bottom: 15px;' onclick='Retina.WidgetInstances.admin_system[1].test_components();'><i class='icon-refresh'></i></button>";
 
 	    html += "<table>";
-	    html += "<tr><td style='width: 150px;'><b>API</b></td><td id='system_api'></td></tr>";
-	    html += "<tr><td><b>SHOCK</b></td><td id='system_shock'></td></tr>";
-	    html += "<tr><td><b>AWE</b></td><td id='system_awe'></td></tr>";
+	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_awe'></td></tr>";
+	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_shock'></td></tr>";
+	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
 	    html += "</table>";
 
-	    html += "<h4>AWE Details</h4><div id='awe_details'>-</div>";
-
-	    html += "<h4>API Details</h4><div id='api_details'>-</div>";
-
-	    html += "<h4>SHOCK Details</h4><div id='shock_details'>-</div>";
+	    html += "<h4 style='margin-top: 50px;'><a name='awe'></a>AWE Details</h4><div id='awe_details'>-</div>";
+	    html += "<h4 style='margin-top: 50px;'><a name='shock'></a>SHOCK Details</h4><div id='shock_details'>-</div>";
+	    html += "<h4 style='margin-top: 50px;'><a name='api'></a>API Details</h4><div id='api_details'>-</div>";
 
 	    widget.main.innerHTML = html;
 
@@ -192,9 +190,55 @@
 
 	var target = document.getElementById('api_details');
 
-	var html = data.resources.length+" resources available";
-
+	var html = data.resources.length+" resources available<div>";
+	for (var i=0; i<data.resources.length; i++) {
+	    html += "<div id='api_resources_"+data.resources[i].name+"'></div>";
+	}
+	html += "</div>";
 	target.innerHTML = html;
+
+	for (var i=0; i<data.resources.length; i++) {
+	    jQuery.ajax({ url: data.resources[i].url,
+			  res: data.resources[i].name,
+			  dataType: "json",
+			  success: function(data) {
+			      var html = "<b>"+this.res+": </b>"+(data.requests.length - 1)+" requests available, testing examples...";
+			      for (var h=1; h<data.requests.length; h++) {
+				  if (data.requests[h].hasOwnProperty('example')) {
+				      if (data.requests[h].example[0].match(/^http/)) {
+					  html += "<div id='api_resource_"+this.res+"_request_"+h+"' style='margin-left: 50px;'>"+data.requests[h].name+" - <img src='Retina/images/waiting.gif' style='width: 16px;'></div>";
+				      } else {
+					  html += "<div style='margin-left: 50px;'>"+data.requests[h].name+" - no http example (curl only)</div>";
+				      }
+				  } else {
+				      html += "<div style='margin-left: 50px;'>"+data.requests[h].name+" - no example available</div>";
+				  }
+			      }
+			      document.getElementById("api_resources_"+this.res).innerHTML = html;
+			      for (var h=1; h<data.requests.length; h++) {
+				  if (! data.requests[h].hasOwnProperty('example') || ! data.requests[h].example[0].match(/^http/)) {
+				      continue;
+				  }
+				  jQuery.ajax({ url: data.requests[h].example[0],
+						res: "api_resource_"+this.res+"_request_"+h,
+						req: data.requests[h].name,
+						time: new Date().getTime(),
+						dataType: "json",
+						success: function(data) {
+						    document.getElementById(this.res).innerHTML = "<a href='"+this.url+"' target=_blank>"+this.req+"</a> - <span style='color: green;'>OK</span> in "+((new Date().getTime() - this.time) / 1000).formatString(3)+" seconds";
+						},
+						error: function(jqXHR, error) {
+						    document.getElementById(this.res).innerHTML = "<a href='"+this.url+"' target=_blank>"+this.req + "</a> - <span style='color: red;'>failed</span> in "+((new Date().getTime() - this.time) / 1000).formatString(3)+" seconds";
+						}
+					      });
+			      }
+			  },
+			  error: function(jqXHR, error) {
+			      document.getElementById("api_resources_"+this.res).innerHTML = this.res + " - <span style='color: red;'>failed</span>";
+			  }
+			});
+	}
+
     };
 
     // login callback
