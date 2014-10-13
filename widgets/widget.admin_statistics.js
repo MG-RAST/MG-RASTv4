@@ -80,6 +80,10 @@
 	var month = widget.dateString(1000 * 60 * 60 * 24 * 30);
 	var week = widget.dateString(1000 * 60 * 60 * 24 * 7);
 	var day = widget.dateString(1000 * 60 * 60 * 24);
+	
+	// chicago day
+	var chicagoTime = new Date( new Date().getTime() - (1000 * 60 * 60 * 6) ); // UTC-6
+	var chicagoDayStart = widget.dateString(chicagoTime.getMilliseconds() + (1000 * chicagoTime.getSeconds()) + (1000 * 60 * chicagoTime.getMinutes()) + (1000 * 60 * 60 * chicagoTime.getHours()));
 
 	// initialize state counter
 	var states = { "in-progress": 0,
@@ -136,6 +140,8 @@
 	var submitted_jobs = {};
 	var completed_bases = {};
 	var submitted_bases = {};
+	
+	var completed_chicago_day = 0;
 
 	// iterate over all jobs of the last month
 	for (var i=0; i<jobs30.length; i++) {
@@ -178,6 +184,9 @@
 		num_completed_today++;
 		completed_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
+	    if (jobs30[i].completedtime >= chicagoDayStart) {
+		completed_chicago_day += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
+	    }
 	}
 	var submitted_week_per_day = submitted_week / 7;
 	var num_submitted_week_per_day = parseInt(num_submitted_week / 7);
@@ -188,7 +197,11 @@
 	var completed_month_per_day = completed_month / 30;
 	var num_completed_month_per_day = parseInt(num_completed_month / 30);
 
-	var html = "<table class='table'>";
+	console.log(completed_chicago_day);
+	console.log(chicagoDayStart);
+	
+	var html = '<div><b>Data completed today (since 00:00AM Chicago time)</b><div class="progress"><div class="bar" style="width: '+(completed_chicago_day / 1000000000)+'%;"></div></div></div><div style="position: relative; bottom: 40px; color: lightgray; left: 20px;">'+(completed_chicago_day / 1000000000).formatString(3)+' Gbp</div>';
+	html += '<table class="table">';
 	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.baseSize()+" in "+num_in_pipeline+" jobs</td></tr>";
 	html += "<tr><td><b>submitted last 24h</b></td><td>"+submitted_today.baseSize()+" in "+num_submitted_today+" jobs</td></tr>";
 	html += "<tr><td><b>completed last 24h</b></td><td>"+completed_today.baseSize()+" in "+num_completed_today+" jobs</td></tr>";
@@ -206,7 +219,7 @@
 	for (var i=0; i<gauges.length; i++) {
 	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
 	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
-	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i], val] ]);
+	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i] == 'day' ? "24h" : gauges[i], val] ]);
 	    var mt = ["0",20,40,60,80,100,120,140,160,180,200];
 	    if (val > 200 || tick > 200) {
 		mt = [];
