@@ -206,9 +206,9 @@
 			      for (var h=1; h<data.requests.length; h++) {
 				  if (data.requests[h].hasOwnProperty('example')) {
 				      if (data.requests[h].example[0].match(/^http/)) {
-					  html += "<div id='api_resource_"+this.res+"_request_"+h+"' style='margin-left: 50px;'>"+data.requests[h].name+" - <img src='Retina/images/waiting.gif' style='width: 16px;'></div>";
+					  html += "<div id='api_resource_"+this.res+"_request_"+h+"' style='margin-left: 50px;'><a href='"+data.requests[h].example[0]+"' target=_blank>"+data.requests[h].name+"</a> - <img src='Retina/images/waiting.gif' style='width: 16px;'></div>";
 				      } else {
-					  html += "<div style='margin-left: 50px;'>"+data.requests[h].name+" - no http example (curl only)</div>";
+					  html += "<div style='margin-left: 50px;'>"+data.requests[h].name+" - no http example:</div><br><pre>"+data.requests[h].example[0]+"</pre>";
 				      }
 				  } else {
 				      html += "<div style='margin-left: 50px;'>"+data.requests[h].name+" - no example available</div>";
@@ -229,7 +229,8 @@
 						},
 						error: function(jqXHR, error) {
 						    document.getElementById(this.res).innerHTML = "<a href='"+this.url+"' target=_blank>"+this.req + "</a> - <span style='color: red;'>failed</span> in "+((new Date().getTime() - this.time) / 1000).formatString(3)+" seconds";
-						}
+						},
+						timeout: 30000
 					      });
 			      }
 			  },
