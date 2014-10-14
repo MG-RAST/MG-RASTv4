@@ -83,7 +83,8 @@
 	
 	// chicago day
 	var chicagoTime = new Date( new Date().getTime() - (1000 * 60 * 60 * 6) ); // UTC-6
-	var chicagoDayStart = widget.dateString(chicagoTime.getMilliseconds() + (1000 * chicagoTime.getSeconds()) + (1000 * 60 * chicagoTime.getMinutes()) + (1000 * 60 * 60 * chicagoTime.getHours()));
+	var chicagoDayStart = chicagoTime.getUTCMilliseconds() + (1000 * chicagoTime.getUTCSeconds()) + (1000 * 60 * chicagoTime.getUTCMinutes()) + (1000 * 60 * 60 * chicagoTime.getUTCHours());
+	chicagoDayStart =  widget.dateString(chicagoDayStart);
 
 	// initialize state counter
 	var states = { "in-progress": 0,
@@ -196,9 +197,6 @@
 	var num_submitted_month_per_day = parseInt(num_submitted_month / 30);
 	var completed_month_per_day = completed_month / 30;
 	var num_completed_month_per_day = parseInt(num_completed_month / 30);
-
-	console.log(completed_chicago_day);
-	console.log(chicagoDayStart);
 	
 	var html = '<div><b>Data completed today (since 00:00AM Chicago time)</b><div class="progress"><div class="bar" style="width: '+(completed_chicago_day / 2000000000)+'%;"></div></div></div><div style="position: relative; bottom: 40px; color: lightgray; left: 20px;">'+(completed_chicago_day / 1000000000).formatString(3)+' Gbp</div>';
 	html += '<table class="table">';
