@@ -230,7 +230,7 @@
 	    }
             var gauge_options = {
 		width: 325, height: 200,
-		redFrom: tick - 1, redTo: tick,
+		redFrom: tick - 2, redTo: tick,
 		majorTicks: mt,
 		minorTicks: 0,
 		min: 0,
