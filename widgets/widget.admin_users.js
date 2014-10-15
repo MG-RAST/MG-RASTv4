@@ -25,7 +25,7 @@
 	    widget.main.parentNode.style.right = "660px";
 	    widget.sidebar.innerHTML = "<div id='details' style='padding-left: 10px; padding-right: 10px;'><h4>User Details</h4><p>click on a user in the lefthand table to view the details here.</p></div>";
 
-	    var html = '<h3>Users</h3><div id="usertable" style="margin-top: 2px;"></div>';
+	    var html = '<h3>Account Requests</h3><div id="requests"><img src="Retina/images/waiting.gif" style="width: 20px;"></div><h3>Users</h3><div id="usertable" style="margin-top: 2px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -62,10 +62,29 @@
 	    widget.result_table.render();
 	    widget.result_table.update({},1);
 
+	    // check for account requests
+	    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/?verbosity=request_access",
+			  dataType: "json",
+			  success: function(data) {
+			      Retina.WidgetInstances.admin_users[1].showRequests(data);
+			  },
+			  error: function(jqXHR, error) {
+			      console.log("error: unable to connect to API server");
+			      console.log(error);
+			  },
+			  headers: widget.authHeader
+			});
+
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
 	}
+    };
+
+    widget.showRequests = function (data) {
+	var widget = Retina.WidgetInstances.admin_users[1];
+
+	console.log(data);
     };
 
     /*

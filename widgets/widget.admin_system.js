@@ -120,8 +120,6 @@
 
 	var data = widget.aweClientData;
 
-	var html = "client nodes registered";
-
 	var stats = { stati: {} };
 	for (var i=0; i<data.length; i++) {
 	    if (! stats.stati.hasOwnProperty(data[i].Status)) {
@@ -129,14 +127,16 @@
 	    }
 	    stats.stati[data[i].Status]++;
 	}
-
-	html += "<table style='margin-bottom: 25px;'><tr><td style='padding-right: 25px;'>total</td><td>"+data.length+"</td></tr>";
+	var clientData = { all: data.length };
 	for (var i in stats.stati) {
 	    if (stats.stati.hasOwnProperty(i)) {
-		html += "<tr><td style='padding-right: 25px;'>"+i+"</td><td>"+stats.stati[i]+"</td></tr>";
+		clientData[i] = stats.stati[i];
 	    }
 	}
-	html += "</table>";
+	
+	var html = "<div id='aweExtended' style='width: 200px; float: left;'></div>";
+	html += "<div style='float: left; margin-left: 50px; margin-bottom: 25px;'><button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].resumeAllClients();'>resume clients</button> <button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].resumeAllJobs();'>resume jobs</button></div>";
+	html += "<div style='float: left; width: 600px; margin-left: 50px;'>";
 
 	for (var i=0; i<data.length; i++) {
 	    if (data[i].Status == "active-idle") {
@@ -150,9 +150,51 @@
 	    }
 	}
 
-	html += "<div style='clear: both;'></div>";
+	html += "</div><div style='clear: both;'></div>";
 
 	target.innerHTML = html;
+
+	jQuery.ajax( { dataType: "json",
+		       url: RetinaConfig["awe_url"]+"/queue",
+		       headers: widget.shockAuthHeader,
+		       clients: clientData,
+		       success: function(data) {
+			   var result = data.data;
+			   var rows = result.split("\n");
+			   
+			   return_data = { "total clients": this.clients,
+					   "total jobs": { "all": rows[1].match(/\d+/)[0],
+							   "in-progress": rows[2].match(/\d+/)[0],
+							   "suspended": rows[3].match(/\d+/)[0] },
+					   "total tasks": { "all": rows[4].match(/\d+/)[0],
+							    "queuing": rows[5].match(/\d+/)[0],
+							    "in-progress": rows[6].match(/\d+/)[0],
+							    "pending": rows[7].match(/\d+/)[0],
+							    "completed": rows[8].match(/\d+/)[0],
+							    "suspended": rows[9].match(/\d+/)[0] },
+					   "total workunits": { "all": rows[11].match(/\d+/)[0],
+								"queueing": rows[12].match(/\d+/)[0],
+								"checkout": rows[13].match(/\d+/)[0],
+								"suspended": rows[14].match(/\d+/)[0] } };
+			   
+			   var html = '<table class="table">';
+			   for (h in return_data) {
+			       if (return_data.hasOwnProperty(h)) {
+				   html += '<tr><th colspan=2>'+h+'</th><th>'+return_data[h]['all']+'</th></tr>';
+				   for (j in return_data[h]) {
+				       if (return_data[h].hasOwnProperty(j)) {
+					   if (j == 'all') {
+					       continue;
+					   }
+					   html += '<tr><td></td><td>'+j+'</td><td>'+return_data[h][j]+'</td></tr>';
+				       }
+				   }
+			       }
+			   }
+			   html += '</table>';
+			   document.getElementById('aweExtended').innerHTML = html;
+		       }
+		     });
     };
 
     widget.aweNode = function (status, id) {
@@ -165,6 +207,36 @@
 	var html = "<pre>"+JSON.stringify(widget.aweClientData[id], null, 2)+"</pre>";
 	
 	widget.sidebar.innerHTML = html;
+    };
+
+    widget.resumeAllJobs = function () {
+	var widget = Retina.WidgetInstances.admin_system[1];
+	jQuery.ajax({
+	    method: "PUT",
+	    dataType: "json",
+	    headers: widget.shockAuthHeader, 
+	    url: RetinaConfig["awe_url"]+"/job?resumeall",
+	    success: function (data) {
+		Retina.WidgetInstances.admin_system[1].test_components();
+		alert('all jobs resumed');
+	    }}).fail(function(xhr, error) {
+		alert('failed to resume all jobs');
+	    });
+    };
+
+    widget.resumeAllClients = function () {
+	var widget = Retina.WidgetInstances.admin_system[1];
+	jQuery.ajax({
+	    method: "PUT",
+	    dataType: "json",
+	    headers: widget.shockAuthHeader, 
+	    url: RetinaConfig["awe_url"]+"/client?resumeall",
+	    success: function (data) {
+		Retina.WidgetInstances.admin_system[1].test_components();
+		alert('all clients resumed');
+	    }}).fail(function(xhr, error) {
+		alert('failed to resume all clients');
+	    });
     };
 
     widget.shockDetails = function (data) {
@@ -190,12 +262,24 @@
 
 	var target = document.getElementById('api_details');
 
-	var html = data.resources.length+" resources available<div>";
+	widget.apiData = data;
+
+	var html = data.resources.length+" resources available ";
+	html += "<button class='btn btn-mini' onclick='Retina.WidgetInstances.admin_system[1].apiDetailsExtended();'>details</button><div id='apiExtended'></div>";
+
+	target.innerHTML = html;
+    };
+    
+    widget.apiDetailsExtended = function () {
+	var widget = Retina.WidgetInstances.admin_system[1];
+
+	var target = document.getElementById('apiExtended');
+	var data = widget.apiData;
+	var html = "";
 	for (var i=0; i<data.resources.length; i++) {
 	    html += "<div id='api_resources_"+data.resources[i].name+"'></div>";
 	}
-	html += "</div>";
-	target.innerHTML = html;
+	target.innerHTML += html;
 
 	for (var i=0; i<data.resources.length; i++) {
 	    jQuery.ajax({ url: data.resources[i].url,

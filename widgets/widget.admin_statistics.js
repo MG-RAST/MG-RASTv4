@@ -121,6 +121,15 @@
 		jobs30.push(jobsactive[i]);
 	    }
 	}
+
+	// add chicago timestamps
+	var chicago = 1000 * 60 * 60 * 6;
+	var now = new Date().getTime();
+	for (var i=0; i<jobs30.length; i++) {
+	    jobs30[i].submitChicago = widget.dateString(now - (Date.parse(jobs30[i].submittime) - chicago));
+	    jobs30[i].completeChicago = widget.dateString(now - (Date.parse(jobs30[i].completedtime) - chicago));
+	}
+
 	var num_in_pipeline = jobsactive.length;
 
 	// initialize vars
@@ -146,8 +155,8 @@
 
 	// iterate over all jobs of the last month
 	for (var i=0; i<jobs30.length; i++) {
-	    var submitted_day = jobs30[i].submittime.substr(0,10);
-	    var completed_day = jobs30[i].completedtime.substr(0,10);
+	    var submitted_day = jobs30[i].submitChicago.substr(0,10);
+	    var completed_day = jobs30[i].completeChicago.substr(0,10);
 	    if (! submitted_jobs.hasOwnProperty(submitted_day)) {
 		submitted_jobs[submitted_day] = 0;
 		submitted_bases[submitted_day] = 0;
@@ -203,10 +212,10 @@
 	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.baseSize()+" in "+num_in_pipeline+" jobs</td></tr>";
 	html += "<tr><td><b>submitted last 24h</b></td><td>"+submitted_today.baseSize()+" in "+num_submitted_today+" jobs</td></tr>";
 	html += "<tr><td><b>completed last 24h</b></td><td>"+completed_today.baseSize()+" in "+num_completed_today+" jobs</td></tr>";
-	html += "<tr><td><b>submitted this week</b></td><td>"+submitted_week.baseSize()+" (avg. "+submitted_week_per_day.baseSize()+" per day) in "+num_submitted_week+" jobs (avg. "+num_submitted_week_per_day+" per day)</td></tr>";
-	html += "<tr><td><b>completed this week</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
-	html += "<tr><td><b>submitted this month</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
-	html += "<tr><td><b>completed this month</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>submitted last 7 days</b></td><td>"+submitted_week.baseSize()+" (avg. "+submitted_week_per_day.baseSize()+" per day) in "+num_submitted_week+" jobs (avg. "+num_submitted_week_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>completed last 7 days</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>submitted last 30 days</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
 	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
 
