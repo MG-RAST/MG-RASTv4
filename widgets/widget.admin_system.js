@@ -135,7 +135,7 @@
 	}
 	
 	var html = "<div id='aweExtended' style='width: 200px; float: left;'></div>";
-	html += "<button class='btn btn-small' style='float: right; position: relative; bottom: 30px;' onclick='if(this.nextSibling.style.display==\"none\"){this.nextSibling.style.display=\"\";}else{this.nextSibling.style.display=\"none\";}'><i class='icon-fullscreen'></i> error summary</button><div id='awe_errors' style='float: left; width: 600px; margin-left: 50px; display: none;'></div>";
+	html += "<button class='btn btn-small' style='float: right; position: relative; bottom: 30px;' onclick='if(this.nextSibling.style.display==\"none\"){this.nextSibling.style.display=\"\";}else{this.nextSibling.style.display=\"none\";}'><i class='icon-fullscreen'></i> error summary</button><div id='awe_errors' style='float: left; width: 600px; margin-left: 50px; display: none;'><img src='Retina/images/waiting.gif' style='margin-left: 50%; margin-top: 50px; margin-bottom: 50px; width: 32px;'></div>";
 	html += "<div style='float: left; margin-left: 50px; margin-bottom: 25px;'><button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].resumeAllClients();'>resume clients</button> <button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].resumeAllJobs();'>resume jobs</button></div>";
 	html += "<div style='float: left; width: 600px; margin-left: 50px;'>";
 
@@ -203,27 +203,77 @@
 		       url: RetinaConfig["awe_url"]+"/job?suspend&limit=100&offset=0",
 		       headers: widget.shockAuthHeader,
 		       success: function(data) {
-			   var errors = {};
-			   for (var i=0; i<data.data.length; i++) {
-			       var err = data.data[i].notes;
-			       err = err.replace(/[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}_/g, "");
-			       var parts = /err=task (\d+)\: (.+)$/.exec(err);
-			       if (! errors.hasOwnProperty(parts[1])) {
-				   errors[parts[1]] = [];
-			       }
-			       errors[parts[1]].push(parts[2]);
-			   }
-			   var html = "<table class='table table-condensed'>";
-			   for (var i in errors) {
-			       if (errors.hasOwnProperty(i)) {
-				   html += "<tr><td style='width: 100px;'><b>task "+i+"</b></td><td style='width: 100px;'>"+errors[i].length+" failures</td><td>"+errors[i][0]+"</td></tr>";
-			       }
-			   }
-			   html += "</table>";
-
-			   document.getElementById('awe_errors').innerHTML = html;
+			   Retina.WidgetInstances.admin_system[1].parseAWEErrors(data);
 		       }
 		     } );
+    };
+
+    widget.parseAWEErrors = function (data) {
+	var widget = Retina.WidgetInstances.admin_system[1];
+
+	var errors = {};
+	var promises = [];
+	widget.worknotes = [];
+	for (var i=0; i<data.data.length; i++) {
+	    var err = data.data[i].notes;
+
+	    // parse out ids
+	    err = err.replace(/[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}_/g, "");
+	    
+	    // check if a stage failed
+	    if (err.match(/err=task/)) {
+		var parts = /err=task (\d+)\: (.+)$/.exec(err);
+		if (parts) {
+		    if (! errors.hasOwnProperty(parts[1])) {
+			errors[parts[1]] = [];
+		    }
+		    errors[parts[1]].push(parts[2]);
+		}
+	    }
+	    // check if a workunit failed
+	    else if (err.match(/^workunit.+failed/)) {
+		var promise = jQuery.Deferred();
+		promises.push(promise);
+		jQuery.ajax( { dataType: "json",
+			       url:RetinaConfig["awe_url"]+"/work/"+data.data[i].lastfailed+"?report=worknotes",
+			       headers: widget.shockAuthHeader,
+			       promise: promise,
+			       success: function(data) {
+				   Retina.WidgetInstances.admin_system[1].worknotes.push(data.data);
+				   this.promise.resolve();
+			       }
+			     } );
+	    }
+	}
+	if (promises.length) {
+	    jQuery.when.apply(this, promises).then(function() {
+		var d = Retina.WidgetInstances.admin_system[1].worknotes;
+		var errs = {};
+		for (var i=0; i<d.length; i++) {
+		    if (! errs.hasOwnProperty(d[i])) {
+			errs[d[i]] = 0;
+		    }
+		    errs[d[i]]++;
+		}
+		var errslist = [ "<tr><td><b>worknode error</b></td><td><b>occurrences</b></td></tr>" ];
+		for (var i in errs) {
+		    if (errs.hasOwnProperty(i)) {
+			errslist.push("<tr><td>"+i+"</td><td>"+errs[i]+"</td></tr>");
+		    }
+		}
+		document.getElementById('awe_errors').innerHTML += "<table class='table table-condensed'>"+errslist.join("")+"</table>";
+	    });
+	}
+
+	var html = "<table class='table table-condensed'><tr><td><b>task error</b></td><td><b>task</b></td><td><b>occurrences</b></td></tr>";
+	for (var i in errors) {
+	    if (errors.hasOwnProperty(i)) {
+		html += "<tr><td>"+errors[i][0]+"</td><td style='width: 100px;'>"+i+"</td><td style='width: 100px;'>"+errors[i].length+"</td></tr>";
+	    }
+	}
+	html += "</table>";
+	
+	document.getElementById('awe_errors').innerHTML = html;
     };
 
     widget.aweNode = function (status, id) {
