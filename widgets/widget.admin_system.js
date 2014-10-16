@@ -221,8 +221,8 @@
 	    err = err.replace(/[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}_/g, "");
 	    
 	    // check if a stage failed
-	    if (err.match(/err=task/)) {
-		var parts = /err=task (\d+)\: (.+)$/.exec(err);
+	    if (err.match(/failed in enqueuing task/)) {
+		var parts = /failed in enqueuing task (\d+), err=(.+)$/.exec(err);
 		if (parts) {
 		    if (! errors.hasOwnProperty(parts[1])) {
 			errors[parts[1]] = [];
@@ -243,6 +243,10 @@
 				   this.promise.resolve();
 			       }
 			     } );
+	    }
+
+	    else {
+		console.log(data.data[i]);
 	    }
 	}
 	if (promises.length) {
