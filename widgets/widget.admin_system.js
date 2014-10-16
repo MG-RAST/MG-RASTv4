@@ -135,6 +135,7 @@
 	}
 	
 	var html = "<div id='aweExtended' style='width: 200px; float: left;'></div>";
+	html += "<button class='btn btn-small' style='float: right; position: relative; bottom: 30px;' onclick='if(this.nextSibling.style.display==\"none\"){this.nextSibling.style.display=\"\";}else{this.nextSibling.style.display=\"none\";}'><i class='icon-fullscreen'></i> error summary</button><div id='awe_errors' style='float: left; width: 600px; margin-left: 50px; display: none;'></div>";
 	html += "<div style='float: left; margin-left: 50px; margin-bottom: 25px;'><button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].resumeAllClients();'>resume clients</button> <button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].resumeAllJobs();'>resume jobs</button></div>";
 	html += "<div style='float: left; width: 600px; margin-left: 50px;'>";
 
@@ -154,6 +155,7 @@
 
 	target.innerHTML = html;
 
+	// get the overview data
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig["awe_url"]+"/queue",
 		       headers: widget.shockAuthHeader,
@@ -195,6 +197,33 @@
 			   document.getElementById('aweExtended').innerHTML = html;
 		       }
 		     });
+
+	// get the errors from the suspended jobs
+	jQuery.ajax( { dataType: "json",
+		       url: RetinaConfig["awe_url"]+"/job?suspend&limit=100&offset=0",
+		       headers: widget.shockAuthHeader,
+		       success: function(data) {
+			   var errors = {};
+			   for (var i=0; i<data.data.length; i++) {
+			       var err = data.data[i].notes;
+			       err = err.replace(/[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}_/g, "");
+			       var parts = /err=task (\d+)\: (.+)$/.exec(err);
+			       if (! errors.hasOwnProperty(parts[1])) {
+				   errors[parts[1]] = [];
+			       }
+			       errors[parts[1]].push(parts[2]);
+			   }
+			   var html = "<table class='table table-condensed'>";
+			   for (var i in errors) {
+			       if (errors.hasOwnProperty(i)) {
+				   html += "<tr><td style='width: 100px;'><b>task "+i+"</b></td><td style='width: 100px;'>"+errors[i].length+" failures</td><td>"+errors[i][0]+"</td></tr>";
+			       }
+			   }
+			   html += "</table>";
+
+			   document.getElementById('awe_errors').innerHTML = html;
+		       }
+		     } );
     };
 
     widget.aweNode = function (status, id) {
