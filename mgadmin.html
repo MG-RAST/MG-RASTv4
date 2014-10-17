@@ -14,6 +14,12 @@
     <script src="Retina/js/retina.js"></script>
     <script src="Retina/js/bootstrap.min.js"></script>
 
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script>
+      google.load("visualization", "1", {packages:["gauge"]});
+    </script>
+
+
     <!-- config  -->
     <script src="js/config.js"></script>
 
@@ -25,55 +31,35 @@
     <!-- webapp initialization -->
     <script>
     jQuery( document ).ready(function(){
-	try {
-	    if (window.opener && window.opener.stm) {
-		window.stm = window.opener.stm;
-	    } else {
-		stm.init({});
-		stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	    }
-	} catch (err) {
-	    stm.init({});
+	stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
 	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	}
-	Retina.init({});
+	    Retina.init({});
 	    
-	var page  = Retina.cgiParam("mgpage") || "search";
-	
-	var icons = { "submission": "pipeline",
-		      "upload": "pipeline",
-		      "overview": "publications",
-		      "project": "publications",
-		      "download": "publications" };
-	var iconame = icons[page] ? icons[page] : page;
-	
-	var ico = document.getElementById('icon_'+iconame);
-	if (ico) {
-	    ico.className = "icosp icoactivesp";
-	    ico.firstChild.className = "ico icoactive";
-	}
-	
-	document.title = page.charAt(0).toUpperCase()+page.substr(1);
-
-	Retina.load_widget("metagenome_"+page).then( function() {
-	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
-								 "sidebar": document.getElementById("sidebar") });
+	    var page  = Retina.cgiParam("mgpage") || "statistics";
 	    
-	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
-		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				"callback": mgp.loginAction,
-						"registerEnabled": true,
-						"registerLink": "mgmain.html?mgpage=register",
-						"helpEnabled": true,
-						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
-						"forgotEnabled": true,
-						"forgotLink": "mgmain.html?mgpage=register&forgot=1" });
+	    var ico = document.getElementById('icon_'+page);
+	    if (ico) {
+		ico.className = "icosp icoactivesp";
+		ico.firstChild.className = "ico icoactive";
+	    }
+	    
+	    document.title = page.charAt(0).toUpperCase()+page.substr(1);
+	    
+	    Retina.load_widget("admin_"+page).then( function() {
+		var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
+								"sidebar": document.getElementById("sidebar") });
+		
+		Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+		    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    				    "callback": mgp.loginAction,
+						  });
+		});
+		
+		Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+		    Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
+		});
+		
 	    });
-	    
-	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
-		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-	    });
-	    
 	});
     });
     </script>
@@ -91,10 +77,9 @@
 	  
       <!-- navigation icons -->
       <div class="icorow">
-    	<div class="icosp" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
-    	<div class="icosp" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Submission</span></div>
-    	<div class="icosp" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects"><span>Metagenomes</span></div>
-    	<div class="icosp" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
+    	<div class="icosp" id="icon_statistics"><img src="Retina/images/bars.png" class="ico" title="Statistics" onclick="window.location='mgadmin.html?mgpage=statistics';"><span>Statistics</span></div>
+    	<div class="icosp" id="icon_users"><img src="Retina/images/user.png" class="ico" title="Users" onclick="window.location='mgadmin.html?mgpage=users';"><span>Users</span></div>
+    	<div class="icosp" id="icon_system" onclick="window.location='mgadmin.html?mgpage=system';"><img src="Retina/images/settings3.png" class="ico" title="System Status"><span>System Status</span></div>
       </div>
 	  
       <div style="float: right;">

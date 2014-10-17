@@ -18,7 +18,7 @@
     widget.authHeader = {};
     widget.user = null;
     widget.jobDataOffset;
-    widget.userID = "rebecca_waddell";
+    widget.userID = "gigico";
 
     widget.settingsMapping = [
 	[ "assembled", "sequence file is assembled" ],
@@ -82,7 +82,7 @@
 		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
 		widget.userID = widget.user.login;
 	    }
-	    content.innerHTML = '<div id="jobtable"></div>';
+	    content.innerHTML = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div><div id='jobtable'></div>";
 
 	    // create the job table
 	    var job_columns = [ "job", "stage", "status", "tasks" ];
@@ -326,8 +326,12 @@
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
 	if (job.state == "suspend") {
-	    html += "the error message is:</p>";
-	    html += "<pre>"+job.notes+"</pre>";
+	    if (Retina.cgiParam('admin')) {
+		html += "the error message is:</p>";
+		html += "<pre>"+job.notes+"</pre>";
+	    } else {
+		html += widget.errorHandling(job);
+	    }
 	} else {
 	    if (job.remaintasks > 0) {
 		if (job.remaintasks < 25) {
@@ -367,6 +371,28 @@
 		html += "<p>If you want to stop the computation of this job  and remove it from the system you can delete it using the button below.</p>";
 		html += "<p style='text-align: center;'><button class='btn btn-danger btn-small' onclick='Retina.WidgetInstances.metagenome_pipeline[1].deleteJob(\""+job.info.userattr.id+"\");'>delete</button></p>";
 	    }
+	}
+
+	if (job.remaintasks > 0 && Retina.cgiParam('admin')) {
+	    html += "<h4>Administrator Tasks</h4><div>";
+	    html += "<div class='input-append' style='margin-bottom: 0px; margin-right: 20px;'><input type='text' id='jobPriorityField' value='"+job.info.priority+"' style='margin-bottom: 0px; width: 100px;'><button class='btn' style='width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"priority\", \""+job.id+"\");'>set priority</button></div>";
+	    html += "<button class='btn btn-primary' style='margin-right: 20px; width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"resume\", \""+job.id+"\");'>resume</button>";
+	    html += "<button class='btn btn-warning' style='margin-right: 20px; width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"suspend\", \""+job.id+"\");'>suspend</button>";
+	    html += "<button class='btn btn-danger' style='width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"delete\", \""+job.id+"\");'>delete</button>";
+	    html += "</div>";
+	}
+
+	return html;
+    };
+
+    widget.errorHandling = function (job) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
+	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
+
+	// SHOCK server was unavailable
+	if (job.notes.match(/lookup shock\.metagenomics.anl\.gov\: no such host/)) {
+	    html = "but the error was likely transient. You can try to <a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"resume\", \""+job.id+"\");'>resume</a> it. If resuming fails, please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
 	}
 
 	return html;
@@ -470,15 +496,15 @@
     /*
       ACTIONS
      */
-    widget.deleteJob = function (job) {
+    widget.deleteJob = function (mgid) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
-	if (prompt("Really delete job "+job+"? This cannot be undone. Type 'DELETE' to confirm", "") == "DELETE") {
+	if (prompt("Really delete job "+mgid+"? This cannot be undone. Type 'DELETE' to confirm", "") == "DELETE") {
 	    var reason = prompt("Why do you want to delete the job?", "- not specified -");
 	    jQuery.ajax({
 		method: "POST",
 		dataType: "json",
-		data: { "metagenome_id": job,
+		data: { "metagenome_id": mgid,
 			"reason": reason },
 		headers: widget.authHeader, 
 		url: RetinaConfig.mgrast_api+'/job/delete',
@@ -486,10 +512,38 @@
 		    alert("job deleted");
 		    Retina.WidgetInstances.metagenome_pipeline[1].display();
 		}}).fail(function(xhr, error) {
+		    alert("job deletion failed");
 		    console.log(error);
 		});
 	}
     };
+
+    widget.adminAction = function (action, id) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var job = stm.DataStore.job[id];
+	
+	var url = "?action="+action;
+	if (action == 'delete') {
+	    widget.deleteJob(job.info.userattr.id);
+	    return;
+	} else if (action == "priority") {
+	    url += "&level=" + document.getElementById('jobPriorityField').value;
+	}
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: widget.authHeader, 
+	    url: RetinaConfig.mgrast_api+'/pipeline/'+job.info.userattr.id+url,
+	    success: function (data) {
+		alert("action successful");
+		Retina.WidgetInstances.metagenome_pipeline[1].display();
+	    }}).fail(function(xhr, error) {
+		alert('action failed');
+		console.log(error);
+	    });
+    };
+
 
     /*
       HELPER FUNCTIONS
