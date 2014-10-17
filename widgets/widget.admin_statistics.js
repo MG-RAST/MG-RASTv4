@@ -65,8 +65,12 @@
 	// all jobs submitted within the last 30 days (initially only the inactive ones)
 	var jobs30 = [];
 	var jk = Retina.keys(stm.DataStore.inactivejobs);
+	var size_in_pipeline = 0;
 	for (var i=0;i<jk.length;i++) {
 	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
+	    if (stm.DataStore.inactivejobs[jk[i]].state == 'suspend') {
+		size_in_pipeline += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
+	    }
 	}
 
 	// jobs currently active in the pipeline
@@ -92,8 +96,6 @@
 		       "queued": 0,
 		       "suspend": 0,
 		       "unknown": 0 };
-
-	var size_in_pipeline = 0;
 
 	// iterate over the active jobs
 	for (var i=0; i<jobsactive.length; i++) {
@@ -221,9 +223,13 @@
 	html += "<tr><td><b>submitted last 30 days</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
-	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div>";
+	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
+	html += "<h4>backlog graph in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
+
+	// backlog graph
+	widget.updateGraph();
 
 	// gauges
 	var gauges = ['day','week','month'];
@@ -350,6 +356,107 @@
 					  chartArea: [0.05, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-35",
 					  type: "column" }).render();
+    };
+
+    widget.updateGraph = function (params) {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	// get all data
+	var data = [];
+	var inactivejobs = stm.DataStore.inactivejobs;
+	var activejobs = stm.DataStore.activejobs;
+	for (var i in activejobs) {
+	    if (activejobs.hasOwnProperty(i)) {
+		data.push(activejobs[i]);
+	    }
+	}
+	for (var i in inactivejobs) {
+	    if (inactivejobs.hasOwnProperty(i)) {
+		data.push(inactivejobs[i]);
+	    }
+	}
+
+	// add chicago time
+	var chicago = 1000 * 60 * 60 * 6;
+	var now = new Date().getTime();
+	for (var i=0; i<data.length; i++) {
+	    data[i].submitChicago = widget.dateString(now - (Date.parse(data[i].submittime) - chicago));
+	    data[i].completeChicago = widget.dateString(now - (Date.parse(data[i].completedtime) - chicago));
+	}
+
+	// get initial backlog
+	var backlog = 0;
+	for (var i=0; i<data.length; i++) {
+	    if (data[i].state != "completed") {
+		if (data[i].userattr.hasOwnProperty('bp_count')) {
+		    backlog += parseInt(data[i].userattr.bp_count) || 0;
+		} else if (data[i].hasOwnProperty('size')) {
+		    backlog += data[i].size;
+		}
+	    }
+	}
+
+	// get the daydata
+	var cdaydata = {};
+	var sdaydata = {};
+	var daysh = {};
+	for (var i=0; i<data.length; i++) {
+	    if (data[i].state == 'completed') {
+		var cday = data[i].completeChicago.substr(0,10);
+		daysh[cday] = 1;
+		if (! cdaydata.hasOwnProperty(cday)) {
+		    cdaydata[cday] = 0;
+		}
+		cdaydata[cday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
+	    }
+	    var sday = data[i].submitChicago.substr(0,10);
+	    daysh[sday] = 1;
+	    if (! sdaydata.hasOwnProperty(sday)) {
+		sdaydata[sday] = 0;
+	    }
+	    sdaydata[sday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
+	}
+	var days = Retina.keys(daysh).sort().reverse();
+
+	// process data
+	var graphData = [];
+	var labels = [];
+	var backlogs = [];
+	var submitteds = [];
+	var completeds = [];
+
+	for (var i=0; i<days.length; i++) {
+	    var b = String(backlog / 1000000000);
+	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
+	    completeds[i] = (parseFloat(cdaydata[days[i]] / 1000000000) || 0);
+	    submitteds[i] = (parseFloat(sdaydata[days[i]] / 1000000000) || 0);
+	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
+	}
+	backlogs = backlogs.reverse();
+	submitteds = submitteds.reverse();
+	completeds = completeds.reverse();
+	labels = days.reverse();
+
+	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
+//	graphData.push({ name: "submitted", data: submitteds, lineColor: "red", settings: { noLines: true } });
+//	graphData.push({ name: "completed", data: completeds, lineColor: "green", settings: { noLines: true } });
+
+	var w = 200 + (submitteds.length * 20);
+
+	// redraw the graph
+	var target = document.getElementById('graph_target');
+	target.innerHTML = "";
+
+	Retina.RendererInstances.graph[1] = null;
+	Retina.Renderer.create("graph", { target: target,
+					  data: graphData,
+					  width: w,
+					  height: 600,
+					  chartArea: [0.1, 0.1, 0.95, 0.7],
+					  x_labels_rotation: "-35",
+					  x_labels: labels,
+					  type: "line" }).render();
+	
     };
 
     widget.dateString = function (period) {
