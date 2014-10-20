@@ -111,7 +111,8 @@
 	var promises = [];
 	for (var i=0; i<data.length; i++) {
 	    if (document.getElementById("requestaction_deny_"+data[i].login).checked) {
-		promises.push(jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/"+data[i].login+"/deny",
+		var reason = prompt("reason to deny "+data[i].firstname+" "+data[i].lastname+" ("+data[i].login+")?", "-");
+		promises.push(jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/"+data[i].login+"/deny?reason="+encodeURIComponent(reason),
 					    dataType: "json",
 					    success: function(data) {
 						Retina.WidgetInstances.admin_users[1].showRequests(data);
