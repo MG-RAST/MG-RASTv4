@@ -69,6 +69,7 @@
 			      Retina.WidgetInstances.admin_users[1].showRequests(data);
 			  },
 			  error: function(jqXHR, error) {
+			      document.getElementById('requests').innerHTML = "<p>There was an error retrieving the data</p>";
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
 			  },
