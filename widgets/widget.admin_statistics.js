@@ -155,8 +155,6 @@
 	
 	var completed_chicago_day = 0;
 
-	var toast = [];
-
 	// iterate over all jobs of the last month
 	for (var i=0; i<jobs30.length; i++) {
 	    var submitted_day = jobs30[i].submitChicago.substr(0,10);
@@ -195,7 +193,6 @@
 		completed_week += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].completedtime >= day) {
-		toast.push(jobs30[i]);
 		num_completed_today++;
 		completed_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
@@ -203,7 +200,7 @@
 		completed_chicago_day += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	}
-	window.toast = toast;
+
 	var submitted_week_per_day = submitted_week / 7;
 	var num_submitted_week_per_day = parseInt(num_submitted_week / 7);
 	var completed_week_per_day = completed_week / 7;
