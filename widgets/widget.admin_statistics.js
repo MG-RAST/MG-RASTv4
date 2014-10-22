@@ -32,8 +32,6 @@
 
 	    widget.getJobData();
 
-	    widget.getUserData();
-
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
@@ -535,7 +533,9 @@
 				   } ) );
 	jQuery.when.apply(this, promises).then(function() {
 	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
-	    stm.dump(true, 'admin_statistics');
+	    stm.dump(true, 'admin_statistics').then(function() {
+		Retina.WidgetInstances.admin_statistics[1].getUserData();
+	    });
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
     };
@@ -624,7 +624,6 @@
 				   } ));
 	
 	jQuery.when.apply(this, promises).then(function() {
-	    stm.dump(true, 'admin_statistics');
 	    widget.showUserData();
 	});
     };
