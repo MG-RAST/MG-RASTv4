@@ -25,11 +25,13 @@
         widget = this;
 	var index = widget.index;
 	
-	wparams.target = wparams.target || wparams.main;
+	if (wparams) {
+	    widget.target = wparams.target || wparams.main;
+	}
 
-	wparams.target.setAttribute('style', "overflow-x: hidden; padding-right: 20px;");
+	widget.target.setAttribute('style', "overflow-x: hidden; padding-right: 20px;");
 
-	wparams.target.innerHTML = '\
+	widget.target.innerHTML = '\
 <div id="mg_modal" class="modal show fade" tabindex="-1" style="width: 500px;" role="dialog">\
   <div class="modal-header">\
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
@@ -42,44 +44,48 @@
 </div>';
 
 	if (Retina.cgiParam('metagenome')) {
-	    wparams.id = Retina.cgiParam('metagenome');
-	    if (! wparams.id.match(/^mgm/)) {
-		wparams.id = "mgm"+wparams.id;
+	    widget.id = Retina.cgiParam('metagenome');
+	    if (! widget.id.match(/^mgm/)) {
+		widget.id = "mgm"+widget.id;
 	    }
 	}
 
         // check if id given
-        if (wparams.id) {
+        if (widget.id) {
 	    jQuery('#mg_modal').modal('hide');
 	    
-	    wparams.target.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
+	    widget.target.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
+	    
+	    if (stm.DataStore.hasOwnProperty('metagenome') && stm.DataStore.metagenome.hasOwnProperty(widget.id) && ! stm.DataStore.metagenome[widget.id].hasOwnProperty('statistics')) {
+		widget.target.innerHTML = "<div class='alert'>This metagenome has not yet finished analysis.</div>";
+		return;
+	    }
 
 	    // check if required data is loaded (use stats)
-	    if (! ( stm.DataStore.hasOwnProperty('metagenome') &&
-	            stm.DataStore.metagenome.hasOwnProperty(wparams.id) &&
-	            stm.DataStore.metagenome[wparams.id].hasOwnProperty('statistics') )) {
-		var url = RetinaConfig.mgrast_api + '/metagenome/'+wparams.id+'?verbosity=full';
-		if (stm.Authentication) {
-		    url += "&auth=" + stm.Authentication;
-		}
-	        jQuery.getJSON(url, function(data) {
-		    if (! stm.DataStore.hasOwnProperty('metagenome')) {
-			stm.DataStore.metagenome = {};
-		    }
-		    stm.DataStore.metagenome[data.id] = data;
-		    Retina.WidgetInstances.metagenome_overview[1].display(wparams);
-	        });
+	    if (! stm.DataStore.hasOwnProperty('metagenome') || ! stm.DataStore.metagenome.hasOwnProperty(widget.id)) {
+		var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
+		jQuery.ajax( { dataType: "json",
+			       url: url,
+			       headers: widget.authHeader,
+			       success: function(data) {
+				   if (! stm.DataStore.hasOwnProperty('metagenome')) {
+				       stm.DataStore.metagenome = {};
+				   }
+				   stm.DataStore.metagenome[data.id] = data;
+				   Retina.WidgetInstances.metagenome_overview[1].display();
+			       }
+			     } );
 		return;
             }
 	    // get id first
         } else {
-            widget.metagenome_modal(index, wparams.main);
+            widget.metagenome_modal(index, widget.main);
             return;
         }
 	
 	// make some shortcuts
-	widget.curr_mg = stm.DataStore.metagenome[wparams.id];
-	var content = wparams.target;
+	widget.curr_mg = stm.DataStore.metagenome[widget.id];
+	var content = widget.target;
 	var seq_type = widget.curr_mg.sequence_type;
 	
 	// set the output area
@@ -822,6 +828,21 @@
     widget._to_num = function(key, obj) {
         var num = (key in obj) ? obj[key] : 0;
         return parseInt(num).formatString();
+    };
+
+    // login callback
+    widget.loginAction = function (data) {
+	var widget = Retina.WidgetInstances.metagenome_overview[1];
+	if (data.user) {
+	    widget.user = data.user;
+	    widget.authHeader = { "Auth": data.token };
+	    widget.shockAuthHeader = { "Authorization": "OAuth "+data.token };
+	} else {
+	    widget.user = null;
+	    widget.authHeader = {};
+	    widget.shockAuthHeader = {};
+	}
+	widget.display();
     };
     
 })();
