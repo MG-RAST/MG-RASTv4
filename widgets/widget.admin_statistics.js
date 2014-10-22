@@ -546,25 +546,31 @@
 
 	var target = document.getElementById('userData');
 
+	var labels = Retina.keys(stm.DataStore.userCounts).sort();
+	widget.allUserCounts = [];
+	for (var i=0; i<labels.length; i++) {
+	    widget.allUserCounts.push(labels[i]+"\t"+stm.DataStore.userCounts[labels[i]].count);
+	}
+
 	var html = "<p><b>Users Registered this Month:</b> "+ widget.currentUserCount;
-	html += "<h4>New Users per Month</h4><div id='userCountGraph' style='width: 1000px; overflow-x: scroll; overflow-y: hidden;'></div>";
+	html += "<button class='btn btn-small' style='margin-left: 50px; position: relative; bottom: 3px;' onclick='stm.saveAs(Retina.WidgetInstances.admin_statistics[1].allUserCounts.join(\"\\n\"), \"newUsers.txt\");'><img src='Retina/images/download.png' style='width: 16px;'> download all</button>";
+	html += "<h4>New Users per Month</h4><div id='userCountGraph'></div>";
 	
 	target.innerHTML = html;
-
-	var labels = Retina.keys(stm.DataStore.userCounts).sort();
+	
+	var last12 = labels.slice(labels.length - 12);
 	var d = [];
-	for (var i=0;i<labels.length;i++) {
-	    d.push(stm.DataStore.userCounts[labels[i]].count);
+	for (var i=0;i<last12.length;i++) {
+	    d.push(stm.DataStore.userCounts[last12[i]].count);
 	}
 	var graphData = [ { name: "new users", data: d, lineColor: "blue" } ];
-	var w = 200 + (labels.length * 25);
 	Retina.Renderer.create("graph", { target: document.getElementById('userCountGraph'),
 					  data: graphData,
-					  width: w,
+					  width: 800,
 					  height: 600,
 					  chartArea: [50, 0.1, 0.99, 0.7],
 					  x_labels_rotation: "-35",
-					  x_labels: labels,
+					  x_labels: last12,
 					  type: "line" }).render();
     };
 
