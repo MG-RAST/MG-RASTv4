@@ -525,6 +525,22 @@
 					 alert('there was an error retrieving the data');
 				     }
 				   } ) );
+
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=10000&state=suspend&userattr=bp_count",
+				     headers: widget.authHeader,
+				     success: function(data) {
+					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
+					     stm.DataStore.inactivejobs = {};
+					 }
+					 for (var i=0; i<data.data.length; i++) {
+					     stm.DataStore.inactivejobs[data.data[i].id] = data.data[i];
+					 }
+				     },
+				     error: function () {
+					 alert('there was an error retrieving the data');
+				     }
+				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000&userattr=bp_count",
