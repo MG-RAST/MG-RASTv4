@@ -71,6 +71,8 @@
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
 
+	var num_in_pipeline = 0;
+
 	// all jobs submitted within the last 30 days (initially only the inactive ones)
 	var jobs30 = [];
 	var jk = Retina.keys(stm.DataStore.inactivejobs);
@@ -78,6 +80,12 @@
 	for (var i=0;i<jk.length;i++) {
 	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
 	    if (stm.DataStore.inactivejobs[jk[i]].state == 'suspend') {
+		num_in_pipeline++;
+		if (! taskcount.hasOwnProperty(stm.DataStore.inactivejobs[jk[i]].task)) {
+		    taskcount[stm.DataStore.inactivejobs[jk[i]].task] = [ 0, 0, 0, 0 ];
+		}
+		taskcount[stm.DataStore.inactivejobs[jk[i]].task][1]++;
+		taskcount[stm.DataStore.inactivejobs[jk[i]].task][3] += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
 		size_in_pipeline += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
 	    }
 	}
@@ -141,7 +149,7 @@
 	    jobs30[i].completeChicago = widget.dateString(now - (Date.parse(jobs30[i].completedtime) - chicago));
 	}
 
-	var num_in_pipeline = jobsactive.length;
+	num_in_pipeline += jobsactive.length;
 
 	// initialize vars
 	var submitted_today = 0;
@@ -318,7 +326,7 @@
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
 
-	var tdataps = [ { name: "running", data: [] } ];
+	var tdataps = [ { name: "pending", data: [] } ];
 	for (var i=0; i<template.tasks.length; i++) {
 	    tdataps[0].data.push(parseInt(taskcount[i][3] / 1000000000));
 	}
