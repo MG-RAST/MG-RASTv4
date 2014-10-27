@@ -54,19 +54,10 @@
 	var tasklabels = [];
 	var tasknames = {};
 	var taskcount = {};
-	var parallelTasks = {};
 	for (var i=0; i<template.tasks.length; i++) {
 	    tasklabels[i] = template.tasks[i].cmd.description;
 	    tasknames[i] = template.tasks[i].cmd.description;
 	    taskcount[i] = [ 0, 0, 0, 0 ];
-	    for (var h=0; h<template.tasks[i].dependsOn.length; h++) {
-		var dep = template.tasks[i].dependsOn[h];
-		var t = dep.substr(dep.lastIndexOf('_') + 1);
-		if (! parallelTasks.hasOwnProperty(t)) {
-		    parallelTasks[t] = [];
-		}
-		parallelTasks[t].push(i);
-	    }
 	}
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
@@ -238,7 +229,7 @@
 	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
 	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
-	html += "<h4>backlog graph in Gbp</h4><div id='graph_target'></div></div>";
+	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
 
@@ -436,26 +427,15 @@
 	var graphData = [];
 	var labels = [];
 	var backlogs = [];
-	var submitteds = [];
-	var completeds = [];
-
-	for (var i=0; i<days.length; i++) {
+	for (var i=0; i<30; i++) {
 	    var b = String(backlog / 1000000000);
 	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
-	    completeds[i] = (parseFloat(cdaydata[days[i]] / 1000000000) || 0);
-	    submitteds[i] = (parseFloat(sdaydata[days[i]] / 1000000000) || 0);
 	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
 	}
 	backlogs = backlogs.reverse();
-	submitteds = submitteds.reverse();
-	completeds = completeds.reverse();
 	labels = days.reverse();
 
 	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
-//	graphData.push({ name: "submitted", data: submitteds, lineColor: "red", settings: { noLines: true } });
-//	graphData.push({ name: "completed", data: completeds, lineColor: "green", settings: { noLines: true } });
-
-	var w = 200 + (submitteds.length * 20);
 
 	// redraw the graph
 	var target = document.getElementById('graph_target');
@@ -463,7 +443,7 @@
 
 	Retina.Renderer.create("graph", { target: target,
 					  data: graphData,
-					  width: w,
+					  width: 800,
 					  height: 600,
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-35",
@@ -497,7 +477,7 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
