@@ -30,8 +30,13 @@
 	    // set the main content html
 	    widget.main.innerHTML = html;
 
-	    widget.getJobData();
-
+	    if (! stm.DataStore.hasOwnProperty('jobtemplate') && ! navigator.userAgent.match(/iPhone/i) && ! navigator.userAgent.match(/Android/i)) {
+		stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
+		    Retina.WidgetInstances.admin_statistics[1].getJobData();
+		});
+	    } else {
+		Retina.WidgetInstances.admin_statistics[1].getJobData();
+	    }
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
