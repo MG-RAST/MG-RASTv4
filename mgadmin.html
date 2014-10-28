@@ -26,40 +26,40 @@
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" type="text/css" href="Retina/css/jquery.svg.css">
+    <link rel="stylesheet" type="text/css" href="Retina/css/jquery.datepicker.css">
     <link rel="stylesheet" type="text/css" href="css/mgrast.css">
 
     <!-- webapp initialization -->
     <script>
     jQuery( document ).ready(function(){
-	stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
-	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	    Retina.init({});
+	stm.init({});
+	stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
+	Retina.init({});
+	
+	var page  = Retina.cgiParam("mgpage") || "statistics";
+	
+	var ico = document.getElementById('icon_'+page);
+	if (ico) {
+	    ico.className = "icosp icoactivesp";
+	    ico.firstChild.className = "ico icoactive";
+	}
+	
+	document.title = page.charAt(0).toUpperCase()+page.substr(1);
+	
+	Retina.load_widget("admin_"+page).then( function() {
+	    var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
+							    "sidebar": document.getElementById("sidebar") });
 	    
-	    var page  = Retina.cgiParam("mgpage") || "statistics";
-	    
-	    var ico = document.getElementById('icon_'+page);
-	    if (ico) {
-		ico.className = "icosp icoactivesp";
-		ico.firstChild.className = "ico icoactive";
-	    }
-	    
-	    document.title = page.charAt(0).toUpperCase()+page.substr(1);
-	    
-	    Retina.load_widget("admin_"+page).then( function() {
-		var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
-								"sidebar": document.getElementById("sidebar") });
-		
-		Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
-		    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				    "callback": mgp.loginAction,
-						  });
-		});
-		
-		Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
-		    Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-		});
-		
+	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    				"callback": mgp.loginAction,
+					      });
 	    });
+	    
+	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
+	    });    
 	});
     });
     </script>
@@ -80,6 +80,7 @@
     	<div class="icosp" id="icon_statistics"><img src="Retina/images/bars.png" class="ico" title="Statistics" onclick="window.location='mgadmin.html?mgpage=statistics';"><span>Statistics</span></div>
     	<div class="icosp" id="icon_users"><img src="Retina/images/user.png" class="ico" title="Users" onclick="window.location='mgadmin.html?mgpage=users';"><span>Users</span></div>
     	<div class="icosp" id="icon_system" onclick="window.location='mgadmin.html?mgpage=system';"><img src="Retina/images/settings3.png" class="ico" title="System Status"><span>System Status</span></div>
+    	<div class="icosp" id="icon_advancedstatistics" onclick="window.location='mgadmin.html?mgpage=advancedstatistics';"><img src="Retina/images/stats.png" class="ico" title="Statistics+"><span>Statistics+</span></div>
       </div>
 	  
       <div style="float: right;">

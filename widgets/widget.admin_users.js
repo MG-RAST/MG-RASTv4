@@ -69,6 +69,7 @@
 			      Retina.WidgetInstances.admin_users[1].showRequests(data);
 			  },
 			  error: function(jqXHR, error) {
+			      document.getElementById('requests').innerHTML = "<p>There was an error retrieving the data</p>";
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
 			  },
@@ -84,7 +85,65 @@
     widget.showRequests = function (data) {
 	var widget = Retina.WidgetInstances.admin_users[1];
 
-	console.log(data);
+	var target = document.getElementById('requests');
+
+	widget.account_requests = data;
+
+	var html = "";
+	
+	if (data.length) {
+	    html = "<button class='btn btn-small' style='position: relative; float: right; bottom: 35px;' onclick='Retina.WidgetInstances.admin_users[1].handleRequests();'>handle requests</button><table class='table table-condensed'><tr><td><b>firstname</b></td><td><b>lastname</b></td><td><b>login</b></td><td><b>email</b></td><td><b>request time</b></td><td style='text-align: center;'><b>accept</b></td><td style='text-align: center;'><b>deny</b></td><td style='text-align: center;'><b>defer</b></td></tr>";
+	    for (var i=0; i<data.length; i++) {
+		html += "<tr><td>"+data[i].firstname+"</td><td>"+data[i].lastname+"</td><td>"+data[i].login+"</td><td>"+data[i].email+"</td><td>"+data[i].entry_date+"</td><td style='text-align: center;'><input type='radio' name='requestaction_"+data[i].login+"' id='requestaction_accept_"+data[i].login+"'></td><td style='text-align: center;'><input type='radio' name='requestaction_"+data[i].login+"' id='requestaction_deny_"+data[i].login+"'></td><td style='text-align: center;'><input type='radio' name='requestaction_"+data[i].login+"' id='requestaction_defer_"+data[i].login+"' checked></td></tr>";
+	    }
+	    html += "</table>";
+	} else {
+	    html = "<p> - no pending requests - </p>";
+	}
+
+	target.innerHTML = html;
+    };
+
+    widget.handleRequests = function () {
+	var widget = Retina.WidgetInstances.admin_users[1];
+	
+	var data = widget.account_requests;
+
+	var promises = [];
+	for (var i=0; i<data.length; i++) {
+	    if (document.getElementById("requestaction_deny_"+data[i].login).checked) {
+		var reason = prompt("reason to deny "+data[i].firstname+" "+data[i].lastname+" ("+data[i].login+")?", "-");
+		promises.push(jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/"+data[i].login+"/deny?reason="+encodeURIComponent(reason),
+					    dataType: "json",
+					    success: function(data) {
+						Retina.WidgetInstances.admin_users[1].showRequests(data);
+					    },
+					    error: function(jqXHR, error) {
+						console.log("error: unable to connect to API server");
+						console.log(error);
+					    },
+					    headers: widget.authHeader
+					  }));
+	    }
+	    else if (document.getElementById("requestaction_accept_"+data[i].login).checked) {
+		promises.push(jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/"+data[i].login+"/accept",
+					    dataType: "json",
+					    success: function(data) {
+						Retina.WidgetInstances.admin_users[1].showRequests(data);
+					    },
+					    error: function(jqXHR, error) {
+						console.log("error: unable to connect to API server");
+						console.log(error);
+					    },
+					    headers: widget.authHeader
+					  }));
+	    }
+	}
+	if (promises.length) {
+	    jQuery.when.apply(this, promises).then(function() {
+		widget.display();
+	    });
+	}
     };
 
     /*

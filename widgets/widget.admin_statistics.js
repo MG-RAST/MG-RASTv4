@@ -25,13 +25,18 @@
 
 	if (widget.user) {
 
-            var html = '<h3>Job Statistics for the last 30 days</h3><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
+            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
 
-	    widget.getJobData();
-
+	    if (! stm.DataStore.hasOwnProperty('jobtemplate') && ! navigator.userAgent.match(/iPhone/i) && ! navigator.userAgent.match(/Android/i)) {
+		stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
+		    Retina.WidgetInstances.admin_statistics[1].getJobData();
+		});
+	    } else {
+		Retina.WidgetInstances.admin_statistics[1].getJobData();
+	    }
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
@@ -62,6 +67,8 @@
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
 
+	var num_in_pipeline = 0;
+
 	// all jobs submitted within the last 30 days (initially only the inactive ones)
 	var jobs30 = [];
 	var jk = Retina.keys(stm.DataStore.inactivejobs);
@@ -69,6 +76,12 @@
 	for (var i=0;i<jk.length;i++) {
 	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
 	    if (stm.DataStore.inactivejobs[jk[i]].state == 'suspend') {
+		num_in_pipeline++;
+		if (! taskcount.hasOwnProperty(stm.DataStore.inactivejobs[jk[i]].task)) {
+		    taskcount[stm.DataStore.inactivejobs[jk[i]].task] = [ 0, 0, 0, 0 ];
+		}
+		taskcount[stm.DataStore.inactivejobs[jk[i]].task][1]++;
+		taskcount[stm.DataStore.inactivejobs[jk[i]].task][3] += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
 		size_in_pipeline += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
 	    }
 	}
@@ -132,7 +145,7 @@
 	    jobs30[i].completeChicago = widget.dateString(now - (Date.parse(jobs30[i].completedtime) - chicago));
 	}
 
-	var num_in_pipeline = jobsactive.length;
+	num_in_pipeline += jobsactive.length;
 
 	// initialize vars
 	var submitted_today = 0;
@@ -154,8 +167,6 @@
 	var submitted_bases = {};
 	
 	var completed_chicago_day = 0;
-
-	var toast = [];
 
 	// iterate over all jobs of the last month
 	for (var i=0; i<jobs30.length; i++) {
@@ -195,7 +206,6 @@
 		completed_week += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	    if (jobs30[i].completedtime >= day) {
-		toast.push(jobs30[i]);
 		num_completed_today++;
 		completed_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
@@ -203,7 +213,7 @@
 		completed_chicago_day += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
 	    }
 	}
-	window.toast = toast;
+
 	var submitted_week_per_day = submitted_week / 7;
 	var num_submitted_week_per_day = parseInt(num_submitted_week / 7);
 	var completed_week_per_day = completed_week / 7;
@@ -224,7 +234,7 @@
 	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
 
 	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
-	html += "<h4>backlog graph in Gbp</h4><div id='graph_target'></div></div>";
+	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
 
@@ -312,7 +322,7 @@
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
 
-	var tdataps = [ { name: "running", data: [] } ];
+	var tdataps = [ { name: "pending", data: [] } ];
 	for (var i=0; i<template.tasks.length; i++) {
 	    tdataps[0].data.push(parseInt(taskcount[i][3] / 1000000000));
 	}
@@ -422,35 +432,23 @@
 	var graphData = [];
 	var labels = [];
 	var backlogs = [];
-	var submitteds = [];
-	var completeds = [];
-
-	for (var i=0; i<days.length; i++) {
+	for (var i=0; i<30; i++) {
 	    var b = String(backlog / 1000000000);
 	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
-	    completeds[i] = (parseFloat(cdaydata[days[i]] / 1000000000) || 0);
-	    submitteds[i] = (parseFloat(sdaydata[days[i]] / 1000000000) || 0);
 	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
 	}
 	backlogs = backlogs.reverse();
-	submitteds = submitteds.reverse();
-	completeds = completeds.reverse();
 	labels = days.reverse();
 
 	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
-//	graphData.push({ name: "submitted", data: submitteds, lineColor: "red", settings: { noLines: true } });
-//	graphData.push({ name: "completed", data: completeds, lineColor: "green", settings: { noLines: true } });
-
-	var w = 200 + (submitteds.length * 20);
 
 	// redraw the graph
 	var target = document.getElementById('graph_target');
 	target.innerHTML = "";
 
-	Retina.RendererInstances.graph[1] = null;
 	Retina.Renderer.create("graph", { target: target,
 					  data: graphData,
-					  width: w,
+					  width: 800,
 					  height: 600,
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-35",
@@ -467,7 +465,8 @@
 	var minute = past.getUTCMinutes().padLeft();
 	var second = past.getUTCSeconds().padLeft();
 	var ms = past.getUTCMilliseconds().padLeft(100);
-	var timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
+	var timestamp;
+	timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
 	return timestamp;
     };
 
@@ -483,7 +482,7 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&state=suspend&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -511,6 +510,22 @@
 					 alert('there was an error retrieving the data');
 				     }
 				   } ) );
+
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=10000&state=suspend&userattr=bp_count",
+				     headers: widget.authHeader,
+				     success: function(data) {
+					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
+					     stm.DataStore.inactivejobs = {};
+					 }
+					 for (var i=0; i<data.data.length; i++) {
+					     stm.DataStore.inactivejobs[data.data[i].id] = data.data[i];
+					 }
+				     },
+				     error: function () {
+					 alert('there was an error retrieving the data');
+				     }
+				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000&userattr=bp_count",
@@ -527,11 +542,100 @@
 				   } ) );
 	jQuery.when.apply(this, promises).then(function() {
 	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
-	    stm.dump(true, 'admin_statistics');
+	    stm.dump(true, 'admin_statistics').then(function() {
+		Retina.WidgetInstances.admin_statistics[1].getUserData();
+	    });
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
     };
 
+    // USERS
+    widget.showUserData = function () {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	var target = document.getElementById('userData');
+
+	var labels = Retina.keys(stm.DataStore.userCounts).sort();
+	widget.allUserCounts = [];
+	for (var i=0; i<labels.length; i++) {
+	    widget.allUserCounts.push(labels[i]+"\t"+stm.DataStore.userCounts[labels[i]].count);
+	}
+
+	var html = "<p><b>Users Registered this Month:</b> "+ widget.currentUserCount;
+	html += "<button class='btn btn-small' style='margin-left: 50px; position: relative; bottom: 3px;' onclick='stm.saveAs(Retina.WidgetInstances.admin_statistics[1].allUserCounts.join(\"\\n\"), \"newUsers.txt\");'><img src='Retina/images/download.png' style='width: 16px;'> download all</button>";
+	html += "<h4>New Users per Month</h4><div id='userCountGraph'></div>";
+	
+	target.innerHTML = html;
+	
+	var last12 = labels.slice(labels.length - 12);
+	var d = [];
+	for (var i=0;i<last12.length;i++) {
+	    d.push(stm.DataStore.userCounts[last12[i]].count);
+	}
+	var graphData = [ { name: "new users", data: d, lineColor: "blue" } ];
+	Retina.Renderer.create("graph", { target: document.getElementById('userCountGraph'),
+					  data: graphData,
+					  width: 800,
+					  height: 600,
+					  chartArea: [50, 0.1, 0.99, 0.7],
+					  x_labels_rotation: "-35",
+					  x_labels: last12,
+					  type: "line" }).render();
+    };
+
+    widget.getUserData = function () {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	if (! stm.DataStore.hasOwnProperty('userCounts')) {
+	    stm.DataStore.userCounts = {};
+	}
+	var promises = [];
+	var year = "2007";
+	var month = "07";
+	var now_year = new Date().getFullYear();
+	var now_month = (new Date().getMonth() + 1).padLeft();
+	while (year < now_year || month < now_month) {
+	    var d = year+"-"+month;
+	    var timestamp = "["+d;
+	    month = parseInt(month);
+	    month++;
+	    if (month > 12) {
+		month = "01";
+		year = parseInt(year);
+		year++;
+		year += "";
+	    } else {
+		month = month.padLeft();
+	    }
+	    timestamp += ";"+year+"-"+month+"[";
+	    if (! stm.DataStore.userCounts.hasOwnProperty(d)) {
+		var p = jQuery.Deferred();
+		promises.push(p);
+		jQuery.ajax( { dataType: "json",
+			       url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent(timestamp)+"&verbosity=minimal&limit=1",
+			       promise: p,
+			       date: d,
+			       headers: widget.authHeader,
+			       success: function(data) {
+				   stm.DataStore.userCounts[this.date] = { "count": data.total_count };
+				   this.promise.resolve();
+			       }
+			     } );
+	    }
+	}
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent("["+now_year+"-"+now_month)+"&verbosity=minimal&limit=1",
+				     date: now_year+"-"+now_month,
+				     headers: widget.authHeader,
+				     success: function(data) {
+					 widget.currentUserCount = data.total_count;
+				     }
+				   } ));
+	
+	jQuery.when.apply(this, promises).then(function() {
+	    widget.showUserData();
+	});
+    };
 
     // login callback
     widget.loginAction = function (data) {
