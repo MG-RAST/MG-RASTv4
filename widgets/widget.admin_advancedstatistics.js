@@ -4,7 +4,7 @@
             title: "Administrator Advanced Statistics Widget",
             name: "admin_advancedstatistics",
             author: "Tobias Paczian",
-            requires: [ "rgbcolor.js" ]
+            requires: [ "rgbcolor.js", "jquery.datepicker.js" ]
         }
     });
     
@@ -26,18 +26,23 @@
 
 	if (widget.user) {
 
-            var html = '<h3>Computation Statistics</h3><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
+	    var nowTemp = new Date();
+	    var pastTemp = new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
+	    var now = nowTemp.getFullYear() + "-" + (nowTemp.getMonth() + 1).padLeft() + "-" + (nowTemp.getDate() + 1).padLeft();
+	    var past = pastTemp.getFullYear() + "-" + (pastTemp.getMonth() + 1).padLeft() + "-" + (pastTemp.getDate() + 1).padLeft();
+            var html = '<h3>Computation Statistics</h3><div><div class="input-prepend"><span class="add-on">from</span><input type="text" id="pick_start" value="'+past+'"></div> <div class="input-prepend input-append"><span class="add-on">to</span><input type="text" id="pick_end" value="'+now+'"><button class="btn" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();">show</button></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
 
-	    if (! stm.DataStore.hasOwnProperty('jobtemplate') && ! navigator.userAgent.match(/iPhone/i) && ! navigator.userAgent.match(/Android/i)) {
-		stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
-		    Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();
-		});
-	    } else {
-		Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();
-	    }
+	    // initialize the datepickers
+	    
+	    jQuery("#pick_start").datepicker({ date: pastTemp,
+					       format: "yyyy-mm-dd" });
+	    jQuery("#pick_end").datepicker({ date: nowTemp,
+					     format: "yyyy-mm-dd" });
+
+	    Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();
 
 	} else {
 	    widget.sidebar.style.display = "none";
@@ -48,23 +53,15 @@
     widget.getJobData = function () {
 	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
 
-	var timestamp = widget.dateString(new Date().getTime());
-	var offset = 0;
-	var limit = 250;
-	var maximum = 6000;
-	if (widget.hasOwnProperty('updateOffset')) {
-	    widget.updateOffset += limit;
-	    offset = widget.updateOffset;
-	} else {
-	    widget.updateOffset = 0;
-	}
-	if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[2]) {
-	    timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[2].update_time);
-	}
+	document.getElementById('statistics').innerHTML = '<img src="Retina/images/waiting.gif" style="margin-left: 40%;">';
+
+	var dstart = document.getElementById('pick_start').value + "T00:00:00.000Z";
+	var dend = document.getElementById('pick_end').value + "T00:00:00.000Z";
+	var limit = 2500;
 	
 	var prom = jQuery.Deferred();
 	jQuery.ajax( { dataType: "json",
-		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&limit="+limit+"&offset="+offset+"&state=completed",
+		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+dstart+"&date_end="+dend+"&limit="+limit+"&state=completed",
 		       headers: widget.authHeader,
 		       success: function(data) {
 			   if (! stm.DataStore.hasOwnProperty('completedJobs')) {
@@ -72,11 +69,6 @@
 			   }
 			   for (var i=0; i<data.data.length; i++) {
 			       stm.DataStore.completedJobs[data.data[i].id] = data.data[i];
-			   }
-			   if ((! (data.offset > maximum)) && data.total_count > (data.limit + data.offset)) {
-			       Retina.WidgetInstances.admin_advancedstatistics[1].incomplete = 1;
-			   } else {
-			       Retina.WidgetInstances.admin_advancedstatistics[1].incomplete = 0;
 			   }
 			   if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
 			       prom.resolve();
@@ -98,14 +90,7 @@
 		       }
 		     } );
 	prom.then(function() {
-	    var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
-	    if (widget.incomplete) {
-		widget.getJobData();
-	    } else {
-		stm.DataStore.updateTime = { 2: { update_time: new Date().getTime() } };
-		stm.dump(true, 'admin_statistics');
-		widget.showStatistics();
-	    }
+	    widget.showStatistics();
 	});
     };
 
@@ -116,7 +101,7 @@
 	
 	widget.jobids = Retina.keys(stm.DataStore.completedJobs);
 
-	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in Mbp</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div>task <div class='input-append'><input type='text' value='0' class='span2'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.previousSibling.value);'>show</button></div></div><div id='tasktime'></div><div>job <div class='input-append'><input type='text' value='0' class='span2'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
+	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in Mbp</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div>task <div class='input-append'><input type='text' value='0' class='span2' id='tasknumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.previousSibling.value);'>show</button></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
 	target.innerHTML = html;
 
 	var which_job = 0;
@@ -126,6 +111,7 @@
 	var size_one = [];
 	var time_one = [];
 	var tasktime = [];
+	var tt2wd = {};
 	var min_time;
 	var max_time;
 	var min_size;
@@ -163,10 +149,14 @@
 		    if (! max_time || max_time < (duration / 60000)) {
 			max_time = (duration / 60000);
 		    }
-		    tasktime.push( { x: (duration / 60000), y: (size / 1000000) } );
+		    var d = (duration / 60000);
+		    var s = (size / 1000000);
+		    tasktime.push( { x: d, y: s } );
+		    tt2wd[d+""+s] = widget.jobids[i];
 		}
 	    }
 	}
+	widget.tt2wd = tt2wd;
 	tasktime.sort(Retina.propSort('x', true));
 	for (var i=0; i<numtasks; i++) {
 	    avg_time[i] = avg_time[i] / widget.jobids.length / 1000 / 60;
@@ -204,6 +194,7 @@
 							    y_max: max_size,
 							    show_dots: true,
 							    connected: false,
+							    drag_select: Retina.WidgetInstances.admin_advancedstatistics[1].tasktimeSelected,
 							    data: { series: [ { name: "task", shape: "circle", pointSize: 3, color: 'blue' } ],
 								    points: [ tasktime ] } }).render();
 	widget.sizeGraph = Retina.Renderer.create("graph", { target: document.getElementById('one'),
@@ -221,6 +212,53 @@
 							     type: "column" }).render();
     };
 
+    widget.tasktimeSelected = function (data) {
+	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
+
+	var task = parseInt(document.getElementById('tasknumselect').value);
+	var html = "<table class='table table-condensed'><tr><td><b>job</b></td><td><b>taskdata</b></td></tr>";
+	for (var i=0; i<data.length; i++) {
+	    var job = stm.DataStore.completedJobs[widget.tt2wd[data[i].x+""+data[i].y]];
+	    html += "<tr><td><a href='#jobnumsel' onclick='document.getElementById(\"jobnumselect\").value=\""+job.info.name+"\";Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(\""+job.info.name+"\");'>"+job.info.name+"</a></td><td><table>";
+	    html += "<tr><td>started</td><td>"+job.tasks[task].starteddate+"</td></tr>";
+	    html += "<tr><td>completed</td><td>"+job.tasks[task].completeddate+"</td></tr>";
+	    html += "<tr><td>duration</td><td>"+parseInt((Date.parse(job.tasks[task].completeddate) - Date.parse(job.tasks[task].starteddate)) / 60000)+" min</td></tr>";
+	    var inp = Retina.keys(job.tasks[task].inputs);
+	    for (var h=0; h<inp.length; h++) {
+		html += "<tr><td>"+inp[h]+"</td><td><a style='cursor: pointer;' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].authenticatedDownload(\""+job.tasks[task].inputs[inp[h]].node+"\", \""+inp[h]+"\");'>"+job.tasks[task].inputs[inp[h]].size.byteSize()+"</a></td></tr>";
+	    }
+	    html += "</table></td></tr>";
+	}
+	html += "</table>";
+
+	document.getElementById('taskdetails').innerHTML = html;
+    };
+
+    widget.authenticatedDownload = function (id, fn) {
+	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
+
+	jQuery.ajax({ url: RetinaConfig.shock_url + "/node/" + id + "?download_url&filename="+fn,
+		      dataType: "json",
+		      success: function(data) {
+			  if (data != null) {
+			      if (data.error != null) {
+				  console.log("error: "+data.error);
+			      }
+			      window.location = data.data.url;
+			  } else {
+			      console.log("error: invalid return structure from SHOCK server");
+			      console.log(data);
+			  }
+		      },
+		      error: function(jqXHR, error) {
+			  console.log( "error: unable to connect to SHOCK server" );
+			  console.log(error);
+		      },
+		      crossDomain: true,
+		      headers: widget.authHeader
+		    });
+    };
+
     widget.updateTask = function (whichtask) {
 	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
 
@@ -229,7 +267,7 @@
 	var max_time;
 	var min_size;
 	var max_size;
-
+	var tt2wd = {};
 	for (var i=0; i<widget.jobids.length; i++) {
 	    var job = stm.DataStore.completedJobs[widget.jobids[i]];
 	    var size = 0;
@@ -250,8 +288,13 @@
 	    if (! max_time || max_time < (duration / 60000)) {
 		max_time = (duration / 60000);
 	    }
-	    tasktime.push( { x: (duration / 60000), y: (size / 1000000) } );
+	    var d = (duration / 60000);
+	    var s = (size / 1000000);
+	    tasktime.push( { x: d, y: s } );
+	    tt2wd[d+""+s] = widget.jobids[i];
 	}
+	
+	widget.tt2wd = tt2wd;
 
 	tasktime.sort(Retina.propSort('x', true));
 
@@ -269,9 +312,13 @@
     widget.updateJob = function (whichjob) {
 	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
 
+	var n2j = {};
+	for (var i=0; i<widget.jobids.length; i++) {
+	    n2j[stm.DataStore.completedJobs[widget.jobids[i]].info.name] = i;
+	}
 	var sdata = [];
 	var tdata = [];
-	var job = stm.DataStore.completedJobs[widget.jobids[whichjob]];
+	var job = stm.DataStore.completedJobs[widget.jobids[n2j[whichjob]]];
 	for (var h=0; h<job.tasks.length; h++) {
 	    var size = 0;
 	    var inputs = Retina.keys(job.tasks[h].inputs);
