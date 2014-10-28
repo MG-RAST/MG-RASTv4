@@ -25,7 +25,7 @@
 
 	if (widget.user) {
 
-            var html = '<h3>Job Statistics</h3><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
+            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
