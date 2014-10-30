@@ -101,7 +101,7 @@
 	
 	widget.jobids = Retina.keys(stm.DataStore.completedJobs);
 
-	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in Mbp</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div>task <div class='input-append'><input type='text' value='0' class='span2' id='tasknumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.previousSibling.value);'>show</button></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
+	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in MB</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div>task <div class='input-append'><input type='text' value='0' class='span2' id='tasknumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.previousSibling.value);'>show</button></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
 	target.innerHTML = html;
 
 	var which_job = 0;
@@ -133,8 +133,8 @@
 		avg_time[h] += duration;
 		avg_size[h] += size;
 		if (i==which_job) {
-		    time_one[h] = duration;
-		    size_one[h] = size;
+		    time_one[h] = duration / 60000;
+		    size_one[h] = size / 1000000;
 		}
 		if (h==which_task) {
 		    if (! min_size || min_size > (size / 1000000)) {
@@ -175,40 +175,47 @@
 	}
 
 	Retina.Renderer.create("graph", { target: document.getElementById('avg_size'),
-					  data: [ { name: "size / Mbp", data: avg_size } ],
+					  data: [ { name: "size / MB", data: avg_size } ],
 					  x_labels: tasklabels,
+					  x_title: "task",
+					  y_title: "size in MB",
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
 	Retina.Renderer.create("graph", { target: document.getElementById('avg_time'),
 					  data: [ { name: "time / min", data: avg_time } ],
 					  x_labels: tasklabels,
+					  x_title: "task",
+					  y_title: "time in minutes",
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
-					  y_scale: "log",
 					  type: "column" }).render();
+	var sx = Retina.niceScale({min: min_time, max: max_time});
+	var sy = Retina.niceScale({min: min_size, max: max_size});
 	widget.taskGraph = Retina.Renderer.create("plot", { target: document.getElementById('tasktime'),
-							    x_min: min_time,
-							    x_max: max_time,
-							    y_min: min_size,
-							    y_max: max_size,
+							    x_title: "time in minutes",
+							    y_title: "size in MB",
 							    show_dots: true,
+							    show_legend: false,
 							    connected: false,
 							    drag_select: Retina.WidgetInstances.admin_advancedstatistics[1].tasktimeSelected,
 							    data: { series: [ { name: "task", shape: "circle", pointSize: 3, color: 'blue' } ],
 								    points: [ tasktime ] } }).render();
 	widget.sizeGraph = Retina.Renderer.create("graph", { target: document.getElementById('one'),
-							     data: [ { name: "size in bp", data: size_one } ],
+							     data: [ { name: "size in MB", data: size_one } ],
 							     x_labels: tasklabels,
+							     x_title: "task",
+							     y_title: "size in MB",
 							     chartArea: [0.1, 0.1, 0.95, 0.7],
 							     x_labels_rotation: "-25",
 							     type: "column" }).render();
 	widget.timeGraph = Retina.Renderer.create("graph", { target: document.getElementById('two'),
-							     data: [ { name: "time in sec", data: time_one } ],
+							     data: [ { name: "time in minutes", data: time_one } ],
 							     x_labels: tasklabels,
+							     x_title: "task",
+							     y_title: "time in minutes",
 							     chartArea: [0.1, 0.1, 0.95, 0.7],
 							     x_labels_rotation: "-25",
-							     y_scale: "log",
 							     type: "column" }).render();
     };
 
@@ -326,8 +333,8 @@
 		size += job.tasks[h].inputs[inputs[j]].size;
 	    }
 	    var duration = Date.parse(job.tasks[h].completeddate) - Date.parse(job.tasks[h].starteddate);
-	    tdata[h] = duration;
-	    sdata[h] = size;
+	    tdata[h] = duration / 60000;
+	    sdata[h] = size / 1000000;
 	}
 
 	var s = document.getElementById('one');
