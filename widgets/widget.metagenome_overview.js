@@ -55,14 +55,14 @@
 	    jQuery('#mg_modal').modal('hide');
 	    
 	    widget.target.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
-	    
-	    if (stm.DataStore.hasOwnProperty('metagenome') && stm.DataStore.metagenome.hasOwnProperty(widget.id) && ! stm.DataStore.metagenome[widget.id].hasOwnProperty('statistics')) {
+
+	    if (stm.DataStore.hasOwnProperty('metagenome') && stm.DataStore.metagenome.hasOwnProperty(widget.id) && stm.DataStore.metagenome[widget.id].hasOwnProperty('computationStatus') && stm.DataStore.metagenome[widget.id].computationStatus == 'incomplete') {
 		widget.target.innerHTML = "<div class='alert'>This metagenome has not yet finished analysis.</div>";
 		return;
 	    }
 
 	    // check if required data is loaded (use stats)
-	    if (! stm.DataStore.hasOwnProperty('metagenome') || ! stm.DataStore.metagenome.hasOwnProperty(widget.id)) {
+	    if (! stm.DataStore.hasOwnProperty('metagenome') || ! stm.DataStore.metagenome.hasOwnProperty(widget.id) || ! stm.DataStore.metagenome[widget.id].hasOwnProperty('computationStatus')) {
 		var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
 		jQuery.ajax( { dataType: "json",
 			       url: url,
@@ -70,6 +70,11 @@
 			       success: function(data) {
 				   if (! stm.DataStore.hasOwnProperty('metagenome')) {
 				       stm.DataStore.metagenome = {};
+				   }
+				   if (data.hasOwnProperty('statistics')) {
+				       data.computationStatus = "complete";
+				   } else {
+				       data.computationStatus = "incomplete";
 				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].display();

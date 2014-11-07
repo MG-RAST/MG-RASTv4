@@ -89,10 +89,10 @@
 			}}));
 		}
 	    }
+	    content.innerHTML = html;
 	    jQuery.when.apply(this, promises).then(function() {
 		Retina.WidgetInstances.metagenome_project[1].showMetagenomeInfo();
 	    });
-	    content.innerHTML = html;
         }
 	// else show the project select
 	else {
@@ -141,16 +141,16 @@
 	    var id = mg.id.substr(3);
 	    var row = [ "<a href='?mgpage=overview&metagenome="+mg.id+"' target=_blank>"+mg.id+"</a>",
 			"<a href='?mgpage=overview&metagenome="+mg.id+"' target=_blank>"+mg.name+"</a>",
-			parseInt(mg.statistics.sequence_stats.bp_count_raw).baseSize(),
-			parseInt(mg.statistics.sequence_stats.sequence_count_raw).formatString(),
-			mg.mixs.biome || "-",
-			mg.mixs.feature || "-",
-			mg.mixs.material || "-",
-			mg.mixs.location || "-",
-			mg.mixs.country || "-",
-			mg.mixs.latitude ? (mg.mixs.latitude+" lat, "+mg.mixs.longitude+" long") : "-",
-			mg.mixs.sequence_type || "-",
-			mg.mixs.seq_method || "-",
+			mg.statistics ? parseInt(mg.statistics.sequence_stats.bp_count_raw).baseSize() : "unknown",
+			mg.statistics ? parseInt(mg.statistics.sequence_stats.sequence_count_raw).formatString() : "unknown",
+			mg.mixs ? (mg.mixs.biome || "-") : "-",
+			mg.mixs ? (mg.mixs.feature || "-") : "-",
+			mg.mixs ? (mg.mixs.material || "-") : "-",
+			mg.mixs ? (mg.mixs.location || "-") : "-",
+			mg.mixs ? (mg.mixs.country || "-") : "-",
+			mg.mixs ? (mg.mixs.latitude ? (mg.mixs.latitude+" lat, "+mg.mixs.longitude+" long") : "-") : "-",
+			mg.mixs ? (mg.mixs.sequence_type || "-") : "-",
+			mg.mixs ? (mg.mixs.seq_method || "-") : "-",
 			'<button class="btn btn-mini" onclick="stm.saveAs(JSON.stringify(stm.DataStore.metagenome[\''+mg.id+'\'].metadata, null, 1), \''+mg.id+'.metadata.txt\');"><i class="icon-download"></i> metadata</button><a href="'+url+id+'/raw" class="btn btn-mini" target=_blank><i class="icon-download"></i> submitted</a> <a href="'+url+id+'/processed" class="btn btn-mini" target=_blank><i class="icon-download"></i> processed</a>'
 		      ];
 	    rows.push(row);

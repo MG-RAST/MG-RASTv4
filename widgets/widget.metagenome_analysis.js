@@ -14,6 +14,55 @@
 		 Retina.load_widget({"name": "RendererController", "resource": "Retina/widgets/"})
 	       ];
     };
+
+    widget.displayStyle = "simple";
+    widget.currentSource = "M5NR";
+    widget.currentAbundance = "representative";
+    widget.sources = { "representative": [ "GROUPProtein",
+					   "IMG",
+					   "TrEMBL",
+					   "PATRIC",
+					   "SwissProt",
+					   "GenBank",
+					   "SEED",
+					   "RefSeq",
+					   "KEGG",
+					   "M5NR",
+					   "GROUPRNA",
+					   "LSU",
+					   "SSU",
+					   "M5RNA",
+					   "RDP",
+					   "Greengenes" ],
+		       "best": [ "GROUPProtein",
+				 "IMG",
+				 "TrEMBL",
+				 "PATRIC",
+				 "SwissProt",
+				 "GenBank",
+				 "SEED",
+				 "RefSeq",
+				 "KEGG",
+				 "M5NR",
+				 "GROUPRNA",
+				 "LSU",
+				 "SSU",
+				 "M5RNA",
+				 "RDP",
+				 "Greengenes" ],
+		       "lowest": [ "LCA" ],
+		       "hierarchical": [ "Subsystems",
+					 "COG",
+					 "NOG",
+					 "KO" ],
+		       "all": [ "IMG",
+				"TrEMBL",
+				"PATRIC",
+				"SwissProt",
+				"GenBank",
+				"SEED",
+				"RefSeq",
+				"KEGG" ] };
     
     // main display function called at startup
     widget.display = function (params) {
@@ -23,37 +72,264 @@
 	jQuery.extend(widget, params);
 	
 	// set the output area
-	widget.main.innerHTML = '<style>\
-.tool {\
-    border: 1px solid #808080;\
-    border-radius: 6px;\
-    box-shadow: 3px 3px 3px;\
-    padding: 4px;\
-    width: 32px;\
-    margin: 10px;\
-    cursor: pointer;\
-}\
-.tool:hover {\
-    background-color: #F0F0F0;\
-}\
-.tool:active {\
-    box-shadow: 0px 0px 1px;\
-}\
-</style><div id="main"></div>';
+	widget.main.innerHTML = '<div id="main"></div>'; 
+// '<div class="btn-group" data-toggle="buttons-radio">\
+// <button type="button" class="btn btn-small'+(widget.displayStyle=="simple" ? " active" : "")+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].displayStyle=\'simple\';Retina.WidgetInstances.metagenome_analysis[1].display();">simple</button>\
+//     <button type="button" class="btn btn-small'+(widget.displayStyle=="advanced" ? " active" : "")+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].displayStyle=\'advanced\';Retina.WidgetInstances.metagenome_analysis[1].display();">advanced</button>\
+//     <button type="button" class="btn btn-small'+(widget.displayStyle=="professional" ? " active" : "")+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].displayStyle=\'professional\';Retina.WidgetInstances.metagenome_analysis[1].display();">professional</button>\
+// </div><div id="main"></div>';
 
 	// set the tool area
 	var tools = widget.sidebar;
-	tools.setAttribute('style', 'padding: 10px;');
+	tools.parentNode.style.overflowY = "visible";
+	tools.setAttribute('style', 'padding: 10px; padding-top: 20px;');
 
-	var html = "<h4>Data Container</h4><div id='data_containers'></div><hr style='clear: both;'><h4>Manipulate</h4><div id='manipulation'></div><hr><h4>Visualizer</h4><div id='visualize'></div><hr><h4>Results</h4><div id='visResults'><p>no results available</p></div>";
+	// check the display style
 
-	tools.innerHTML = html;
+	// normal user
+	if (widget.displayStyle == "simple") {
+	    widget.simpleInterface();
+	}
 
-	// fill the tools area
-	widget.fillContainers();
-	widget.fillManipulators();
-	widget.fillVisualizations();
+	// advanced user
+	else if (widget.displayStyle == "advanced") {
+	    var html = "<h4>Data Container</h4><div id='data_containers'></div><hr style='clear: both;'><h4>Manipulate</h4><div id='manipulation'></div><hr><h4>Visualizer</h4><div id='visualize'></div><hr><h4>Results</h4><div id='visResults'><p>no results available</p></div>";
+	    
+	    tools.innerHTML = html;
+
+	    // fill the tools area
+	    widget.fillContainers();
+	    widget.fillManipulators();
+	    widget.fillVisualizations();
+	}
+
+	// professional user
+	else {
+	    var target = document.getElementById('main');
+
+	    var html = "<h4>professional view</h4>";
+
+	    target.innerHTML = html;
+	}
 	
+    };
+
+    /*
+      SIMPLE INTERFACE
+     */
+
+    widget.simpleInterface = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	document.getElementById('sidebar').style.fontSize = "12px";
+   
+	var target = document.getElementById('main');
+
+	var html = "<div style='display: none;' id='mgselectcontainer'><div id='mgselect'><img src='Retina/images/waiting.gif' style='margin-left: 40%; width: 24px;'></div></div><div id='simpleContent'></div>";
+
+	target.innerHTML = html;
+
+	var htmltools = "";
+
+	htmltools += '\
+<table class="table table-hover table-condensed">\
+  <thead>\
+    <tr><th>Metagenomes <button class="btn btn-mini pull-right" onclick="jQuery(\'#mgselectcontainer\').toggle();">select</button></th></tr>\
+  </thead>\
+  <tbody id="selectedMetagenomesTable">\
+    <tr><td style="text-align: center;"><i>- none selected -</i></td></tr>\
+  </tbody>\
+</table>\
+';
+
+	htmltools += '\
+<p style="margin: 0px 0px 5px; padding-left: 6px;"><b>Settings</b><button class="btn btn-mini pull-right" onclick="jQuery(\'#settingsselectcontainer\').toggle();" style="margin-right: 5px;">toggle</button></p>\
+<div id="settingsselectcontainer">\
+<div class="accordion" id="dataSelection">\
+  <div class="accordion-group">\
+    <div class="accordion-heading">\
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#dataSelection" href="#collapseOrg" onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">\
+        Organism Abundance\
+      </a>\
+    </div>\
+    <div id="collapseOrg" class="accordion-body collapse in">\
+      <div class="accordion-inner">\
+        <ul class="nav nav-pills nav-stacked" id="OrganismAbundanceList" style="margin-bottom: 5px;">\
+          <li class="active" style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">representative hit</a></li>\
+          <li style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">best hit</a></li>\
+          <li style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">lowest common ancestor</a></li>\
+        </ul>\
+      </div>\
+    </div>\
+  </div>\
+  <div class="accordion-group">\
+    <div class="accordion-heading">\
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#dataSelection" href="#collapseFunc" onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">\
+        Functional Abundance\
+      </a>\
+    </div>\
+    <div id="collapseFunc" class="accordion-body collapse">\
+      <div class="accordion-inner">\
+        <ul class="nav nav-pills nav-stacked" id="FunctionalAbundanceList" style="margin-bottom: 5px;">\
+          <li class="active" style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">hierarchical classification</a></li>\
+          <li style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">all annotations</a></li>\
+        </ul>\
+      </div>\
+    </div>\
+  </div>\
+</div>\
+';
+	
+	htmltools += '\
+<ul class="nav nav-pills" style="margin-bottom: 5px;">\
+  <li style="width: 170px;"><a>Annotation Source</a></li>\
+  <li class="dropdown active">\
+    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">\
+      <span id="currentSource">\
+      <b class="caret"></b>\
+    </a>\
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" id="sources">\
+    </ul>\
+  </li>\
+</ul>\
+';
+
+	htmltools += '\
+<ul class="nav nav-pills" style="margin-bottom: 5px;">\
+  <li style="width: 170px;"><a>Max. e-Value</a></li>\
+  <li>\
+    <div class="input-prepend" style="margin-bottom: 0px; height: 20px"><span class="add-on">1e-</span><input type="text" value="5" style="width: 40px;" id="evalue"></div>\
+  </li>\
+</ul>\
+';
+
+	htmltools += '\
+<ul class="nav nav-pills" style="margin-bottom: 5px;">\
+  <li style="width: 170px;"><a>Min. % Identity</a></li>\
+  <li>\
+    <div class="input-append" style="margin-bottom: 0px; height: 20px"><input type="text" value="60" style="width: 45px;" id="percentidentity"><span class="add-on">%</span></div>\
+  </li>\
+</ul>\
+';
+
+	htmltools += '\
+<ul class="nav nav-pills" style="margin-bottom: 5px;">\
+  <li style="width: 170px;"><a>Min. Alignment Length</a></li>\
+  <li>\
+    <div class="input-append" style="margin-bottom: 0px; height: 20px"><input type="text" value="15" style="width: 45px;" id="alignmentlength"><span class="add-on">bp</span></div>\
+  </li>\
+</ul>\
+';
+
+	htmltools += "</div>";
+
+	htmltools += '\
+<p style="margin: 0px 0px 5px; padding-left: 6px;"><b>Load Data</b></p>\
+<button class="btn" style="width: 100%; margin-bottom: 15px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].simpleLoad();" id="dataLoadButton">load</button>\
+<div id="dataprogress"></div>\
+';
+
+	widget.sidebar.innerHTML = htmltools;
+
+	document.getElementById('currentSource').innerHTML = widget.currentSource;
+	document.getElementById('sources').innerHTML = widget.currentSources();
+
+	widget.mgselect = Retina.Widget.create('mgbrowse',
+					       { target: document.getElementById("mgselect"),
+						 type: "listselect",
+						 multiple: true,
+						 wide: true,
+						 callback: Retina.WidgetInstances.metagenome_analysis[1].selectMetagenomes });
+    }
+
+    widget.currentSources = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	var html = "";
+	for (var i=0; i<widget.sources[widget.currentAbundance].length; i++) {
+	    var c = widget.sources[widget.currentAbundance][i];
+	    if (c.match(/^GROUP/)) {
+		html += "<li style='font-weight: bold; position: relative; left: 5px;'>"+c.substr(5)+"</li>";
+		continue;
+	    }
+	    if (widget.currentSource == null) {
+		widget.currentSource = c;
+	    }
+	    html += "<li><a style='cursor: pointer;' onclick='Retina.WidgetInstances.metagenome_analysis[1].currentSource=this.innerHTML;document.getElementById(\"currentSource\").innerHTML=this.innerHTML;'>"+c+"</a></li>";
+	}
+	
+	return html;
+    };
+
+    widget.setAbundance = function (elem) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	var text = elem.innerHTML.match(/(\w+)/);
+	text = text[0];
+
+	if (text == "Organism") {
+	    text = "representative";
+	} else if (text == "Functional") {
+	    text = "hierarchical";
+	}
+
+	var children = [];
+	var c = document.getElementById('OrganismAbundanceList').childNodes;
+	for (var i=0; i<c.length; i++) {
+	    children.push(c[i]);
+	}
+	c = document.getElementById('FunctionalAbundanceList').childNodes;
+	for (var i=0; i<c.length; i++) {
+	    children.push(c[i]);
+	}
+	for (var i=0; i<children.length; i++) {
+	    if (children[i].tagName == "LI") {
+		if (children[i].innerHTML.match(new RegExp(text))) {
+		    children[i].className = "active";
+		} else {
+		    children[i].className = "";
+		}
+	    }
+	}
+	widget.currentAbundance = text;
+	widget.currentSource = null;
+	document.getElementById('sources').innerHTML = widget.currentSources();
+	document.getElementById('currentSource').innerHTML = widget.currentSource;
+    };
+
+    widget.selectMetagenomes = function (data) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	jQuery('#mgselectcontainer').toggle();
+	
+	var html = "";
+	for (var i=0; i<data.length; i++) {
+	    html += "<tr><td>"+data[i].name+"</td></tr>";
+	}
+	widget.selectedMetagenomes = data;
+	if (data.length == 0) {
+	    html = '<tr><td style="text-align: center;"><i>- none selected -</i></td></tr>';
+	}
+	document.getElementById('selectedMetagenomesTable').innerHTML = html;
+    };
+
+    widget.simpleLoad = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	document.getElementById('dataLoadButton').setAttribute('disabled', 'disabled');
+	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
+	    stm.DataStore.dataContainer = {};
+	}
+
+	widget.loadData(widget.selectedMetagenomes, { type: document.getElementById('collapseOrg').className.match(/in/) ? "organism" : "function", source: widget.currentSource, name: "simpleContainer"+Retina.keys(stm.DataStore.dataContainer).length });
+    };
+
+    widget.simpleLoadDone = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	document.getElementById('dataLoadButton').removeAttribute('disabled');
+	document.getElementById('dataprogress').innerHTML = "";
+	document.getElementById('simpleContent').innerHTML = "<h4>Your data has loaded!</h4>";
     };
 
     /*
@@ -454,12 +730,12 @@
      */
 
     // perform a set of API requests and create a data container
-    widget.loadData = function (ids) {
+    widget.loadData = function (ids, params) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
-	var type = document.getElementById('profile_type').options[document.getElementById('profile_type').selectedIndex].value;
-	var source = document.getElementById('profile_source').options[document.getElementById('profile_source').selectedIndex].value;
-	var name = document.getElementById('dataContainerName').value;
+	var type = params ? params.type : document.getElementById('profile_type').options[document.getElementById('profile_type').selectedIndex].value;
+	var source = params ? params.source : document.getElementById('profile_source').options[document.getElementById('profile_source').selectedIndex].value;
+	var name = params ? params.name : document.getElementById('dataContainerName').value;
 	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
 	    stm.DataStore.dataContainer = {};
 	}
@@ -483,7 +759,7 @@
 						  items: ids,
 						  status: "loading",
 						  promises: [],
-						  callbacks: [ Retina.WidgetInstances.metagenome_analysis[1].showDataContainers ],
+						  callbacks: [ Retina.WidgetInstances.metagenome_analysis[1].displayStyle == "simple" ? Retina.WidgetInstances.metagenome_analysis[1].simpleLoadDone : Retina.WidgetInstances.metagenome_analysis[1].showDataContainers ],
 						  parameters: { type: type,
 								source: source },
 						  created: Retina.date_string(new Date().getTime()),
@@ -520,6 +796,17 @@
 				  },
 				  error: function(jqXHR, error) {
 				      var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+				      widget.dataLoaded(this.bound);
+				      delete stm.DataStore.inprogress[this.bound];
+				      var bar = document.getElementById('progressbar'+this.bound);
+				      if (bar) {
+					  document.getElementById('progress'+this.bound).innerHTML += " - error.";
+					  bar.parentNode.setAttribute('class', 'progress');
+					  bar.setAttribute('class', 'bar bar-error');
+					  bar.style.width = '100%';
+				      }
+
 				      console.log("error: unable to connect to API server");
 				      console.log(error);
 				  },
@@ -580,8 +867,8 @@
 	var div = document.createElement('div');
 	div.setAttribute('id', id);
 	div.setAttribute('class', 'prog');
-	div.setAttribute('style', 'clear: both;');
-	div.innerHTML = '<div style="float: left; margin-right: 10px;">'+name+' ['+source+' - '+type+']</div><button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button><div style="float: right; margin-right: 10px;"><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: '+(done ? '100' : '0' )+'%;"></div></div></div><div style="float: right; margin-right: 10px;" id="progress'+id+'">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div>';
+	div.setAttribute('style', 'clear: both;'); // ['+source+' - '+type+']  <button class="close" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" type="button" style="margin-top: -3px;">×</button>
+	div.innerHTML = '<div>'+name+'</div><div><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px; float: left; margin-right: 5px;"><div class="bar'+(done ? ' bar-success' : '')+'" id="progressbar'+id+'" style="width: '+(done ? '100' : '0' )+'%;"></div></div><div id="progress'+id+'" style="float: left;">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'>")+'</div></div>';
 	progressContainer.appendChild(div);
     };
 
