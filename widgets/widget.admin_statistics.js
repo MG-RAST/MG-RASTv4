@@ -75,14 +75,17 @@
 	var size_in_pipeline = 0;
 	for (var i=0;i<jk.length;i++) {
 	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
-	    if (stm.DataStore.inactivejobs[jk[i]].state == 'suspend') {
+	    if (stm.DataStore.inactivejobs[jk[i]].state[0] == 'suspend') {
 		num_in_pipeline++;
-		if (! taskcount.hasOwnProperty(stm.DataStore.inactivejobs[jk[i]].task)) {
-		    taskcount[stm.DataStore.inactivejobs[jk[i]].task] = [ 0, 0, 0, 0 ];
+		var j = stm.DataStore.inactivejobs[jk[i]];
+		for (var h=0; h<j.task.length; h++) {
+		    if (! taskcount.hasOwnProperty(j.task[h])) {
+			taskcount[j.task[h]] = [ 0, 0, 0, 0 ];
+		    }
+		    taskcount[j.task[h]][1]++;
+		    taskcount[j.task[h]][3] += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
 		}
-		taskcount[stm.DataStore.inactivejobs[jk[i]].task][1]++;
-		taskcount[stm.DataStore.inactivejobs[jk[i]].task][3] += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
-		size_in_pipeline += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
+		size_in_pipeline += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
 	    }
 	}
 
@@ -117,18 +120,23 @@
 	    size_in_pipeline += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 
 	    // count the current state
-	    states[jobsactive[i].state]++;
+	    for (var h=0; h<jobsactive[i].state.length; h++) {
+		states[jobsactive[i].state[h]]++;
+	    }
 
-	    // count the current task
-	    if (jobsactive[i].state == "in-progress") {
-		taskcount[jobsactive[i].task][0]++;
-		taskcount[jobsactive[i].task][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
-	    } else {
-		if (! taskcount.hasOwnProperty(jobsactive[i].task)) {
-		    taskcount[jobsactive[i].task] = [ 0, 0, 0, 0 ];
+	    for (var h=0; h<jobsactive[i].state.length; h++) {
+
+		// count the current task
+		if (jobsactive[i].state[h] == "in-progress") {
+		    taskcount[jobsactive[i].task[h]][0]++;
+		    taskcount[jobsactive[i].task[h]][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
+		} else {
+		    if (! taskcount.hasOwnProperty(jobsactive[i].task[h])) {
+			taskcount[jobsactive[i].task[h]] = [ 0, 0, 0, 0 ];
+		    }
+		    taskcount[jobsactive[i].task[h]][1]++;
+		    taskcount[jobsactive[i].task[h]][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 		}
-		taskcount[jobsactive[i].task][1]++;
-		taskcount[jobsactive[i].task][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 	    }
 
 	    // get the active jobs for last 30 days
@@ -397,7 +405,7 @@
 	// get initial backlog
 	var backlog = 0;
 	for (var i=0; i<data.length; i++) {
-	    if (data[i].state != "completed") {
+	    if (data[i].state[0] != "completed") {
 		if (data[i].userattr.hasOwnProperty('bp_count')) {
 		    backlog += parseInt(data[i].userattr.bp_count) || 0;
 		} else if (data[i].hasOwnProperty('size')) {
@@ -411,7 +419,7 @@
 	var sdaydata = {};
 	var daysh = {};
 	for (var i=0; i<data.length; i++) {
-	    if (data[i].state == 'completed') {
+	    if (data[i].state[0] == 'completed') {
 		var cday = data[i].completeChicago.substr(0,10);
 		daysh[cday] = 1;
 		if (! cdaydata.hasOwnProperty(cday)) {
