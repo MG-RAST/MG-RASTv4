@@ -434,7 +434,7 @@
 	    }
 	    sdaydata[sday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
 	}
-	var days = Retina.keys(daysh).sort().reverse();
+	var days = Retina.keys(daysh).sort().slice(-30).reverse();
 
 	// process data
 	var graphData = [];
