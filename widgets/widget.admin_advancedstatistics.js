@@ -108,6 +108,8 @@
 	var which_task = 0;
 	var avg_time = [];
 	var avg_size = [];
+	var all_times = [];
+	var all_sizes = [];
 	var size_one = [];
 	var time_one = [];
 	var tasktime = [];
@@ -120,6 +122,8 @@
 	for (var i=0; i<numtasks; i++) {
 	    avg_time.push(0);
 	    avg_size.push(0);
+	    all_times[i] = [];
+	    all_sizes[i] = [];
 	}
 	for (var i=0; i<widget.jobids.length; i++) {
 	    var job = stm.DataStore.completedJobs[widget.jobids[i]];
@@ -132,6 +136,8 @@
 		var duration = Date.parse(job.tasks[h].completeddate) - Date.parse(job.tasks[h].starteddate);
 		avg_time[h] += duration;
 		avg_size[h] += size;
+		all_times[h].push(duration / 60000);
+		all_sizes[h].push(size / 1000000);
 		if (i==which_job) {
 		    time_one[h] = duration / 60000;
 		    size_one[h] = size / 1000000;
@@ -190,8 +196,6 @@
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
-	var sx = Retina.niceScale({min: min_time, max: max_time});
-	var sy = Retina.niceScale({min: min_size, max: max_size});
 	widget.taskGraph = Retina.Renderer.create("plot", { target: document.getElementById('tasktime'),
 							    x_title: "time in minutes",
 							    y_title: "size in MB",
@@ -308,10 +312,12 @@
 	var t = document.getElementById('tasktime');
 	t.innerHTML = "";
 	widget.taskGraph.settings.target = t;
-	widget.taskGraph.settings.x_min = min_time;
-	widget.taskGraph.settings.x_max = max_time;
-	widget.taskGraph.settings.y_min = min_size;
-	widget.taskGraph.settings.y_max = max_size;
+	var sx = Retina.niceScale({min: min_time, max: max_time});
+	var sy = Retina.niceScale({min: min_size, max: max_size});
+	widget.taskGraph.settings.x_min = sx.min;
+	widget.taskGraph.settings.x_max = sx.max;
+	widget.taskGraph.settings.y_min = sy.min;
+	widget.taskGraph.settings.y_max = sy.max;
 	widget.taskGraph.settings.data.points[0] = tasktime;
 	widget.taskGraph.render();
     }
