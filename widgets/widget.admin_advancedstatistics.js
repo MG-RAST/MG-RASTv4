@@ -66,28 +66,15 @@
 		       dend: dend,
 		       dstart: dstart,
 		       success: function(data) {
-			   if (! stm.DataStore.hasOwnProperty('completedJobs')) {
-			       stm.DataStore.completedJobs = {};
-			   }
+			   stm.DataStore.completedJobs = {};
+			   var j;
 			   for (var i=0; i<data.data.length; i++) {
 			       if ((data.data[i].info.completedtime > this.dstart) && (data.data[i].info.completedtime < this.dend)) {
 				   stm.DataStore.completedJobs[data.data[i].id] = data.data[i];
+				   stm.DataStore.jobtemplate = { 1: data.data[i] };
 			       }
 			   }
-			   if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
-			       prom.resolve();
-			   } else {
-			       jQuery.ajax( { dataType: "json",
-					      url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].info.name,
-					      headers: widget.authHeader,
-					      success: function(data) {
-					 	  stm.DataStore.jobtemplate = { 1: data.data[0] };
-					      },
-					      error: function () {
-					 	  alert('there was an error retrieving the data');
-					      }
-					    } ).then(function(){ prom.resolve(); });
-			   }
+			   prom.resolve();
 		       },
 		       error: function () {
 			   alert('there was an error retrieving the data');
