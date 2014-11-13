@@ -56,19 +56,23 @@
 	document.getElementById('statistics').innerHTML = '<img src="Retina/images/waiting.gif" style="margin-left: 40%;">';
 
 	var dstart = document.getElementById('pick_start').value + "T00:00:00.000Z";
-	var dend = document.getElementById('pick_end').value + "T00:00:00.000Z";
+	var dend = document.getElementById('pick_end').value + "T23:59:59.999Z";
 	var limit = 2500;
 	
 	var prom = jQuery.Deferred();
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+dstart+"&date_end="+dend+"&limit="+limit+"&state=completed",
 		       headers: widget.authHeader,
+		       dend: dend,
+		       dstart: dstart,
 		       success: function(data) {
 			   if (! stm.DataStore.hasOwnProperty('completedJobs')) {
 			       stm.DataStore.completedJobs = {};
 			   }
 			   for (var i=0; i<data.data.length; i++) {
-			       stm.DataStore.completedJobs[data.data[i].id] = data.data[i];
+			       if ((data.data[i].info.completedtime > this.dstart) && (data.data[i].info.completedtime < this.dend)) {
+				   stm.DataStore.completedJobs[data.data[i].id] = data.data[i];
+			       }
 			   }
 			   if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
 			       prom.resolve();
