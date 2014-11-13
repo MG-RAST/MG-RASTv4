@@ -92,8 +92,16 @@
 	
 	widget.jobids = Retina.keys(stm.DataStore.completedJobs);
 
-	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in MB</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div>task <div class='input-append'><input type='text' value='0' class='span2' id='tasknumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.previousSibling.value);'>show</button></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
+	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in MB</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div><div class='input-prepend'><span class='add-on'>task</span><select class='span10' id='tasknumselect' onchange='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.options[this.selectedIndex].value);'></select></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
 	target.innerHTML = html;
+
+	var sel = document.getElementById('tasknumselect');
+	var tmpl = stm.DataStore.jobtemplate[1];
+	var selhtml = "";
+	for (var i=0; i<tmpl.tasks.length; i++) {
+	    selhtml += "<option value='"+i+"'>"+tmpl.tasks[i].cmd.description+"</option>";
+	}
+	sel.innerHTML = selhtml;
 
 	var which_job = 0;
 	var which_task = 0;
