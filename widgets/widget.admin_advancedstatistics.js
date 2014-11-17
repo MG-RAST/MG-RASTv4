@@ -55,8 +55,8 @@
 
 	document.getElementById('statistics').innerHTML = '<img src="Retina/images/waiting.gif" style="margin-left: 40%;">';
 
-	var dstart = document.getElementById('pick_start').value + "T00:00:00.000Z";
-	var dend = document.getElementById('pick_end').value + "T23:59:59.999Z";
+	var dstart = widget.dateString(new Date().getTime() - (Date.parse(document.getElementById('pick_start').value + "T00:00:00.000Z") + (1000 * 60 * 60 * 6)));
+	var dend = widget.dateString(new Date().getTime() - (Date.parse(document.getElementById('pick_end').value + "T23:59:59.999Z") + (1000 * 60 * 60 * 6)));
 	var limit = 2500;
 	
 	var prom = jQuery.Deferred();
