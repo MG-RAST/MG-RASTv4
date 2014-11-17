@@ -625,13 +625,15 @@
     widget.showLongTermJobData = function () {
 	var widget = Retina.WidgetInstances.admin_statistics[1];
 
-	var months = Retina.keys(stm.DataStore.longTermJobData).sort();
+	var d = jQuery.extend(true, stm.DataStore.longTermJobData, widget.legacyJobData);
+	var months = Retina.keys(d).sort();
 	var longdata = [ { name: "data submitted (Gbp)", data: [] },
-			 { name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "red" } } ];
+			 { name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } } ];
 	var sumbp = 0;
 	for (var i=0; i<months.length; i++) {
-	    longdata[0].data.push(parseFloat((stm.DataStore.longTermJobData[months[i]].bp / 1000000000).formatString(3, null, "")));
-	    sumbp += stm.DataStore.longTermJobData[months[i]].bp;
+	    var item = d[months[i]];
+	    longdata[0].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000000).formatString(3, null, "")));
+	    sumbp += item.legacy ? (item.bp * 1000000000) : item.bp;
 	    longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
 	}
 
@@ -752,6 +754,102 @@
 	    widget.authHeader = {};
 	}
 	widget.display();
+    };
+
+
+    /*
+      Legacy Job Data
+     */
+    widget.legacyJobData = {
+	// "2007-04": { "num": 10, "bp": 0.09, "legacy": true },
+	// "2007-05": { "num": 7, "bp": 0.16, "legacy": true },
+	// "2007-06": { "num": 2, "bp": 0.12, "legacy": true },
+	// "2007-07": { "num": 45, "bp": 1.21, "legacy": true },
+	// "2007-08": { "num": 27, "bp": 0.39, "legacy": true },
+	// "2007-09": { "num": 23, "bp": 0.39, "legacy": true },
+	// "2007-10": { "num": 25, "bp": 0.40, "legacy": true },
+	// "2007-11": { "num": 36, "bp": 0.90, "legacy": true },
+	// "2007-12": { "num": 82, "bp": 0.88, "legacy": true },
+	// "2008-01": { "num": 111, "bp": 0.50, "legacy": true },
+	// "2008-02": { "num": 58, "bp": 1.39, "legacy": true },
+	// "2008-03": { "num": 57, "bp": 1.17, "legacy": true },
+	// "2008-04": { "num": 84, "bp": 0.99, "legacy": true },
+	// "2008-05": { "num": 110, "bp": 2.77, "legacy": true },
+	// "2008-06": { "num": 141, "bp": 1.92, "legacy": true },
+	// "2008-07": { "num": 87, "bp": 3.67, "legacy": true },
+	// "2008-08": { "num": 49, "bp": 1.88, "legacy": true },
+	// "2008-09": { "num": 105, "bp": 3.51, "legacy": true },
+	// "2008-10": { "num": 239, "bp": 14.26, "legacy": true },
+	// "2008-11": { "num": 149, "bp": 2.74, "legacy": true },
+	// "2008-12": { "num": 229, "bp": 3.22, "legacy": true },
+	// "2009-01": { "num": 179, "bp": 3.90, "legacy": true },
+	// "2009-02": { "num": 195, "bp": 3.97, "legacy": true },
+	// "2009-03": { "num": 316, "bp": 4.83, "legacy": true },
+	// "2009-04": { "num": 154, "bp": 8.64, "legacy": true },
+	// "2009-05": { "num": 210, "bp": 5.44, "legacy": true },
+	// "2009-06": { "num": 314, "bp": 12.43, "legacy": true },
+	// "2009-07": { "num": 245, "bp": 5.35, "legacy": true },
+	// "2009-08": { "num": 186, "bp": 6.38, "legacy": true },
+	// "2009-09": { "num": 165, "bp": 8.41, "legacy": true },
+	// "2009-10": { "num": 162, "bp": 6.36, "legacy": true },
+	// "2009-11": { "num": 238, "bp": 8.75, "legacy": true },
+	// "2009-12": { "num": 183, "bp": 7.05, "legacy": true },
+	// "2010-01": { "num": 256, "bp": 13.67, "legacy": true },
+	// "2010-02": { "num": 196, "bp": 31.35, "legacy": true },
+	// "2010-03": { "num": 531, "bp": 20.13, "legacy": true },
+	// "2010-04": { "num": 485, "bp": 31.39, "legacy": true },
+	// "2010-05": { "num": 622, "bp": 33.11, "legacy": true },
+	// "2010-06": { "num": 539, "bp": 30.50, "legacy": true },
+	// "2010-07": { "num": 595, "bp": 31.70, "legacy": true },
+	// "2010-08": { "num": 436, "bp": 25.65, "legacy": true },
+	// "2010-09": { "num": 421, "bp": 23.68, "legacy": true },
+	// "2010-10": { "num": 529, "bp": 44.45, "legacy": true },
+	// "2010-11": { "num": 759, "bp": 15.98, "legacy": true },
+	// "2010-12": { "num": 516, "bp": 36.08, "legacy": true },
+	// "2011-01": { "num": 506, "bp": 29.35, "legacy": true },
+	// "2011-02": { "num": 727, "bp": 33.68, "legacy": true },
+	// "2011-03": { "num": 149, "bp": 30.18, "legacy": true },
+	// "2011-04": { "num": 159, "bp": 73.15, "legacy": true },
+	// "2011-05": { "num": 9868, "bp": 501.33, "legacy": true },
+	// "2011-06": { "num": 1867, "bp": 720.18, "legacy": true },
+	// "2011-07": { "num": 2083, "bp": 221.71, "legacy": true },
+	// "2011-08": { "num": 2101, "bp": 472.44, "legacy": true },
+	// "2011-09": { "num": 3104, "bp": 4732.48, "legacy": true },
+	// "2011-10": { "num": 1394, "bp": 592.07, "legacy": true },
+	// "2011-11": { "num": 1692, "bp": 111.78, "legacy": true },
+	// "2011-12": { "num": 1660, "bp": 1260.73, "legacy": true },
+	"2012-01": { "num": 1922, "bp": 896.64, "legacy": true },
+	"2012-02": { "num": 3550, "bp": 1081.32, "legacy": true },
+	"2012-03": { "num": 2602, "bp": 695.20, "legacy": true },
+	"2012-04": { "num": 2487, "bp": 650.16, "legacy": true },
+	"2012-05": { "num": 3305, "bp": 1193.34, "legacy": true },
+	"2012-06": { "num": 1445, "bp": 446.47, "legacy": true },
+	"2012-07": { "num": 3080, "bp": 791.64, "legacy": true },
+	"2012-08": { "num": 2446, "bp": 476.42, "legacy": true },
+	"2012-09": { "num": 2720, "bp": 1260.94, "legacy": true },
+	"2012-10": { "num": 3357, "bp": 951.35, "legacy": true },
+	"2012-11": { "num": 2593, "bp": 786.49, "legacy": true },
+	"2012-12": { "num": 1759, "bp": 1077.42, "legacy": true },
+	"2013-01": { "num": 2895, "bp": 953.34, "legacy": true },
+	"2013-02": { "num": 3135, "bp": 1700.24, "legacy": true },
+	"2013-03": { "num": 2573, "bp": 1984.73, "legacy": true },
+	"2013-04": { "num": 2550, "bp": 1695.53, "legacy": true },
+	"2013-05": { "num": 2409, "bp": 1241.64, "legacy": true },
+	"2013-06": { "num": 3248, "bp": 876.77, "legacy": true },
+	"2013-07": { "num": 2527, "bp": 2100.13, "legacy": true },
+	"2013-08": { "num": 3832, "bp": 1491.26, "legacy": true },
+	"2013-09": { "num": 2922, "bp": 2302.40, "legacy": true },
+	"2013-10": { "num": 4377, "bp": 3188.31, "legacy": true },
+	"2013-11": { "num": 3438, "bp": 1472.80, "legacy": true },
+	"2013-12": { "num": 3362, "bp": 1776.19, "legacy": true },
+	"2014-01": { "num": 2859, "bp": 1705.05, "legacy": true },
+	"2014-02": { "num": 3049, "bp": 1327.80, "legacy": true },
+	"2014-03": { "num": 4280, "bp": 1663.67, "legacy": true },
+	"2014-04": { "num": 4010, "bp": 2244.64, "legacy": true },
+	"2014-05": { "num": 4009, "bp": 1799.97, "legacy": true },
+	"2014-06": { "num": 3753, "bp": 1953.90, "legacy": true },
+	"2014-07": { "num": 4271, "bp": 2301.45, "legacy": true },
+	"2014-08": { "num": 4357, "bp": 1380.57, "legacy": true },
     };
 
 })();
