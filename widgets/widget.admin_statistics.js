@@ -628,20 +628,23 @@
 	var d = jQuery.extend(true, stm.DataStore.longTermJobData, widget.legacyJobData);
 	var months = Retina.keys(d).sort();
 	var longdata = [ { name: "data submitted (Gbp)", data: [] },
-			 { name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } } ];
+			 //{ name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
+			 { name: "average jobsize (Mbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
+		       ];
 	var sumbp = 0;
 	for (var i=0; i<months.length; i++) {
 	    var item = d[months[i]];
 	    longdata[0].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000000).formatString(3, null, "")));
-	    sumbp += item.legacy ? (item.bp * 1000000000) : item.bp;
-	    longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
+	    longdata[1].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000 / item.num).formatString(3, null, "")));
+	    //sumbp += item.legacy ? (item.bp * 1000000000) : item.bp;
+	    //longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
 	}
 
 	Retina.Renderer.create("graph", { target: document.getElementById('longtermgraph'),
 					  data: longdata,
 					  hasY2: true,
 					  y_title: "submitted data (Gbp)",
-					  y2_title: "accumulated data (Tbp)",
+					  y2_title: "average jobsize (Mbp)",
 					  x_labels: months,
 					  width: 950,
 					  chartArea: [100, 0.1, 850, 0.7],
