@@ -25,7 +25,7 @@
 
 	if (widget.user) {
 
-            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
+            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h4>Monthly Job Submission</h4><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -552,9 +552,99 @@
 	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
 	    stm.dump(true, 'admin_statistics').then(function() {
 		Retina.WidgetInstances.admin_statistics[1].getUserData();
+		Retina.WidgetInstances.admin_statistics[1].getLongTermJobData();
 	    });
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
+    };
+
+    widget.getLongTermJobData = function () {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	var year = "2014";
+	var month = "09";
+	var now_year = new Date().getFullYear();
+	var now_month = (new Date().getMonth() + 1).padLeft();
+	var promises = [];
+	while (year < now_year || month < now_month) {
+	    var tstart = year+"-"+month+"-01T00:00:00.000Z";
+	    var d = year+"-"+month;
+	    month = parseInt(month);
+	    month++;
+	    if (month > 12) {
+		month = "01";
+		year = parseInt(year);
+		year++;
+		year += "";
+	    } else {
+		month = month.padLeft();
+	    }
+	    var tend = year+"-"+month+"-01T00:00:00.000Z";
+	    if (! stm.DataStore.hasOwnProperty('longTermJobData')) {
+		stm.DataStore.longTermJobData = {};
+	    }
+	    if (! stm.DataStore.longTermJobData.hasOwnProperty(d)) {
+		var p = jQuery.Deferred();
+		promises.push(p);
+		jQuery.ajax( { dataType: "json",
+			       promise: p,
+			       date: d,
+			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
+			       headers: widget.authHeader,
+			       success: function(data) {
+				   var bps = 0;
+				   var min = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
+				   var max = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
+				   for (var i=0; i<data.data.length; i++) {
+				       var s = data.data[i].userattr.bp_count ? parseInt(data.data[i].userattr.bp_count) : data.data[i].size;
+				       max = s > max ? s : max;
+				       min = s < min ? s : min;
+				       bps += s;
+				   }
+				   stm.DataStore.longTermJobData[this.date] = { id: this.date, num: data.data.length, bp: bps, min: min, max: max };
+				   this.promise.resolve();
+			       },
+			       error: function () {
+				   alert('there was an error retrieving the long term job data for '+this.date);
+				   this.promise.resolve();
+			       }
+			     } );
+	    }
+	}
+	if (promises.length) {
+	    jQuery.when.apply(this, promises).then(function() {
+		stm.updateHardStorage('admin_statistics', { longTermJobData: true }).then(function() {
+		    Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
+		});
+	    });
+	} else {
+	    Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
+	}
+    };
+
+    widget.showLongTermJobData = function () {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	var months = Retina.keys(stm.DataStore.longTermJobData).sort();
+	var longdata = [ { name: "data submitted (Gbp)", data: [] },
+			 { name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "red" } } ];
+	var sumbp = 0;
+	for (var i=0; i<months.length; i++) {
+	    longdata[0].data.push(parseFloat((stm.DataStore.longTermJobData[months[i]].bp / 1000000000).formatString(3, null, "")));
+	    sumbp += stm.DataStore.longTermJobData[months[i]].bp;
+	    longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
+	}
+
+	Retina.Renderer.create("graph", { target: document.getElementById('longtermgraph'),
+					  data: longdata,
+					  hasY2: true,
+					  y_title: "submitted data (Gbp)",
+					  y2_title: "accumulated data (Tbp)",
+					  x_labels: months,
+					  width: 950,
+					  chartArea: [100, 0.1, 850, 0.7],
+					  x_labels_rotation: "-35",
+					  type: "column" }).render();
     };
 
     // USERS
@@ -636,12 +726,18 @@
 				     date: now_year+"-"+now_month,
 				     headers: widget.authHeader,
 				     success: function(data) {
-					 widget.currentUserCount = data.total_count;
+					 Retina.WidgetInstances.admin_statistics[1].currentUserCount = data.total_count;
 				     }
 				   } ));
 	
 	jQuery.when.apply(this, promises).then(function() {
-	    widget.showUserData();
+	    if (promises.length > 1) {
+		stm.updateHardStorage('admin_statistics', { userCounts: true }).then(function() {
+		    Retina.WidgetInstances.admin_statistics[1].showUserData();
+		});
+	    } else {
+		Retina.WidgetInstances.admin_statistics[1].showUserData();
+	    }
 	});
     };
 
