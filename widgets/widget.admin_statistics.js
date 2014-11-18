@@ -446,6 +446,7 @@
 	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
 	}
 	labels = days;
+	backlogs = backlogs.reverse();
 
 	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
 
