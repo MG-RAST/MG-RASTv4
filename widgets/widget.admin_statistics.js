@@ -434,7 +434,7 @@
 	    }
 	    sdaydata[sday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
 	}
-	var days = Retina.keys(daysh).sort().slice(-30).reverse();
+	var days = Retina.keys(daysh).sort().slice(-30);
 
 	// process data
 	var graphData = [];
@@ -445,8 +445,7 @@
 	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
 	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
 	}
-	backlogs = backlogs.reverse();
-	labels = days.reverse();
+	labels = days;
 
 	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
 
