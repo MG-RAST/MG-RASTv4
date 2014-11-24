@@ -434,7 +434,7 @@
 	    }
 	    sdaydata[sday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
 	}
-	var days = Retina.keys(daysh).sort().slice(-30);
+	var days = Retina.keys(daysh).sort().slice(-30).reverse();
 
 	// process data
 	var graphData = [];
@@ -443,10 +443,11 @@
 	for (var i=0; i<30; i++) {
 	    var b = String(backlog / 1000000000);
 	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
-	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
+	    backlog = backlog + (cdaydata[days[i]] || 0) - (sdaydata[days[i]] || 0);
 	}
 	labels = days;
 	backlogs = backlogs.reverse();
+	days = days.reverse();
 
 	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
 
@@ -758,7 +759,6 @@
 	}
 	widget.display();
     };
-
 
     /*
       Legacy Job Data
