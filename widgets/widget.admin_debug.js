@@ -95,7 +95,7 @@
 			       { "text": "suspend", "value": "suspend" }
 			   ],
 			   "searchword": "in-progress&state=queued&state=pending&state=suspend" } },
-	    asynch_column_mapping: { "ID": "jid",
+	    asynch_column_mapping: { "ID": "info.name",
 				     "name": "info.userattr.name",
 				     "project": "info.project",
 				     "size": "info.userattr.bp_count",
@@ -185,7 +185,7 @@
     };
 
     widget.showJobDetails = function (id) {
-
+	
     };
 
     widget.queueTableDataManipulation = function (data) {
@@ -195,7 +195,7 @@
 
 	for (var i=0; i<data.length; i++) {
 	    widget.currentIDs.push(data[i].info.userattr.id);
-	    result_data.push( { "ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.userattr.id+"\");' style='cursor: pointer;'>"+data[i].jid+"</a>",
+	    result_data.push( { "ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.userattr.id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>",
 				"name": data[i].info.userattr.name,
 				"project": data[i].info.project,
 				"size": data[i].info.userattr.bp_count ? parseInt(data[i].info.userattr.bp_count).baseSize() : "-",
