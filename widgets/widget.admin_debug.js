@@ -74,13 +74,13 @@
 	// create the job table
 	widget.queueTable = Retina.Renderer.create("table", { 
 	    target: document.getElementById('queueTable'),
-	    data: { header: [ "ID", "name", "project", "size", "status", "priority", "submitted" ], data: [] },
+	    data: { header: [ "ID", "name", "project", "size", "status", "user", "priority", "submitted" ], data: [] },
 	    headers: widget.authHeader,
 	    synchronous: false,
 	    query_type: "prefix",
 	    data_manipulation: Retina.WidgetInstances.admin_debug[1].queueTableDataManipulation,
 	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?userattr=bp_count",
-	    minwidths: [ 60, 1, 1, 1, 1, 1, 1 ],
+	    minwidths: [ 60, 1, 1, 1, 1, 1, 1, 1 ],
 	    rows_per_page: 10,
 	    filter_autodetect: false,
 	    filter: { 0: { "type": "text" },
@@ -94,12 +94,14 @@
 			       { "text": "pending", "value": "pending" },
 			       { "text": "suspend", "value": "suspend" }
 			   ],
-			   "searchword": "in-progress&state=queued&state=pending&state=suspend" } },
+			   "searchword": "in-progress&state=queued&state=pending&state=suspend" },
+		      5: { "type": "text" } },
 	    asynch_column_mapping: { "ID": "info.name",
 				     "name": "info.userattr.name",
 				     "project": "info.project",
 				     "size": "info.userattr.bp_count",
 				     "status": "state",
+				     "user": "info.user",
 				     "priority": "info.priority",
 				     "submitted": "info.submittime" },
 	    
@@ -200,6 +202,7 @@
 				"project": data[i].info.project,
 				"size": data[i].info.userattr.bp_count ? parseInt(data[i].info.userattr.bp_count).baseSize() : "-",
 				"status": data[i].state,
+				"user": data[i].info.user,
 				"priority": data[i].info.priority,
 				"submitted": data[i].info.submittime } );
 	}
