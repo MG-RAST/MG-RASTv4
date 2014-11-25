@@ -78,14 +78,19 @@
 	    if (stm.DataStore.inactivejobs[jk[i]].state[0] == 'suspend') {
 		num_in_pipeline++;
 		var j = stm.DataStore.inactivejobs[jk[i]];
-		for (var h=0; h<j.task.length; h++) {
-		    if (! taskcount.hasOwnProperty(j.task[h])) {
-			taskcount[j.task[h]] = [ 0, 0, 0, 0 ];
+		if (j.task) {
+		    for (var h=0; h<j.task.length; h++) {
+			if (! taskcount.hasOwnProperty(j.task[h])) {
+			    taskcount[j.task[h]] = [ 0, 0, 0, 0 ];
+			}
+			taskcount[j.task[h]][1]++;
+			taskcount[j.task[h]][3] += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
 		    }
-		    taskcount[j.task[h]][1]++;
-		    taskcount[j.task[h]][3] += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
+		    size_in_pipeline += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
+		} else {
+		    console.log("WARNING: the following job has no tasks");
+		    console.log(j);
 		}
-		size_in_pipeline += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
 	    }
 	}
 
