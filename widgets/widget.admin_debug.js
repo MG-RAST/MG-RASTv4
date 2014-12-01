@@ -27,45 +27,49 @@
 	widget.sidebar.parentNode.style.display = "none";
 	widget.main.className = "span10 offset1";
 
-	var html = "<h3>Debugger</h3>";
+	var html = "";
 	
-//	html += "<div class='input-append'><input type='text' placeholder='enter name or id' id='findField'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].loadInfo();'>find</button></div>";
-
-	html += "<div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
 
 	// load the queue data
 	if (widget.user) {
+	    widget.createUserTable();
 	    widget.showQueue();
 	} else {
 	    widget.main.innerHTML = "<p>You need to log in to view this page.</p>";
 	}
     };
 
-    widget.loadInfo = function () {
+    widget.createUserTable = function () {
 	var widget = Retina.WidgetInstances.admin_debug[1];
 
-	// get the output div
-	var target = document.getElementById('result');
-
-	// get the search string
-	var input = document.getElementById('findField').value;
-	
-	// this is a project id
-	if (input.match(/^mgp/)) {
-	    jQuery.ajax( { dataType: "json",
-			   url: RetinaConfig['mgrast_api'] + "/project/"+input+"?verbosity=full",
-			   headers: widget.authHeader,
-			   success: function(data) {
-			       window.project = data;
-			   },
-			   error: function () {
-			       alert('there was an error retrieving the data');
-			   }
-			 } );
+	if (! widget.hasOwnProperty('user_table')) {
+	    widget.user_table = Retina.Renderer.create("table", {
+		target: document.getElementById('usertable'),
+		rows_per_page: 5,
+		filter_autodetect: false,
+		filter: { 0: { "type": "text" },
+			  1: { "type": "text" },
+			  2: { "type": "text" },
+			  3: { "type": "text" },
+			  4: { "type": "text" } },
+		invisible_columns: { 3: true },
+		sort_autodetect: true,
+		synchronous: false,
+		sort: "lastname",
+		default_sort: "lastname",
+		data_manipulation: Retina.WidgetInstances.admin_debug[1].userTable,
+		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
+		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id" ] }
+	    });
+	} else {
+	    widget.user_table.settings.target = document.getElementById('usertable');
 	}
+	widget.user_table.render();
+	widget.user_table.update({},widget.user_table.index);
     };
 
     widget.showQueue = function () {
@@ -74,19 +78,21 @@
 	// create the job table
 	widget.queueTable = Retina.Renderer.create("table", { 
 	    target: document.getElementById('queueTable'),
-	    data: { header: [ "ID", "name", "project", "size", "status", "user", "priority", "submitted" ], data: [] },
+	    data: { header: [ "Job ID", "MG-ID", "name", "project", "project ID", "size", "status", "user", "priority", "submitted" ], data: [] },
 	    headers: widget.authHeader,
 	    synchronous: false,
 	    query_type: "prefix",
 	    data_manipulation: Retina.WidgetInstances.admin_debug[1].queueTableDataManipulation,
 	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?userattr=bp_count",
-	    minwidths: [ 60, 1, 1, 1, 1, 1, 1, 1 ],
+	    minwidths: [ 80, 1, 1, 1, 105, 50, 1, 1, 70, 1 ],
 	    rows_per_page: 10,
 	    filter_autodetect: false,
 	    filter: { 0: { "type": "text" },
 		      1: { "type": "text" },
 		      2: { "type": "text" },
-		      4: { "type": "premade-select",
+		      3: { "type": "text" },
+		      4: { "type": "text" },
+		      6: { "type": "premade-select",
 			   "options": [ 
 			       { "text": "show all", "value": "in-progress&state=queued&state=pending&state=suspend" },
 			       { "text": "in-progress", "value": "in-progress" },
@@ -95,19 +101,23 @@
 			       { "text": "suspend", "value": "suspend" }
 			   ],
 			   "searchword": "in-progress&state=queued&state=pending&state=suspend" },
-		      5: { "type": "text" } },
-	    asynch_column_mapping: { "ID": "info.name",
+		      7: { "type": "text" } },
+	    asynch_column_mapping: { "Job ID": "info.name",
+				     "MG-ID": "info.userattr.id",
 				     "name": "info.userattr.name",
 				     "project": "info.project",
+				     "project ID": "info.userattr.project_id", 
 				     "size": "info.userattr.bp_count",
 				     "status": "state",
 				     "user": "info.user",
 				     "priority": "info.priority",
 				     "submitted": "info.submittime" },
+	    invisible_columns: { 2: true,
+				 3: true }
 	    
 	});
 	widget.queueTable.render();
-	widget.queueTable.update({ query: { 4: { "searchword": "in-progress&state=queued&state=pending&state=suspend", "field": "status" } } }, widget.queueTable.index);
+	widget.queueTable.update({ query: { 6: { "searchword": "in-progress&state=queued&state=pending&state=suspend", "field": "status" } } }, widget.queueTable.index);
 
 	// create the job menu
 	var target = document.getElementById('queueMenu');
@@ -187,7 +197,32 @@
     };
 
     widget.showJobDetails = function (id) {
-	
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	var metagenome;
+	if (! stm.DataStore.hasOwnProperty("metagenome")) {
+	    stm.DataStore.metagenome = {};
+	}
+	if (stm.DataStore.metagenome.hasOwnProperty(id)) {
+	    metagenome = stm.DataStore.metagenome[id];
+	} else {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: widget.authHeader, 
+		url: RetinaConfig.mgrast_api+'/metagenome/'+id,
+		success: function (data) {
+		    stm.DataStore.metagenome[data.id] = data;
+		    Retina.WidgetInstances.admin_debug[1].showJobDetails(data.id);
+		}}).fail(function(xhr, error) {
+		    console.log(xhr);
+		});
+	    return;
+	}
+
+	var html = "<pre>"+JSON.stringify(metagenome, null, 2)+"</pre>";
+
+	document.getElementById('jobDetails').innerHTML = html;
     };
 
     widget.queueTableDataManipulation = function (data) {
@@ -197,9 +232,11 @@
 
 	for (var i=0; i<data.length; i++) {
 	    widget.currentIDs.push(data[i].info.userattr.id);
-	    result_data.push( { "ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.userattr.id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>",
+	    result_data.push( { "Job ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.userattr.id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>",
+				"MG-ID": data[i].info.userattr.id,
 				"name": data[i].info.userattr.name,
 				"project": data[i].info.project,
+				"project ID": data[i].info.userattr.project_id,
 				"size": data[i].info.userattr.bp_count ? parseInt(data[i].info.userattr.bp_count).baseSize() : "-",
 				"status": data[i].state,
 				"user": data[i].info.user,
@@ -208,10 +245,6 @@
 	}
 
 	return result_data;
-    };
-
-    widget.showJobDetails = function (id) {
-
     };
 
      // login callback
