@@ -74,6 +74,11 @@
 	document.getElementById('sidebarResizer').style.display = "none";
 	content.className = "span5 offset1";
 
+	// check for parameterization
+	if (Retina.cgiParam('user')) {
+	    widget.userID = Retina.cgiParam('user');
+	}
+
 	// check if we have a user
 	if (widget.user) {
 	    sidebar.innerHTML = "<h3 style='margin-left: 10px;'>Job Status Monitor</h3><p style='margin-left: 10px;'>Click on a job id in the lefthand table to get details on the status of that submission.</p>";
@@ -147,6 +152,21 @@
 		}
 		widget.user_table.render();
 		widget.user_table.update({},2);
+
+		if (Retina.cgiParam('admin') && Retina.cgiParam('job')) {
+		    jQuery.ajax({
+			method: "GET",
+			dataType: "json",
+			headers: widget.authHeader,
+			url: RetinaConfig.mgrast_api+'/pipeline/'+Retina.cgiParam('job'),
+			success: function (data) {
+			    if (! stm.DataStore.hasOwnProperty('job')) {
+				stm.DataStore.job = {};
+			    }
+			    stm.DataStore.job[data.data[0].id] = data.data[0];
+			    Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(data.data[0].id);
+			}});
+		}
 	    }
 	}
 	// there is no user, show login required
@@ -543,7 +563,6 @@
 		console.log(error);
 	    });
     };
-
 
     /*
       HELPER FUNCTIONS

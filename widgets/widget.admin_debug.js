@@ -196,33 +196,10 @@
 	widget.queueTable.settings.navigation_callback({}, widget.queueTable.index);
     };
 
-    widget.showJobDetails = function (id) {
+    widget.showJobDetails = function (user, id) {
 	var widget = Retina.WidgetInstances.admin_debug[1];
 
-	var metagenome;
-	if (! stm.DataStore.hasOwnProperty("metagenome")) {
-	    stm.DataStore.metagenome = {};
-	}
-	if (stm.DataStore.metagenome.hasOwnProperty(id)) {
-	    metagenome = stm.DataStore.metagenome[id];
-	} else {
-	    jQuery.ajax({
-		method: "GET",
-		dataType: "json",
-		headers: widget.authHeader, 
-		url: RetinaConfig.mgrast_api+'/metagenome/'+id,
-		success: function (data) {
-		    stm.DataStore.metagenome[data.id] = data;
-		    Retina.WidgetInstances.admin_debug[1].showJobDetails(data.id);
-		}}).fail(function(xhr, error) {
-		    console.log(xhr);
-		});
-	    return;
-	}
-
-	var html = "<pre>"+JSON.stringify(metagenome, null, 2)+"</pre>";
-
-	document.getElementById('jobDetails').innerHTML = html;
+	window.open("mgmain.html?mgpage=pipeline&admin=1&user="+user+"&job="+id);
     };
 
     widget.queueTableDataManipulation = function (data) {
@@ -232,7 +209,7 @@
 
 	for (var i=0; i<data.length; i++) {
 	    widget.currentIDs.push(data[i].info.userattr.id);
-	    result_data.push( { "Job ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.userattr.id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>",
+	    result_data.push( { "Job ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.user+"\", \""+data[i].info.userattr.job_id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>",
 				"MG-ID": data[i].info.userattr.id,
 				"name": data[i].info.userattr.name,
 				"project": data[i].info.project,
