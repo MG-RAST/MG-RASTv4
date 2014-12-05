@@ -29,7 +29,7 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>select project</h4><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div><div id='projectSpace'></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
@@ -200,6 +200,53 @@
 	var widget = Retina.WidgetInstances.admin_debug[1];
 
 	window.open("mgmain.html?mgpage=pipeline&admin=1&user="+user+"&job="+id);
+    };
+
+    widget.showProject = function (pid, data) {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
+
+	if (data) {
+	    html = "<b>Project "+data.name+" ("+data.id+")</b>";
+	    html += "<select size=10 multiple id='project_a'>";
+	    for (var i=0; i<data.metagenomes.length; i++) {
+		html += "<option>"+data.metagenomes[i][0]+"</option>";
+	    }
+	    html += "</select><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button>";
+	} else {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: widget.authHeader,
+		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
+		success: function (data) {
+		    Retina.WidgetInstances.admin_debug[1].showProject(data.id, data);
+		}});
+	}
+
+	document.getElementById('projectSpace').innerHTML = html;
+    };
+
+    widget.moveMetagenomes = function (pid) {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	var mgs = "&";
+	var sel = document.getElementById('project_a').options;
+	for (var i=0; i<sel.length; i++) {
+	    if (sel[i].selected) {
+		mgs += "move="+sel[i].text;
+	    }
+	}
+	
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: widget.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+document.getElementById('project_b').value+mgs,
+	    success: function (data) {
+		Retina.WidgetInstances.admin_debug[1].showProject(pid);
+	    }});
     };
 
     widget.queueTableDataManipulation = function (data) {
