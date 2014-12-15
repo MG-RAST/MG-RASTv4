@@ -761,15 +761,18 @@
 
     widget.metadata_table = function(index) {
         var md = Retina.WidgetInstances.metagenome_overview[index].curr_mg.metadata;
+	
         var cats  = ['project', 'sample', 'library', 'env_package'];
         var tdata = [];
-        for (var c in cats) {
-            if (md[cats[c]]) {
-                for (var key in md[cats[c]]['data']) {
-                    tdata.push([ cats[c], key, md[cats[c]]['data'][key] ]);
-                }
+	if (md) {
+            for (var c in cats) {
+		if (md[cats[c]]) {
+                    for (var key in md[cats[c]]['data']) {
+			tdata.push([ cats[c], key, md[cats[c]]['data'][key] ]);
+                    }
+		}
             }
-        }
+	}
         var data = { 'width': 400,
                      'height': 600,
                      'data': {'data': tdata, 'header': ['category', 'field', 'value']},
