@@ -27,11 +27,9 @@
 	
 	if (wparams) {
 	    widget.target = wparams.target || wparams.main;
-	}
-
-	widget.target.setAttribute('style', "overflow-x: hidden; padding-right: 20px;");
-
-	widget.target.innerHTML = '\
+	    widget.target.setAttribute('style', "overflow-x: hidden; padding-right: 20px;");
+	    
+	    widget.target.innerHTML = '\
 <div id="mg_modal" class="modal show fade" tabindex="-1" style="width: 500px;" role="dialog">\
   <div class="modal-header">\
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
@@ -42,6 +40,7 @@
     <button class="btn btn-danger pull-left" data-dismiss="modal" aria-hidden="true">Cancel</button>\
   </div>\
 </div>';
+	}
 
 	if (Retina.cgiParam('metagenome')) {
 	    widget.id = Retina.cgiParam('metagenome');
@@ -78,6 +77,9 @@
 				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].display();
+			       },
+			       error: function () {
+				   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
 			       }
 			     } );
 		return;
@@ -246,16 +248,18 @@
                 wide: true,
                 multiple: false,
                 callback: function (data) {
+		    var widget = Retina.WidgetInstances.metagenome_overview[index];
                     if ((! data) || (data.length == 0)) {
         	        alert("You have not selected a metagenome");
             	        return;
         	    }
 		    jQuery('#mg_modal').modal('hide');
-    		    Retina.WidgetInstances.metagenome_overview[index].display({"main": target, "id": data['id']});
+		    widget.id = data['id'];
+    		    widget.display();
                 }
             });
         } else {
-            Retina.WidgetInstances.metagenome_overview[index].mg_select_list.update();
+            Retina.WidgetInstances.metagenome_overview[index].mg_select_list.display();
         }
     };
     
