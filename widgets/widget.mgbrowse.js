@@ -18,7 +18,7 @@
     widget.type = "table";
     
     widget.display = function (params) {
-        widget = this;
+        var widget = this;
 
 	jQuery.extend(widget, params);
 
