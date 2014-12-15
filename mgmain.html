@@ -55,6 +55,15 @@
 	
 	document.title = page.charAt(0).toUpperCase()+page.substr(1);
 
+	changeLocation = function(event, loc) {
+	    event = event || window.event;
+	    if (event.shiftKey) {
+		window.open(loc);
+	    } else {
+		window.location = loc;
+	    }
+	};
+
 	Retina.load_widget("metagenome_"+page).then( function() {
 	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
 								 "sidebar": document.getElementById("sidebar") });
@@ -106,10 +115,10 @@
 	  
       <!-- navigation icons -->
       <div class="icorow">
-    	<div class="icosp" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><span>Search</span></div>
-    	<div class="icosp" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Jobs" onclick="window.location='mgmain.html?mgpage=pipeline';"><span>Job Submission</span></div>
-    	<div class="icosp" id="icon_publications" onclick="window.location='mgmain.html?mgpage=overview';"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects"><span>Metagenomes</span></div>
-    	<div class="icosp" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><span>Analysis</span></div>
+    	<div class="icosp" id="icon_search" onclick="changeLocation(event, 'mgmain.html?mgpage=search');"><img src="Retina/images/search.png" class="ico" title="Search"><span>Search</span></div>
+    	<div class="icosp" id="icon_pipeline" onclick="changeLocation(event, 'mgmain.html?mgpage=pipeline');"><img src="Retina/images/settings3.png" class="ico" title="Jobs"><span>Job Submission</span></div>
+    	<div class="icosp" id="icon_publications" onclick="changeLocation(event, 'mgmain.html?mgpage=overview');"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects"><span>Metagenomes</span></div>
+    	<div class="icosp" id="icon_analysis" onclick="changeLocation(event, 'mgmain.html?mgpage=analysis');"><img src="Retina/images/notebook.png" class="ico" title="Analysis"><span>Analysis</span></div>
       </div>
 	  
       <div style="float: right;">
