@@ -158,8 +158,8 @@
 		    }
 		    var d = (duration / 60000);
 		    var s = (size / 1000000);
-		    tasktime.push( { x: d, y: s } );
-		    tt2wd[d+""+s] = widget.jobids[i];
+		    tasktime.push( { y: d, x: s } );
+		    tt2wd[s+""+d] = widget.jobids[i];
 		}
 	    }
 	}
@@ -198,8 +198,8 @@
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
 	widget.taskGraph = Retina.Renderer.create("plot", { target: document.getElementById('tasktime'),
-							    x_title: "time in minutes",
-							    y_title: "size in MB",
+							    y_title: "time in minutes",
+							    x_title: "size in MB",
 							    show_dots: true,
 							    show_legend: true,
 							    connected: false,
@@ -308,11 +308,11 @@
 	    var d = (duration / 60000);
 	    var s = (size / 1000000);
 	    if (chicagoTimeSplit && chicagoTimeSplit < job.info.completedtime) {
-		tasktime2.push( { x: d, y: s } );
+		tasktime2.push( { y: d, x: s } );
 	    } else {
-		tasktime.push( { x: d, y: s } );
+		tasktime.push( { y: d, x: s } );
 	    }
-	    tt2wd[d+""+s] = widget.jobids[i];
+	    tt2wd[s+""+d] = widget.jobids[i];
 	}
 	
 	widget.tt2wd = tt2wd;
@@ -324,10 +324,10 @@
 	widget.taskGraph.settings.target = t;
 	var sx = Retina.niceScale({min: min_time, max: max_time});
 	var sy = Retina.niceScale({min: min_size, max: max_size});
-	widget.taskGraph.settings.x_min = sx.min;
-	widget.taskGraph.settings.x_max = sx.max;
-	widget.taskGraph.settings.y_min = sy.min;
-	widget.taskGraph.settings.y_max = sy.max;
+	widget.taskGraph.settings.y_min = sx.min;
+	widget.taskGraph.settings.y_max = sx.max;
+	widget.taskGraph.settings.x_min = sy.min;
+	widget.taskGraph.settings.x_max = sy.max;
 	widget.taskGraph.settings.data.points[0] = tasktime;
 	if (tasktime2.length) {
 	    if (widget.taskGraph.settings.data.points.length == 1) {
