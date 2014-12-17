@@ -29,7 +29,7 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn'>set</button></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
@@ -248,12 +248,7 @@
 		    }
 		    html += "<option"+sel+">"+types[i]+"</option>";
 		}
-		var st = document.getElementById('seqtype');
-		st.innerHTML = html;
-		st.nextSibling.addEventListener('click', function() {
-		    var widget = Retina.WidgetInstances.admin_debug[1];
-		    widget.changeSequenceType(document.getElementById('mgid').value, document.getElementById('seqtype').options[document.getElementById('seqtype').selectedIndex].value);
-		});
+		document.getElementById('seqtype').innerHTML = html;
 	    }});
     };
 
