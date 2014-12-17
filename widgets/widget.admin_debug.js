@@ -29,7 +29,7 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>select project</h4><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div><div id='projectSpace'></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn'>set</button></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
@@ -208,12 +208,12 @@
 	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
 
 	if (data) {
-	    html = "<b>Project "+data.name+" ("+data.id+")</b>";
-	    html += "<select size=10 multiple id='project_a'>";
+	    html = "<table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")</td></tr>";
+	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
 	    for (var i=0; i<data.metagenomes.length; i++) {
 		html += "<option>"+data.metagenomes[i][0]+"</option>";
 	    }
-	    html += "</select><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button>";
+	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID</th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
 	} else {
 	    jQuery.ajax({
 		method: "GET",
@@ -226,6 +226,48 @@
 	}
 
 	document.getElementById('projectSpace').innerHTML = html;
+    };
+
+    widget.checkSequenceType = function () {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	var mgid = document.getElementById('mgid').value;
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: widget.authHeader,
+	    url: RetinaConfig.mgrast_api+'/metagenome/'+mgid,
+	    success: function (data) {
+		var types = [ "Amplicon", "MT", "WGS", "Unknown" ];
+		var html = "";
+		for (var i=0; i<types.length; i++) {
+		    var sel = "";
+		    if (types[i] == data.sequence_type) {
+			sel = " selected=selected";
+		    }
+		    html += "<option"+sel+">"+types[i]+"</option>";
+		}
+		var st = document.getElementById('seqtype');
+		st.innerHTML = html;
+		st.nextSibling.addEventListener('click', function() {
+		    var widget = Retina.WidgetInstances.admin_debug[1];
+		    widget.changeSequenceType(document.getElementById('mgid').value, document.getElementById('seqtype').options[document.getElementById('seqtype').selectedIndex].value);
+		});
+	    }});
+    };
+
+    widget.changeSequenceType = function (mgid, type) {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: widget.authHeader,
+	    url: RetinaConfig.mgrast_api+'/metagenome/'+mgid+"/changesequencetype/"+type,
+	    success: function (data) {
+		alert('sequence type changed.');
+	    }});
     };
 
     widget.moveMetagenomes = function (pid) {
