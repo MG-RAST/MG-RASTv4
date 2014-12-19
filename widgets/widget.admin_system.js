@@ -34,8 +34,8 @@
 	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_awe'></td></tr>";
 	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_shock'></td></tr>";
 	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
-	    html += "<tr><td><a href='#m5solr'><b>m5nr solr</b></a></td><td id='system_m5solr'></td></tr>";
-	    html += "<tr><td><a href='#mgsolr'><b>metagenome solr</b></a></td><td id='system_mgsolr'></td></tr>";
+	    html += "<tr><td><b>m5nr solr</b></td><td id='system_m5solr'></td></tr>";
+	    html += "<tr><td><b>metagenome solr</a></td><td id='system_mgsolr'></td></tr>";
 
 	    html += "</table>";
 
