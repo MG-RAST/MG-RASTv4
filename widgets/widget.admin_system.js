@@ -34,6 +34,9 @@
 	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_awe'></td></tr>";
 	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_shock'></td></tr>";
 	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
+	    html += "<tr><td><a href='#m5solr'><b>m5nr solr</b></a></td><td id='system_m5solr'></td></tr>";
+	    html += "<tr><td><a href='#mgsolr'><b>metagenome solr</b></a></td><td id='system_mgsolr'></td></tr>";
+
 	    html += "</table>";
 
 	    html += "<h4 style='margin-top: 50px;'><a name='awe'></a>AWE Details</h4><div id='awe_details'>-</div>";
@@ -62,6 +65,8 @@
 	document.getElementById('system_api').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
 	document.getElementById('system_shock').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
 	document.getElementById('system_awe').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+	document.getElementById('system_m5solr').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+	document.getElementById('system_mgsolr').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
 
 	jQuery.ajax({ url: RetinaConfig.mgrast_api,
 		      dataType: "json",
@@ -111,6 +116,16 @@
 			  document.getElementById('system_shock').innerHTML = Retina.WidgetInstances.admin_system[1].status('error') + "failed in "+(t - widget.startTime)+"ms";
 		      }
 		    });
+	jQuery.getScript(RetinaConfig.m5nr_solr_url, function() {
+	    var widget = Retina.WidgetInstances.admin_system[1];
+	    var t = new Date().getTime();
+	    document.getElementById('system_m5solr').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
+	});
+	jQuery.getScript(RetinaConfig.metagenome_solr_url, function() {
+	    var widget = Retina.WidgetInstances.admin_system[1];
+	    var t = new Date().getTime();
+	    document.getElementById('system_mgsolr').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
+	});
     };
 
     widget.aweDetails = function () {
