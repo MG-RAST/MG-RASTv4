@@ -132,11 +132,12 @@
 .tool {
     border: 1px solid #808080;
     border-radius: 6px;
-    box-shadow: 3px 3px 3px;
+    box-shadow: 2px 2px 2px;
     padding: 4px;
     width: 32px;
     margin: 10px;
     cursor: pointer;
+    height: 32px;
 }
 .tool:hover {
     background-color: #F0F0F0;

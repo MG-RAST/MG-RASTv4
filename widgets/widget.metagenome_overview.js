@@ -303,7 +303,7 @@
 	    } catch (err) {
 	        organization = "-";
 	    }
-	var downloadLink = "<a href='?mgpage=download&metagenome="+mg.id+"'><img src='Retina/images/download.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download'></a>";
+	var downloadLink = "<a href='?mgpage=download&metagenome="+mg.id+"'><img src='Retina/images/download.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download'></a><a href='?mgpage=analysis&metagenome="+mg.id+"' target=_blank><img src='Retina/images/notebook.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='analysis'></a>";
 	var data = { data:
 	             [ { title: "Metagenome Data Sheet for ID " + mg.id.substring(3) + downloadLink },
 		       { table: [ [ { header: "Metagenome Name" }, mg.name, { header: "NCBI Project ID" }, ncbi_id ],
