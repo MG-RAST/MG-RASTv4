@@ -44,6 +44,15 @@
 	}
 	
 	document.title = page.charAt(0).toUpperCase()+page.substr(1);
+
+    changeLocation = function(event, loc) {
+	    event = event || window.event;
+	    if (event.shiftKey) {
+		window.open(loc);
+	    } else {
+		window.location = loc;
+	    }
+	};
 	
 	Retina.load_widget("admin_"+page).then( function() {
 	    var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
@@ -75,11 +84,11 @@
 	  
       <!-- navigation icons -->
       <div class="icorow">
-    	<div class="icosp" id="icon_statistics"><img src="Retina/images/bars.png" class="ico" title="Statistics" onclick="window.location='mgadmin.html?mgpage=statistics';"><span>Statistics</span></div>
-    	<div class="icosp" id="icon_users"><img src="Retina/images/user.png" class="ico" title="Users" onclick="window.location='mgadmin.html?mgpage=users';"><span>Users</span></div>
-    	<div class="icosp" id="icon_system" onclick="window.location='mgadmin.html?mgpage=system';"><img src="Retina/images/settings3.png" class="ico" title="System Status"><span>System Status</span></div>
-    	<div class="icosp" id="icon_advancedstatistics" onclick="window.location='mgadmin.html?mgpage=advancedstatistics';"><img src="Retina/images/stats.png" class="ico" title="Statistics+"><span>Statistics+</span></div>
-    	<div class="icosp" id="icon_debug" onclick="window.location='mgadmin.html?mgpage=debug';"><img src="Retina/images/bug.png" class="ico" title="Debug"><span>Debug</span></div>
+    	<div class="icosp" id="icon_statistics"><img src="Retina/images/bars.png" class="ico" title="Statistics" onclick="changeLocation(event, 'mgadmin.html?mgpage=statistics');"><span>Statistics</span></div>
+    	<div class="icosp" id="icon_users"><img src="Retina/images/user.png" class="ico" title="Users" onclick="changeLocation(event, 'mgadmin.html?mgpage=users');"><span>Users</span></div>
+    	<div class="icosp" id="icon_system" onclick="changeLocation(event, 'mgadmin.html?mgpage=system');"><img src="Retina/images/settings3.png" class="ico" title="System Status"><span>System Status</span></div>
+    	<div class="icosp" id="icon_advancedstatistics" onclick="changeLocation(event, 'mgadmin.html?mgpage=advancedstatistics');"><img src="Retina/images/stats.png" class="ico" title="Statistics+"><span>Statistics+</span></div>
+    	<div class="icosp" id="icon_debug" onclick="changeLocation(event, 'mgadmin.html?mgpage=debug');"><img src="Retina/images/bug.png" class="ico" title="Debug"><span>Debug</span></div>
       </div>
 	  
       <div style="float: right;">
