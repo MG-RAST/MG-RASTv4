@@ -26,7 +26,7 @@
 	jQuery.extend(widget, params);
 	
 	// set the output area
-	widget.main.innerHTML = '<div id="data"></div><div id="visualize"></div>';
+	widget.main.innerHTML = '<div id="data"></div><div id="visualize"></div><div id="videoModal" class="modal hide fade"></div>';
 
 	// set the tool area
 	var tools = widget.sidebar;
@@ -34,8 +34,6 @@
 	tools.setAttribute('style', 'padding: 10px;');
 
 	// check the context
-	var html = "<h4>Welcome</h4>";
-
 	var toolshtml = "<h4>Data</h4>";
 	toolshtml += "<div id='availableContainers'></div>";
 	toolshtml += "<hr style='clear: both; margin-top: 15px;'>";
@@ -223,8 +221,6 @@
 
 	var demo_data = widget.demoData();
 
-	console.log(widget.selectedContainer);
-
 	var containerData = "";
 	if (widget.selectedContainer) {
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
@@ -407,11 +403,15 @@
 		    if (! widget.selectedContainer) {
 			widget.selectedContainer = keys[i];
 		    }
-		    html += "<div style='width: 75px; word-wrap: break-word; float: left;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/data.png' class='tool'><br>"+keys[i]+"</div>";
+		    var glow = "";
+		    if (keys[i] == widget.selectedContainer) {
+			glow = " glow";
+		    }
+		    html += "<div style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/data.png' class='tool"+glow+"'><br>"+keys[i]+"</div>";
 		}
 		
 	    }
-	    html += "<div style='width: 75px; word-wrap: break-word; float: left;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
+	    html += "<div style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
 	}
     };
@@ -942,6 +942,11 @@
 	       };
     };
 
+    widget.showHelpVideo = function (id) {
+	document.getElementById('videoModal').innerHTML = "<iframe src='https://www.screenr.com/embed/"+id+"' width='650' height='396' frameborder='0'></iframe>";
+	jQuery('#videoModal').modal({show: true});
+    };
+
     /*
       DATA LOADING UI
     */
@@ -954,7 +959,7 @@
 
 	if (! widget.hasOwnProperty('mgselect')) {
 	    
-	    var html = "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h4 style='margin-top: 0px;'>Data Loader</h4><div>";
+	    var html = "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h4 style='margin-top: 0px;'>Data Loader <span onclick='Retina.WidgetInstances.metagenome_analysis[1].showHelpVideo(\"uGqN\");' style='cursor: pointer;'><sup>[?]</sup></span></h4><div>";
 	    
 	    html += '\
 <div class="accordion" id="dataSelection" style="float: left;">\
@@ -1159,7 +1164,8 @@
 
 	if (container.status == "ready") {
 	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
-	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize();"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
+	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize();" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
+	    widget.selectedContainer = container.id;
 	    document.getElementById('dataprogress').innerHTML = html;
 	    widget.showDataContainers();
 	} else {
