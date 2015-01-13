@@ -205,19 +205,37 @@
 
 	var container = document.getElementById('visualContainerSpace');
 
-	container.innerHTML = "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");'><img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");'><img src='Retina/images/stats.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"linechart\");'><img src='Retina/images/bars2.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");'><img src='Retina/images/areachart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"areachart\");'><img src='images/icon_pcoa.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"dotplot\");'><img src='images/icon_boxplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"boxplot\");'><img src='images/icon_deviationplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"deviationplot\");'><img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");'><img src='Retina/images/spinner.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donut\");'>";
+	var html = "";
+	html += "<img src='Retina/images/data.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"container\");'>";
+	html += "<img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");'>";
+
+	// html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");'>";
+	// html += "<img src='Retina/images/stats.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"linechart\");'>";
+	// html += "<img src='Retina/images/bars2.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");'>";
+	// html += "<img src='Retina/images/areachart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"areachart\");'>";
+	// html += "<img src='images/icon_pcoa.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"dotplot\");'>";
+	// html += "<img src='images/icon_boxplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"boxplot\");'>";
+	// html += "<img src='images/icon_deviationplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"deviationplot\");'>";
+	// html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");'>";
+	// html += "<img src='Retina/images/spinner.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donut\");'>";
+	container.innerHTML = html;
     };
 
     // draw a demo version of the selected visualization
     widget.visualize = function (type) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
-	type = type || "table";
+	type = type || "matrix";
 
 	document.getElementById("data").style.display = "none";
 	document.getElementById("visualize").style.display = "";
 
 	var container = document.getElementById('visualize');
+
+	if (type == "container") {
+	    widget.editContainer();
+	    return;
+	}
 
 	var demo_data = widget.demoData();
 
@@ -240,7 +258,7 @@
 		    matrixLevels += "<option value='"+i+"'>"+i+"</option>";
 		}
 		
-		containerData = "<div class='form-inline' style='margin-bottom: 20px;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div>";
+		containerData = "<div class='form-inline' style='margin-bottom: 20px; display: none;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div>";
 	    } else {
 		containerData = "<p>The selected data container does not contain any data rows.</p>";
 	    }
@@ -262,6 +280,37 @@
 	if (widget.selectedContainer) {
 	    widget.updateVis();
 	}
+    };
+
+    widget.editContainer = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	var container = document.getElementById('visualize');
+	var html = "<h4>edit data container</h4><p>Here you can view and modify the settings of the selected data container.</p>";
+	if (widget.selectedContainer) {
+	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	    var items = "<table>";
+	    for (var i=0; i<c.items.length; i++) {
+		items += "<tr><td>"+c.items[i].name+"</td></tr>";
+	    }
+	    items += "</table>";
+	    html += "<table>";
+	    html += "<tr><td style='height: 30px;'><b>name</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn'>update</button></div></td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>created</b></td><td>"+c.created+"</td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>by</b></td><td>"+c.user.firstname+" "+c.user.lastname+" ("+c.user.login+")</td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>type</b></td><td>"+c.parameters.type+"</td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>source</b></td><td>"+c.parameters.source+"</td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>e-value</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.evalue+"' class='span3'><button class='btn'>update</button></div></td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>%-identity</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.identity+"' class='span3'><button class='btn'>update</button></div></td></tr>";
+	    html += "<tr><td style='padding-right: 20px; height: 30px;'><b>alignment length</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.length+"' class='span3'><button class='btn'>update</button></div></td></tr>";
+	    html += "<tr><td style='vertical-align: top; height: 30px;'><b>items</b></td><td>"+items+"</td></tr>";
+	    html += "</table>";
+	} else {
+	    html += "<p>You currently have no data loaded. To do so, click the <span style='border: 1px solid black; border-radius: 3px; padding-bottom: 2px; padding-left: 5px; padding-right: 4px; font-weight: bold;'>+</span> icon on the right.</p>";
+	    document.getElementById('addDataIcon').className = "tool glow";
+	}
+
+	container.innerHTML = html;
     };
 
     // draw the current visualization with updated parameters
@@ -411,36 +460,9 @@
 		}
 		
 	    }
-	    html += "<div style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
+	    html += "<div style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
 	}
-    };
-
-    // display details about the currently selected data container
-    widget.displaySelectedContainer = function () {
-	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-
-	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-	var type = "unspecified items";
-	if (c.type == 'biom') {
-	    if (c.source == "load") {
-		type = "metagenome profiles";
-	    }
-	}
-	var plist = Retina.keys(c.parameters).sort();
-	var params = "";
-	for (var i=0;i<plist.length;i++) {
-	    params += plist[i]+" - "+c.parameters[plist[i]]+"<br>";
-	}
-	var html = "<table style='text-align: left; float: left; margin-bottom: 20px;'><tr><td style='padding-right: 10px;'><b>name</b></td><td>"+c.id+"</td></tr>";
-	html += "<tr><td style='padding-right: 10px; vertical-align: top;'><b>created</b></td><td>"+c.created+"</td></tr>";
-	html += "<tr><td style='padding-right: 10px; vertical-align: top;'><b>user</b></td><td>"+c.user+"</td></tr>";
-	html += "<tr><td style='padding-right: 10px; vertical-align: top;'><b>status</b></td><td>"+c.status+"</td></tr>";
-	html += "<tr><td style='padding-right: 10px; vertical-align: top;'><b>contents</b></td><td>"+c.items.length+" "+type+"</td></tr>";
-	html += "<tr><td style='padding-right: 10px; vertical-align: top;'><b>parameters</b></td><td>"+params+"</td></tr>";
-	html += "</table>";
-
-	return html;
     };
 
     /*
@@ -729,7 +751,6 @@
 	}
 	var tableData = [];
 	var rows = Retina.keys(d).sort();
-	console.log(rows[0]);
 	for (var i=0; i<rows.length; i++) {
 	    var row = [];
 	    for (var h=0; h<m[rows[i]].length; h++) {
@@ -803,7 +824,7 @@
       DATA SECTION
      */
     widget.demoData = function () {
-	return { 'table': { title: 'abundance table',
+	return { 'matrix': { title: 'abundance matrix',
 			    renderer: "matrix",
 			    settings: { data: { rows: ['metagenome a', 'metagenome b', 'metagenome c'],
 						columns: ['function 1', 'function 2', 'function 3', 'function 4', 'function 5', 'function 6', 'function 7', 'function 8', 'function 9', 'function 10' ],
@@ -962,6 +983,7 @@
 	    var html = "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h4 style='margin-top: 0px;'>Data Loader <span onclick='Retina.WidgetInstances.metagenome_analysis[1].showHelpVideo(\"uGqN\");' style='cursor: pointer;'><sup>[?]</sup></span></h4><div>";
 	    
 	    html += '\
+<h5><div style="float: left;">select data typ</div><div style="float: left; width: 147px;">e</div><div style="">select parameters</div></h5>\
 <div class="accordion" id="dataSelection" style="float: left;">\
   <div class="accordion-group">\
     <div class="accordion-heading">\
@@ -1040,7 +1062,7 @@
 
 	    html += "</div>";
 
-	    html += '<div id="dataprogress" style="float: left; margin-left: 20px; height: 230px; overflow-y: auto;"></div><div style="clear: both;"><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div></div></div>';
+	    html += '<div id="dataprogress" style="float: left; margin-left: 20px; height: 230px; overflow-y: auto; width: 385px;"></div><div style="clear: both;"><h5>select metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div></div></div>';
 	    
 	    target.innerHTML = html;
 	    
@@ -1164,7 +1186,7 @@
 
 	if (container.status == "ready") {
 	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
-	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize();" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
+	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize();document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
 	    widget.selectedContainer = container.id;
 	    document.getElementById('dataprogress').innerHTML = html;
 	    widget.showDataContainers();
