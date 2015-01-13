@@ -496,7 +496,7 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -526,7 +526,7 @@
 				   } ) );
 
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=10000&state=suspend&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=100000&state=suspend&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -542,7 +542,7 @@
 				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
 				     headers: widget.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = {};
