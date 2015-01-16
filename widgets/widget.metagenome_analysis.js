@@ -37,7 +37,7 @@
 	var toolshtml = "<h4>Data</h4>";
 	toolshtml += "<div id='availableContainers'></div>";
 	toolshtml += "<hr style='clear: both; margin-top: 15px;'>";
-	toolshtml += "<h4>Visuals</h4>";
+	toolshtml += "<h4>View</h4>";
 	toolshtml += "<div id='visualContainerSpace'></div>";
 	tools.innerHTML = toolshtml;
 
@@ -209,15 +209,9 @@
 	html += "<img src='Retina/images/data.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"container\");'>";
 	html += "<img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");'>";
 
-	// html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");'>";
-	// html += "<img src='Retina/images/stats.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"linechart\");'>";
-	// html += "<img src='Retina/images/bars2.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");'>";
-	// html += "<img src='Retina/images/areachart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"areachart\");'>";
-	// html += "<img src='images/icon_pcoa.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"dotplot\");'>";
-	// html += "<img src='images/icon_boxplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"boxplot\");'>";
-	// html += "<img src='images/icon_deviationplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"deviationplot\");'>";
-	// html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");'>";
-	// html += "<img src='Retina/images/spinner.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donut\");'>";
+	html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");'>";
+	html += "<img src='Retina/images/bars2.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");'>";
+	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");'>";
 	container.innerHTML = html;
     };
 
@@ -226,6 +220,7 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	type = type || "matrix";
+	widget.currentType = type;
 
 	document.getElementById("data").style.display = "none";
 	document.getElementById("visualize").style.display = "";
@@ -295,7 +290,7 @@
 	    }
 	    items += "</table>";
 	    html += "<table>";
-	    html += "<tr><td style='height: 30px;'><b>name</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn'>update</button></div></td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>name</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].renameContainer(this.previousSibling.value);'>update</button></div></td></tr>";
 	    html += "<tr><td style='height: 30px;'><b>created</b></td><td>"+c.created+"</td></tr>";
 	    html += "<tr><td style='height: 30px;'><b>by</b></td><td>"+c.user.firstname+" "+c.user.lastname+" ("+c.user.login+")</td></tr>";
 	    html += "<tr><td style='height: 30px;'><b>type</b></td><td>"+c.parameters.type+"</td></tr>";
@@ -311,6 +306,26 @@
 	}
 
 	container.innerHTML = html;
+    };
+
+    // change the container name
+    widget.renameContainer = function (newName) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	
+	if (newName && newName.length) {
+	    if (stm.DataStore.dataContainer.hasOwnProperty(newName)) {
+		alert("this name is already taken, please select another");
+	    } else {
+		stm.DataStore.dataContainer[newName] = stm.DataStore.dataContainer[widget.selectedContainer];
+		delete stm.DataStore.dataContainer[widget.selectedContainer];
+		widget.selectedContainer = newName;
+		stm.DataStore.dataContainer[widget.selectedContainer].id = newName;
+		widget.showDataContainers();
+		widget.editContainer();
+	    }
+	} else {
+	    alert("you did not choose a name");
+	}
     };
 
     // draw the current visualization with updated parameters
@@ -344,7 +359,7 @@
 	}
 
 	/* drilldown */
-	if (r.params.type == 'matrix') {
+	if (widget.currentType == 'matrix') {
 	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
 	    r.data(1, { data: matrix.data,
 			rows: matrix.rows,
@@ -364,22 +379,22 @@
 		    
 		}
 	    };
-	} else if (r.params.type == 'graph') {
-	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter });
+	} else if (widget.currentType == 'barchart') {
+	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter, type: 'barchart' });
 	    r.data(1, data.data);
 	    r.renderer.settings.x_labels = data.x_labels;
 	    r.renderer.settings.onclick = function (p) {
 		var rend = Retina.RendererInstances.graph[p.rendererIndex];
 		var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.label+'\'});">&raquo; '+p.label+' </a>';
+		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
 		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
 		    html = "";
 		}
 		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
 		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
-				    value: p.label } );
+				    value: p.series } );
 	    };
-	} else if (r.params.type == 'plot') {
+	} else if (widget.currentType == 'plot') {
 	    var data = widget.container2plotseries({ dataColIndex: matrixLevel, filter: filter });
 	    for (var i=0; i<data.data.points.length; i++) {
 		data.data.points[i] = data.data.points[i].sort(Retina.propSort('y', true));
@@ -394,7 +409,7 @@
 	    r.renderer.settings.y_max = data.y_max;
 	    r.renderer.settings.x_title = "";
 	    r.renderer.settings.y_title = "abundance";
-	} else if (r.params.type == 'heatmap') {
+	} else if (widget.currentType == 'heatmap') {
 	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
 	    var data = widget.normalizeMatrix(matrix.data);
 	    r.data(1, { data: data,
@@ -413,7 +428,7 @@
 		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
 				    value: p.label } );
 	    };
-	} else if (r.params.type == 'donut') {
+	} else if (widget.currentType == 'donut') {
 	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
 	    r.data(1, matrix.data);
 	    r.renderer.settings.rows = matrix.rows;
@@ -429,8 +444,23 @@
 				    value: rend.settings.rows[p.slice] } );
 		
 	    };
+	} else if (widget.currentType == 'piechart') {
+	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter });
+	    r.data(1, data.data);
+	    r.renderer.settings.x_labels = data.x_labels;
+	    r.renderer.settings.onclick = function (p) {
+		console.log(p);
+		var rend = Retina.RendererInstances.graph[p.rendererIndex];
+		var widget = Retina.WidgetInstances.metagenome_analysis[1];
+		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
+		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
+		    html = "";
+		}
+		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
+		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
+				    value: p.series } );
+	    };
 	}
-
 	r.render(1);	   
     };
 
@@ -501,58 +531,22 @@
     widget.container2graphseries = function (params) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
-	var cname = params.container || widget.selectedContainer;
-	var c = stm.DataStore.dataContainer[cname];
-
-	var series = { data:[] };
-
-	var id = params.colHeader || 'id';
-
-	var d = {};
-	var dataRow = params.dataRow || 0;
-	var isFiltered = false;
-	if (c.hasOwnProperty('rows')) {
-	    isFiltered = true;
-	}
-	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
-	var cp = stm.DataStore.profile[pid];
-	var colItem = params.dataColItem || cp.mdname;
-	var colIndex = params.dataColIndex;
-	var palette = GooglePalette(c.items.length);
-	for (var i=0; i<c.items.length; i++) {
-	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
-	    var p = stm.DataStore.profile[pid];
-	    series.data.push( { name: c.items[i][id], data: [], fill: palette[i] } );
-	    for (var h=0; h<(isFiltered ? c.rows[c.items[i].id].length : p.rows.length); h++) {
-		var row = (isFiltered ? c.rows[c.items[i].id][h] : h);
-		var val = p.data[row][dataRow];
-		var key = (colIndex === null ? p.rows[row].metadata[colItem] : p.rows[row].metadata[colItem][colIndex]);
-
-		if (params.filter && params.filter.level !== null && params.filter.value !== null) {
-		    if (p.rows[row].metadata[colItem][params.filter.level] != params.filter.value) {
-			continue;
-		    }
-		}
-
-		if (! d.hasOwnProperty(key)) {
-		    d[key] = [];
-		    for (var j=0;j<c.items.length;j++) {
-			d[key][j] = 0;
-		    }
-		}
-		d[key][i] += val;
+	var matrix = widget.container2matrix(params);
+	
+	var data = [];
+	var palette = GooglePalette(matrix.rows.length);
+	for (var i=0; i<matrix.rows.length; i++) {
+	    var series = { name: matrix.rows[i], data: [], fill: palette[i] };
+	    for (var h=0; h<matrix.cols.length; h++) {
+		series.data.push(matrix.data[i][h]);
 	    }
-	}
-
-	var rows = Retina.keys(d).sort();
-	series.x_labels = rows;
-	for (var i=0; i<rows.length; i++) {
-	    for (var h=0; h<c.items.length; h++) {
-		series.data[h].data.push(d[rows[i]][h]);
-	    }
+	    data.push(series);
 	}
 	
-	return series;
+	var retval = { x_labels: matrix.cols, data: data };
+	console.log(retval);
+	
+	return retval;
     };
 
     widget.container2plotseries = function (params) {
@@ -838,128 +832,45 @@
 			      settings: { width: 200,
 					  height: 200,
 					  legend_height: 80,
-					  legend_width: 90 }
-			    },
-		 'deviationplot': { title: 'deviationplot',
-				    renderer: "deviationplot",
-				    settings: { }
-				  },
-		 'boxplot': { title: 'boxplot',
-			      renderer: "boxplot",
-			      settings: { }
+					  legend_width: 400 }
 			    },
 		 'piechart': { title: 'piechart',
 			       renderer: "graph",
-			       settings: { title: 'my pie',
+			       settings: { title: ' ',
     					   type: 'pie',
     					   title_settings: { 'font-size': '18px', 'font-weight': 'bold', 'x': 0, 'text-anchor': 'start' },
     					   x_labels: [""],
+					   chartOptions: { },
     					   show_legend: true,
-    					   legendArea: [290, 20, 9 * 23, 250],
-    					   chartArea: [25, 20, 250, 250],
-    					   width: 250,
-    					   height: 250,
+    					   //legendArea: [290, 20, 9 * 23, 250],
+    					   //chartArea: [25, 20, 250, 250],
+    					   width: 850,
+    					   height: 650,
     					   data: [ { name: "A", data: [ 100 ], fill: GooglePalette(9)[0] },
 						   { name: "B", data: [ 50 ], fill: GooglePalette(9)[1] },
 						   { name: "C", data: [ 25 ], fill: GooglePalette(9)[2] },
 						   { name: "D", data: [ 20 ], fill: GooglePalette(9)[3] },
 						   { name: "E", data: [ 19 ], fill: GooglePalette(9)[4] },
-						   { name: "F", data: [ 18 ], fill: GooglePalette(9)[5] },
-						   { name: "G", data: [ 12 ], fill: GooglePalette(9)[6] },
-						   { name: "H", data: [ 5 ], fill: GooglePalette(9)[7] },
-						   { name: "I", data: [ 1 ], fill: GooglePalette(9)[8] } ] }
+						   { name: "F", data: [ 18 ], fill: GooglePalette(9)[5] } ] }
 			     },
-		 'areachart': { title: 'areachart',
-				renderer: "graph",
-				settings: {'x_title': "x-axis",
-					   'y_title': "y-axis",
-					   'type': 'stackedArea',
-					   'x_tick_interval': 1,
-					   'x_labeled_tick_interval': 5,
-					   'show_legend': true,
-					   'legendArea': [770, 20, 15, 5 * 23],
-     					   'chartArea': [70, 20, 750, 300],
-     					   'width': 805,
-     					   'height': 345,
-					   'data': [ { name: "A", data: [ 50, 55, 54, 45, 41, 52, 41, 52, 51, 42 ], fill: GooglePalette(5)[0] },
-						     { name: "T", data: [ 55, 54, 45, 41, 52, 41, 52, 51, 42, 60 ], fill: GooglePalette(5)[1] },
-						     { name: "C", data: [ 54, 45, 41, 52, 41, 52, 51, 42, 60, 22 ], fill: GooglePalette(5)[2] },
-						     { name: "G", data: [ 45, 41, 52, 41, 52, 51, 42, 60, 12, 5 ], fill: GooglePalette(5)[3] },
-						     { name: "N", data: [ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 ], fill: GooglePalette(5)[4] } ]
-					  }
-			      },
-		 'linechart': { title: 'linechart',
-				renderer: "plot",
-				settings: { 'x_titleOffset': 40,
-					    'y_titleOffset': 60,
-					    'x_title': 'bp position',
-					    'y_title': 'percent error',
-					    'x_min': 0,
-					    'x_max': 10,
-					    'y_min': 0,
-					    'y_max': 30,
-					    'show_legend': false,
-					    'show_dots': false,
-					    'connected': true,
-					    'chartArea': [70, 20, 750, 300],
-					    'width': 790,
-					    'height': 345,
-					    'data': { 'series': [ {'name': 'Metagenome A', color: GooglePalette(3)[0] },
-								  {'name': 'Metagenome B', color: GooglePalette(3)[1] },
-								  {'name': 'Metagenome C', color: GooglePalette(3)[2] } ],
-						      'points': [ [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 2 }, { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 3 }, { x: 7, y: 5 }, { x: 8, y: 8 }, { x: 9, y: 10 }, { x: 10, y: 19 } ],
-								  [ { x: 0, y: 3 }, { x: 1, y: 12 }, { x: 2, y: 2 }, { x: 3, y: 4 }, { x: 4, y: 2 }, { x: 5, y: 5 }, { x: 6, y: 1 }, { x: 7, y: 6 }, { x: 8, y: 5 }, { x: 9, y: 8 }, { x: 10, y: 15 } ],
-								  [ { x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 4 }, { x: 3, y: 1 }, { x: 4, y: 3 }, { x: 5, y: 1 }, { x: 6, y: 5 }, { x: 7, y: 9 }, { x: 8, y: 11 }, { x: 9, y: 18 }, { x: 10, y: 29 } ]
-								] }
-				      }
-			      },
-		 'dotplot': { title: 'dotplot',
-			      renderer: "plot",
-			      settings: { 'x_titleOffset': 40,
-					  'y_titleOffset': 60,
-					  'x_title': '',
-					  'y_title': '',
-					  'x_min': -10,
-					  'x_max': 10,
-					  'y_min': -10,
-					  'y_max': 10,
-					  'show_legend': false,
-					  'show_dots': true,
-					  'connected': false,
-					  'chartArea': [70, 20, 450, 400],
-					  'width': 500,
-					  'height': 450,
-					  'data': { 'series': [ {'name': 'Metagenome A', color: GooglePalette(3)[0], shape: 'circle', filled: true },
-								{'name': 'Metagenome B', color: GooglePalette(3)[1], shape: 'circle', filled: true },
-								{'name': 'Metagenome C', color: GooglePalette(3)[2], shape: 'circle', filled: true } ],
-						    'points': [ [ { x: -5, y: -1 }, { x: 1, y: 2 }, { x: 2, y: -3 }, { x: -3, y: 2 } ],
-								[ { x: -8, y: -3 }, { x: 5, y: 9 }, { x: 7, y: 2 }, { x: 3, y: 8 } ],
-								[ { x: -2, y: 0 }, { x: 2, y: -5 }, { x: 9, y: -4 }, { x: 3, y: 7 } ]
-							      ] }
-					}
-			    },
 		 'barchart': { title: 'barchart',
 			       renderer: "graph",
 			       settings: {'title': '',
-    					  'type': 'column',
+    					  'type': 'row',
     					  'default_line_width': 1,
     					  'default_line_color': 'blue',
 					  'x_labels': ['Organism A', 'Organism B', 'Organism C', 'Organism D', 'Organism E'],
     					  'x_labels_rotation': '310',
     					  'x_tick_interval': 5,
-    					  'show_legend': false,
+    					  'show_legend': true,
     					  //'chartArea': [180, 20, 700, 250],
     					  'width': 830,
-    					  'height': 340,
+    					  'height': 540,
 					  'data': [ { name: "Metagenome A", data: [ 50, 55, 54, 45, 41 ], fill: GooglePalette(3)[0] },
 						    { name: "Metagenome B", data: [ 41, 52, 51, 42, 60 ], fill: GooglePalette(3)[1] },
 						    { name: "Metagenome C", data: [ 45, 41, 60, 22, 19 ], fill: GooglePalette(3)[2] } ]
 					 }
-			     },
-		 'donut': { title: 'donut',
-			    renderer: "donut",
-			    settings: {'title': 'Sample' }
-			  }
+			     }
 	       };
     };
 
