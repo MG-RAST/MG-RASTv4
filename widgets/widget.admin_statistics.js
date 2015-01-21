@@ -69,6 +69,9 @@
 
 	var num_in_pipeline = 0;
 
+	// store all unfinished jobs
+	var unfinishedJobs = [];
+
 	// all jobs submitted within the last 30 days (initially only the inactive ones)
 	var jobs30 = [];
 	var jk = Retina.keys(stm.DataStore.inactivejobs);
@@ -76,6 +79,7 @@
 	for (var i=0;i<jk.length;i++) {
 	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
 	    if (stm.DataStore.inactivejobs[jk[i]].state[0] == 'suspend') {
+		unfinishedJobs.push(stm.DataStore.inactivejobs[jk[i]]);
 		num_in_pipeline++;
 		var j = stm.DataStore.inactivejobs[jk[i]];
 		if (j.task) {
@@ -99,6 +103,9 @@
 	jk = Retina.keys(stm.DataStore.activejobs);
 	for (var i=0;i<jk.length;i++) {
 	    jobsactive.push(stm.DataStore.activejobs[jk[i]]);
+	    if (stm.DataStore.activejobs[jk[i]].state[0] != 'completed') {
+		unfinishedJobs.push(stm.DataStore.activejobs[jk[i]]);
+	    }
 	}
 
 	// timestamp of 30 days ago
@@ -245,8 +252,26 @@
 	html += "<tr><td><b>completed last 7 days</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>submitted last 30 days</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
+	html += "</table>";
 
-	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
+	// display unfinished jobs
+	html += "<h4>ten oldest unfinished jobs</h4>";
+	console.log(unfinishedJobs);
+	unfinishedJobs.sort(Retina.propSort('submittime'));
+	console.log(unfinishedJobs);
+	html += "<table class='table table-striped table-condensed' style='width: 300px;'><tr><th>ID</th><th>size</th><th>age in days</th></tr>";
+	var iMax = 10;
+	for (var i=0; i<unfinishedJobs.length; i++) {
+	    if (i == iMax) {
+		break;
+	    }
+	    var t = new Date(); // "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.user+"\", \""+data[i].info.userattr.job_id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>"
+	    var daysInQueue = parseInt((t.getTime() - Date.parse(unfinishedJobs[i].submittime)) / (1000 * 60 * 60 * 24));
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td style='text-align: center;'>"+daysInQueue+"</td></tr>";
+	}
+	html += "</table>";
+
+	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
 	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
