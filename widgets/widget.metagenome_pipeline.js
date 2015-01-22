@@ -341,7 +341,7 @@
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);
-
+	console.log(job);
 	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
@@ -395,6 +395,7 @@
 
 	if (job.remaintasks > 0 && Retina.cgiParam('admin')) {
 	    html += "<h4>Administrator Tasks</h4><div>";
+	    html += "<div style='margin-bottom: 10px;'>This job is owned by user <a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+job.info.user+"\");'>"+job.info.user+"</a></div>";
 	    html += "<div class='input-append' style='margin-bottom: 0px; margin-right: 20px;'><input type='text' id='jobPriorityField' value='"+job.info.priority+"' style='margin-bottom: 0px; width: 100px;'><button class='btn' style='width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"priority\", \""+job.id+"\");'>set priority</button></div>";
 	    html += "<button class='btn btn-primary' style='margin-right: 20px; width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"resume\", \""+job.id+"\");'>resume</button>";
 	    html += "<button class='btn btn-warning' style='margin-right: 20px; width: 100px;' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"suspend\", \""+job.id+"\");'>suspend</button>";

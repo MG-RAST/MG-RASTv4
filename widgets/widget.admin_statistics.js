@@ -257,7 +257,7 @@
 	// display unfinished jobs
 	html += "<h4>ten oldest unfinished jobs</h4>";
 	unfinishedJobs.sort(Retina.propSort('submittime'));
-	html += "<table class='table table-striped table-condensed' style='width: 300px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th></tr>";
+	html += "<table class='table table-striped table-condensed' style='width: 350px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th></tr>";
 	var iMax = 10;
 	for (var i=0; i<unfinishedJobs.length; i++) {
 	    if (i == iMax) {
