@@ -256,18 +256,16 @@
 
 	// display unfinished jobs
 	html += "<h4>ten oldest unfinished jobs</h4>";
-	console.log(unfinishedJobs);
 	unfinishedJobs.sort(Retina.propSort('submittime'));
-	console.log(unfinishedJobs);
-	html += "<table class='table table-striped table-condensed' style='width: 300px;'><tr><th>ID</th><th>size</th><th>age in days</th></tr>";
+	html += "<table class='table table-striped table-condensed' style='width: 300px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th></tr>";
 	var iMax = 10;
 	for (var i=0; i<unfinishedJobs.length; i++) {
 	    if (i == iMax) {
 		break;
 	    }
-	    var t = new Date(); // "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.user+"\", \""+data[i].info.userattr.job_id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>"
+	    var t = new Date();
 	    var daysInQueue = parseInt((t.getTime() - Date.parse(unfinishedJobs[i].submittime)) / (1000 * 60 * 60 * 24));
-	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td style='text-align: center;'>"+daysInQueue+"</td></tr>";
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td>"+unfinishedJobs[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td></tr>";
 	}
 	html += "</table>";
 
