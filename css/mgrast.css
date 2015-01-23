@@ -160,3 +160,65 @@
   from {box-shadow: 0 0 20px rgba(12,65,190, 0.1);}
   to {box-shadow: 0 0 20px rgba(12,65,190, 0.9);}
 }
+
+.stage {
+    background-color: #3a87ad;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.stage > a {
+    color: white;
+}
+
+.stage > a:focus {
+    outline: none;
+    text-decoration: none;
+}
+
+.stage > a:hover {
+    text-decoration: none;
+}
+
+.stage > a:visited {
+    text-decoration: none;
+}
+
+.completedstage {
+    background-color: #468847;
+}
+
+.helplist {
+    counter-reset:li; /* Initiate a counter */
+    margin-left:0; /* Remove the default left margin */
+    padding-left:0; /* Remove the default left padding */
+}
+
+.helplist > li {
+    position:relative; /* Create a positioning context */
+    margin:0 0 6px 2em; /* Give each list item a left margin to make room for the numbers */
+    padding:4px 8px; /* Add some spacing around the content */
+    list-style:none; /* Disable the normal item numbering */
+}
+
+.helplist > li:before {
+    content: "-";
+//    content:counter(li); /* Use the counter as content */
+    counter-increment:li; /* Increment the counter by 1 */
+    position:absolute;
+    top: 4px;
+    left: -1em;
+/*    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    width:2em;
+    margin-right:8px;
+    padding:4px;
+    border-top:2px solid #666;
+    color:#fff;
+    background:#666;
+    font-weight:bold;
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    text-align:center; */
+}

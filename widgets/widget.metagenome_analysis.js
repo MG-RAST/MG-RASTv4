@@ -428,22 +428,6 @@
 		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
 				    value: p.label } );
 	    };
-	} else if (widget.currentType == 'donut') {
-	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
-	    r.data(1, matrix.data);
-	    r.renderer.settings.rows = matrix.rows;
-	    r.renderer.settings.onclick = function (p) {
-		var rend = Retina.RendererInstances.donut[p.rendererIndex];
-		var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+rend.settings.rows[p.slice]+'\'});">&raquo; '+rend.settings.rows[p.slice]+' </a>';
-		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
-		    html = "";
-		}
-		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
-				    value: rend.settings.rows[p.slice] } );
-		
-	    };
 	} else if (widget.currentType == 'piechart') {
 	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter });
 	    r.data(1, data.data);
@@ -984,6 +968,8 @@
 						   { target: document.getElementById("mgselect"),
 						     type: "listselect",
 						     multiple: true,
+						     result_field: true,
+						     result_field_placeholder: "data container name",
 						     wide: true,
 						     callback: Retina.WidgetInstances.metagenome_analysis[1].loadData });
 	    widget.mgselect.display();
@@ -1134,7 +1120,7 @@
     widget.xhr = {};
 
     // perform a set of API requests and create a data container
-    widget.loadData = function (ids, params) {
+    widget.loadData = function (ids, collectionName) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
@@ -1145,7 +1131,7 @@
 
 	var type = widget.dataLoadParams.type;
 	var source = widget.dataLoadParams.source;
-	var name = widget.dataLoadParams.name || "data"+Retina.keys(stm.DataStore.dataContainer).length;
+	var name = collectionName || widget.dataLoadParams.name || "data"+Retina.keys(stm.DataStore.dataContainer).length;
 	var evalue = document.getElementById('evalue').value;
 	var alilength = document.getElementById('alignmentlength').value;
 	var identity = document.getElementById('percentidentity').value;
