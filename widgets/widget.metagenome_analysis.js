@@ -189,7 +189,7 @@
 			     rows: stm.DataStore.tmpRows,
 			     parameters: jQuery.extend(true, {}, stm.DataStore.tmpParams, c.parameters),
 			     created: Retina.date_string(new Date().getTime()),
-			     user: widget.user || "public" };
+			     user: stm.user || "public" };
 
 	stm.DataStore.dataContainer[name] = newContainer;
 
@@ -482,20 +482,6 @@
     /*
       CALLBACK FUNCTIONS
      */
-
-    // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	if (Retina.WidgetInstances.metagenome_analysis[1].browse) {
-	    Retina.WidgetInstances.metagenome_analysis[1].browse.result_list.update_data({},1);
-	}
-	if (params.token) {
-	    Retina.WidgetInstances.metagenome_analysis[1].user = params.user;
-	    Retina.WidgetInstances.metagenome_analysis[1].authHeader = { "Auth": params.token };
-	} else {
-	    Retina.WidgetInstances.metagenome_analysis[1].user = null;
-	    Retina.WidgetInstances.metagenome_analysis[1].authHeader = {};
-	}
-    };
 
     // all promises for a data container have been fulfilled
     widget.dataContainerReady = function (name, abort) {
@@ -1162,7 +1148,7 @@
 								length: alilength,
 								identity: identity },
 						  created: Retina.date_string(new Date().getTime()),
-						  user: widget.user || "public" };
+						  user: stm.user || "public" };
 	}
 	if (! stm.DataStore.hasOwnProperty('profile') ) {
 	    stm.DataStore.profile = {};

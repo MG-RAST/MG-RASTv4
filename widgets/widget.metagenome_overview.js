@@ -65,7 +65,7 @@
 		var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
 		jQuery.ajax( { dataType: "json",
 			       url: url,
-			       headers: widget.authHeader,
+			       headers: stm.authHeader,
 			       success: function(data) {
 				   if (! stm.DataStore.hasOwnProperty('metagenome')) {
 				       stm.DataStore.metagenome = {};
@@ -841,20 +841,4 @@
         var num = (key in obj) ? obj[key] : 0;
         return parseInt(num).formatString();
     };
-
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.metagenome_overview[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	    widget.shockAuthHeader = { "Authorization": "OAuth "+data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	    widget.shockAuthHeader = {};
-	}
-	widget.display();
-    };
-    
 })();

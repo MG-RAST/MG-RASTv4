@@ -61,7 +61,7 @@
 
 	widget.checkInbox();
 
-	if (! widget.user) {
+	if (! stm.user) {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to submit to the pipeline.</div>";
 	}
     };
@@ -70,10 +70,10 @@
     widget.checkInbox = function () {
 	var widget = Retina.WidgetInstances.metagenome_submission[1];
 
-	if (widget.user) {
+	if (stm.user) {
 	    jQuery.ajax( { dataType: "json",
 			   url: RetinaConfig['mgrast_api'] + "/project?private=1&edit=1&limit=0",
-			   headers: widget.authHeader,
+			   headers: stm.authHeader,
 			   success: function(data) {
 			       var plist = [];
 			       for (var i=0; i<data.data.length; i++) {
@@ -85,6 +85,19 @@
 			       alert('there was an error accessing the api');
 			   }
 			 } );
+
+	    // jQuery.ajax( { dataType: "json",
+	    // 		   url: RetinaConfig['mgrast_api'] + "/user/paczian/preferences",
+	    // 		   method: "PUT",
+	    // 		   data: "prefs="+JSON.stringify({ "setting1": "alpha", "setting2": "beta", "setting3": { "subsettingA": "klaus" }}),
+	    // 		   headers: stm.authHeader,
+	    // 		   success: function(data) {
+	    // 		       console.log(data);
+	    // 		   },
+	    // 		   error: function () {
+	    // 		       alert('there was an error accessing the api');
+	    // 		   }
+	    // 		 } );
 	}
     };
 
@@ -97,7 +110,7 @@
 
 	html += "<div class='input-append' style='margin-left: 20%; margin-top: 15px; margin-bottom: 15px;'><input type='text' name='projectname' placeholder='enter project name' autocomplete='off' data-provide='typeahead' data-source='[]' id='projectname' style='width: 400px;'><button class='btn'>select</button></div>";
 
-	html += "<p>Note: The projects listed are those that you have write access to. The owners of other projects can provide you with write access if you do not have it.</p>";
+	html += "<p><b>Note:</b> <i>The projects listed are those that you have write access to. The owners of other projects can provide you with write access if you do not have it.</i></p>";
 
 	html += "<div style='height: 20px;'></div>";
 
@@ -304,18 +317,5 @@
 	html += "<div style='height: 20px;'></div>";
 
 	document.getElementById('submit').innerHTML = html;
-    };
-
-     // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_submission[1];
-	if (params.token) {
-	    widget.user = params.user;
-	    widget.authHeader = { "Auth": params.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
     };
 })();

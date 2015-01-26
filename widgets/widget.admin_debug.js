@@ -35,7 +35,7 @@
 	widget.main.innerHTML = html;
 
 	// load the queue data
-	if (widget.user) {
+	if (stm.user) {
 	    widget.createUserTable();
 	    widget.showQueue();
 	} else {
@@ -79,7 +79,7 @@
 	widget.queueTable = Retina.Renderer.create("table", { 
 	    target: document.getElementById('queueTable'),
 	    data: { header: [ "Job ID", "MG-ID", "name", "project", "project ID", "size", "status", "user", "priority", "submitted" ], data: [] },
-	    headers: widget.authHeader,
+	    headers: stm.authHeader,
 	    synchronous: false,
 	    query_type: "prefix",
 	    data_manipulation: Retina.WidgetInstances.admin_debug[1].queueTableDataManipulation,
@@ -147,7 +147,7 @@
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
-		headers: widget.authHeader,
+		headers: stm.authHeader,
 		prom: promise,
 		jid: what[i],
 		url: RetinaConfig.mgrast_api+'/pipeline/'+what[i]+url,
@@ -218,7 +218,7 @@
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
-		headers: widget.authHeader,
+		headers: stm.authHeader,
 		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
 		success: function (data) {
 		    Retina.WidgetInstances.admin_debug[1].showProject(data.id, data);
@@ -236,7 +236,7 @@
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
-	    headers: widget.authHeader,
+	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/metagenome/'+mgid,
 	    success: function (data) {
 		var types = [ "Amplicon", "MT", "WGS", "Unknown" ];
@@ -258,7 +258,7 @@
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
-	    headers: widget.authHeader,
+	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/metagenome/'+mgid+"/changesequencetype/"+type,
 	    success: function (data) {
 		alert('sequence type changed.');
@@ -279,7 +279,7 @@
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
-	    headers: widget.authHeader,
+	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+document.getElementById('project_b').value+mgs,
 	    success: function (data) {
 		Retina.WidgetInstances.admin_debug[1].showProject(pid);
@@ -307,19 +307,4 @@
 
 	return result_data;
     };
-
-     // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_debug[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
-
-
 })();

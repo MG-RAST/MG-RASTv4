@@ -20,7 +20,7 @@
 	    widget.sidebar = wparams.sidebar;
 	}
 
-	if (widget.user) {
+	if (stm.user) {
 	    widget.sidebar.style.display = "";
 	    widget.main.parentNode.style.right = "660px";
 	    widget.sidebar.innerHTML = "<div id='details' style='padding-left: 10px; padding-right: 10px;'><h4>User Details</h4><p>click on a user in the lefthand table to view the details here.</p></div>";
@@ -73,7 +73,7 @@
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
 			  },
-			  headers: widget.authHeader
+			  headers: stm.authHeader
 			});
 
 	} else {
@@ -122,7 +122,7 @@
 						console.log("error: unable to connect to API server");
 						console.log(error);
 					    },
-					    headers: widget.authHeader
+					    headers: stm.authHeader
 					  }));
 	    }
 	    else if (document.getElementById("requestaction_accept_"+data[i].login).checked) {
@@ -135,7 +135,7 @@
 						console.log("error: unable to connect to API server");
 						console.log(error);
 					    },
-					    headers: widget.authHeader
+					    headers: stm.authHeader
 					  }));
 	    }
 	}
@@ -205,22 +205,8 @@
 			  console.log("error: unable to connect to API server");
 			  console.log(error);
 		      },
-		      headers: widget.authHeader
+		      headers: stm.authHeader
 		    });
 
     };
-
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_users[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
-
 })();

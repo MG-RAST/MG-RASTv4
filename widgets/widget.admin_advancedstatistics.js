@@ -24,7 +24,7 @@
 	widget.sidebar.parentNode.style.display = "none";
 	widget.main.className = "span10 offset1";
 
-	if (widget.user) {
+	if (stm.user) {
 
 	    var pastTemp = new Date(new Date().getTime() - (1000 * 60 * 60 * 24));
 	    var past = pastTemp.getFullYear() + "-" + (pastTemp.getMonth() + 1).padLeft() + "-" + (pastTemp.getDate() + 1).padLeft();
@@ -60,7 +60,7 @@
 	var prom = jQuery.Deferred();
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+dstart+"&date_end="+dend+"&limit="+limit+"&state=completed",
-		       headers: widget.authHeader,
+		       headers: stm.authHeader,
 		       dend: dend,
 		       dstart: dstart,
 		       success: function(data) {
@@ -267,7 +267,7 @@
 			  console.log(error);
 		      },
 		      crossDomain: true,
-		      headers: widget.authHeader
+		      headers: stm.authHeader
 		    });
     };
 
@@ -391,18 +391,4 @@
 	timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
 	return timestamp;
     };
-
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
-
 })();

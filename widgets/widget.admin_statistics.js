@@ -23,7 +23,7 @@
 	widget.sidebar.parentNode.style.display = "none";
 	widget.main.className = "span10 offset1";
 
-	if (widget.user) {
+	if (stm.user) {
 
             var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h4>Monthly Job Submission</h4><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
@@ -520,7 +520,7 @@
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
-				     headers: widget.authHeader,
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
 					     stm.DataStore.inactivejobs = {};
@@ -533,7 +533,7 @@
 					 } else {
 					     jQuery.ajax( { dataType: "json",
 					 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					 		    headers: widget.authHeader,
+					 		    headers: stm.authHeader,
 					 		    success: function(data) {
 					 			stm.DataStore.jobtemplate = { 1: data.data[0] };
 					 		    },
@@ -550,7 +550,7 @@
 
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=100000&state=suspend&userattr=bp_count",
-				     headers: widget.authHeader,
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
 					     stm.DataStore.inactivejobs = {};
@@ -566,7 +566,7 @@
 	
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
-				     headers: widget.authHeader,
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = {};
 					 for (var i=0; i<data.data.length; i++) {
@@ -619,7 +619,7 @@
 			       promise: p,
 			       date: d,
 			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
-			       headers: widget.authHeader,
+			       headers: stm.authHeader,
 			       success: function(data) {
 				   var bps = 0;
 				   var min = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
@@ -747,7 +747,7 @@
 			       url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent(timestamp)+"&verbosity=minimal&limit=1",
 			       promise: p,
 			       date: d,
-			       headers: widget.authHeader,
+			       headers: stm.authHeader,
 			       success: function(data) {
 				   stm.DataStore.userCounts[this.date] = { "count": data.total_count };
 				   this.promise.resolve();
@@ -758,7 +758,7 @@
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent("["+now_year+"-"+now_month)+"&verbosity=minimal&limit=1",
 				     date: now_year+"-"+now_month,
-				     headers: widget.authHeader,
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 Retina.WidgetInstances.admin_statistics[1].currentUserCount = data.total_count;
 				     }
@@ -773,19 +773,6 @@
 		Retina.WidgetInstances.admin_statistics[1].showUserData();
 	    }
 	});
-    };
-
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_statistics[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
     };
 
     /*

@@ -15,8 +15,6 @@
     /*
       GLOBAL VARIABLES
     */
-    widget.authHeader = {};
-    widget.user = null;
     widget.jobDataOffset;
     widget.userID = "pturnbaugh";
 
@@ -80,12 +78,12 @@
 	}
 
 	// check if we have a user
-	if (widget.user) {
+	if (stm.user) {
 	    sidebar.innerHTML = "<h3 style='margin-left: 10px;'>Job Status Monitor</h3><p style='margin-left: 10px;'>Click on a job id in the lefthand table to get details on the status of that submission.</p>";
 	    
 	    if (! widget.userID) {
 		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
-		widget.userID = widget.user.login;
+		widget.userID = stm.user.login;
 	    }
 	    content.innerHTML = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div><div id='jobtable'></div>";
 
@@ -107,7 +105,7 @@
 		    default_sort: "job",
 		    asynch_column_mapping: { "job": "info.name",
 					     "status": "state" },
-		    headers: widget.authHeader,
+		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
 		    minwidths: [1,1,1,1],
 		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID,
@@ -157,7 +155,7 @@
 		    jQuery.ajax({
 			method: "GET",
 			dataType: "json",
-			headers: widget.authHeader,
+			headers: stm.authHeader,
 			url: RetinaConfig.mgrast_api+'/pipeline/'+Retina.cgiParam('job'),
 			success: function (data) {
 			    if (! stm.DataStore.hasOwnProperty('job')) {
@@ -249,7 +247,7 @@
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
-		headers: widget.authHeader, 
+		headers: stm.authHeader, 
 		url: RetinaConfig.mgrast_api+'/metagenome/'+job.info.userattr.id,
 		success: function (data) {
 		    stm.DataStore.metagenome[data.id] = data;
@@ -527,7 +525,7 @@
 		dataType: "json",
 		data: { "metagenome_id": mgid,
 			"reason": reason },
-		headers: widget.authHeader, 
+		headers: stm.authHeader, 
 		url: RetinaConfig.mgrast_api+'/job/delete',
 		success: function (data) {
 		    alert("job deleted");
@@ -554,7 +552,7 @@
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
-	    headers: widget.authHeader, 
+	    headers: stm.authHeader, 
 	    url: RetinaConfig.mgrast_api+'/pipeline/'+job.info.userattr.id+url,
 	    success: function (data) {
 		alert("action successful");
@@ -642,18 +640,5 @@
 	var minute = parseInt(time_passed / (1000 * 60));
 	var some_time = ((day > 0) ? day+" days " : "") + ((hour > 0) ? hour+" hours " : "") + minute+" minutes";
 	return some_time;
-    };
-
-    // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
-	if (params.token) {
-	    widget.user = params.user;
-	    widget.authHeader = { "Auth": params.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
     };
 })();

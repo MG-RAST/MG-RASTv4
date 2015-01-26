@@ -79,20 +79,33 @@ google.setOnLoadCallback(showNewsFeed);
 	stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
 	Retina.init({});
 	Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
-	    Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-					    "registerEnabled": true,
-					    "helpEnabled": true,
-					    "helpLink": "http://blog.metagenomics.anl.gov/howto/",
-					    "registerLink": "mgmain.html?mgpage=register",
-					    "forgotEnabled": true,
-					    "forgotLink": "mgmain.html?mgpage=register&forgot=1",
+		var loginAction = function (data) {
+		    if (data.action != "logout" && data.result == "success") {
+			if (stm.user && stm.user.hasOwnProperty("preferences")) {
+			    return;
+			}
+			stm.user = data.user;
+			stm.authHeader = { "Auth": data.token };
+		    } else {
+			stm.user = null;
+			stm.authHeader = {};
+		    }
+		};
+		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    				"callback": loginAction,
+						"registerEnabled": true,
+						"registerLink": "mgmain.html?mgpage=register",
+						"helpEnabled": true,
+						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
+						"forgotEnabled": true,
+						"forgotLink": "mgmain.html?mgpage=register&forgot=1",
 						"myDataEnabled": true,
 						"myDataLink": "mgmain.html?mgpage=user" });
-	});
-	
-	Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
-	    Retina.Widget.create('session', {"target": document.getElementById('session_space'), noInfo: true});
-	});
+	    });
+	    
+	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
+	    });
     });
     </script>
 
@@ -143,15 +156,15 @@ google.setOnLoadCallback(showNewsFeed);
 	
 	<!-- navigation icons -->
 	<div id="navdiv" class="icorow" style="position: relative; right: 40px;">
-	  <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.open('mgmain.html?mgpage=search');"><br><span>Search</span></div>
-	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Submission" onclick="window.open('mgmain.html?mgpage=upload');"><br><span>Submission</span></div>
-	  <div class="icospan" id="icon_publications"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects" onclick="window.open('mgmain.html?mgpage=overview');"><br><span>Metagenomes</span></div>
-	  <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.open('mgmain.html?mgpage=analysis');"><br><span>Analysis</span></div>
+	  <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><br><span>Search</span></div>
+	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Submission" onclick="window.location='mgmain.html?mgpage=upload';"><br><span>Submission</span></div>
+	  <div class="icospan" id="icon_publications"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects" onclick="window.location='mgmain.html?mgpage=overview';"><br><span>Metagenomes</span></div>
+	  <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><br><span>Analysis</span></div>
 	  
 	  <div class="icospan" id="icon_handbook"><img src="Retina/images/file-pdf.png" class="ico" title="Handbook" onclick="window.open('ftp://ftp.metagenomics.anl.gov/data/manual/mg-rast-manual.pdf');"><br><span>Handbook</span></div>
 	  <div class="icospan" id="icon_tutorials"><img src="Retina/images/wizard.png" class="ico" title="Tutorials" onclick="window.open('https://www.youtube.com/channel/UCoBKJ-yYJu5HK1szy3my91A');"><br><span>Tutorials</span></div>
 	  <div class="icospan" id="icon_forum"><img src="Retina/images/bubbles.png" class="ico" title="Forum" onclick="window.open('https://groups.google.com/forum/#!forum/mg-rast');"><br><span>Forum</span></div>
-	  <div class="icospan" id="icon_feedback"><img src="Retina/images/envelop.png" class="ico" title="Feedback" onclick="window.open('contact.html');"><br><span>Feedback</span></div>
+	  <div class="icospan" id="icon_feedback"><img src="Retina/images/envelop.png" class="ico" title="Feedback" onclick="window.location='contact.html';"><br><span>Feedback</span></div>
 	</div>
 	
       </div>

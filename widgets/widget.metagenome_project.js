@@ -44,7 +44,7 @@
 	            stm.DataStore.project.hasOwnProperty(widget.id))) {
 		jQuery.ajax({
 		    dataType: "json",
-		    headers: widget.authHeader, 
+		    headers: stm.authHeader, 
 		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=full',
 		    success: function (data) {
 			if (! stm.DataStore.hasOwnProperty('project')) {
@@ -82,7 +82,7 @@
 		if (! stm.DataStore.metagenome.hasOwnProperty(project.metagenomes[i][0])) {
 		    promises.push(jQuery.ajax({
 			dataType: "json",
-			headers: widget.authHeader, 
+			headers: stm.authHeader, 
 			url: RetinaConfig.mgrast_api+'/metagenome/'+project.metagenomes[i][0]+'?verbosity=full',
 			success: function (data) {
 			    stm.DataStore.metagenome[data.id] = data;
@@ -115,7 +115,7 @@
 		    sort: "name",
 		    query_type: "equal",
 		    default_sort: "name",
-		    headers: widget.authHeader,
+		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_project[1].tableManipulation,
 		    navigation_url: RetinaConfig['mgrast_api'] + "/project",
 		    data: { data: [], header: columns }
@@ -163,7 +163,7 @@
 	    sort_autodetect: true,
 	    synchronous: true,
 	    sort: "name",
-	    headers: widget.authHeader,
+	    headers: stm.authHeader,
 	    invisible_columns: { 0: true },
 	    minwidths: [125,175,105,110,85,95,95,100,95,120,70,90,110],
 	    data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "location", "country", "coordinates", "type", "method", "download" ] }
@@ -177,16 +177,4 @@
 	return data;
     };
 
-     // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_project[1];
-	if (params.token) {
-	    widget.user = params.user;
-	    widget.authHeader = { "Auth": params.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
 })();
