@@ -380,16 +380,16 @@
 	var query_str = "";
 	for (var h=0;h<type.length; h++) {
 	    if(query_str == "") {
-		query_str = type[h] + "=" + widget.query;
+		query_str = type[h] + "=\"" + widget.query + "\"";
 	    } else {
-		query_str += "&" + type[h] + "=" + widget.query;
+		query_str += "&" + type[h] + "=\"" + widget.query + "\"";
 	    }
 	}
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
 		query_str += "&"+h;
-		query_str += "="+widget.advancedOptions[h];
+		query_str += "=\""+widget.advancedOptions[h] + "\"";
 	    }
 	}
 
