@@ -445,12 +445,21 @@
   <span style="float: right;">(in queue)</span>\
 </div>';
 		} else if (job.tasks[i].state == 'error') {
-		    html += '\
+		    if (Retina.cgiParam('admin')) {
+			html += '\
+<div class="pill errorpill clickable" onclick="if(document.getElementById(\'stageDetails'+i+'\').style.display==\'none\'){document.getElementById(\'stageDetails'+i+'\').style.display=\'\';}else{document.getElementById(\'stageDetails'+i+'\').style.display=\'none\';};">\
+  <img class="miniicon" src="Retina/images/remove.png">\
+  '+job.tasks[i].cmd.description+'\
+  <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].createddate)+'</span>\
+</div><div style="display: none;" id="stageDetails'+i+'">'+widget.stageDetails(job.id, i)+'</div>';
+		    } else {
+			html += '\
 <div class="pill errorpill">\
   <img class="miniicon" src="Retina/images/remove.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].createddate)+'</span>\
 </div>';
+		    }
 		} else if (job.tasks[i].state == 'pending') {
 		    html += '\
 <div class="pill pendingpill">\
@@ -459,12 +468,21 @@
   <span style="float: right;">(not started)</span>\
 </div>';
 		} else if (job.tasks[i].state == 'suspend') {
-		    html += '\
+		    if (Retina.cgiParam('admin')) {
+			html += '\
+<div class="pill errorpill clickable" onclick="if(document.getElementById(\'stageDetails'+i+'\').style.display==\'none\'){document.getElementById(\'stageDetails'+i+'\').style.display=\'\';}else{document.getElementById(\'stageDetails'+i+'\').style.display=\'none\';};">\
+  <img class="miniicon" src="Retina/images/remove.png">\
+  '+job.tasks[i].cmd.description+'\
+  <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].createddate)+'</span>\
+</div><div style="display: none;" id="stageDetails'+i+'">'+widget.stageDetails(job.id, i)+'</div>';
+		    } else {
+			html += '\
 <div class="pill errorpill">\
   <img class="miniicon" src="Retina/images/remove.png">\
   '+job.tasks[i].cmd.description+'\
   <span style="float: right;">'+widget.prettyAWEdate(job.tasks[i].createddate)+'</span>\
 </div>';
+		    }
 		} else {
 		    console.log('unhandled state: '+job.tasks[i].state);
 		}
