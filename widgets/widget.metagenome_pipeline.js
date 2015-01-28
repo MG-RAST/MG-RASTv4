@@ -475,6 +475,21 @@
 	return html;
     };
 
+    widget.downloadHead = function (nodeid, fn) {
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	jQuery.ajax({
+	    method: "GET",
+	    fn: fn,
+	    headers: { "Authorization": "OAuth "+stm.Authentication},
+	    url: RetinaConfig.shock_url+'/node/'+nodeid + "?download&index=size&part=1&chunksize=10240",
+	    success: function (data) {
+		stm.saveAs(data, this.fn);
+	    }}).fail(function(xhr, error) {
+		alert("could not get head of file");
+		console.log(error);
+	    });
+    };
+
     widget.stageDetails = function (jid, stage) {
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
@@ -486,7 +501,7 @@
 		if (task.inputs[i].nofile || i == "mysql.tar" || i == "postgresql.tar") {
 		    continue;
 		}
-		inputs.push(i+" ("+task.inputs[i].size.byteSize()+")");
+		inputs.push(i+" ("+task.inputs[i].size.byteSize()+")" + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.inputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
 	    }
 	}
 	inputs = inputs.join('<br>');
@@ -496,7 +511,7 @@
 		if (task.outputs[i].type == "update") {
 		    continue;
 		}
-		outputs.push(i+" ("+task.outputs[i].size.byteSize()+")"+(task.outputs[i]["delete"] ? " <i>temporary</i>" : ""));
+		outputs.push(i+" ("+task.outputs[i].size.byteSize()+")"+(task.outputs[i]["delete"] ? " <i>temporary</i>" : "") + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.outputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
 	    }
 	}
 	outputs = outputs.join('<br>');
