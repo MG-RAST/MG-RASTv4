@@ -181,7 +181,7 @@
 
 	button.setAttribute('disabled', 'true');
 	jQuery.ajax( { url: url+"&link=1",
-		       headers: widget.authHeader,
+		       headers: stm.authHeader,
 		       success: function(data) {
 			   button.removeAttribute('disabled');
 			   window.location = data.url;

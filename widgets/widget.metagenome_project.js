@@ -45,7 +45,7 @@
 		jQuery.ajax({
 		    dataType: "json",
 		    headers: stm.authHeader, 
-		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=full',
+		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=summary',
 		    success: function (data) {
 			if (! stm.DataStore.hasOwnProperty('project')) {
 			    stm.DataStore.project = {};
@@ -61,7 +61,7 @@
 
 	    var project = stm.DataStore.project[widget.id];
 	    var id_no_prefix = widget.id.substr(3);
-	    var html = "<h3>"+project.name+" ("+widget.id+")<a style='margin-left: 10px; margin-right: 10px;' target=_blank href='"+RetinaConfig["mgrast_ftp"]+"/projects/"+id_no_prefix+"/' class='btn btn-mini' title='download all submitted and derived metagenome data for this project'><i class='icon-download'></i> metagenomes</a><a target=_blank href='"+RetinaConfig["mgrast_ftp"]+"/projects/"+id_no_prefix+"/metadata.project-"+id_no_prefix+".xlsx' class='btn btn-mini' title='download project metadata'><i class='icon-download'></i> project metadata</a></h3>";
+	    var html = "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    html += "<table>";
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
@@ -74,25 +74,40 @@
 	    html += "<address><strong>Technical</strong><br>"+(project.metadata.firstname||"-")+" "+(project.metadata.lastname||"-")+" ("+(project.metadata.email||"-")+")<br>"+(project.metadata.organization||"-")+" ("+(project.metadata.organization_url||"-")+")<br>"+(project.metadata.organization_address||"-")+", "+(project.metadata.organization_country||"-")+"</address>";
 	    html += "<h4>metagenomes</h4><div id='metagenome_table'><img src='Retina/images/waiting.gif' style='margin-left: 40%;margin-top: 100px;'></div>";
 	    
-	    if (! stm.DataStore.hasOwnProperty('metagenome')) {
-		stm.DataStore.metagenome = {};
-	    }
-	    var promises = [];
-	    for (var i=0; i<project.metagenomes.length; i++) {
-		if (! stm.DataStore.metagenome.hasOwnProperty(project.metagenomes[i][0])) {
-		    promises.push(jQuery.ajax({
-			dataType: "json",
-			headers: stm.authHeader, 
-			url: RetinaConfig.mgrast_api+'/metagenome/'+project.metagenomes[i][0]+'?verbosity=full',
-			success: function (data) {
-			    stm.DataStore.metagenome[data.id] = data;
-			}}));
-		}
-	    }
 	    content.innerHTML = html;
-	    jQuery.when.apply(this, promises).then(function() {
-		Retina.WidgetInstances.metagenome_project[1].showMetagenomeInfo();
-	    });
+
+	    // create the metagenome table
+	    var rows = [];
+	    var url = RetinaConfig.mgrast_ftp+"/metagenome/";
+	    for (var i=0; i<project.metagenomes.length; i++) {
+		var mg = project.metagenomes[i];
+		var row = [ "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.metagenome_id+"</a>",
+			    "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.name+"</a>",
+			    mg.basepairs,
+			    mg.sequences,
+			    mg.biome,
+			    mg.feature,
+			    mg.material,
+			    mg.location,
+			    mg.country,
+			    mg.coordinates,
+			    mg.sequence_type,
+			    mg.sequencing_method,
+			    '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'metadata\');"><i class="icon-download"></i> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'submitted\');"><i class="icon-download"></i> submitted</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'processed\');"><i class="icon-download"></i> results</button>'
+			  ];
+		rows.push(row);
+	    }
+	    Retina.Renderer.create("table", {
+		target: document.getElementById('metagenome_table'),
+		rows_per_page: 10,
+		filter_autodetect: true,
+		sort_autodetect: true,
+		synchronous: true,
+		sort: "name",
+		invisible_columns: { 0: true },
+		minwidths: [125,175,105,110,85,95,95,100,95,120,70,90,110],
+		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "location", "country", "coordinates", "type", "method", "download" ] }
+	    }).render();
         }
 	// else show the project select
 	else {
@@ -129,45 +144,42 @@
 	
     };
 
-    widget.showMetagenomeInfo = function () {
+    widget.authenticatedDownload = function (button, id, type) {
 	var widget = Retina.WidgetInstances.metagenome_project[1];
-
-	var id_no_prefix = widget.id.substr(3);
-	var url = RetinaConfig["mgrast_ftp"]+"/projects/"+id_no_prefix+"/";
-	var mgs = stm.DataStore.project[widget.id].metagenomes;
-	var rows = [];
-	for (var i=0; i<mgs.length; i++) {
-	    var mg = stm.DataStore.metagenome[mgs[i][0]];
-	    var id = mg.id.substr(3);
-	    var row = [ "<a href='?mgpage=overview&metagenome="+mg.id+"' target=_blank>"+mg.id+"</a>",
-			"<a href='?mgpage=overview&metagenome="+mg.id+"' target=_blank>"+mg.name+"</a>",
-			mg.statistics ? parseInt(mg.statistics.sequence_stats.bp_count_raw).baseSize() : "unknown",
-			mg.statistics ? parseInt(mg.statistics.sequence_stats.sequence_count_raw).formatString() : "unknown",
-			mg.mixs ? (mg.mixs.biome || "-") : "-",
-			mg.mixs ? (mg.mixs.feature || "-") : "-",
-			mg.mixs ? (mg.mixs.material || "-") : "-",
-			mg.mixs ? (mg.mixs.location || "-") : "-",
-			mg.mixs ? (mg.mixs.country || "-") : "-",
-			mg.mixs ? (mg.mixs.latitude ? (mg.mixs.latitude+" lat, "+mg.mixs.longitude+" long") : "-") : "-",
-			mg.mixs ? (mg.mixs.sequence_type || "-") : "-",
-			mg.mixs ? (mg.mixs.seq_method || "-") : "-",
-			'<button class="btn btn-mini" onclick="stm.saveAs(JSON.stringify(stm.DataStore.metagenome[\''+mg.id+'\'].metadata, null, 1), \''+mg.id+'.metadata.txt\');"><i class="icon-download"></i> metadata</button><a href="'+url+id+'/raw" class="btn btn-mini" target=_blank><i class="icon-download"></i> submitted</a> <a href="'+url+id+'/processed" class="btn btn-mini" target=_blank><i class="icon-download"></i> processed</a>'
-		      ];
-	    rows.push(row);
+	button.setAttribute('disabled', 'true');
+	var url = RetinaConfig.mgrast_api + "/";
+	if (type == "metadata") {
+	    url += "metagenome/"+id+"?verbosity=metadata";
+	    jQuery.ajax( { url: url,
+			   headers: stm.authHeader,
+			   success: function(data) {
+			       button.removeAttribute('disabled');
+			       stm.saveAs(JSON.stringify(data, null, 2), id+"_metadata.json");
+			   },
+			   error: function () {
+			       button.removeAttribute('disabled');
+			       alert('download failed');
+			   }
+			 } );
+	} else {
+	    url += "download/"+id+"?file=";
+	    if (type == "submitted") {
+		url += "050.1";
+	    } else {
+		url += "700.1";
+	    }
+	    jQuery.ajax( { url: url+"&link=1",
+			   headers: stm.authHeader,
+			   success: function(data) {
+			       button.removeAttribute('disabled');
+			       window.location = data.url;
+			   },
+			   error: function () {
+			       button.removeAttribute('disabled');
+			       alert('download failed');
+			   }
+			 } );
 	}
-
-	Retina.Renderer.create("table", {
-	    target: document.getElementById('metagenome_table'),
-	    rows_per_page: 10,
-	    filter_autodetect: true,
-	    sort_autodetect: true,
-	    synchronous: true,
-	    sort: "name",
-	    headers: stm.authHeader,
-	    invisible_columns: { 0: true },
-	    minwidths: [125,175,105,110,85,95,95,100,95,120,70,90,110],
-	    data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "location", "country", "coordinates", "type", "method", "download" ] }
-	}).render();
     };
 
     widget.tableManipulation = function (data) {

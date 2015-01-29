@@ -66,7 +66,7 @@
 
 	Retina.load_widget("metagenome_"+page).then( function() {
 	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
-								 "sidebar": document.getElementById("sidebar") });
+								 "sidebar": document.getElementById("sidebar") }, true);
 	    
 	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
 		var loginAction = function (data) {
