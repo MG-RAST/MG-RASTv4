@@ -131,10 +131,6 @@
 	    html += "<button class='btn btn-small'>join paired ends</button>";
 	} else if (filetype.match(/^fasta/)) {
 	    html += "<button class='btn btn-small'>check coverage format</button>";
-// >sequence_number_1_[cov=2]
-// CTAGCGCACATAGCATTCAGCGTAGCAGTCACTAGTACGTAGTACGTACC
-// >sequence_number_2_[cov=4]
-// ACGTAGCTCACTCCAGTAG
 	}
 	
 	html += "<h4 style='margin-top: 20px;'>Delete File</h4>";

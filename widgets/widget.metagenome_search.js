@@ -396,7 +396,7 @@
 	var url = api_url + query_str + "&order=" + widget.sort + "&direction=" + widget.sortDir + "&match=" + widget.match + "&limit=" + widget.limit + "&offset=" + widget.offset;
 	
 	if (stm.Authorization) {
-	    url += "&auth=" + stm.Authorization;
+	    url += "&auth=" + stm.authHeader;
 	}
 
 	jQuery.getJSON(url, function(data) {
@@ -466,18 +466,4 @@
 	
 	alert('search stored');
     };
-
-    // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_search[1];
-	if (params.token) {
-	    widget.user = params.user;
-	    widget.authHeader = { "Auth": params.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.checkStoreSearch();
-    };
-    
 })();

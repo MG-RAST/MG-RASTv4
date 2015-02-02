@@ -497,7 +497,7 @@
 	jQuery.ajax({
 	    method: "GET",
 	    fn: fn,
-	    headers: { "Authorization": "OAuth "+stm.Authentication},
+	    headers: stm.SHOCKAWEAuth,
 	    url: RetinaConfig.shock_url+'/node/'+nodeid + "?download&index=size&part=1&chunksize=10240",
 	    success: function (data) {
 		stm.saveAs(data, this.fn);

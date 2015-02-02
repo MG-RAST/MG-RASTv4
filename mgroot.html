@@ -86,9 +86,11 @@ google.setOnLoadCallback(showNewsFeed);
 			}
 			stm.user = data.user;
 			stm.authHeader = { "Auth": data.token };
+			stm.SHOCKAWEAuth = { "Authorization": "mgrast "+data.token};
 		    } else {
 			stm.user = null;
 			stm.authHeader = {};
+			stm.SHOCKAWEAuth = {};
 		    }
 		};
 		Retina.Widget.create('login', { "target": document.getElementById("login_space"),

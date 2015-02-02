@@ -80,7 +80,7 @@
 			  console.log("error: unable to connect to API server");
 			  console.log(error);
 		      },
-		      headers: widget.authHeader
+		      headers: stm.authHeader
 		    });
     };
 
@@ -103,7 +103,7 @@
 			  console.log("error: unable to connect to API server");
 			  console.log(error);
 		      },
-		      headers: widget.authHeader
+		      headers: stm.authHeader
 		    });
 	
 	if (password.length) {
@@ -117,22 +117,9 @@
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
 			  },
-			  headers: widget.authHeader
+			  headers: stm.authHeader
 			});
 	    
 	}
     };
-
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.metagenome_user[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
-
 })();

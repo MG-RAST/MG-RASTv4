@@ -78,11 +78,13 @@
 			}
 			stm.user = data.user;
 			stm.authHeader = { "Auth": data.token };
+			stm.SHOCKAWEAuth = { "Authorization": "mgrast "+data.token};
 			mgp.display({ "main": document.getElementById("content"),
 				      "sidebar": document.getElementById("sidebar") });
 		    } else {
 			stm.user = null;
 			stm.authHeader = {};
+			stm.SHOCKAWEAuth = {};
 			mgp.display({ "main": document.getElementById("content"),
 				      "sidebar": document.getElementById("sidebar") });
 		    }
