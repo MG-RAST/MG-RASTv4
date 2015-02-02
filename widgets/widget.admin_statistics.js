@@ -103,8 +103,13 @@
 	jk = Retina.keys(stm.DataStore.activejobs);
 	for (var i=0;i<jk.length;i++) {
 	    jobsactive.push(stm.DataStore.activejobs[jk[i]]);
-	    if (stm.DataStore.activejobs[jk[i]].state[0] != 'completed') {
-		unfinishedJobs.push(stm.DataStore.activejobs[jk[i]]);
+	    if (stm.DataStore.activejobs[jk[i]].state) {
+		if (stm.DataStore.activejobs[jk[i]].state[0] != 'completed') {
+		    unfinishedJobs.push(stm.DataStore.activejobs[jk[i]]);
+		}
+	    } else {
+		console.log("WARNING: job with invalid state");
+		console.log(stm.DataStore.activejobs[jk[i]]);
 	    }
 	}
 
@@ -132,6 +137,9 @@
 	    size_in_pipeline += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 
 	    // count the current state
+	    if (! jobsactive[i].state) {
+		continue;
+	    }
 	    for (var h=0; h<jobsactive[i].state.length; h++) {
 		states[jobsactive[i].state[h]]++;
 	    }
@@ -433,6 +441,9 @@
 	// get initial backlog
 	var backlog = 0;
 	for (var i=0; i<data.length; i++) {
+	    if (! data[i].state) {
+		continue;
+	    }
 	    if (data[i].state[0] != "completed") {
 		if (data[i].userattr.hasOwnProperty('bp_count')) {
 		    backlog += parseInt(data[i].userattr.bp_count) || 0;
@@ -447,6 +458,9 @@
 	var sdaydata = {};
 	var daysh = {};
 	for (var i=0; i<data.length; i++) {
+	    if (! data[i].state) {
+		continue;
+	    }
 	    if (data[i].state[0] == 'completed') {
 		var cday = data[i].completeChicago.substr(0,10);
 		daysh[cday] = 1;

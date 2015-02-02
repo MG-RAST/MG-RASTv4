@@ -27,6 +27,8 @@
 	
 	if (wparams) {
 	    widget.target = wparams.target || wparams.main;
+	    widget.sidebar = wparams.sidebar;
+	    widget.sidebar.innerHTML = "";
 	    //widget.target.setAttribute('style', "overflow-x: scroll;");
 	    
 	    widget.target.innerHTML = '\
