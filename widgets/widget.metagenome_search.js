@@ -148,7 +148,7 @@
 <hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
 <h3 style="margin-left: 10px;">\
   <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/disk.png">\
-  Store Results <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
+  Save Search <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
 </h3>\
 <div id="storeresults_div" style="margin-left: 10px; margin-right: 10px;">\
   <p>Store the results of your search.</p>\
@@ -172,11 +172,10 @@
 	sidebar.innerHTML = html_sidebar;
 
 	// check for search preferences
-	widget.updateStoredSearches();
+	stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
 
-	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Storing a result requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
-	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Select a previously stored search and click the <b>show</b> button.</p>"});
-	jQuery("#smartsearch").popover({ trigger: "hover", content: "A smart search issues a new search based on the stored parameters whenever it is used, rather than storing the results."});
+	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Saving a search requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
+	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Click on the name of a previously stored search to apply the same search parameters again.</p>"});
 
 	var keyselect = document.getElementById('advanced_search_key');
 	var keylist = widget.keylist;
