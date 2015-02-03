@@ -465,9 +465,9 @@
         try {
 	        return { style: "clear: both",
 	                 data: [ { header: "Project Information" },
-			                 { p: "This metagenome is part of the project "+mg.metadata.project.name },
-			                 { p: mg.metadata.project.data.project_description }
-			               ] };
+			         { p: "This metagenome is part of the project <a href='?mgpage=project&project="+mg.metadata.project.id+"' target=_blank>"+mg.metadata.project.name+"</a>" },
+			         { p: mg.metadata.project.data.project_description }
+			       ] };
 		} catch (err) {
             return null;
 	    }

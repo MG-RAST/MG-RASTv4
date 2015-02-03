@@ -74,6 +74,7 @@
 								   "showUploadPreview": false,
 								   "presetFilters": { "type": "inbox" },
 								   "shockBase": RetinaConfig.shock_url});
+	    widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.SHOCKAWEAuth});
 	}
 	if (! stm.user) {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
@@ -85,7 +86,7 @@
 
 	var html = "<h4>File Information</h4>";
 
-	console.log(params);
+	//console.log(params);
 
 	var node = params.node;
 	var fn = node.file.name;
@@ -164,7 +165,7 @@
 		console.log(jqXHR);
 	    },
 	    crossDomain: true,
-	    headers: widget.browser.authHeader,
+	    headers: stm.authHeader,
 	    type: "PUT"
 	});
     };
