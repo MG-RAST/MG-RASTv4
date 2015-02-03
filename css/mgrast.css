@@ -222,3 +222,23 @@
     font-family:"Helvetica Neue", Arial, sans-serif;
     text-align:center; */
 }
+
+.selectList {
+    list-style: none;
+    margin: 0px;
+}
+
+.selectList > li {
+    border-radius: 6px;
+    border: 1px solid lightgray;
+    padding: 5px;
+    margin-bottom: 3px;
+}
+
+.selectList > li > a {
+    cursor: pointer;
+}
+
+.selectList > li:hover {
+    background-color: lightgray;
+}
