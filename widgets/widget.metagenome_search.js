@@ -19,6 +19,11 @@
     widget.limit = 20;
     widget.match = "all";
     widget.advancedOptions = {};
+    widget.specialKeyMapping = { "created": "creation date",
+				 "name": "metagenome name",
+				 "seq_method": "sequencing method",
+				 "job": "job id",
+				 "id": "metagenome id" };
     widget.keylist = [ { "name": "Project",
 			 "items": [ { "name": "PI_firstname", "value": "PI firstname" },
 				    { "name": "PI_lastname", "value": "PI lastname" },
@@ -50,7 +55,7 @@
 		     ];
     
     widget.display = function (params) {
-        widget = Retina.WidgetInstances.metagenome_search[1];
+        var widget = Retina.WidgetInstances.metagenome_search[1];
 	
 	if (params && params.main) {
 	    widget.main = params.main;
@@ -135,7 +140,15 @@
 <hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
 <h3 style="margin-left: 10px;">\
   <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/cart.png">\
-  Store Results <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
+  Stored Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
+</h3>\
+<div id="storedresults_div" style="margin-left: 10px; margin-right: 10px;">\
+'+(stm.user ? '<p>you have no previous searches</p>' : '<p>you must be logged in to view stored searches</p>')+'\
+</div>\
+<hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
+<h3 style="margin-left: 10px;">\
+  <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/disk.png">\
+  Save Search <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
 </h3>\
 <div id="storeresults_div" style="margin-left: 10px; margin-right: 10px;">\
   <p>Store the results of your search.</p>\
@@ -151,15 +164,18 @@
       <textarea id="searchresult_description" placeholder="enter description (optional)" style="width: 320px;" rows=3></textarea>\
     </div>\
   </div>\
-  <button class="btn pull-right" type="button" disabled id="storeSearchButton" onclick="Retina.WidgetInstances.metagenome_search[1].storeSearch();">store</button>\
+  <button class="btn pull-right" type="button" id="storeSearchButton" onclick="Retina.WidgetInstances.metagenome_search[1].storeSearch();">store</button>\
   <div id="search_result_overview"></div>\
 </div>\
 ';
 	
 	sidebar.innerHTML = html_sidebar;
 
-	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Storing a result requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
-	jQuery("#smartsearch").popover({ trigger: "hover", content: "A smart search issues a new search based on the stored parameters whenever it is used, rather than storing the results."});
+	// check for search preferences
+	stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
+
+	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Saving a search requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
+	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Click on the name of a previously stored search to apply the same search parameters again.</p>"});
 
 	var keyselect = document.getElementById('advanced_search_key');
 	var keylist = widget.keylist;
@@ -210,8 +226,57 @@
 	Retina.WidgetInstances.metagenome_search[1].queryAPI();
     };
 
+    widget.showStoredSearch = function (index) {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+	
+	var searches = Retina.keys(stm.user.preferences.searches).sort();
+	var search = stm.user.preferences.searches[searches[index]];
+	widget.refineSearch('restore', search);
+    };
+
+    widget.deleteStoredSearch = function (index) {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+	
+	var searches = Retina.keys(stm.user.preferences.searches).sort();
+	delete stm.user.preferences.searches[searches[index]];
+	var searches = Retina.keys(stm.user.preferences.searches).sort();
+	if (searches.length) {
+	    var sidehtml = "<ul class='selectList'>";
+	    for (var i=0; i<searches.length; i++) {
+		var item = stm.user.preferences.searches[searches[i]];
+		sidehtml += "<li title='"+item.description+"'><a onclick='Retina.WidgetInstances.metagenome_search[1].showStoredSearch("+i+");'>"+item.name+"</a><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_search[1].deleteStoredSearch("+i+");' title='permanently delete this search'>delete</button></li>";
+	    }
+	    sidehtml += "</ul>";
+	    document.getElementById('storedresults_div').innerHTML = sidehtml;
+	} else {
+	    document.getElementById('storedresults_div').innerHTML = "<p>You currently have no stored searches</p>";
+	}
+	stm.storePreferences("search deleted", "there was an error deleting your search");
+    };
+
+    widget.updateStoredSearches = function () {
+	if (stm.user) {
+	    if (! stm.user.hasOwnProperty("preferences")) {
+		stm.user.preferences = {};
+	    }
+	    if (! stm.user.preferences.hasOwnProperty("searches")) {
+		stm.user.preferences.searches = {};
+	    }
+	    var searches = Retina.keys(stm.user.preferences.searches).sort();
+	    if (searches.length) {
+		var sidehtml = "<ul class='selectList'>";
+		for (var i=0; i<searches.length; i++) {
+		    var item = stm.user.preferences.searches[searches[i]];
+		    sidehtml += "<li title='"+item.description+"'><a onclick='Retina.WidgetInstances.metagenome_search[1].showStoredSearch("+i+");'>"+item.name+"</a><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_search[1].deleteStoredSearch("+i+");' title='permanently delete this search'>delete</button></li>";
+		}
+		sidehtml += "</ul>";
+		document.getElementById('storedresults_div').innerHTML = sidehtml;
+	    }
+	}
+    };
+
     widget.refineSearch = function (action, item) {
-	widget = Retina.WidgetInstances.metagenome_search[1];
+	var widget = Retina.WidgetInstances.metagenome_search[1];
 
 	// get the DOM space for the buttons
 	var target = document.getElementById('refine_search_terms');
@@ -260,6 +325,33 @@
 	} else if (action == "clear") {
 	    widget.advancedOptions = {};
 	    target.innerHTML = "";
+	} else if (action == "restore") {
+	    widget.advancedOptions = item.advancedOptions;
+	    target.innerHTML = "";
+	    var clear = document.createElement('button');
+	    clear.className = "btn btn-small btn-danger";
+	    clear.innerHTML = "clear advanced options";
+	    clear.addEventListener('click', function () {
+		Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
+	    });
+	    clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 20px; margin-top: -15px;");
+	    target.appendChild(clear);
+	    for (var i in widget.advancedOptions) {
+		var skey = i;
+		var sname = widget.specialKeyMapping[i] ? widget.specialKeyMapping[i] : i.replace(/_/g, " ");
+		var sval = widget.advancedOptions[i];
+		var button = document.createElement('button');
+		button.className = "btn btn-small";
+		button.setAttribute('style', "float: left; margin-right: 10px; margin-bottom: 10px;");
+		button.innerHTML = sname+" - "+sval+" <i class='icon icon-remove'></i>";
+		button.title = "click to remove";
+		button.setAttribute('id', 'advSearch_'+skey);
+		button.skey = skey;
+		button.addEventListener('click', function() {
+		    Retina.WidgetInstances.metagenome_search[1].refineSearch("remove", this.skey);
+		});
+		target.appendChild(button);
+	    }
 	} else {
 	    console.log("undefined action for refineSearch");
 	    return;
@@ -268,7 +360,7 @@
     };
     
     widget.resultTable = function (data, total_count) {
-	widget = Retina.WidgetInstances.metagenome_search[1];
+	var widget = Retina.WidgetInstances.metagenome_search[1];
 
 	var showing = "all matches.";
 	var num = 0;
@@ -344,7 +436,7 @@
     };
 
     widget.queryAPI = function (more) {
-	widget = Retina.WidgetInstances.metagenome_search[1];
+	var widget = Retina.WidgetInstances.metagenome_search[1];
 	
 	// get params
 	widget.query = document.getElementById("searchtext").value;
@@ -380,38 +472,40 @@
 	var query_str = "";
 	for (var h=0;h<type.length; h++) {
 	    if(query_str == "") {
-		query_str = type[h] + "=" + widget.query;
+		query_str = type[h] + "=\"" + widget.query + "\"";
 	    } else {
-		query_str += "&" + type[h] + "=" + widget.query;
+		query_str += "&" + type[h] + "=\"" + widget.query + "\"";
 	    }
 	}
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
 		query_str += "&"+h;
-		query_str += "="+widget.advancedOptions[h];
+		query_str += "=\""+widget.advancedOptions[h] + "\"";
 	    }
 	}
 
 	var url = api_url + query_str + "&order=" + widget.sort + "&direction=" + widget.sortDir + "&match=" + widget.match + "&limit=" + widget.limit + "&offset=" + widget.offset;
 	
-	if (stm.Authorization) {
-	    url += "&auth=" + stm.Authorization;
-	}
-
-	jQuery.getJSON(url, function(data) {
-	    for (var i=0;i<data.data.length;i++) {
-		stm.DataStore.search[data.data[i]["id"]] = data.data[i];
-	    }
-
-	    document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, data.total_count);
-	});
-	
+	jQuery.ajax( { dataType: "json",
+		       url: url,
+		       headers: stm.authHeader,
+		       success: function(data) {
+			   for (var i=0;i<data.data.length;i++) {
+			       stm.DataStore.search[data.data[i]["id"]] = data.data[i];
+			   }
+			   
+			   document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, data.total_count);
+		       },
+		       error: function () {
+			   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
+		       }
+		     });
 	return;
     };
 
     widget.sortQuery = function (field, direction) {
-	widget = Retina.WidgetInstances.metagenome_search[1];
+	var widget = Retina.WidgetInstances.metagenome_search[1];
 
 	widget.sort = field;
 	widget.sortDir = direction;
@@ -423,7 +517,7 @@
 	var widget = Retina.WidgetInstances.metagenome_search[1];
 
 	var btn = document.getElementById('storeSearchButton');
-	if (widget.user && (Retina.keys(widget.advancedOptions).length || widget.query)) {
+	if (stm.user && (Retina.keys(widget.advancedOptions).length || widget.query)) {
 	    btn.removeAttribute("disabled");
 	} else {
 	    btn.setAttribute("disabled", "true");
@@ -432,6 +526,11 @@
 
     widget.storeSearch = function () {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	if (! stm.user) {
+	    alert('you must be logged in to store a search');
+	    return;
+	}
 
 	var types = [];
 	var poss = [ 'metadata', 'organism', 'function' ];
@@ -452,32 +551,12 @@
 		       query: widget.query,
 		       advancedOptions: widget.advancedOptions };
 
-	if (! stm.DataStore.hasOwnProperty('preferences')) {
-	    stm.DataStore.preferences = {};
-	}
-	if (! stm.DataStore.preferences.hasOwnProperty('search')) {
-	    stm.DataStore.preferences.search = {};
-	}
-	if (stm.DataStore.preferences.search.hasOwnProperty(search.name)) {
+	if (stm.user.preferences.searches.hasOwnProperty(search.name)) {
 	    alert('you already have a search store with that name');
 	} else {
-	    stm.DataStore.preferences.search[search.name] = search;
+	    stm.user.preferences.searches[search.name] = search;
+	    stm.storePreferences("search stored", "there was an error storing your search");
+	    widget.updateStoredSearches();
 	}
-	
-	alert('search stored');
     };
-
-    // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_search[1];
-	if (params.token) {
-	    widget.user = params.user;
-	    widget.authHeader = { "Auth": params.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.checkStoreSearch();
-    };
-    
 })();

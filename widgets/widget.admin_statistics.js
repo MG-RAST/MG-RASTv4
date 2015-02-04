@@ -23,9 +23,9 @@
 	widget.sidebar.parentNode.style.display = "none";
 	widget.main.className = "span10 offset1";
 
-	if (widget.user) {
+	if (stm.user) {
 
-            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
+            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h4>Monthly Job Submission</h4><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -69,20 +69,32 @@
 
 	var num_in_pipeline = 0;
 
+	// store all unfinished jobs
+	var unfinishedJobs = [];
+
 	// all jobs submitted within the last 30 days (initially only the inactive ones)
 	var jobs30 = [];
 	var jk = Retina.keys(stm.DataStore.inactivejobs);
 	var size_in_pipeline = 0;
 	for (var i=0;i<jk.length;i++) {
 	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
-	    if (stm.DataStore.inactivejobs[jk[i]].state == 'suspend') {
+	    if (stm.DataStore.inactivejobs[jk[i]].state[0] == 'suspend') {
+		unfinishedJobs.push(stm.DataStore.inactivejobs[jk[i]]);
 		num_in_pipeline++;
-		if (! taskcount.hasOwnProperty(stm.DataStore.inactivejobs[jk[i]].task)) {
-		    taskcount[stm.DataStore.inactivejobs[jk[i]].task] = [ 0, 0, 0, 0 ];
+		var j = stm.DataStore.inactivejobs[jk[i]];
+		if (j.task) {
+		    for (var h=0; h<j.task.length; h++) {
+			if (! taskcount.hasOwnProperty(j.task[h])) {
+			    taskcount[j.task[h]] = [ 0, 0, 0, 0 ];
+			}
+			taskcount[j.task[h]][1]++;
+			taskcount[j.task[h]][3] += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
+		    }
+		    size_in_pipeline += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
+		} else {
+		    console.log("WARNING: the following job has no tasks");
+		    console.log(j);
 		}
-		taskcount[stm.DataStore.inactivejobs[jk[i]].task][1]++;
-		taskcount[stm.DataStore.inactivejobs[jk[i]].task][3] += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
-		size_in_pipeline += stm.DataStore.inactivejobs[jk[i]].userattr.bp_count ? parseInt(stm.DataStore.inactivejobs[jk[i]].userattr.bp_count) : stm.DataStore.inactivejobs[jk[i]].size;
 	    }
 	}
 
@@ -91,6 +103,14 @@
 	jk = Retina.keys(stm.DataStore.activejobs);
 	for (var i=0;i<jk.length;i++) {
 	    jobsactive.push(stm.DataStore.activejobs[jk[i]]);
+	    if (stm.DataStore.activejobs[jk[i]].state) {
+		if (stm.DataStore.activejobs[jk[i]].state[0] != 'completed') {
+		    unfinishedJobs.push(stm.DataStore.activejobs[jk[i]]);
+		}
+	    } else {
+		console.log("WARNING: job with invalid state");
+		console.log(stm.DataStore.activejobs[jk[i]]);
+	    }
 	}
 
 	// timestamp of 30 days ago
@@ -117,18 +137,26 @@
 	    size_in_pipeline += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 
 	    // count the current state
-	    states[jobsactive[i].state]++;
+	    if (! jobsactive[i].state) {
+		continue;
+	    }
+	    for (var h=0; h<jobsactive[i].state.length; h++) {
+		states[jobsactive[i].state[h]]++;
+	    }
 
-	    // count the current task
-	    if (jobsactive[i].state == "in-progress") {
-		taskcount[jobsactive[i].task][0]++;
-		taskcount[jobsactive[i].task][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
-	    } else {
-		if (! taskcount.hasOwnProperty(jobsactive[i].task)) {
-		    taskcount[jobsactive[i].task] = [ 0, 0, 0, 0 ];
+	    for (var h=0; h<jobsactive[i].state.length; h++) {
+
+		// count the current task
+		if (jobsactive[i].state[h] == "in-progress") {
+		    taskcount[jobsactive[i].task[h]][0]++;
+		    taskcount[jobsactive[i].task[h]][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
+		} else {
+		    if (! taskcount.hasOwnProperty(jobsactive[i].task[h])) {
+			taskcount[jobsactive[i].task[h]] = [ 0, 0, 0, 0 ];
+		    }
+		    taskcount[jobsactive[i].task[h]][1]++;
+		    taskcount[jobsactive[i].task[h]][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 		}
-		taskcount[jobsactive[i].task][1]++;
-		taskcount[jobsactive[i].task][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 	    }
 
 	    // get the active jobs for last 30 days
@@ -232,8 +260,24 @@
 	html += "<tr><td><b>completed last 7 days</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>submitted last 30 days</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
 	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
+	html += "</table>";
 
-	html += "</table><h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
+	// display unfinished jobs
+	html += "<h4>ten oldest unfinished jobs</h4>";
+	unfinishedJobs.sort(Retina.propSort('submittime'));
+	html += "<table class='table table-striped table-condensed' style='width: 350px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th></tr>";
+	var iMax = 10;
+	for (var i=0; i<unfinishedJobs.length; i++) {
+	    if (i == iMax) {
+		break;
+	    }
+	    var t = new Date();
+	    var daysInQueue = parseInt((t.getTime() - Date.parse(unfinishedJobs[i].submittime)) / (1000 * 60 * 60 * 24));
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td>"+unfinishedJobs[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td></tr>";
+	}
+	html += "</table>";
+
+	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
 	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
@@ -397,7 +441,10 @@
 	// get initial backlog
 	var backlog = 0;
 	for (var i=0; i<data.length; i++) {
-	    if (data[i].state != "completed") {
+	    if (! data[i].state) {
+		continue;
+	    }
+	    if (data[i].state[0] != "completed") {
 		if (data[i].userattr.hasOwnProperty('bp_count')) {
 		    backlog += parseInt(data[i].userattr.bp_count) || 0;
 		} else if (data[i].hasOwnProperty('size')) {
@@ -411,7 +458,10 @@
 	var sdaydata = {};
 	var daysh = {};
 	for (var i=0; i<data.length; i++) {
-	    if (data[i].state == 'completed') {
+	    if (! data[i].state) {
+		continue;
+	    }
+	    if (data[i].state[0] == 'completed') {
 		var cday = data[i].completeChicago.substr(0,10);
 		daysh[cday] = 1;
 		if (! cdaydata.hasOwnProperty(cday)) {
@@ -426,7 +476,7 @@
 	    }
 	    sdaydata[sday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
 	}
-	var days = Retina.keys(daysh).sort().reverse();
+	var days = Retina.keys(daysh).sort().slice(-30).reverse();
 
 	// process data
 	var graphData = [];
@@ -435,10 +485,11 @@
 	for (var i=0; i<30; i++) {
 	    var b = String(backlog / 1000000000);
 	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
-	    backlog = backlog - (cdaydata[days[i]] || 0) + (sdaydata[days[i]] || 0);
+	    backlog = backlog + (cdaydata[days[i]] || 0) - (sdaydata[days[i]] || 0);
 	}
+	labels = days;
 	backlogs = backlogs.reverse();
-	labels = days.reverse();
+	days = days.reverse();
 
 	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
 
@@ -482,8 +533,8 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
-				     headers: widget.authHeader,
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
 					     stm.DataStore.inactivejobs = {};
@@ -496,7 +547,7 @@
 					 } else {
 					     jQuery.ajax( { dataType: "json",
 					 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					 		    headers: widget.authHeader,
+					 		    headers: stm.authHeader,
 					 		    success: function(data) {
 					 			stm.DataStore.jobtemplate = { 1: data.data[0] };
 					 		    },
@@ -512,8 +563,8 @@
 				   } ) );
 
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=10000&state=suspend&userattr=bp_count",
-				     headers: widget.authHeader,
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&limit=100000&state=suspend&userattr=bp_count",
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
 					     stm.DataStore.inactivejobs = {};
@@ -528,8 +579,8 @@
 				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=10000&userattr=bp_count",
-				     headers: widget.authHeader,
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
+				     headers: stm.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = {};
 					 for (var i=0; i<data.data.length; i++) {
@@ -544,9 +595,104 @@
 	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
 	    stm.dump(true, 'admin_statistics').then(function() {
 		Retina.WidgetInstances.admin_statistics[1].getUserData();
+		Retina.WidgetInstances.admin_statistics[1].getLongTermJobData();
 	    });
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
+    };
+
+    widget.getLongTermJobData = function () {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	var year = "2014";
+	var month = "09";
+	var now_year = new Date().getFullYear();
+	var now_month = (new Date().getMonth() + 1).padLeft();
+	var promises = [];
+	while (year < now_year || month < now_month) {
+	    var tstart = year+"-"+month+"-01T00:00:00.000Z";
+	    var d = year+"-"+month;
+	    month = parseInt(month);
+	    month++;
+	    if (month > 12) {
+		month = "01";
+		year = parseInt(year);
+		year++;
+		year += "";
+	    } else {
+		month = month.padLeft();
+	    }
+	    var tend = year+"-"+month+"-01T00:00:00.000Z";
+	    if (! stm.DataStore.hasOwnProperty('longTermJobData')) {
+		stm.DataStore.longTermJobData = {};
+	    }
+	    if (! stm.DataStore.longTermJobData.hasOwnProperty(d)) {
+		var p = jQuery.Deferred();
+		promises.push(p);
+		jQuery.ajax( { dataType: "json",
+			       promise: p,
+			       date: d,
+			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
+			       headers: stm.authHeader,
+			       success: function(data) {
+				   var bps = 0;
+				   var min = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
+				   var max = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
+				   for (var i=0; i<data.data.length; i++) {
+				       var s = data.data[i].userattr.bp_count ? parseInt(data.data[i].userattr.bp_count) : data.data[i].size;
+				       max = s > max ? s : max;
+				       min = s < min ? s : min;
+				       bps += s;
+				   }
+				   stm.DataStore.longTermJobData[this.date] = { id: this.date, num: data.data.length, bp: bps, min: min, max: max };
+				   this.promise.resolve();
+			       },
+			       error: function () {
+				   alert('there was an error retrieving the long term job data for '+this.date);
+				   this.promise.resolve();
+			       }
+			     } );
+	    }
+	}
+	if (promises.length) {
+	    jQuery.when.apply(this, promises).then(function() {
+		stm.updateHardStorage('admin_statistics', { longTermJobData: true }).then(function() {
+		    Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
+		});
+	    });
+	} else {
+	    Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
+	}
+    };
+
+    widget.showLongTermJobData = function () {
+	var widget = Retina.WidgetInstances.admin_statistics[1];
+
+	var d = jQuery.extend(true, stm.DataStore.longTermJobData, widget.legacyJobData);
+	var months = Retina.keys(d).sort();
+	var longdata = [ { name: "data submitted (Gbp)", data: [] },
+			 //{ name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
+			 { name: "average jobsize (Mbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
+		       ];
+	var sumbp = 0;
+	for (var i=0; i<months.length; i++) {
+	    var item = d[months[i]];
+	    longdata[0].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000000).formatString(3, null, "")));
+	    longdata[1].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000 / item.num).formatString(3, null, "")));
+	    //sumbp += item.legacy ? (item.bp * 1000000000) : item.bp;
+	    //longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
+	}
+
+	Retina.Renderer.create("graph", { target: document.getElementById('longtermgraph'),
+					  data: longdata,
+					  hasY2: true,
+					  y_title: "submitted data (Gbp)",
+					  y2_title: "average jobsize (Mbp)",
+					  x_labels: months,
+					  width: 950,
+					  chartArea: [100, 0.1, 850, 0.7],
+					  x_labels_rotation: "-35",
+					  type: "column" }).render();
     };
 
     // USERS
@@ -615,7 +761,7 @@
 			       url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent(timestamp)+"&verbosity=minimal&limit=1",
 			       promise: p,
 			       date: d,
-			       headers: widget.authHeader,
+			       headers: stm.authHeader,
 			       success: function(data) {
 				   stm.DataStore.userCounts[this.date] = { "count": data.total_count };
 				   this.promise.resolve();
@@ -626,28 +772,116 @@
 	promises.push(jQuery.ajax( { dataType: "json",
 				     url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent("["+now_year+"-"+now_month)+"&verbosity=minimal&limit=1",
 				     date: now_year+"-"+now_month,
-				     headers: widget.authHeader,
+				     headers: stm.authHeader,
 				     success: function(data) {
-					 widget.currentUserCount = data.total_count;
+					 Retina.WidgetInstances.admin_statistics[1].currentUserCount = data.total_count;
 				     }
 				   } ));
 	
 	jQuery.when.apply(this, promises).then(function() {
-	    widget.showUserData();
+	    if (promises.length > 1) {
+		stm.updateHardStorage('admin_statistics', { userCounts: true }).then(function() {
+		    Retina.WidgetInstances.admin_statistics[1].showUserData();
+		});
+	    } else {
+		Retina.WidgetInstances.admin_statistics[1].showUserData();
+	    }
 	});
     };
 
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_statistics[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
+    /*
+      Legacy Job Data
+     */
+    widget.legacyJobData = {
+	// "2007-04": { "num": 10, "bp": 0.09, "legacy": true },
+	// "2007-05": { "num": 7, "bp": 0.16, "legacy": true },
+	// "2007-06": { "num": 2, "bp": 0.12, "legacy": true },
+	// "2007-07": { "num": 45, "bp": 1.21, "legacy": true },
+	// "2007-08": { "num": 27, "bp": 0.39, "legacy": true },
+	// "2007-09": { "num": 23, "bp": 0.39, "legacy": true },
+	// "2007-10": { "num": 25, "bp": 0.40, "legacy": true },
+	// "2007-11": { "num": 36, "bp": 0.90, "legacy": true },
+	// "2007-12": { "num": 82, "bp": 0.88, "legacy": true },
+	// "2008-01": { "num": 111, "bp": 0.50, "legacy": true },
+	// "2008-02": { "num": 58, "bp": 1.39, "legacy": true },
+	// "2008-03": { "num": 57, "bp": 1.17, "legacy": true },
+	// "2008-04": { "num": 84, "bp": 0.99, "legacy": true },
+	// "2008-05": { "num": 110, "bp": 2.77, "legacy": true },
+	// "2008-06": { "num": 141, "bp": 1.92, "legacy": true },
+	// "2008-07": { "num": 87, "bp": 3.67, "legacy": true },
+	// "2008-08": { "num": 49, "bp": 1.88, "legacy": true },
+	// "2008-09": { "num": 105, "bp": 3.51, "legacy": true },
+	// "2008-10": { "num": 239, "bp": 14.26, "legacy": true },
+	// "2008-11": { "num": 149, "bp": 2.74, "legacy": true },
+	// "2008-12": { "num": 229, "bp": 3.22, "legacy": true },
+	// "2009-01": { "num": 179, "bp": 3.90, "legacy": true },
+	// "2009-02": { "num": 195, "bp": 3.97, "legacy": true },
+	// "2009-03": { "num": 316, "bp": 4.83, "legacy": true },
+	// "2009-04": { "num": 154, "bp": 8.64, "legacy": true },
+	// "2009-05": { "num": 210, "bp": 5.44, "legacy": true },
+	// "2009-06": { "num": 314, "bp": 12.43, "legacy": true },
+	// "2009-07": { "num": 245, "bp": 5.35, "legacy": true },
+	// "2009-08": { "num": 186, "bp": 6.38, "legacy": true },
+	// "2009-09": { "num": 165, "bp": 8.41, "legacy": true },
+	// "2009-10": { "num": 162, "bp": 6.36, "legacy": true },
+	// "2009-11": { "num": 238, "bp": 8.75, "legacy": true },
+	// "2009-12": { "num": 183, "bp": 7.05, "legacy": true },
+	// "2010-01": { "num": 256, "bp": 13.67, "legacy": true },
+	// "2010-02": { "num": 196, "bp": 31.35, "legacy": true },
+	// "2010-03": { "num": 531, "bp": 20.13, "legacy": true },
+	// "2010-04": { "num": 485, "bp": 31.39, "legacy": true },
+	// "2010-05": { "num": 622, "bp": 33.11, "legacy": true },
+	// "2010-06": { "num": 539, "bp": 30.50, "legacy": true },
+	// "2010-07": { "num": 595, "bp": 31.70, "legacy": true },
+	// "2010-08": { "num": 436, "bp": 25.65, "legacy": true },
+	// "2010-09": { "num": 421, "bp": 23.68, "legacy": true },
+	// "2010-10": { "num": 529, "bp": 44.45, "legacy": true },
+	// "2010-11": { "num": 759, "bp": 15.98, "legacy": true },
+	// "2010-12": { "num": 516, "bp": 36.08, "legacy": true },
+	// "2011-01": { "num": 506, "bp": 29.35, "legacy": true },
+	// "2011-02": { "num": 727, "bp": 33.68, "legacy": true },
+	// "2011-03": { "num": 149, "bp": 30.18, "legacy": true },
+	// "2011-04": { "num": 159, "bp": 73.15, "legacy": true },
+	// "2011-05": { "num": 9868, "bp": 501.33, "legacy": true },
+	// "2011-06": { "num": 1867, "bp": 720.18, "legacy": true },
+	// "2011-07": { "num": 2083, "bp": 221.71, "legacy": true },
+	// "2011-08": { "num": 2101, "bp": 472.44, "legacy": true },
+	// "2011-09": { "num": 3104, "bp": 4732.48, "legacy": true },
+	// "2011-10": { "num": 1394, "bp": 592.07, "legacy": true },
+	// "2011-11": { "num": 1692, "bp": 111.78, "legacy": true },
+	// "2011-12": { "num": 1660, "bp": 1260.73, "legacy": true },
+	"2012-01": { "num": 1922, "bp": 896.64, "legacy": true },
+	"2012-02": { "num": 3550, "bp": 1081.32, "legacy": true },
+	"2012-03": { "num": 2602, "bp": 695.20, "legacy": true },
+	"2012-04": { "num": 2487, "bp": 650.16, "legacy": true },
+	"2012-05": { "num": 3305, "bp": 1193.34, "legacy": true },
+	"2012-06": { "num": 1445, "bp": 446.47, "legacy": true },
+	"2012-07": { "num": 3080, "bp": 791.64, "legacy": true },
+	"2012-08": { "num": 2446, "bp": 476.42, "legacy": true },
+	"2012-09": { "num": 2720, "bp": 1260.94, "legacy": true },
+	"2012-10": { "num": 3357, "bp": 951.35, "legacy": true },
+	"2012-11": { "num": 2593, "bp": 786.49, "legacy": true },
+	"2012-12": { "num": 1759, "bp": 1077.42, "legacy": true },
+	"2013-01": { "num": 2895, "bp": 953.34, "legacy": true },
+	"2013-02": { "num": 3135, "bp": 1700.24, "legacy": true },
+	"2013-03": { "num": 2573, "bp": 1984.73, "legacy": true },
+	"2013-04": { "num": 2550, "bp": 1695.53, "legacy": true },
+	"2013-05": { "num": 2409, "bp": 1241.64, "legacy": true },
+	"2013-06": { "num": 3248, "bp": 876.77, "legacy": true },
+	"2013-07": { "num": 2527, "bp": 2100.13, "legacy": true },
+	"2013-08": { "num": 3832, "bp": 1491.26, "legacy": true },
+	"2013-09": { "num": 2922, "bp": 2302.40, "legacy": true },
+	"2013-10": { "num": 4377, "bp": 3188.31, "legacy": true },
+	"2013-11": { "num": 3438, "bp": 1472.80, "legacy": true },
+	"2013-12": { "num": 3362, "bp": 1776.19, "legacy": true },
+	"2014-01": { "num": 2859, "bp": 1705.05, "legacy": true },
+	"2014-02": { "num": 3049, "bp": 1327.80, "legacy": true },
+	"2014-03": { "num": 4280, "bp": 1663.67, "legacy": true },
+	"2014-04": { "num": 4010, "bp": 2244.64, "legacy": true },
+	"2014-05": { "num": 4009, "bp": 1799.97, "legacy": true },
+	"2014-06": { "num": 3753, "bp": 1953.90, "legacy": true },
+	"2014-07": { "num": 4271, "bp": 2301.45, "legacy": true },
+	"2014-08": { "num": 4357, "bp": 1380.57, "legacy": true },
     };
 
 })();

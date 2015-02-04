@@ -20,7 +20,7 @@
 	    widget.sidebar = wparams.sidebar;
 	}
 
-	if (widget.user) {
+	if (stm.user) {
 	    widget.sidebar.style.display = "";
 	    widget.sidebar.style.padding = "10px";
 	    widget.sidebar.style.paddingTop = "20px";
@@ -34,6 +34,9 @@
 	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_awe'></td></tr>";
 	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_shock'></td></tr>";
 	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
+	    html += "<tr><td><b>m5nr solr</b></td><td id='system_m5solr'></td></tr>";
+	    html += "<tr><td><b>metagenome solr</a></td><td id='system_mgsolr'></td></tr>";
+
 	    html += "</table>";
 
 	    html += "<h4 style='margin-top: 50px;'><a name='awe'></a>AWE Details</h4><div id='awe_details'>-</div>";
@@ -62,10 +65,12 @@
 	document.getElementById('system_api').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
 	document.getElementById('system_shock').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
 	document.getElementById('system_awe').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+	document.getElementById('system_m5solr').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+	document.getElementById('system_mgsolr').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
 
 	jQuery.ajax({ url: RetinaConfig.mgrast_api,
 		      dataType: "json",
-		      headers: widget.authHeader,
+		      headers: stm.authHeader,
 		      success: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
 			  widget.apiDetails(data);
@@ -80,7 +85,7 @@
 		    });
 
 	jQuery.ajax({ url: RetinaConfig.awe_url+"/client",
-		      headers: widget.shockAuthHeader,
+		      headers: stm.SHOCKAWEAuth,
 		      dataType: "json",
 		      success: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
@@ -97,7 +102,7 @@
 		    });
 
 	jQuery.ajax({ url: RetinaConfig.shock_url+"/node",
-		      headers: widget.shockAuthHeader,
+		      headers: stm.SHOCKAWEAuth,
 		      dataType: "json",
 		      success: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
@@ -111,6 +116,16 @@
 			  document.getElementById('system_shock').innerHTML = Retina.WidgetInstances.admin_system[1].status('error') + "failed in "+(t - widget.startTime)+"ms";
 		      }
 		    });
+	jQuery.getScript(RetinaConfig.m5nr_solr_url, function() {
+	    var widget = Retina.WidgetInstances.admin_system[1];
+	    var t = new Date().getTime();
+	    document.getElementById('system_m5solr').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
+	});
+	jQuery.getScript(RetinaConfig.metagenome_solr_url, function() {
+	    var widget = Retina.WidgetInstances.admin_system[1];
+	    var t = new Date().getTime();
+	    document.getElementById('system_mgsolr').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
+	});
     };
 
     widget.aweDetails = function () {
@@ -158,7 +173,7 @@
 	// get the overview data
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig["awe_url"]+"/queue",
-		       headers: widget.shockAuthHeader,
+		       headers: stm.SHOCKAWEAuth,
 		       clients: clientData,
 		       success: function(data) {
 			   var result = data.data;
@@ -201,7 +216,7 @@
 	// get the errors from the suspended jobs
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig["awe_url"]+"/job?suspend&limit=100&offset=0",
-		       headers: widget.shockAuthHeader,
+		       headers: stm.SHOCKAWEAuth,
 		       success: function(data) {
 			   Retina.WidgetInstances.admin_system[1].parseAWEErrors(data);
 		       }
@@ -236,7 +251,7 @@
 		promises.push(promise);
 		jQuery.ajax( { dataType: "json",
 			       url:RetinaConfig["awe_url"]+"/work/"+data.data[i].lastfailed+"?report=worknotes",
-			       headers: widget.shockAuthHeader,
+			       headers: stm.SHOCKAWEAuth,
 			       promise: promise,
 			       success: function(data) {
 				   Retina.WidgetInstances.admin_system[1].worknotes.push(data.data);
@@ -297,7 +312,7 @@
 	jQuery.ajax({
 	    method: "PUT",
 	    dataType: "json",
-	    headers: widget.shockAuthHeader, 
+	    headers: stm.SHOCKAWEAuth, 
 	    url: RetinaConfig["awe_url"]+"/job?resumeall",
 	    success: function (data) {
 		Retina.WidgetInstances.admin_system[1].test_components();
@@ -312,7 +327,7 @@
 	jQuery.ajax({
 	    method: "PUT",
 	    dataType: "json",
-	    headers: widget.shockAuthHeader, 
+	    headers: stm.SHOCKAWEAuth, 
 	    url: RetinaConfig["awe_url"]+"/client?resumeall",
 	    success: function (data) {
 		Retina.WidgetInstances.admin_system[1].test_components();
@@ -335,7 +350,7 @@
 								   "width": Retina.WidgetInstances.shockbrowse[0].sizes.small[0],
 								   "height": Retina.WidgetInstances.shockbrowse[0].sizes.small[1],
 								   "target": target,
-								   "authHeader": widget.shockAuthHeader,
+								   "authHeader": stm.SHOCKAWEAuth,
 								   "shockBase": RetinaConfig.shock_url});
 	}
     };
@@ -408,20 +423,4 @@
 	}
 
     };
-
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_system[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	    widget.shockAuthHeader = { "Authorization": "OAuth "+data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	    widget.shockAuthHeader = {};
-	}
-	widget.display();
-    };
-
 })();

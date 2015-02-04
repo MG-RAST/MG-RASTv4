@@ -732,7 +732,7 @@
 	    widget.user = action.user;
 
 	    // set authentication
-	    widget.authHeader = { "Authorization": "OAuth "+action.token };
+	    widget.authHeader = action.authHeader;
 
 	    if (widget.enableUpload) {
 		// enable functions only available when logged in

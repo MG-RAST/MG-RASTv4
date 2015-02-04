@@ -74,8 +74,9 @@
 								   "showUploadPreview": false,
 								   "presetFilters": { "type": "inbox" },
 								   "shockBase": RetinaConfig.shock_url});
+	    widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.SHOCKAWEAuth});
 	}
-	if (! widget.user) {
+	if (! stm.user) {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
 	}
     };
@@ -85,7 +86,7 @@
 
 	var html = "<h4>File Information</h4>";
 
-	console.log(params);
+	//console.log(params);
 
 	var node = params.node;
 	var fn = node.file.name;
@@ -131,10 +132,6 @@
 	    html += "<button class='btn btn-small'>join paired ends</button>";
 	} else if (filetype.match(/^fasta/)) {
 	    html += "<button class='btn btn-small'>check coverage format</button>";
-// >sequence_number_1_[cov=2]
-// CTAGCGCACATAGCATTCAGCGTAGCAGTCACTAGTACGTAGTACGTACC
-// >sequence_number_2_[cov=4]
-// ACGTAGCTCACTCCAGTAG
 	}
 	
 	html += "<h4 style='margin-top: 20px;'>Delete File</h4>";
@@ -150,8 +147,8 @@
 	var node = data.data;
 	var newNodeAttributes = node.attributes;
 	newNodeAttributes['type'] = 'inbox';
-	newNodeAttributes['user'] = widget.user.login;
-	newNodeAttributes['email'] = widget.user.email;
+	newNodeAttributes['user'] = stm.user.login;
+	newNodeAttributes['email'] = stm.user.email;
 	var url = widget.browser.shockBase+'/node/'+node.id;
 	var fd = new FormData();
 	fd.append('attributes', new Blob([ JSON.stringify(newNodeAttributes) ], { "type" : "text\/json" }));
@@ -168,27 +165,9 @@
 		console.log(jqXHR);
 	    },
 	    crossDomain: true,
-	    headers: widget.browser.authHeader,
+	    headers: stm.authHeader,
 	    type: "PUT"
 	});
     };
 
-     // login widget sends an action (log-in or log-out)
-    widget.loginAction = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-	if (params.token) {
-	    widget.user = params.user;
-	    widget.browser.user = widget.user;
-	    widget.browser.presetFilters.user = widget.user.login;
-	    widget.browser.authHeader = { "Authorization": "OAuth "+params.token };
-	    widget.authHeader = { "Auth": params.token };
-	} else {
-	    widget.user = null;
-	    widget.browser.user = null;
-	    delete widget.browser.presetFilters.user;
-	    widget.browser.authHeader = {};
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
 })();

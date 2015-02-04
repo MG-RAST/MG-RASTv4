@@ -12,7 +12,6 @@
 	return [ Retina.load_renderer("table") ];
     };
     
-    widget.authHeader = {};
     widget.user = null;
 
     widget.display = function (wparams) {
@@ -36,7 +35,7 @@
 
 	    jQuery.ajax( { dataType: "json",
 			   url: RetinaConfig['mgrast_api']+"/metagenome/"+mgid,
-			   headers: widget.authHeader,
+			   headers: stm.authHeader,
 			   success: function(data) {
 			       var did = data.id.substr(3);
 			       document.getElementById('mginfo').innerHTML = data.name+" ("+did+")";
@@ -45,7 +44,7 @@
 
 	    jQuery.ajax( { dataType: "json",
 			   url: RetinaConfig['mgrast_api']+"/download/"+mgid,
-			   headers: widget.authHeader,
+			   headers: stm.authHeader,
 			   success: function(data) {
 			       Retina.WidgetInstances.metagenome_download[1].displayMetagenomeDownloads(data);
 			   },
@@ -59,7 +58,7 @@
 	    content.innerHTML = html;
 
 	    var table = Retina.Renderer.create("table", { target: document.getElementById('projects_table'), data: {}, filter_autodetect: true, sort_autodetect: true });
-	    table.settings.headers = widget.authHeader;
+	    table.settings.headers = stm.authHeader;
 	    table.settings.synchronous = false;
 	    table.settings.query_type = 'prefix';
 	    table.settings.data_manipulation = Retina.WidgetInstances.metagenome_download[1].dataManipulation,
@@ -164,7 +163,7 @@
 	var filename = Retina.cgiParam('metagenome')+"_"+ann+"_"+(ann == "ontology" ? ont : org)+".tab";
 
 	jQuery.ajax( { url: url,
-		       headers: widget.authHeader,
+		       headers: stm.authHeader,
 		       success: function(data) {
 			   stm.saveAs(data, filename);
 			   document.getElementById('download_progress').innerHTML = "";
@@ -178,10 +177,10 @@
 
     widget.authenticatedDownload = function (button, url) {
 	var widget = Retina.WidgetInstances.metagenome_download[1];
-
+	console.log(url);
 	button.setAttribute('disabled', 'true');
 	jQuery.ajax( { url: url+"&link=1",
-		       headers: widget.authHeader,
+		       headers: stm.authHeader,
 		       success: function(data) {
 			   button.removeAttribute('disabled');
 			   window.location = data.url;

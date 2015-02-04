@@ -26,8 +26,6 @@
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" type="text/css" href="Retina/css/jquery.svg.css">
-    <link rel="stylesheet" type="text/css" href="Retina/css/jquery.datepicker.css">
     <link rel="stylesheet" type="text/css" href="css/mgrast.css">
 
     <!-- webapp initialization -->
@@ -46,20 +44,51 @@
 	}
 	
 	document.title = page.charAt(0).toUpperCase()+page.substr(1);
+
+	changeLocation = function(event, loc) {
+	    event = event || window.event;
+	    if (event.shiftKey) {
+		window.open(loc);
+	    } else {
+		window.location = loc;
+	    }
+	};
 	
 	Retina.load_widget("admin_"+page).then( function() {
 	    var mgp = Retina.Widget.create('admin_'+page, { "main": document.getElementById("content"),
 							    "sidebar": document.getElementById("sidebar") });
 	    
 	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+		var loginAction = function (data) {
+		    if (data.action != "logout" && data.result == "success") {
+			if (stm.user && stm.user.hasOwnProperty("preferences")) {
+			    mgp.display();
+			    return;
+			}
+			stm.user = data.user;
+			stm.authHeader = { "Auth": data.token };
+			mgp.display();
+		    } else {
+			stm.user = null;
+			stm.authHeader = {};
+			mgp.display();
+		    }
+		};
 		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				"callback": mgp.loginAction,
-					      });
+		    				"callback": loginAction,
+						"registerEnabled": true,
+						"registerLink": "mgmain.html?mgpage=register",
+						"helpEnabled": true,
+						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
+						"forgotEnabled": true,
+						"forgotLink": "mgmain.html?mgpage=register&forgot=1",
+						"myDataEnabled": true,
+						"myDataLink": "mgmain.html?mgpage=user" });
 	    });
 	    
 	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
 		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-	    });    
+	    });
 	});
     });
     </script>
@@ -77,10 +106,11 @@
 	  
       <!-- navigation icons -->
       <div class="icorow">
-    	<div class="icosp" id="icon_statistics"><img src="Retina/images/bars.png" class="ico" title="Statistics" onclick="window.location='mgadmin.html?mgpage=statistics';"><span>Statistics</span></div>
-    	<div class="icosp" id="icon_users"><img src="Retina/images/user.png" class="ico" title="Users" onclick="window.location='mgadmin.html?mgpage=users';"><span>Users</span></div>
-    	<div class="icosp" id="icon_system" onclick="window.location='mgadmin.html?mgpage=system';"><img src="Retina/images/settings3.png" class="ico" title="System Status"><span>System Status</span></div>
-    	<div class="icosp" id="icon_advancedstatistics" onclick="window.location='mgadmin.html?mgpage=advancedstatistics';"><img src="Retina/images/stats.png" class="ico" title="Statistics+"><span>Statistics+</span></div>
+    	<div class="icosp" id="icon_statistics"><img src="Retina/images/bars.png" class="ico" title="Statistics" onclick="changeLocation(event, 'mgadmin.html?mgpage=statistics');"><span>Statistics</span></div>
+    	<div class="icosp" id="icon_users"><img src="Retina/images/user.png" class="ico" title="Users" onclick="changeLocation(event, 'mgadmin.html?mgpage=users');"><span>Users</span></div>
+    	<div class="icosp" id="icon_system" onclick="changeLocation(event, 'mgadmin.html?mgpage=system');"><img src="Retina/images/settings3.png" class="ico" title="System Status"><span>System Status</span></div>
+    	<div class="icosp" id="icon_advancedstatistics" onclick="changeLocation(event, 'mgadmin.html?mgpage=advancedstatistics');"><img src="Retina/images/stats.png" class="ico" title="Statistics+"><span>Statistics+</span></div>
+    	<div class="icosp" id="icon_debug" onclick="changeLocation(event, 'mgadmin.html?mgpage=debug');"><img src="Retina/images/bug.png" class="ico" title="Debug"><span>Debug</span></div>
       </div>
 	  
       <div style="float: right;">

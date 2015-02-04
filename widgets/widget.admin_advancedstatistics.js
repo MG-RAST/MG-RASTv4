@@ -24,13 +24,11 @@
 	widget.sidebar.parentNode.style.display = "none";
 	widget.main.className = "span10 offset1";
 
-	if (widget.user) {
+	if (stm.user) {
 
-	    var nowTemp = new Date();
-	    var pastTemp = new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
-	    var now = nowTemp.getFullYear() + "-" + (nowTemp.getMonth() + 1).padLeft() + "-" + (nowTemp.getDate() + 1).padLeft();
+	    var pastTemp = new Date(new Date().getTime() - (1000 * 60 * 60 * 24));
 	    var past = pastTemp.getFullYear() + "-" + (pastTemp.getMonth() + 1).padLeft() + "-" + (pastTemp.getDate() + 1).padLeft();
-            var html = '<h3>Computation Statistics</h3><div><div class="input-prepend"><span class="add-on">from</span><input type="text" id="pick_start" value="'+past+'"></div> <div class="input-prepend input-append"><span class="add-on">to</span><input type="text" id="pick_end" value="'+now+'"><button class="btn" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();">show</button></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
+            var html = '<h3>Computation Statistics</h3><div><div class="input-prepend"><span class="add-on">from</span><input type="text" id="pick_start" value="'+past+'"></div> <div class="input-prepend input-append"><span class="add-on">to</span><input type="text" id="pick_end" value="'+past+'"><button class="btn" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();">show</button></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -39,7 +37,7 @@
 	    
 	    jQuery("#pick_start").datepicker({ date: pastTemp,
 					       format: "yyyy-mm-dd" });
-	    jQuery("#pick_end").datepicker({ date: nowTemp,
+	    jQuery("#pick_end").datepicker({ date: pastTemp,
 					     format: "yyyy-mm-dd" });
 
 	    Retina.WidgetInstances.admin_advancedstatistics[1].getJobData();
@@ -55,35 +53,26 @@
 
 	document.getElementById('statistics').innerHTML = '<img src="Retina/images/waiting.gif" style="margin-left: 40%;">';
 
-	var dstart = document.getElementById('pick_start').value + "T00:00:00.000Z";
-	var dend = document.getElementById('pick_end').value + "T00:00:00.000Z";
+	var dstart = widget.dateString(new Date().getTime() - (Date.parse(document.getElementById('pick_start').value + "T00:00:00.000Z") + (1000 * 60 * 60 * 6)));
+	var dend = widget.dateString(new Date().getTime() - (Date.parse(document.getElementById('pick_end').value + "T23:59:59.999Z") + (1000 * 60 * 60 * 6)));
 	var limit = 2500;
 	
 	var prom = jQuery.Deferred();
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+dstart+"&date_end="+dend+"&limit="+limit+"&state=completed",
-		       headers: widget.authHeader,
+		       headers: stm.authHeader,
+		       dend: dend,
+		       dstart: dstart,
 		       success: function(data) {
-			   if (! stm.DataStore.hasOwnProperty('completedJobs')) {
-			       stm.DataStore.completedJobs = {};
-			   }
+			   stm.DataStore.completedJobs = {};
+			   var j;
 			   for (var i=0; i<data.data.length; i++) {
-			       stm.DataStore.completedJobs[data.data[i].id] = data.data[i];
+			       if ((data.data[i].info.completedtime > this.dstart) && (data.data[i].info.completedtime < this.dend)) {
+				   stm.DataStore.completedJobs[data.data[i].id] = data.data[i];
+				   stm.DataStore.jobtemplate = { 1: data.data[i] };
+			       }
 			   }
-			   if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
-			       prom.resolve();
-			   } else {
-			       jQuery.ajax( { dataType: "json",
-					      url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].info.name,
-					      headers: widget.authHeader,
-					      success: function(data) {
-					 	  stm.DataStore.jobtemplate = { 1: data.data[0] };
-					      },
-					      error: function () {
-					 	  alert('there was an error retrieving the data');
-					      }
-					    } ).then(function(){ prom.resolve(); });
-			   }
+			   prom.resolve();
 		       },
 		       error: function () {
 			   alert('there was an error retrieving the data');
@@ -101,13 +90,27 @@
 	
 	widget.jobids = Retina.keys(stm.DataStore.completedJobs);
 
-	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in Mbp</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div>task <div class='input-append'><input type='text' value='0' class='span2' id='tasknumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.previousSibling.value);'>show</button></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
+	var nowTemp = new Date();
+	var now = nowTemp.getFullYear() + "-" + (nowTemp.getMonth() + 1).padLeft() + "-" + (nowTemp.getDate() + 1).padLeft();
+	var html = "loaded "+widget.jobids.length+" completed job statistics<h4>average input size in MB</h4><div id='avg_size'></div><h4>average computation time in minutes</h4><div id='avg_time'></div><div><h4 style='margin-top: 25px;'>Task Plot</h4><div class='input-prepend'><span class='add-on'>task</span><select class='span10' id='tasknumselect' onchange='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(this.options[this.selectedIndex].value);'></select></div><div class='input-prepend'><span class='add-on'>separation date</span><input type='text' id='pick_sep' value='"+now+"' onchange='Retina.WidgetInstances.admin_advancedstatistics[1].updateTask(document.getElementById(\"tasknumselect\").options[document.getElementById(\"tasknumselect\").selectedIndex].value);'></div></div><div class='row'><div id='tasktime' class='span8'></div><div id='taskdetails' class='span4'></div></div><div id='jobnumsel' style='height: 70px;'></div><div>job <div class='input-append'><input type='text' value='"+stm.DataStore.completedJobs[widget.jobids[0]].info.name+"' class='span4' id='jobnumselect'><button class='btn' onclick='Retina.WidgetInstances.admin_advancedstatistics[1].updateJob(this.previousSibling.value);'>show</button></div></div><h4>size</h4><div id='one'></div><h4>time</h4><div id='two'></div>";
 	target.innerHTML = html;
+
+	var sel = document.getElementById('tasknumselect');
+	var tmpl = stm.DataStore.jobtemplate[1];
+	var selhtml = "";
+	for (var i=0; i<tmpl.tasks.length; i++) {
+	    selhtml += "<option value='"+i+"'>"+tmpl.tasks[i].cmd.description+"</option>";
+	}
+	sel.innerHTML = selhtml;
+
+	jQuery("#pick_sep").datepicker({ format: "yyyy-mm-dd" });
 
 	var which_job = 0;
 	var which_task = 0;
 	var avg_time = [];
 	var avg_size = [];
+	var all_times = [];
+	var all_sizes = [];
 	var size_one = [];
 	var time_one = [];
 	var tasktime = [];
@@ -120,6 +123,8 @@
 	for (var i=0; i<numtasks; i++) {
 	    avg_time.push(0);
 	    avg_size.push(0);
+	    all_times[i] = [];
+	    all_sizes[i] = [];
 	}
 	for (var i=0; i<widget.jobids.length; i++) {
 	    var job = stm.DataStore.completedJobs[widget.jobids[i]];
@@ -132,9 +137,11 @@
 		var duration = Date.parse(job.tasks[h].completeddate) - Date.parse(job.tasks[h].starteddate);
 		avg_time[h] += duration;
 		avg_size[h] += size;
+		all_times[h].push(duration / 60000);
+		all_sizes[h].push(size / 1000000);
 		if (i==which_job) {
-		    time_one[h] = duration;
-		    size_one[h] = size;
+		    time_one[h] = duration / 60000;
+		    size_one[h] = size / 1000000;
 		}
 		if (h==which_task) {
 		    if (! min_size || min_size > (size / 1000000)) {
@@ -151,8 +158,8 @@
 		    }
 		    var d = (duration / 60000);
 		    var s = (size / 1000000);
-		    tasktime.push( { x: d, y: s } );
-		    tt2wd[d+""+s] = widget.jobids[i];
+		    tasktime.push( { y: d, x: s } );
+		    tt2wd[s+""+d] = widget.jobids[i];
 		}
 	    }
 	}
@@ -175,40 +182,45 @@
 	}
 
 	Retina.Renderer.create("graph", { target: document.getElementById('avg_size'),
-					  data: [ { name: "size / Mbp", data: avg_size } ],
+					  data: [ { name: "size / MB", data: avg_size } ],
 					  x_labels: tasklabels,
+					  x_title: "task",
+					  y_title: "size in MB",
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  type: "column" }).render();
 	Retina.Renderer.create("graph", { target: document.getElementById('avg_time'),
 					  data: [ { name: "time / min", data: avg_time } ],
 					  x_labels: tasklabels,
+					  x_title: "task",
+					  y_title: "time in minutes",
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
-					  y_scale: "log",
 					  type: "column" }).render();
 	widget.taskGraph = Retina.Renderer.create("plot", { target: document.getElementById('tasktime'),
-							    x_min: min_time,
-							    x_max: max_time,
-							    y_min: min_size,
-							    y_max: max_size,
+							    y_title: "time in minutes",
+							    x_title: "size in MB",
 							    show_dots: true,
+							    show_legend: true,
 							    connected: false,
 							    drag_select: Retina.WidgetInstances.admin_advancedstatistics[1].tasktimeSelected,
 							    data: { series: [ { name: "task", shape: "circle", pointSize: 3, color: 'blue' } ],
 								    points: [ tasktime ] } }).render();
 	widget.sizeGraph = Retina.Renderer.create("graph", { target: document.getElementById('one'),
-							     data: [ { name: "size in bp", data: size_one } ],
+							     data: [ { name: "size in MB", data: size_one } ],
 							     x_labels: tasklabels,
+							     x_title: "task",
+							     y_title: "size in MB",
 							     chartArea: [0.1, 0.1, 0.95, 0.7],
 							     x_labels_rotation: "-25",
 							     type: "column" }).render();
 	widget.timeGraph = Retina.Renderer.create("graph", { target: document.getElementById('two'),
-							     data: [ { name: "time in sec", data: time_one } ],
+							     data: [ { name: "time in minutes", data: time_one } ],
 							     x_labels: tasklabels,
+							     x_title: "task",
+							     y_title: "time in minutes",
 							     chartArea: [0.1, 0.1, 0.95, 0.7],
 							     x_labels_rotation: "-25",
-							     y_scale: "log",
 							     type: "column" }).render();
     };
 
@@ -255,7 +267,7 @@
 			  console.log(error);
 		      },
 		      crossDomain: true,
-		      headers: widget.authHeader
+		      headers: stm.SHOCKAWEAuth
 		    });
     };
 
@@ -263,11 +275,16 @@
 	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
 
 	var tasktime = [];
+	var tasktime2 = [];
 	var min_time;
 	var max_time;
 	var min_size;
 	var max_size;
 	var tt2wd = {};
+	var chicagoTimeSplit = null;
+	if (document.getElementById('pick_sep').value != "none") {
+	    chicagoTimeSplit = widget.dateString(new Date().getTime() - (Date.parse(document.getElementById('pick_sep').value + "T00:00:00.000Z") + (1000 * 60 * 60 * 6)));
+	}
 	for (var i=0; i<widget.jobids.length; i++) {
 	    var job = stm.DataStore.completedJobs[widget.jobids[i]];
 	    var size = 0;
@@ -290,8 +307,12 @@
 	    }
 	    var d = (duration / 60000);
 	    var s = (size / 1000000);
-	    tasktime.push( { x: d, y: s } );
-	    tt2wd[d+""+s] = widget.jobids[i];
+	    if (chicagoTimeSplit && chicagoTimeSplit < job.info.completedtime) {
+		tasktime2.push( { y: d, x: s } );
+	    } else {
+		tasktime.push( { y: d, x: s } );
+	    }
+	    tt2wd[s+""+d] = widget.jobids[i];
 	}
 	
 	widget.tt2wd = tt2wd;
@@ -301,11 +322,25 @@
 	var t = document.getElementById('tasktime');
 	t.innerHTML = "";
 	widget.taskGraph.settings.target = t;
-	widget.taskGraph.settings.x_min = min_time;
-	widget.taskGraph.settings.x_max = max_time;
-	widget.taskGraph.settings.y_min = min_size;
-	widget.taskGraph.settings.y_max = max_size;
+	var sx = Retina.niceScale({min: min_time, max: max_time});
+	var sy = Retina.niceScale({min: min_size, max: max_size});
+	widget.taskGraph.settings.y_min = sx.min;
+	widget.taskGraph.settings.y_max = sx.max;
+	widget.taskGraph.settings.x_min = sy.min;
+	widget.taskGraph.settings.x_max = sy.max;
 	widget.taskGraph.settings.data.points[0] = tasktime;
+	if (tasktime2.length) {
+	    if (widget.taskGraph.settings.data.points.length == 1) {
+		widget.taskGraph.settings.data.points.push([]);
+		widget.taskGraph.settings.data.series.push({ name: "after", shape: "circle", pointSize: 3, color: 'red' });
+		widget.taskGraph.settings.data.series[0].name = "before";
+	    }
+	    widget.taskGraph.settings.data.points[1] = tasktime2;
+	} else {
+	    widget.taskGraph.settings.data.series[0].name = "task";
+	    delete widget.taskGraph.settings.data.series[1];
+	    delete widget.taskGraph.settings.data.points[1];
+	}
 	widget.taskGraph.render();
     }
 
@@ -326,8 +361,8 @@
 		size += job.tasks[h].inputs[inputs[j]].size;
 	    }
 	    var duration = Date.parse(job.tasks[h].completeddate) - Date.parse(job.tasks[h].starteddate);
-	    tdata[h] = duration;
-	    sdata[h] = size;
+	    tdata[h] = duration / 60000;
+	    sdata[h] = size / 1000000;
 	}
 
 	var s = document.getElementById('one');
@@ -356,18 +391,4 @@
 	timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
 	return timestamp;
     };
-
-    // login callback
-    widget.loginAction = function (data) {
-	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
-	if (data.user) {
-	    widget.user = data.user;
-	    widget.authHeader = { "Auth": data.token };
-	} else {
-	    widget.user = null;
-	    widget.authHeader = {};
-	}
-	widget.display();
-    };
-
 })();
