@@ -141,6 +141,7 @@
 			synchronous: false,
 			sort: "lastname",
 			default_sort: "lastname",
+			headers: stm.authHeader,
 			data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].userTable,
 			navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
 			data: { data: [], header: [ "login", "firstname", "lastname", "email", "id" ] }

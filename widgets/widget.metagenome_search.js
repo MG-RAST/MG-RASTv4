@@ -221,6 +221,8 @@
 		    document.getElementById('organism_button').className = "btn btn-mini span1";
 		}
 	    }
+	} else if (Retina.cgiParam("stored") != null) {
+	    widget.showStoredSearch(Retina.cgiParam("stored"));
 	}
 
 	Retina.WidgetInstances.metagenome_search[1].queryAPI();
@@ -239,7 +241,7 @@
 	
 	var searches = Retina.keys(stm.user.preferences.searches).sort();
 	delete stm.user.preferences.searches[searches[index]];
-	var searches = Retina.keys(stm.user.preferences.searches).sort();
+	searches = Retina.keys(stm.user.preferences.searches).sort();
 	if (searches.length) {
 	    var sidehtml = "<ul class='selectList'>";
 	    for (var i=0; i<searches.length; i++) {
@@ -325,7 +327,7 @@
 	} else if (action == "clear") {
 	    widget.advancedOptions = {};
 	    target.innerHTML = "";
-	} else if (action == "restore") {
+	} else if (action == "restore" && item) {
 	    widget.advancedOptions = item.advancedOptions;
 	    target.innerHTML = "";
 	    var clear = document.createElement('button');
