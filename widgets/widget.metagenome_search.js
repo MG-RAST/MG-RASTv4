@@ -140,7 +140,7 @@
 <hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
 <h3 style="margin-left: 10px;">\
   <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/cart.png">\
-  Stored Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
+  Saved Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
 </h3>\
 <div id="storedresults_div" style="margin-left: 10px; margin-right: 10px;">\
 '+(stm.user ? '<p>you have no previous searches</p>' : '<p>you must be logged in to view stored searches</p>')+'\
@@ -151,7 +151,7 @@
   Save Search <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
 </h3>\
 <div id="storeresults_div" style="margin-left: 10px; margin-right: 10px;">\
-  <p>Store the results of your search.</p>\
+  <p>Store the parameters of your search query.</p>\
   <div class="control-group">\
     <label class="control-label" for="searchresult_name">name</label>\
     <div class="controls">\
