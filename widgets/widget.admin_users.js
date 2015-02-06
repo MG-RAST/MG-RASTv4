@@ -50,6 +50,7 @@
 		    synchronous: false,
 		    sort: "lastname",
 		    default_sort: "lastname",
+		    headers: stm.authHeader,
 		    invisible_columns: { 5: true },
 		    data_manipulation: Retina.WidgetInstances.admin_users[1].dataManipulation,
 		    minwidths: [150,150,150,80,150,150,85,1],

@@ -24,6 +24,9 @@
     widget.display = function (wparams) {
         widget = this;
 	var index = widget.index;
+
+	document.getElementById('icon_publications').firstChild.title = "Metagenome Overview";
+	document.getElementById('icon_publications').lastChild.innerHTML = "Metagenome";
 	
 	if (wparams) {
 	    widget.target = wparams.target || wparams.main;

@@ -1,5 +1,5 @@
 (function () {
-    widget = Retina.Widget.extend({
+    var widget = Retina.Widget.extend({
         about: {
             title: "Metagenome User Widget",
             name: "metagenome_user",
@@ -134,14 +134,14 @@
 	    headers: stm.authHeader,
 	    data_manipulation: Retina.WidgetInstances.metagenome_user[1].jobTable,
 	    minwidths: [1,1,1,1],
-	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+"adrianamfroes",//stm.user.login,
+	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+stm.user.login,
 	    data: { data: [], header: job_columns }
 	});
 	widget.job_table.render();
 	widget.job_table.update({},1);
 
 	// sidebar
-	var side = '<div style="padding-left: 15px; padding-right: 15px;"><h3><span style="border: 3px solid black; margin-right: 10px; border-radius: 20px; font-size: 16px; padding-left: 8px; padding-right: 8px; position: relative; bottom: 3px;">i</span>Personal Information</h3><p>In this section you can update your personal information.</p></div>';
+	var side = '<div style="padding-left: 15px; padding-right: 15px;"><h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">Personal Information</h3><p>In this section you can update your personal information.</p></div>';
 	
 	widget.sidebar.innerHTML = side;
     };

@@ -172,7 +172,9 @@
 	sidebar.innerHTML = html_sidebar;
 
 	// check for search preferences
-	stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
+	if (stm.user) {
+	    stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
+	}
 
 	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Saving a search requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
 	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Click on the name of a previously stored search to apply the same search parameters again.</p>"});
@@ -221,7 +223,7 @@
 		    document.getElementById('organism_button').className = "btn btn-mini span1";
 		}
 	    }
-	} else if (Retina.cgiParam("stored") != null) {
+	} else if (Retina.cgiParam("stored") != "") {
 	    widget.showStoredSearch(Retina.cgiParam("stored"));
 	}
 

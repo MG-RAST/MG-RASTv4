@@ -37,7 +37,7 @@
 
 	widget.sidebar.style.paddingLeft = "20px";
 	widget.sidebar.style.paddingRight = "20px";
-	widget.sidebar.innerHTML = "<h3><img style='height: 20px; margin-right: 10px; margin-top: -4px;' src='Retina/images/info.png'>Password Reset fails?</h3><p>If you are trying to reset your password, but you do not remember the login / email combination you registered with, you need to <a href='contact.html'>contact our support</a> to retrieve a new password.</p><p>We will need to verify that you are the owner of the account. The easiest way is for you to send an email originating from the account you registered with MG-RAST.</p><p>It helps us a lot you add information about your account, like metagenome or project ids you own, your full name or your organization.</p>";
+	widget.sidebar.innerHTML = "<h3><img style='height: 20px; margin-right: 10px; margin-top: -4px;' src='Retina/images/info2.png'>Password Reset fails?</h3><p>If you are trying to reset your password, but you do not remember the login / email combination you registered with, you need to <a href='contact.html'>contact our support</a> to retrieve a new password.</p><p>We will need to verify that you are the owner of the account. The easiest way is for you to send an email originating from the account you registered with MG-RAST.</p><p>It helps us a lot you add information about your account, like metagenome or project ids you own, your full name or your organization.</p>";
 
 	var html = '\
 <h3>Reset your Password</h3>\
@@ -70,11 +70,11 @@
 
 	widget.sidebar.innerHTML = '\
 <div style="padding-left: 20px; padding-right: 20px;">\
-  <h3><img src="Retina/images/info.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">why register?</h3>\
+  <h3><img src="Retina/images/info2.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">why register?</h3>\
   <p>MG-RAST is a free resource, but the data you upload is private to you. Even though we encourage making data public as soon as possible, it will stay private until you decide to share it with the world. To do so, you need to be able to securely authenticate yourself.</p>\
   <p style="margin-bottom: 35px;">Our past experience has also shown that the computation on metagenomic data is a complicated process. Sometimes we need to feedback error or other information to you. This is only possible if we have a valid email to contact you.</p>\
   <hr>\
-  <h3><img src="Retina/images/info.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">can I share my account?</h3>\
+  <h3><img src="Retina/images/info2.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">can I share my account?</h3>\
   <p>No, you should never share your account with anyone, nor should you create group accounts. MG-RAST offers easy to use mechanisms to securely share data with other users.</p>\
   <p>You can also create a group of registered users and share data with that group. Even in a classroom situation, you should always create separate accounts for each user.</p>\
 </div>\

@@ -17,6 +17,9 @@
     widget.display = function (wparams) {
         widget = Retina.WidgetInstances.metagenome_download[1];
 
+	document.getElementById('icon_publications').firstChild.title = "Metagenome Download";
+	document.getElementById('icon_publications').lastChild.innerHTML = "Download";
+
 	if (wparams && wparams.main) {
 	    widget.main = wparams.main;
 	    widget.sidebar = wparams.sidebar;
