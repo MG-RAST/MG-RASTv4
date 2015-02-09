@@ -25,7 +25,7 @@
 
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
-	var sidehtml = '<h3><span style="border: 3px solid black; margin-right: 10px; border-radius: 20px; font-size: 16px; padding-left: 5px; padding-right: 5px; position: relative; bottom: 3px;">?</span>frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
+	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
 	sidehtml += '<li><a href="">Use MetaZen to create your metadata spreadsheet</a></li>';
 	sidehtml += '<li><a href="">Uploading a metagenome (Video)</a></li>';
 	sidehtml += '<li><a href="">Inbox explained</a></li>';
@@ -38,7 +38,7 @@
 	sidehtml += '</ul>';
 
 	// running actions
-	sidehtml += '<h3><span style="border: 3px solid black; margin-right: 10px; border-radius: 20px; font-size: 16px; padding-left: 8px; padding-right: 8px; position: relative; bottom: 3px;">i</span>running actions</h3>';
+	sidehtml += '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions</h3>';
 	sidehtml += "<p>If you perform actions on files in your inbox that take some time to complete, you can view their status here.</p><p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
 
 	sidebar.innerHTML = sidehtml;
