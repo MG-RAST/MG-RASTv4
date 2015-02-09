@@ -31,12 +31,14 @@
 	    html += "<button class='btn btn-mini' title='refresh' style='margin-bottom: 15px;' onclick='Retina.WidgetInstances.admin_system[1].test_components();'><i class='icon-refresh'></i></button>";
 
 	    html += "<table>";
-	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_awe'></td></tr>";
-	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_shock'></td></tr>";
+	    html += "<tr><td style='width: 150px;'><b>Website</b></td><td id='system_website'></td></tr>";
+	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_AWE'></td></tr>";
+	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_SHOCK'></td></tr>";
 	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
-	    html += "<tr><td><b>m5nr solr</b></td><td id='system_m5solr'></td></tr>";
-	    html += "<tr><td><b>metagenome solr</a></td><td id='system_mgsolr'></td></tr>";
-
+//	    html += "<tr><td><b>m5nr solr</b></td><td id='system_M5NR'></td></tr>";
+	    html += "<tr><td><b>metagenome solr</a></td><td id='system_solr'></td></tr>";
+	    html += "<tr><td><b>postgres</a></td><td id='system_postgres'></td></tr>";
+	    html += "<tr><td><b>mySQL</a></td><td id='system_mySQL'></td></tr>";
 	    html += "</table>";
 
 	    html += "<h4 style='margin-top: 50px;'><a name='awe'></a>AWE Details</h4><div id='awe_details'>-</div>";
@@ -59,73 +61,43 @@
 
     widget.test_components = function () {
 	var widget = Retina.WidgetInstances.admin_system[1];
-	
-	widget.startTime = new Date().getTime();
 
+	// get api details
 	document.getElementById('system_api').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
-	document.getElementById('system_shock').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
-	document.getElementById('system_awe').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
-	document.getElementById('system_m5solr').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
-	document.getElementById('system_mgsolr').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
-
 	jQuery.ajax({ url: RetinaConfig.mgrast_api,
 		      dataType: "json",
 		      headers: stm.authHeader,
 		      success: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
-			  widget.apiDetails(data);
 			  var t = new Date().getTime();
 			  document.getElementById('system_api').innerHTML = widget.status('success') + "OK in "+(t - widget.startTime)+" ms";
+			  widget.apiDetails(data);
 		      },
-		      error: function(jqXHR, error) {
+		      error: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
 			  var t = new Date().getTime();
-			  document.getElementById('system_api').innerHTML = Retina.WidgetInstances.admin_system[1].status('error') + "failed in "+(t - widget.startTime)+"ms";
+			  document.getElementById('system_api').innerHTML = widget.status('error') + "failed in "+(t - widget.startTime)+" ms";
 		      }
 		    });
+	
+	// iterate over services to check
+	widget.startTime = new Date().getTime();
+	var sites = ['website',
+		     'SHOCK',
+		     'AWE',
+		     //'M5NR',
+		     'solr',
+		     'postgres',
+		     'mySQL' ];
 
-	jQuery.ajax({ url: RetinaConfig.awe_url+"/client",
-		      headers: stm.SHOCKAWEAuth,
-		      dataType: "json",
-		      success: function(data) {
-			  var widget = Retina.WidgetInstances.admin_system[1];
-			  widget.aweClientData = data.data;
-			  widget.aweDetails();
-			  var t = new Date().getTime();
-			  document.getElementById('system_awe').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
-		      },
-		      error: function(jqXHR, error) {
-			  var widget = Retina.WidgetInstances.admin_system[1];
-			  var t = new Date().getTime();
-			  document.getElementById('system_awe').innerHTML = Retina.WidgetInstances.admin_system[1].status('error') + "failed in "+(t - widget.startTime)+"ms";
-		      }
-		    });
-
-	jQuery.ajax({ url: RetinaConfig.shock_url+"/node",
-		      headers: stm.SHOCKAWEAuth,
-		      dataType: "json",
-		      success: function(data) {
-			  var widget = Retina.WidgetInstances.admin_system[1];
-			  widget.shockDetails(data);
-			  var t = new Date().getTime();
-			  document.getElementById('system_shock').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
-		      },
-		      error: function(jqXHR, error) {
-			  var widget = Retina.WidgetInstances.admin_system[1];
-			  var t = new Date().getTime();
-			  document.getElementById('system_shock').innerHTML = Retina.WidgetInstances.admin_system[1].status('error') + "failed in "+(t - widget.startTime)+"ms";
-		      }
-		    });
-	jQuery.getScript(RetinaConfig.m5nr_solr_url, function() {
-	    var widget = Retina.WidgetInstances.admin_system[1];
-	    var t = new Date().getTime();
-	    document.getElementById('system_m5solr').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
-	});
-	jQuery.getScript(RetinaConfig.metagenome_solr_url, function() {
-	    var widget = Retina.WidgetInstances.admin_system[1];
-	    var t = new Date().getTime();
-	    document.getElementById('system_mgsolr').innerHTML = Retina.WidgetInstances.admin_system[1].status('success') + "OK in "+(t - widget.startTime)+"ms";
-	});
+	for (var i=0; i<sites.length; i++) {
+	    document.getElementById('system_'+sites[i]).innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+	    jQuery.getJSON(RetinaConfig.mgrast_api+"/heartbeat/"+sites[i], function(data) {
+		var widget = Retina.WidgetInstances.admin_system[1];
+		var t = new Date().getTime();
+		document.getElementById('system_'+data.service).innerHTML = (data.status ? widget.status('success') + "OK in " : widget.status('error') + "failed in ")+(t - widget.startTime)+" ms";
+	    });
+	}
     };
 
     widget.aweDetails = function () {
