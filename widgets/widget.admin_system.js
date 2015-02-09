@@ -35,7 +35,7 @@
 	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_AWE'></td></tr>";
 	    html += "<tr><td><a href='#shock'><b>SHOCK</b></a></td><td id='system_SHOCK'></td></tr>";
 	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
-//	    html += "<tr><td><b>m5nr solr</b></td><td id='system_M5NR'></td></tr>";
+	    html += "<tr><td><b>m5nr solr</b></td><td id='system_M5NR'></td></tr>";
 	    html += "<tr><td><b>metagenome solr</a></td><td id='system_solr'></td></tr>";
 	    html += "<tr><td><b>postgres</a></td><td id='system_postgres'></td></tr>";
 	    html += "<tr><td><b>mySQL</a></td><td id='system_mySQL'></td></tr>";
