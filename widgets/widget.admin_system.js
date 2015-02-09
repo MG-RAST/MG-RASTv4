@@ -85,7 +85,7 @@
 	var sites = ['website',
 		     'SHOCK',
 		     'AWE',
-		     //'M5NR',
+		     'M5NR',
 		     'solr',
 		     'postgres',
 		     'mySQL' ];
