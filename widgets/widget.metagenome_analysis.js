@@ -92,7 +92,7 @@
     		}
     	    }
     	}
-    	c.data = rows;
+    	c.rows = rows;
     };
 
     // visualization section
@@ -222,18 +222,21 @@
 	    var p = stm.DataStore.profile[id];
 	    if (parseInt(value) < parseInt(p.params[param])) {
 		if (confirm("The loaded data has lower cutoffs than you are filtering for.\nDo you want to load the required data now? This may take some time.")) {
-		    	container.parameters[param] = value;
+		    container.parameters[param] = value;
+		    widget.loadData(ids, container.items, container.parameters);
+		    return;
 		} else {
 		    // set param to lowest
 		    document.getElementById('containerParam'+param).value = widget.cutoffThresholds[param];
 		    return;
 		}
+		break;
 	    }
 	}
 	
 	// update parameter data
 	container.parameters[param] = value;
-	document.getElementById('visualize').addAttribute('disabled', 'disabled');
+	document.getElementById('visualize').setAttribute('disabled', 'disabled');
 	widget.performFilter();
 	document.getElementById('visualize').removeAttribute('disabled');
     };
@@ -466,13 +469,13 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
+	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	var cp = stm.DataStore.profile[pid];
 	var colItem = params.dataColItem || cp.mdname;
 	var colIndex = params.dataColIndex;
 	var palette = GooglePalette(c.items.length);
 	for (var i=0; i<c.items.length; i++) {
-	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
+	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	    var p = stm.DataStore.profile[pid];
 	    series.data.series.push( { name: c.items[i][id], color: palette[i] } );
 	    series.data.points.push([]);
@@ -533,12 +536,12 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
+	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	var cp = stm.DataStore.profile[pid];
 	var colItem = params.dataColItem || Retina.keys(cp.rows[0].metadata)[0];
 	var colIndex = params.dataColIndex || cp.rows[0].metadata[colItem].length - 1;
 	for (var i=0; i<c.items.length; i++) {
-	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
+	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	    var p = stm.DataStore.profile[pid];
 	    matrix.cols.push(c.items[i][id]);
 	    for (var h=0; h<(isFiltered ? c.rows[c.items[i].id].length : p.rows.length); h++) {
@@ -581,12 +584,12 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
+	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	var cp = stm.DataStore.profile[pid];
 	var colItem = params.dataColItem || Retina.keys(cp.rows[0].metadata)[0];
 	var colIndex = params.dataColIndex || cp.rows[0].metadata[colItem].length - 1;
 	for (var i=0; i<c.items.length; i++) {
-	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source+"_"+c.parameters['evalue']+"_"+c.parameters['length']+"_"+c.parameters.identity;
+	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	    var p = stm.DataStore.profile[pid];
 	    for (var h=0; h<(isFiltered ? c.rows[c.items[i].id].length : p.rows.length); h++) {
 		var row = (isFiltered ? c.rows[c.items[i].id][h] : h);
@@ -1037,7 +1040,7 @@
     widget.xhr = {};
 
     // perform a set of API requests and create a data container
-    widget.loadData = function (ids, collectionName) {
+    widget.loadData = function (ids, collectionName, params) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
@@ -1049,9 +1052,9 @@
 	var type = widget.dataLoadParams.type;
 	var source = widget.dataLoadParams.source;
 	var name = collectionName || widget.dataLoadParams.name || "data"+Retina.keys(stm.DataStore.dataContainer).length;
-	var evalue = document.getElementById('evalue').value;
-	var alilength = document.getElementById('alignmentlength').value;
-	var identity = document.getElementById('percentidentity').value;
+	var evalue = params ? params.evalue : document.getElementById('evalue').value;
+	var alilength = params ? params["length"] : document.getElementById('alignmentlength').value;
+	var identity = params ? params.identity : document.getElementById('percentidentity').value;
 	if (ids.length) {
 	    if (! name) {
 		var i = Retina.keys(stm.DataStore.dataContainer).length;
@@ -1061,7 +1064,7 @@
 		name = 'data_'+i;
 		document.getElementById('dataContainerName').value = name;
 	    }
-	    if (stm.DataStore.dataContainer.hasOwnProperty(name)) {
+	    if (stm.DataStore.dataContainer.hasOwnProperty(name) && ! params) {
 		if (! confirm("The name '"+name+"' already exists. Do you want \nto replace it with the current selection?")) {
 		    return;
 		}
