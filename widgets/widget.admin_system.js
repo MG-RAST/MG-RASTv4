@@ -98,6 +98,27 @@
 		document.getElementById('system_'+data.service).innerHTML = (data.status ? widget.status('success') + "OK in " : widget.status('error') + "failed in ")+(t - widget.startTime)+" ms";
 	    });
 	}
+
+	// get awe details
+	jQuery.ajax({ url: RetinaConfig.awe_url+"/client",
+		      headers: stm.SHOCKAWEAuth,
+		      dataType: "json",
+		      success: function(data) {
+			  var widget = Retina.WidgetInstances.admin_system[1];
+			  widget.aweClientData = data.data;
+			  widget.aweDetails();
+		      }
+		    });
+	
+	// get shock details
+	jQuery.ajax({ url: RetinaConfig.shock_url+"/node",
+		      headers: stm.SHOCKAWEAuth,
+		      dataType: "json",
+		      success: function(data) {
+			  var widget = Retina.WidgetInstances.admin_system[1];
+			  widget.shockDetails(data);
+		      }
+		    });
     };
 
     widget.aweDetails = function () {
