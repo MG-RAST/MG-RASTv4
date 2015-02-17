@@ -267,7 +267,7 @@
 			  console.log(error);
 		      },
 		      crossDomain: true,
-		      headers: stm.SHOCKAWEAuth
+		      headers: stm.authHeader
 		    });
     };
 

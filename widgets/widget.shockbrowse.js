@@ -39,6 +39,8 @@
   authHeader - authentication header used when interacting with the server
   customPreview - optinally provided custom function for node preview, receives an object with the selected node (node), the first previewChunkSize bytes of the file (data) and the error if exists (error), must return the HTML to be displayed in the preview section
 
+  uploadRestrictions - array of objects with the attributes 'expression' which is a regular expression to match a filename and 'text' which will be displayed as an error alert to the user. Filenames that match will not be able to be uploaded. Default is an empty array.
+
 */
 (function () {
     var widget = Retina.Widget.extend({
@@ -82,6 +84,9 @@
     widget.currentUploadChunk = 0;
     widget.uploadPaused = false;
     widget.chunkComplete = false;
+    
+    // upload restrictions
+    widget.uploadRestrictions = [];
 
     // store the different sections
     widget.sections = {};
@@ -1005,22 +1010,27 @@
     widget.addAcl = function(params) {
 	var widget = Retina.WidgetInstances.shockbrowse[1];
 
-	var uuid = prompt("Enter user id or uuid", "");
+	var uuid = params.uuid || prompt("Enter user id or uuid", "");
 	if (uuid) {
 	    var url = widget.shockBase + "/node/" + params.node + "/acl/"+params.acl+"?users="+uuid;
+	    var promise = jQuery.Deferred();
 	    jQuery.ajax({ url: url,
+			  promise: promise,
 			  success: function(data) {
 			      var widget = Retina.WidgetInstances.shockbrowse[1];
 			      widget.showDetails(null, true);
+			      this.promise.resolve();
 			  },
 			  error: function(jqXHR, error) {
 			      var widget = Retina.WidgetInstances.shockbrowse[1];
 			      widget.showDetails(null, true);
+			      this.promise.resolve();
 			  },
 			  crossDomain: true,
 			  headers: widget.authHeader,
 			  type: "PUT"
 			});
+	    return promise;
 	}
     };
 
@@ -1498,23 +1508,30 @@
 
 	// show file details and settings
 	var section = Retina.WidgetInstances.shockbrowse[1].sections.detailSectionContent;
-	var html = "<p><table style='text-align: left;'><tr><th style='padding-right: 20px;'>filename</th><td>"+file.name+"</td><tr></tr><th>modified</th><td>"+file.lastModifiedDate+"</td></tr><tr><th>size</th><td>"+file.size.byteSize()+"</td></tr><tr><th>type</th><td>"+fileType+"</td></tr></table></p><div style='text-align: center;'><button class='btn btn-success' type='button' onclick='Retina.WidgetInstances.shockbrowse[1].uploadFile();'>commence upload</button><button class='btn pull-right' data-toggle='button' type='button' onclick='if(this.className.match(/active/)){document.getElementById(\"upload_advanced_options\").style.display=\"none\";}else{document.getElementById(\"upload_advanced_options\").style.display=\"\";}'><i class='icon icon-cog'></i> advanced</button></div><div id='upload_advanced_options' style='margin-top: 10px; border: 1px solid #bbbbbb; padding: 5px; margin-bottom: 10px; display: none;'><b>upload chunk size</b> <select id='upload_chunk_size' onchange='Retina.WidgetInstances.shockbrowse[1].uploadChunkSize=this.options[this.selectedIndex].value;' style='position: relative; top: 4px; left: 5px;'>";
+	var html = "<p><table style='text-align: left;'><tr><th style='padding-right: 20px;'>filename</th><td>"+file.name+"</td><tr></tr><th>modified</th><td>"+file.lastModifiedDate+"</td></tr><tr><th>size</th><td>"+file.size.byteSize()+"</td></tr><tr><th>type</th><td>"+fileType+"</td></tr></table></p>";
 	
-	// upload chunk size is currently the only advanced parameter
-	var chunkSizes = [ [ 1024 * 100, "100 KB" ],
-			   [ 1024 * 1024, "1 MB" ],
-			   [ 1024 * 1024 * 10, "10 MB" ],
+	var restricted = widget.checkUploadRestrictions(file.name);
+	if (restricted) {
+	    html += restricted;
+	} else {
+	    html += "<div style='text-align: center;'><button class='btn btn-success' type='button' onclick='Retina.WidgetInstances.shockbrowse[1].uploadFile();'>commence upload</button><button class='btn pull-right' data-toggle='button' type='button' onclick='if(this.className.match(/active/)){document.getElementById(\"upload_advanced_options\").style.display=\"none\";}else{document.getElementById(\"upload_advanced_options\").style.display=\"\";}'><i class='icon icon-cog'></i> advanced</button></div><div id='upload_advanced_options' style='margin-top: 10px; border: 1px solid #bbbbbb; padding: 5px; margin-bottom: 10px; display: none;'><b>upload chunk size</b> <select id='upload_chunk_size' onchange='Retina.WidgetInstances.shockbrowse[1].uploadChunkSize=this.options[this.selectedIndex].value;' style='position: relative; top: 4px; left: 5px;'>";
+	
+	    // upload chunk size is currently the only advanced parameter
+	    var chunkSizes = [ [ 1024 * 100, "100 KB" ],
+			       [ 1024 * 1024, "1 MB" ],
+			       [ 1024 * 1024 * 10, "10 MB" ],
 			   [ 1024 * 1024 * 100, "100 MB" ],
-			   [ 0, "unchunked" ] ];
-	for (var i=0; i<chunkSizes.length; i++) {
-	    var sel = "";
-	    if (chunkSizes[i][0] == widget.uploadChunkSize) {
-		sel = " selected";
+			       [ 0, "unchunked" ] ];
+	    for (var i=0; i<chunkSizes.length; i++) {
+		var sel = "";
+		if (chunkSizes[i][0] == widget.uploadChunkSize) {
+		    sel = " selected";
+		}
+		html += "<option value='"+chunkSizes[i][0]+"'"+sel+">"+chunkSizes[i][1]+"</option>";
 	    }
-	    html += "<option value='"+chunkSizes[i][0]+"'"+sel+">"+chunkSizes[i][1]+"</option>";
+	    
+	    html += "</select></div>";
 	}
-
-	html += "</select></div>";
 	
 	section.innerHTML = html;
 
@@ -1573,6 +1590,21 @@
 	    }
 	}
     }
+
+    // check if the file may be uploaded
+    widget.checkUploadRestrictions = function (filename) {
+	var widget = Retina.WidgetInstances.shockbrowse[1];
+
+	var html = false;
+	for (var i=0; i<widget.uploadRestrictions.length; i++) {
+	    if (filename.match(widget.uploadRestrictions[i].expression)) {
+		html = "<div class='alert alert-error'>"+widget.uploadRestrictions[i].text+"</div>";
+		break;
+	    }
+	}
+
+	return html;
+    };
 
     // RESUME UPLOAD SECTION
     
