@@ -226,7 +226,7 @@
 	// attach the required additional attributes to the uploaded file
 	var newNodeAttributes = node.attributes;
 	newNodeAttributes['type'] = 'inbox';
-	newNodeAttributes['user'] = stm.user.login;
+	newNodeAttributes['id'] = stm.user.id;
 	newNodeAttributes['email'] = stm.user.email;
 
 	var url = widget.browser.shockBase+'/node/'+node.id;

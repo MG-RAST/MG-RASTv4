@@ -59,6 +59,7 @@
 		invisible_columns: { 3: true },
 		sort_autodetect: true,
 		synchronous: false,
+		headers: stm.authHeader,
 		sort: "lastname",
 		default_sort: "lastname",
 		data_manipulation: Retina.WidgetInstances.admin_debug[1].userTable,
