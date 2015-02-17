@@ -64,13 +64,49 @@
 		default_sort: "lastname",
 		data_manipulation: Retina.WidgetInstances.admin_debug[1].userTable,
 		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
-		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id" ] }
+		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id", "impersonate" ] }
 	    });
 	} else {
 	    widget.user_table.settings.target = document.getElementById('usertable');
 	}
 	widget.user_table.render();
 	widget.user_table.update({},widget.user_table.index);
+    };
+
+    widget.userTable = function (data) {
+	var result_data = [];
+
+	for (var i=0; i<data.length; i++) {
+	    result_data.push( { "login": data[i].login,
+				"firstname": data[i].firstname,
+				"lastname": data[i].lastname,
+				"email": data[i].email,
+				"id": data[i].id,
+				"impersonate": '<button class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].impersonateUser(\''+data[i].login+'\');">impersonate</button>' } );
+	}
+
+	return result_data;
+    };
+
+    widget.impersonateUser = function (login) {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+	
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/user/impersonate/'+login,
+	    success: function (d) {
+		stm.authHeader = { "Authorization": "mgrast "+d.token };
+		jQuery.cookie(Retina.WidgetInstances.login[1].cookiename, JSON.stringify({ "user": { firstname: d.firstname,
+												     lastname: d.lastname,
+												     email: d.email,
+												     login: d.login },
+											   "token": d.token }), { expires: 7 });
+		window.location = "mgmain.html";
+	    }}).fail(function(xhr, error) {
+		alert('impersonation failed');
+	    });
     };
 
     widget.showQueue = function () {

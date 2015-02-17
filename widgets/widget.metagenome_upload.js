@@ -191,12 +191,22 @@
 		    html += '<div class="alert alert-info">'+validInfo+'<br>'+lenInfo+'</div>';
 		}
 		else if (d[0].match(/^@/)) {
+		    //		    @EAS139_FC706VJ:2:2104:15343:197393#0/1
+		    //              @EAS139:136:FC706VJ:2:2104:15343:197393 1:Y:18:ATCACG
+		    var isIllumina = false;
+		    if (d[0].match() || d[0].match()) {
+			isIllumina = true;
+		    }
 		    for (var i=0; i<d.length; i+=4) {
 			var l = d.length - i;
 			if (l>3) {
 			    var id = d[i];
 			    var seq = d[i+1];
 			}
+		    }
+		    if (! isIllumina) {
+			// add demultiplex button
+			html += "<button class='btn btn-small'>demultiplex</button>";
 		    }
 		}
 		else {
