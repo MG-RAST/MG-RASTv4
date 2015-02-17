@@ -101,7 +101,7 @@
 
 	// get awe details
 	jQuery.ajax({ url: RetinaConfig.awe_url+"/client",
-		      headers: stm.SHOCKAWEAuth,
+		      headers: stm.authHeader,
 		      dataType: "json",
 		      success: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
@@ -112,7 +112,7 @@
 	
 	// get shock details
 	jQuery.ajax({ url: RetinaConfig.shock_url+"/node",
-		      headers: stm.SHOCKAWEAuth,
+		      headers: stm.authHeader,
 		      dataType: "json",
 		      success: function(data) {
 			  var widget = Retina.WidgetInstances.admin_system[1];
@@ -166,7 +166,7 @@
 	// get the overview data
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig["awe_url"]+"/queue",
-		       headers: stm.SHOCKAWEAuth,
+		       headers: stm.authHeader,
 		       clients: clientData,
 		       success: function(data) {
 			   var result = data.data;
@@ -209,7 +209,7 @@
 	// get the errors from the suspended jobs
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig["awe_url"]+"/job?suspend&limit=100&offset=0",
-		       headers: stm.SHOCKAWEAuth,
+		       headers: stm.authHeader,
 		       success: function(data) {
 			   Retina.WidgetInstances.admin_system[1].parseAWEErrors(data);
 		       }
@@ -244,7 +244,7 @@
 		promises.push(promise);
 		jQuery.ajax( { dataType: "json",
 			       url:RetinaConfig["awe_url"]+"/work/"+data.data[i].lastfailed+"?report=worknotes",
-			       headers: stm.SHOCKAWEAuth,
+			       headers: stm.authHeader,
 			       promise: promise,
 			       success: function(data) {
 				   Retina.WidgetInstances.admin_system[1].worknotes.push(data.data);
@@ -305,7 +305,7 @@
 	jQuery.ajax({
 	    method: "PUT",
 	    dataType: "json",
-	    headers: stm.SHOCKAWEAuth, 
+	    headers: stm.authHeader, 
 	    url: RetinaConfig["awe_url"]+"/job?resumeall",
 	    success: function (data) {
 		Retina.WidgetInstances.admin_system[1].test_components();
@@ -320,7 +320,7 @@
 	jQuery.ajax({
 	    method: "PUT",
 	    dataType: "json",
-	    headers: stm.SHOCKAWEAuth, 
+	    headers: stm.authHeader, 
 	    url: RetinaConfig["awe_url"]+"/client?resumeall",
 	    success: function (data) {
 		Retina.WidgetInstances.admin_system[1].test_components();
@@ -343,7 +343,7 @@
 								   "width": Retina.WidgetInstances.shockbrowse[0].sizes.small[0],
 								   "height": Retina.WidgetInstances.shockbrowse[0].sizes.small[1],
 								   "target": target,
-								   "authHeader": stm.SHOCKAWEAuth,
+								   "authHeader": stm.authHeader,
 								   "shockBase": RetinaConfig.shock_url});
 	}
     };
