@@ -140,7 +140,7 @@
 <hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
 <h3 style="margin-left: 10px;">\
   <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/cart.png">\
-  Stored Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
+  Saved Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
 </h3>\
 <div id="storedresults_div" style="margin-left: 10px; margin-right: 10px;">\
 '+(stm.user ? '<p>you have no previous searches</p>' : '<p>you must be logged in to view stored searches</p>')+'\
@@ -151,7 +151,7 @@
   Save Search <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
 </h3>\
 <div id="storeresults_div" style="margin-left: 10px; margin-right: 10px;">\
-  <p>Store the results of your search.</p>\
+  <p>Store the parameters of your search query.</p>\
   <div class="control-group">\
     <label class="control-label" for="searchresult_name">name</label>\
     <div class="controls">\
@@ -172,7 +172,9 @@
 	sidebar.innerHTML = html_sidebar;
 
 	// check for search preferences
-	stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
+	if (stm.user) {
+	    stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
+	}
 
 	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Saving a search requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
 	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Click on the name of a previously stored search to apply the same search parameters again.</p>"});
@@ -221,6 +223,8 @@
 		    document.getElementById('organism_button').className = "btn btn-mini span1";
 		}
 	    }
+	} else if (Retina.cgiParam("stored") != "") {
+	    widget.showStoredSearch(Retina.cgiParam("stored"));
 	}
 
 	Retina.WidgetInstances.metagenome_search[1].queryAPI();
@@ -239,7 +243,7 @@
 	
 	var searches = Retina.keys(stm.user.preferences.searches).sort();
 	delete stm.user.preferences.searches[searches[index]];
-	var searches = Retina.keys(stm.user.preferences.searches).sort();
+	searches = Retina.keys(stm.user.preferences.searches).sort();
 	if (searches.length) {
 	    var sidehtml = "<ul class='selectList'>";
 	    for (var i=0; i<searches.length; i++) {
@@ -325,7 +329,7 @@
 	} else if (action == "clear") {
 	    widget.advancedOptions = {};
 	    target.innerHTML = "";
-	} else if (action == "restore") {
+	} else if (action == "restore" && item) {
 	    widget.advancedOptions = item.advancedOptions;
 	    target.innerHTML = "";
 	    var clear = document.createElement('button');

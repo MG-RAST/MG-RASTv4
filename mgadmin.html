@@ -62,16 +62,19 @@
 		var loginAction = function (data) {
 		    if (data.action != "logout" && data.result == "success") {
 			if (stm.user && stm.user.hasOwnProperty("preferences")) {
-			    mgp.display();
+			    mgp.display({ "main": document.getElementById("content"),
+					  "sidebar": document.getElementById("sidebar") });
 			    return;
 			}
 			stm.user = data.user;
-			stm.authHeader = { "Auth": data.token };
-			mgp.display();
+			stm.authHeader = { "Authorization": "mgrast "+data.token};
+			mgp.display({ "main": document.getElementById("content"),
+				      "sidebar": document.getElementById("sidebar") });
 		    } else {
 			stm.user = null;
 			stm.authHeader = {};
-			mgp.display();
+			mgp.display({ "main": document.getElementById("content"),
+				      "sidebar": document.getElementById("sidebar") });
 		    }
 		};
 		Retina.Widget.create('login', { "target": document.getElementById("login_space"),

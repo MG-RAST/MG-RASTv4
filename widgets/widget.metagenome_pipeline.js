@@ -141,6 +141,7 @@
 			synchronous: false,
 			sort: "lastname",
 			default_sort: "lastname",
+			headers: stm.authHeader,
 			data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].userTable,
 			navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
 			data: { data: [], header: [ "login", "firstname", "lastname", "email", "id" ] }
@@ -497,7 +498,7 @@
 	jQuery.ajax({
 	    method: "GET",
 	    fn: fn,
-	    headers: stm.SHOCKAWEAuth,
+	    headers: stm.authHeader,
 	    url: RetinaConfig.shock_url+'/node/'+nodeid + "?download&index=size&part=1&chunksize=10240",
 	    success: function (data) {
 		stm.saveAs(data, this.fn);

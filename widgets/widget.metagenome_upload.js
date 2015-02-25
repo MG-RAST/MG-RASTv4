@@ -25,7 +25,7 @@
 
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
-	var sidehtml = '<h3><span style="border: 3px solid black; margin-right: 10px; border-radius: 20px; font-size: 16px; padding-left: 5px; padding-right: 5px; position: relative; bottom: 3px;">?</span>frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
+	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
 	sidehtml += '<li><a href="">Use MetaZen to create your metadata spreadsheet</a></li>';
 	sidehtml += '<li><a href="">Uploading a metagenome (Video)</a></li>';
 	sidehtml += '<li><a href="">Inbox explained</a></li>';
@@ -38,7 +38,7 @@
 	sidehtml += '</ul>';
 
 	// running actions
-	sidehtml += '<h3><span style="border: 3px solid black; margin-right: 10px; border-radius: 20px; font-size: 16px; padding-left: 8px; padding-right: 8px; position: relative; bottom: 3px;">i</span>running actions</h3>';
+	sidehtml += '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions</h3>';
 	sidehtml += "<p>If you perform actions on files in your inbox that take some time to complete, you can view their status here.</p><p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
 
 	sidebar.innerHTML = sidehtml;
@@ -72,9 +72,11 @@
 								   "showTitleBar": false,
 								   "enableDownload": false,
 								   "showUploadPreview": false,
+								   "uploadRestrictions": [ { "expression": /\.rar$/, "text": 'Invalid archive type. Allowed types are gz, zip and bz2' },
+											   { "expression": /\.faa$/, "text": "MG-RAST cannot process protein sequences. Please use DNA only." }],
 								   "presetFilters": { "type": "inbox" },
 								   "shockBase": RetinaConfig.shock_url});
-	    widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.SHOCKAWEAuth});
+	    widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.authHeader});
 	}
 	if (! stm.user) {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
@@ -85,8 +87,6 @@
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var html = "<h4>File Information</h4>";
-
-	//console.log(params);
 
 	var node = params.node;
 	var fn = node.file.name;
@@ -100,14 +100,18 @@
 
 	// detect filetype
 	var filetype = "";
+	var sequenceType = null;
 	if (fn.match(/(tar\.gz|tgz|zip|tar\.bz2|tbz|tbz2|tb2|gzip|bzip2|gz)$/)) {
 	    filetype = "archive";
 	} else if (fn.match(/(fasta|fa|ffn|frn|fna)$/)) {
-	    filetype = "fasta sequence";
+	    sequenceType = "fasta";
+	    filetype = "sequence";
 	} else if (fn.match(/sff$/)) {
+	    sequenceType = "sff";
 	    filetype = "sff sequence";
 	} else if (fn.match(/(fq|fastq)$/)) {
-	    filetype = "fastq sequence";
+	    sequenceType = "fastq";
+	    filetype = "sequence";
 	} else if (fn.match(/(xls|xlsx)$/)) {
 	    filetype = "excel";
 	} else if (fn.match(/json$/)) {
@@ -116,39 +120,115 @@
 	    filetype = "text";
 	}
 
-	html += "<h4 style='margin-top: 20px;'>File Actions ("+filetype+")</h4>";
+	// check data
+	var data = params.data;
 	
 	if (filetype == "archive") {
+	    html += "<h4 style='margin-top: 20px;'>File Actions ("+filetype+")</h4>";
 	    html += "<button class='btn btn-small'>decompress</button>";
-	} else if (filetype.match(/sequence$/)) {
-	    html += "<button class='btn btn-small'>demultiplex</button>";
-	} else if (filetype == "text" || filetype == "excel" || filetype == "JSON") {
-	    html += "<button class='btn btn-small'>check for metadata format</button>";
-	    html += "<button class='btn btn-small'>check for barcode format</button>";
 	}
-	if (filetype.match(/^sff/)) {
+	if (filetype == "sff sequence") {
+	    html += "<h4 style='margin-top: 20px;'>File Actions ("+filetype+")</h4>";
 	    html += "<button class='btn btn-small'>convert to fastq</button>";
-	} else if (filetype.match(/^fastq/)) {
-	    html += "<button class='btn btn-small'>join paired ends</button>";
-	} else if (filetype.match(/^fasta/)) {
-	    html += "<button class='btn btn-small'>check coverage format</button>";
+	}
+	if (filetype == "sequence") {
+	    html += "<h4 style='margin-top: 20px;'>Sequence File Information</h4>";
+	    if (node.file.size < (1024 * 1024)) {
+		html += '<div class="alert alert-error"><strong>Sequence file too small</strong> You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
+	    } else {
+		
+		// check the available sequences
+		var d = params.data.split(/\n/);
+
+		// FASTA
+		if (d[0].match(/^>/)) {
+		    var header = d[0];
+		    var seq = d[1];
+		    var tooShort = 0;
+		    var numSeqs = 1;
+		    var invalidSeqs = 0;
+		    var headers = {};
+		    var numDuplicate = 0;
+		    headers[d[0]] = true;
+		    for (var i=2; i<d.length; i++) {
+			if (d[i].match(/^>/)) {
+			    if (headers.hasOwnProperty(d[i])) {
+				numDuplicate++;
+			    } else {
+				headers[d[i]] = true;
+			    }
+			    numSeqs++;
+			    // sequence contains invalid characters
+			    if (! seq.match(/^[acgtunx-]+$/i)) {
+				invalidSeqs++;
+			    }
+			    if (seq.length < 75) {
+				tooShort++;
+			    }
+			    
+			    header = d[i];
+			    seq = "";
+			} else {
+			    seq += d[i];
+			}
+		    }
+		    numSeqs--;
+		    tooShort--;
+		    var lenInfo = "All of the "+numSeqs+" tested sequences have the minimum length of 75bp.";
+		    if (tooShort > 0) {
+			lenInfo = tooShort + " of the "+numSeqs+" tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
+		    }
+		    var validInfo = "This is a valid FASTA file.";
+		    if (invalidSeqs || numDuplicate) {
+			validInfo = numSeqs + " sequences of this file were tested. ";
+			if (invalidSeqs) {
+			    validInfo += invalidSeqs + " of them contain invalid characters. The FASTA file is not in the correct format for processing.";
+			}
+			if (numDuplicate) {
+			    validInfo += numDuplicate + " of them contain duplicate headers";
+			}
+		    }
+		    html += '<div class="alert alert-info">'+validInfo+'<br>'+lenInfo+'</div>';
+		}
+		else if (d[0].match(/^@/)) {
+		    for (var i=0; i<d.length; i+=4) {
+			var l = d.length - i;
+			if (l>3) {
+			    var id = d[i];
+			    var seq = d[i+1];
+			}
+		    }
+		}
+		else {
+		    html += '<div class="alert alert-error">Could not detect sequence file type. Is this a valid sequence file?</div>';
+		}
+	    }
 	}
 	
 	html += "<h4 style='margin-top: 20px;'>Delete File</h4>";
 	html += "<button class='btn btn-small btn-danger' onclick='if(confirm(\"Really delete this file?\\nThis cannot be undone!\")){Retina.WidgetInstances.metagenome_upload[1].browser.removeNode({node:\""+node.id+"\"});}'>delete file</button>";
 	
+
 	return html;
     };
 
     widget.fileCompleted = function (data) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	// attach the required additional attributes to the uploaded file
+	// get node from data
 	var node = data.data;
+
+	// set permissions for mgrast
+	widget.browser.addAcl({node: node.id, acl: "read", uuid: "mgrast"});
+	widget.browser.addAcl({node: node.id, acl: "write", uuid: "mgrast"});
+	widget.browser.addAcl({node: node.id, acl: "delete", uuid: "mgrast"});
+
+	// attach the required additional attributes to the uploaded file
 	var newNodeAttributes = node.attributes;
 	newNodeAttributes['type'] = 'inbox';
-	newNodeAttributes['user'] = stm.user.login;
+	newNodeAttributes['id'] = stm.user.id;
 	newNodeAttributes['email'] = stm.user.email;
+
 	var url = widget.browser.shockBase+'/node/'+node.id;
 	var fd = new FormData();
 	fd.append('attributes', new Blob([ JSON.stringify(newNodeAttributes) ], { "type" : "text\/json" }));
