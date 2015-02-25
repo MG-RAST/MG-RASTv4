@@ -11,12 +11,12 @@ To build the image either download the Docker file into an empty directory of pr
 
 ```bash
 export TAG=`date +"%Y%m%d.%H%M"`
-docker build --force-rm --no-cache --rm -t  mg-rast-v4-web:${TAG} https://raw.githubusercontent.com/wgerlach/MG-RASTv4/master/docker/Dockerfile
+docker build --force-rm --no-cache --rm -t  mgrast/v4-web:${TAG} https://raw.githubusercontent.com/wgerlach/MG-RASTv4/master/docker/Dockerfile
 ```
 
 Example for manual invocation:
 ```bash
-docker run -p 80:80 -t -i mg-rast-v4-web:${TAG} /usr/sbin/apache2ctl -D FOREGROUND
+docker run -p 80:80 -t -i mgrast/v4-web:${TAG} /usr/sbin/apache2ctl -D FOREGROUND
 ```
 
 ### Other notes ###
