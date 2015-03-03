@@ -29,7 +29,7 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>ID Finder</h4><div><div class='input-append'><input type='text' placeholder='enter ID' id='idFinderID'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].idFinder();'>find</button></div><div id='idFinderResult'></div></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
@@ -71,6 +71,104 @@
 	}
 	widget.user_table.render();
 	widget.user_table.update({},widget.user_table.index);
+    };
+
+    widget.idFinder = function () {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	var id = document.getElementById('idFinderID').value;
+	if (id.length == 0) {
+	    alert('you must enter an id');
+	    return;
+	}
+	// mg-id
+	if (id.match(/^mgm\d+\.\d+$/) || id.match(/^\d+\.\d+$/)) {
+	    if (! id.match(/^mgm/)) {
+		id = "mgm"+id;
+	    }
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url:RetinaConfig.mgrast_api+"/metagenome/"+id,
+		success: function (data) {
+		    if (data.error) {
+			document.getElementById('idFinderResult').innerHTML = "ID not found";
+		    } else {
+			jQuery.ajax({
+			    method: "GET",
+			    dataType: "json",
+			    headers: stm.authHeader,
+			    mgdata: data,
+			    url: RetinaConfig.awe_url+'/job?query&info.userattr.job_id='+data.job_id,
+			    success: function (d) {
+				var data = this.mgdata;
+				var html = "<table>";
+				html += "<tr><td><b>Metagenome</b></td><td>"+data.name+"</td></tr>";
+				html += "<tr><td style='padding-right: 20px;'><b>metagenome ID</b></td><td>"+data.id+"</td></tr>";
+				html += "<tr><td><b>job ID</b></td><td>"+data.job_id+"</td></tr>";
+				if (d.total_count == 1) {
+				    html += "<tr><td><b>AWE ID</b></td><td>"+d.data[0].id+"</td></tr>";
+				    html += "<tr><td><b>AWE jid</b></td><td>"+d.data[0].jid+"</td></tr>";
+				    html += "<tr><td><b>AWE user</b></td><td>"+d.data[0].info.user+"</td></tr>";
+				} else {
+				    html += "<tr><td><b>AWE ID</b></td><td>no AWE job found</td></tr>";
+				}
+				html += "</table>";
+				document.getElementById('idFinderResult').innerHTML = html;
+			    }});
+		    }		
+		}
+	    });
+	}
+	// job id
+	else if (id.match(/^\d+$/)) {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url: RetinaConfig.awe_url+'/job?query&info.userattr.job_id='+id,
+		success: function (d) {
+		    if (d.total_count == 1) {
+			var html = "<table>";
+			html += "<tr><td><b>Metagenome</b></td><td>"+d.data[0].info.userattr.name+"</td></tr>";
+			html += "<tr><td style='padding-right: 20px;'><b>metagenome ID</b></td><td>"+d.data[0].info.userattr.id+"</td></tr>";
+			html += "<tr><td><b>job ID</b></td><td>"+d.data[0].info.userattr.job_id+"</td></tr>";
+			html += "<tr><td><b>AWE ID</b></td><td>"+d.data[0].id+"</td></tr>";
+			html += "<tr><td><b>AWE jid</b></td><td>"+d.data[0].jid+"</td></tr>";
+			html += "<tr><td><b>AWE user</b></td><td>"+d.data[0].info.user+"</td></tr>";
+			html += "</table>";
+			document.getElementById('idFinderResult').innerHTML = html;
+		    } else {
+			document.getElementById('idFinderResult').innerHTML = "AWE job not found";
+		    }
+		    
+		}});
+	}
+	// AWE ID
+	else {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url: RetinaConfig.awe_url+'/job/'+id,
+		success: function (data) {
+		    if (data.error) {
+			document.getElementById('idFinderResult').innerHTML = "AWE job not found";
+		    } else {
+			data = data.data;
+			var html = "<table>";
+			html += "<tr><td><b>Metagenome</b></td><td>"+data.info.userattr.name+"</td></tr>";
+			html += "<tr><td style='padding-right: 20px;'><b>metagenome ID</b></td><td>"+data.info.userattr.id+"</td></tr>";
+			html += "<tr><td><b>job ID</b></td><td>"+data.info.userattr.job_id+"</td></tr>";
+			html += "<tr><td><b>AWE ID</b></td><td>"+data.id+"</td></tr>";
+			html += "<tr><td><b>AWE jid</b></td><td>"+data.jid+"</td></tr>";
+			html += "<tr><td><b>AWE user</b></td><td>"+data.info.user+"</td></tr>";
+			html += "</table>";
+			document.getElementById('idFinderResult').innerHTML = html;
+		    }
+		}});
+	}
     };
 
     widget.userTable = function (data) {
