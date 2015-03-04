@@ -350,6 +350,10 @@
 	    }
 	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID</th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
 	} else {
+	    if (pid.match(/^\d+$/)) {
+		pid = "mgp"+pid;
+		document.getElementById('projectSel').value = pid;
+	    }
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
