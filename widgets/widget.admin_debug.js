@@ -343,7 +343,7 @@
 	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
 
 	if (data) {
-	    html = "<table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")</td></tr>";
+	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")</td></tr>";
 	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
 	    for (var i=0; i<data.metagenomes.length; i++) {
 		html += "<option>"+data.metagenomes[i][0]+"</option>";
@@ -361,6 +361,9 @@
 		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
 		success: function (data) {
 		    Retina.WidgetInstances.admin_debug[1].showProject(data.id, data);
+		},
+		error: function (data) {
+		    document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>retrieving project data failed, is the ID valid?</div>";
 		}});
 	}
 
@@ -414,14 +417,23 @@
 		mgs += "move="+sel[i].text;
 	    }
 	}
-	
+
+	var pid_b = document.getElementById('project_b').value;
+	if (pid_b.match(/^\d$/)) {
+	    pid_b = "mgp" + pid_b;
+	}
+
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+document.getElementById('project_b').value+mgs,
+	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+pid_b+mgs,
 	    success: function (data) {
 		Retina.WidgetInstances.admin_debug[1].showProject(pid);
+		document.getElementById('project_message_space').innerHTML = "<div class='alert alert-success'>metagenomes moved successfully</div>";
+	    },
+	    error: function (data) {
+		document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>moving metagenomes failed, is the target ID valid?</div>";
 	    }});
     };
 
