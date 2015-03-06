@@ -325,7 +325,7 @@
 	    var jobpriority = "lowest";
 	    var prio = "never";
 	    if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
-		prio = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.publish_priority;
+		prio = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.priority;
 		jobpriority = widget.priorityMapping[prio][0];
 		prio = widget.priorityMapping[prio][1];
 	    }
@@ -379,7 +379,7 @@
 
 		var jobpriority = "lowest";
 		if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
-		    jobpriority = widget.priorityMapping[stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.publish_priority][0];
+		    jobpriority = widget.priorityMapping[stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.priority][0];
 		}
 		
 		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";

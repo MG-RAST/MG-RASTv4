@@ -78,7 +78,7 @@ google.setOnLoadCallback(showNewsFeed);
 	stm.init({});
 	stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
 	Retina.init({});
-	Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+	Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
 		var loginAction = function (data) {
 		    if (data.action != "logout" && data.result == "success") {
 			if (stm.user && stm.user.hasOwnProperty("preferences")) {
@@ -103,7 +103,7 @@ google.setOnLoadCallback(showNewsFeed);
 						"myDataLink": "mgmain.html?mgpage=user" });
 	    });
 	    
-	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+	    Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
 		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
 	    });
     });
