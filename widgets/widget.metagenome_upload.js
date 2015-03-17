@@ -236,6 +236,24 @@
 			html += '<div class="alert alert-error">Could not detect sequence file type. Is this a valid sequence file?</div>';
 		    }
 		}
+
+		if (! node.attributes.hasOwnProperty('stats_info')) {
+		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
+		    jQuery.ajax(url, {
+			success: function(data){
+			    Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+			    Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
+			    Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
+			},
+			error: function(jqXHR, error){
+			    console.log(error);
+			    console.log(jqXHR);
+			},
+			crossDomain: true,
+			headers: stm.authHeader,
+			type: "GET"
+		    });
+		}
 	    }
 	    
 	    html += "<h4 style='margin-top: 20px;'>Delete File</h4>";

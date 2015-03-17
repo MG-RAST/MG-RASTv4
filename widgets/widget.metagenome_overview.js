@@ -557,10 +557,10 @@
     	}
     	var pwidth  = 250;
     	var pheight = 250;
-    	var lwidth  = Math.min(300, annMax*7.5);
-    	var lheight = pieData.length * 23;
+    	var lwidth  = Math.min(300, annMax*15);
+    	var lheight = pieData.length * 18;
     	var width   = pwidth+lwidth;
-    	var height  = (lheight > pheight) ? Math.min(lheight, pheight+(pheight/2)) : pheight;
+    	var height  = (lheight > pheight) ? lheight : pheight;//Math.min(lheight, pheight+(pheight/2))
     	var data = { 'title': dtype,
     	             'type': 'pie',
     		     'title_settings': { 'font-size': '18px', 'font-weight': 'bold', 'x': 0, 'text-anchor': 'start' },

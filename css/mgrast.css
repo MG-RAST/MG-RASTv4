@@ -242,3 +242,7 @@
 .selectList > li:hover {
     background-color: lightgray;
 }
+
+.legend {
+    font-size: 12px;
+}
