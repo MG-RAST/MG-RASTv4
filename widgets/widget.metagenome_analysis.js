@@ -4,7 +4,7 @@
                 title: "Metagenome Analysis Widget",
                 name: "metagenome_analysis",
                 author: "Tobias Paczian",
-            requires: [ "rgbcolor.js", "html2canvas.min.js" ]
+            requires: [ "rgbcolor.js", "html2canvas.js" ]
         }
     });
     
@@ -69,11 +69,10 @@
     	var container = document.getElementById('exportContainerSpace');
 	var html = "";
 
-	html += "<img src='Retina/images/file-pdf.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].export(\"pdf\");' title='PDF'>";
-	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].export(\"svg\");' title='SVG'>";
-	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].export(\"png\");' title='PNG'>";
-	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].export(\"tsv\");' title='TSV'>";
-	html += "<img src='Retina/images/file-css.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].export(\"biom\");' title='BIOM'>";
+	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
+	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
+	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
+	html += "<img src='Retina/images/file-css.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"json\");' title='JSON'>";
 
 	container.innerHTML = html;
     };
@@ -291,6 +290,7 @@
 	
 	/* drilldown */
 	if (filter && filter.level !== null) {
+	    widget.currentFilter = filter;
 	    var sel = document.getElementById('matrixLevel');
 	    if (sel.options.length > filter.level + 1) {
 		matrixLevel = filter.level + 1;
@@ -1307,6 +1307,82 @@
 	container.promises = [];
 	
 	Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(container.id, "abort");
+    };
+
+    /*
+      EXPORT FUNCTIONS
+     */
+    widget.exportData = function (type) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	if (! widget.selectedContainer) {
+	    alert('you currently have no data selected');
+	    return;
+	}
+
+	if (type == 'png') {
+	    // set the output div
+	    var resultDiv = document.createElement('div');
+	    resultDiv.setAttribute('style', 'display: none;');
+	    resultDiv.setAttribute('id', 'canvasResult');
+	    document.body.appendChild(resultDiv);
+	    
+	    // the image is svg
+	    if (document.getElementById('graph_div1')) {
+		var source = document.getElementById('graph_div1').firstChild;
+		Retina.svg2png(null, resultDiv, source.getAttribute('width'), source.getAttribute('height')).then(
+		    function() {
+			Retina.WidgetInstances.metagenome_analysis[1].saveCanvas();
+		    });
+	    }
+	    // the image is html
+	    else {
+		var source = document.getElementById('visualizeBreadcrumbs').nextSibling;
+		
+		html2canvas(source, {
+		    onrendered: function(canvas) {
+			document.getElementById('canvasResult').appendChild(canvas);
+			Retina.WidgetInstances.metagenome_analysis[1].saveCanvas();
+		    }
+		});
+	    }
+	} else if (type == 'svg') {
+	    // the image is svg
+	    if (document.getElementById('graph_div1')) {
+		stm.saveAs(document.getElementById('graph_div1').innerHTML, widget.selectedContainer + ".svg");
+	    } else {
+		alert('this feature is not available for this view');
+	    }
+	} else if (type == 'json') {
+	    stm.saveAs(JSON.stringify(widget.container2matrix({ dataColIndex: document.getElementById('matrixLevel') ? document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value : 0, filter: widget.currentFilter }), null, 2), widget.selectedContainer + ".json");
+	    return;
+	} else if (type == 'tsv') {
+	    var exportData = widget.container2table({ dataColIndex: document.getElementById('matrixLevel') ? document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value : 0, filter: widget.currentFilter });
+	    var exportString = [];
+	    exportString.push(exportData.header.join("\t"));
+	    for (var i=0; i<exportData.data.length; i++) {
+		exportString.push(exportData.data[i].join("\t"));
+	    }
+	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".tsv");
+	    return;
+	}
+    };
+
+    widget.saveCanvas = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	// create the href and click it
+	var href = document.createElement('a');
+	var canvas = document.getElementById('canvasResult').children[0];
+	href.setAttribute('href', canvas.toDataURL());
+	href.setAttribute('download', widget.selectedContainer + ".png");
+	href.setAttribute('style', 'display: none;');
+	document.body.appendChild(href);
+	href.click();
+
+	// remove the elements
+	document.body.removeChild(href);
+	document.body.removeChild(document.getElementById('canvasResult'));
     };
 
 })();
