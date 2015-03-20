@@ -40,13 +40,13 @@
 	sidehtml += '</ul>';
 
 	// running actions
-	sidehtml += '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions</h3>';
+	sidehtml += '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions<button class="btn btn-mini" title="refresh" onclick="Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();" style="margin-left: 30px;position: relative; bottom: 2px;"><img style="height: 12px;" src="Retina/images/loop.png"></button></h3>';
 	sidehtml += "<p>If you perform actions on files in your inbox that take some time to complete, you can view their status here.</p><div id='inboxActions' style='text-align: center;'><img src='Retina/images/waiting.gif' style='width: 32px;'></div>";
 
 	sidebar.innerHTML = sidehtml;
 
 	// check if actions are running
-	Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions().then(function(){Retina.WidgetInstances.metagenome_upload[1].showRunningInboxActions();});
+	Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
 
 	// title
 	var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
@@ -62,44 +62,53 @@
 	// check if we have a user
 	if (stm.user) {
 	    if (widget.browser) {
-		widget.browser.display({ target: document.getElementById("browser") });
+	    	widget.browser.display({ target: document.getElementById("browser") });
 	    } else {
-		widget.browser = Retina.Widget.create("shockbrowse", { "target": document.getElementById("browser"),
-								       "width": 900,
-								       "height": 500,
-								       "enableUpload": true,
-								       "customPreview": widget.filePreview,
-								       "fileUploadCompletedCallback": widget.fileCompleted,
-								       "detailType": "preview",
-								       "showDetailBar": false,
-								       "showFilter": false,
-								       "showResizer": false,
-								       "showStatusBar": false,
-								       "showTitleBar": false,
-								       "enableDownload": false,
-								       "showUploadPreview": false,
-								       "autoDecompress": true,
-								       "user": stm.user,
-								       "uploadRestrictions": [ { "expression": /\.rar$/, "text": 'Invalid archive type. Allowed types are gz, zip and bz2' },
-											       { "expression": /\.faa$/, "text": "MG-RAST cannot process protein sequences. Please use DNA only." }],
-								       "presetFilters": { "type": "inbox" },
-								       "shockBase": RetinaConfig.shock_url});
-		widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.authHeader});
+	    	widget.browser = Retina.Widget.create("shockbrowse", { "target": document.getElementById("browser"),
+	    							       "width": 900,
+	    							       "height": 500,
+	    							       "enableUpload": true,
+	    							       "customPreview": widget.filePreview,
+	    							       "fileUploadCompletedCallback": widget.fileCompleted,
+	    							       "detailType": "preview",
+	    							       "showDetailBar": false,
+	    							       "showFilter": false,
+	    							       "showResizer": false,
+	    							       "showStatusBar": false,
+	    							       "showTitleBar": false,
+	    							       "enableDownload": false,
+								       "previewChunkSize": 100000,
+	    							       "enableCompressedDownload": false,
+	    							       "showUploadPreview": false,
+	    							       "autoDecompress": true,
+	    							       "user": stm.user,
+	    							       "uploadRestrictions": [ { "expression": /\.rar$/, "text": 'Invalid archive type. Allowed types are gz, zip and bz2' },
+	    										       { "expression": /\.faa$/, "text": "MG-RAST cannot process protein sequences. Please use DNA only." }],
+	    							       "preUploadCustom": widget.fileSelectedForUpload,
+	    							       "presetFilters": { "type": "inbox" },
+	    							       "shockBase": RetinaConfig.shock_url});
+	    	widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.authHeader});
 	    }
 	} else {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
 	}
     };
 
+    widget.fileSelectedForUpload = function (selectedFile) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	return { "html": null, "preventUpload": false };
+    };
+
     widget.filePreview = function (params) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	var html = "<h4>File Information</h4>";
+	var html = "<h5 style='margin-bottom: 0px;'>File Information</h5>";
 
 	var node = params.node;
 	var fn = node.file.name;
 
-	html += "<table>";
+	html += "<table style='font-size: 12px;'>";
 	html += "<tr><td style='padding-right: 20px;'><b>filename</b></td><td>"+fn+"</td></tr>";
 	html += "<tr><td><b>size</b></td><td>"+node.file.size.byteSize()+"</td></tr>";
 	html += "<tr><td><b>creation</b></td><td>"+node.last_modified+"</td></tr>";
@@ -134,18 +143,287 @@
 	var task = widget.checkFileHasAction(fn);
 	if (task) {
 	    html += '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with '+task+'</div>';
-	} else {	
-	    if (filetype == "archive") {
-		html += "<h4 style='margin-top: 20px;'>File Actions ("+filetype+")</h4>";
-		html += "<button class='btn btn-small'>decompress</button>";
+	} else {
+	    var fileHash = [];
+	    for (var i=0; i<widget.browser.fileList.length; i++) {
+		fileHash[widget.browser.fileList[i].file.name] = widget.browser.fileList[i];
 	    }
 	    if (filetype == "sff sequence") {
-		html += "<h4 style='margin-top: 20px;'>File Actions ("+filetype+")</h4>";
-		html += "<div id='convert'><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].sff2fastq(\""+node.id+"\");'>convert to fastq</button></div>";
+		var noSuffix = node.file.name.replace(/sff$/, "");
+		html += "<h5 style='margin-top: 20px; margin-bottom: 0px;'>File Actions ("+filetype+")</h5>";
+		if (fileHash.hasOwnProperty(noSuffix+"fastq")) {
+		    html += "<div class='alert alert-info' style='margin-top: 20px;'>This file has already been converted to fastq.</div>";
+		} else {
+		    html += "<div id='convert'><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].sff2fastq(\""+node.id+"\");'>convert to fastq</button></div>";
+		}
+	    }
+	    if (filetype == "text") {
+		// check if this is a barcode file
+		var d = params.data.split(/\n/);
+		var validBarcode = true;
+		var barcodes = {};
+		for (var i=0; i<d.length; i++) {
+		    if (d[i].length == 0) {
+			continue;
+		    }
+		    if (d[i].match(/^([atcg])+\t+(\S+)$/i)) {
+			var c = d[i].replace(/\t+/, "\t");
+			c = c.split(/\t/);
+			barcodes[c[1]] = c[0];
+		    } else {
+			validBarcode = false;
+		    }
+		}
+		if (validBarcode) {
+		    var options = "";
+		    var alreadyDemultiplexed = false;
+		    for (var i=0; i<widget.browser.fileList.length; i++) {
+			var fn = widget.browser.fileList[i].file.name;
+			if (fn.match(/\.fastq$/) || fn.match(/\.fq$/)) {
+			    options += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
+			    fn = fn.replace(/\.fastq$/, "").replace(/\.fq$/, "");
+			    if (barcodes.hasOwnProperty(fn)) {
+				alreadyDemultiplexed = true;
+				break;
+			    }
+			}
+		    }
+		    if (alreadyDemultiplexed) {
+			 html += "<div class='alert alert-info' style='margin-top: 20px;'>The demultiplex files of these barcodes have already been generated.</div>";
+		    } else {
+			html += "<h5>Demultiplex</h5><div id='convert'><p>This is a valid barcode file. Select a file below to demultiplex:</p>";
+			html += "<select style='width: 100%;'>";
+			html += options;
+			html += "</select><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(this.previousSibling.options[this.previousSibling.selectedIndex].value, \""+node.id+"\");'>demultiplex</button></div>";
+		    }
+		} else {
+		    html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
+		}
 	    }
 	    if (filetype == "sequence") {
-		html += "<h4 style='margin-top: 20px;'>Sequence File Information</h4>";
-		if (node.file.size < (1024 * 1024)) {
+		html += "<h5 style='margin-top: 20px; margin-bottom: 0px;'>Sequence Information";
+
+		// tell user detail info about the sequence
+		if (node.attributes.hasOwnProperty('stats_info')) {
+		    
+		    if (sequenceType == "fastq") {
+			html += "<button class='btn btn-small' style='float: right;' onclick='if(this.innerHTML==\"join paired ends\"){this.innerHTML=\"show sequence info\";this.previousSibling.textContent=\"Join Paired Ends\";}else{this.innerHTML=\"join paired ends\";this.previousSibling.textContent=\"Sequence Information\";}jQuery(\"#joinPairedEndsDiv\").toggle();jQuery(\"#seqInfoDiv\").toggle();'>join paired ends</button>";
+		    }
+
+		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 20px;'>";
+		    var opts = "";
+		    var txtOpts = "<option>- none -</option>";
+		    for (var i=0; i<widget.browser.fileList.length; i++) {
+			var fn = widget.browser.fileList[i].file.name;
+			if (fn.match(/\.fastq$/) || fn.match(/\.fq$/)) {
+			    opts += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
+			} else if (fn.match(/\.txt$/)) {
+			    txtOpts += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
+			}
+		    }
+		    html += "<span style='position: relative; bottom: 4px;'>File A</span><select id='fileA' style='font-size: 12px; height: 25px; margin-left: 10px; width: 380px;'>"+opts+"</select><br><span style='position: relative; bottom: 4px;'>File B</span><select id='fileB' style='font-size: 12px; height: 25px; margin-left: 10px; width: 380px;'>"+opts+"</select><br>";
+		    html += "<span style='position: relative; bottom: 4px;'>Barcode file (optional)</span><select id='barcodeFile' style='font-size: 12px; height: 25px; margin-left: 10px; width: 295px;'>"+txtOpts+"</select><br>";
+		    html += "<span style='position: relative; bottom: 4px;'>Output file name</span><div class='input-append'><input type='text' placeholder='output file name' id='outputFileName' style='font-size: 12px; height: 16px; margin-left: 3px;'>";
+		    html += "<button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].joinPairedEnds();'>join paired ends</button></div>";
+		    html += "</div><div id='seqInfoDiv'>";
+
+		    // check if all sequences have a unique id
+		    var unique = parseInt(node.attributes.stats_info.unique_id_count);
+		    var seqcount = parseInt(node.attributes.stats_info.sequence_count);
+		    var minlen = parseInt(node.attributes.stats_info.length_min);
+		    var maxlen = parseInt(node.attributes.stats_info.length_max);
+
+		    html += "<div style='text-align: left; font-size: 12px;'>";
+		    html += "<div style='font-weight: bold;'>basepair count</div><div>This file contains "+parseInt(node.attributes.stats_info.bp_count).formatString()+"bp of "+node.attributes.stats_info.sequence_content+" sequence containing "+parseInt(node.attributes.stats_info.ambig_char_count).formatString()+" ambiguous characters.</div>";
+		    html += "<div style='font-weight: bold;'>sequence count</div><div>This file contains "+seqcount.formatString()+" sequences "+(minlen < maxlen ? "ranging from "+minlen.formatString()+"bp to "+maxlen.formatString()+"bp and averaging "+parseInt(node.attributes.stats_info.average_length).formatString()+"bp in length (std.deviation from average length "+node.attributes.stats_info.standard_deviation_length+")." : " all "+minlen+"bp in length.")+(unique == seqcount ? " All of them have unique ids." : " Only "+unique.formatString()+" have unique ids.")+" The average GC-content is "+node.attributes.stats_info.average_gc_content+"% (std.deviation "+node.attributes.stats_info.standard_deviation_gc_content+") and GC-ratio "+node.attributes.stats_info.average_gc_ratio+" (std.deviation "+node.attributes.stats_info.standard_deviation_gc_ratio+"). </div>";
+		    html += "<div style='font-weight: bold;'>sequence type</div><div>We think this is a"+(node.attributes.stats_info.sequence_type == "WGS" ? " whole genome shotgun" : "n amplicon")+" dataset "+(node.attributes.stats_info.sequencing_method_guess == "other" ? (node.attributes.stats_info.sequencing_method_guess == "assembled" ? "sequenced with "+node.attributes.stats_info.sequencing_method_guess+"." : "of assembled reads.") : "but were unable to guess the sequencing technology.")+"</div>";
+		    html += "</div>";
+
+		    html += "</div>";
+		} else {
+		    html += "</h5>";
+		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
+		    widget.inboxData.push({ "info": { "pipeline": "seq stats" } });
+		    jQuery.ajax(url, {
+			success: function(data){
+			    Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+			    Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
+			    Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
+			},
+			error: function(jqXHR, error){
+			    console.log(error);
+			    console.log(jqXHR);
+			},
+			crossDomain: true,
+			headers: stm.authHeader,
+			type: "GET"
+		    });
+		}
+	    }
+	    
+	    html += "<h5 style='margin-top: 20px;'>Delete File</h5>";
+	    html += "<button class='btn btn-small btn-danger' onclick='if(confirm(\"Really delete this file?\\nThis cannot be undone!\")){Retina.WidgetInstances.metagenome_upload[1].browser.removeNode({node:\""+node.id+"\"});}'>delete file</button>";
+	}
+
+	return html;
+    };
+
+    widget.fileCompleted = function (data) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	// get node from data
+	var node = data.data;
+
+	// set permissions for mgrast
+	widget.browser.addAcl({node: node.id, acl: "read", uuid: "mgrast"});
+	widget.browser.addAcl({node: node.id, acl: "write", uuid: "mgrast"});
+	widget.browser.addAcl({node: node.id, acl: "delete", uuid: "mgrast"});
+
+	// attach the required additional attributes to the uploaded file
+	var newNodeAttributes = node.attributes;
+	newNodeAttributes['type'] = 'inbox';
+	newNodeAttributes['id'] = stm.user.id;
+	newNodeAttributes['email'] = stm.user.email;
+
+	var url = widget.browser.shockBase+'/node/'+node.id;
+	var fd = new FormData();
+	fd.append('attributes', new Blob([ JSON.stringify(newNodeAttributes) ], { "type" : "text\/json" }));
+	jQuery.ajax(url, {
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    success: function(data){
+		Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
+		Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
+	    },
+	    error: function(jqXHR, error){
+		console.log(error);
+		console.log(jqXHR);
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "PUT"
+	});
+    };
+
+    // Inbox actions
+    widget.sff2fastq = function (fid) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
+
+	var url = RetinaConfig.mgrast_api+'/inbox/sff2fastq';
+	jQuery.ajax(url, {
+	    data: { "sff_file": fid },
+	    success: function(data){
+		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+		document.getElementById('convert').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with sff to fastq</div>';
+	    },
+	    error: function(jqXHR, error){
+		console.log(error);
+		console.log(jqXHR);
+		document.getElementById('convert').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">sff to fastq processing failed</div>';
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "POST"
+	});
+    };
+
+    widget.demultiplex = function (sourceID, barcodeID) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
+
+	var url = RetinaConfig.mgrast_api+'/inbox/demultiplex';
+	jQuery.ajax(url, {
+	    data: { "seq_file": sourceID,
+		    "barcode_file": barcodeID },
+	    success: function(data){
+		document.getElementById('convert').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with demultiplex</div>';
+		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+	    },
+	    error: function(jqXHR, error){
+		document.getElementById('convert').innerHTML = '<div class="alert alert-error" style="margin-top: 20px;">demultiplex failed</div>';
+		console.log(error);
+		console.log(jqXHR);
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "POST"
+	});
+    };
+
+    widget.getRunningInboxActions = function () {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+	
+	document.getElementById('inboxActions').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
+	var url = RetinaConfig.mgrast_api+'/inbox/pending?in-progress=1&suspend=1&pending=1&queued=1';
+	jQuery.ajax(url, {
+	    success: function(data){
+		Retina.WidgetInstances.metagenome_upload[1].inboxData = data.data;
+		Retina.WidgetInstances.metagenome_upload[1].showRunningInboxActions();
+	    },
+	    error: function(jqXHR, error){
+		console.log(error);
+		console.log(jqXHR);
+		Retina.WidgetInstances.metagenome_upload[1].showRunningInboxActions();
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "GET",
+	});
+
+    };
+
+    widget.showRunningInboxActions = function () {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	var target = document.getElementById('inboxActions');
+	var data = widget.inboxData;
+
+	var html = "<p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
+
+	if (data.length > 0) {
+	    html = "<table class='table table-condensed'><tr><th>file</th><th>action</th><th>status</th></tr>";
+	    for (var i=0; i<data.length; i++) {
+		var fn = Retina.keys(data[i].tasks[0].inputs)[0];
+		var task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
+		var colors = { "in-progress": "green",
+			       "suspend": "red",
+			       "pending": "orange",
+			       "queued": "blue" };
+		var title = data[i].state;
+		var status = '<span style="color: '+colors[title]+';font-size: 19px; cursor: default;" title="'+title+'">&#9679;</span>';
+		html += "<tr><td style='padding-right: 5px;'>"+fn+"</td><td>"+task+"</td><td style='text-align: center;'>"+status+"</td></tr>";
+	    }
+	    html += "</table>";
+	}
+	
+	target.innerHTML = html;
+    };
+
+    widget.checkFileHasAction = function (filename) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+	
+	var data = widget.inboxData;
+
+	var task = false; 
+	for (var i=0; i<data.length; i++) {
+	    if (filename == Retina.keys(data[i].tasks[0].inputs)[0]) {
+		task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
+		break;
+	    }
+	}
+	
+	return task;
+    };
+
+})();
+
+/*
+
+  TEST BEFORE UPLOAD!
+
+  if (node.file.size < (1024 * 1024)) {
 		    html += '<div class="alert alert-error"><strong>Sequence file too small</strong> You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
 		} else {
 		    
@@ -203,190 +481,37 @@
 			html += '<div class="alert alert-info">'+validInfo+'<br>'+lenInfo+'</div>';
 		    }
 		    else if (d[0].match(/^@/)) {
-			var isIllumina = false;
-			// < 1.4
-			// @HWUSI-EAS100R:6:73:941:1973#0/1
-			if (d[0].match(/^\@[^:]+\:\d+\:\d+\:\d+\:\d+\#[01](\/[12]){01}$/)) {
-			    isIllumina = true;
-			}
-			// >= 1.4
-			// @HWUSI-EAS100R:6:73:941:1973#NNNNNN/1
-			else if (d[0].match(/^\@[^:]+\:\d+\:\d+\:\d+\:\d+\#[atcg]+(\/[12]){01}$/i)) {
-			    isIllumina = true;
-			}
-			// >= 1.8
-			// @EAS139:136:FC706VJ:2:2104:15343:197393 1:Y:18:ATCACG
-			else if (d[0].match(/^\@[^:]+\:\d+\:[^:]+\:\d+\:\d+\:\d+\:\d+( [12]\:[yn]\:\d+\:[atcg]+){01}$/i)) {
-			    isIllumina = true;
-			}
+			// var isIllumina = false;
+			// console.log(d[0]);
+			// // < 1.4
+			// // @HWUSI-EAS100R:6:73:941:1973#0/1
+			// if (d[0].match(/^\@[^:]+\:\d+\:\d+\:\d+\:\d+\#[01](\/[12]){01}$/)) {
+			//     isIllumina = true;
+			// }
+			// // >= 1.4
+			// // @HWUSI-EAS100R:6:73:941:1973#NNNNNN/1
+			// else if (d[0].match(/^\@[^:]+\:\d+\:\d+\:\d+\:\d+\#[atcg]+(\/[12]){01}$/i)) {
+			//     isIllumina = true;
+			// }
+			// // >= 1.8
+			// // @EAS139:136:FC706VJ:2:2104:15343:197393 1:Y:18:ATCACG
+			// else if (d[0].match(/^\@[^:]+\:\d+\:[^:]+\:\d+\:\d+\:\d+\:\d+( [12]\:[yn]\:\d+\:[atcg]+){01}$/i)) {
+			//     isIllumina = true;
+			// }
 
-			for (var i=0; i<d.length; i+=4) {
-			    var l = d.length - i;
-			    if (l>3) {
-				var id = d[i];
-				var seq = d[i+1];
-			    }
-			}
-			if (! isIllumina) {
-			    // add demultiplex button
-			    html += "<button class='btn btn-small'>demultiplex</button>";
-			}
+			// for (var i=0; i<d.length; i+=4) {
+			//     var l = d.length - i;
+			//     if (l>3) {
+			// 	var id = d[i];
+			// 	var seq = d[i+1];
+			//     }
+			// }
+			// if (! isIllumina) {
+			//     // add demultiplex button
+			//     html += "<button class='btn btn-small'>demultiplex</button>";
+			// }
 		    }
 		    else {
 			html += '<div class="alert alert-error">Could not detect sequence file type. Is this a valid sequence file?</div>';
 		    }
-		}
-
-		if (! node.attributes.hasOwnProperty('stats_info')) {
-		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
-		    jQuery.ajax(url, {
-			success: function(data){
-			    Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
-			    Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
-			    Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
-			},
-			error: function(jqXHR, error){
-			    console.log(error);
-			    console.log(jqXHR);
-			},
-			crossDomain: true,
-			headers: stm.authHeader,
-			type: "GET"
-		    });
-		}
-	    }
-	    
-	    html += "<h4 style='margin-top: 20px;'>Delete File</h4>";
-	    html += "<button class='btn btn-small btn-danger' onclick='if(confirm(\"Really delete this file?\\nThis cannot be undone!\")){Retina.WidgetInstances.metagenome_upload[1].browser.removeNode({node:\""+node.id+"\"});}'>delete file</button>";
-	}
-
-	return html;
-    };
-
-    widget.fileCompleted = function (data) {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-
-	// get node from data
-	var node = data.data;
-
-	// set permissions for mgrast
-	widget.browser.addAcl({node: node.id, acl: "read", uuid: "mgrast"});
-	widget.browser.addAcl({node: node.id, acl: "write", uuid: "mgrast"});
-	widget.browser.addAcl({node: node.id, acl: "delete", uuid: "mgrast"});
-
-	// attach the required additional attributes to the uploaded file
-	var newNodeAttributes = node.attributes;
-	newNodeAttributes['type'] = 'inbox';
-	newNodeAttributes['id'] = stm.user.id;
-	newNodeAttributes['email'] = stm.user.email;
-
-	var url = widget.browser.shockBase+'/node/'+node.id;
-	var fd = new FormData();
-	fd.append('attributes', new Blob([ JSON.stringify(newNodeAttributes) ], { "type" : "text\/json" }));
-	jQuery.ajax(url, {
-	    contentType: false,
-	    processData: false,
-	    data: fd,
-	    success: function(data){
-		Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
-		Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
-	    },
-	    error: function(jqXHR, error){
-		console.log(error);
-		console.log(jqXHR);
-	    },
-	    crossDomain: true,
-	    headers: stm.authHeader,
-	    type: "PUT"
-	});
-    };
-
-    // Inbox actions
-    widget.sff2fastq = function (fid) {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-
-	var url = RetinaConfig.mgrast_api+'/inbox/sff2fastq';
-	jQuery.ajax(url, {
-	    data: { "sff_file": fid },
-	    success: function(data){
-		alert('action started');
-		document.getElementById('convert').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with sff to fastq</div>';
-		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions().then(function(){Retina.WidgetInstances.metagenome_upload[1].showRunningInboxActions();});
-	    },
-	    error: function(jqXHR, error){
-		console.log(error);
-		console.log(jqXHR);
-	    },
-	    crossDomain: true,
-	    headers: stm.authHeader,
-	    type: "POST"
-	});
-    };
-
-    widget.getRunningInboxActions = function () {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-	
-	var p = jQuery.Deferred();
-	var url = RetinaConfig.mgrast_api+'/inbox/pending?in-progress=1&suspend=1&pending=1&queued=1';
-	jQuery.ajax(url, {
-	    success: function(data){
-		Retina.WidgetInstances.metagenome_upload[1].inboxData = data.data;
-		this.p.resolve();
-	    },
-	    error: function(jqXHR, error){
-		console.log(error);
-		console.log(jqXHR);
-	    },
-	    crossDomain: true,
-	    headers: stm.authHeader,
-	    type: "GET",
-	    p: p
-	});
-
-	return p;
-    };
-
-    widget.showRunningInboxActions = function () {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-
-	var target = document.getElementById('inboxActions');
-	var data = widget.inboxData;
-
-	var html = "<p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
-
-	if (data.length > 0) {
-	    html = "<table class='table table-condensed'><tr><th>file</th><th>action</th><th>status</th></tr>";
-	    for (var i=0; i<data.length; i++) {
-		var fn = Retina.keys(data[i].tasks[0].inputs)[0];
-		var task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
-		var colors = { "in-progress": "green",
-			       "suspend": "red",
-			       "pending": "orange",
-			       "queued": "blue" };
-		var title = data[i].state;
-		var status = '<span style="color: '+colors[title]+';font-size: 19px; cursor: default;" title="'+title+'">&#9679;</span>';
-		html += "<tr><td style='padding-right: 5px;'>"+fn+"</td><td>"+task+"</td><td style='text-align: center;'>"+status+"</td></tr>";
-	    }
-	    html += "</table>";
-	}
-	
-	target.innerHTML = html;
-    };
-
-    widget.checkFileHasAction = function (filename) {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-	
-	var data = widget.inboxData;
-	
-	var task = false; 
-	for (var i=0; i<data.length; i++) {
-	    if (filename == Retina.keys(data[i].tasks[0].inputs)[0]) {
-		task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
-		break;
-	    }
-	}
-	
-	return task;
-    };
-
-})();
+*/
