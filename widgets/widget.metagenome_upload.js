@@ -160,9 +160,15 @@
 		    var data = e.target.result;
 		    var d = data.split(/\n/);
 		    var allow = true;
-	    
+		    var type = "unknown";
+		    
 		    // FASTA
 		    if (d[0].match(/^>/)) {
+			type = "FASTA";
+		    } else if (d[0].match(/^@/)) {
+			type = "FASTQ";
+		    }
+		    if (type == "FASTA" || type == "FASTQ") {
 			var header = d[0];
 			var seq = d[1];
 			var tooShort = 0;
@@ -170,15 +176,31 @@
 			var invalidSeqs = 0;
 			var headers = {};
 			var numDuplicate = 0;
-			headers[d[0]] = true;
-			for (var i=2; i<d.length; i++) {
-			    if (d[i].match(/^>/)) {
-				if (headers.hasOwnProperty(d[i])) {
+			if (type=="FASTA") {
+			    headers[header] = true;
+			}
+			for (var i=(type=="FASTA"?2:0); i<d.length - 1; i++) {
+			    var newEntry = false;
+			    if (type == "FASTA") {
+				if (d[i].match(/^>/)) {
+				    header = d[i];
+				    newEntry = true;
+				} else {
+				    seq += d[i];
+				}
+			    } else {
+				header = d[i];
+				seq = d[i+1];
+				i += 3;
+			    }
+			    if (newEntry || type=="FASTQ") {
+				if (headers.hasOwnProperty(header)) {
 				    numDuplicate++;
 				} else {
-				    headers[d[i]] = true;
+				    headers[header] = true;
 				}
 				numSeqs++;
+				
 				// sequence contains invalid characters
 				if (! seq.match(/^[acgtunx-]+$/i)) {
 				    invalidSeqs++;
@@ -186,20 +208,16 @@
 				if (seq.length < 75) {
 				    tooShort++;
 				}
-				
-				header = d[i];
 				seq = "";
-			    } else {
-				seq += d[i];
 			    }
 			}
 			numSeqs--;
 			tooShort--;
-			var lenInfo = "All of the "+numSeqs+" tested sequences have the minimum length of 75bp.";
+			var lenInfo = " All of the tested sequences have the minimum length of 75bp.";
 			if (tooShort > 0) {
-			    lenInfo = tooShort.formatString() + " of the "+numSeqs.formatString()+" tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
+			    lenInfo = " "+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
 			}
-			var validInfo = "This is a valid FASTA file.";
+			var validInfo = "This is a valid "+type+" file. "+numSeqs.formatString() + " sequences of this file were tested. ";
 			if (invalidSeqs || numDuplicate) {
 			    validInfo = numSeqs.formatString() + " sequences of this file were tested. ";
 			    if (invalidSeqs) {
@@ -208,23 +226,19 @@
 			    if (numDuplicate) {
 				validInfo += numDuplicate + " of them contain duplicate headers. ";
 			    }
-			    validInfo += "The FASTA file is not in the correct format for processing.";
+			    validInfo += "The "+type+" file is not in the correct format for processing.";
 			    allow = false;
 			}
-			html += '<div class="alert alert-info">'+validInfo+'<br>'+lenInfo+'</div>';
-		    }
-		    else if (d[0].match(/^@/)) {
-			html += '<div class="alert alert-info">This is a FASTQ file.</div>';
-		    }
-		    else {
-			html += '<div class="alert alert-error">Not a valid sequence file.</div>';
+			html += '<div class="alert alert-info">'+validInfo+lenInfo+'</div>';
+		    } else {
+			html = '<div class="alert alert-error">Not a valid sequence file.</div>';
 			allow = false;
 		    }
 		    this.prom.resolve(html, allow);
 		};
-		var tenMB = 1024 * 1024 * 10;
-		fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size < tenMB ? selectedFile.size : tenMB));
-	    } 
+	    }
+	    var tenMB = 1024 * 1024 * 10;
+	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size < tenMB ? selectedFile.size : tenMB));
 	} else {
 	    return promise.resolve("", true);
 	}
