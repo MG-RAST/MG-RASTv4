@@ -25,6 +25,11 @@
 	var content = widget.main;
 	var sidebar = widget.sidebar;
 
+	if (! stm.user) {
+	    content.innerHTML = "<div class='alert alert-info'>You need to be logged in to use this page</div>";
+	    return;
+	}
+
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
@@ -97,7 +102,7 @@
     widget.fileSelectedForUpload = function (selectedFile) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	return { "html": null, "preventUpload": false };
+	return { "html": "<h5>Hello World</h5>", "preventUpload": false };
     };
 
     widget.filePreview = function (params) {
@@ -180,7 +185,11 @@
 		    for (var i=0; i<widget.browser.fileList.length; i++) {
 			var fn = widget.browser.fileList[i].file.name;
 			if (fn.match(/\.fastq$/) || fn.match(/\.fq$/)) {
-			    options += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
+			    var sel = "";
+			    if (fn.substr(0, fn.lastIndexOf(".")) == node.file.name.substr(0, node.file.name.lastIndexOf("."))) {
+				sel = " selected";
+			    }
+			    options += "<option value='"+widget.browser.fileList[i].id+"'"+sel+">"+fn+"</option>";
 			    fn = fn.replace(/\.fastq$/, "").replace(/\.fq$/, "");
 			    if (barcodes.hasOwnProperty(fn)) {
 				alreadyDemultiplexed = true;
@@ -206,24 +215,56 @@
 		// tell user detail info about the sequence
 		if (node.attributes.hasOwnProperty('stats_info')) {
 		    
+		    // fastq files can have the "join paired ends" option
 		    if (sequenceType == "fastq") {
 			html += "<button class='btn btn-small' style='float: right;' onclick='if(this.innerHTML==\"join paired ends\"){this.innerHTML=\"show sequence info\";this.previousSibling.textContent=\"Join Paired Ends\";}else{this.innerHTML=\"join paired ends\";this.previousSibling.textContent=\"Sequence Information\";}jQuery(\"#joinPairedEndsDiv\").toggle();jQuery(\"#seqInfoDiv\").toggle();'>join paired ends</button>";
 		    }
 
 		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 20px;'>";
-		    var opts = "";
+		    html += "<input type='text' style='display: none;' value='"+node.id+"' id='jpeFileA'>";
+		    var opts = [];
 		    var txtOpts = "<option>- none -</option>";
+		    var bestHit = 0;
+		    var selectedOpt = 0;
+		    var partial = "";
+		    var currFn = node.file.name;
 		    for (var i=0; i<widget.browser.fileList.length; i++) {
 			var fn = widget.browser.fileList[i].file.name;
+
+			// a file cannot be joined on itself
+			if (fn == currFn) {
+			    continue;
+			}
+
 			if (fn.match(/\.fastq$/) || fn.match(/\.fq$/)) {
-			    opts += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
+			    // check if the filename is similar to the current filename
+			    for (var h=0; h<fn.length; h++) {
+				if (fn.charAt(h) != currFn.charAt(h)) {
+				    if (h>bestHit) {
+					bestHit = h;
+					selectedOpt = opts.length;
+					partial = fn.substr(0, h);
+				    }
+				    break;
+				}
+			    }
+			    opts.push(widget.browser.fileList[i]);
 			} else if (fn.match(/\.txt$/)) {
 			    txtOpts += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
 			}
 		    }
-		    html += "<span style='position: relative; bottom: 4px;'>File A</span><select id='fileA' style='font-size: 12px; height: 25px; margin-left: 10px; width: 380px;'>"+opts+"</select><br><span style='position: relative; bottom: 4px;'>File B</span><select id='fileB' style='font-size: 12px; height: 25px; margin-left: 10px; width: 380px;'>"+opts+"</select><br>";
-		    html += "<span style='position: relative; bottom: 4px;'>Barcode file (optional)</span><select id='barcodeFile' style='font-size: 12px; height: 25px; margin-left: 10px; width: 295px;'>"+txtOpts+"</select><br>";
-		    html += "<span style='position: relative; bottom: 4px;'>Output file name</span><div class='input-append'><input type='text' placeholder='output file name' id='outputFileName' style='font-size: 12px; height: 16px; margin-left: 3px;'>";
+		    for (var i=0; i<opts.length; i++) {
+			var sel = "";
+			if (i==selectedOpt) {
+			    sel = " selected";
+			}
+			opts[i] = "<option value='"+opts[i].id+"'"+sel+">"+opts[i].file.name+"</option>";
+		    }
+		    opts = opts.join("\n");
+		    html += "<span style='position: relative; bottom: 4px;'>file to join</span><select id='jpeFileB' style='font-size: 12px; height: 25px; margin-left: 10px; width: 360px;'>"+opts+"</select><br>";
+		    html += "<span style='position: relative; bottom: 4px;'>Barcode file (optional)</span><select id='jpeBarcode' style='font-size: 12px; height: 25px; margin-left: 10px; width: 295px;'>"+txtOpts+"</select><br>";
+		    html += "remove non-overlapping paired-ends <input type='checkbox' checked='checked' id='jpeRetain' style='margin-top: -2px;'><div style='height: 10px;'></div>";
+		    html += "<span style='position: relative; bottom: 4px;'>Output file name</span><div class='input-append'><input type='text' placeholder='output file name' id='jpeOutfile' style='font-size: 12px; height: 16px; margin-left: 3px;' value='"+(partial.length > 1 ? partial + ".fastq" : "")+"'>";
 		    html += "<button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].joinPairedEnds();'>join paired ends</button></div>";
 		    html += "</div><div id='seqInfoDiv'>";
 
@@ -352,6 +393,39 @@
 	});
     };
 
+    widget.joinPairedEnds = function () {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	var fileA = document.getElementById('jpeFileA').value;
+	var fileB = document.getElementById('jpeFileB').options[document.getElementById('jpeFileB').selectedIndex].value;
+	var barcode = document.getElementById('jpeBarcode').selectedIndex > 0 ? document.getElementById('jpeBarcode').options[document.getElementById('jpeBarcode').selectedIndex].value : null;
+	var outfile = document.getElementById('jpeOutfile').value;
+	var retain = document.getElementById('jpeRetain').getAttribute('checked') ? 1 : 0;
+
+	var url = RetinaConfig.mgrast_api+'/inbox/pairjoin' + (barcode ? "_demultiplex" : "");
+	jQuery.ajax(url, {
+	    data: { "pair_file_1": fileA,
+		    "pair_file_2": fileB,
+		    "output": outfile,
+		    "index_file": barcode,
+		    "retain": retain },
+	    success: function(data){
+		document.getElementById('joinPairedEndsDiv').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with join paired ends</div>';
+		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+	    },
+	    error: function(jqXHR, error){
+		document.getElementById('joinPairedEndsDiv').innerHTML = '<div class="alert alert-error" style="margin-top: 20px;">join paired ends failed</div>';
+		console.log(error);
+		console.log(jqXHR);
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "POST"
+	});
+
+	document.getElementById('joinPairedEndsDiv').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
+    };
+
     widget.getRunningInboxActions = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
@@ -374,6 +448,26 @@
 
     };
 
+    widget.cancelInboxAction = function (id) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+	
+	var url = RetinaConfig.mgrast_api+'/inbox/cancel/'+id;
+	jQuery.ajax(url, {
+	    success: function(data){
+		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+	    },
+	    error: function(jqXHR, error){
+		console.log(error);
+		console.log(jqXHR);
+		Retina.WidgetInstances.metagenome_upload[1].showRunningInboxActions();
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "GET",
+	});
+
+    };
+
     widget.showRunningInboxActions = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
@@ -382,8 +476,8 @@
 
 	var html = "<p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
 
-	if (data.length > 0) {
-	    html = "<table class='table table-condensed'><tr><th>file</th><th>action</th><th>status</th></tr>";
+	if (data && data.length > 0) {
+	    html = "<table class='table table-condensed'><tr><th>file</th><th>action</th><th>status</th><th></th></tr>";
 	    for (var i=0; i<data.length; i++) {
 		var fn = Retina.keys(data[i].tasks[0].inputs)[0];
 		var task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
@@ -393,7 +487,7 @@
 			       "queued": "blue" };
 		var title = data[i].state;
 		var status = '<span style="color: '+colors[title]+';font-size: 19px; cursor: default;" title="'+title+'">&#9679;</span>';
-		html += "<tr><td style='padding-right: 5px;'>"+fn+"</td><td>"+task+"</td><td style='text-align: center;'>"+status+"</td></tr>";
+		html += "<tr><td style='padding-right: 5px;'>"+fn+"</td><td>"+task+"</td><td style='text-align: center;'>"+status+"</td><td><button class='btn btn-mini btn-danger' title='cancel action' onclick='if(confirm(\"really cancel this action?\")){Retina.WidgetInstances.metagenome_upload[1].cancelInboxAction(\""+data[i].id+"\");}'>&times;</button></td></tr>";
 	    }
 	    html += "</table>";
 	}
