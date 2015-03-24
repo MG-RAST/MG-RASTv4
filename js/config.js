@@ -4,7 +4,8 @@ var RetinaConfig = {
 		       		    "prefix": "mggo4711",
 		       		    "keyword": "Authorization",
 		       		    "url": "http://api.metagenomics.anl.gov?verbosity=verbose",
-		       		    "useHeader": true }
+		       		    "useHeader": true,
+				    "loginField": "login" }
 		     },
     "mgrast_ftp": "ftp://ftp.metagenomics.anl.gov",
     "mgrast_api": "http://dunkirk.mcs.anl.gov/~paczian/MG-RAST/site/CGI/api.cgi", //"http://api.metagenomics.anl.gov",

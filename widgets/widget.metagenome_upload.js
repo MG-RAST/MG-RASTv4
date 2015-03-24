@@ -99,28 +99,140 @@
 	}
     };
 
+    // do some convenience checks before the file is uploaded
     widget.fileSelectedForUpload = function (selectedFile) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	return { "html": "<h5>Hello World</h5>", "preventUpload": false };
+	// detect filetype
+	var ret = widget.detectFiletype(selectedFile.name);
+	var fileType = ret.fileType;
+	var sequenceType = ret.sequenceType;
+
+	var promise = jQuery.Deferred();
+
+	// get the filereader
+	var fileReader = new FileReader();
+	fileReader.prom = promise;
+	fileReader.onerror = function (error) {
+	    console.log(error);
+	};
+	var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+
+	// check the type of file to be uploaded
+	if (fileType == "text" ) {
+	    fileReader.onload = function(e) {
+		var data = e.target.result;
+		var d = data.split(/\n/);
+		var html = "";
+		var allow = true;
+
+		var validBarcode = true;
+		for (var i=0; i<d.length; i++) {
+		    if (d[i].length == 0) {
+			continue;
+		    }
+		    if (d[i].match(/^([atcg])+\t+(\S+)$/i)) {
+			var c = d[i].replace(/\t+/, "\t");
+			c = c.split(/\t/);
+		    } else {
+			validBarcode = false;
+			break;
+		    }
+		}
+		var allow = true;
+		if (validBarcode) {
+		    html = "<div class='alert alert-success' style='margin-top: 20px;'>This is a valid barcode file.</div>";
+		} else {
+		    html = "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
+		    allow = false;
+		}
+		this.prom.resolve(html, allow);
+	    };
+	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size));
+	} else if (fileType == "sequence") {
+
+	    if (selectedFile.size < (1024 * 1024)) {
+		var html = '<div class="alert alert-error"><strong>Sequence file too small</strong> You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
+		promise.resolve(html, false);
+	    } else {
+		fileReader.onload = function(e) {
+		    var html = "";
+		    var data = e.target.result;
+		    var d = data.split(/\n/);
+		    var allow = true;
+	    
+		    // FASTA
+		    if (d[0].match(/^>/)) {
+			var header = d[0];
+			var seq = d[1];
+			var tooShort = 0;
+			var numSeqs = 1;
+			var invalidSeqs = 0;
+			var headers = {};
+			var numDuplicate = 0;
+			headers[d[0]] = true;
+			for (var i=2; i<d.length; i++) {
+			    if (d[i].match(/^>/)) {
+				if (headers.hasOwnProperty(d[i])) {
+				    numDuplicate++;
+				} else {
+				    headers[d[i]] = true;
+				}
+				numSeqs++;
+				// sequence contains invalid characters
+				if (! seq.match(/^[acgtunx-]+$/i)) {
+				    invalidSeqs++;
+				}
+				if (seq.length < 75) {
+				    tooShort++;
+				}
+				
+				header = d[i];
+				seq = "";
+			    } else {
+				seq += d[i];
+			    }
+			}
+			numSeqs--;
+			tooShort--;
+			var lenInfo = "All of the "+numSeqs+" tested sequences have the minimum length of 75bp.";
+			if (tooShort > 0) {
+			    lenInfo = tooShort.formatString() + " of the "+numSeqs.formatString()+" tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
+			}
+			var validInfo = "This is a valid FASTA file.";
+			if (invalidSeqs || numDuplicate) {
+			    validInfo = numSeqs.formatString() + " sequences of this file were tested. ";
+			    if (invalidSeqs) {
+				validInfo += invalidSeqs.formatString() + " of them contain invalid characters. ";
+			    }
+			    if (numDuplicate) {
+				validInfo += numDuplicate + " of them contain duplicate headers. ";
+			    }
+			    validInfo += "The FASTA file is not in the correct format for processing.";
+			    allow = false;
+			}
+			html += '<div class="alert alert-info">'+validInfo+'<br>'+lenInfo+'</div>';
+		    }
+		    else if (d[0].match(/^@/)) {
+			html += '<div class="alert alert-info">This is a FASTQ file.</div>';
+		    }
+		    else {
+			html += '<div class="alert alert-error">Not a valid sequence file.</div>';
+			allow = false;
+		    }
+		    this.prom.resolve(html, allow);
+		};
+		var tenMB = 1024 * 1024 * 10;
+		fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size < tenMB ? selectedFile.size : tenMB));
+	    } 
+	} else {
+	    return promise.resolve("", true);
+	}
+	
+	return promise;
     };
 
-    widget.filePreview = function (params) {
-	var widget = Retina.WidgetInstances.metagenome_upload[1];
-
-	var html = "<h5 style='margin-bottom: 0px;'>File Information</h5>";
-
-	var node = params.node;
-	var fn = node.file.name;
-
-	html += "<table style='font-size: 12px;'>";
-	html += "<tr><td style='padding-right: 20px;'><b>filename</b></td><td>"+fn+"</td></tr>";
-	html += "<tr><td><b>size</b></td><td>"+node.file.size.byteSize()+"</td></tr>";
-	html += "<tr><td><b>creation</b></td><td>"+node.last_modified+"</td></tr>";
-	html += "<tr><td><b>md5</b></td><td>"+node.file.checksum.md5+"</td></tr>";
-	html += "</table>";
-
-	// detect filetype
+    widget.detectFiletype = function (fn) {
 	var filetype = "";
 	var sequenceType = null;
 	if (fn.match(/(tar\.gz|tgz|zip|tar\.bz2|tbz|tbz2|tb2|gzip|bzip2|gz)$/)) {
@@ -141,6 +253,29 @@
 	} else if (fn.match(/txt$/)) {
 	    filetype = "text";
 	}
+	
+	return { fileType: filetype, sequenceType: sequenceType };
+    };
+
+    widget.filePreview = function (params) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	var html = "<h5 style='margin-bottom: 0px;'>File Information</h5>";
+
+	var node = params.node;
+	var fn = node.file.name;
+
+	html += "<table style='font-size: 12px;'>";
+	html += "<tr><td style='padding-right: 20px;'><b>filename</b></td><td>"+fn+"</td></tr>";
+	html += "<tr><td><b>size</b></td><td>"+node.file.size.byteSize()+"</td></tr>";
+	html += "<tr><td><b>creation</b></td><td>"+node.last_modified+"</td></tr>";
+	html += "<tr><td><b>md5</b></td><td>"+node.file.checksum.md5+"</td></tr>";
+	html += "</table>";
+
+	// detect filetype
+	var ret = widget.detectFiletype(fn);
+	var filetype = ret.fileType;
+	var sequenceType = ret.sequenceType;
 
 	// check data
 	var data = params.data;
@@ -512,100 +647,3 @@
     };
 
 })();
-
-/*
-
-  TEST BEFORE UPLOAD!
-
-  if (node.file.size < (1024 * 1024)) {
-		    html += '<div class="alert alert-error"><strong>Sequence file too small</strong> You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
-		} else {
-		    
-		    // check the available sequences
-		    var d = params.data.split(/\n/);
-		    
-		    // FASTA
-		    if (d[0].match(/^>/)) {
-			var header = d[0];
-			var seq = d[1];
-			var tooShort = 0;
-			var numSeqs = 1;
-			var invalidSeqs = 0;
-			var headers = {};
-			var numDuplicate = 0;
-			headers[d[0]] = true;
-			for (var i=2; i<d.length; i++) {
-			    if (d[i].match(/^>/)) {
-				if (headers.hasOwnProperty(d[i])) {
-				    numDuplicate++;
-				} else {
-				    headers[d[i]] = true;
-				}
-				numSeqs++;
-				// sequence contains invalid characters
-				if (! seq.match(/^[acgtunx-]+$/i)) {
-				    invalidSeqs++;
-				}
-				if (seq.length < 75) {
-				    tooShort++;
-				}
-				
-				header = d[i];
-				seq = "";
-			    } else {
-				seq += d[i];
-			    }
-			}
-			numSeqs--;
-			tooShort--;
-			var lenInfo = "All of the "+numSeqs+" tested sequences have the minimum length of 75bp.";
-			if (tooShort > 0) {
-			    lenInfo = tooShort + " of the "+numSeqs+" tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
-			}
-			var validInfo = "This is a valid FASTA file.";
-			if (invalidSeqs || numDuplicate) {
-			    validInfo = numSeqs + " sequences of this file were tested. ";
-			    if (invalidSeqs) {
-				validInfo += invalidSeqs + " of them contain invalid characters. The FASTA file is not in the correct format for processing.";
-			    }
-			    if (numDuplicate) {
-				validInfo += numDuplicate + " of them contain duplicate headers";
-			    }
-			}
-			html += '<div class="alert alert-info">'+validInfo+'<br>'+lenInfo+'</div>';
-		    }
-		    else if (d[0].match(/^@/)) {
-			// var isIllumina = false;
-			// console.log(d[0]);
-			// // < 1.4
-			// // @HWUSI-EAS100R:6:73:941:1973#0/1
-			// if (d[0].match(/^\@[^:]+\:\d+\:\d+\:\d+\:\d+\#[01](\/[12]){01}$/)) {
-			//     isIllumina = true;
-			// }
-			// // >= 1.4
-			// // @HWUSI-EAS100R:6:73:941:1973#NNNNNN/1
-			// else if (d[0].match(/^\@[^:]+\:\d+\:\d+\:\d+\:\d+\#[atcg]+(\/[12]){01}$/i)) {
-			//     isIllumina = true;
-			// }
-			// // >= 1.8
-			// // @EAS139:136:FC706VJ:2:2104:15343:197393 1:Y:18:ATCACG
-			// else if (d[0].match(/^\@[^:]+\:\d+\:[^:]+\:\d+\:\d+\:\d+\:\d+( [12]\:[yn]\:\d+\:[atcg]+){01}$/i)) {
-			//     isIllumina = true;
-			// }
-
-			// for (var i=0; i<d.length; i+=4) {
-			//     var l = d.length - i;
-			//     if (l>3) {
-			// 	var id = d[i];
-			// 	var seq = d[i+1];
-			//     }
-			// }
-			// if (! isIllumina) {
-			//     // add demultiplex button
-			//     html += "<button class='btn btn-small'>demultiplex</button>";
-			// }
-		    }
-		    else {
-			html += '<div class="alert alert-error">Could not detect sequence file type. Is this a valid sequence file?</div>';
-		    }
-*/
