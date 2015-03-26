@@ -333,7 +333,7 @@
 		}
 	    };
 	} else if (widget.currentType == 'barchart') {
-	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter, type: 'barchart' });
+	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter });
 	    r.data(1, data.data);
 	    r.renderer.settings.x_labels = data.x_labels;
 	    r.renderer.settings.chartArea = [ 120, 0, 0.8, 1 ];
@@ -406,23 +406,12 @@
 	    r.renderer.settings.tdata = null;
 	    r.data(1, data);
 	} else if (widget.currentType == 'boxplot') {
-	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter, type: 'barchart' });
-	    r.clear(1);
+	    var data = widget.container2boxplot({ dataColIndex: 3, filter: filter });
 	    r.data(1, data.data);
 	    r.renderer.settings.x_labels = data.x_labels;
 	    r.renderer.settings.chartArea = [ 120, 0, 0.8, 1 ];
 	    r.renderer.settings.legendArea = [ 0.81, 0.1, 0.97, 1 ];
-	    r.renderer.settings.onclick = function (p) {
-		var rend = Retina.RendererInstances.graph[p.rendererIndex];
-		var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
-		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
-		    html = "";
-		}
-		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
-				    value: p.series } );
-	    };
+	    console.log(data);
 	}
 	r.render(1);	   
     };
@@ -488,6 +477,26 @@
 	    var series = { name: matrix.rows[i], data: [], fill: palette[i] };
 	    for (var h=0; h<matrix.cols.length; h++) {
 		series.data.push(matrix.data[i][h]);
+	    }
+	    data.push(series);
+	}
+	
+	var retval = { x_labels: matrix.cols, data: data };
+	
+	return retval;
+    };
+
+    widget.container2boxplot = function (params) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	
+	var matrix = widget.container2matrix(params);
+	
+	var data = [];
+	var palette = GooglePalette(matrix.rows.length);
+	for (var i=0; i<matrix.cols.length; i++) {
+	    var series = { name: matrix.cols[i], data: [], fill: palette[i] };
+	    for (var h=0; h<matrix.rows.length; h++) {
+		series.data.push(matrix.data[h][i]);
 	    }
 	    data.push(series);
 	}
