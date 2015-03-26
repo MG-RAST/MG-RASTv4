@@ -119,6 +119,7 @@
     	html += "<img src='Retina/images/bars3.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='barchart'>";
     	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
     	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");' title='table'>";
+    	html += "<img src='images/icon_boxplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"boxplot\");' title='table'>";
     	container.innerHTML = html;
     };
 
@@ -404,6 +405,24 @@
 	    r.renderer.settings.header = null;
 	    r.renderer.settings.tdata = null;
 	    r.data(1, data);
+	} else if (widget.currentType == 'boxplot') {
+	    var data = widget.container2graphseries({ dataColIndex: matrixLevel, filter: filter, type: 'barchart' });
+	    r.clear(1);
+	    r.data(1, data.data);
+	    r.renderer.settings.x_labels = data.x_labels;
+	    r.renderer.settings.chartArea = [ 120, 0, 0.8, 1 ];
+	    r.renderer.settings.legendArea = [ 0.81, 0.1, 0.97, 1 ];
+	    r.renderer.settings.onclick = function (p) {
+		var rend = Retina.RendererInstances.graph[p.rendererIndex];
+		var widget = Retina.WidgetInstances.metagenome_analysis[1];
+		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
+		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
+		    html = "";
+		}
+		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
+		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
+				    value: p.series } );
+	    };
 	}
 	r.render(1);	   
     };
@@ -765,7 +784,27 @@
 		 'table': { title: 'table',
 			    renderer: 'table',
 			    settings: {}
-		 }
+			  },
+		 'boxplot': { title: 'boxplot',
+			      renderer: 'graph',
+			      settings: { 'title': '',
+    					  'type': 'deviation',
+    					  'default_line_width': 1,
+    					  'default_line_color': 'blue',
+					  'x_labels': ['Metgenome A', 'Metgenome B', 'Metgenome C', 'Metgenome D', 'Metgenome E'],
+    					  'x_labels_rotation': '310',
+    					  'x_tick_interval': 5,
+    					  'show_legend': true,
+    					  'chartArea': [120, 0, 0.79, 1],
+					  'legendArea': [0.8, 0.1, 1, 1],
+    					  'width': 830,
+    					  'height': 540,
+					  'data': [ { name: "Organism A", data: [ 50, 55, 54, 45, 41 ], fill: GooglePalette(5)[0] },
+						    { name: "Organism B", data: [ 41, 52, 51, 42, 60 ], fill: GooglePalette(5)[1] },
+						    { name: "Organism C", data: [ 45, 41, 60, 22, 19 ], fill: GooglePalette(5)[2] },
+						    { name: "Organism D", data: [ 38, 27, 50, 32, 59 ], fill: GooglePalette(5)[3] },
+						    { name: "Organism E", data: [ 49, 14, 40, 42, 79 ], fill: GooglePalette(5)[4] } ] }
+			    }
 	       };
     };
 

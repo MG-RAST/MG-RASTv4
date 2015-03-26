@@ -311,6 +311,23 @@
 		    html += "<div id='convert'><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].sff2fastq(\""+node.id+"\");'>convert to fastq</button></div>";
 		}
 	    }
+	    if (filetype == "excel") {
+		// check if this is valid metadata
+		var url = RetinaConfig.mgrast_api+'/metadata/validate';
+		jQuery.ajax(url, {
+		    data: { "node_id": node.id },
+		    success: function(data){
+			Retina.WidgetInstances.metagenome_upload[1].selectedMetadata = data;
+		    },
+		    error: function(jqXHR, error){
+			console.log(error);
+			console.log(jqXHR);
+		    },
+		    crossDomain: true,
+		    headers: stm.authHeader,
+		    type: "POST"
+		});
+	    }
 	    if (filetype == "text") {
 		// check if this is a barcode file
 		var d = params.data.split(/\n/);
@@ -624,7 +641,6 @@
 	var data = widget.inboxData;
 
 	var html = "<p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
-
 	if (data && data.length > 0) {
 	    html = "<table class='table table-condensed'><tr><th>file</th><th>action</th><th>status</th><th></th></tr>";
 	    for (var i=0; i<data.length; i++) {

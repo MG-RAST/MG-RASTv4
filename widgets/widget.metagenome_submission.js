@@ -12,6 +12,11 @@
 	return [];
     };
     
+    widget.validSteps = { metadata: false,
+			  project: false,
+			  files: false,
+			  options: false };
+
     widget.display = function (params) {
         var widget = this;
 	var index = widget.index;
@@ -29,76 +34,71 @@
 
 	sidebar.innerHTML = sidehtml;
 
-	// title
-	var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
-
-	// create a new project
-	html += "<form class='form-horizontal' onsubmit='return false;'>";
-
-	html += '<div class="accordion" id="accordion">';
-
-	html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#metadata'>1. select metadata file</a></div><div id='metadata' class='accordion-body collapse in'></div></div>";
-
-	html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#project'>2. select project</a></div><div id='project' class='accordion-body collapse'></div></div>";
-
-	html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#files'>3. select sequence file(s)</a></div><div id='files' class='accordion-body collapse'></div></div>";
-
-	html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#options'>4. choose pipeline options</a></div><div id='options' class='accordion-body collapse'></div></div>";
-
-	html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#submit'>5. submit</a></div><div id='submit' class='accordion-body collapse'></div></div>";
-	
-	html += "</div></form>";
-
-	html += "<button class='btn' onclick='if(this.fasta){Retina.WidgetInstances.metagenome_submission[1].displayOptions(\"fastq\");this.fasta=false;}else{Retina.WidgetInstances.metagenome_submission[1].displayOptions(\"fasta\");this.fasta=true;}'>fastq / fasta</button>";
-
-	content.innerHTML = html;
-
-	widget.displayProjectSelect();
-	widget.displayMetadataSelect();
-	widget.displayFileSelect();
-	widget.displayOptions('fastq');
-	widget.displaySubmit();
-
-	widget.checkInbox();
-
 	if (! stm.user) {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to submit to the pipeline.</div>";
+	    return;
+	}
+
+	if (! widget.inboxData) {
+	    content.innerHTML = "<div style='width: 100%; text-align: center; margin-top: 150px;'><img src='Retina/images/waiting.gif' style='width: 25px;'></div>";
+	    widget.checkInbox();
+
+	} else {
+	    
+	    // title
+	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
+	    
+	    // create a new project
+	    html += "<form class='form-horizontal' onsubmit='return false;'>";
+	    
+	    html += '<div class="accordion" id="accordion">';
+	    
+	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#metadata' id='metadataHeader'>1. select metadata file</a></div><div id='metadata' class='accordion-body collapse in'></div></div>";
+	    
+	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#project' id='projectHeader'>2. select project</a></div><div id='project' class='accordion-body collapse'></div></div>";
+	    
+	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#files' id='filesHeader'>3. select sequence file(s)</a></div><div id='files' class='accordion-body collapse'></div></div>";
+	    
+	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#options' id='optionsHeader'>4. choose pipeline options</a></div><div id='options' class='accordion-body collapse'></div></div>";
+	    
+	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#submit' id='submitHeader'>5. submit</a></div><div id='submit' class='accordion-body collapse'></div></div>";
+	    
+	    html += "</div></form>";
+	    
+	    content.innerHTML = html;
+	    
+	    widget.displayProjectSelect();
+	    widget.displayMetadataSelect();
+	    widget.displayFileSelect();
+	    widget.displayOptions('fastq');
+	    widget.displaySubmit();
 	}
     };
 
     // DATA QUERY METHODS
     widget.checkInbox = function () {
 	var widget = Retina.WidgetInstances.metagenome_submission[1];
-
+	var url = RetinaConfig.mgrast_api + "/inbox";
 	if (stm.user) {
-	    jQuery.ajax( { dataType: "json",
-			   url: RetinaConfig['mgrast_api'] + "/project?private=1&edit=1&limit=0",
-			   headers: stm.authHeader,
-			   success: function(data) {
-			       var plist = [];
-			       for (var i=0; i<data.data.length; i++) {
-				   plist.push(data.data[i].name);
-			       }
-			       jQuery("#projectname").typeahead({source: plist, minLength: 0});
-			   },
-			   error: function () {
-			       alert('there was an error accessing the api');
-			   }
-			 } );
-
-	    // jQuery.ajax( { dataType: "json",
-	    // 		   url: RetinaConfig['mgrast_api'] + "/user/paczian/preferences",
-	    // 		   method: "PUT",
-	    // 		   data: "prefs="+JSON.stringify({ "setting1": "alpha", "setting2": "beta", "setting3": { "subsettingA": "klaus" }}),
-	    // 		   headers: stm.authHeader,
-	    // 		   success: function(data) {
-	    // 		       console.log(data);
-	    // 		   },
-	    // 		   error: function () {
-	    // 		       alert('there was an error accessing the api');
-	    // 		   }
-	    // 		 } );
+	    jQuery.ajax(url, {
+		success: function(data){
+		    Retina.WidgetInstances.metagenome_submission[1].inboxData = data.files;
+		    Retina.WidgetInstances.metagenome_submission[1].display();
+		},
+		error: function(jqXHR, error){
+		    Retina.WidgetInstances.metagenome_submission[1].showError("unable to get inbox data");
+		    console.log(error);
+		    console.log(jqXHR);
+		},
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "GET"
+	    });
 	}
+    };
+
+    widget.showError = function (error) {
+	Retina.WidgetInstances.metagenome_submission[1].main.innerHTML = "<div class='alert alert-error' style='width: 500px;'>"+error+"</div>";
     };
 
     // DISPLAY METHODS FOR THE STEPS
@@ -108,7 +108,7 @@
 
 	var html = "<p>You have to specify a project to upload a job to MG-RAST. If you have a metadata file, the project must be specified in that file. If you choose to not use a metadata file, you can select a project here. You can either select an existing project or you can choose a new project.</p>";
 
-	html += "<div class='input-append' style='margin-left: 20%; margin-top: 15px; margin-bottom: 15px;'><input type='text' name='projectname' placeholder='enter project name' autocomplete='off' data-provide='typeahead' data-source='[]' id='projectname' style='width: 400px;'><button class='btn'>select</button></div>";
+	html += "<div class='input-append' style='margin-left: 20%; margin-top: 15px; margin-bottom: 15px;'><input type='text' name='projectname' placeholder='enter project name' autocomplete='off' data-provide='typeahead' data-source='[]' id='projectname' style='width: 400px;'><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectProject();'>select</button></div>";
 
 	html += "<p><b>Note:</b> <i>The projects listed are those that you have write access to. The owners of other projects can provide you with write access if you do not have it.</i></p>";
 
@@ -117,28 +117,109 @@
 	target.innerHTML = html;
     };
 
+    widget.selectProject = function () {
+	var widget = Retina.WidgetInstances.metagenome_submission[1];
+
+	var project = document.getElementById('projectname').value;
+	if (! project) {
+	    alert('you must select a project');
+	    widget.validSteps.project = false;
+	} else {
+	    widget.selectedProject = project;
+	    widget.validSteps.project = true;
+	}
+	widget.checkSubmittable();
+    };
+
     widget.displayMetadataSelect = function () {
 	var widget = Retina.WidgetInstances.metagenome_submission[1];
 	var target = document.getElementById('metadata');
 
-	var html = '<div style="float: left;"><table><tbody><tr><td><select style="width: 420px; height: 200px;" multiple="" id="metadata_file_select"></select><br><p><input type="checkbox" onclick="if(this.checked){alert(\'INFO\\nNot submitting metadata will severely lower your priority in the computation queue.\\nYou will also not be able to make your data public until you provide metadata for it.\');document.getElementById(\'accept_metadata_selection\').onclick();}" id="no_metadata" name="no_metadata" value="no_metadata"> <span style="font-size: 12px; position: relative; top: 2px;">I do not want to supply metadata</span></p> <input type="button" onclick="select_metadata_file();" value="select" class="btn" id="accept_metadata_selection"></td><td><p style="margin-left: 20px;" id="metadata_file_info"></p></td></tr></tbody></table></div><div style="float: left; width: 50%;"><p>Select a spreadsheet with metadata for the project you want to submit.</p><p>In order to map sequence files to metadata libraries, the names of the sequence files must exactly match the library <i>file_name</i> fields or match the library <i>metagenome_name</i> fields minus the file extension.</p><p><b>Note: While metadata is not required at submission, the priority for processing data without metadata is lower.</b></p></div>';
+	var md_file_opts = [];
+	for (var i=0; i<widget.inboxData.length; i++) {
+	    if (widget.inboxData[i].filename.match(/\.xlsx$/)) {
+		md_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
+	    }
+	}
+	md_file_opts = md_file_opts.join("\n");
+
+	var html = '<div style="float: left;"><table><tbody><tr><td><select style="width: 420px; height: 200px;" multiple="" id="metadata_file_select">'+md_file_opts+'</select><br><p><input type="checkbox" onclick="if(this.checked){alert(\'INFO\\nNot submitting metadata will severely lower your priority in the computation queue.\\nYou will also not be able to make your data public until you provide metadata for it.\');}" id="no_metadata" name="no_metadata" value="no_metadata"> <span style="font-size: 12px; position: relative; top: 2px;">I do not want to supply metadata</span></p> <input type="button" onclick="Retina.WidgetInstances.metagenome_submission[1].selectMetadata();" value="select" class="btn"></td><td><p style="margin-left: 20px;" id="metadata_file_info"></p></td></tr></tbody></table></div><div style="float: left; width: 50%;"><p>Select a spreadsheet with metadata for the project you want to submit.</p><p>In order to map sequence files to metadata libraries, the names of the sequence files must exactly match the library <i>file_name</i> fields or match the library <i>metagenome_name</i> fields minus the file extension.</p><p><b>Note: While metadata is not required at submission, the priority for processing data without metadata is lower.</b></p></div>';
 
 	html += "<div style='height: 20px; clear: both;'></div>";
 
 	target.innerHTML = html;
     };
 
+    widget.selectMetadata = function () {
+	var widget = Retina.WidgetInstances.metagenome_submission[1];
+
+	var metadata = document.getElementById('no_metadata').checked ? "none" : (document.getElementById('metadata_file_select').selectedIndex > -1 ? document.getElementById('metadata_file_select').options[document.getElementById('metadata_file_select').selectedIndex].value : null);
+	if (! metadata) {
+	    alert('if you do not want to provide metadata, please check the checkbox');
+	    widget.validSteps.metadata = false;
+	} else {
+	    widget.selectedMetadata = metadata;
+	    widget.validSteps.metadata = true;
+	}
+	widget.checkSubmittable();
+    };
+
     widget.displayFileSelect = function () {
 	var widget = Retina.WidgetInstances.metagenome_submission[1];
 	var target = document.getElementById('files');
 
+	var seq_file_opts = [];
+	for (var i=0; i<widget.inboxData.length; i++) {
+	    if (widget.inboxData[i].hasOwnProperty('stats_info') && widget.inboxData[i].stats_info.hasOwnProperty('bp_count')) {
+		seq_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
+	    }
+	}
+	seq_file_opts = seq_file_opts.join("\n");
+
 	var html = "<p>Sequence files from your inbox will appear here. Please note, there is a delay between upload completion and appearing in this table due to sequence statistics calculations. This may be on the order of seconds to hours depending on file size.</p>";
 
-	html += "<select name='inputfile' multiple style='margin-left: 30%;'><option>file1.fasta</option><option>file2.fasta</option><option>file3.fastq</option><option>file4.fastq</option></select>";
+	html += "<select name='inputfiles' id='inputfiles' multiple style='margin-left: 50px; width: 500px; height: 200px;'>"+seq_file_opts+"</select><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectFiles();' style='margin-left: 20px;'>select</button>";
 
 	html += "<div style='height: 20px;'></div>";
 
 	target.innerHTML = html;
+    };
+
+    widget.selectFiles = function () {
+	var widget = Retina.WidgetInstances.metagenome_submission[1];
+
+	var files = [];
+	var sel = document.getElementById('inputfiles');
+	for (var i=0; i<sel.options.length; i++) {
+	    if (sel.options[i].selected) {
+		files.push({id: sel.options[i].value, name: sel.options[i].label});
+	    }
+	}
+	if (! files.length) {
+	    widget.validSteps.files = false;
+	    alert('you did not select any files');
+	} else {
+	    widget.selectedSequenceFiles = files;
+	    var types = { fasta: 0, fastq: 0 };
+	    for (var i=0; i<files.length; i++) {
+		if (files[i].name.match(/(\.fasta|\.fa|\.fna|\.faa)$/)) {
+		    types.fasta++;
+		} else {
+		    types.fastq++;
+		}
+	    }
+	    if (types.fasta > 0 && types.fastq > 0) {
+		widget.validSteps.files = false;
+		alert('you cannot submit both fasta and fastq at the same time');
+	    } else if (types.fasta > 0) {
+		widget.displayOptions('fasta');
+		widget.validSteps.files = true;
+	    } else {
+		widget.displayOptions('fastq');
+		widget.validSteps.files = true;	
+	    }
+	}
+	widget.checkSubmittable();
     };
 
     widget.displayOptions = function (option) {
@@ -291,10 +372,43 @@
 	}
 
 	html += '</div>';
+
+	html += "<button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectOptions();'>select</button>";
 	
 	html += "<div style='height: 20px;'></div>";
 
 	target.innerHTML = html;
+    };
+
+    widget.selectOptions = function () {
+	var widget = Retina.WidgetInstances.metagenome_submission[1];
+
+	widget.validSteps.options = true;
+	widget.checkSubmittable();
+    };
+
+    widget.checkSubmittable = function () {
+	var widget = Retina.WidgetInstances.metagenome_submission[1];
+
+	var valid = true;
+	for (var i in widget.validSteps) {
+	    if (widget.validSteps.hasOwnProperty(i)) {
+		if (widget.validSteps[i]) {
+		    document.getElementById(i+'Header').parentNode.className = "accordion-heading stage completedstage";
+		} else {
+		    document.getElementById(i+'Header').parentNode.className = "accordion-heading stage";
+		    valid = false;
+		}
+	    }
+	}
+	
+	if (valid) {
+	    document.getElementById('submitHeader').parentNode.className = "accordion-heading stage completedstage";
+	    document.getElementById('submit_job_button').removeAttribute('disabled');
+	} else {
+	    document.getElementById('submitHeader').parentNode.className = "accordion-heading stage";
+	    document.getElementById('submit_job_button').setAttribute('disabled', 'disabled');
+	}
     };
 
     widget.displaySubmit = function () {
