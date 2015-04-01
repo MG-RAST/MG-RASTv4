@@ -14,7 +14,8 @@
 		 Retina.load_renderer("graph"),
 		 Retina.load_renderer("plot"),
  		 Retina.load_renderer("table"),
-		 Retina.load_widget("mgbrowse")
+		 Retina.load_widget("mgbrowse"),
+		 Retina.load_renderer("pdf")
 	       ];
     };
     
@@ -338,7 +339,7 @@
 	    } catch (err) {
 	        organization = "-";
 	    }
-	var downloadLink = "<a href='?mgpage=download&metagenome="+mg.id+"'><img src='Retina/images/download.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download'></a><a href='?mgpage=analysis&metagenome="+mg.id+"' target=_blank><img src='Retina/images/notebook.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='analysis'></a>";
+	var downloadLink = "<a href='?mgpage=download&metagenome="+mg.id+"'><img src='Retina/images/download.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download'></a><a href='?mgpage=analysis&metagenome="+mg.id+"' target=_blank><img src='Retina/images/notebook.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='analysis'></a><a onclick='Retina.WidgetInstances.metagenome_overview[1].exportPDF("+index+");' style='cursor: pointer;'><img src='Retina/images/file-pdf.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download as PDF'></a>";
 	var data = { data:
 	             [ { title: "Metagenome Data Sheet for ID " + mg.id.substring(3) + downloadLink },
 		       { table: [ [ { header: "Metagenome Name" }, mg.name, { header: "NCBI Project ID" }, ncbi_id ],
@@ -877,4 +878,186 @@
         var num = (key in obj) ? obj[key] : 0;
         return parseInt(num).formatString();
     };
+
+    // PDF Export
+    widget.exportPDF = function () {
+	var widget = Retina.WidgetInstances.metagenome_overview[1];
+
+	// make sure there is only one instance of the pdf renderer
+	if (Retina.RendererInstances.pdf.length > 1) {
+	    Retina.RendererInstances.pdf.pop();
+	}
+	var pdf = Retina.Renderer.create('pdf', {}).render();
+
+	// write the page header
+	pdf.paragraph("Dataset "+widget.curr_mg.name+" (" + widget.id+") from the Study "+widget.curr_mg.metadata.project.name, "header");
+
+	// subheader
+	pdf.y -= 20;
+	pdf.paragraph("a project by "+widget.curr_mg.metadata.project.data.PI_firstname+" "+widget.curr_mg.metadata.project.data.PI_lastname, "subheader");
+
+	// metagenome summary
+	pdf.paragraph("Summary", "heading");
+	var d = widget.metagenome_summary(1).data;
+	for (var i=1; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+
+	var imageFactor = 0.5;
+
+	// sequence breakdown
+	var img = document.getElementById('graph_div1').firstChild;
+	img.setAttribute('id', 'sequenceBreakdown');
+	pdf.svgImage('#sequenceBreakdown', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+
+	// project information
+	d = widget.project_information(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+
+	// DRISEE
+	d = widget.drisee_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('plot_div0').firstChild;
+	img.setAttribute('id', 'driseeGraph');
+	pdf.svgImage('#driseeGraph', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+	
+	// Kmer
+	d = widget.kmer_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('plot_div1').firstChild;
+	img.setAttribute('id', 'kmerGraph');
+	pdf.svgImage('#kmerGraph', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+
+	// Nucleotide histogram
+	d = widget.bp_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('graph_div2').firstChild;
+	img.setAttribute('id', 'bpGraph');
+	pdf.svgImage('#bpGraph', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+
+	// Ontology
+	d = widget.ontology_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('graph_div3').firstChild;
+	img.setAttribute('id', 'ontologyGraph1');
+	pdf.svgImage('#ontologyGraph1', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+	img = document.getElementById('graph_div4').firstChild;
+	img.setAttribute('id', 'ontologyGraph2');
+	pdf.svgImage('#ontologyGraph2', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+	img = document.getElementById('graph_div5').firstChild;
+	img.setAttribute('id', 'ontologyGraph3');
+	pdf.svgImage('#ontologyGraph3', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+	img = document.getElementById('graph_div6').firstChild;
+	img.setAttribute('id', 'ontologyGraph4');
+	pdf.svgImage('#ontologyGraph4', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+
+	// Taxonomy
+	d = widget.taxonomy_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('graph_div7').firstChild;
+	img.setAttribute('id', 'taxonomyGraph1');
+	pdf.svgImage('#taxonomyGraph1', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));	
+	img = document.getElementById('graph_div8').firstChild;
+	img.setAttribute('id', 'taxonomyGraph2');
+	pdf.svgImage('#taxonomyGraph2', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));	
+	img = document.getElementById('graph_div9').firstChild
+	img.setAttribute('id', 'taxonomyGraph3');
+	pdf.svgImage('#taxonomyGraph3', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));	
+	img = document.getElementById('graph_div10').firstChild;
+	img.setAttribute('id', 'taxonomyGraph4');
+	pdf.svgImage('#taxonomyGraph4', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));	
+	img = document.getElementById('graph_div11').firstChild;
+	img.setAttribute('id', 'taxonomyGraph5');
+	pdf.svgImage('#taxonomyGraph5', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));	
+	img = document.getElementById('graph_div12').firstChild;
+	img.setAttribute('id', 'taxonomyGraph6');
+	pdf.svgImage('#taxonomyGraph6', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));	
+
+	// Rank Abundance
+	d = widget.rank_abund_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('graph_div13').firstChild;
+	img.setAttribute('id', 'rank_abundGraph');
+	pdf.svgImage('#rank_abundGraph', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+
+	// Rarefaction Plot
+	d = widget.rarefaction_introtext(1).data;
+	for (var i=0; i<d.length; i++) {
+	    var font = "paragraph";
+	    var k = Retina.keys(d[i])[0];
+	    if (k == "header") {
+		font = "heading";
+	    }
+	    pdf.paragraph(d[i][k].replace(/<.+?>/ig, ""), font);
+	}
+	img = document.getElementById('plot_div2').firstChild;
+	img.setAttribute('id', 'rarefactionGraph');
+	pdf.svgImage('#rarefactionGraph', parseInt(imageFactor * parseInt(img.getAttribute('width'))), parseInt(imageFactor * parseInt(img.getAttribute('height'))));
+	
+	// metadata table
+	pdf.paragraph("Metadata", "heading");
+	d = widget.metadata_table(1).data;
+	var d2 = [];
+	for (var i=0; i<d.data.length; i++) {
+	    if (d.data[i][1] != "project_description" && d.data[i][1] != "project_name") {
+		d2.push(d.data[i]);
+	    }
+	}
+	pdf.y -= 30;
+	pdf.table(d.header, d2);
+
+	pdf.output(widget.curr_mg.name+".pdf");
+    };
+
 })();
