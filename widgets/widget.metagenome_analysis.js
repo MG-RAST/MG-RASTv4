@@ -1028,7 +1028,7 @@
 
 	    html += "</div>";
 
-	    html += '<div id="dataprogress" style="float: left; margin-left: 20px; height: 230px; overflow-y: auto; width: 385px;"></div><div style="clear: both;"><h5>select metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div></div></div>';
+	    html += '<div id="dataprogress" style="float: left; margin-left: 20px; height: 230px; overflow-y: auto; width: 380px;"></div><div style="clear: both;"><h5>select metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div></div></div>';
 	    
 	    target.innerHTML = html;
 	    
