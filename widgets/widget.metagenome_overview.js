@@ -883,6 +883,11 @@
     widget.exportPDF = function () {
 	var widget = Retina.WidgetInstances.metagenome_overview[1];
 
+	if (! widget.curr_mg.metadata) {
+	    alert('Metagenomes without metadata cannot be exported to PDF');
+	    return;
+	}
+
 	// make sure there is only one instance of the pdf renderer
 	if (Retina.RendererInstances.pdf.length > 1) {
 	    Retina.RendererInstances.pdf.pop();
