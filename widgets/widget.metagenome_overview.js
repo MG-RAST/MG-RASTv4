@@ -33,8 +33,6 @@
 	    widget.target = wparams.target || wparams.main;
 	    widget.sidebar = wparams.sidebar;
 	    widget.sidebar.innerHTML = "";
-	    //widget.target.setAttribute('style', "overflow-x: scroll;");
-	    
 	    widget.target.innerHTML = '\
 <div id="mg_modal" class="modal show fade" tabindex="-1" style="width: 500px;" role="dialog">\
   <div class="modal-header">\
@@ -104,7 +102,7 @@
 	var seq_type = widget.curr_mg.sequence_type;
 	
 	// set the output area
-	content.innerHTML = '';
+	content.innerHTML = '<a name="home" style="padding-top: 80px;"></a>';
 	
 	// set style variables
 	var header_color = "black";
@@ -146,7 +144,7 @@
 	    { type: 'linegraph', data: 'rank_abund_plot', category: 'rank_abund' },
 	    { type: 'paragraph', data: 'rarefaction_introtext' },
 	    { type: 'plot', data: 'rarefaction_plot', category: 'rarefaction' },
-	    { type: 'title', data: 'Metadata' },
+	    { type: 'title', data: '<a name="metadata_table" style="padding-top: 80px;"></a>Metadata' },
 	    { type: 'metadata_table', data: 'metadata_table' }
 	];
 	
@@ -185,7 +183,7 @@
 		    document.getElementById('sidebar').appendChild(tag);
 		    document.getElementById('sidebar').appendChild(div);
 		} else {
-		    content.appendChild(tag);
+		    //content.appendChild(tag);
 		    if (! lastDiv) {
 			content.appendChild(div);
 		    }
@@ -301,44 +299,20 @@
     
     widget.general_overview = function (index) {
         var mg = Retina.WidgetInstances.metagenome_overview[index].curr_mg;
-	    // general overview
-	    var ncbi_id;
-	    try {
-	        ncbi_id = mg.metadata.project.data.ncbi_id;
-	        ncbi_id = "<a href='http://www.ncbi.nlm.nih.gov/genomeprj/"+ncbi_id+"'>"+ncbi_id+"</a>";
-	    } catch (err) {
-	        ncbi_id = "-";
+	// general overview
+	var ncbi_id = mg.metadata.project.data.ncbi_id ? "<a href='http://www.ncbi.nlm.nih.gov/genomeprj/"+ncbi_id+"'>"+ncbi_id+"</a>" : "-";
+	var gold_id = mg.metadata.library.data.gold_id ? "<a href='http://www.ncbi.nlm.nih.gov/genomeprj/"+gold_id+"'>"+gold_id+"</a>" : "-";
+	var pubmed_id = "-";
+	if (mg.metadata.library.data.pubmed_id) {
+	    pubmed_id = mg.metadata.library.data.pubmed_id.split(", ");
+	    var pm = [];
+	    for (var i=0;i<pubmed_id.length;i++) {
+		pm.push("<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+pubmed_id[i]+"'>"+pubmed_id[i]+"</a>");
 	    }
-	    var gold_id;
-	    try {
- 	        gold_id = mg.metadata.library.data.gold_id;
-	        gold_id = "<a href='http://www.ncbi.nlm.nih.gov/genomeprj/"+gold_id+"'>"+gold_id+"</a>";
-	    } catch (err) {
-	        gold_id = "-";
-	    }
-	    var pubmed_id;
-	    try {
- 	        pubmed_id = mg.metadata.library.data.pubmed_id.split(", ");
-	        var pm = [];
-	        for (var i=0;i<pubmed_id.length;i++) {
-		        pm.push("<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+pubmed_id[i]+"'>"+pubmed_id[i]+"</a>");
-	        }
-	        pubmed_id = pm.join(", ");
-	    } catch (err) {
-	        pubmed_id = "-";
-	    }
-	    var pi_link;
-	    try {
-	        pi_link = "<a href='mailto:"+mg.metadata.project.data.PI_email+"'>"+mg.metadata.project.data.PI_firstname+" "+mg.metadata.project.data.PI_lastname+"</a>";
-	    } catch (err) {
-	        pi_link = "-";
-	    }
-	    var organization;
-	    try {
-	        organization = mg.metadata.project.data.PI_organization;
-	    } catch (err) {
-	        organization = "-";
-	    }
+	    pubmed_id = pm.join(", ");
+	}
+	var pi_link = (mg.metadata.project.data.PI_email && mg.metadata.project.data.PI_firstname && mg.metadata.project.data.PI_lastname) ? "<a href='mailto:"+mg.metadata.project.data.PI_email+"'>"+mg.metadata.project.data.PI_firstname+" "+mg.metadata.project.data.PI_lastname+"</a>" : "-";
+	var organization = mg.metadata.project.data.PI_organization || "-";
 	var downloadLink = "<a href='?mgpage=download&metagenome="+mg.id+"'><img src='Retina/images/download.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download'></a><a href='?mgpage=analysis&metagenome="+mg.id+"' target=_blank><img src='Retina/images/notebook.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='analysis'></a><a onclick='Retina.WidgetInstances.metagenome_overview[1].exportPDF("+index+");' style='cursor: pointer;'><img src='Retina/images/file-pdf.png' style='margin-left: 30px; width: 24px; position: relative; bottom: 5px;' title='download as PDF'></a>";
 	var data = { data:
 	             [ { title: "Metagenome Data Sheet for ID " + mg.id.substring(3) + downloadLink },
@@ -374,6 +348,7 @@
 		 style: "margin-right: 20px; margin-left: 20px;",
 		 data: [ { header: "Table of Contents" },
 			 { fancy_table: { data: [
+			     [ "<a href='#home'>Summary</a>" ],
 			     [ "<a href='#project_information'>Project</a>" ],
 			     [ "<a href='#analysis_statistics'>Statistics</a>" ],
 			     [ "<a href='#mixs_metadata'>MIxS Metadata</a>" ],
@@ -455,6 +430,10 @@
       	        var diff = (qc_fail_seqs + ann_aa_reads + ann_rna_reads) - raw_seqs;
       	        ann_rna_reads = (diff > ann_rna_reads) ? 0 : ann_rna_reads - diff;
             }
+	    var diff = raw_seqs - (qc_fail_seqs + unkn_aa_reads + ann_aa_reads + ann_rna_reads);
+	    if (unknown_all < diff) {
+		unknown_all = diff;
+	    }
         }
         return [ qc_fail_seqs, unknown_all, unkn_aa_reads, ann_aa_reads, ann_rna_reads ];
     };
@@ -468,7 +447,7 @@
         var mg = Retina.WidgetInstances.metagenome_overview[index].curr_mg;
         try {
 	        return { style: "clear: both",
-	                 data: [ { header: "Project Information" },
+	                 data: [ { header: "<a name='project_information' style='padding-top: 80px;'></a>Project Information" },
 			         { p: "This metagenome is part of the project <a href='?mgpage=project&project="+mg.metadata.project.id+"' target=_blank>"+mg.metadata.project.name+"</a>" },
 			         { p: mg.metadata.project.data.project_description }
 			       ] };
@@ -488,7 +467,7 @@
             message = "DRISEE successfully calculated an error profile.";
         }
 	return { style: "clear: both",
-	         data: [ { header: "DRISEE" },
+	         data: [ { header: "<a name='drisee_introtext' style='padding-top: 80px;'></a>DRISEE" },
 			 { p: "Duplicate Read Inferred Sequencing Error Estimation (<a href='http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1002541'>Keegan et al., PLoS Computational Biology, 2012</a>)" },
 			 { p: message },
 			 { p: "DRISEE is a tool that utilizes artificial duplicate reads (ADRs) to provide a platform independent assessment of sequencing error in metagenomic (or genomic) sequencing data. DRISEE is designed to consider shotgun data. Currently, it is not appropriate for amplicon data." },
@@ -498,28 +477,28 @@
     
     widget.kmer_introtext = function(index) {
         var mg = Retina.WidgetInstances.metagenome_overview[index].curr_mg;
-        var retval = { style: "clear: both", data: [ { header: "Kmer Profile" } ] };
+        var retval = { style: "clear: both", data: [ { header: "<a name='kmer_introtext' style='padding-top: 80px;'></a>Kmer Profile" } ] };
 	    retval.data.push( { p: "The kmer rank abundance graph plots the kmer coverage as a function of abundance rank, with the most abundant sequences at left." } );
 	    return retval;
     };
     
     widget.bp_introtext = function(index) {
         var mg = Retina.WidgetInstances.metagenome_overview[index].curr_mg;
-        var retval = { style: "clear: both", data: [ { header: "Nucleotide Histogram" } ] };
+        var retval = { style: "clear: both", data: [ { header: "<a name='bp_introtext' style='padding-top: 80px;'></a>Nucleotide Histogram" } ] };
 	    retval.data.push( { p: "These graphs show the fraction of base pairs of each type (A, C, G, T, or ambiguous base 'N') at each position starting from the beginning of each read up to the first 100 base pairs. Amplicon datasets should show consensus sequences; shotgun datasets should have roughly equal proportions of basecalls." } );
 	    return retval;
     };
     
     widget.rank_abund_introtext = function(index) {
         return { style: "clear: both",
-                 data: [ { header: "Rank Abundance Plot" },
+                 data: [ { header: "<a name='rank_abund_introtext' style='padding-top: 80px;'></a>Rank Abundance Plot" },
 	                     { p: "The plot below shows the family abundances ordered from the most abundant to least abundant. Only the top 50 most abundant are shown. The y-axis plots the abundances of annotations in each family on a log scale." },
 	                     { p: "The rank abundance curve is a tool for visually representing taxonomic richness and evenness." }
 	                   ] };
     };
     
     widget.rarefaction_introtext = function(index) {
-        return { data: [ { header: "Rarefaction Curve" },
+        return { data: [ { header: "<a name='rarefaction_introtext' style='padding-top: 80px;'></a>Rarefaction Curve" },
 	                     { p: "The plot below shows the rarefaction curve of annotated species richness. This curve is a plot of the total number of distinct species annotations as a function of the number of sequences sampled. On the left, a steep slope indicates that a large fraction of the species diversity remains to be discovered. If the curve becomes flatter to the right, a reasonable number of individuals is sampled: more intensive sampling is likely to yield only few additional species." },
 	                     { p: "Sampling curves generally rise very quickly at first and then level off towards an asymptote as fewer new species are found per unit of individuals collected. These rarefaction curves are calculated from the table of species abundance. The curves represent the average number of different species annotations for subsamples of the the complete dataset." }
 	                   ] };
@@ -527,13 +506,13 @@
     
     widget.ontology_introtext = function(index) {
 	    return { style: "clear: both",
-	             data: [ { header: "Functional Category Hits Distribution" },
+	             data: [ { header: "<a name='ontology_introtext' style='padding-top: 80px;'></a>Functional Category Hits Distribution" },
 			             { p: "The pie charts below illustrate the distribution of functional categories for COGs, KOs, NOGs, and Subsystems at the highest level supported by these functional hierarchies. Each slice indicates the percentage of reads with predicted protein functions annotated to the category for the given source. " } ] };
     };
     
     widget.taxonomy_introtext = function(index) {
 	    return { style: "clear: both",
-	             data: [ { header: "Taxonomic Hits Distribution" },
+	             data: [ { header: "<a name='taxonomy_introtext' style='padding-top: 80px;'></a>Taxonomic Hits Distribution" },
 			             { p: "The pie charts below illustrate the distribution of taxonomic domains, phyla, and orders for the annotations. Each slice indicates the percentage of reads with predicted proteins and ribosomal RNA genes annotated to the indicated taxonomic level. This information is based on all the annotation source databases used by MG-RAST." } ] };
     };
     
@@ -825,7 +804,7 @@
         var stats = Retina.WidgetInstances.metagenome_overview[index].curr_mg.statistics.sequence_stats;
 	    return { width: "span6",
 		     style: "float: left;",
-		     data: [ { header: "Analysis Statistics" },
+		     data: [ { header: "<a name='analysis_statistics' style='padding-top: 80px;'></a>Analysis Statistics" },
 			     { fancy_table: { data: [
 			         [ { header: "Upload: bp Count" }, widget._to_num('bp_count_raw', stats)+" bp" ],
 			         [ { header: "Upload: Sequences Count" }, widget._to_num('sequence_count_raw', stats) ],
@@ -849,7 +828,7 @@
         var md = Retina.WidgetInstances.metagenome_overview[index].curr_mg.mixs;
         var data = { width: "span5",
 		     style: "float: right;",
-		     data: [ { header: "GSC MIxS Info" },
+		     data: [ { header: "<a name='mixs_metadata' style='padding-top: 80px;'></a>GSC MIxS Info" },
 			     { fancy_table: { data: [
 			         [ { header: "Investigation Type" }, md['sequence_type'] ],
 			         [ { header: "Project Name" }, md['project'] ],
