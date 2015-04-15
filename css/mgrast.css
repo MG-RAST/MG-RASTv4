@@ -246,3 +246,57 @@
 .legend {
     font-size: 12px;
 }
+.wizard {
+    background-color: #9b9b9b;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 20px;
+}
+.wizard div:first-child {
+    position: relative;
+    right: 20px;
+}
+.wizard a {
+    padding: 10px;
+    color: black;
+    width: 350px;
+}
+.wizard .active {
+    color: white;
+    cursor: default
+}
+.wizard a:hover {
+    text-decoration: none;;
+}
+.wizard > div {
+    float: left;
+    width: 33%;
+}
+.wizard .separator {
+    font-size: 100px;
+    font-weight: 100;
+    color: white;
+    float: left;
+    width: 1px;
+    position: relative;
+    bottom: 7px;
+}
+.wizard img {
+    width: 16px;
+    opacity: 0.8;
+    margin-left: 15px;
+}
+.wizard li {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 5px;
+    display: block;
+    float: left;
+    margin-top: 6px;
+    margin-left: 30%;
+    height: 10px;
+    width: 10px;
+}
+.wizard li[class=active] {
+    background-image: linear-gradient(to bottom, #55bb55, #00FF00);
+}

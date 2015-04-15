@@ -3,7 +3,7 @@ var RetinaConfig = {
 		       "MG-RAST": { "icon": "MGRAST_favicon.ico",
 		       		    "prefix": "mggo4711",
 		       		    "keyword": "Authorization",
-		       		    "url": "http://api.metagenomics.anl.gov?verbosity=verbose",
+		       		    "url": "http://dunkirk.mcs.anl.gov/~paczian/MG-RAST/site/CGI/api.cgi?verbosity=verbose",//"http://api.metagenomics.anl.gov?verbosity=verbose",
 		       		    "useHeader": true,
 				    "loginField": "login" }
 		     },

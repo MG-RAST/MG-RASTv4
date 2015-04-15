@@ -212,7 +212,7 @@
 		    data.header_color = header_color;
 		    Retina.Renderer.create("paragraph", data).render();
 	        } else {
-		    content.removeChild(tag);
+		    //content.removeChild(tag);
 		    content.removeChild(div);
 		}
 		break;
@@ -237,7 +237,7 @@
             break;
             case 'areagraph':
 		if (! widget.curr_mg.statistics.qc.bp_profile.percents.data) {
-		    content.removeChild(tag);
+		    //content.removeChild(tag);
 		    content.removeChild(div);
                     break;
 		}
@@ -250,7 +250,7 @@
             case 'plot':
 		data = widget.mg_plot(index, outputs[out].category);
 		if (! data) {
-                    content.removeChild(tag);
+                    //content.removeChild(tag);
 	            content.removeChild(div);
                     break;
 		}
@@ -793,6 +793,7 @@
                      'height': 600,
                      'data': {'data': tdata, 'header': ['category', 'field', 'value']},
                      'rows_per_page': 20,
+		     'minwidths': [100,1,1],
                      'sort_autodetect': true,
                      'filter_autodetect': true,
                      'hide_options': false

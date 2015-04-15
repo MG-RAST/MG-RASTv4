@@ -1227,7 +1227,7 @@
 						  items: ids,
 						  status: "loading",
 						  promises: [],
-						  callbacks: [ Retina.WidgetInstances.metagenome_analysis[1].loadDone ],
+						  callbacks: [],
 						  parameters: { type: type,
 								source: source,
 								evalue: evalue,
@@ -1235,6 +1235,9 @@
 								identity: identity },
 						  created: Retina.date_string(new Date().getTime()),
 						  user: stm.user || "public" };
+	    if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
+		stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
+	    }
 	}
 	if (! stm.DataStore.hasOwnProperty('profile') ) {
 	    stm.DataStore.profile = {};

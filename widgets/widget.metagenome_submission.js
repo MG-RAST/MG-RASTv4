@@ -47,6 +47,24 @@
 	    
 	    // title
 	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
+
+	    // new title
+	    html = '<div class="wizard span12">\
+	  <div>\
+	    <li></li>\
+	    <a href="?mgpage=upload">upload<img src="Retina/images/upload.png"></a>\
+	  </div>\
+	  <div class="separator">›</div>\
+	  <div>\
+	    <li class="active"></li>\
+	    <a href="#" class="active">submit<img src="Retina/images/settings.png"></a>\
+	  </div>\
+	  <div class="separator">›</div>\
+	  <div>\
+	    <li></li>\
+	    <a href="?mgpage=pipeline">progress<img src="Retina/images/settings3.png"></a>\
+	  </div>\
+	</div><div style="clear: both; height: 20px;"></div>';
 	    
 	    // create a new project
 	    html += "<form class='form-horizontal' onsubmit='return false;'>";

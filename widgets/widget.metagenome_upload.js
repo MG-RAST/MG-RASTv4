@@ -15,6 +15,7 @@
     };
     
     widget.display = function (params) {
+	console.log('display');
         var widget = this;
 	var index = widget.index;
 	
@@ -55,9 +56,27 @@
 
 	// title
 	var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
+	
+	// new title
+	html = '<div class="wizard span12">\
+	  <div>\
+	    <li class="active"></li>\
+	    <a href="#" onclick="Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();" style="cursor: pointer;" class="active">upload<img src="Retina/images/upload.png"></a>\
+	  </div>\
+	  <div class="separator">›</div>\
+	  <div>\
+	    <li></li>\
+	    <a href="?mgpage=submission">submit<img src="Retina/images/settings.png"></a>\
+	  </div>\
+	  <div class="separator">›</div>\
+	  <div>\
+	    <li></li>\
+	    <a href="?mgpage=pipeline">progress<img src="Retina/images/settings3.png"></a>\
+	  </div>\
+	</div><div style="clear: both; height: 20px;"></div>';
 
 	// intro
-	html += "<p>Before you can submit data to our metagenomics pipeline you must first load it into your private inbox on the MG-RAST server. To do so you can either use <a href=''>our API</a> or the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/upload.png'>upload</a> function on this page. The inbox is a temporary storage location allowing you to assemble all files required for submission. You can upload any fasta, fastq or SFF files and GSC MIxS compliant metadata files into your inbox. If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</p><p>After manipulating the files in your inbox, you can <a href=''><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>submit data</a> to our pipeline to create and/or add to existing projects. When the submission process has been successfully completed, MG-RAST ID's (\"Accession numbers\") will be automatically assigned and the data will be removed from your inbox.</p><p>You can monitor the progress of your submission at the <a href=''><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
+	html += "<p>Before you can submit data to our metagenomics pipeline you must first load it into your private inbox on the MG-RAST server. To do so you can either use <a href=''>our API</a> or the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/upload.png'>upload</a> function on this page. The inbox is a temporary storage location allowing you to gather all files required for submission. You can upload any fasta, fastq or SFF files and GSC MIxS compliant metadata files into your inbox. If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</p><p>After manipulating the files in your inbox, you can <a href=''><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>submit data</a> to our pipeline to create and/or add to existing projects. When the submission process has been successfully completed, MG-RAST ID's (\"Accession numbers\") will be automatically assigned and the data will be removed from your inbox.</p><p>You can monitor the progress of your submission at the <a href=''><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
 
 	// shockbrowser space
 	html += "<div id='browser'></div>";
@@ -101,6 +120,7 @@
 
     // do some convenience checks before the file is uploaded
     widget.fileSelectedForUpload = function (selectedFile) {
+	console.log('file selected for upload');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// detect filetype
@@ -247,6 +267,7 @@
     };
 
     widget.detectFiletype = function (fn) {
+	console.log('detect filetype');
 	var filetype = "";
 	var sequenceType = null;
 	if (fn.match(/(tar\.gz|tgz|zip|tar\.bz2|tbz|tbz2|tb2|gzip|bzip2|gz)$/)) {
@@ -272,6 +293,7 @@
     };
 
     widget.filePreview = function (params) {
+	console.log('file preview');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var html = "<h5 style='margin-bottom: 0px;'>File Information</h5>";
@@ -476,6 +498,7 @@
     };
 
     widget.fileCompleted = function (data) {
+	console.log('file completed');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// get node from data
@@ -515,6 +538,7 @@
 
     // Inbox actions
     widget.sff2fastq = function (fid) {
+	console.log('sff to fastq');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
 
@@ -537,6 +561,7 @@
     };
 
     widget.demultiplex = function (sourceID, barcodeID) {
+	console.log('demultiplex');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
 
@@ -560,6 +585,7 @@
     };
 
     widget.joinPairedEnds = function () {
+	console.log('join paired ends');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var fileA = document.getElementById('jpeFileA').value;
@@ -593,6 +619,7 @@
     };
 
     widget.getRunningInboxActions = function () {
+	console.log('get running inbox actions');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
 	document.getElementById('inboxActions').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
@@ -615,6 +642,7 @@
     };
 
     widget.cancelInboxAction = function (id) {
+	console.log('cancel inbox action');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
 	var url = RetinaConfig.mgrast_api+'/inbox/cancel/'+id;
@@ -635,6 +663,7 @@
     };
 
     widget.showRunningInboxActions = function () {
+	console.log('show running inbox actions');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var target = document.getElementById('inboxActions');
@@ -661,6 +690,7 @@
     };
 
     widget.checkFileHasAction = function (filename) {
+	console.log('check file has action');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
 	var data = widget.inboxData;
