@@ -25,7 +25,7 @@
 
 	if (stm.user) {
 
-            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h4>Monthly Job Submission</h4><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><div class="input-append"><input type="text" value="1000" id="maxcount"><button onclick="Retina.WidgetInstances.admin_statistics[1].showTheWorld(document.getElementById(\'maxcount\').value);" class="btn btn-success">show me the world!</button></div><div id="myWorld" style="width: 1000px; height: 700px;"></div>';
+            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h4>Monthly Job Submission</h4><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -786,57 +786,6 @@
 	    } else {
 		Retina.WidgetInstances.admin_statistics[1].showUserData();
 	    }
-	});
-    };
-
-    widget.showTheWorld = function (maxCount) {
-	var widget = Retina.WidgetInstances.admin_statistics[1];
-	maxCount = parseInt(maxCount);
-	
-	jQuery.getJSON("data/gmap.json").then( function(data) {
-	    var mgdata = data;
-	    window.map = new google.maps.Map(document.getElementById('myWorld'), {
-		center: { lat: 40, lng: 5},
-		zoom: 2
-	    });
-	    var count = 0;
-	    for (var id in mgdata) {
-		var mg = mgdata[id];
-		mg.latitude = parseFloat(mg.latitude);
-		mg.longitude = parseFloat(mg.longitude);
-		var mgOptions = {
-		    strokeColor: '#FF0000',
-		    strokeOpacity: 0.2,
-		    strokeWeight: 1,
-		    fillColor: '#FF0000',
-		    fillOpacity: 0.2,
-		    map: map,
-		    center: new google.maps.LatLng(mg.latitude, mg.longitude),
-		    radius: 100000
-		};
-		count++;
-		// Add the circle for this city to the map.
-		cityCircle = new google.maps.Circle(mgOptions);
-		if (count > maxCount) {
-		    break;
-		}
-	    }
-
-	    var heatmapData = [];
-	    for (var id in mgdata) {
-		var mg = mgdata[id];
-		mg.latitude = parseFloat(mg.latitude);
-		mg.longitude = parseFloat(mg.longitude);
-		heatmapData.push(new google.maps.LatLng(mg.latitude, mg.longitude));
-		count++;
-		if (count > maxCount) {
-		    break;
-		}
-	    }
-	    var heatmap = new google.maps.visualization.HeatmapLayer({
-	    	data: heatmapData,
-		dissipating: false
-	    });
 	});
     };
 
