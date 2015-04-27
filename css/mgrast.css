@@ -1,3 +1,4 @@
+/* Icons */
 .ico {
     padding: 10px;
     border-radius: 10px;
@@ -48,6 +49,12 @@
     display: inline;
 }
 
+.miniicon {
+    height: 16px;
+    margin-right: 5px;
+}
+
+/* Title */
 .header {
     box-shadow: 0 3px 3px #BBBBBB;
     top: 0px;
@@ -60,6 +67,14 @@
     z-index: 10000;
 }
 
+@media (max-width: 767px) {
+    .header {
+	position: absolute;
+        height: 105px;
+    }
+}
+
+/* Sidebar */
 .sidebar {
     box-shadow: 4px 4px 4px #666666;
     padding: 0;
@@ -74,21 +89,12 @@
     padding-right: 10px;
 }
 
-@media (max-width: 767px) {
-    .header {
-	position: absolute;
-        height: 105px;
-    }
-}
-
+/* General */
 .clickable {
     cursor: pointer;
 }
 
-.miniicon {
-    height: 16px;
-    margin-right: 5px;
-}
+/* Colors */
 .red {
     color: red;
 }
@@ -129,6 +135,7 @@
     background-image: linear-gradient(to bottom, #BBBBBB, #666666);
 }
 
+/* Analysis Page Tools */
 .tool {
     border: 1px solid #808080;
     border-radius: 6px;
@@ -161,6 +168,7 @@
   to {box-shadow: 0 0 20px rgba(12,65,190, 0.9);}
 }
 
+/* Stage Pills */
 .stage {
     background-color: #3a87ad;
     border-radius: 5px;
@@ -189,38 +197,26 @@
     background-color: #468847;
 }
 
+/* Special List */
 .helplist {
-    counter-reset:li; /* Initiate a counter */
-    margin-left:0; /* Remove the default left margin */
-    padding-left:0; /* Remove the default left padding */
+    counter-reset:li;
+    margin-left:0;
+    padding-left:0;
 }
 
 .helplist > li {
-    position:relative; /* Create a positioning context */
-    margin:0 0 6px 2em; /* Give each list item a left margin to make room for the numbers */
-    padding:4px 8px; /* Add some spacing around the content */
-    list-style:none; /* Disable the normal item numbering */
+    position:relative;
+    margin:0 0 6px 2em;
+    padding:4px 8px;
+    list-style:none;
 }
 
 .helplist > li:before {
     content: "-";
-//    content:counter(li); /* Use the counter as content */
-    counter-increment:li; /* Increment the counter by 1 */
+    counter-increment:li;
     position:absolute;
     top: 4px;
     left: -1em;
-/*    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing:border-box;
-    width:2em;
-    margin-right:8px;
-    padding:4px;
-    border-top:2px solid #666;
-    color:#fff;
-    background:#666;
-    font-weight:bold;
-    font-family:"Helvetica Neue", Arial, sans-serif;
-    text-align:center; */
 }
 
 .selectList {
@@ -246,6 +242,8 @@
 .legend {
     font-size: 12px;
 }
+
+/* Job Submission Wizard */
 .wizard {
     background-color: #9b9b9b;
     padding-top: 20px;
@@ -299,4 +297,45 @@
 }
 .wizard li[class=active] {
     background-image: linear-gradient(to bottom, #55bb55, #00FF00);
+}
+
+/* Notebook */
+.notebook {
+    font-family: "Helvetica";
+    font-size: 12pt;
+    line-height: normal;
+}
+.notebookTitle {
+    font-size: 20pt;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+.notebookSubtitle {
+    font-size: 12pt;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+.notebookHeader {
+    font-size: 14pt;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+.notebookIntroduction {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: justify;
+}
+.notebookParagraph {
+    font-family: "Times New Roman";
+    margin-bottom: 10px;
+    text-align: justify;
+}
+.notebookImage {
+    margin-top: 25px;
+    margin-bottom: 35px;
+    text-align: center;
+    font-size: 10pt;
+}
+.notebookTable {
+    font-size: 10pt;
 }
