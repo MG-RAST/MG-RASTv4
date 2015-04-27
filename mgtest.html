@@ -24,13 +24,15 @@
 
     <link rel="stylesheet" type="text/css" href="Retina/css/notebook.css">
 
+    <script src="Retina/renderers/renderer.svg.js"></script>
+
     <!-- webapp initialization -->
     <script>
 jQuery( document ).ready(function(){
     stm.init({});
     Retina.init({});
     Retina.load_widget("mgtest").then( function() {
-	var mgt = Retina.Widget.create('mgtest', { "target": document.getElementById("content"), "sidebar": document.getElementById("sidebar")});
+	var mgt = Retina.Widget.create("mgtest", { "main": document.getElementById("content"), "sidebar": document.getElementById("sidebar")});
     });
 });
     </script>
