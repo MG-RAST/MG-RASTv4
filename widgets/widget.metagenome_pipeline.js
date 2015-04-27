@@ -111,14 +111,15 @@
 	    content.innerHTML = html;
 
 	    // create the job table
-	    var job_columns = [ "job", "stage", "status", "tasks" ];
+	    var job_columns = [ "job", "mgid", "stage", "status", "tasks" ];
 
 	    var job_table_filter = { 0: { "type": "text" },
-				     2: { "type": "text" } };
+				     3: { "type": "text" } };
 	    if (! widget.hasOwnProperty('job_table')) {
 		widget.job_table = Retina.Renderer.create("table", {
 		    target: document.getElementById('jobtable'),
 		    rows_per_page: 20,
+		    invisible_columns: { 1: true },
 		    filter_autodetect: false,
 		    filter: job_table_filter,
 		    sort_autodetect: true,
@@ -127,6 +128,7 @@
 		    query_type: "equal",
 		    default_sort: "job",
 		    asynch_column_mapping: { "job": "info.name",
+					     "mgid": "info.userattr.id",
 					     "status": "state" },
 		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
@@ -217,12 +219,14 @@
 	for (var i=0; i<data.length; i++) {
 	    if (data[i].state == "deleted") {
 		result_data.push({ "job": data[i].info.name,
+				   "mgid": data[i].info.userattr.id,
 				   "stage": "-",
 				   "status": "deleted",
 				   "tasks": "-"
 				 });
 	    } else {
 		result_data.push({ "job": "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'>"+data[i].info.name+"</a>",
+				   "mgid": data[i].info.userattr.id,
 				   "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
 				   "status": widget.status(data[i].state),
 				   "tasks": widget.dots(data[i].tasks)
