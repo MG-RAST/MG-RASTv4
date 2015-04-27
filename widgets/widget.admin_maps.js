@@ -22,7 +22,7 @@
 
 	if (stm.user) {
 
-            var html = '<h3>MG-RAST Jobs</h3><div id="myWorld" style="width: 1000px; height: 700px;"></div>';
+            var html = '<h3>MG-RAST Jobs with valid location metadata</h3><div id="myWorld" style="width: 1000px; height: 700px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
