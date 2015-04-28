@@ -124,6 +124,12 @@
 	
 	// get base numbers
         var stats  = mg.statistics.sequence_stats;
+	
+	if (! stats) {
+	    widget.target.innerHTML = '<div class="alert alert-error">no statistical data available for this metagenome</div>';
+	    return;
+	}
+
         var is_rna = (mg.sequence_type == 'Amplicon') ? 1 : 0;
         var raw_seqs    = ('sequence_count_raw' in stats) ? parseFloat(stats.sequence_count_raw) : 0;
         var qc_rna_seqs = ('sequence_count_preprocessed_rna' in stats) ? parseFloat(stats.sequence_count_preprocessed_rna) : 0;
@@ -178,22 +184,31 @@
 	mg.ann_rna_reads = ann_rna_reads;
 	
 	mg.taxonomy = {};
-	var taxa = [ "domain", "phylum", "class", "order", "family", "genus" ];
-	for (var h=0; h<taxa.length; h++) {
-	    mg.taxonomy[taxa[h]] = [];
-	    var d = mg.statistics.taxonomy[taxa[h]];
-	    for (var j=0; j<d.length; j++) {
-		mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0]} );
+	try {
+	    var taxa = [ "domain", "phylum", "class", "order", "family", "genus" ];
+	    for (var h=0; h<taxa.length; h++) {
+		mg.taxonomy[taxa[h]] = [];
+		var d = mg.statistics.taxonomy[taxa[h]];
+		for (var j=0; j<d.length; j++) {
+		    mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0]} );
+		}
 	    }
+	} catch (error) {
+	    console.log("could not parse taxonomy data: "+error);
 	}
+
 	mg.ontology = {};
-	var onto = [ "NOG", "COG", "KO", "Subsystems" ];
-	for (var h=0; h<onto.length; h++) {
-	    mg.ontology[onto[h]] = [];
-	    var d = mg.statistics.ontology[onto[h]];
-	    for (var j=0; j<d.length; j++) {
-		mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0]} );
+	try {
+	    var onto = [ "NOG", "COG", "KO", "Subsystems" ];
+	    for (var h=0; h<onto.length; h++) {
+		mg.ontology[onto[h]] = [];
+		var d = mg.statistics.ontology[onto[h]];
+		for (var j=0; j<d.length; j++) {
+		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0]} );
+		}
 	    }
+	} catch (error) {
+	    console.log("could not parse functional data: "+error);
 	}
 	
 	var allmetadata = [];
@@ -212,42 +227,62 @@
 	    { label: "C", values: [] },
 	    { label: "G", values: [] },
 	    { label: "N", values: [] } ]
-	for (var i=0; i<mg.statistics.qc.bp_profile.percents.data.length; i++) {
-	    for (var h=0; h<bpprofile.length; h++) {
-		bpprofile[h].values.push(mg.statistics.qc.bp_profile.percents.data[i][h+1]);
+	try {
+	    for (var i=0; i<mg.statistics.qc.bp_profile.percents.data.length; i++) {
+		for (var h=0; h<bpprofile.length; h++) {
+		    bpprofile[h].values.push(mg.statistics.qc.bp_profile.percents.data[i][h+1]);
+		}
 	    }
+	} catch (error) {
+	    console.log("could not extract nucleotide data: "+error);
 	}
 	mg.bpprofile = bpprofile;
 	
 	var rankabundance = [];
-	var t = mg.statistics.taxonomy.family.sort(function(a,b) {
-	    return b[1] - a[1];
-        }).slice(0,50);
-	for (var i=0; i<t.length; i++) {
-	    rankabundance.push( { label: t[i][0], value: t[i][1] } );
+	try {
+	    var t = mg.statistics.taxonomy.family.sort(function(a,b) {
+		return b[1] - a[1];
+            }).slice(0,50);
+	    for (var i=0; i<t.length; i++) {
+		rankabundance.push( { label: t[i][0], value: t[i][1] } );
+	    }
+	} catch (error) {
+	    console.log("could not extract rankabundance data: " + error);
 	}
 	mg.rankabundance = rankabundance;
 	
 	var rarefaction = [];
-	for (var i=0; i<mg.statistics.rarefaction.length; i++) {
-	    rarefaction.push({ x: mg.statistics.rarefaction[i][0], y: mg.statistics.rarefaction[i][1] });
+	try {
+	    for (var i=0; i<mg.statistics.rarefaction.length; i++) {
+		rarefaction.push({ x: mg.statistics.rarefaction[i][0], y: mg.statistics.rarefaction[i][1] });
+	    }
+	} catch (error) {
+	    console.log("could not parse rarefaction data: "+error);
 	}
 	mg.rarefaction = rarefaction;
 	
 	var drisee = [ { label: "A", values: [] }, { label: "T", values: [] }, { label: "C", values: [] }, { label: "G", values: [] }, { label: "N", values: [] }, { label: "InDel", values: [] }, { label: "Total", values: [] } ];
-	var dr = mg.statistics.qc.drisee.percents.data;
-	for (var i=0; i<dr.length; i++) {
-	    for (var h=0; h<drisee.length; h++) {
-		drisee[h].values.push({x: dr[i][0], y: dr[i][h+1] });
+	try {
+	    var dr = mg.statistics.qc.drisee.percents.data;
+	    for (var i=0; i<dr.length; i++) {
+		for (var h=0; h<drisee.length; h++) {
+		    drisee[h].values.push({x: dr[i][0], y: dr[i][h+1] });
+		}
 	    }
+	} catch (error) {
+	    console.log("could not parse drisee data:" +error);
 	}
 	mg.drisee = drisee;
 	
 	var kmer = [];
-        for (var i = 0; i < mg.statistics.qc.kmer['15_mer']['data'].length; i+=2) {
-	    var thisY = mg.statistics.qc.kmer['15_mer']['data'][i][0];
-            kmer.push({ x: mg.statistics.qc.kmer['15_mer']['data'][i][3], y: thisY });
-        }
+	try {
+            for (var i=0; i<mg.statistics.qc.kmer['15_mer']['data'].length; i+=2) {
+		var thisY = mg.statistics.qc.kmer['15_mer']['data'][i][0];
+		kmer.push({ x: mg.statistics.qc.kmer['15_mer']['data'][i][3], y: thisY });
+            }
+	} catch (error) {
+	    console.log("could not parse kmer data: "+error);
+	}
 	mg.kmer = kmer;
     };
     
