@@ -38,7 +38,7 @@
 	widget.sidebar.parentNode.className = "span3 sidebar affix";
 	widget.sidebar.parentNode.style = "right: 8%; background-color: white;";
 
-	var notebook = Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: stm.DataStore.flows.metagenome_overview, dataContainer: stm.DataStore.metagenome[widget.id] }).render();	
+	var notebook = Retina.Renderer.create('notebook', { target: container, showTOC: false, tocTarget: sidebar, editTarget: sidebar, flow: [], dataContainer: stm.DataStore.metagenome[widget.id], editMode: true }).render();	
     };  
 
     widget.variableExtractorMetagenome = function (id) {
