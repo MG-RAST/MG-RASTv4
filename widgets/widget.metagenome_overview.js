@@ -20,6 +20,8 @@
 
 	var container = widget.target = wparams ? wparams.main : widget.target;
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
+	document.getElementById('icon_publications').firstChild.title = "Metagenome Overview";
+	document.getElementById('icon_publications').lastChild.innerHTML = "Metagenome";
 
 	if (Retina.cgiParam('metagenome')) {
 	    widget.id = Retina.cgiParam('metagenome');
@@ -58,9 +60,6 @@
 				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].variableExtractorMetagenome(data.id);
-				   jQuery.getJSON("data/metagenome.json").then(function(data){
-				       console.log(data);
-				   });
 				   jQuery.getJSON("data/metagenome_overview.flow.json").then(function(d) {
 				       stm.DataStore.flows = { "metagenome_overview": d };
 				       Retina.WidgetInstances.metagenome_overview[1].display();
@@ -72,6 +71,7 @@
 			     } );
 		return;
             }
+	    
 	    
 	    var notebook = Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: stm.DataStore.flows.metagenome_overview, dataContainer: stm.DataStore.metagenome[widget.id] }).render();	
 	} else {
