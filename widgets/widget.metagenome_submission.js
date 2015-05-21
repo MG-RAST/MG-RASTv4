@@ -126,13 +126,31 @@
 
 	var html = "<p>You have to specify a project to upload a job to MG-RAST. If you have a metadata file, the project must be specified in that file. If you choose to not use a metadata file, you can select a project here. You can either select an existing project or you can choose a new project.</p>";
 
-	html += "<div class='input-append' style='margin-left: 20%; margin-top: 15px; margin-bottom: 15px;'><input type='text' name='projectname' placeholder='enter project name' autocomplete='off' data-provide='typeahead' data-source='[]' id='projectname' style='width: 400px;'><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectProject();'>select</button></div>";
+	html += "<div class='input-append' style='margin-left: 20%; margin-top: 15px; margin-bottom: 15px;'><input type='text' name='projectname' placeholder='enter project name' autocomplete='off' id='projectname' style='width: 400px;'><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectProject();'>select</button></div>";
 
 	html += "<p><b>Note:</b> <i>The projects listed are those that you have write access to. The owners of other projects can provide you with write access if you do not have it.</i></p>";
 
 	html += "<div style='height: 20px;'></div>";
 
 	target.innerHTML = html;
+
+	// get the private projects this user has access to
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project?private=1&edit=1',
+	    success: function (data) {
+		if (! stm.DataStore.hasOwnProperty('project')) {
+		    stm.DataStore.project = {};
+		}
+		var projectNames = [];
+		for (var i=0; i<data.data.length; i++) {
+		    stm.DataStore.project[data.data[i].id] = data.data[i];
+		    projectNames.push(data.data[i].name);
+		}
+		jQuery('#projectname').typeahead({ source: projectNames });
+	    }});
     };
 
     widget.selectProject = function () {
@@ -143,7 +161,14 @@
 	    alert('you must select a project');
 	    widget.validSteps.project = false;
 	} else {
-	    widget.selectedProject = project;
+	    var ps = Retina.keys(stm.DataStore.project);
+	    widget.selectedProject = { id: null, name: project };
+	    for (var i=0; i<ps.length; i++) {
+		if (stm.DataStore.project[ps[i]].name == project) {
+		    widget.selectedProject.id = ps[i];
+		    break;
+		}
+	    }
 	    widget.validSteps.project = true;
 	}
 	widget.checkSubmittable();
@@ -161,7 +186,7 @@
 	}
 	md_file_opts = md_file_opts.join("\n");
 
-	var html = '<div style="float: left;"><table><tbody><tr><td><select style="width: 420px; height: 200px;" multiple="" id="metadata_file_select">'+md_file_opts+'</select><br><p><input type="checkbox" onclick="if(this.checked){alert(\'INFO\\nNot submitting metadata will severely lower your priority in the computation queue.\\nYou will also not be able to make your data public until you provide metadata for it.\');}" id="no_metadata" name="no_metadata" value="no_metadata"> <span style="font-size: 12px; position: relative; top: 2px;">I do not want to supply metadata</span></p> <input type="button" onclick="Retina.WidgetInstances.metagenome_submission[1].selectMetadata();" value="select" class="btn"></td><td><p style="margin-left: 20px;" id="metadata_file_info"></p></td></tr></tbody></table></div><div style="float: left; width: 50%;"><p>Select a spreadsheet with metadata for the project you want to submit.</p><p>In order to map sequence files to metadata libraries, the names of the sequence files must exactly match the library <i>file_name</i> fields or match the library <i>metagenome_name</i> fields minus the file extension.</p><p><b>Note: While metadata is not required at submission, the priority for processing data without metadata is lower.</b></p></div>';
+	var html = '<div style="float: left;"><table><tbody><tr><td><select style="width: 420px; height: 200px;" multiple="" id="metadata_file_select">'+md_file_opts+'</select><br><p><input type="checkbox" onclick="if(this.checked){document.getElementById(\'metadata_file_select\').selectedIndex=-1;alert(\'INFO\\nNot submitting metadata will severely lower your priority in the computation queue.\\nYou will also not be able to make your data public until you provide metadata for it.\');}" id="no_metadata" name="no_metadata" value="no_metadata"> <span style="font-size: 12px; position: relative; top: 2px;">I do not want to supply metadata</span></p> <input type="button" onclick="Retina.WidgetInstances.metagenome_submission[1].selectMetadata();" value="select" class="btn"></td><td><p style="margin-left: 20px;" id="metadata_file_info"></p></td></tr></tbody></table></div><div style="float: left; width: 50%;"><p>Select a spreadsheet with metadata for the project you want to submit.</p><p>In order to map sequence files to metadata libraries, the names of the sequence files must exactly match the library <i>file_name</i> fields or match the library <i>metagenome_name</i> fields minus the file extension.</p><p><b>Note: While metadata is not required at submission, the priority for processing data without metadata is lower.</b></p></div>';
 
 	html += "<div style='height: 20px; clear: both;'></div>";
 
@@ -210,7 +235,7 @@
 	var sel = document.getElementById('inputfiles');
 	for (var i=0; i<sel.options.length; i++) {
 	    if (sel.options[i].selected) {
-		files.push({id: sel.options[i].value, name: sel.options[i].label});
+		files.push({ id: sel.options[i].value, name: sel.options[i].label });
 	    }
 	}
 	if (! files.length) {
@@ -278,7 +303,7 @@
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
 							{ "value": "none", "text": "none" } ] }
 				     ] },
-				   { "name": "dereplication",
+				   { "name": "dynamic trimming",
 				     "fields": [
 					 { "id": "dynamic_trim",
 					   "name": "dynamic_trim",
@@ -436,18 +461,84 @@
 <div class="controls">\
 <label class="radio"><input type="radio" name="priorityOption" value="immediately" id="priorityOption1">Data will be publicly accessible <b> immediately </b> after processing completion - Highest Priority</label>\
 <label class="radio"><input type="radio" name="priorityOption" value="3months" id="priorityOption2">Data will be publicly accessible <b>after 3 months</b> - High Priority</label>\
-<label class="radio"><input type="radio" name="priorityOption" value="6months" id="priorityOption2">Data will be publicly accessible <b>after 6 months</b> - Medium Priority</label>\
-<label class="radio"><input type="radio" name="priorityOption" value="date" id="priorityOption2">Data will be publicly accessible <b>eventually</b> - Lower Priority</label>\
-<label class="radio"><input type="radio" name="priorityOption" value="never" checked="" id="priorityOption2"><b>Data will stay private </b> (DEFAULT) - Lowest Priority</label>\
+<label class="radio"><input type="radio" name="priorityOption" value="6months" id="priorityOption3">Data will be publicly accessible <b>after 6 months</b> - Medium Priority</label>\
+<label class="radio"><input type="radio" name="priorityOption" value="date" id="priorityOption4">Data will be publicly accessible <b>eventually</b> - Lower Priority</label>\
+<label class="radio"><input type="radio" name="priorityOption" value="never" checked="" id="priorityOption5"><b>Data will stay private </b> (DEFAULT) - Lowest Priority</label>\
 </div>\
 </div>\
 <p>Please note that only private data can be deleted.</p>\
 <div style="height:10px;" class="clear"></div>\
-<div style="margin-bottom: 20px; text-align: center;"><input type="button" id="submit_job_button" disabled="" onclick="submit_job();" value="submit job" class="btn"><span style="margin-left: 20px;"><b>Note: You must complete all previous steps to enable submission.</b></span></div>\
+<div style="margin-bottom: 20px; text-align: center;"><input type="button" id="submit_job_button" disabled="" onclick="Retina.WidgetInstances.metagenome_submission[1].submit_job();" value="submit job" class="btn"><span style="margin-left: 20px;"><b>Note: You must complete all previous steps to enable submission.</b></span></div>\
 <p>Upon successful submission, MG-RAST IDs ("Accession numbers") will be automatically assigned to your datasets and data files will be removed from your inbox.</p>';
 
 	html += "<div style='height: 20px;'></div>";
 
 	document.getElementById('submit').innerHTML = html;
+    };
+
+    widget.submit_job = function () {
+	var widget = this;
+
+	// get all the parameters
+	var files = [];
+	for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
+	    files.push(widget.selectedSequenceFiles[i].id);
+	}
+	var priority = "never";
+	if (document.getElementById('priorityOption1').checked) {
+	    priority = "immediately";
+	} else if (document.getElementById('priorityOption2').checked) {
+	    priority = "3months";
+	} else if (document.getElementById('priorityOption3').checked) {
+	    priority = "6months";
+	} else if (document.getElementById('priorityOption4').checked) {
+	    priority = "date";
+	}
+	var screen = document.getElementById('screening');
+	screen = screen.options[screen.selectedIndex].value == "none" ? null : screen.options[screen.selectedIndex].value;
+
+	// do the post request
+	var url = RetinaConfig.mgrast_api + "/submission/submit";
+	var data = { "priority": priority,
+		    "seq_files": files,
+		    "metadata_file": widget.selectedMetadata == "none" ? null : widget.selectedMetadata,
+		    "project_name": widget.selectedProject.name,
+		    "project_id": widget.selectedProject.id,
+		    "assembled": document.getElementById('assembled').checked ? 1 : 0,
+		    "bowtie": screen == null ? 0 : 1,
+		    "screen_indexes": screen,
+		    "dereplicate": document.getElementById('dereplication').checked ? 1 : 0,
+
+		    // fastq
+		    "dynamic_trim": document.getElementById('dynamic_trim') ? (document.getElementById('dynamic_trim').checked ? 1 : 0) : null,
+		    "min_qual": document.getElementById('min_qual') ? document.getElementById('min_qual').value : null,
+		    "max_lqb": document.getElementById('max_lqb') ? document.getElementById('max_lqb').value : null,
+
+		    // fasta
+		    "filter_ln": document.getElementById('filter_ln') ? (document.getElementById('filter_ln').checked ? 1 : 0) : null,
+		    "filter_ln_mult": document.getElementById('deviation') ? document.getElementById('deviation').value : null,
+		    "filter_ambig": document.getElementById('filter_ambig') ? (document.getElementById('filter_ambig').checked ? 1 : 0) : null,
+		    "max_ambig": document.getElementById('max_ambig') ? document.getElementById('max_ambig').value : null,
+		   };
+	document.getElementById('submit_job_button').setAttribute('disabled', 'disabled');
+	jQuery.ajax(url, {
+	    data: JSON.stringify(data),
+	    success: function(data){
+		document.getElementById('submit_job_button').removeAttribute('disabled');	
+		if (data.hasOwnProperty('info')) {
+		    alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor it\'s progress.');
+		    window.location = "mgmain.html?mgpage=pipeline";
+		} else {
+		    alert("There was an error with your submission: "+data.ERROR);
+		}
+	    },
+	    error: function(jqXHR, error){
+		console.log(error);
+		console.log(jqXHR);
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "POST"
+	});
     };
 })();
