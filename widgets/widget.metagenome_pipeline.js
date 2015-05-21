@@ -16,7 +16,6 @@
       GLOBAL VARIABLES
     */
     widget.jobDataOffset;
-    widget.userID = "pturnbaugh";
 
     widget.settingsMapping = [
 	[ "assembled", "sequence file is assembled" ],
@@ -133,7 +132,7 @@
 		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
 		    minwidths: [1,1,1,1],
-		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID,
+		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID,
 		    data: { data: [], header: job_columns }
 		});
 	    } else {
@@ -251,7 +250,7 @@
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
 	widget.userID = id;
-	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID;
+	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID;
 	widget.display();
     };
     
