@@ -120,7 +120,6 @@
 
     // do some convenience checks before the file is uploaded
     widget.fileSelectedForUpload = function (selectedFile) {
-	console.log('file selected for upload');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// detect filetype
@@ -267,7 +266,6 @@
     };
 
     widget.detectFiletype = function (fn) {
-	console.log('detect filetype');
 	var filetype = "";
 	var sequenceType = null;
 	if (fn.match(/(tar\.gz|tgz|zip|tar\.bz2|tbz|tbz2|tb2|gzip|bzip2|gz)$/)) {
@@ -293,7 +291,6 @@
     };
 
     widget.filePreview = function (params) {
-	console.log('file preview');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var html = "<h5 style='margin-bottom: 0px;'>File Information</h5>";
@@ -352,49 +349,53 @@
 	    }
 	    if (filetype == "text") {
 		// check if this is a barcode file
-		var d = params.data.split(/\n/);
-		var validBarcode = true;
-		var barcodes = {};
-		for (var i=0; i<d.length; i++) {
-		    if (d[i].length == 0) {
-			continue;
-		    }
-		    if (d[i].match(/^([atcg])+\t+(\S+)$/i)) {
-			var c = d[i].replace(/\t+/, "\t");
-			c = c.split(/\t/);
-			barcodes[c[1]] = c[0];
-		    } else {
-			validBarcode = false;
-		    }
-		}
-		if (validBarcode) {
-		    var options = "";
-		    var alreadyDemultiplexed = false;
-		    for (var i=0; i<widget.browser.fileList.length; i++) {
-			var fn = widget.browser.fileList[i].file.name;
-			if (fn.match(/\.fastq$/) || fn.match(/\.fq$/)) {
-			    var sel = "";
-			    if (fn.substr(0, fn.lastIndexOf(".")) == node.file.name.substr(0, node.file.name.lastIndexOf("."))) {
-				sel = " selected";
-			    }
-			    options += "<option value='"+widget.browser.fileList[i].id+"'"+sel+">"+fn+"</option>";
-			    fn = fn.replace(/\.fastq$/, "").replace(/\.fq$/, "");
-			    if (barcodes.hasOwnProperty(fn)) {
-				alreadyDemultiplexed = true;
-				break;
-			    }
+		if (! params.data) {
+		    html += "<div class='alert alert-info' style='margin-top: 20px;'>This file is empty.</div>";
+		} else {
+		    var d = params.data.split(/\n/);
+		    var validBarcode = true;
+		    var barcodes = {};
+		    for (var i=0; i<d.length; i++) {
+			if (d[i].length == 0) {
+			    continue;
+			}
+			if (d[i].match(/^([atcg])+\t+(\S+)$/i)) {
+			    var c = d[i].replace(/\t+/, "\t");
+			    c = c.split(/\t/);
+			    barcodes[c[1]] = c[0];
+			} else {
+			    validBarcode = false;
 			}
 		    }
-		    if (alreadyDemultiplexed) {
-			 html += "<div class='alert alert-info' style='margin-top: 20px;'>The demultiplex files of these barcodes have already been generated.</div>";
+		    if (validBarcode) {
+			var options = "";
+			var alreadyDemultiplexed = false;
+			for (var i=0; i<widget.browser.fileList.length; i++) {
+			    var fn = widget.browser.fileList[i].file.name;
+			    if (fn.match(/\.fastq$/) || fn.match(/\.fq$/)) {
+				var sel = "";
+				if (fn.substr(0, fn.lastIndexOf(".")) == node.file.name.substr(0, node.file.name.lastIndexOf("."))) {
+				    sel = " selected";
+				}
+				options += "<option value='"+widget.browser.fileList[i].id+"'"+sel+">"+fn+"</option>";
+				fn = fn.replace(/\.fastq$/, "").replace(/\.fq$/, "");
+				if (barcodes.hasOwnProperty(fn)) {
+				    alreadyDemultiplexed = true;
+				    break;
+				}
+			    }
+			}
+			if (alreadyDemultiplexed) {
+			    html += "<div class='alert alert-info' style='margin-top: 20px;'>The demultiplex files of these barcodes have already been generated.</div>";
+			} else {
+			    html += "<h5>Demultiplex</h5><div id='convert'><p>This is a valid barcode file. Select a file below to demultiplex:</p>";
+			    html += "<select style='width: 100%;'>";
+			    html += options;
+			    html += "</select><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(this.previousSibling.options[this.previousSibling.selectedIndex].value, \""+node.id+"\");'>demultiplex</button></div>";
+			}
 		    } else {
-			html += "<h5>Demultiplex</h5><div id='convert'><p>This is a valid barcode file. Select a file below to demultiplex:</p>";
-			html += "<select style='width: 100%;'>";
-			html += options;
-			html += "</select><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(this.previousSibling.options[this.previousSibling.selectedIndex].value, \""+node.id+"\");'>demultiplex</button></div>";
+			html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
 		    }
-		} else {
-		    html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
 		}
 	    }
 	    if (filetype == "sequence") {
@@ -498,7 +499,6 @@
     };
 
     widget.fileCompleted = function (data) {
-	console.log('file completed');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// get node from data
@@ -538,7 +538,6 @@
 
     // Inbox actions
     widget.sff2fastq = function (fid) {
-	console.log('sff to fastq');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
 
@@ -561,7 +560,6 @@
     };
 
     widget.demultiplex = function (sourceID, barcodeID) {
-	console.log('demultiplex');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
 
@@ -585,7 +583,6 @@
     };
 
     widget.joinPairedEnds = function () {
-	console.log('join paired ends');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var fileA = document.getElementById('jpeFileA').value;
@@ -619,7 +616,6 @@
     };
 
     widget.getRunningInboxActions = function () {
-	console.log('get running inbox actions');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
 	document.getElementById('inboxActions').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
@@ -642,7 +638,6 @@
     };
 
     widget.cancelInboxAction = function (id) {
-	console.log('cancel inbox action');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
 	var url = RetinaConfig.mgrast_api+'/inbox/cancel/'+id;
@@ -663,7 +658,6 @@
     };
 
     widget.showRunningInboxActions = function () {
-	console.log('show running inbox actions');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var target = document.getElementById('inboxActions');
@@ -690,7 +684,6 @@
     };
 
     widget.checkFileHasAction = function (filename) {
-	console.log('check file has action');
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	
 	var data = widget.inboxData;
