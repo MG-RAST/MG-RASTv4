@@ -15,7 +15,6 @@
     };
     
     widget.display = function (params) {
-	console.log('display');
         var widget = this;
 	var index = widget.index;
 	
