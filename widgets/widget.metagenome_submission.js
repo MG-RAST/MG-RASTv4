@@ -213,7 +213,7 @@
 
 	var seq_file_opts = [];
 	for (var i=0; i<widget.inboxData.length; i++) {
-	    if (widget.inboxData[i].hasOwnProperty('stats_info') && widget.inboxData[i].stats_info.hasOwnProperty('bp_count')) {
+	    if (widget.inboxData[i].hasOwnProperty('stats_info')) {// && widget.inboxData[i].stats_info.hasOwnProperty('bp_count')) {
 		seq_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
 	    }
 	}
