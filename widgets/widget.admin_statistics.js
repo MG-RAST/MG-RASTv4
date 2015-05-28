@@ -533,7 +533,7 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&pipeline=mgrast-prod&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&info.pipeline=mgrast-prod&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -563,7 +563,7 @@
 				   } ) );
 
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&pipeline=mgrast-prod&limit=100000&state=suspend&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&info.pipeline=mgrast-prod&limit=100000&state=suspend&userattr=bp_count",
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -579,7 +579,7 @@
 				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&pipeline=mgrast-prod&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&info.pipeline=mgrast-prod&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = {};
@@ -632,7 +632,7 @@
 		jQuery.ajax( { dataType: "json",
 			       promise: p,
 			       date: d,
-			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
+			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
 			       headers: stm.authHeader,
 			       success: function(data) {
 				   var bps = 0;
