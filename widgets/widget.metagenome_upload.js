@@ -665,7 +665,13 @@
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	var target = document.getElementById('inboxActions');
-	var data = widget.inboxData;
+	var data = [];
+	var d = widget.inboxData;
+	for (var i=0; i<d.length; i++) {
+	    if (Retina.keys(d[i].tasks[0].inputs)[0] != "submission_parameters.json") {
+		data.push(d[i]);
+	    }
+	}
 
 	var html = "<p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
 	if (data && data.length > 0) {
