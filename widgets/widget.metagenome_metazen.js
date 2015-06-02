@@ -36,11 +36,11 @@
 	}
 
 	if (! stm.DataStore.hasOwnProperty('cv')) {
-	    // jQuery.getJSON("DATA/session_metazen.dump", function (data) {
-	    // 	stm.DataStore = data;
-	    // 	Retina.WidgetInstances.metagenome_metazen[1].display();
-	    // });
-	    // return;
+	    jQuery.getJSON("DATA/session_metazen.dump", function (data) {
+		stm.DataStore = data;
+		Retina.WidgetInstances.metagenome_metazen[1].display();
+	    });
+	    return;
 
 	    content.innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 16px; margin-right: 10px; position: relative; bottom: 2px;'> loading controlled vocabularies</div>";
 	    var promise1 = jQuery.Deferred();
@@ -249,16 +249,16 @@
 
 	html += widget.newSection({ "title": "Optional Fields",
 				    "fields": [
-					{ "label": "Altitude", "id": "sample_altitude", "help": "The altitude of the sample is the vertical distance in meters between Earth's surface above Sea Level and the sampled position in the air.", "mandatory": false, "type": "text" },
+					{ "label": "Altitude", "id": "sample_altitude", "help": "The altitude of the sample is the vertical distance in meters between Earth's surface above Sea Level and the sampled position in the air.", "mandatory": false, "type": "text", "unit": "meters" },
 					{ "label": "Biotic Relationship", "id": "sample_biotic_relationship", "help": "Is it free-living or in a host and if the latter what type of relationship is observed", "mandatory": false, "type": "text" },
 					{ "label": "Continent", "id": "sample_continent", "help": "The geographical origin of the sample as defined by continent. Use one of: Africa, Antarctica, Asia, Australia, Europe, North America, South America", "mandatory": false, "type": "text" },
-					{ "label": "Depth", "id": "sample_depth", "help": "Depth is defined as the vertical distance in meters below surface, e.g. for sediment or soil samples depth is measured from sediment or soil surface, respectivly.", "mandatory": false, "type": "text" },
-					{ "label": "Elevation", "id": "sample_elevation", "help": "The elevation of the sampling site in meters as measured by the vertical distance from mean sea level.", "mandatory": false, "type": "text" },
+					{ "label": "Depth", "id": "sample_depth", "help": "Depth is defined as the vertical distance in meters below surface, e.g. for sediment or soil samples depth is measured from sediment or soil surface, respectivly.", "mandatory": false, "type": "text", "unit": "meters" },
+					{ "label": "Elevation", "id": "sample_elevation", "help": "The elevation of the sampling site in meters as measured by the vertical distance from mean sea level.", "mandatory": false, "type": "text", "unit": "meters" },
 					{ "label": "pH", "id": "sample_ph", "help": "pH measurement of the sample", "mandatory": false, "type": "text" },
 					{ "label": "Rel to Oxygen", "id": "sample_rel_to_oxygen", "help": "Is this organism an aerobe, anaerobe? Please note that aerobic and anaerobic are valid descriptors for microbial environments", "mandatory": false, "type": "text" },
 					{ "label": "Sample ID", "id": "sample_sample_id", "help": "Internal ID of sample", "mandatory": false, "type": "text" },
 					{ "label": "Sample Collect Device", "id": "sample_samp_collect_device", "help": "The method or device employed for isolating/collecting the sample", "mandatory": false, "type": "text" },
-					{ "label": "Sample Size", "id": "sample_samp_size", "help": "Amount or size of sample (volume, mass or area) that was collected, along with the unit used", "mandatory": false, "type": "text" },
+					{ "label": "Sample Size", "id": "sample_samp_size", "help": "Amount or size of sample (volume, mass or area) that was collected, along with the unit used", "mandatory": false, "type": "text", "unit": "°C" },
 					{ "label": "Temperature", "id": "sample_temperature", "help": "Temperature of the sample in celsius at time of sampling", "mandatory": false, "type": "text" }
 				    ] });
 
@@ -267,7 +267,7 @@
 	html += widget.newSection({ "title": "More Optional Fields",
 				    "fields": [
 					{ "label": "Encoded Traits", "id": "sample_encoded_traits", "help": "Should include key traits like antibiotic resistance or xenobiotic degradation phenotypes for plasmids, converting genes for phage", "mandatory": false, "type": "text" },
-					{ "label": "Estimated Size", "id": "sample_estimated_size", "help": "The estimated size of the genome prior to sequencing. Of particular importance in the sequencing of (eukaryotic) genome which could remain in draft form for a long or unspecified period.", "mandatory": false, "type": "text" },
+					{ "label": "Estimated Size", "id": "sample_estimated_size", "help": "The estimated size of the genome prior to sequencing. Of particular importance in the sequencing of (eukaryotic) genome which could remain in draft form for a long or unspecified period.", "mandatory": false, "type": "text", "unit": "bp" },
 					{ "label": "Experimental Factor", "id": "sample_experimental_factor", "help": "Experimental factors are essentially the variable aspects of an experiment design which can be used to describe an experiment, or set of experiments, in an increasingly detailed manner.", "mandatory": false, "type": "text" },
 					{ "label": "Extrachrom Elements", "id": "sample_extrachrom_elements", "help": "Do plasmids exist of significant phenotypic consequence (e.g. ones that determine virulence or antibiotic resistance). Megaplasmids? Other plasmids (borrelia has 15+ plasmids)", "mandatory": false, "type": "text" },
 					{ "label": "Health/Disease Status", "id": "sample_health_disease_stat", "help": "Health or disease status of specific host at time of collection. This field accepts PATO (v1.269) terms, for a browser please see http://bioportal.bioontology.org/visualize/44601", "mandatory": false, "type": "text" },
@@ -551,11 +551,11 @@
 	var project = document.getElementById('projectname');
 	if (project.selectedIndex > 0) {
 	    var pdata = stm.DataStore.project[project.options[project.selectedIndex].value].metadata;
-	    if (pdata.PI_email) { document.getElementById('project_PI_email').value = pdata.PI_email; }
-	    if (pdata.PI_firstname) { document.getElementById('project_PI_firstname').value = pdata.PI_firstname; }
-	    if (pdata.PI_lastname) { document.getElementById('project_PI_lastname').value = pdata.PI_lastname; }
-	    if (pdata.PI_organization) { document.getElementById('project_PI_organization').value = pdata.PI_organization; }
-	    if (pdata.PI_organization_address) { document.getElementById('project_PI_organization_address').value = pdata.PI_organization_address; }
+	    if (pdata.PI_email) { document.getElementById('project_PI_email').value = pdata.PI_email; document.getElementById('project_PI_email').onchange(); }
+	    if (pdata.PI_firstname) { document.getElementById('project_PI_firstname').value = pdata.PI_firstname; document.getElementById('project_PI_firstname').onchange(); }
+	    if (pdata.PI_lastname) { document.getElementById('project_PI_lastname').value = pdata.PI_lastname; document.getElementById('project_PI_lastname').onchange(); }
+	    if (pdata.PI_organization) { document.getElementById('project_PI_organization').value = pdata.PI_organization; document.getElementById('project_PI_organization').onchange(); }
+	    if (pdata.PI_organization_address) { document.getElementById('project_PI_organization_address').value = pdata.PI_organization_address; document.getElementById('project_PI_organization_address').onchange(); }
 	    if (pdata.PI_organization_country) {
 		var elem = document.getElementById('project_PI_organization_country');
 		for (var i=0; i<elem.options.length; i++) {
@@ -564,9 +564,12 @@
 			break;
 		    }
 		}
+		if (elem.selectedIndex > 0) {
+		    elem.parentNode.parentNode.className = "control-group success";
+		}
 	    }
 	    if (pdata.PI_organization_url) { document.getElementById('project_PI_organization_url').value = pdata.PI_organization_url; }
-	    if (pdata.project_name) { document.getElementById('project_project_name').value = pdata.project_name; }
+	    if (pdata.project_name) { document.getElementById('project_project_name').value = pdata.project_name; document.getElementById('project_project_name').onchange(); }
 	    if (pdata.project_funding) { document.getElementById('project_project_funding').value = pdata.project_funding; }
 	    if (pdata.project_description) { document.getElementById('project_project_description').value = pdata.project_description; }
 	    if (pdata.email) { document.getElementById('project_email').value = pdata.email; }
@@ -645,8 +648,16 @@
   <label class="control-label" for="'+params.id+'">'+params.label+'<sup style="cursor: help;" data-content="'+params.help+'" data-container="body" onmouseover="$(this).popover(\'show\');" onmouseout="$(this).popover(\'hide\');">[?]</sup></label>\
 <div class="controls">';
 
+	var validation = "";
+	if (params.mandatory) {
+	    validation = " onchange='if(this.value.length==0){this.parentNode.parentNode"+(params.unit ? ".parentNode" : "")+".className=\"control-group error\";}else{this.parentNode.parentNode"+(params.unit ? ".parentNode" : "")+".className=\"control-group success\";};'";
+	}
+
+	if (params.unit) {
+	    html += "<div class='input-append'>";
+	}
 	if (params.type == 'text') {
-	    html += '<input type="text" id="'+params.id+'">';
+	    html += '<input type="text" id="'+params.id+'"'+validation+'>';
 	} else if (params.type == 'cv') {
 	    if (typeof stm.DataStore.cv.select[params.cv][0] == "object") {
 		var opts = [];
@@ -658,14 +669,17 @@
 		html += '<select id="'+params.id+'"><option></option><option>'+stm.DataStore.cv.select[params.cv].join("</option><option>")+'</option></select>';
 	    }
 	} else if (params.type == 'typeahead') {
-	    html += '<input id="'+params.id+'" type="text">';
+	    html += '<input id="'+params.id+'" type="text"'+validation+'>';
 	    widget.typeaheads.push({id: params.id, data: stm.DataStore.cv.select[params.cv]});
 	} else if (params.type == 'email') {
-	    html += '<input type="text" id="'+params.id+'">';
+	    html += '<input type="text" id="'+params.id+'"'+validation+'>';
 	} else if (params.type == 'longtext') {
 	    html += '<textarea id="'+params.id+'" style="height: 180px;"></textarea>';
 	} else if (params.type == 'url') {
-	    html += '<input type="text" id="'+params.id+'">';
+	    html += '<input type="text" id="'+params.id+'"'+validation+'>';
+	}
+	if (params.unit) {
+	    html += "<span class='add-on'>"+params.unit+"</span></div>";
 	}
 
 	html += '  </div>\
