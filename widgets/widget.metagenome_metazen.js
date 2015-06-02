@@ -36,11 +36,11 @@
 	}
 
 	if (! stm.DataStore.hasOwnProperty('cv')) {
-	    jQuery.getJSON("DATA/session_metazen.dump", function (data) {
-		stm.DataStore = data;
-		Retina.WidgetInstances.metagenome_metazen[1].display();
-	    });
-	    return;
+	    // jQuery.getJSON("DATA/session_metazen.dump", function (data) {
+	    // 	stm.DataStore = data;
+	    // 	Retina.WidgetInstances.metagenome_metazen[1].display();
+	    // });
+	    // return;
 
 	    content.innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 16px; margin-right: 10px; position: relative; bottom: 2px;'> loading controlled vocabularies</div>";
 	    var promise1 = jQuery.Deferred();
