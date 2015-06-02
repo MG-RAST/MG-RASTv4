@@ -105,6 +105,11 @@
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
 	    							       "user": stm.user,
+								       "blacklist": {
+									   "awe_stderr.txt": true,
+									   "awe_stdout.txt": true,
+									   "submission_parameters.json": true,
+										    },
 	    							       "uploadRestrictions": [ { "expression": /\.rar$/, "text": 'Invalid archive type. Allowed types are gz, zip and bz2' },
 	    										       { "expression": /\.faa$/, "text": "MG-RAST cannot process protein sequences. Please use DNA only." }],
 	    							       "preUploadCustom": widget.fileSelectedForUpload,
