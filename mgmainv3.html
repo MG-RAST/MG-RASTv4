@@ -51,7 +51,7 @@
 	    if (cookie) {
 		jQuery.ajax({ method: "GET",
 			      dataType: "json",
-			      url: "http://api.metagenomics.anl.gov?verbosity=verbose",
+			      url: "http://api.metagenomics.anl.gov/user/"+jQuery.cookie("WUID")+"?verbosity=verbose",
 			      headers: { "Authorization": "mgrast "+cookie},
 			      success: function (d) {
 				  document.getElementById('username').innerHTML = d.firstname+" "+d.lastname;
