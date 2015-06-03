@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+
+    <!-- title and icon -->
+    <title>MG-RAST</title>
+    <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
+
+    <!-- default js -->
+    <script src="Retina/js/jquery.min.js"></script>
+    <script src="Retina/js/stm.js"></script>
+    <script src="Retina/js/retina.js"></script>
+    <script src="Retina/js/bootstrap.min.js"></script>
+    <script src="Retina/js/jquery.cookie.js"></script>
+
+    <!-- config  -->
+    <script src="js/config.js"></script>
+
+    <!-- bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" type="text/css" href="css/mgrastv4.css">
+
+    <!-- webapp initialization -->
+    <script>
+    jQuery( document ).ready(function(){
+	try {
+	    if (window.opener && window.opener.stm) {
+		window.stm = window.opener.stm;
+	    } else {
+		stm.init({});
+		stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
+	    }
+	} catch (err) {
+	    stm.init({});
+	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
+	}
+	Retina.init({});
+	
+	var page  = Retina.cgiParam("mgpage") || "upload";
+	
+	document.title = page.charAt(0).toUpperCase()+page.substr(1);
+	
+	Retina.load_widget("metagenome_"+page).then( function() {
+	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
+								 "sidebar": document.getElementById("sidebar") }, true);
+	    
+	    var cookie = jQuery.cookie("WebSession");
+	    if (cookie) {
+		document.getElementById('username').innerHTML = jQuery.cookie("username") || "Welcome"
+		stm.user = { login: "hans" };
+		stm.authHeader = { "Authorization": "mgrast "+cookie};
+		mgp.display({ "main": document.getElementById("content"),
+			      "sidebar": document.getElementById("sidebar") });
+	    } else {
+		stm.user = null;
+		stm.authHeader = {};
+		mgp.display({ "main": document.getElementById("content"),
+			      "sidebar": document.getElementById("sidebar") });
+		document.getElementById('login').innerHTML = '<form style="margin: 0px; padding: 0px;" action="'+RetinaConfig.v3BaseLoginUrl+'" enctype="multipart/form-data" id="login_form" method="post"><input type="hidden" id="action" value="perform_login" name="action"><input type="hidden" id="page" value="Login" name="page"><div id="login_box"><div id="login_left_txt">EXISTING USERS »</div><div id="login_input_box"><div id="login_input_header">LOGIN<a title="click to register a new account" style="margin-left:32px;" href="metagenomics.cgi?page=Register" class="forgot">REGISTER</a></div><div id="login_input_box"><input type="text" name="login" title="Enter your login name here." id="login_name"></div></div><div id="login_input_box"><div><div id="login_input_header" style="float: left;">PASSWORD</div><div id="login_input_header_forgot"><a href="metagenomics.cgi?page=RequestNewPassword" class="forgot">FORGOT?</a></div></div><div id="login_input_box"><input type="password" name="password" title="Enter your password." id="login_pass"></div></div><div id="login_submit"><input id="login_button" type="submit" title="Click here to login!" style="margin-right: 0; width:45px;cursor: pointer;" value="login"></div></div></form>';
+	    }
+	});
+    });
+    </script>
+
+    <!-- Google Analytics -->
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56018972-1', 'auto');
+  ga('send', 'pageview');
+
+    </script>
+
+  </head>
+
+  <body style="padding: 0px;">
+
+    <!-- header bar -->
+    <div id="header"><a style="border: none;" href="metagenomics.cgi?page=Home">
+	<img alt="MG-RAST Metagenomics Analysis Server" src="./Html/MGRAST_logo.png" style="float: left; height: 80px; margin-left: 40px; margin-top: 10px;">
+      </a>
+      <div id="nav_login_box">
+	<div id="top_nav">    
+	  <div id="top_nav_links"><a href="metagenomics.cgi?page=Home" class="nav_top"><img title="Home" style="width: 20px; height: 20px;" src="./Html/mg-home.png"></a></div>
+	  <div id="top_nav_links"><a href="metagenomics.cgi?page=MetagenomeSelect" class="nav_top"><img title="Browse" style="width: 20px; height: 20px;" src="./Html/mgrast_globe.png"></a></div>
+	  <div id="top_nav_links"><a href="metagenomics.cgi?page=Analysis" class="nav_top"><img title="Analyze" style="width: 20px; height: 20px;" src="./Html/analysis.gif"></a></div>
+	  <div id="top_nav_links"><a href="metagenomics.cgi?page=MetagenomeSearch" class="nav_top"><img title="Search" style="width: 20px; height: 20px;" src="./Html/lupe.png"></a></div>
+	  <br>
+	  <div id="top_nav_links"><a href="metagenomics.cgi?page=DownloadMetagenome" class="nav_top"><img title="Download" style="width: 20px; height: 20px;" src="./Html/mg-download.png"></a></div>
+    	  <div id="top_nav_links"><a href="mgmainv3.html?mgpage=upload" class="nav_top"><img title="Upload" style="width: 20px; height: 20px;" src="./Html/mg-upload.png"></a></div>
+	  <div id="top_nav_links"><a target="_blank" href="http://blog.metagenomics.anl.gov/howto/" class="nav_top"><img title="Support" style="width: 20px; height: 20px;" src="./Html/mg-help.png"></a></div>
+	  <div id="top_nav_links"><a href="metagenomics.cgi?page=Contact" class="nav_top"><img title="Contact" style="width: 20px; height: 20px;" src="./Html/mg-contact.png"></a></div>
+	</div>
+	<div id="login">
+	  
+	  <div id="user"><div style="float:left; padding-top:4px; color: #8FBC3F; font-size: 1.4em;" id="username"></div><div style="float:left;"><a href="metagenomics.cgi?page=AccountManagement"><img title="Account Management" src="./Html/mg-account.png" style="padding-left: 10px; height:20px;" class="imglink"></a>
+	      <a href="metagenomics.cgi?page=Logout"><img title="Logout" src="./Html/mg-logout.png" style="height:20px;" class="imglink"></a>
+	  </div></div>
+	  
+	</div>
+      </div>
+    </div>
+
+    <span id="login_space" style="display: none;"></span>
+    <span id="session_space" style="display: none; float: right; margin-right: 10px;"></span>
+
+    <div style="height: 10px;"></div>
+    
+    <!--border layout -->
+    <div class="row-fluid">
+      
+      <!-- main content -->
+      <div id="content" class="span7 offset1"></div>
+      
+      <!-- sidebar content -->
+      <div class="span3 sidebar">
+	<span style="float: right; margin-right: 5px; cursor: pointer;" status="on" onclick="if (this.getAttribute('status') == 'on') { this.setAttribute('status', 'off'); document.getElementById('content').className='span10 offset1'; this.parentNode.className='span1'; document.getElementById('sidebar').style.display='none'; this.firstChild.className='icon-plus'; this.style.cssFloat='left'; this.style.styleFloat='left'; } else { this.setAttribute('status', 'on'); document.getElementById('content').className='span7 offset1'; this.parentNode.className='span3 sidebar'; document.getElementById('sidebar').style.display=''; this.firstChild.className='icon-minus'; this.style.cssFloat='right'; this.style.styleFloat='right'; }" id="sidebarResizer"><icon class="icon-minus"></icon></span>
+	<div id="sidebar"></div>
+      </div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+  </body>
+</html>
