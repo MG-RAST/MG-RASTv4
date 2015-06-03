@@ -13,5 +13,6 @@ var RetinaConfig = {
     "awe_url": "http://140.221.67.236:8000",
     "m5nr_solr_url": "http://140.221.67.212:8983/solr/",
     "metagenome_solr_url": "http://140.221.67.239:8983/solr/",
-    "authentication": true
+    "authentication": true,
+    "v3BaseLoginUrl": "https://metagenomics.anl.gov/"
 };
