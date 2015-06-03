@@ -1,5 +1,5 @@
 (function () {
-    widget = Retina.Widget.extend({
+    var widget = Retina.Widget.extend({
         about: {
                 title: "Metagenome Upload Widget",
                 name: "metagenome_upload",
@@ -33,15 +33,15 @@
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
-	sidehtml += '<li><a href="">Use MetaZen to create your metadata spreadsheet</a></li>';
-	sidehtml += '<li><a href="">Uploading a metagenome (Video)</a></li>';
-	sidehtml += '<li><a href="">Inbox explained</a></li>';
-	sidehtml += '<li><a href="">Automated submission via our API</a></li>';
-	sidehtml += '<li><a href="">Preparing metadata</a></li>';
-	sidehtml += '<li><a href="">Priority assignments explained</a></li>';
-	sidehtml += '<li><a href="">Obtaining Accession numbers</a></li>';
-	sidehtml += '<li><a href="">Which projects are shown in the dialogue?</a></li>';
-	sidehtml += '<li><a href="">How should barcode files be formatted?</a></li>';
+	sidehtml += '<li><a href="http://metagenomics.anl.gov/metazen.cgi" target=_blank>Use MetaZen to create your metadata spreadsheet</a></li>';
+	sidehtml += '<li><a href="http://www.youtube.com/watch?v=pAf19exJo4o&feature=youtu.be" target=_blank>Uploading a metagenome (Video)</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/glossary-of-mg-rast-terms-and-concepts/#inbox" target=_blank>Inbox explained</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#command_line_submission" target=_blank>Automated submission via our API</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#preparing_metadata" target=_blank>Preparing metadata</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#job_priority" target=_blank>Priority assignments explained</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/glossary-of-mg-rast-terms-and-concepts/#accession_numbers" target=_blank>Obtaining Accession numbers</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#projects_on_upload_page" target=_blank>Which projects are shown in the dialogue?</a></li>';
+	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/upload-data-v3-2/" target=_blank>How should barcode files be formatted?</a></li>';
 	sidehtml += '</ul>';
 
 	// running actions
@@ -75,7 +75,7 @@
 	</div><div style="clear: both; height: 20px;"></div>';
 
 	// intro
-	html += "<p>Before you can submit data to our metagenomics pipeline you must first load it into your private inbox on the MG-RAST server. To do so you can either use <a href=''>our API</a> or the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/upload.png'>upload</a> function on this page. The inbox is a temporary storage location allowing you to gather all files required for submission. You can upload any fasta, fastq or SFF files and GSC MIxS compliant metadata files into your inbox. If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</p><p>After manipulating the files in your inbox, you can <a href=''><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>submit data</a> to our pipeline to create and/or add to existing projects. When the submission process has been successfully completed, MG-RAST ID's (\"Accession numbers\") will be automatically assigned and the data will be removed from your inbox.</p><p>You can monitor the progress of your submission at the <a href=''><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
+	html += "<p>Before you can submit data to our metagenomics pipeline you must first load it into your private inbox on the MG-RAST server. To do so you can either use <a href='http://api.metagenomics.anl.gov/api.html' target=_blank>our API</a> or the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/upload.png'>upload</a> function on this page. The inbox is a temporary storage location allowing you to gather all files required for submission. You can upload any fasta, fastq or SFF files and GSC MIxS compliant metadata files into your inbox. If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</p><p>After manipulating the files in your inbox, you can <a href='?mgpage=submission'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>submit data</a> to our pipeline to create and/or add to existing projects. When the submission process has been successfully completed, MG-RAST ID's (\"Accession numbers\") will be automatically assigned and the data will be removed from your inbox.</p><p>You can monitor the progress of your submission at the <a href='?mgpage=pipeline'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
 
 	// shockbrowser space
 	html += "<div id='browser'></div>";
@@ -294,6 +294,21 @@
 	return { fileType: filetype, sequenceType: sequenceType };
     };
 
+    widget.metadataValidationResult = function (data) {
+	var widget = this;
+
+	var resultDiv = document.getElementById('metadataValidation');
+	if (resultDiv) {
+	    if (data.is_valid) {
+		resultDiv.innerHTML = '<div class="alert alert-success">This file contains valid metadata.</div>';
+	    } else {
+		var txt = data.message.replace(/\[error\]/, "");
+		var messages = (data.hasOwnProperty('errors') && data.errors.length) ? "<br>"+data.errors.join("<br>") : "";
+		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata</b><br>'+txt+messages+'</div>';
+	    }
+	}
+    };
+
     widget.filePreview = function (params) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
@@ -336,11 +351,12 @@
 	    }
 	    if (filetype == "excel") {
 		// check if this is valid metadata
+		html += '<div id="metadataValidation" style="padding-top: 10px;"><div class="alert alert-info"><img src="Retina/images/waiting.gif" style="margin-right: 10px; width: 16px;"> validating metadata...</div></div>';
 		var url = RetinaConfig.mgrast_api+'/metadata/validate';
 		jQuery.ajax(url, {
 		    data: { "node_id": node.id },
 		    success: function(data){
-			Retina.WidgetInstances.metagenome_upload[1].selectedMetadata = data;
+			Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data);
 		    },
 		    error: function(jqXHR, error){
 			console.log(error);
@@ -675,10 +691,10 @@
 
 	var html = "<p style='text-align: center; font-style: italic;'>- no actions running on files in your inbox -</p>";
 	if (data && data.length > 0) {
-	    html = "<table class='table table-condensed'><tr><th>file</th><th>action</th><th>status</th><th></th></tr>";
+	    html = "<table class='table table-condensed' style='font-size: 12px;'><tr><th>file</th><th>action</th><th>status</th><th></th></tr>";
 	    for (var i=0; i<data.length; i++) {
 		var fn = Retina.keys(data[i].tasks[0].inputs)[0];
-		var task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
+		var task = data[i].tasks[0].cmd.description;
 		var colors = { "in-progress": "green",
 			       "suspend": "red",
 			       "pending": "orange",
@@ -701,7 +717,7 @@
 	var task = false; 
 	for (var i=0; i<data.length; i++) {
 	    if (filename == Retina.keys(data[i].tasks[0].inputs)[0]) {
-		task = data[i].info.pipeline.replace(/^inbox_/, "").replace(/_/g, " ");
+		task = data[i].tasks[0].cmd.description;
 		break;
 	    }
 	}
