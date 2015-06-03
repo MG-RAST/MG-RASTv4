@@ -369,7 +369,7 @@
 //	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
 	// MOCKUP FOR v3 INTEGRATION
-	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 	// END MOCKUP
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
@@ -395,7 +395,7 @@
 
 		// MOCKUP FOR v3 INTEGRATION
 
-		html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+		html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
 		
 		// END MOCKUP
 
