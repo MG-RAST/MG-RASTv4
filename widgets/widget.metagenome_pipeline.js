@@ -387,8 +387,14 @@
 		// time from submission to completion
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
-		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+//		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+
+		// MOCKUP FOR v3 INTEGRATION
+
+		html += "<p>The result data is available for download on the <a href='metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
 		
+		// END MOCKUP
+
 	    }
 	    html += "</p>";
 	    
