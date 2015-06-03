@@ -49,18 +49,12 @@
 	    
 	    var cookie = jQuery.cookie("WebSession");
 	    if (cookie) {
-		jQuery.ajax({ method: "GET",
-			      dataType: "json",
-			      url: "http://api.metagenomics.anl.gov/user/"+jQuery.cookie("WUID")+"?verbosity=verbose",
-			      headers: { "Authorization": "mgrast "+cookie},
-			      success: function (d) {
-				  document.getElementById('username').innerHTML = d.firstname+" "+d.lastname;
-				  stm.user = { login: d.login };
-				  stm.authHeader = { "Authorization": "mgrast "+cookie};
-				  mgp.display({ "main": document.getElementById("content"),
-						"sidebar": document.getElementById("sidebar") });
-			      }
-			    });
+		var d = jQuery.cookie("WUID").split("|");
+		document.getElementById('username').innerHTML = d[1];
+		stm.user = { login: d[0] };
+		stm.authHeader = { "Authorization": "mgrast "+cookie};
+		mgp.display({ "main": document.getElementById("content"),
+			      "sidebar": document.getElementById("sidebar") });
 	    } else {
 		stm.user = null;
 		stm.authHeader = {};
