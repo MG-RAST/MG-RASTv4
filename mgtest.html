@@ -24,9 +24,6 @@
 
     <link rel="stylesheet" type="text/css" href="Retina/css/notebook.css">
 
-    <script src="Retina/renderers/renderer.svg.js"></script>
-    <script src="Retina/renderers/renderer.notebook.js"></script>
-
     <!-- webapp initialization -->
     <script>
 jQuery( document ).ready(function(){
@@ -34,6 +31,19 @@ jQuery( document ).ready(function(){
     Retina.init({});
     Retina.load_widget("mgtest").then( function() {
 	var mgt = Retina.Widget.create("mgtest", { "main": document.getElementById("content"), "sidebar": document.getElementById("sidebar")});
+    });
+    Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
+	var loginAction = function (data) {
+	    if (data.action != "logout" && data.result == "success") {
+		stm.user = data.user;
+		stm.authHeader = { "Authorization": "mgrast "+data.token};
+	    } else {
+		stm.user = null;
+		stm.authHeader = {};
+	    }
+	};
+	Retina.Widget.create('login', { "target": document.getElementById("login_space"),
+		    			"callback": loginAction });
     });
 });
     </script>
@@ -48,8 +58,13 @@ jQuery( document ).ready(function(){
       <!-- logo and title -->
       <div style="width: 235px; float: left; margin-right: 25px;">
         <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgroot.html';">
-      </div>
-	  
+      </div> 
+
+      	<div style="float: right;">
+    	  <!-- user info / login section -->
+    	  <span id="login_space"></span>
+	</div>
+
     </div>
 
     <div style="height: 80px;" class="visible-desktop"></div>
