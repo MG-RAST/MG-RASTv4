@@ -475,11 +475,10 @@
 	
 	var query_str = "";
 	for (var h=0;h<type.length; h++) {
-	    if(query_str == "") {
-		query_str = type[h] + "=\"" + widget.query + "\"";
-	    } else {
-		query_str += "&" + type[h] + "=\"" + widget.query + "\"";
+	    if(query_str != "") {
+		query_str += "&";
 	    }
+	    query_str += type[h] + "=" + widget.query.split(/\s/).join("&"+type[h]+"=");
 	}
 
 	for (var h in widget.advancedOptions) {

@@ -59,7 +59,7 @@
 	
 	var prom = jQuery.Deferred();
 	jQuery.ajax( { dataType: "json",
-		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+dstart+"&date_end="+dend+"&limit="+limit+"&state=completed",
+		       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+dstart+"&info.pipeline=mgrast-prod&date_end="+dend+"&limit="+limit+"&state=completed",
 		       headers: stm.authHeader,
 		       dend: dend,
 		       dstart: dstart,

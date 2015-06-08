@@ -29,7 +29,7 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>ID Finder</h4><div><div class='input-append'><input type='text' placeholder='enter ID' id='idFinderID'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].idFinder();'>find</button></div><div id='idFinderResult'></div></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
@@ -64,13 +64,147 @@
 		default_sort: "lastname",
 		data_manipulation: Retina.WidgetInstances.admin_debug[1].userTable,
 		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
-		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id" ] }
+		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id", "impersonate" ] }
 	    });
 	} else {
 	    widget.user_table.settings.target = document.getElementById('usertable');
 	}
 	widget.user_table.render();
 	widget.user_table.update({},widget.user_table.index);
+    };
+
+    widget.idFinder = function () {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+
+	var id = document.getElementById('idFinderID').value;
+	if (id.length == 0) {
+	    alert('you must enter an id');
+	    return;
+	}
+	// mg-id
+	if (id.match(/^mgm\d+\.\d+$/) || id.match(/^\d+\.\d+$/)) {
+	    if (! id.match(/^mgm/)) {
+		id = "mgm"+id;
+	    }
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url:RetinaConfig.mgrast_api+"/metagenome/"+id,
+		success: function (data) {
+		    if (data.error) {
+			document.getElementById('idFinderResult').innerHTML = "ID not found";
+		    } else {
+			jQuery.ajax({
+			    method: "GET",
+			    dataType: "json",
+			    headers: stm.authHeader,
+			    mgdata: data,
+			    url: RetinaConfig.awe_url+'/job?query&info.userattr.job_id='+data.job_id,
+			    success: function (d) {
+				var data = this.mgdata;
+				var html = "<table>";
+				html += "<tr><td><b>Metagenome</b></td><td>"+data.name+"</td></tr>";
+				html += "<tr><td style='padding-right: 20px;'><b>metagenome ID</b></td><td>"+data.id+"</td></tr>";
+				html += "<tr><td><b>job ID</b></td><td>"+data.job_id+"</td></tr>";
+				if (d.total_count == 1) {
+				    html += "<tr><td><b>AWE ID</b></td><td>"+d.data[0].id+"</td></tr>";
+				    html += "<tr><td><b>AWE jid</b></td><td>"+d.data[0].jid+"</td></tr>";
+				    html += "<tr><td><b>AWE user</b></td><td>"+d.data[0].info.user+"</td></tr>";
+				} else {
+				    html += "<tr><td><b>AWE ID</b></td><td>no AWE job found</td></tr>";
+				}
+				html += "</table>";
+				document.getElementById('idFinderResult').innerHTML = html;
+			    }});
+		    }		
+		}
+	    });
+	}
+	// job id
+	else if (id.match(/^\d+$/)) {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url: RetinaConfig.awe_url+'/job?query&info.userattr.job_id='+id,
+		success: function (d) {
+		    if (d.total_count == 1) {
+			var html = "<table>";
+			html += "<tr><td><b>Metagenome</b></td><td>"+d.data[0].info.userattr.name+"</td></tr>";
+			html += "<tr><td style='padding-right: 20px;'><b>metagenome ID</b></td><td>"+d.data[0].info.userattr.id+"</td></tr>";
+			html += "<tr><td><b>job ID</b></td><td>"+d.data[0].info.userattr.job_id+"</td></tr>";
+			html += "<tr><td><b>AWE ID</b></td><td>"+d.data[0].id+"</td></tr>";
+			html += "<tr><td><b>AWE jid</b></td><td>"+d.data[0].jid+"</td></tr>";
+			html += "<tr><td><b>AWE user</b></td><td>"+d.data[0].info.user+"</td></tr>";
+			html += "</table>";
+			document.getElementById('idFinderResult').innerHTML = html;
+		    } else {
+			document.getElementById('idFinderResult').innerHTML = "AWE job not found";
+		    }
+		    
+		}});
+	}
+	// AWE ID
+	else {
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url: RetinaConfig.awe_url+'/job/'+id,
+		success: function (data) {
+		    if (data.error) {
+			document.getElementById('idFinderResult').innerHTML = "AWE job not found";
+		    } else {
+			data = data.data;
+			var html = "<table>";
+			html += "<tr><td><b>Metagenome</b></td><td>"+data.info.userattr.name+"</td></tr>";
+			html += "<tr><td style='padding-right: 20px;'><b>metagenome ID</b></td><td>"+data.info.userattr.id+"</td></tr>";
+			html += "<tr><td><b>job ID</b></td><td>"+data.info.userattr.job_id+"</td></tr>";
+			html += "<tr><td><b>AWE ID</b></td><td>"+data.id+"</td></tr>";
+			html += "<tr><td><b>AWE jid</b></td><td>"+data.jid+"</td></tr>";
+			html += "<tr><td><b>AWE user</b></td><td>"+data.info.user+"</td></tr>";
+			html += "</table>";
+			document.getElementById('idFinderResult').innerHTML = html;
+		    }
+		}});
+	}
+    };
+
+    widget.userTable = function (data) {
+	var result_data = [];
+
+	for (var i=0; i<data.length; i++) {
+	    result_data.push( { "login": data[i].login,
+				"firstname": data[i].firstname,
+				"lastname": data[i].lastname,
+				"email": data[i].email,
+				"id": data[i].id,
+				"impersonate": '<button class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].impersonateUser(\''+data[i].login+'\');">impersonate</button>' } );
+	}
+
+	return result_data;
+    };
+
+    widget.impersonateUser = function (login) {
+	var widget = Retina.WidgetInstances.admin_debug[1];
+	
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/user/impersonate/'+login,
+	    success: function (d) {
+		stm.authHeader = { "Authorization": "mgrast "+d.token };
+		jQuery.cookie(Retina.WidgetInstances.login[1].cookiename, JSON.stringify({ "user": { firstname: d.firstname,
+												     lastname: d.lastname,
+												     email: d.email,
+												     login: d.login },
+											   "token": d.token }), { expires: 7 });
+		window.location = "mgmain.html";
+	    }}).fail(function(xhr, error) {
+		alert('impersonation failed');
+	    });
     };
 
     widget.showQueue = function () {
@@ -84,7 +218,7 @@
 	    synchronous: false,
 	    query_type: "prefix",
 	    data_manipulation: Retina.WidgetInstances.admin_debug[1].queueTableDataManipulation,
-	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?userattr=bp_count",
+	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?userattr=bp_count&info.pipeline=mgrast-prod",
 	    minwidths: [ 80, 1, 1, 1, 105, 50, 1, 1, 70, 1 ],
 	    rows_per_page: 10,
 	    filter_autodetect: false,
@@ -209,13 +343,17 @@
 	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
 
 	if (data) {
-	    html = "<table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")</td></tr>";
+	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")</td></tr>";
 	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
 	    for (var i=0; i<data.metagenomes.length; i++) {
 		html += "<option>"+data.metagenomes[i][0]+"</option>";
 	    }
 	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID</th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
 	} else {
+	    if (pid.match(/^\d+$/)) {
+		pid = "mgp"+pid;
+		document.getElementById('projectSel').value = pid;
+	    }
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
@@ -223,6 +361,9 @@
 		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
 		success: function (data) {
 		    Retina.WidgetInstances.admin_debug[1].showProject(data.id, data);
+		},
+		error: function (data) {
+		    document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>retrieving project data failed, is the ID valid?</div>";
 		}});
 	}
 
@@ -276,14 +417,23 @@
 		mgs += "move="+sel[i].text;
 	    }
 	}
-	
+
+	var pid_b = document.getElementById('project_b').value;
+	if (pid_b.match(/^\d$/)) {
+	    pid_b = "mgp" + pid_b;
+	}
+
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+document.getElementById('project_b').value+mgs,
+	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+pid_b+mgs,
 	    success: function (data) {
 		Retina.WidgetInstances.admin_debug[1].showProject(pid);
+		document.getElementById('project_message_space').innerHTML = "<div class='alert alert-success'>metagenomes moved successfully</div>";
+	    },
+	    error: function (data) {
+		document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>moving metagenomes failed, is the target ID valid?</div>";
 	    }});
     };
 

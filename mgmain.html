@@ -63,12 +63,11 @@
 		window.location = loc;
 	    }
 	};
-
 	Retina.load_widget("metagenome_"+page).then( function() {
 	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
 								 "sidebar": document.getElementById("sidebar") }, true);
 	    
-	    Retina.load_widget({"name": "login", "resource": "Retina/widgets/"}).then( function() {
+	    Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
 		var loginAction = function (data) {
 		    if (data.action != "logout" && data.result == "success") {
 			if (stm.user && stm.user.hasOwnProperty("preferences")) {
@@ -99,7 +98,7 @@
 						"myDataLink": "mgmain.html?mgpage=user" });
 	    });
 	    
-	    Retina.load_widget({"name": "session", "resource": "Retina/widgets/"}).then( function() {
+	    Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
 		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
 	    });
 	    

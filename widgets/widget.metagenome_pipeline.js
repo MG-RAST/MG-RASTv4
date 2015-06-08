@@ -16,7 +16,6 @@
       GLOBAL VARIABLES
     */
     widget.jobDataOffset;
-    widget.userID = "pturnbaugh";
 
     widget.settingsMapping = [
 	[ "assembled", "sequence file is assembled" ],
@@ -85,17 +84,41 @@
 		content.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 45%; margin-top: 300px;'>";
 		widget.userID = stm.user.login;
 	    }
-	    content.innerHTML = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div><div id='jobtable'></div>";
+	    // title
+	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
+
+	    // new title
+	    html = '<div class="wizard span12">\
+	  <div>\
+	    <li></li>\
+	    <a href="?mgpage=upload">upload<img src="Retina/images/upload.png"></a>\
+	  </div>\
+	  <div class="separator">›</div>\
+	  <div>\
+	    <li></li>\
+	    <a href="?mgpage=submission">submit<img src="Retina/images/settings.png"></a>\
+	  </div>\
+	  <div class="separator">›</div>\
+	  <div>\
+	    <li class="active"></li>\
+	    <a href="#" class="active">progress<img src="Retina/images/settings3.png"></a>\
+	  </div>\
+	</div><div style="clear: both; height: 20px;"></div>';
+	    
+	    html += "<div id='jobtable'></div>";
+
+	    content.innerHTML = html;
 
 	    // create the job table
-	    var job_columns = [ "job", "stage", "status", "tasks" ];
+	    var job_columns = [ "job", "mgid", "stage", "status", "tasks" ];
 
 	    var job_table_filter = { 0: { "type": "text" },
-				     2: { "type": "text" } };
+				     3: { "type": "text" } };
 	    if (! widget.hasOwnProperty('job_table')) {
 		widget.job_table = Retina.Renderer.create("table", {
 		    target: document.getElementById('jobtable'),
 		    rows_per_page: 20,
+		    invisible_columns: { 1: true },
 		    filter_autodetect: false,
 		    filter: job_table_filter,
 		    sort_autodetect: true,
@@ -104,11 +127,12 @@
 		    query_type: "equal",
 		    default_sort: "job",
 		    asynch_column_mapping: { "job": "info.name",
+					     "mgid": "info.userattr.id",
 					     "status": "state" },
 		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
 		    minwidths: [1,1,1,1],
-		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID,
+		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID,
 		    data: { data: [], header: job_columns }
 		});
 	    } else {
@@ -194,12 +218,14 @@
 	for (var i=0; i<data.length; i++) {
 	    if (data[i].state == "deleted") {
 		result_data.push({ "job": data[i].info.name,
+				   "mgid": data[i].info.userattr.id,
 				   "stage": "-",
 				   "status": "deleted",
 				   "tasks": "-"
 				 });
 	    } else {
 		result_data.push({ "job": "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(\""+data[i].id+"\");'>"+data[i].info.name+"</a>",
+				   "mgid": data[i].info.userattr.id,
 				   "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
 				   "status": widget.status(data[i].state),
 				   "tasks": widget.dots(data[i].tasks)
@@ -224,7 +250,7 @@
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 	
 	widget.userID = id;
-	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.user="+widget.userID;
+	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID;
 	widget.display();
     };
     
@@ -325,7 +351,7 @@
 	    var jobpriority = "lowest";
 	    var prio = "never";
 	    if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
-		prio = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.publish_priority;
+		prio = stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.priority;
 		jobpriority = widget.priorityMapping[prio][0];
 		prio = widget.priorityMapping[prio][1];
 	    }
@@ -340,7 +366,11 @@
 	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);
-	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+//	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+
+	// MOCKUP FOR v3 INTEGRATION
+	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	// END MOCKUP
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
 	if (job.state == "suspend") {
@@ -361,8 +391,14 @@
 		// time from submission to completion
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
-		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+//		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+
+		// MOCKUP FOR v3 INTEGRATION
+
+		html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
 		
+		// END MOCKUP
+
 	    }
 	    html += "</p>";
 	    
@@ -379,7 +415,7 @@
 
 		var jobpriority = "lowest";
 		if (stm.DataStore.metagenome.hasOwnProperty(job.info.userattr.id)) {
-		    jobpriority = widget.priorityMapping[stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.publish_priority][0];
+		    jobpriority = widget.priorityMapping[stm.DataStore.metagenome[job.info.userattr.id].pipeline_parameters.priority][0];
 		}
 		
 		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";

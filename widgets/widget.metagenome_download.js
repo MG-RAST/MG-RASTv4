@@ -123,6 +123,8 @@
 			}
 		    }
 		    html += "</div>";
+		} else {
+		    html += "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><span></span><div class='span6'></div>";
 		}
 		
 		var stats = "";
@@ -146,6 +148,7 @@
 		html += "<tr><td><b>MD5</b></td><td>"+d.file_md5+"</td></tr>";
 		html += "</table></div>";
 		html += stats;
+		html += "</div>";
 		html += "</div>";
 	    }
 	    html += widget.apiDownloadHTML();

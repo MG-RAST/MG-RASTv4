@@ -134,7 +134,7 @@
 	    headers: stm.authHeader,
 	    data_manipulation: Retina.WidgetInstances.metagenome_user[1].jobTable,
 	    minwidths: [1,1,1,1],
-	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.user="+stm.user.login,
+	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+stm.user.login,
 	    data: { data: [], header: job_columns }
 	});
 	widget.job_table.render();
