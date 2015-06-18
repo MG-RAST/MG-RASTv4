@@ -202,7 +202,7 @@
       MAIN CONTENT
      */
     widget.jobTable = function (data) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 	
 	// store the data in the DataStore
 	if (! stm.DataStore.hasOwnProperty('job')) {
@@ -237,7 +237,7 @@
     };
 
     widget.userTable = function (data) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	for (var i=0; i<data.length; i++) {
 	    data[i].login = "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+data[i].login+"\");'>"+data[i].login+"</a>";
@@ -247,7 +247,7 @@
     };
 
     widget.changeDisplayUser = function (id) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 	
 	widget.userID = id;
 	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID;
@@ -258,7 +258,7 @@
       SIDEBAR CONTENT
      */
     widget.showJobDetails = function (id) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	widget.sidebar.innerHTML = "<img src='Retina/images/waiting.gif' style='margin-left: 40%; margin-top: 50px; margin-bottom: 50px;'>";
 	
@@ -309,7 +309,7 @@
     };
     
     widget.jobSettings = function (job) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	var html = "<p>Below are the pipeline options and the choice on when the completed data will be made publicly available chosen at submission time.</p><h4>pipeline options</h4>";
 
@@ -363,13 +363,13 @@
     };
 
     widget.statusDetails = function (job) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);
-//	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
 	// MOCKUP FOR v3 INTEGRATION
-	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	// var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 	// END MOCKUP
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
@@ -391,12 +391,10 @@
 		// time from submission to completion
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
-//		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
 
 		// MOCKUP FOR v3 INTEGRATION
-
-		html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
-		
+		// html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
 		// END MOCKUP
 
 	    }
@@ -441,7 +439,7 @@
     };
 
     widget.errorHandling = function (job) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
 
@@ -454,7 +452,7 @@
     };
 
     widget.stagePills = function (job) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	var html = "<h4>this job has no tasks</h4>";
 	if (job.tasks.length > 0) {
@@ -530,7 +528,7 @@
     };
 
     widget.downloadHead = function (nodeid, fn) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 	jQuery.ajax({
 	    method: "GET",
 	    fn: fn,
@@ -545,7 +543,7 @@
     };
 
     widget.stageDetails = function (jid, stage) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	var task = stm.DataStore.job[jid].tasks[stage];
 
@@ -585,7 +583,7 @@
       ACTIONS
      */
     widget.deleteJob = function (mgid) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	if (prompt("Really delete job "+mgid+"? This cannot be undone. Type 'DELETE' to confirm", "") == "DELETE") {
 	    var reason = prompt("Why do you want to delete the job?", "- not specified -");
@@ -607,7 +605,7 @@
     };
 
     widget.adminAction = function (action, id) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 	var job = stm.DataStore.job[id];
 	
 	var url = "?action="+action;
@@ -690,7 +688,7 @@
     };
 
     widget.averageWaitTime = function (prio, size) {
-	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+	var widget = this;
 
 	var gb_per_day = 30;
 	var gb_queued_better_prio_or_date = 300;
