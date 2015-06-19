@@ -551,14 +551,14 @@
 					 		    success: function(data) {
 					 			stm.DataStore.jobtemplate = { 1: data.data[0] };
 					 		    },
-					 		    error: function () {
-					 			alert('there was an error retrieving the data');
+					 		    error: function (xhr) {
+								Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 					 		    }
 					 		  } ).then(function(){ prom.resolve(); });
 					 }
 				     },
-				     error: function () {
-					 alert('there was an error retrieving the data');
+				     error: function (xhr) {
+					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 				     }
 				   } ) );
 
@@ -573,8 +573,8 @@
 					     stm.DataStore.inactivejobs[data.data[i].id] = data.data[i];
 					 }
 				     },
-				     error: function () {
-					 alert('there was an error retrieving the data');
+				     error: function (xhr) {
+					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 				     }
 				   } ) );
 	
@@ -587,8 +587,8 @@
 					     stm.DataStore.activejobs[data.data[i].id] = data.data[i];
 					 }
 				     },
-				     error: function () {
-					 alert('there was an error retrieving the data');
+				     error: function (xhr) {
+					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 				     }
 				   } ) );
 	jQuery.when.apply(this, promises).then(function() {
@@ -647,7 +647,8 @@
 				   stm.DataStore.longTermJobData[this.date] = { id: this.date, num: data.data.length, bp: bps, min: min, max: max };
 				   this.promise.resolve();
 			       },
-			       error: function () {
+			       error: function (xhr) {
+				   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 				   alert('there was an error retrieving the long term job data for '+this.date);
 				   this.promise.resolve();
 			       }
@@ -765,8 +766,11 @@
 			       success: function(data) {
 				   stm.DataStore.userCounts[this.date] = { "count": data.total_count };
 				   this.promise.resolve();
-			       }
-			     } );
+			       },
+			       error: function (xhr) {
+				   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+			       } 
+			     });
 	    }
 	}
 	promises.push(jQuery.ajax( { dataType: "json",
@@ -775,6 +779,9 @@
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 Retina.WidgetInstances.admin_statistics[1].currentUserCount = data.total_count;
+				     },
+				     error: function (xhr) {
+					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 				     }
 				   } ));
 	

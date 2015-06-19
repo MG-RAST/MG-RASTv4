@@ -74,8 +74,8 @@
 			   }
 			   prom.resolve();
 		       },
-		       error: function () {
-			   alert('there was an error retrieving the data');
+		       error: function (xhr) {
+			   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 		       }
 		     } );
 	prom.then(function() {
@@ -262,9 +262,8 @@
 			      console.log(data);
 			  }
 		      },
-		      error: function(jqXHR, error) {
-			  console.log( "error: unable to connect to SHOCK server" );
-			  console.log(error);
+		      error: function (xhr) {
+			  Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 		      },
 		      crossDomain: true,
 		      headers: stm.authHeader

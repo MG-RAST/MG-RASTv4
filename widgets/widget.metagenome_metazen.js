@@ -1,10 +1,10 @@
 (function () {
-    widget = Retina.Widget.extend({
+    var widget = Retina.Widget.extend({
         about: {
             title: "Metagenome Metadata Wizard Widget",
             name: "metagenome_metazen",
             author: "Tobias Paczian",
-            requires: [ "jquery.timepicker.js", "jquery.datepicker.js" ]
+            requires: [ "jquery.timepicker.js", "jquery.datepicker.js", "xlsx.js", "jszip.min.js" ]
         }
     });
 
@@ -50,6 +50,10 @@
 	    var promise3 = jQuery.Deferred();
 	    var promise4 = jQuery.Deferred();
 	    var promises = [ promise1, promise2, promise3, promise4 ];
+
+	    // load excel template
+	    promises.push(widget.loadExcelTemplate());
+
 	    // get the private projects this user has access to
 	    jQuery.ajax({
 		method: "GET",
@@ -65,6 +69,9 @@
 			stm.DataStore.project[data.data[i].id] = data.data[i];
 		    }
 		    promise4.resolve();
+		},
+		error: function (xhr) {
+		    Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 		}});
 	    jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/cv", function (data) {
 		stm.DataStore.cv = data;
@@ -132,6 +139,8 @@
 	html += widget.newAccordion({ "id": "amplicon", "title": "7. enter amplicon metagenome (16S) information", "content": widget.formAmplicon(), "hidden": true });
 
 	html += "</div></form>";
+
+	html += "<button class='btn' onclick='Retina.WidgetInstances.metagenome_metazen[1].exportExcel();'>download excel spreadsheet</button>";
 
 	content.innerHTML = html;
 
@@ -352,6 +361,38 @@
 		showMeridian: false
 	    });
 	}
+    };
+
+    widget.loadExcelTemplate = function () {
+	var widget = this;
+
+	var prom = jQuery.Deferred();
+	var xhr = new XMLHttpRequest();
+	xhr.p = prom;
+	var method = "GET";
+	var base_url = "data/MGRAST_MetaData_template_1.6.xlsx";
+	if ("withCredentials" in xhr) {
+	    xhr.open(method, base_url, true);
+	} else if (typeof XDomainRequest != "undefined") {
+	    xhr = new XDomainRequest();
+	    xhr.open(method, base_url);
+	} else {
+	    alert("your browser does not support CORS requests");
+	    console.log("your browser does not support CORS requests");
+	    return undefined;
+	}
+
+	xhr.responseType = 'arraybuffer';
+
+	xhr.onload = function() {
+	    // the file is loaded, create a javascript object from it
+	    widget.excelWorkbook = xlsx(xhr.response);
+	    this.p.resolve();
+	}
+
+	xhr.send();
+
+	return prom;
     };
 
     /*
@@ -758,5 +799,157 @@
 	html += "<div id='misc_params_amplicon' class='span12'></div><div style='clear: both;'><button class='btn' onclick='Retina.WidgetInstances.metagenome_metazen[1].addMiscParam(\"amplicon\");'>add misc param</button></div>";
 
 	return html;
+    };
+
+    widget.exportExcel = function () {
+	var widget = this;
+
+	var wb = jQuery.extend(true, {}, widget.excelWorkbook);
+	var inputs = document.getElementsByTagName('input');
+	var selects = document.getElementsByTagName('select');
+	var areas = document.getElementsByTagName('textarea');
+	var fields = [];
+	for (var i=0; i<inputs.length; i++) {
+	    fields.push(inputs[i]);
+	}
+	for (var i=0; i<selects.length; i++) {
+	    selects[i].value = selects[i].options[selects[i].selectedIndex].value;
+	    fields.push(selects[i]);
+	}
+	for (var i=0; i<areas.length; i++) {
+	    fields.push(areas[i]);
+	}
+	var data = { "project": {},
+		     "sample": {},
+		     "metagenome": {},
+		     "metatranscriptome": {},
+		     "mimarks-survey": {}
+		   };
+
+	for (var i=0; i<fields.length; i++) {
+	    if (fields[i].value.length) {
+		var id = fields[i].id;
+		for (var h in data) {
+		    if (data.hasOwnProperty(h)) {
+			var re = new RegExp("^"+h+"_");
+			if (id.match(re)) {
+			    var fieldname = id.replace(re, "");
+			    data[h][fieldname] = fields[i].value;
+			    break;
+			}
+		    }
+		}
+	    }
+	}
+	data.sample.biome = document.getElementById('tree_search_input_1').value;
+	data.sample.feature = document.getElementById('tree_search_input_2').value;
+	data.sample.material = document.getElementById('tree_search_input_3').value;
+
+	// fill in the project sheet
+	for (var i=0; i<wb.worksheets[1].maxCol; i++) {
+	    if (data.project.hasOwnProperty(wb.worksheets[1].data[0][i].value)) {
+		wb.setCell(1, i, 2, data.project[wb.worksheets[1].data[0][i].value]);
+	    }
+	}
+	for (var i in data.project) {
+	    if (data.project.hasOwnProperty(i) && i.match(/^misc_param_\d+/)) {
+		wb.setCell(1, wb.worksheets[1].maxCol, 0, i);
+		wb.setCell(1, wb.worksheets[1].maxCol - 1, 2, data.project[i]);
+	    }
+	}
+
+	// fill in the sample sheet
+	var numSamples = document.getElementById('numSamples').value || 1;
+	numSamples = parseInt(numSamples);
+	for (var i=0; i<numSamples; i++) {
+	    wb.setCell(2,0,i+2,"Sample"+(i+1));
+	    for (var h=0; h<wb.worksheets[2].maxCol; h++) {
+		if (data.sample.hasOwnProperty(wb.worksheets[2].data[0][h].value)) {
+		    wb.setCell(2, h, 2, data.sample[wb.worksheets[2].data[0][h].value]);
+		}
+	    }
+	}
+	
+	// check env package
+	var ep = document.getElementById('envPackage').options[document.getElementById('envPackage').selectedIndex].value;
+	for (var i=0; i<wb.worksheets.length; i++) {
+	    if (wb.worksheets[i].name.match(/^ep /)) {
+		if (wb.worksheets[i].name == "ep "+ep) {
+		    for (var h=0; h<numSamples; h++) {
+			wb.setCell(i, 0, h+2, "Sample"+(h+1));
+		    }
+		} else {
+		    wb.removeWorksheet(i);
+		    i--;
+		}
+	    }
+	}
+
+	// remove non required sheets and fill in the required ones
+	for (var i=0; i<wb.worksheets.length; i++) {
+	    if (wb.worksheets[i].name == "library metagenome") {
+		if (! document.getElementById('numShotgun').value || document.getElementById('numShotgun').value == "0") {
+		    wb.removeWorksheet(i);
+		    i--;
+		} else {
+		    var numLibs = parseInt(document.getElementById('numShotgun').value) * numSamples;
+		    for (var h=0; h<numLibs; h++) {
+			var sampnum = h+1;
+			while (sampnum > numSamples) {
+			    sampnum -= numSamples;
+			}
+			wb.setCell(i,0,h+2,"Sample"+sampnum);
+			for (var j=0; j<wb.worksheets[i].maxCol; j++) {
+			    if (data.metagenome.hasOwnProperty(wb.worksheets[i].data[0][j].value)) {
+				wb.setCell(i, j, h+2, data.metagenome[wb.worksheets[i].data[0][j].value]);
+			    }
+			}
+		    }
+		}
+	    }
+	    if (wb.worksheets[i].name == "library metatranscriptome") {
+		if (! document.getElementById('numMetatranscriptome').value || document.getElementById('numMetatranscriptome').value == "0") {
+		    wb.removeWorksheet(i);
+		    i--;
+		} else {
+		    var numLibs = parseInt(document.getElementById('numMetatranscriptome').value) * numSamples;
+		    for (var h=0; h<numLibs; h++) {
+			var sampnum = h+1;
+			while (sampnum > numSamples) {
+			    sampnum -= numSamples;
+			}
+			wb.setCell(i,0,h+2,"Sample"+sampnum);
+			for (var j=0; j<wb.worksheets[i].maxCol; j++) {
+			    if (data.metatranscriptome.hasOwnProperty(wb.worksheets[i].data[0][j].value)) {
+				wb.setCell(i, j, h+2, data.metatranscriptome[wb.worksheets[i].data[0][j].value]);
+			    }
+			}
+		    }
+		}
+	    }
+	    if (wb.worksheets[i].name == "library mimarks-survey") {
+		if (! document.getElementById('numAmplicon').value || document.getElementById('numAmplicon').value == "0") {
+		    wb.removeWorksheet(i);
+		    i--;
+		} else {
+		    var numLibs = parseInt(document.getElementById('numAmplicon').value) * numSamples;
+		    for (var h=0; h<numLibs; h++) {
+			var sampnum = h+1;
+			while (sampnum > numSamples) {
+			    sampnum -= numSamples;
+			}
+			wb.setCell(i,0,h+2,"Sample"+sampnum);
+			for (var j=0; j<wb.worksheets[i].maxCol; j++) {
+			    if (data['mimarks-survey'].hasOwnProperty(wb.worksheets[i].data[0][j].value)) {
+				wb.setCell(i, j, h+2, data['mimarks-survey'][wb.worksheets[i].data[0][j].value]);
+			    }
+			}
+		    }
+		}
+	    }
+	}
+
+	stm.saveAs(xlsx(wb).base64, "metadata.xlsx", true, "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,");
+	
     };
 })();

@@ -69,10 +69,8 @@
 			  success: function(data) {
 			      Retina.WidgetInstances.admin_users[1].showRequests(data);
 			  },
-			  error: function(jqXHR, error) {
-			      document.getElementById('requests').innerHTML = "<p>There was an error retrieving the data</p>";
-			      console.log("error: unable to connect to API server");
-			      console.log(error);
+			  error: function (xhr) {
+			      Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 			  },
 			  headers: stm.authHeader
 			});
@@ -119,9 +117,8 @@
 					    success: function(data) {
 						Retina.WidgetInstances.admin_users[1].showRequests(data);
 					    },
-					    error: function(jqXHR, error) {
-						console.log("error: unable to connect to API server");
-						console.log(error);
+					    error: function (xhr) {
+						Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 					    },
 					    headers: stm.authHeader
 					  }));
@@ -132,9 +129,8 @@
 					    success: function(data) {
 						Retina.WidgetInstances.admin_users[1].showRequests(data);
 					    },
-					    error: function(jqXHR, error) {
-						console.log("error: unable to connect to API server");
-						console.log(error);
+					    error: function (xhr) {
+						Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 					    },
 					    headers: stm.authHeader
 					  }));
@@ -202,12 +198,10 @@
 
 			  document.getElementById('details').innerHTML = html;
 		      },
-		      error: function(jqXHR, error) {
-			  console.log("error: unable to connect to API server");
-			  console.log(error);
+		      error: function (xhr) {
+			  Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 		      },
 		      headers: stm.authHeader
 		    });
-
     };
 })();

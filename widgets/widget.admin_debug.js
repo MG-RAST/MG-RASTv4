@@ -116,8 +116,15 @@
 				}
 				html += "</table>";
 				document.getElementById('idFinderResult').innerHTML = html;
-			    }});
+			    },
+			    error: function (xhr) {
+				Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+			    }
+			});
 		    }		
+		},
+		error: function (xhr) {
+		    Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 		}
 	    });
 	}
@@ -143,7 +150,11 @@
 			document.getElementById('idFinderResult').innerHTML = "AWE job not found";
 		    }
 		    
-		}});
+		},
+		error: function (xhr) {
+		    Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+		}
+	    });
 	}
 	// AWE ID
 	else {
@@ -167,7 +178,11 @@
 			html += "</table>";
 			document.getElementById('idFinderResult').innerHTML = html;
 		    }
-		}});
+		},
+		error: function (xhr) {
+		    Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+		}
+	    });
 	}
     };
 
