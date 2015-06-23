@@ -202,8 +202,8 @@
       MAIN CONTENT
      */
     widget.jobTable = function (data) {
-	var widget = this;
-	
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
+
 	// store the data in the DataStore
 	if (! stm.DataStore.hasOwnProperty('job')) {
 	    stm.DataStore.job = {};
@@ -237,7 +237,7 @@
     };
 
     widget.userTable = function (data) {
-	var widget = this;
+	var widget = Retina.WidgetInstances.metagenome_pipeline[1];
 
 	for (var i=0; i<data.length; i++) {
 	    data[i].login = "<a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+data[i].login+"\");'>"+data[i].login+"</a>";
