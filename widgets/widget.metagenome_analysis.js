@@ -1265,6 +1265,7 @@
 		stm.DataStore.inprogress['profile'+id] = true;
 		stm.DataStore.dataContainer[name].promises.push(
 		    jQuery.ajax({ bound: 'profile'+id,
+				  //url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type=feature&source="+source+"&nocutoff=1",
 				  url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type="+type+"&source="+source+"&evalue="+evalue+"&length="+alilength+"&identity="+identity,
 				  dataType: "json",
 				  id: id,
