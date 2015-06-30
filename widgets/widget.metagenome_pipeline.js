@@ -365,12 +365,14 @@
     widget.statusDetails = function (job) {
 	var widget = this;
 
-	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);
-	var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);	
+	var html = "";
 
-	// MOCKUP FOR v3 INTEGRATION
-	// var html = "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
-	// END MOCKUP
+	if (RetinaConfig.v3) {
+	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	} else {
+	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	}
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
 	if (job.state == "suspend") {
@@ -391,12 +393,12 @@
 		// time from submission to completion
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
-		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
 
-		// MOCKUP FOR v3 INTEGRATION
-		// html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
-		// END MOCKUP
-
+		if (RetinaConfig.v3) {
+		    html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
+		} else {
+		    html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+		}
 	    }
 	    html += "</p>";
 	    
@@ -418,8 +420,6 @@
 		
 		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
 		
-		//html += "<p>You can increase the priority of your job by altering the <a href='#' onclick='document.getElementById(\"sheader\").click();'>Settings</a>.</p>";
-
 		html += "<p>If you want to stop the computation of this job  and remove it from the system you can delete it using the button below.</p>";
 		html += "<p style='text-align: center;'><button class='btn btn-danger btn-small' onclick='Retina.WidgetInstances.metagenome_pipeline[1].deleteJob(\""+job.info.userattr.id+"\");'>delete</button></p>";
 	    }
@@ -587,11 +587,13 @@
 
 	if (prompt("Really delete job "+mgid+"? This cannot be undone. Type 'DELETE' to confirm", "") == "DELETE") {
 	    var reason = prompt("Why do you want to delete the job?", "- not specified -");
+	    var form = new FormData();
+	    form.append('metagenome_id', mgid);
+	    form.append('reason', reason);
 	    jQuery.ajax({
 		method: "POST",
 		dataType: "json",
-		data: { "metagenome_id": mgid,
-			"reason": reason },
+		data: form,
 		headers: stm.authHeader, 
 		url: RetinaConfig.mgrast_api+'/job/delete',
 		success: function (data) {
