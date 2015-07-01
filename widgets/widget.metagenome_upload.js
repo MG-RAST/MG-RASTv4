@@ -33,7 +33,7 @@
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
-	sidehtml += '<li><a href="http://metagenomics.anl.gov/metazen.cgi" target=_blank>Use MetaZen to create your metadata spreadsheet</a></li>';
+	sidehtml += '<li><a href="?mgpage=metazen" target=_blank>Use MetaZen to create your metadata spreadsheet</a></li>';
 	sidehtml += '<li><a href="http://www.youtube.com/watch?v=pAf19exJo4o&feature=youtu.be" target=_blank>Uploading a metagenome (Video)</a></li>';
 	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/glossary-of-mg-rast-terms-and-concepts/#inbox" target=_blank>Inbox explained</a></li>';
 	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#command_line_submission" target=_blank>Automated submission via our API</a></li>';
@@ -132,6 +132,12 @@
 	var sequenceType = ret.sequenceType;
 
 	var promise = jQuery.Deferred();
+
+	// check if the filename is valid
+	if (! selectedFile.name.match(/^[\w\d\.]+$/)) {
+	    var html = '<div class="alert alert-error"><strong>Invalid filename</strong> The filename may only contain letters, digits, underscore and ".".</div>';
+	    return promise.resolve(html, false);
+	}
 
 	// get the filereader
 	var fileReader = new FileReader();
