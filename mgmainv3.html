@@ -48,7 +48,7 @@
 								 "sidebar": document.getElementById("sidebar") }, true);
 	    
 	    var cookie = jQuery.cookie("WebSession");
-	    if (cookie) {    
+	    if (cookie && jQuery.cookie("WUID")) {    
 		var d = jQuery.cookie("WUID").split("|");
 		document.getElementById('username').innerHTML = d[1];
 		stm.user = { login: d[0] };
