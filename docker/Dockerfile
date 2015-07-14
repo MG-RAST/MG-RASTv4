@@ -15,7 +15,7 @@ RUN cd /var/www && \
 	ln -s MG-RASTv4 html
 
 RUN cd /var/www/MG-RASTv4/js && \
-    rm -fv config.js && \
+    mv -fv config.js config.old && \
     ln -s /config/config.js
 
 # start apache
