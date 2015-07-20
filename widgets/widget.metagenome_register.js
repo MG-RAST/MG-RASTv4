@@ -5,7 +5,7 @@
             name: "metagenome_register",
             author: "Tobias Paczian",
             requires: [
-		"http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"
+		"https://www.google.com/recaptcha/api.js"
 	    ]
         }
     });
@@ -62,7 +62,7 @@
 	widget.main.innerHTML = html;
 
 	// set up recaptcha
-	Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
+	grecaptcha.render('recap', { 'sitekey' : '6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z' });
     };
 
     widget.newAccount = function () {
@@ -187,7 +187,7 @@
 	}).render();
 
 	// set up recaptcha
-	Recaptcha.create("6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z", "recap");
+	grecaptcha.render('recap', { 'sitekey' : '6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z' });
  	
 	// set up country typeahead
 	jQuery('#inputCountry').typeahead({ source: Retina.values(widget.countryCodes) });
@@ -224,13 +224,13 @@
     widget.performPasswordReset = function () {
 	var widget = Retina.WidgetInstances.metagenome_register[1];
 
-	if (Recaptcha.get_response() && document.getElementById('inputLogin').value && document.getElementById('inputEmail').value) {
+	if (grecaptcha.getResponse() && document.getElementById('inputLogin').value && document.getElementById('inputEmail').value) {
 	    document.getElementById('submit').setAttribute('disabled', 'disabled');
 	    jQuery.post(RetinaConfig.mgrast_api+"/user/resetpassword", {
 	    	"email": document.getElementById('inputEmail').value,
 		"login": document.getElementById('inputLogin').value,
-	    	"challenge": Recaptcha.get_challenge(),
-	    	"response": Recaptcha.get_response()
+	    	"challenge": grecaptcha.getChallenge(),
+	    	"response": grecaptcha.getResponse()
 	    }, function (result) {
 		if (result.hasOwnProperty('ERROR')) {
 		    alert("Resetting your password failed: "+result.ERROR);
@@ -273,7 +273,7 @@
 	}
 	if (valid) {
 	    document.getElementById('submit').setAttribute('disabled', 'disabled');
-	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+Recaptcha.get_challenge(), {
+	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+grecaptcha.getChallenge(), {
 	    	"email": document.getElementById('inputPrimaryEmail').value,
 		"email2": document.getElementById('inputSecondaryEmail').value,
 	    	"firstname": document.getElementById('inputFirstname').value,
@@ -283,7 +283,7 @@
 	    	"lru": document.getElementById('inputURL').value,
 	    	"country": document.getElementById('inputCountry').value,
 	    	"mailinglist": document.getElementById('inputMailinglist').checked,
-		"response": Recaptcha.get_response()
+		"response": grecaptcha.getResponse()
 	    }, function (result) {
 		if (result.hasOwnProperty('ERROR')) {
 		    alert("Your registration failed: "+result.ERROR);
@@ -504,7 +504,7 @@
 	if (widget.org_urls.hasOwnProperty(org)) {
 	    document.getElementById('inputURL').value = widget.org_urls[org].replace(/^http\:\/\//, "");
 	    if (document.getElementById('inputCountry').value.length) {
-		Recaptcha.focus_response_field();
+		grecaptcha.focusResponseField();
 	    } else {
 		document.getElementById('inputCountry').focus();
 	    }
