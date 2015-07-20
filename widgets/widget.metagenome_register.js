@@ -229,7 +229,8 @@
 	    jQuery.post(RetinaConfig.mgrast_api+"/user/resetpassword", {
 	    	"email": document.getElementById('inputEmail').value,
 		"login": document.getElementById('inputLogin').value,
-	    	"challenge": grecaptcha.getChallenge(),
+		"version": 2,
+	    	"challenge": null,
 	    	"response": grecaptcha.getResponse()
 	    }, function (result) {
 		if (result.hasOwnProperty('ERROR')) {
@@ -273,7 +274,7 @@
 	}
 	if (valid) {
 	    document.getElementById('submit').setAttribute('disabled', 'disabled');
-	    jQuery.post(RetinaConfig.mgrast_api+"/user/"+grecaptcha.getChallenge(), {
+	    jQuery.post(RetinaConfig.mgrast_api+"/user/recaptcha", {
 	    	"email": document.getElementById('inputPrimaryEmail').value,
 		"email2": document.getElementById('inputSecondaryEmail').value,
 	    	"firstname": document.getElementById('inputFirstname').value,
@@ -503,9 +504,7 @@
 	var widget = Retina.WidgetInstances.metagenome_register[1];
 	if (widget.org_urls.hasOwnProperty(org)) {
 	    document.getElementById('inputURL').value = widget.org_urls[org].replace(/^http\:\/\//, "");
-	    if (document.getElementById('inputCountry').value.length) {
-		grecaptcha.focusResponseField();
-	    } else {
+	    if (! document.getElementById('inputCountry').value.length) {
 		document.getElementById('inputCountry').focus();
 	    }
 	} else {
