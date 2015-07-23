@@ -40,11 +40,14 @@
 	    
 	var page  = Retina.cgiParam("mgpage") || "search";
 	
-	var icons = { "submission": "pipeline",
-		      "upload": "pipeline",
-		      "overview": "publications",
-		      "project": "publications",
-		      "download": "publications" };
+	var icons = {
+	    "submission": "pipeline",
+	    "upload": "pipeline",
+	    "overview": "publications",
+	    "project": "publications",
+	    "download": "publications", 
+	    "share": "pipeline"
+	};
 	var iconame = icons[page] ? icons[page] : page;
 	
 	var ico = document.getElementById('icon_'+iconame);

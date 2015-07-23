@@ -48,7 +48,19 @@
 								 "sidebar": document.getElementById("sidebar") }, true);
 	    
 	    var cookie = jQuery.cookie("WebSession");
-	    if (cookie && jQuery.cookie("WUID")) {    
+	    if (cookie && jQuery.cookie("WUID")) {
+		jQuery.ajax(Retina.mgrast_api+'user/authenticate', {
+		    success: function(data){
+			alert('geschaaaaaft!');
+		    },
+		    error: function(jqXHR, error){
+			console.log(error);
+			console.log(jqXHR);
+		    },
+		    crossDomain: true,
+		    headers: { "Authorization": "mgrast "+cookie},
+		    type: "GET"
+		});
 		var d = jQuery.cookie("WUID").split("|");
 		document.getElementById('username').innerHTML = d[1];
 		stm.user = { login: d[0] };
