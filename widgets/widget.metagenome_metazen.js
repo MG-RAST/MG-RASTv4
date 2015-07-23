@@ -105,7 +105,7 @@
 <dt>sample</dt><dd>a single entity that has been obtained for analysis</dd>\
 <dt>library</dt><dd>a prepped collection of DNA fragments generated from a sample (also, in this case, corresponds to a sequencing run)</dd>\
 <dt>environmental information</dt><dd>the characteristics which describe the environment in which your samples were obtained</dd>\
-<dt>sample set</dt><dd>a group of samples sharing the same library and environmental characteristics</lidd';
+<dt>sample set</dt><dd>a group of samples sharing the same library and environmental characteristics</dd>';
 	sidehtml += '</dl>';
 
 	sidebar.innerHTML = sidehtml;
@@ -477,7 +477,7 @@
     widget.formEnvironment = function () {
 	var widget = this;
 
-	var html = "<p>Use three different terms from controlled vocabularies for biome, environmental feature, and environmental material to classify your samples. Note that while the terms might not be perfect matches for your specific project they are primarily meant to allow use of your data by others. You can enter your detailed project description in the project tab at the top of this form.</p><table><tr><td style='font-weight: bold; padding-left: 10px;'>Biome</td><td style='font-weight: bold; padding-left: 10px;'>Environmental Feature</td><td style='font-weight: bold; padding-left: 10px;'>Environmental Material</td></tr><tr><td><div id='tree_biome'></div></td><td><div id='tree_feature'></div></td><td><div id='tree_material'></div></td></tr></table>";
+	var html = "<p>Use three different terms from controlled vocabularies for biome, environmental feature, and environmental material to classify your samples. Note that while the terms might not be perfect matches for your specific project they are primarily meant to allow use of your data by others. You can enter your detailed project description in the project tab at the top of this form.</p><p>The data shown represents ENVO version "+stm.DataStore.cv.latest_version["biome"]+" <button class='btn btn-mini'>choose different version</button></p><table><tr><td style='font-weight: bold; padding-left: 10px;'>Biome</td><td style='font-weight: bold; padding-left: 10px;'>Environmental Feature</td><td style='font-weight: bold; padding-left: 10px;'>Environmental Material</td></tr><tr><td><div id='tree_biome'></div></td><td><div id='tree_feature'></div></td><td><div id='tree_material'></div></td></tr></table>";
 
 	return html;
     };
