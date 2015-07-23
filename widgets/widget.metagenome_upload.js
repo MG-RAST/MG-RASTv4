@@ -539,6 +539,7 @@
 	var newNodeAttributes = node.attributes;
 	newNodeAttributes['type'] = 'inbox';
 	newNodeAttributes['id'] = stm.user.id;
+	newNodeAttributes['user'] = stm.user.login;
 	newNodeAttributes['email'] = stm.user.email;
 
 	var url = widget.browser.shockBase+'/node/'+node.id;
