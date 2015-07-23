@@ -48,25 +48,26 @@
 								 "sidebar": document.getElementById("sidebar") }, true);
 	    
 	    var cookie = jQuery.cookie("WebSession");
-	    if (cookie && jQuery.cookie("WUID")) {
-		jQuery.ajax(Retina.mgrast_api+'user/authenticate', {
+	    if (cookie) {
+		jQuery.ajax(RetinaConfig.mgrast_api+'user/authenticate', {
 		    success: function(data){
-			alert('geschaaaaaft!');
+			document.getElementById('username').innerHTML = data.firstname+" "+data.lastname;
+			stm.user = { login: data.login };
+			stm.authHeader = { "Authorization": "mgrast "+data.token};
+			mgp.display({ "main": document.getElementById("content"),
+				      "sidebar": document.getElementById("sidebar") });
 		    },
 		    error: function(jqXHR, error){
-			console.log(error);
-			console.log(jqXHR);
+			stm.user = null;
+			stm.authHeader = {};
+			mgp.display({ "main": document.getElementById("content"),
+				      "sidebar": document.getElementById("sidebar") });
+			document.getElementById('login').innerHTML = '<form style="margin: 0px; padding: 0px;" action="'+RetinaConfig.v3BaseLoginUrl+'" enctype="multipart/form-data" id="login_form" method="post"><input type="hidden" id="action" value="perform_login" name="action"><input type="hidden" id="page" value="Login" name="page"><div id="login_box"><div id="login_left_txt">EXISTING USERS »</div><div id="login_input_box"><div id="login_input_header">LOGIN<a title="click to register a new account" style="margin-left:32px;" href="../metagenomics.cgi?page=Register" class="forgot">REGISTER</a></div><div id="login_input_box"><input type="text" name="login" title="Enter your login name here." id="login_name"></div></div><div id="login_input_box"><div><div id="login_input_header" style="float: left;">PASSWORD</div><div id="login_input_header_forgot"><a href="../metagenomics.cgi?page=RequestNewPassword" class="forgot">FORGOT?</a></div></div><div id="login_input_box"><input type="password" name="password" title="Enter your password." id="login_pass"></div></div><div id="login_submit"><input id="login_button" type="submit" title="Click here to login!" style="margin-right: 0; width:45px;cursor: pointer;" value="login"></div></div></form>';
 		    },
 		    crossDomain: true,
 		    headers: { "Authorization": "mgrast "+cookie},
 		    type: "GET"
 		});
-		var d = jQuery.cookie("WUID").split("|");
-		document.getElementById('username').innerHTML = d[1];
-		stm.user = { login: d[0] };
-		stm.authHeader = { "Authorization": "mgrast "+cookie};
-		mgp.display({ "main": document.getElementById("content"),
-			      "sidebar": document.getElementById("sidebar") });
 	    } else {
 		stm.user = null;
 		stm.authHeader = {};
