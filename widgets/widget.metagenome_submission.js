@@ -57,7 +57,7 @@
 	  <div class="separator">›</div>\
 	  <div>\
 	    <li class="active"></li>\
-	    <a href="#" class="active">submit<img src="Retina/images/settings.png"></a>\
+	    <a href="#" class="active">submit<img src="images/forward.png"></a>\
 	  </div>\
 	  <div class="separator">›</div>\
 	  <div>\

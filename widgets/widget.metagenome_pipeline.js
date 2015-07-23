@@ -96,7 +96,7 @@
 	  <div class="separator">›</div>\
 	  <div>\
 	    <li></li>\
-	    <a href="?mgpage=submission">submit<img src="Retina/images/settings.png"></a>\
+	    <a href="?mgpage=submission">submit<img src="images/forward.png"></a>\
 	  </div>\
 	  <div class="separator">›</div>\
 	  <div>\
