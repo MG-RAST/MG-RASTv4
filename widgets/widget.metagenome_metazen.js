@@ -379,7 +379,7 @@
 	var xhr = new XMLHttpRequest();
 	xhr.p = prom;
 	var method = "GET";
-	var base_url = "data/MGRAST_MetaData_template_1.7.xlsx";
+	var base_url = "data/MGRAST_MetaData_template_1.6.xlsx";
 	if ("withCredentials" in xhr) {
 	    xhr.open(method, base_url, true);
 	} else if (typeof XDomainRequest != "undefined") {
