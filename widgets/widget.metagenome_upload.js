@@ -32,17 +32,11 @@
 
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
-	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><ul style="list-style: none; margin-left: 10px;">';
-	sidehtml += '<li><a href="?mgpage=metazen" target=_blank>Use MetaZen to create your metadata spreadsheet</a></li>';
-	sidehtml += '<li><a href="http://www.youtube.com/watch?v=pAf19exJo4o&feature=youtu.be" target=_blank>Uploading a metagenome (Video)</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/glossary-of-mg-rast-terms-and-concepts/#inbox" target=_blank>Inbox explained</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#command_line_submission" target=_blank>Automated submission via our API</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#preparing_metadata" target=_blank>Preparing metadata</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#job_priority" target=_blank>Priority assignments explained</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/glossary-of-mg-rast-terms-and-concepts/#accession_numbers" target=_blank>Obtaining Accession numbers</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#projects_on_upload_page" target=_blank>Which projects are shown in the dialogue?</a></li>';
-	sidehtml += '<li><a href="http://blog.metagenomics.anl.gov/upload-data-v3-2/" target=_blank>How should barcode files be formatted?</a></li>';
-	sidehtml += '</ul>';
+	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><dl>';
+	sidehtml += '<dt>File Formats</dt><dd>You can upload any fasta, fastq or SFF files. For metadata please use MS Excel spreadsheets with GSC MIxS compliant metadata. (Check out our Metazen (link)  tool for assistance creating and filling them out).  If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</dd><br>';
+	sidehtml += '<dt>Metadata</dt><dd>We require metadata for submission of multiple files, sharing with colleagues or data publication. A good strategy is create the metadata file with metazen or copy an existing file. The metadata is not meant to perfectly describe your data, but allow others to discover it for this purpose we use controlled vocabularies as much as possible.</dd><br>';
+	sidehtml += '<dt>Studies and Projects</dt><dd>Older versions of MG-RAST used the term projects, we are now migrating to the use of the term study instead. They are identical otherwise.</dd>';
+	sidehtml += '</dl>';
 
 	// running actions
 	sidehtml += '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions<button class="btn btn-mini" title="refresh" onclick="Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();" style="margin-left: 30px;position: relative; bottom: 2px;"><img style="height: 12px;" src="Retina/images/loop.png"></button></h3>';
@@ -65,7 +59,7 @@
 	  <div class="separator">›</div>\
 	  <div>\
 	    <li></li>\
-	    <a href="?mgpage=submission">submit<img src="Retina/images/settings.png"></a>\
+	    <a href="?mgpage=submission">submit<img src="images/forward.png"></a>\
 	  </div>\
 	  <div class="separator">›</div>\
 	  <div>\
@@ -75,7 +69,7 @@
 	</div><div style="clear: both; height: 20px;"></div>';
 
 	// intro
-	html += "<p>Before you can submit data to our metagenomics pipeline you must first load it into your private inbox on the MG-RAST server. To do so you can either use <a href='http://api.metagenomics.anl.gov/api.html' target=_blank>our API</a> or the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/upload.png'>upload</a> function on this page.</p><p>The inbox is a temporary storage location allowing you to gather all files required for submission. You can upload any fasta, fastq or SFF files and GSC MIxS compliant metadata files into your inbox. If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</p><p>For metadata please use our <a href='ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.6.xlsx'>Excel template</a>. Our tool <a href='?mgpage=metazen' target=_blank>MetaZen</a> can assist you in filling it out.</p><p>After manipulating the files in your inbox, you can <a href='?mgpage=submission'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>submit data</a> to our pipeline to create and/or add to existing projects. When the submission process has been successfully completed, MG-RAST ID's (\"Accession numbers\") will be automatically assigned and the data will be removed from your inbox.</p><p>You can monitor the progress of your submission at the <a href='?mgpage=pipeline'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
+	html += "<p>Data submission is a two step process. As the first step data is uploaded into your private inbox on the MG-RAST server, this area is write only and only accessible to you. From the inbox data can then be submitted. Use the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/upload.png'>upload</a> function or use <a href='http://api.metagenomics.anl.gov/api.html' target=_blank>our API</a> to upload your data.</p><p>Submission of multiple files, sharing of data or data publication require metadata. You can use <a href='ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.6.xlsx'>this Excel template</a> and/or a <a href='?mgpage=metazen' target=_blank>the MetaZen tool</a> to fill out the metadata spreadsheet for a study.</p><p>As the second step, <a href='?mgpage=submission'><img style='height: 16px; margin-right: 5px; position: relative;' src='images/forward.png'>data needs to be submitted</a> for processing. At submission time you either add data to an existing study (or project) or create a new study. Upon successful submission, data is removed from the inbox. You will be notified via email once your submission has completed processing, in addition you can monitor the progress of your submission at the <a href='?mgpage=pipeline'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
 
 	// shockbrowser space
 	html += "<div id='browser'></div>";

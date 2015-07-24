@@ -57,7 +57,7 @@
 	  <div class="separator">›</div>\
 	  <div>\
 	    <li class="active"></li>\
-	    <a href="#" class="active">submit<img src="Retina/images/settings.png"></a>\
+	    <a href="#" class="active">submit<img src="images/forward.png"></a>\
 	  </div>\
 	  <div class="separator">›</div>\
 	  <div>\
@@ -527,7 +527,7 @@
 		document.getElementById('submit_job_button').removeAttribute('disabled');	
 		if (data.hasOwnProperty('info')) {
 		    alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor it\'s progress.');
-		    window.location = "mgmain.html?mgpage=pipeline";
+		    window.location = "?mgpage=pipeline";
 		} else {
 		    alert("There was an error with your submission: "+data.ERROR);
 		}
