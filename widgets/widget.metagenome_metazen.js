@@ -77,7 +77,9 @@
 		stm.DataStore.cv = data;
 
 		// LOAD FROM API
-		stm.DataStore.cv.versions = [ stm.DataStore.cv.latest_version.biome ];
+		if (! stm.DataStore.cv.hasOwnProperty('versions')) {
+		    stm.DataStore.cv.versions = [ stm.DataStore.cv.latest_version.biome ];
+		}
 		// LOAD FROM API
 
 		stm.DataStore.cv.select.timezone = [ [ '', ''], [ '-12', '(UTC-12:00) U.S. Baker Island, Howland Island'], [ '-11', '(UTC-11:00) Hawaii, American Samoa'], [ '-10', '(UTC-10:00) Cook Islands'], [ '-9:30', '(UTC-9:30) Marguesas Islands'], [ '-9', '(UTC-9:00) Gambier Islands'], [ '-8', '(UTC-8:00) U.S. & Canada Pacific Time Zone'], [ '-7', '(UTC-7:00) U.S. & Canada Mountain Time Zone'], [ '-6', '(UTC-6:00) U.S. & Canada Central Time Zone'], [ '-5', '(UTC-5:00) U.S. Eastern Time Zone'], [ '-4:30', '(UTC-4:30) Venezuela'], [ '-4', '(UTC-4:00) Canada Atlantic Time Zone'], [ '-3:30', '(UTC-3:30) Newfoundland'], [ '-3', '(UTC-3:00) French Guiana, Falkland Islands'], [ '-2', '(UTC-2:00) South Georgia and the South Sandwich Islands'], [ '-1', '(UTC-1:00) Cape Verde'], [ '0', '(UTC+0:00) Ireland, London'], [ '1', '(UTC+1:00) Amsterdam, Berlin'], [ '2', '(UTC+2:00) Athens, Cairo, Johannesburg'], [ '3', '(UTC+3:00) Baghdad, Riyadh'], [ '3:30', '(UTC+3:30) Tehran'], [ '4', '(UTC+4:00) Dubai, Moscow'], [ '4:30', '(UTC+4:30) Kabul'], [ '5', '(UTC+5:00) Pakistan'], [ '5:30', '(UTC+5:30) Delhi, Mumbai'], [ '5:45', '(UTC+5:45) Nepal'], [ '6', '(UTC+6:00) Bangladesh'], [ '6:30', '(UTC+6:30) Cocos Islands'], [ '7', '(UTC+7:00) Bangkok, Hanoi'], [ '8', '(UTC+8:00) Beijing, Singapore'], [ '8:45', '(UTC+8:45) Eucla'], [ '9', '(UTC+9:00) Seoul, Tokyo'], [ '9:30', '(UTC+9:30) Adelaide'], [ '10', '(UTC+10:00) Sydney, Melbourne'], [ '10:30', '(UTC+10:30) New South Wales'], [ '11', '(UTC+11:00) Solomon Islands'], [ '11:30', '(UTC+11:30) Norfolk Island'], [ '12', '(UTC+12:00) U.S. Wake Island'], [ '12:45', '(UTC+12:45) Chatham Islands'], [ '13', '(UTC+13:00) Samoa'], [ '14', '(UTC+14:00) Line Islands' ] ];
@@ -118,7 +120,7 @@
 	// title
 	var html = '<h3>What does MetaZen do?</h3>\
 <p>Metadata (or data about the data) has become a necessity as the community generates large quantities of data sets.</p>\
-<p>Using community generated questionnaires we capture this metadata. MG-RAST has implemented the use of <a target="_blank" href="http://gensc.org/gc_wiki/index.php/MIxS">Minimum Information about any (X) Sequence (miXs)</a> developed by the <a target="_blank" href="http://gensc.org">Genomic Standards Consortium</a> (GSC).</p>\
+<p>Using community generated questionnaires we capture this metadata. MG-RAST has implemented the use of <a target="_blank" href="http://gensc.org/gc_wiki/index.php/MIxS">Minimum Information about any (X) Sequence</a> (miXs) developed by the <a target="_blank" href="http://gensc.org">Genomic Standards Consortium</a> (GSC).</p>\
 <p>The best form to capture metadata is via a simple spreadsheet with 12 mandatory terms. This tool is designed to help you fill out your metadata spreadsheet. The metadata you provide, helps us to analyze your data more accurately and helps make MG-RAST a more useful resource.</p>\
 <p>This tool will help you get started on completing your metadata spreadsheet by filling in any information that is common across all of your samples and/or libraries. This tool currently only allows users to enter one environmental package for your samples and all samples must have been sequenced by the same number of sequencing technologies with the same number of replicates. This information is entered in tab #2 below. If your project deviates from this convention, you must either produce multiple separate metadata spreadsheets or generate your spreadsheet and then edit the appropriate fields manually.</p>';
 
@@ -338,9 +340,9 @@
 	document.getElementById('projectname').innerHTML = projectOptions.join("");
 
 	// ontology trees
-	var biome = Retina.Renderer.create('tree', { target: document.getElementById('tree_biome'), data: stm.DataStore.biome, width: 0 }).render();	
-	var feature = Retina.Renderer.create('tree', { target: document.getElementById('tree_feature'), data: stm.DataStore.feature, width: 0 }).render();	
-	var material = Retina.Renderer.create('tree', { target: document.getElementById('tree_material'), data: stm.DataStore.material, width: 0 }).render();
+	var biome = widget.biome = Retina.Renderer.create('tree', { target: document.getElementById('tree_biome'), data: stm.DataStore.biome, width: 0 }).render();	
+	var feature = widget.feature = Retina.Renderer.create('tree', { target: document.getElementById('tree_feature'), data: stm.DataStore.feature, width: 0 }).render();	
+	var material = widget.material = Retina.Renderer.create('tree', { target: document.getElementById('tree_material'), data: stm.DataStore.material, width: 0 }).render();
 	
 	// typeaheads
 	for (var i=0; i<widget.typeaheads.length; i++) {
@@ -406,7 +408,37 @@
 	var widget = this;
 
 	widget.currentENVOversion = sel.options[sel.selectedIndex].value;
-	widget.showENVOversion();
+
+	var promise1 = jQuery.Deferred();
+	var promise2 = jQuery.Deferred();
+	var promise3 = jQuery.Deferred();
+	var promises = [ promise1, promise2, promise3 ];
+	
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=biome&version="+widget.currentENVOversion, function (data) {
+	    stm.DataStore.biome = data;
+	    promise1.resolve();
+	});
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=feature&version="+widget.currentENVOversion, function (data) {
+	    stm.DataStore.feature = data;
+	    promise2.resolve();
+	});
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=material&version="+widget.currentENVOversion, function (data) {
+	    stm.DataStore.material = data;
+	    promise3.resolve();
+	});
+
+	jQuery.when.apply(this, promises).then(function() {
+	    var widget = Retina.WidgetInstances.metagenome_metazen[1];
+	    widget.biome.settings.data = stm.DataStore.biome;
+	    widget.feature.settings.data = stm.DataStore.feature;
+	    widget.material.settings.data = stm.DataStore.material;
+	    widget.biome.render();
+	    widget.feature.render();
+	    widget.material.render();
+	    widget.showENVOversion();
+	});
+	
+	document.getElementById('envo_select_div').innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 24px;'> loading selected ENVO version</div>";
     };
 
     widget.showENVOselect = function () {
