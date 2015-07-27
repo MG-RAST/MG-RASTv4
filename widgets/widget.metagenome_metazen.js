@@ -83,15 +83,15 @@
 		// LOAD FROM API
 
 		stm.DataStore.cv.select.timezone = [ [ '', ''], [ '-12', '(UTC-12:00) U.S. Baker Island, Howland Island'], [ '-11', '(UTC-11:00) Hawaii, American Samoa'], [ '-10', '(UTC-10:00) Cook Islands'], [ '-9:30', '(UTC-9:30) Marguesas Islands'], [ '-9', '(UTC-9:00) Gambier Islands'], [ '-8', '(UTC-8:00) U.S. & Canada Pacific Time Zone'], [ '-7', '(UTC-7:00) U.S. & Canada Mountain Time Zone'], [ '-6', '(UTC-6:00) U.S. & Canada Central Time Zone'], [ '-5', '(UTC-5:00) U.S. Eastern Time Zone'], [ '-4:30', '(UTC-4:30) Venezuela'], [ '-4', '(UTC-4:00) Canada Atlantic Time Zone'], [ '-3:30', '(UTC-3:30) Newfoundland'], [ '-3', '(UTC-3:00) French Guiana, Falkland Islands'], [ '-2', '(UTC-2:00) South Georgia and the South Sandwich Islands'], [ '-1', '(UTC-1:00) Cape Verde'], [ '0', '(UTC+0:00) Ireland, London'], [ '1', '(UTC+1:00) Amsterdam, Berlin'], [ '2', '(UTC+2:00) Athens, Cairo, Johannesburg'], [ '3', '(UTC+3:00) Baghdad, Riyadh'], [ '3:30', '(UTC+3:30) Tehran'], [ '4', '(UTC+4:00) Dubai, Moscow'], [ '4:30', '(UTC+4:30) Kabul'], [ '5', '(UTC+5:00) Pakistan'], [ '5:30', '(UTC+5:30) Delhi, Mumbai'], [ '5:45', '(UTC+5:45) Nepal'], [ '6', '(UTC+6:00) Bangladesh'], [ '6:30', '(UTC+6:30) Cocos Islands'], [ '7', '(UTC+7:00) Bangkok, Hanoi'], [ '8', '(UTC+8:00) Beijing, Singapore'], [ '8:45', '(UTC+8:45) Eucla'], [ '9', '(UTC+9:00) Seoul, Tokyo'], [ '9:30', '(UTC+9:30) Adelaide'], [ '10', '(UTC+10:00) Sydney, Melbourne'], [ '10:30', '(UTC+10:30) New South Wales'], [ '11', '(UTC+11:00) Solomon Islands'], [ '11:30', '(UTC+11:30) Norfolk Island'], [ '12', '(UTC+12:00) U.S. Wake Island'], [ '12:45', '(UTC+12:45) Chatham Islands'], [ '13', '(UTC+13:00) Samoa'], [ '14', '(UTC+14:00) Line Islands' ] ];
-		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=biome&version="+stm.DataStore.cv.latest_version["biome"], function (data) {
+		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?label=biome&version="+stm.DataStore.cv.latest_version["biome"], function (data) {
 		    stm.DataStore.biome = data;
 		    promise1.resolve();
 		});
-		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=feature&version="+stm.DataStore.cv.latest_version["feature"], function (data) {
+		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?label=feature&version="+stm.DataStore.cv.latest_version["feature"], function (data) {
 		    stm.DataStore.feature = data;
 		    promise2.resolve();
 		});
-		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=material&version="+stm.DataStore.cv.latest_version["material"], function (data) {
+		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?label=material&version="+stm.DataStore.cv.latest_version["material"], function (data) {
 		    stm.DataStore.material = data;
 		    promise3.resolve();
 		});
@@ -414,15 +414,15 @@
 	var promise3 = jQuery.Deferred();
 	var promises = [ promise1, promise2, promise3 ];
 	
-	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=biome&version="+widget.currentENVOversion, function (data) {
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?label=biome&version="+widget.currentENVOversion, function (data) {
 	    stm.DataStore.biome = data;
 	    promise1.resolve();
 	});
-	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=feature&version="+widget.currentENVOversion, function (data) {
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?label=feature&version="+widget.currentENVOversion, function (data) {
 	    stm.DataStore.feature = data;
 	    promise2.resolve();
 	});
-	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=material&version="+widget.currentENVOversion, function (data) {
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?label=material&version="+widget.currentENVOversion, function (data) {
 	    stm.DataStore.material = data;
 	    promise3.resolve();
 	});

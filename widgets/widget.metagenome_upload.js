@@ -33,9 +33,9 @@
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><dl>';
-	sidehtml += '<dt>File Formats</dt><dd>You can upload any fasta, fastq or SFF files. For metadata please use <a href="ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.6.xlsx">MS Excel spreadsheets</a> with GSC MIxS compliant metadata. (Check out our <a href="?mgpage=metazen" target=_blank>Metazen tool</a> for assistance creating and filling them out). If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).</dd><br>';
-	sidehtml += '<dt>Metadata</dt><dd>We require metadata for submission of multiple files, sharing with colleagues or data publication. A good strategy is create the metadata file with metazen or copy an existing file. The metadata is not meant to perfectly describe your data, but allow others to discover it for this purpose we use controlled vocabularies as much as possible.</dd><br>';
-	sidehtml += '<dt>Studies and Projects</dt><dd>Older versions of MG-RAST used the term projects, we are now migrating to the use of the term study instead. They are identical otherwise.</dd>';
+	sidehtml += '<dt>'+widget.expander()+'File Formats</dt><dd style="display: none;">You can upload any fasta, fastq or SFF files. For metadata please use <a href="ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.6.xlsx">MS Excel spreadsheets</a> with GSC MIxS compliant metadata. (Check out our <a href="?mgpage=metazen" target=_blank>Metazen tool</a> for assistance creating and filling them out). If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).<br><br></dd>';
+	sidehtml += '<dt>'+widget.expander()+'Metadata</dt><dd style="display: none;">We require metadata for submission of multiple files, sharing with colleagues or data publication. A good strategy is create the metadata file with metazen or copy an existing file. The metadata is not meant to perfectly describe your data, but allow others to discover it for this purpose we use controlled vocabularies as much as possible.<br><br></dd>';
+	sidehtml += '<dt>'+widget.expander()+'Studies and Projects</dt><dd style="display: none;">Older versions of MG-RAST used the term projects, we are now migrating to the use of the term study instead. They are identical otherwise.</dd>';
 	sidehtml += '</dl>';
 
 	// running actions
@@ -411,7 +411,7 @@
 			    html += "<h5>Demultiplex</h5><div id='convert'><p>This is a valid barcode file. Select a file below to demultiplex:</p>";
 			    html += "<select style='width: 100%;'>";
 			    html += options;
-			    html += "</select><button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(this.previousSibling.options[this.previousSibling.selectedIndex].value, \""+node.id+"\");'>demultiplex</button></div>";
+			    html += "</select><button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(this.previousSibling.options[this.previousSibling.selectedIndex].value, \""+node.id+"\");'>demultiplex</button></div>";
 			}
 		    } else {
 			html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
@@ -423,10 +423,13 @@
 
 		// tell user detail info about the sequence
 		if (node.attributes.hasOwnProperty('stats_info')) {
+
+		    // demultiplex button
+		    html += "<button class='btn btn-mini' style='float: right;' onclick='alert(\"Please select the barcode file on the left to demultiplex\")'>demultiplex</button>";
 		    
 		    // fastq files can have the "join paired ends" option
 		    if (sequenceType == "fastq") {
-			html += "<button class='btn btn-small' style='float: right;' onclick='if(this.innerHTML==\"join paired ends\"){this.innerHTML=\"show sequence info\";this.previousSibling.textContent=\"Join Paired Ends\";}else{this.innerHTML=\"join paired ends\";this.previousSibling.textContent=\"Sequence Information\";}jQuery(\"#joinPairedEndsDiv\").toggle();jQuery(\"#seqInfoDiv\").toggle();'>join paired ends</button>";
+			html += "<button class='btn btn-mini' style='float: right;' onclick='if(this.innerHTML==\"join paired ends\"){this.innerHTML=\"show sequence info\";this.previousSibling.textContent=\"Join Paired Ends\";}else{this.innerHTML=\"join paired ends\";this.previousSibling.textContent=\"Sequence Information\";}jQuery(\"#joinPairedEndsDiv\").toggle();jQuery(\"#seqInfoDiv\").toggle();'>join paired ends</button>";
 		    }
 
 		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 20px;'>";
@@ -726,4 +729,9 @@
 	return task;
     };
 
+    // helper functions
+    widget.expander = function () {
+	return '<span onclick="if(this.getAttribute(\'exp\')==\'n\'){this.parentNode.nextSibling.style.display=\'\';this.innerHTML=\'▾\';this.setAttribute(\'exp\',\'y\');}else{this.parentNode.nextSibling.style.display=\'none\';this.innerHTML=\'▸\';this.setAttribute(\'exp\',\'n\');}" style="cursor: pointer; margin-right: 5px;" exp=n>▸</span>';
+    };
+    
 })();
