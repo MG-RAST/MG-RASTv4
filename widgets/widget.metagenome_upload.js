@@ -107,7 +107,7 @@
 	    							       "uploadRestrictions": [ { "expression": /\.rar$/, "text": 'Invalid archive type. Allowed types are gz, zip and bz2' },
 	    										       { "expression": /\.faa$/, "text": "MG-RAST cannot process protein sequences. Please use DNA only." }],
 	    							       "preUploadCustom": widget.fileSelectedForUpload,
-	    							       "presetFilters": { "type": "inbox" },
+	    							       "presetFilters": { "type": "inbox", "id": stm.user.id },
 	    							       "shockBase": RetinaConfig.shock_url});
 	    	widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.authHeader});
 	    }
