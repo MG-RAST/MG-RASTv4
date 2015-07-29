@@ -15,5 +15,6 @@ var RetinaConfig = {
     "metagenome_solr_url": "http://140.221.67.239:8983/solr/",
     "authentication": true,
     "v3BaseLoginUrl": "https://metagenomics.anl.gov/",
+    "v3CGIUrl": "http://metagenomics.anl.gov/metagenomics.cgi",
     "v3": true
 };
