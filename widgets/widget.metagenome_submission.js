@@ -82,6 +82,9 @@
 	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#submit' id='submitHeader'>5. submit</a></div><div id='submit' class='accordion-body collapse'></div></div>";
 	    
 	    html += "</div></form>";
+
+	    // move next button
+	    html += "<button class='btn btn-success pull-right btn-large' style='margin-top: 15px;' onclick='window.location=\"?mgpage=pipeline\";'>next <i class='icon icon-forward'></i></button>";
 	    
 	    content.innerHTML = html;
 	    

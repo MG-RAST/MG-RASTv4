@@ -74,6 +74,9 @@
 	// shockbrowser space
 	html += "<div id='browser'></div>";
 
+	// move next button
+	html += "<button class='btn btn-success pull-right btn-large' style='margin-top: 15px;' onclick='window.location=\"?mgpage=submission\";'>next <i class='icon icon-forward'></i></button>";
+
 	content.innerHTML = html;
 	
 	// check if we have a user
@@ -98,6 +101,7 @@
 	    							       "enableCompressedDownload": false,
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
+								       "calculateMD5": true,
 	    							       "user": stm.user,
 								       "blacklist": {
 									   "awe_stderr.txt": true,
