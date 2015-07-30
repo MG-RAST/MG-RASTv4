@@ -379,7 +379,7 @@
 	var xhr = new XMLHttpRequest();
 	xhr.p = prom;
 	var method = "GET";
-	var base_url = "data/MGRAST_MetaData_template_1.6.xlsx";
+	var base_url = "data/MGRAST_MetaData_template_1.7.xlsx";
 	if ("withCredentials" in xhr) {
 	    xhr.open(method, base_url, true);
 	} else if (typeof XDomainRequest != "undefined") {
@@ -447,8 +447,12 @@
 	var select = document.getElementById('envo_select_div');
 
 	var html = "<div class='input-append'><select>";
-	for (var i=0; i<stm.DataStore.cv.versions.length; i++) {
-	    html += "<option>"+stm.DataStore.cv.versions[i]+"</option>";
+	for (var i=0; i<stm.DataStore.cv.versions.biome.length; i++) {
+	    var sel = "";
+	    if (stm.DataStore.cv.versions.biome[i] == widget.currentENVOversion) {
+		sel = " selected=selected";
+	    }
+	    html += "<option"+sel+">"+stm.DataStore.cv.versions.biome[i]+"</option>";
 	}
 	html += "</select><button class='btn' onclick='Retina.WidgetInstances.metagenome_metazen[1].selectENVO(this.previousSibling);'>select</button></div>";
 	select.innerHTML = html;

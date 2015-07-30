@@ -369,7 +369,7 @@
 	var html = "";
 
 	if (RetinaConfig.v3) {
-	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='../metagenomics.cgi?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
+	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='"+RetinaConfig.v3CGIUrl+"?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 	} else {
 	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 	}
@@ -395,7 +395,7 @@
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
 
 		if (RetinaConfig.v3) {
-		    html += "<p>The result data is available for download on the <a href='../metagenomics.cgi?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='../metagenomics.cgi?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
+		    html += "<p>The result data is available for download on the <a href='"+RetinaConfig.v3CGIUrl+"?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='"+RetinaConfig.v3CGIUrl+"?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
 		} else {
 		    html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
 		}

@@ -33,7 +33,7 @@
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><dl>';
-	sidehtml += '<dt>'+widget.expander()+'File Formats</dt><dd style="display: none;">You can upload any fasta, fastq or SFF files. For metadata please use <a href="ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.6.xlsx">MS Excel spreadsheets</a> with GSC MIxS compliant metadata. (Check out our <a href="?mgpage=metazen" target=_blank>Metazen tool</a> for assistance creating and filling them out). If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).<br><br></dd>';
+	sidehtml += '<dt>'+widget.expander()+'File Formats</dt><dd style="display: none;">You can upload any fasta, fastq or SFF files. For metadata please use <a href="ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.7.xlsx">MS Excel spreadsheets</a> with GSC MIxS compliant metadata. (Check out our <a href="?mgpage=metazen" target=_blank>Metazen tool</a> for assistance creating and filling them out). If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).<br><br></dd>';
 	sidehtml += '<dt>'+widget.expander()+'Metadata</dt><dd style="display: none;">We require metadata for submission of multiple files, sharing with colleagues or data publication. A good strategy is create the metadata file with metazen or copy an existing file. The metadata is not meant to perfectly describe your data, but allow others to discover it for this purpose we use controlled vocabularies as much as possible.<br><br></dd>';
 	sidehtml += '<dt>'+widget.expander()+'Studies and Projects</dt><dd style="display: none;">Older versions of MG-RAST used the term projects, we are now migrating to the use of the term study instead. They are identical otherwise.</dd>';
 	sidehtml += '</dl>';
@@ -74,6 +74,9 @@
 	// shockbrowser space
 	html += "<div id='browser'></div>";
 
+	// move next button
+	html += "<button class='btn btn-success pull-right btn-large' style='margin-top: 15px;' onclick='window.location=\"?mgpage=submission\";'>next <i class='icon icon-forward'></i></button>";
+
 	content.innerHTML = html;
 	
 	// check if we have a user
@@ -83,7 +86,7 @@
 	    } else {
 	    	widget.browser = Retina.Widget.create("shockbrowse", { "target": document.getElementById("browser"),
 	    							       "width": 900,
-	    							       "height": 500,
+	    							       "height": 520,
 	    							       "enableUpload": true,
 	    							       "customPreview": widget.filePreview,
 	    							       "fileUploadCompletedCallback": widget.fileCompleted,
@@ -98,6 +101,7 @@
 	    							       "enableCompressedDownload": false,
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
+								       "calculateMD5": true,
 	    							       "user": stm.user,
 								       "blacklist": {
 									   "awe_stderr.txt": true,
@@ -172,6 +176,14 @@
 		this.prom.resolve(html, allow);
 	    };
 	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size));
+	} else if (fileType == "archive") {
+	    var containedType = widget.detectFiletype(selectedFile.name.substr(0, selectedFile.name.lastIndexOf(".")));
+	    if (containedType.fileType == "") {
+		var html = '<div class="alert alert-warning" style="text-align: left;"><strong>Compressed file without file ending</strong><br> You can use this file, but the filename does not contain the filetype suffix. If the archive does not contain the name, you might not be able to use it for processing.</div>';
+		promise.resolve(html, true);
+	    } else {
+		return promise.resolve("", true);
+	    }
 	} else if (fileType == "sequence") {
 
 	    if (selectedFile.size < (1024 * 1024)) {
@@ -697,7 +709,7 @@
 	if (data && data.length > 0) {
 	    html = "<table class='table table-condensed' style='font-size: 12px;'><tr><th>file</th><th>action</th><th>status</th><th></th></tr>";
 	    for (var i=0; i<data.length; i++) {
-		var fn = Retina.keys(data[i].tasks[0].inputs)[0];
+		var fn = data[i].tasks[0].inputs[0].filename;
 		var task = data[i].tasks[0].cmd.description;
 		var colors = { "in-progress": "green",
 			       "suspend": "red",
