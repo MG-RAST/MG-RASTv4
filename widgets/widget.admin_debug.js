@@ -459,9 +459,9 @@
 
 	for (var i=0; i<data.length; i++) {
 	    widget.currentIDs.push(data[i].info.userattr.id);
-	    result_data.push( { "Job ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.user+"\", \""+data[i].info.userattr.job_id+"\");' style='cursor: pointer;'>"+data[i].info.name+"</a>",
-				"MG-ID": data[i].info.userattr.id,
-				"name": data[i].info.userattr.name,
+	    result_data.push( { "Job ID": "<a onclick='window.open(\""+RetinaConfig['awe_url']+"/monitor/main.html?page=monitor&jobdetail="+data[i].id+"\")' style='cursor: pointer;'>"+data[i].info.name+"</a>",
+				"MG-ID": "<a onclick='Retina.WidgetInstances.admin_debug[1].showJobDetails(\""+data[i].info.user+"\", \""+data[i].info.userattr.job_id+"\");' style='cursor: pointer;'>"+data[i].info.userattr.id+"</a>",
+				"name": data[i].info.userattr.name+"</a>",
 				"project": data[i].info.project,
 				"project ID": data[i].info.userattr.project_id,
 				"size": data[i].info.userattr.bp_count ? parseInt(data[i].info.userattr.bp_count).baseSize() : "-",
