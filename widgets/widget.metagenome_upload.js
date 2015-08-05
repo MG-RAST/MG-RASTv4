@@ -306,7 +306,7 @@
 	return { fileType: filetype, sequenceType: sequenceType };
     };
 
-    widget.metadataValidationResult = function (data) {
+    widget.metadataValidationResult = function (data, nodeid) {
 	var widget = this;
 
 	var resultDiv = document.getElementById('metadataValidation');
@@ -316,7 +316,25 @@
 	    } else {
 		var txt = data.message.replace(/\[error\]/, "");
 		var messages = (data.hasOwnProperty('errors') && data.errors.length) ? "<br>"+data.errors.join("<br>") : "";
-		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata</b><br>'+txt+messages+'</div>';
+//		jQuery.ajax(RetinaConfig['mgrast_api']+"/metadata/google/"+nodeid, {
+			// success: function(data){
+			//     var resultDiv = document.getElementById('metadataValidation');
+			//     if (resultDiv) {
+			// 	resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata</b><br>'+txt+messages+'</div><div style="text-align: center;"><button class="btn btn-primary" onclick="window.open(\'https://docs.google.com/spreadsheets/d/1lpLH6mStkgm81cTM5UoDrJpsLQoj9Camy0xMGyVB5bQ/edit?usp=sharing&newcopy=true\');">edit in google sheets</button></div>';
+			//     }
+			// },
+			// error: function(jqXHR, error){
+			//     var resultDiv = document.getElementById('metadataValidation');
+			//     if (resultDiv) {
+				resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata</b><br>'+txt+messages+'</div>';
+		    // 	    }
+		    // 	    console.log(error);
+		    // 	    console.log(jqXHR);
+		    // 	},
+		    // 	crossDomain: true,
+		    // 	headers: stm.authHeader,
+		    // 	type: "GET"
+		    // });
 	    }
 	}
     };
@@ -368,7 +386,7 @@
 		jQuery.ajax(url, {
 		    data: { "node_id": node.id },
 		    success: function(data){
-			Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data);
+			Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data, node.id);
 		    },
 		    error: function(jqXHR, error){
 			console.log(error);
@@ -506,23 +524,7 @@
 
 		    html += "</div>";
 		} else {
-		    html += "</h5>";
-		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
-		    widget.inboxData.push({ "info": { "pipeline": "seq stats" } });
-		    jQuery.ajax(url, {
-			success: function(data){
-			    Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
-			    Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
-			    Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
-			},
-			error: function(jqXHR, error){
-			    console.log(error);
-			    console.log(jqXHR);
-			},
-			crossDomain: true,
-			headers: stm.authHeader,
-			type: "GET"
-		    });
+		    html += "</h5><div class='alert alert-info'>calculation of sequence stats in progress <button class='btn btn-small' title='refresh' style='margin-left: 15px;' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.updateData();'><img src='Retina/images/loop.png' style='width: 12px; margin-top: -2px;'></button></div>";
 		}
 	    }
 	    
@@ -558,9 +560,29 @@
 	    contentType: false,
 	    processData: false,
 	    data: fd,
-	    success: function(data){
-		Retina.WidgetInstances.metagenome_upload[1].browser.preserveDetail = true;
-		Retina.WidgetInstances.metagenome_upload[1].browser.updateData();
+	    success: function(d){
+		var widget = Retina.WidgetInstances.metagenome_upload[1];
+		if (widget.detectFiletype(d.data.file.name).fileType == "sequence") {
+		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+d.data.id;
+		    jQuery.ajax(url, {
+			success: function(data){
+			    var widget = Retina.WidgetInstances.metagenome_upload[1];
+			    widget.getRunningInboxActions();
+			    widget.browser.preserveDetail = true;
+			    widget.browser.updateData();
+			},
+			error: function(jqXHR, error){
+			    console.log(error);
+			    console.log(jqXHR);
+			},
+			crossDomain: true,
+			headers: stm.authHeader,
+			type: "GET"
+		    });
+		} else {
+		    widget.browser.preserveDetail = true;
+		    widget.browser.updateData();
+		}
 	    },
 	    error: function(jqXHR, error){
 		console.log(error);
