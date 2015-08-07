@@ -115,6 +115,11 @@
 	    							       "shockBase": RetinaConfig.shock_url});
 	    	widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.authHeader});
 	    }
+
+	    // check if we have enough space to show the sidebar
+	    widget.checkScreenWidth();
+	    window.onresize = Retina.WidgetInstances.metagenome_upload[1].checkScreenWidth;
+
 	} else {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
 	}
@@ -766,6 +771,33 @@
     // helper functions
     widget.expander = function () {
 	return '<span onclick="if(this.getAttribute(\'exp\')==\'n\'){this.parentNode.nextSibling.style.display=\'\';this.innerHTML=\'▾\';this.setAttribute(\'exp\',\'y\');}else{this.parentNode.nextSibling.style.display=\'none\';this.innerHTML=\'▸\';this.setAttribute(\'exp\',\'n\');}" style="cursor: pointer; margin-right: 5px;" exp=n>▸</span>';
+    };
+
+    widget.checkScreenWidth = function () {
+	var widget = this;
+
+	var w = jQuery(window).width();
+	var sb = document.getElementById('sidebarResizer');
+	var c = document.getElementById('content');
+	if (w < 1200) {
+	    c.style.paddingLeft = "10px";
+	    c.className = "span9";
+	    if (sb.getAttribute('status') == "on") {
+		sb.click();
+	    }
+	} else if (w < 1520) {
+	    c.style.paddingLeft = "10px";
+	    c.className = "span9";
+	    if (sb.getAttribute('status') == "off") {
+		sb.click();
+	    }
+	} else {
+	    c.style.paddingLeft = "0px";
+	    c.className = "span7 offset1";
+	    if (sb.getAttribute('status') == "off") {
+		sb.click();
+	    }
+	}
     };
     
 })();
