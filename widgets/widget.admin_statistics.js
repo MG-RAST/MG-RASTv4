@@ -265,15 +265,20 @@
 	// display unfinished jobs
 	html += "<h4>ten oldest unfinished jobs</h4>";
 	unfinishedJobs.sort(Retina.propSort('submittime'));
-	html += "<table class='table table-striped table-condensed' style='width: 350px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th></tr>";
+	html += "<table class='table table-striped table-condensed' style='width: 550px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th><th>current tasks</th></tr>";
 	var iMax = 10;
+	var template = stm.DataStore.jobtemplate[1];
 	for (var i=0; i<unfinishedJobs.length; i++) {
 	    if (i == iMax) {
 		break;
 	    }
 	    var t = new Date();
 	    var daysInQueue = parseInt((t.getTime() - Date.parse(unfinishedJobs[i].submittime)) / (1000 * 60 * 60 * 24));
-	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td>"+unfinishedJobs[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td></tr>";
+	    var ts = [];
+	    for (var j=0; j<unfinishedJobs[i].task.length; j++) {
+		ts.push(template.tasks[unfinishedJobs[i].task[j]].cmd.description);
+	    }
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td>"+unfinishedJobs[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
 	}
 	html += "</table>";
 
