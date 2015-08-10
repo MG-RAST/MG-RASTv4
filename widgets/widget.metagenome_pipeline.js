@@ -105,9 +105,49 @@
 	  </div>\
 	</div><div style="clear: both; height: 20px;"></div>';
 	    
+	    // show pending submissions
+	    html += "<h4>Queued Submissions</h4>";
+	    html += "<div id='running_submissions'><img src='Retina/images/waiting.gif' style='text-align: center; width: 24px; margin-bottom: 10px; margin-top: 10px;'></div>";
+
+	    // show running jobs
+	    html += "<h4>Jobs in Progress</h4>";
 	    html += "<div id='jobtable'></div>";
 
 	    content.innerHTML = html;
+
+	    // load submissions in progress
+	    jQuery.ajax(RetinaConfig['mgrast_api']+"/submission/list", {
+		success: function(data){
+		    var showSubs = [];
+		    for (var i=0; i<data.submissions.length; i++) {
+			var s = data.submissions[i];
+			if (s.status !== 'deleted' && s.status !== 'completed') {
+			    showSubs.push(s);
+			}
+		    }
+		    var html = "";
+		    if (showSubs.length) {
+			html = "<table class='table table-condensed'><tr><th>submission time</th><th>status</th></tr>";
+			for (var i=0; i<showSubs.length; i++) {
+			    var action = "";
+			    if (showSubs[i].status == "suspend") {
+				action = " <button class='btn btn-mini' onclick='alert(\"Please report this error to mg-rast@rt.mcs.anl.gov and paste the submission id: "+showSubs[i].id+"\");'>?</button>";
+			    }
+			    html += "<tr><td>"+showSubs[i].timestamp+"</td><td>"+showSubs[i].status+action+"</td></tr>";
+			}
+			html += "</table>";
+		    } else {
+			html = "<p>You have no submissions waiting to be queued in the pipeline.</p>";
+		    }
+		    document.getElementById('running_submissions').innerHTML = html;
+		},
+		error: function(jqXHR, error){
+		    document.getElementById('running_submissions').innerHTML = "<div class='alert alert-error'>an error occurred contacting the server</div>";
+		},
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "GET"
+	    });
 
 	    // create the job table
 	    var job_columns = [ "job", "mgid", "stage", "status", "tasks" ];

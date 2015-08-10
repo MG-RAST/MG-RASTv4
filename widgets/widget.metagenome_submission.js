@@ -82,9 +82,6 @@
 	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#submit' id='submitHeader'>5. submit</a></div><div id='submit' class='accordion-body collapse'></div></div>";
 	    
 	    html += "</div></form>";
-
-	    // move next button
-	    html += "<button class='btn btn-success pull-right btn-large' style='margin-top: 15px;' onclick='window.location=\"?mgpage=pipeline\";'>next <i class='icon icon-forward'></i></button>";
 	    
 	    content.innerHTML = html;
 	    
@@ -173,6 +170,7 @@
 		}
 	    }
 	    widget.validSteps.project = true;
+	    document.getElementById('filesHeader').click();
 	}
 	widget.checkSubmittable();
     };
@@ -183,7 +181,7 @@
 
 	var md_file_opts = [];
 	for (var i=0; i<widget.inboxData.length; i++) {
-	    if (widget.inboxData[i].filename.match(/\.xlsx$/) || widget.inboxData[i].filename.match(/\.xls$/)) {
+	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'metadata') {
 		md_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
 	    }
 	}
@@ -206,6 +204,7 @@
 	} else {
 	    widget.selectedMetadata = metadata;
 	    widget.validSteps.metadata = true;
+	    document.getElementById('projectHeader').click();
 	}
 	widget.checkSubmittable();
     };
@@ -216,7 +215,7 @@
 
 	var seq_file_opts = [];
 	for (var i=0; i<widget.inboxData.length; i++) {
-	    if (widget.inboxData[i].filename.match(/(\.fastq|\.fasta|\.fna|\.faa|\.fq)$/)) {
+	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'sequence') {
 		seq_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
 	    }
 	}
@@ -224,7 +223,9 @@
 
 	var html = "<p>Sequence files from your inbox will appear here. Please note, there is a delay between upload completion and appearing in this table due to sequence statistics calculations. This may be on the order of seconds to hours depending on file size.</p>";
 
-	html += "<select name='inputfiles' id='inputfiles' multiple style='margin-left: 50px; width: 500px; height: 200px;'>"+seq_file_opts+"</select><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectFiles();' style='margin-left: 20px;'>select</button>";
+	html += "<div id='fileSelect'><select name='inputfiles' id='inputfiles' multiple style='margin-left: 50px; width: 500px; height: 200px;'>"+seq_file_opts+"</select><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].selectFiles();' style='margin-left: 20px;'>select</button></div>";
+
+	html += "<div id='selectedFiles' style='display: none;'><div></div><button class='btn' onclick='Retina.WidgetInstances.metagenome_submission[1].unselectFiles();'>unselect</button></div>";
 
 	html += "<div style='height: 20px;'></div>";
 
@@ -264,7 +265,35 @@
 		widget.displayOptions('fastq');
 		widget.validSteps.files = true;	
 	    }
+	    if (widget.validSteps.files) {
+		var html = "<p><b>You have selected the following sequence files:</b></p><ul>";
+		for (var i=0; i<files.length; i++) {
+		    html += "<li>"+files[i].name+"</li>";
+		}
+		html += "</ul>";
+		document.getElementById('selectedFiles').firstChild.innerHTML = html;
+		document.getElementById('fileSelect').style.display = "none";
+		document.getElementById('selectedFiles').style.display = "";
+		document.getElementById('optionsHeader').click();
+	    }
 	}
+	widget.checkSubmittable();
+    };
+
+    widget.unselectFiles = function () {
+	var widget = Retina.WidgetInstances.metagenome_submission[1];
+
+	var inp = document.getElementById('inputfiles');
+	for (var i=0; i<inp.options.length; i++) {
+	    inp.options[i].selected = false;
+	}
+	inp.selectedIndex = null;
+	widget.selectedSequenceFiles = [];
+	widget.validSteps.files = false;
+
+	document.getElementById('fileSelect').style.display = "";
+	document.getElementById('selectedFiles').style.display = "none";
+
 	widget.checkSubmittable();
     };
 
@@ -449,7 +478,7 @@
 	}
 	
 	if (valid) {
-	    document.getElementById('submitHeader').parentNode.className = "accordion-heading stage completedstage";
+	    document.getElementById('submitHeader').click();
 	    document.getElementById('submit_job_button').removeAttribute('disabled');
 	} else {
 	    document.getElementById('submitHeader').parentNode.className = "accordion-heading stage";
@@ -536,6 +565,7 @@
 		}
 	    },
 	    error: function(jqXHR, error){
+		alert('There was a technichal error with you submission');
 		console.log(error);
 		console.log(jqXHR);
 	    },

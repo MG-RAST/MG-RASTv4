@@ -304,7 +304,7 @@
 	    filetype = "excel";
 	} else if (fn.match(/json$/)) {
 	    filetype = "JSON";
-	} else if (fn.match(/txt$/)) {
+	} else if (fn.match(/txt|barcode$/)) {
 	    filetype = "text";
 	}
 	
@@ -350,6 +350,11 @@
 	var html = "<h5 style='margin-bottom: 0px;'>File Information</h5>";
 
 	var node = params.node;
+
+	if (! node) {
+	    console.log(params);
+	}
+
 	var fn = node.file.name;
 
 	html += "<table style='font-size: 12px;'>";
@@ -385,22 +390,28 @@
 		}
 	    }
 	    if (filetype == "excel") {
-		// check if this is valid metadata
-		html += '<div id="metadataValidation" style="padding-top: 10px;"><div class="alert alert-info"><img src="Retina/images/waiting.gif" style="margin-right: 10px; width: 16px;"> validating metadata...</div></div>';
-		var url = RetinaConfig.mgrast_api+'/metadata/validate';
-		jQuery.ajax(url, {
-		    data: { "node_id": node.id },
-		    success: function(data){
-			Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data, node.id);
-		    },
-		    error: function(jqXHR, error){
-			console.log(error);
-			console.log(jqXHR);
-		    },
-		    crossDomain: true,
-		    headers: stm.authHeader,
-		    type: "POST"
-		});
+		// check if this file has already been validated
+		if (node.attributes.hasOwnProperty('data_type') && node.attributes.data_type == 'metadata') {
+		    html += '<div class="alert alert-success">This file contains valid metadata.</div>';
+		} else {
+
+		    // check if this is valid metadata
+		    html += '<div id="metadataValidation" style="padding-top: 10px;"><div class="alert alert-info"><img src="Retina/images/waiting.gif" style="margin-right: 10px; width: 16px;"> validating metadata...</div></div>';
+		    var url = RetinaConfig.mgrast_api+'/metadata/validate';
+		    jQuery.ajax(url, {
+			data: { "node_id": node.id },
+			success: function(data){
+			    Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data, node.id);
+			},
+			error: function(jqXHR, error){
+			    console.log(error);
+			    console.log(jqXHR);
+			},
+			crossDomain: true,
+			headers: stm.authHeader,
+			type: "POST"
+		    });
+		}
 	    }
 	    if (filetype == "text") {
 		// check if this is a barcode file

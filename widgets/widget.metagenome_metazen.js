@@ -37,7 +37,7 @@
 	    return;
 	}
 
-	if (! stm.DataStore.hasOwnProperty('cv')) {
+	if (! widget.excelWorkbook) {
 	    // jQuery.getJSON("DATA/session_metazen.dump", function (data) {
 	    // 	stm.DataStore = data;
 	    // 	Retina.WidgetInstances.metagenome_metazen[1].display();
@@ -82,7 +82,7 @@
 		}
 		// LOAD FROM API
 
-		stm.DataStore.cv.select.timezone = [ [ '', ''], [ '-12', '(UTC-12:00) U.S. Baker Island, Howland Island'], [ '-11', '(UTC-11:00) Hawaii, American Samoa'], [ '-10', '(UTC-10:00) Cook Islands'], [ '-9:30', '(UTC-9:30) Marguesas Islands'], [ '-9', '(UTC-9:00) Gambier Islands'], [ '-8', '(UTC-8:00) U.S. & Canada Pacific Time Zone'], [ '-7', '(UTC-7:00) U.S. & Canada Mountain Time Zone'], [ '-6', '(UTC-6:00) U.S. & Canada Central Time Zone'], [ '-5', '(UTC-5:00) U.S. Eastern Time Zone'], [ '-4:30', '(UTC-4:30) Venezuela'], [ '-4', '(UTC-4:00) Canada Atlantic Time Zone'], [ '-3:30', '(UTC-3:30) Newfoundland'], [ '-3', '(UTC-3:00) French Guiana, Falkland Islands'], [ '-2', '(UTC-2:00) South Georgia and the South Sandwich Islands'], [ '-1', '(UTC-1:00) Cape Verde'], [ '0', '(UTC+0:00) Ireland, London'], [ '1', '(UTC+1:00) Amsterdam, Berlin'], [ '2', '(UTC+2:00) Athens, Cairo, Johannesburg'], [ '3', '(UTC+3:00) Baghdad, Riyadh'], [ '3:30', '(UTC+3:30) Tehran'], [ '4', '(UTC+4:00) Dubai, Moscow'], [ '4:30', '(UTC+4:30) Kabul'], [ '5', '(UTC+5:00) Pakistan'], [ '5:30', '(UTC+5:30) Delhi, Mumbai'], [ '5:45', '(UTC+5:45) Nepal'], [ '6', '(UTC+6:00) Bangladesh'], [ '6:30', '(UTC+6:30) Cocos Islands'], [ '7', '(UTC+7:00) Bangkok, Hanoi'], [ '8', '(UTC+8:00) Beijing, Singapore'], [ '8:45', '(UTC+8:45) Eucla'], [ '9', '(UTC+9:00) Seoul, Tokyo'], [ '9:30', '(UTC+9:30) Adelaide'], [ '10', '(UTC+10:00) Sydney, Melbourne'], [ '10:30', '(UTC+10:30) New South Wales'], [ '11', '(UTC+11:00) Solomon Islands'], [ '11:30', '(UTC+11:30) Norfolk Island'], [ '12', '(UTC+12:00) U.S. Wake Island'], [ '12:45', '(UTC+12:45) Chatham Islands'], [ '13', '(UTC+13:00) Samoa'], [ '14', '(UTC+14:00) Line Islands' ] ];
+		stm.DataStore.cv.select.timezone = [ [ '', ''], [ 'UTC-12:00', '(UTC-12:00) U.S. Baker Island, Howland Island'], [ 'UTC-11:00', '(UTC-11:00) Hawaii, American Samoa'], [ 'UTC-10:00', '(UTC-10:00) Cook Islands'], [ 'UTC-9:30', '(UTC-9:30) Marguesas Islands'], [ 'UTC-9:00', '(UTC-9:00) Gambier Islands'], [ 'UTC-8:00', '(UTC-8:00) U.S. & Canada Pacific Time Zone'], [ 'UTC-7:00', '(UTC-7:00) U.S. & Canada Mountain Time Zone'], [ 'UTC-6:00', '(UTC-6:00) U.S. & Canada Central Time Zone'], [ 'UTC-5:00', '(UTC-5:00) U.S. Eastern Time Zone'], [ 'UTC-4:30', '(UTC-4:30) Venezuela'], [ 'UTC-4:00', '(UTC-4:00) Canada Atlantic Time Zone'], [ 'UTC-3:30', '(UTC-3:30) Newfoundland'], [ 'UTC-3:00', '(UTC-3:00) French Guiana, Falkland Islands'], [ 'UTC-2:00', '(UTC-2:00) South Georgia and the South Sandwich Islands'], [ 'UTC-1:00', '(UTC-1:00) Cape Verde'], [ 'UTC+0:00', '(UTC+0:00) Ireland, London'], [ 'UTC+1:00', '(UTC+1:00) Amsterdam, Berlin'], [ 'UTC+2:00', '(UTC+2:00) Athens, Cairo, Johannesburg'], [ 'UTC+3:00', '(UTC+3:00) Baghdad, Riyadh'], [ 'UTC+3:30', '(UTC+3:30) Tehran'], [ 'UTC+4:00', '(UTC+4:00) Dubai, Moscow'], [ 'UTC+4:30', '(UTC+4:30) Kabul'], [ 'UTC+5:00', '(UTC+5:00) Pakistan'], [ 'UTC+5:30', '(UTC+5:30) Delhi, Mumbai'], [ 'UTC+5:45', '(UTC+5:45) Nepal'], [ 'UTC+6:00', '(UTC+6:00) Bangladesh'], [ 'UTC+6:30', '(UTC+6:30) Cocos Islands'], [ 'UTC+7:00', '(UTC+7:00) Bangkok, Hanoi'], [ 'UTC+8:00', '(UTC+8:00) Beijing, Singapore'], [ 'UTC+8:45', '(UTC+8:45) Eucla'], [ 'UTC+9:00', '(UTC+9:00) Seoul, Tokyo'], [ 'UTC+9:30', '(UTC+9:30) Adelaide'], [ 'UTC+10:00', '(UTC+10:00) Sydney, Melbourne'], [ 'UTC+10:30', '(UTC+10:30) New South Wales'], [ 'UTC+11:00', '(UTC+11:00) Solomon Islands'], [ 'UTC+11:30', '(UTC+11:30) Norfolk Island'], [ 'UTC+12:00', '(UTC+12:00) U.S. Wake Island'], [ 'UTC+12:45', '(UTC+12:45) Chatham Islands'], [ 'UTC+13:00', '(UTC+13:00) Samoa'], [ 'UTC+14:00', '(UTC+14:00) Line Islands' ] ];
 		jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=biome&version="+stm.DataStore.cv.latest_version["biome"], function (data) {
 		    stm.DataStore.biome = data;
 		    promise1.resolve();
@@ -542,7 +542,7 @@
 	html += '\
 <table style="margin-top: 25px;">\
 <tr style="font-weight: bold; vertical-align: top;"><td># of samples</td><td>environmental package</td><td># of shotgun metagenome libraries per sample</td><td># of meta transcriptome libraries per sample</td><td># of amplicon metagenome (16S) libraries per sample</td></tr>\
-<tr><td style="padding-right: 15px;"><input type="text" style="width: 100px;" id="numSamples"></td><td style="padding-right: 15px;"><select id="envPackage"><option>'+stm.DataStore.cv.select.env_package.join("</option><option>")+'</option></select></td><td style="padding-right: 15px;"><input type="text" style="width: 100px;" id="numShotgun"></td><td style="padding-right: 15px;"><input type="text" style="width: 100px;" id="numMetatranscriptome"></td><td><input type="text" style="width: 100px;" id="numAmplicon"></td></tr>\
+<tr><td style="padding-right: 15px;"><input type="text" style="width: 100px;" id="numSamples"></td><td style="padding-right: 15px;"><select id="envPackage"><option selected=selected>'+stm.DataStore.cv.select.env_package.join("</option><option>")+'</option></select></td><td style="padding-right: 15px;"><input type="text" style="width: 100px;" id="numShotgun"></td><td style="padding-right: 15px;"><input type="text" style="width: 100px;" id="numMetatranscriptome"></td><td><input type="text" style="width: 100px;" id="numAmplicon"></td></tr>\
 </table>';
 
 	html += "<button class='btn' onclick='Retina.WidgetInstances.metagenome_metazen[1].selectSampleSet();' style='width: 100%; margin-top: 15px;'>show library input forms</button>";
@@ -935,20 +935,9 @@
 	    }
 	}
 
-	// fill in the sample sheet
-	var numSamples = document.getElementById('numSamples').value || 1;
-	numSamples = parseInt(numSamples);
-	for (var i=0; i<numSamples; i++) {
-	    wb.setCell(2,0,i+2,"Sample"+(i+1));
-	    for (var h=0; h<wb.worksheets[2].maxCol; h++) {
-		if (data.sample.hasOwnProperty(wb.worksheets[2].data[0][h].value)) {
-		    wb.setCell(2, h, 2, data.sample[wb.worksheets[2].data[0][h].value]);
-		}
-	    }
-	}
-	
 	// check env package
 	var ep = document.getElementById('envPackage').options[document.getElementById('envPackage').selectedIndex].value;
+	data.sample.env_package = ep;
 	for (var i=0; i<wb.worksheets.length; i++) {
 	    if (wb.worksheets[i].name.match(/^ep /)) {
 		if (wb.worksheets[i].name == "ep "+ep) {
@@ -958,6 +947,18 @@
 		} else {
 		    wb.removeWorksheet(i);
 		    i--;
+		}
+	    }
+	}
+
+	// fill in the sample sheet
+	var numSamples = document.getElementById('numSamples').value || 1;
+	numSamples = parseInt(numSamples);
+	for (var i=0; i<numSamples; i++) {
+	    wb.setCell(2,0,i+2,"Sample"+(i+1));
+	    for (var h=0; h<wb.worksheets[2].maxCol; h++) {
+		if (data.sample.hasOwnProperty(wb.worksheets[2].data[0][h].value)) {
+		    wb.setCell(2, h, 2, data.sample[wb.worksheets[2].data[0][h].value]);
 		}
 	    }
 	}
