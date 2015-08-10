@@ -435,6 +435,7 @@
 		    }
 		    if (validBarcode) {
 			var options = "";
+			var indexOptions = "";
 			var alreadyDemultiplexed = false;
 			for (var i=0; i<widget.browser.fileList.length; i++) {
 			    var fn = widget.browser.fileList[i].file.name;
@@ -443,6 +444,7 @@
 				if (fn.substr(0, fn.lastIndexOf(".")) == node.file.name.substr(0, node.file.name.lastIndexOf("."))) {
 				    sel = " selected";
 				}
+				indexOptions += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
 				options += "<option value='"+widget.browser.fileList[i].id+"'"+sel+">"+fn+"</option>";
 				fn = fn.replace(/\.fastq$/, "").replace(/\.fq$/, "");
 				if (barcodes.hasOwnProperty(fn)) {
@@ -455,9 +457,15 @@
 			    html += "<div class='alert alert-info' style='margin-top: 20px;'>The demultiplex files of these barcodes have already been generated.</div>";
 			} else {
 			    html += "<h5>Demultiplex</h5><div id='convert'><p>This is a valid barcode file. Select a file below to demultiplex:</p>";
-			    html += "<select style='width: 100%;'>";
+			    html += "<select id='demultiplexFile' style='width: 100%;'>";
 			    html += options;
-			    html += "</select><button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(this.previousSibling.options[this.previousSibling.selectedIndex].value, \""+node.id+"\");'>demultiplex</button></div>";
+			    html += "</select>";
+			    html += "<p>select index file if applicable</p>";
+			    html += "<select id='demultiplexIndex' style='width: 100%;'><option>-</option>";
+			    html += indexOptions;
+			    html += "</select>";
+			    html += "barcodes are reverse complements <input type='checkbox' id='demultiplexIsReverseComplement' style='margin-top: -2px;'><div style='height: 10px;'></div>";
+			    html += "<button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(\""+node.id+"\");'>demultiplex</button></div>";
 			}
 		    } else {
 			html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
@@ -519,8 +527,10 @@
 			opts[i] = "<option value='"+opts[i].id+"'"+sel+">"+opts[i].file.name+"</option>";
 		    }
 		    opts = opts.join("\n");
-		    html += "<span style='position: relative; bottom: 4px;'>file to join</span><select id='jpeFileB' style='font-size: 12px; height: 25px; margin-left: 10px; width: 360px;'>"+opts+"</select><br>";
-		    html += "<span style='position: relative; bottom: 4px;'>Barcode file (optional)</span><select id='jpeBarcode' style='font-size: 12px; height: 25px; margin-left: 10px; width: 295px;'>"+txtOpts+"</select><br>";
+		    html += "<span style='position: relative; bottom: 4px;'>file to join</span><select id='jpeFileB' style='font-size: 12px; height: 25px; margin-left: 10px; width: 350px;'>"+opts+"</select><br>";
+		    html += "<span style='position: relative; bottom: 4px;'>index file</span><select id='jpeIndexFile' style='font-size: 12px; height: 25px; margin-left: 14px; width: 350px;'>"+opts+"</select><br>";
+		    html += "<span style='position: relative; bottom: 4px;'>Barcode file (optional)</span><select id='jpeBarcode' style='font-size: 12px; height: 25px; margin-left: 10px; width: 286px;'>"+txtOpts+"</select><br>";
+		    html += "barcodes are reverse complements <input type='checkbox' id='jpeIsReverseComplement' style='margin-top: -2px;'><div style='height: 10px;'></div>";
 		    html += "remove non-overlapping paired-ends <input type='checkbox' checked='checked' id='jpeRetain' style='margin-top: -2px;'><div style='height: 10px;'></div>";
 		    html += "<span style='position: relative; bottom: 4px;'>Output file name</span><div class='input-append'><input type='text' placeholder='output file name' id='jpeOutfile' style='font-size: 12px; height: 16px; margin-left: 3px;' value='"+(partial.length > 1 ? partial + ".fastq" : "")+"'>";
 		    html += "<button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].joinPairedEnds();'>join paired ends</button></div>";
@@ -633,14 +643,19 @@
 	});
     };
 
-    widget.demultiplex = function (sourceID, barcodeID) {
+    widget.demultiplex = function (barcodeID) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
-	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
 
 	var url = RetinaConfig.mgrast_api+'/inbox/demultiplex';
+	var d = { "seq_file": document.getElementById('demultiplexFile').options[document.getElementById('demultiplexFile').selectedIndex].value,
+		  "barcode_file": barcodeID,
+		  "rc_index": document.getElementById('demultiplexIsReverseComplement').checked };
+	var ind = document.getElementById('demultiplexIndex');
+	if (ind.selectedIndex > 0) {
+	    d.index_file = ind.options[ind.selectedIndex].value;
+	}
 	jQuery.ajax(url, {
-	    data: { "seq_file": sourceID,
-		    "barcode_file": barcodeID },
+	    data: d,
 	    success: function(data){
 		document.getElementById('convert').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with demultiplex</div>';
 		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
@@ -654,6 +669,8 @@
 	    headers: stm.authHeader,
 	    type: "POST"
 	});
+
+	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
     };
 
     widget.joinPairedEnds = function () {
@@ -661,17 +678,24 @@
 
 	var fileA = document.getElementById('jpeFileA').value;
 	var fileB = document.getElementById('jpeFileB').options[document.getElementById('jpeFileB').selectedIndex].value;
-	var barcode = document.getElementById('jpeBarcode').selectedIndex > 0 ? document.getElementById('jpeBarcode').options[document.getElementById('jpeBarcode').selectedIndex].value : null;
 	var outfile = document.getElementById('jpeOutfile').value;
 	var retain = document.getElementById('jpeRetain').getAttribute('checked') ? 1 : 0;
+	var indexFile = document.getElementById('jpeIndexFile').options[document.getElementById('jpeIndexFile').selectedIndex].value;
+	var d = { "pair_file_1": fileA,
+		  "pair_file_2": fileB,
+		  "output": outfile,
+		  "index_file": indexFile,
+		  "retain": retain };
+
+	var barcode = document.getElementById('jpeBarcode');
+	if (barcode.selectedIndex > 0) {
+	    d.barcode_file = document.getElementById('jpeBarcode').options[document.getElementById('jpeBarcode').selectedIndex].value;
+	    d.rc_index = document.getElementById('jpeIsReverseComplement').checked;
+	}
 
 	var url = RetinaConfig.mgrast_api+'/inbox/pairjoin' + (barcode ? "_demultiplex" : "");
 	jQuery.ajax(url, {
-	    data: { "pair_file_1": fileA,
-		    "pair_file_2": fileB,
-		    "output": outfile,
-		    "index_file": barcode,
-		    "retain": retain },
+	    data: d,
 	    success: function(data){
 		document.getElementById('joinPairedEndsDiv').innerHTML = '<div class="alert alert-info" style="margin-top: 20px;">This file is being processed with join paired ends</div>';
 		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
