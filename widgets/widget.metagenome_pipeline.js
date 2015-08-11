@@ -105,12 +105,8 @@
 	  </div>\
 	</div><div style="clear: both; height: 20px;"></div>';
 	    
-	    // show pending submissions
-	    html += "<h4>Queued Submissions</h4>";
-	    html += "<div id='running_submissions'><img src='Retina/images/waiting.gif' style='text-align: center; width: 24px; margin-bottom: 10px; margin-top: 10px;'></div>";
-
 	    // show running jobs
-	    html += "<h4>Jobs in Progress</h4>";
+	    html += "<p>The submission process is complete and you can now safely close your browser. You can come back to this page or reload it at any time to monitor the progress of your submission.</p><p>The table below shows the status of your submissions as they progress through our pipeline. Click on the job number in the first column to view details of that specific job. The status lights in the last column show an overview of which tasks have been completed and which still need to run.</p>";
 	    html += "<div id='jobtable'></div>";
 
 	    content.innerHTML = html;
@@ -125,24 +121,10 @@
 			    showSubs.push(s);
 			}
 		    }
-		    var html = "";
-		    if (showSubs.length) {
-			html = "<table class='table table-condensed'><tr><th>submission time</th><th>status</th></tr>";
-			for (var i=0; i<showSubs.length; i++) {
-			    var action = "";
-			    if (showSubs[i].status == "suspend") {
-				action = " <button class='btn btn-mini' onclick='alert(\"Please report this error to mg-rast@rt.mcs.anl.gov and paste the submission id: "+showSubs[i].id+"\");'>?</button>";
-			    }
-			    html += "<tr><td>"+showSubs[i].timestamp+"</td><td>"+showSubs[i].status+action+"</td></tr>";
-			}
-			html += "</table>";
-		    } else {
-			html = "<p>You have no submissions waiting to be queued in the pipeline.</p>";
-		    }
-		    document.getElementById('running_submissions').innerHTML = html;
+		    Retina.WidgetInstances.metagenome_pipeline[1].submissionData = showSubs;
+		    Retina.WidgetInstances.metagenome_pipeline[1].job_table.update({},1);
 		},
 		error: function(jqXHR, error){
-		    document.getElementById('running_submissions').innerHTML = "<div class='alert alert-error'>an error occurred contacting the server</div>";
 		},
 		crossDomain: true,
 		headers: stm.authHeader,
@@ -253,6 +235,24 @@
 	}
 
 	var result_data = [];
+
+	// check if there is submission data and prepend it
+	if (widget.submissionData) {
+	    for (var i=0; i<widget.submissionData.length; i++) {
+		var d = widget.submissionData[i];
+		var action = "";
+		if (d.status == "suspend" || d.status == "error") {
+		    d.status = "error";
+		    action = " <button class='btn btn-mini' onclick='alert(\"Please report this error to mg-rast@rt.mcs.anl.gov and paste the submission id: "+d.id+"\");'>?</button>";
+		}
+		result_data.push({ "job": "new submission",
+				   "mgid": d.id,
+				   "stage": "preparation",
+				   "status": d.status + action,
+				   "tasks": "generating job"
+				 });
+	    }
+	}
 
 	// iterate over data rows
 	for (var i=0; i<data.length; i++) {
