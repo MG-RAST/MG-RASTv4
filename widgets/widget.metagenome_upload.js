@@ -764,7 +764,7 @@
 	var data = [];
 	var d = widget.inboxData;
 	for (var i=0; i<d.length; i++) {
-	    if (Retina.keys(d[i].tasks[0].inputs)[0] != "submission_parameters.json") {
+	    if (d[i].tasks[0].inputs[0].filename != "submission_parameters.json") {
 		data.push(d[i]);
 	    }
 	}
