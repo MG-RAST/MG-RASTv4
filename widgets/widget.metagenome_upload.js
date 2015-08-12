@@ -160,15 +160,23 @@
 		var html = "";
 		var allow = true;
 
+		var barcode = 0;
+		var samplename = 1;
+
+		// test for QIIME barcode file
+		if (d[0].match(/^\#SampleID\tBarcodeSequence/i)) {
+		    d.pop();
+		    barcode = 1;
+		    samplename = 0;
+		}
+
 		var validBarcode = true;
 		for (var i=0; i<d.length; i++) {
 		    if (d[i].length == 0) {
 			continue;
 		    }
-		    if (d[i].match(/^([atcg])+\t+(\S+)/i)) {
-			var c = d[i].replace(/\t+/, "\t");
-			c = c.split(/\t/);
-		    } else {
+		    var l = d[i].split(/\t/);
+		    if (! (l[barcode].match(/^[atcg]+$/i) && l[samplename].match(/^(\S)+$/))) {
 			validBarcode = false;
 			break;
 		    }
