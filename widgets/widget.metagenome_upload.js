@@ -572,7 +572,7 @@
 		}
 	    }
 	    
-	    html += "<h5 style='margin-top: 20px;'>Delete File</h5>";
+	    html += "<h5 style='margin-top: 10px;'>Delete File</h5>";
 	    html += "<button class='btn btn-small btn-danger' onclick='if(confirm(\"Really delete this file?\\nThis cannot be undone!\")){Retina.WidgetInstances.metagenome_upload[1].browser.removeNode({node:\""+node.id+"\"});}'>delete file</button>";
 	}
 
@@ -702,8 +702,11 @@
 	var d = { "pair_file_1": fileA,
 		  "pair_file_2": fileB,
 		  "output": outfile,
-		  "index_file": indexFile,
 		  "retain": retain };
+
+	if (document.getElementById('jpeIndexFile').selectedIndex > 0) {
+	    d.index_file = indexFile;
+	}
 
 	var barcode = document.getElementById('jpeBarcode');
 	if (barcode.selectedIndex > 0) {
