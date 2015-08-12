@@ -718,7 +718,7 @@
 	    d.rc_index = document.getElementById('jpeIsReverseComplement').checked;
 	}
 
-	var url = RetinaConfig.mgrast_api+'/inbox/pairjoin' + (barcode ? "_demultiplex" : "");
+	var url = RetinaConfig.mgrast_api+'/inbox/pairjoin' + (barcode.selectedIndex > 0 ? "_demultiplex" : "");
 	jQuery.ajax(url, {
 	    data: d,
 	    success: function(data){
