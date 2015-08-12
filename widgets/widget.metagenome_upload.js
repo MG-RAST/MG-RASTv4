@@ -501,10 +501,11 @@
 		    // demultiplex button
 		    html += "<button class='btn btn-mini' style='float: right;' onclick='alert(\"Please select the barcode file on the left to demultiplex\")'>demultiplex</button>";
 
-		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 20px;'>";
+		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 10px;'>";
 		    html += "<input type='text' style='display: none;' value='"+node.id+"' id='jpeFileA'>";
 		    var opts = [];
 		    var txtOpts = "<option>- none -</option>";
+		    var indOpts = "<option>- none -</option>";
 		    var bestHit = 0;
 		    var selectedOpt = 0;
 		    var partial = "";
@@ -530,6 +531,7 @@
 				}
 			    }
 			    opts.push(widget.browser.fileList[i]);
+			    indOpts += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
 			} else if (fn.match(/\.txt$/)) {
 			    txtOpts += "<option value='"+widget.browser.fileList[i].id+"'>"+fn+"</option>";
 			}
@@ -543,10 +545,11 @@
 		    }
 		    opts = opts.join("\n");
 		    html += "<span style='position: relative; bottom: 4px;'>file to join</span><select id='jpeFileB' style='font-size: 12px; height: 25px; margin-left: 10px; width: 350px;'>"+opts+"</select><br>";
-		    html += "<span style='position: relative; bottom: 4px;'>index file</span><select id='jpeIndexFile' style='font-size: 12px; height: 25px; margin-left: 14px; width: 350px;'>"+opts+"</select><br>";
+		    html += "remove non-overlapping paired-ends <input type='checkbox' checked='checked' id='jpeRetain' style='margin-top: -2px;'><div style='height: 1px;'></div>";
+		    html += "<h5>Optional Demultiplex</h5>";
+		    html += "<span style='position: relative; bottom: 4px;'>index file</span><select id='jpeIndexFile' style='font-size: 12px; height: 25px; margin-left: 14px; width: 350px;'>"+indOpts+"</select><br>";
 		    html += "<span style='position: relative; bottom: 4px;'>Barcode file (optional)</span><select id='jpeBarcode' style='font-size: 12px; height: 25px; margin-left: 10px; width: 286px;'>"+txtOpts+"</select><br>";
 		    html += "barcodes are reverse complements <input type='checkbox' id='jpeIsReverseComplement' style='margin-top: -2px;'><div style='height: 10px;'></div>";
-		    html += "remove non-overlapping paired-ends <input type='checkbox' checked='checked' id='jpeRetain' style='margin-top: -2px;'><div style='height: 10px;'></div>";
 		    html += "<span style='position: relative; bottom: 4px;'>Output file name</span><div class='input-append'><input type='text' placeholder='output file name' id='jpeOutfile' style='font-size: 12px; height: 16px; margin-left: 3px;' value='"+(partial.length > 1 ? partial + ".fastq" : "")+"'>";
 		    html += "<button class='btn btn-small' onclick='Retina.WidgetInstances.metagenome_upload[1].joinPairedEnds();'>join paired ends</button></div>";
 		    html += "</div><div id='seqInfoDiv'>";
