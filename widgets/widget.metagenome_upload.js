@@ -706,6 +706,10 @@
 
 	if (document.getElementById('jpeIndexFile').selectedIndex > 0) {
 	    d.index_file = indexFile;
+	    if (indexFile == fileB) {
+		alert("join file and index file may not be the same");
+		return;
+	    }
 	}
 
 	var barcode = document.getElementById('jpeBarcode');
