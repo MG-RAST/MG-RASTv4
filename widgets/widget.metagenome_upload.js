@@ -156,7 +156,12 @@
 	if (fileType == "text" ) {
 	    fileReader.onload = function(e) {
 		var data = e.target.result;
-		var d = data.split(/\n/);
+		var d;
+		if (data.match(/\n/)) {
+		    d = data.split(/\n/);
+		} else {
+		    d = data.split(/\r/);
+		}
 		var html = "";
 		var allow = true;
 
@@ -165,7 +170,7 @@
 
 		// test for QIIME barcode file
 		if (d[0].match(/^\#SampleID\tBarcodeSequence/i)) {
-		    d.pop();
+		    d.shift();
 		    barcode = 1;
 		    samplename = 0;
 		}
@@ -185,7 +190,7 @@
 		if (validBarcode) {
 		    html = "<div class='alert alert-success' style='margin-top: 20px;'>This is a valid barcode file.</div>";
 		} else {
-		    html = "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
+		    html = "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line, or an automatically generated QIIME barcode file.</div>";
 		    allow = false;
 		}
 		this.prom.resolve(html, allow);
