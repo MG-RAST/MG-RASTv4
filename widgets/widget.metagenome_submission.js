@@ -181,7 +181,7 @@
 
 	var md_file_opts = [];
 	for (var i=0; i<widget.inboxData.length; i++) {
-	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'metadata' && widget.inboxData[i].filename.match(/\.xlsx$/)) {
+	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'metadata' && widget.inboxData[i].filename.match(/\.xls/)) {
 		md_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
 	    }
 	}
