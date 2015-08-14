@@ -145,7 +145,7 @@
 		    filter: job_table_filter,
 		    sort_autodetect: true,
 		    synchronous: false,
-		    sort: "job",
+		    sort: "updatetime",
 		    query_type: "equal",
 		    default_sort: "job",
 		    asynch_column_mapping: { "job": "info.name",
