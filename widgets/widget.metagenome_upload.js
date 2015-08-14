@@ -103,6 +103,11 @@
 	    							       "autoDecompress": true,
 								       "calculateMD5": true,
 	    							       "user": stm.user,
+								       "fileDoneAttributes": {
+									   "type": "inbox",
+									   "id": stm.user.id,
+									   "user": stm.user.login,
+									   "email": stm.user.email },
 								       "blacklist": {
 									   "awe_stderr.txt": true,
 									   "awe_stdout.txt": true,
@@ -501,6 +506,9 @@
 		    // demultiplex button
 		    html += "<button class='btn btn-mini' style='float: right;' onclick='alert(\"Please select the barcode file on the left to demultiplex\")'>demultiplex</button>";
 
+		    // recalculate seq stats button
+		    //html += "<button class='btn btn-mini' style='float: right;' onclick='Retina.WidgetInstances.metagenome_upload[1].statsCalculation(\""+node.id+"\");'>recompute stats</button>";
+
 		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 10px;'>";
 		    html += "<input type='text' style='display: none;' value='"+node.id+"' id='jpeFileA'>";
 		    var opts = [];
@@ -586,55 +594,33 @@
 	var node = data.data;
 
 	// set permissions for mgrast
-	widget.browser.addAcl({node: node.id, acl: "read", uuid: "mgrast"});
-	widget.browser.addAcl({node: node.id, acl: "write", uuid: "mgrast"});
-	widget.browser.addAcl({node: node.id, acl: "delete", uuid: "mgrast"});
+	widget.browser.addAcl({node: node.id, acl: "all", uuid: "mgrast"});
 
-	// attach the required additional attributes to the uploaded file
-	var newNodeAttributes = node.attributes;
-	newNodeAttributes['type'] = 'inbox';
-	newNodeAttributes['id'] = stm.user.id;
-	newNodeAttributes['user'] = stm.user.login;
-	newNodeAttributes['email'] = stm.user.email;
+	if (widget.detectFiletype(node.file.name).fileType == "sequence") {
+	    widget.statsCalculation(node.id);
+	} else {
+	    widget.browser.preserveDetail = true;
+	    widget.browser.updateData();
+	}
+    };
 
-	var url = widget.browser.shockBase+'/node/'+node.id;
-	var fd = new FormData();
-	fd.append('attributes', new Blob([ JSON.stringify(newNodeAttributes) ], { "type" : "text\/json" }));
+    widget.statsCalculation = function (node) {
+	var widget = this;
+
+	var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node;
 	jQuery.ajax(url, {
-	    contentType: false,
-	    processData: false,
-	    data: fd,
-	    success: function(d){
+	    success: function(data){
 		var widget = Retina.WidgetInstances.metagenome_upload[1];
-		if (widget.detectFiletype(d.data.file.name).fileType == "sequence") {
-		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+d.data.id;
-		    jQuery.ajax(url, {
-			success: function(data){
-			    var widget = Retina.WidgetInstances.metagenome_upload[1];
-			    widget.getRunningInboxActions();
-			    widget.browser.preserveDetail = true;
-			    widget.browser.updateData();
-			},
-			error: function(jqXHR, error){
-			    console.log(error);
-			    console.log(jqXHR);
-			},
-			crossDomain: true,
-			headers: stm.authHeader,
-			type: "GET"
-		    });
-		} else {
-		    widget.browser.preserveDetail = true;
-		    widget.browser.updateData();
-		}
+		widget.getRunningInboxActions();
+		widget.browser.preserveDetail = true;
+		widget.browser.updateData();
 	    },
 	    error: function(jqXHR, error){
-		console.log(error);
-		console.log(jqXHR);
+		alert("sequence stats calculation failed");
 	    },
 	    crossDomain: true,
 	    headers: stm.authHeader,
-	    type: "PUT"
+	    type: "GET"
 	});
     };
 

@@ -181,7 +181,7 @@
 
 	var md_file_opts = [];
 	for (var i=0; i<widget.inboxData.length; i++) {
-	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'metadata') {
+	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'metadata' && widget.inboxData[i].filename.match(/\.xlsx$/)) {
 		md_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
 	    }
 	}
@@ -500,7 +500,7 @@
 </div>\
 <p>Please note that only private data can be deleted.</p>\
 <div style="height:10px;" class="clear"></div>\
-<div style="margin-bottom: 20px; text-align: center;"><input type="button" id="submit_job_button" disabled="" onclick="Retina.WidgetInstances.metagenome_submission[1].submit_job();" value="submit job" class="btn"><span style="margin-left: 20px;"><b>Note: You must complete all previous steps to enable submission.</b></span></div>\
+<div style="margin-bottom: 20px; text-align: center;"><img src="Retina/images/waiting.gif" style="display: none; width: 24px;" id="submit_job_waiting"><input type="button" id="submit_job_button" disabled="" onclick="Retina.WidgetInstances.metagenome_submission[1].submit_job();" value="submit job" class="btn"><span style="margin-left: 20px;"><b>Note: You must complete all previous steps to enable submission.</b></span></div>\
 <p>Upon successful submission, MG-RAST IDs ("Accession numbers") will be automatically assigned to your datasets and data files will be removed from your inbox.</p>';
 
 	html += "<div style='height: 20px;'></div>";
@@ -508,8 +508,80 @@
 	document.getElementById('submit').innerHTML = html;
     };
 
-    widget.submit_job = function () {
+    widget.submit_job = function (metadata_consistent) {
 	var widget = this;
+
+	// if metadata is selected, check file consistency
+	if (widget.selectedMetadata != "none" && ! metadata_consistent) {
+	    document.getElementById('submit_job_waiting').style.display = "";
+	    document.getElementById('submit_job_button').style.display = "none";
+	    var url = RetinaConfig.mgrast_api+'/metadata/validate';
+	    jQuery.ajax(url, {
+		data: { "node_id": widget.selectedMetadata },
+		success: function(data){
+		    var widget = Retina.WidgetInstances.metagenome_submission[1];
+		    var errors = [];
+
+		    // check files
+		    var seqfiles = {};
+		    var seqnames = {};
+		    for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
+			var f = widget.selectedSequenceFiles[i].name;
+			seqfiles[f] = true;
+			seqnames[f.substr(0, f.lastIndexOf("."))] = true;
+		    }
+		    var numlibs = 0;
+		    for (var i=0; i<data.metadata.samples.length; i++) {
+			for (var h=0; h<data.metadata.samples[i].libraries.length; h++) {
+			    numlibs++;
+			    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('file_name')) {
+				if (! seqfiles[data.metadata.samples[i].libraries[h].data.file_name.value]) {
+				    errors.push('No sequence file matching library '+data.metadata.samples[i].libraries[h].name);
+				}
+			    } else {
+				if (! seqnames[data.metadata.samples[i].libraries[h].data.metagenome_name.value]) {
+				    errors.push('No sequence file matching library '+data.metadata.samples[i].libraries[h].name+".");
+				}
+			    }
+			}
+		    }
+
+		    if (errors.length) {
+			errors.push("You need to verify that either the metagenome_name field matches the sequence filename without the suffix or the file_name field is identical to the file name of the selected sequence file.\n");
+		    }
+
+		    if (widget.selectedSequenceFiles.length > numlibs) {
+			errors.push('There are more files selected than entries in the metadata spreadsheet.');
+		    } else if (widget.selectedSequenceFiles.length < numlibs) {
+			errors.push('There are fewer files selected than entries in the metadata spreadsheet.');
+		    }
+
+		    // check project name
+		    if (widget.selectedProject.name !== data.metadata.data.project_name.value) {
+			errors.push("The project name in the metadata is "+data.metadata.data.project_name.value+" and the one selected in section 2 is "+widget.selectedProject.name);
+		    }
+		    
+		    if (errors.length) {
+			alert("There were inconsistencies in your metadata:\n\n"+errors.join("\n")+"\n\nYou must correct these errors before you can perform the submission.");
+			document.getElementById('submit_job_waiting').style.display = "none";
+			document.getElementById('submit_job_button').style.display = "";
+		    } else {
+			widget.submit_job(true);
+		    }
+		},
+		error: function(jqXHR, error){
+		    alert('could not validate metadata');
+		    document.getElementById('submit_job_waiting').style.display = "none";
+		    document.getElementById('submit_job_button').style.display = "";
+		},
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "POST"
+	    });
+	    return;
+	}
+	document.getElementById('submit_job_waiting').style.display = "none";
+	document.getElementById('submit_job_button').style.display = "";
 
 	// get all the parameters
 	var files = [];
