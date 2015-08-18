@@ -496,7 +496,7 @@
 		html += "<h5 style='margin-top: 20px; margin-bottom: 0px;'>Sequence Information";
 
 		// tell user detail info about the sequence
-		if (node.attributes.hasOwnProperty('stats_info')) {
+		if (node.attributes.hasOwnProperty('stats_info') && node.attributes.stats_info.hasOwnProperty('bp_count')) {
 		    
 		    // fastq files can have the "join paired ends" option
 		    if (sequenceType == "fastq") {
