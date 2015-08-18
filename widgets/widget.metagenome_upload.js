@@ -311,7 +311,7 @@
 	var sequenceType = null;
 	if (fn.match(/(tar\.gz|tgz|zip|tar\.bz2|tbz|tbz2|tb2|gzip|bzip2|gz)$/)) {
 	    filetype = "archive";
-	} else if (fn.match(/(fasta|fa|ffn|frn|fna)$/)) {
+	} else if (fn.match(/(fasta|fa|ffn|frn|fna|fas)$/)) {
 	    sequenceType = "fasta";
 	    filetype = "sequence";
 	} else if (fn.match(/sff$/)) {
