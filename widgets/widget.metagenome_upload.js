@@ -266,6 +266,7 @@
 				numSeqs++;
 				
 				// sequence contains invalid characters
+				seq = seq.trim();
 				if (! seq.match(/^[acgtunx-]+$/i)) {
 				    invalidSeqs++;
 				}
