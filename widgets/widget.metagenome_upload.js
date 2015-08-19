@@ -145,7 +145,7 @@
 
 	// check if the filename is valid
 	if (! selectedFile.name.match(/^[\w\d\.]+$/)) {
-	    var html = '<div class="alert alert-error"><strong>Invalid filename</strong> The filename may only contain letters, digits, underscore and ".".</div>';
+	    var html = '<div class="alert alert-error"><strong>Invalid file name</strong> The file name may only contain letters, digits, underscore and ".".</div>';
 	    return promise.resolve(html, false);
 	}
 
@@ -683,6 +683,13 @@
 	var fileA = document.getElementById('jpeFileA').value;
 	var fileB = document.getElementById('jpeFileB').options[document.getElementById('jpeFileB').selectedIndex].value;
 	var outfile = document.getElementById('jpeOutfile').value;
+
+	// check if the outfile name is valid
+	if (! outfile.match(/^[\w\d\.]+$/)) {
+	    alert("The selected output file name is invalid.\nFile names may only contain letters, digits, '.' and '_' characters.");
+	    return;
+	}
+
 	var retain = document.getElementById('jpeRetain').getAttribute('checked') ? 1 : 0;
 	var indexFile = document.getElementById('jpeIndexFile').options[document.getElementById('jpeIndexFile').selectedIndex].value;
 	var d = { "pair_file_1": fileA,
