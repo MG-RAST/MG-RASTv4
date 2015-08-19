@@ -103,6 +103,10 @@
 	    							       "autoDecompress": true,
 								       "calculateMD5": true,
 	    							       "user": stm.user,
+								       "fileSectionColumns": [
+									   { "path": "file.name", "name": "Name", "width": "75%", "type": "file" },
+									   { "path": "attributes.data_type", "name": "Type", "width": "25%" }
+								       ],
 								       "fileDoneAttributes": {
 									   "type": "inbox",
 									   "id": stm.user.id,
@@ -576,6 +580,14 @@
 
 		    html += "</div>";
 		} else {
+		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
+		    jQuery.ajax(url, {
+			success: function(data){ },
+			error: function(jqXHR, error){ },
+			crossDomain: true,
+			headers: stm.authHeader,
+			type: "GET"
+		    });
 		    html += "</h5><div class='alert alert-info'>calculation of sequence stats in progress <button class='btn btn-small' title='refresh' style='margin-left: 15px;' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.updateData();'><img src='Retina/images/loop.png' style='width: 12px; margin-top: -2px;'></button></div>";
 		}
 	    }
@@ -598,6 +610,16 @@
 
 	if (widget.detectFiletype(node.file.name).fileType == "sequence") {
 	    widget.statsCalculation(node.id);
+	} else if (widget.detectFiletype(node.file.name).fileType == "excel") {
+	    var url = RetinaConfig.mgrast_api+'/metadata/validate';
+	    jQuery.ajax(url, {
+		data: { "node_id": node.id },
+		success: function(data){ },
+		error: function(jqXHR, error){ },
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "POST"
+	    });
 	} else {
 	    widget.browser.preserveDetail = true;
 	    widget.browser.updateData();
