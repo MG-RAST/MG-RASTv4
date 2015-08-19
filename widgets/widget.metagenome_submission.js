@@ -39,6 +39,8 @@
 	    return;
 	}
 
+	//Retina.WidgetInstances.login[1].verifyAuthentication(RetinaConfig.mgrast_api+"/user/authenticate", stm.authHeader);
+
 	if (! widget.inboxData) {
 	    content.innerHTML = "<div style='width: 100%; text-align: center; margin-top: 150px;'><img src='Retina/images/waiting.gif' style='width: 25px;'></div>";
 	    widget.checkInbox();
