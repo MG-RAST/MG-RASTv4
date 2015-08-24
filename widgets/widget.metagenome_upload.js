@@ -102,6 +102,10 @@
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
 								       "calculateMD5": true,
+								       "customButtons": [ { "title": "download inbox details",
+											    "id": "inboxDetailsButton",
+											    "image": "Retina/images/info.png",
+											    "callback": widget.downloadInboxDetails } ],
 	    							       "user": stm.user,
 								       "fileSectionColumns": [
 									   { "path": "file.name", "name": "Name", "width": "75%", "type": "file" },
@@ -842,6 +846,13 @@
 	}
 	
 	return task;
+    };
+
+    // generate a tab separated file that shows details about the files in the inbox
+    widget.downloadInboxDetails = function () {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	console.log(widget.browser.fileList);
     };
 
     // helper functions
