@@ -102,6 +102,7 @@
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
 								       "calculateMD5": true,
+								       "allowMultiselect": true,
 								       "customButtons": [ { "title": "download sequence file details",
 											    "id": "inboxDetailsButton",
 											    "image": "Retina/images/info.png",
