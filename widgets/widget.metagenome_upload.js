@@ -102,7 +102,7 @@
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
 								       "calculateMD5": true,
-								       "customButtons": [ { "title": "download inbox details",
+								       "customButtons": [ { "title": "download sequence file details",
 											    "id": "inboxDetailsButton",
 											    "image": "Retina/images/info.png",
 											    "callback": widget.downloadInboxDetails } ],
@@ -852,7 +852,32 @@
     widget.downloadInboxDetails = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	console.log(widget.browser.fileList);
+	var files = widget.browser.fileList;
+	var sequences = [];
+	for (var i=0; i<files.length; i++) {
+	    if (files[i].attributes.hasOwnProperty('data_type') && files[i].attributes.data_type == "sequence") {
+		sequences.push(files[i]);
+	    }
+	}
+    
+	var txt = [ "no sequence files in your inbox" ];
+	if (sequences.length) {
+	    var seqHead = Retina.keys(sequences[0].attributes.stats_info).sort();
+	    txt = [ seqHead.join("\t") ];
+	    for (var i=0; i<sequences.length; i++) {
+		var row = [];
+		if (sequences[i].attributes.stats_info.hasOwnProperty("bp_count")) {
+		    for (var h=0; h<seqHead.length; h++) {
+			row.push(sequences[i].attributes.stats_info[seqHead[h]]);
+		    }
+		} else {
+		    row = [ "sequence statistics calculation incomplete" ]
+		}
+		txt.push(row.join("\t"));
+	    }
+	}
+	
+	stm.saveAs(txt.join("\n"), "inbox.txt");
     };
 
     // helper functions
