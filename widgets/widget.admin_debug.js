@@ -425,11 +425,11 @@
     widget.moveMetagenomes = function (pid) {
 	var widget = Retina.WidgetInstances.admin_debug[1];
 
-	var mgs = "&";
+	var mgs = [];
 	var sel = document.getElementById('project_a').options;
 	for (var i=0; i<sel.length; i++) {
 	    if (sel[i].selected) {
-		mgs += "move="+sel[i].text;
+		mgs.push("move="+sel[i].text);
 	    }
 	}
 
@@ -442,7 +442,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+pid_b+mgs,
+	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+pid_b+"&"+mgs.join("&"),
 	    success: function (data) {
 		Retina.WidgetInstances.admin_debug[1].showProject(pid);
 		document.getElementById('project_message_space').innerHTML = "<div class='alert alert-success'>metagenomes moved successfully</div>";
