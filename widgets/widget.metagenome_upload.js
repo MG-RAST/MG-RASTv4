@@ -101,6 +101,7 @@
 	    							       "enableCompressedDownload": false,
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
+								       "autoUnarchive": true,
 								       "calculateMD5": true,
 								       "allowMultiselect": true,
 								       "customButtons": [ { "title": "download sequence file details",
@@ -210,14 +211,17 @@
 		this.prom.resolve(html, allow);
 	    };
 	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size));
-	} else if (fileType == "archive") {
+	} else if (fileType == "compressed") {
 	    var containedType = widget.detectFiletype(selectedFile.name.substr(0, selectedFile.name.lastIndexOf(".")));
 	    if (containedType.fileType == "") {
-		var html = '<div class="alert alert-warning" style="text-align: left;"><strong>Compressed file without file ending</strong><br> You can use this file, but the filename does not contain the filetype suffix. If the archive does not contain the name, you might not be able to use it for processing.</div>';
+		var html = '<div class="alert alert-warning" style="text-align: left;"><strong>Compressed file without file ending</strong><br>You can upload this file, but the filename does not contain the filetype suffix and it will not be detected as a sequence file.</div>';
 		promise.resolve(html, true);
 	    } else {
 		return promise.resolve("", true);
 	    }
+	} else if (fileType == "archive") {
+	    var html = '<div class="alert alert-info" style="text-align: left;"><strong>Archive file detected</strong><br>Once the upload has completed, this file will automatically be decompressed and unpacked. If the archive contains sequence files, sequence statistics will automatically be computed.</div>';
+	    promise.resolve(html, true);
 	} else if (fileType == "sequence") {
 
 	    if (selectedFile.size < (1024 * 1024)) {
@@ -239,7 +243,7 @@
 		    }
 		    if (type == "FASTA" || type == "FASTQ") {
 			var header = d[0];
-			var seq = d[1];
+			var seq = d[1].trim();
 			var tooShort = 0;
 			var numSeqs = 1;
 			var invalidSeqs = 0;
@@ -255,7 +259,7 @@
 				    header = d[i];
 				    newEntry = true;
 				} else {
-				    seq += d[i];
+				    seq += d[i].trim();
 				}
 			    } else {
 				header = d[i];
@@ -319,8 +323,10 @@
     widget.detectFiletype = function (fn) {
 	var filetype = "";
 	var sequenceType = null;
-	if (fn.match(/(tar\.gz|tgz|zip|tar\.bz2|tbz|tbz2|tb2|gzip|bzip2|gz)$/)) {
+	if (fn.match(/(tar\.gz|zip|tar\.bz2|tar)$/)) {
 	    filetype = "archive";
+	} else if (fn.match(/(gz|gzip)$/)) {
+	    filetype = "compressed";
 	} else if (fn.match(/(fasta|fa|ffn|frn|fna|fas)$/)) {
 	    sequenceType = "fasta";
 	    filetype = "sequence";
@@ -516,9 +522,6 @@
 		    // demultiplex button
 		    html += "<button class='btn btn-mini' style='float: right;' onclick='alert(\"Please select the barcode file on the left to demultiplex\")'>demultiplex</button>";
 
-		    // recalculate seq stats button
-		    //html += "<button class='btn btn-mini' style='float: right;' onclick='Retina.WidgetInstances.metagenome_upload[1].statsCalculation(\""+node.id+"\");'>recompute stats</button>";
-
 		    html += "</h5><div id='joinPairedEndsDiv' style='display: none; font-size: 12px; padding-top: 10px;'>";
 		    html += "<input type='text' style='display: none;' value='"+node.id+"' id='jpeFileA'>";
 		    var opts = [];
@@ -609,29 +612,44 @@
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// get node from data
-	var node = data.data;
+	var nodes = data.data;
 
-	// set permissions for mgrast
-	widget.browser.addAcl({node: node.id, acl: "all", uuid: "mgrast"});
-
-	if (widget.detectFiletype(node.file.name).fileType == "sequence") {
-	    widget.statsCalculation(node.id);
-	} else if (widget.detectFiletype(node.file.name).fileType == "excel") {
-	    var url = RetinaConfig.mgrast_api+'/metadata/validate';
-	    jQuery.ajax(url, {
-		data: { "node_id": node.id },
-		success: function(data){ },
-		error: function(jqXHR, error){ },
-		crossDomain: true,
-		headers: stm.authHeader,
-		type: "POST"
-	    });
-	} else {
-	    widget.browser.preserveDetail = true;
-	    widget.browser.updateData();
+	// check if this is an archive
+	if (typeof nodes.length !== 'number') {
+	    nodes = [ nodes ];
 	}
+
+	// iterate over the nodes
+	for (var i=0; i<nodes.length; i++) {
+
+	    var node = nodes[i];
+
+	    // set permissions for mgrast
+	    widget.browser.addAcl({node: node.id, acl: "all", uuid: "mgrast"});
+	    
+	    // calculate sequence stats
+	    if (widget.detectFiletype(node.file.name).fileType == "sequence") {
+		widget.statsCalculation(node.id);
+	    }
+	    // validate metadata
+	    else if (widget.detectFiletype(node.file.name).fileType == "excel") {
+		var url = RetinaConfig.mgrast_api+'/metadata/validate';
+		jQuery.ajax(url, {
+		    data: { "node_id": node.id },
+		    success: function(data){ },
+		    error: function(jqXHR, error){ },
+		    crossDomain: true,
+		    headers: stm.authHeader,
+		    type: "POST"
+		});
+	    }
+	}
+
+	widget.browser.preserveDetail = true;
+	widget.browser.updateData();
     };
 
+    // Inbox actions
     widget.statsCalculation = function (node) {
 	var widget = this;
 
@@ -652,7 +670,6 @@
 	});
     };
 
-    // Inbox actions
     widget.sff2fastq = function (fid) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 	document.getElementById('convert').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 32px;'>";
