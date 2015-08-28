@@ -247,9 +247,9 @@
 		}
 		result_data.push({ "job": "<a href='#'>-</a>",
 				   "mgid": d.id,
-				   "stage": "preparation",
+				   "stage": "submission",
 				   "status": widget.status(d.status) + action,
-				   "tasks": widget.dots([{"state": d.status, "cmd": "preparation" }])
+				   "tasks": widget.dots([{"state": d.status, "cmd": { "description": "submission" } }])
 				 });
 	    }
 	}
