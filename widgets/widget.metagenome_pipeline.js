@@ -245,11 +245,11 @@
 		    d.status = "error";
 		    action = " <button class='btn btn-mini' onclick='alert(\"Please report this error to mg-rast@rt.mcs.anl.gov and paste the submission id: "+d.id+"\");'>?</button>";
 		}
-		result_data.push({ "job": "new submission",
+		result_data.push({ "job": "<a href='#'>-</a>",
 				   "mgid": d.id,
-				   "stage": "preparation",
-				   "status": d.status + action,
-				   "tasks": "generating job"
+				   "stage": "submission",
+				   "status": widget.status(d.status) + action,
+				   "tasks": widget.dots([{"state": d.status, "cmd": { "description": "submission" } }])
 				 });
 	    }
 	}

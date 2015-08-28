@@ -614,6 +614,12 @@
 	// get node from data
 	var nodes = data.data;
 
+	// check if something went wrong
+	if (nodes === null) {
+	    console.log('error in archive unpacking');
+	    return;
+	}
+
 	// check if this is an archive
 	if (typeof nodes.length !== 'number') {
 	    nodes = [ nodes ];
