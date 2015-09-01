@@ -90,6 +90,7 @@
 	    							       "enableUpload": true,
 	    							       "customPreview": widget.filePreview,
 	    							       "fileUploadCompletedCallback": widget.fileCompleted,
+								       "fileDeletedCallback": widget.fileDeleted,
 	    							       "detailType": "preview",
 	    							       "showDetailBar": false,
 	    							       "showFilter": false,
@@ -98,6 +99,7 @@
 	    							       "showTitleBar": false,
 	    							       "enableDownload": false,
 								       "previewChunkSize": 100000,
+								       "uploadChunkSize": 1024 * 1024 * 100,
 	    							       "enableCompressedDownload": false,
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
@@ -589,14 +591,18 @@
 
 		    html += "</div>";
 		} else {
-		    var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
-		    jQuery.ajax(url, {
-			success: function(data){ },
-			error: function(jqXHR, error){ },
-			crossDomain: true,
-			headers: stm.authHeader,
-			type: "GET"
-		    });
+		    if (! widget.checkFileHasAction(node.file.name)) {
+			var url = RetinaConfig.mgrast_api + "/inbox/stats/"+node.id;
+			jQuery.ajax(url, {
+			    success: function(data){
+				Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+			    },
+			    error: function(jqXHR, error){ },
+			    crossDomain: true,
+			    headers: stm.authHeader,
+			    type: "GET"
+			});
+		    }
 		    html += "</h5><div class='alert alert-info'>calculation of sequence stats in progress <button class='btn btn-small' title='refresh' style='margin-left: 15px;' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.updateData();'><img src='Retina/images/loop.png' style='width: 12px; margin-top: -2px;'></button></div>";
 		}
 	    }
@@ -651,8 +657,21 @@
 	    }
 	}
 
+	widget.getRunningInboxActions();
 	widget.browser.preserveDetail = true;
 	widget.browser.updateData();
+    };
+
+    widget.fileDeleted = function (deleted, node) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	if (deleted) {
+	    if (node.attributes.hasOwnProperty('actions')) {
+		for (var i=0; i<node.attributes.actions.length; i++) {
+		    widget.cancelInboxAction(node.attributes.actions[i].id);
+		}
+	    }
+	}
     };
 
     // Inbox actions
@@ -861,9 +880,9 @@
 	
 	var data = widget.inboxData;
 
-	var task = false; 
+	var task = false;
 	for (var i=0; i<data.length; i++) {
-	    if (filename == Retina.keys(data[i].tasks[0].inputs)[0]) {
+	    if (filename == data[i].tasks[0].inputs[0].filename) {
 		task = data[i].tasks[0].cmd.description;
 		break;
 	    }
