@@ -230,7 +230,7 @@
 	} else if (fileType == "sequence") {
 
 	    if (selectedFile.size < (1024 * 1024)) {
-		var html = '<div class="alert alert-error"><strong>Sequence file too small</strong> You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
+		var html = '<div class="alert alert-error"><strong>Sequence file too small</strong><br>You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
 		promise.resolve(html, false, customIndex);
 	    } else {
 		fileReader.onload = function(e) {
