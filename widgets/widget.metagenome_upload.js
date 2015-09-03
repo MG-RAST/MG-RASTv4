@@ -672,7 +672,7 @@
     widget.fileDeleted = function (deleted, node) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	if (deleted) {
+	if (deleted && node) {
 	    if (node.attributes.hasOwnProperty('actions')) {
 		for (var i=0; i<node.attributes.actions.length; i++) {
 		    widget.cancelInboxAction(node.attributes.actions[i].id);
