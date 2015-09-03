@@ -90,6 +90,7 @@
 	    							       "enableUpload": true,
 	    							       "customPreview": widget.filePreview,
 	    							       "fileUploadCompletedCallback": widget.fileCompleted,
+								       "allFileUploadCompletedCallback": widget.allFilesCompleted,
 								       "fileDeletedCallback": widget.fileDeleted,
 	    							       "detailType": "preview",
 	    							       "showDetailBar": false,
@@ -106,6 +107,7 @@
 								       "autoUnarchive": true,
 								       "calculateMD5": true,
 								       "allowMultiselect": true,
+								       "allowMultiFileUpload": true,
 								       "customButtons": [ { "title": "download sequence file details",
 											    "id": "inboxDetailsButton",
 											    "image": "Retina/images/info.png",
@@ -145,7 +147,7 @@
     };
 
     // do some convenience checks before the file is uploaded
-    widget.fileSelectedForUpload = function (selectedFile) {
+    widget.fileSelectedForUpload = function (selectedFile, customIndex) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// detect filetype
@@ -158,12 +160,13 @@
 	// check if the filename is valid
 	if (! selectedFile.name.match(/^[\w\d\.]+$/)) {
 	    var html = '<div class="alert alert-error"><strong>Invalid file name</strong> The file name may only contain letters, digits, underscore and ".".</div>';
-	    return promise.resolve(html, false);
+	    return promise.resolve(html, false, customIndex);
 	}
 
 	// get the filereader
 	var fileReader = new FileReader();
 	fileReader.prom = promise;
+	fileReader.customIndex = customIndex;
 	fileReader.onerror = function (error) {
 	    console.log(error);
 	};
@@ -210,25 +213,25 @@
 		    html = "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line, or an automatically generated QIIME barcode file.</div>";
 		    allow = false;
 		}
-		this.prom.resolve(html, allow);
+		this.prom.resolve(html, allow, this.customIndex);
 	    };
 	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size));
 	} else if (fileType == "compressed") {
 	    var containedType = widget.detectFiletype(selectedFile.name.substr(0, selectedFile.name.lastIndexOf(".")));
 	    if (containedType.fileType == "") {
 		var html = '<div class="alert alert-warning" style="text-align: left;"><strong>Compressed file without file ending</strong><br>You can upload this file, but the filename does not contain the filetype suffix and it will not be detected as a sequence file.</div>';
-		promise.resolve(html, true);
+		promise.resolve(html, true, customIndex);
 	    } else {
-		return promise.resolve("", true);
+		return promise.resolve("", true, customIndex);
 	    }
 	} else if (fileType == "archive") {
 	    var html = '<div class="alert alert-info" style="text-align: left;"><strong>Archive file detected</strong><br>Once the upload has completed, this file will automatically be decompressed and unpacked. If the archive contains sequence files, sequence statistics will automatically be computed.</div>';
-	    promise.resolve(html, true);
+	    promise.resolve(html, true, customIndex);
 	} else if (fileType == "sequence") {
 
 	    if (selectedFile.size < (1024 * 1024)) {
-		var html = '<div class="alert alert-error"><strong>Sequence file too small</strong> You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
-		promise.resolve(html, false);
+		var html = '<div class="alert alert-error"><strong>Sequence file too small</strong><br>You cannot use this file, as it is too small for MG-RAST to process. The minimum size is 1Mbp.</div>';
+		promise.resolve(html, false, customIndex);
 	    } else {
 		fileReader.onload = function(e) {
 		    var html = "";
@@ -310,13 +313,13 @@
 			html = '<div class="alert alert-error">Not a valid sequence file.</div>';
 			allow = false;
 		    }
-		    this.prom.resolve(html, allow);
+		    this.prom.resolve(html, allow, this.customIndex);
 		};
 	    }
 	    var tenMB = 1024 * 1024 * 10;
 	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size < tenMB ? selectedFile.size : tenMB));
 	} else {
-	    return promise.resolve("", true);
+	    return promise.resolve("", true, customIndex);
 	}
 	
 	return promise;
@@ -614,7 +617,7 @@
 	return html;
     };
 
-    widget.fileCompleted = function (data) {
+    widget.fileCompleted = function (data, currentIndex) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	// get node from data
@@ -656,6 +659,10 @@
 		});
 	    }
 	}
+    };
+
+    widget.allFilesCompleted = function (data) {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
 	widget.getRunningInboxActions();
 	widget.browser.preserveDetail = true;
@@ -665,7 +672,7 @@
     widget.fileDeleted = function (deleted, node) {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	if (deleted) {
+	if (deleted && node) {
 	    if (node.attributes.hasOwnProperty('actions')) {
 		for (var i=0; i<node.attributes.actions.length; i++) {
 		    widget.cancelInboxAction(node.attributes.actions[i].id);
