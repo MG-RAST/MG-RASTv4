@@ -33,6 +33,7 @@
 		"direction": "desc",
 		"querymode": "full",
 		"allowMultiselect": true,
+		"allowMultiFileUpload": true,
 		"width": 1500,
 		"height": 730,
 		"fileSectionColumns": [
