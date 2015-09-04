@@ -41,6 +41,7 @@
 		    { "path": "created_on", "name": "Date Created", "width": "25%", "type": "date", "align": "left", "sortable": true },
 		]
 	    });
+	    widget.browser.loginAction({ "action": "login", "result": "success", "user": stm.user, "authHeader": stm.authHeader });
 
 	} else {
 	    widget.sidebar.style.display = "none";
