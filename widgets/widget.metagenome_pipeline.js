@@ -691,7 +691,7 @@
 		    dots += '<span style="color: green;font-size: 19px; cursor: default;" title="completed: '+stages[i].cmd.description+'">&#9679;</span>';
 		} else if (stages[i].state == 'in-progress') {
 		    dots += '<span style="color: blue;font-size: 19px; cursor: default;" title="in-progress: '+stages[i].cmd.description+'">&#9679;</span>';
-		} else if (stages[i].state == 'queued') {
+		} else if (stages[i].state == 'queued' || stages[i].state == 'init') {
 		    dots += '<span style="color: orange;font-size: 19px; cursor: default;" title="queued: '+stages[i].cmd.description+'">&#9679;</span>';
 		} else if (stages[i].state == 'error') {
 		    dots += '<span style="color: red;font-size: 19px; cursor: default;" title="error: '+stages[i].cmd.description+'">&#9679;</span>';
