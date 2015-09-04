@@ -34,6 +34,7 @@
 		"querymode": "full",
 		"allowMultiselect": true,
 		"allowMultiFileUpload": true,
+		"calculateMD5": true,
 		"width": 1500,
 		"height": 730,
 		"fileSectionColumns": [
