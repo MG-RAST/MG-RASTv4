@@ -8,7 +8,7 @@ var RetinaConfig = {
 				    "loginField": "login" }
 		     },
     "mgrast_ftp": "ftp://ftp.metagenomics.anl.gov",
-    "mgrast_api": "http://api-dev.metagenomics.anl.gov",
+    "mgrast_api": "http://api-dev.metagenomics.anl.gov",//"http://dunkirk.mcs.anl.gov/~paczian/MG-RAST/site/CGI/api.cgi",
     "shock_url": "http://shock.metagenomics.anl.gov",
     "awe_url": "http://awe.metagenomics.anl.gov",
     "m5nr_solr_url": "http://140.221.67.212:8983/solr/",
