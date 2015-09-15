@@ -283,7 +283,7 @@
 				// sequence contains invalid characters
 				seq = seq.trim();
 				if (! seq.match(/^[acgtunx-]+$/i)) {
-				    if (seq.match(/^[acgtunx-rykmswbdhv]+$/i)) {
+				    if (seq.match(/^[acgtunxrykmswbdhv-]+$/i)) {
 					IUPAC = true;
 				    }
 				    invalidSeqs++;
