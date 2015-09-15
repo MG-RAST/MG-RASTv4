@@ -239,6 +239,7 @@
 		    var d = data.split(/\n/);
 		    var allow = true;
 		    var type = "unknown";
+		    var IUPAC = false;
 		    
 		    // FASTA
 		    if (d[0].match(/^>/)) {
@@ -281,9 +282,10 @@
 				
 				// sequence contains invalid characters
 				seq = seq.trim();
-				if (! seq.match(/^[acgtunx-rykmswbdhv]+$/i)) {
-				    console.log(seq);
-				    return;
+				if (! seq.match(/^[acgtunx-]+$/i)) {
+				    if (seq.match(/^[acgtunx-rykmswbdhv]+$/i)) {
+					IUPAC = true;
+				    }
 				    invalidSeqs++;
 				}
 				if (seq.length < 75) {
@@ -303,6 +305,9 @@
 			    validInfo = numSeqs.formatString() + " sequences of this file were tested. ";
 			    if (invalidSeqs) {
 				validInfo += invalidSeqs.formatString() + " of them contain invalid characters. ";
+				if (IUPAC) {
+				    validInfo += "It seems the file contains IUPAC ambiguity characters other than N. Allowed characters are GATC UXN- only. ";
+				}
 			    }
 			    if (numDuplicate) {
 				validInfo += numDuplicate + " of them contain duplicate headers. ";
