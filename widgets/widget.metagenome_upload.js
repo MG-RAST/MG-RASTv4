@@ -281,7 +281,9 @@
 				
 				// sequence contains invalid characters
 				seq = seq.trim();
-				if (! seq.match(/^[acgtunx-]+$/i)) {
+				if (! seq.match(/^[acgtunx-rykmswbdhv]+$/i)) {
+				    console.log(seq);
+				    return;
 				    invalidSeqs++;
 				}
 				if (seq.length < 75) {
@@ -292,7 +294,7 @@
 			}
 			numSeqs--;
 			tooShort--;
-			var lenInfo = " All of the tested sequences have the minimum length of 75bp.";
+			var lenInfo = " All of the tested sequences fulfill the minimum length requirement of 75bp.";
 			if (tooShort > 0) {
 			    lenInfo = " "+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
 			}
