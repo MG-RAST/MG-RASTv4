@@ -281,9 +281,7 @@
 				
 				// sequence contains invalid characters
 				seq = seq.trim();
-				if (! seq.match(/^[acgtunx-rykmswbdhv]+$/i)) {
-				    console.log(seq);
-				    return;
+				if (! seq.match(/^[acgtunx-]+$/i)) {
 				    invalidSeqs++;
 				}
 				if (seq.length < 75) {
