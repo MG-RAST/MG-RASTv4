@@ -176,41 +176,14 @@
 	if (fileType == "text" ) {
 	    fileReader.onload = function(e) {
 		var data = e.target.result;
-		var d;
-		if (data.match(/\n/)) {
-		    d = data.split(/\n/);
-		} else {
-		    d = data.split(/\r/);
-		}
 		var html = "";
 		var allow = true;
-
-		var barcode = 0;
-		var samplename = 1;
-
-		// test for QIIME barcode file
-		if (d[0].match(/^\#SampleID\tBarcodeSequence/i)) {
-		    d.shift();
-		    barcode = 1;
-		    samplename = 0;
-		}
-
-		var validBarcode = true;
-		for (var i=0; i<d.length; i++) {
-		    if (d[i].length == 0) {
-			continue;
-		    }
-		    var l = d[i].split(/\t/);
-		    if (! (l[barcode].match(/^[atcg]+$/i) && l[samplename].match(/^(\S)+$/))) {
-			validBarcode = false;
-			break;
-		    }
-		}
+		var validBarcode = Retina.WidgetInstances.metagenome_upload[1].validateBarcode(data).valid;
 		var allow = true;
 		if (validBarcode) {
 		    html = "<div class='alert alert-success' style='margin-top: 20px;'>This is a valid barcode file.</div>";
 		} else {
-		    html = "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line, or an automatically generated QIIME barcode file.</div>";
+		    html = "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line, or be an automatically generated QIIME barcode file.</div>";
 		    allow = false;
 		}
 		this.prom.resolve(html, allow, this.customIndex);
@@ -466,21 +439,9 @@
 		if (! params.data) {
 		    html += "<div class='alert alert-info' style='margin-top: 20px;'>This file is empty.</div>";
 		} else {
-		    var d = params.data.split(/\n/);
-		    var validBarcode = true;
-		    var barcodes = {};
-		    for (var i=0; i<d.length; i++) {
-			if (d[i].length == 0) {
-			    continue;
-			}
-			if (d[i].match(/^([atcg])+\t+(\S+)$/i)) {
-			    var c = d[i].replace(/\t+/, "\t");
-			    c = c.split(/\t/);
-			    barcodes[c[1]] = c[0];
-			} else {
-			    validBarcode = false;
-			}
-		    }
+		    var validation = Retina.WidgetInstances.metagenome_upload[1].validateBarcode(params.data);
+		    var barcodes = validation.barcodes;
+		    var validBarcode = validation.valid;
 		    if (validBarcode) {
 			var options = "";
 			var indexOptions = "";
@@ -516,7 +477,7 @@
 			    html += "<button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_upload[1].demultiplex(\""+node.id+"\");'>demultiplex</button></div>";
 			}
 		    } else {
-			html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line.</div>";
+			html += "<div class='alert alert-warning' style='margin-top: 20px;'>This file is not a valid barcode file. Barcode files must have a barcode sequence followed by a tab and a filename in each line, or be an automatically generated QIIME barcode file.</div>";
 		    }
 		}
 	    }
@@ -967,6 +928,43 @@
 		sb.click();
 	    }
 	}
+    };
+
+    widget.validateBarcode = function (data) {
+	var d;
+	if (data.match(/\n/)) {
+	    d = data.split(/\n/);
+	} else {
+	    d = data.split(/\r/);
+	}
+
+	var barcode = 0;
+	var samplename = 1;
+	var barcodes = {};
+	
+	// test for QIIME barcode file
+	if (d[0].match(/^\#SampleID\tBarcodeSequence/i)) {
+	    d.shift();
+	    barcode = 1;
+	    samplename = 0;
+	}
+	
+	var validBarcode = true;
+	for (var i=0; i<d.length; i++) {
+	    if (d[i].length == 0) {
+		continue;
+	    }
+	    var l = d[i].split(/\t/);
+	    if (! (l[barcode].match(/^[atcg]+$/i) && l[samplename].match(/^(\S)+$/))) {
+		validBarcode = false;
+		console.log(l);
+		break;
+	    } else {
+		barcodes[l[samplename]] = l[barcode];
+	    }
+	}
+
+	return { "valid": validBarcode, "barcodes": barcodes };
     };
     
 })();
