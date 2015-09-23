@@ -577,6 +577,7 @@
 		    document.getElementById('submit_job_button').style.display = "";
 		},
 		crossDomain: true,
+		contentType: "application/json",
 		headers: stm.authHeader,
 		type: "POST"
 	    });
@@ -644,6 +645,7 @@
 		console.log(jqXHR);
 	    },
 	    crossDomain: true,
+	    contentType: "application/json",
 	    headers: stm.authHeader,
 	    type: "POST"
 	});
