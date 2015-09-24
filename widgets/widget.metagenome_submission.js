@@ -519,56 +519,69 @@
 	    document.getElementById('submit_job_button').style.display = "none";
 	    var url = RetinaConfig.mgrast_api+'/metadata/validate';
 	    jQuery.ajax(url, {
-		data: { "node_id": widget.selectedMetadata },
+		data: JSON.stringify({ "node_id": widget.selectedMetadata }),
 		success: function(data){
 		    var widget = Retina.WidgetInstances.metagenome_submission[1];
 		    var errors = [];
-
-		    // check files
-		    var seqfiles = {};
-		    var seqnames = {};
-		    for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
-			var f = widget.selectedSequenceFiles[i].name;
-			seqfiles[f] = true;
-			seqnames[f.substr(0, f.lastIndexOf("."))] = true;
-		    }
-		    var numlibs = 0;
-		    for (var i=0; i<data.metadata.samples.length; i++) {
-			for (var h=0; h<data.metadata.samples[i].libraries.length; h++) {
-			    numlibs++;
-			    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('file_name')) {
-				if (! seqfiles[data.metadata.samples[i].libraries[h].data.file_name.value]) {
-				    errors.push('No sequence file matching library '+data.metadata.samples[i].libraries[h].name);
-				}
-			    } else {
-				if (! seqnames[data.metadata.samples[i].libraries[h].data.metagenome_name.value]) {
-				    errors.push('No sequence file matching library '+data.metadata.samples[i].libraries[h].name+".");
-				}
-			    }
-			}
-		    }
+		    
+            var libfiles = {};
+            var libnames = {};
+            var numlibs  = 0;
+            
+            // get files from metadata
+            for (var i=0; i<data.metadata.samples.length; i++) {
+                for (var h=0; h<data.metadata.samples[i].libraries.length; h++) {
+                    numlibs++;
+                    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('file_name')) {
+                        libfiles[ data.metadata.samples[i].libraries[h].data.file_name.value ] = true;
+                    }
+                    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('metagenome_name')) {
+                        libnames[ data.metadata.samples[i].libraries[h].data.metagenome_name.value ] = true;
+                    }
+                }
+            }
+            
+            // check files
+            for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
+                var has_file = false;
+                var f = widget.selectedSequenceFiles[i].name;
+                if (libfiles[f]) {
+                    has_file = true;
+                }
+                if (libnames[f.substr(0, f.lastIndexOf("."))]) {
+                    has_file = true;
+                }
+                if (has_file == false) {
+                    errors.push('No library matching sequence file '+f);
+                }
+            }
 
 		    if (errors.length) {
-			errors.push("You need to verify that either the metagenome_name field matches the sequence filename without the suffix or the file_name field is identical to the file name of the selected sequence file.\n");
+			    errors.push("You need to verify that either the metagenome_name field matches the sequence filename without the suffix or the file_name field is identical to the file name of the selected sequence file.\n");
 		    }
 
 		    if (widget.selectedSequenceFiles.length > numlibs) {
-			errors.push('There are more files selected than entries in the metadata spreadsheet.');
-		    } else if (widget.selectedSequenceFiles.length < numlibs) {
-			errors.push('There are fewer files selected than entries in the metadata spreadsheet.');
+			    errors.push('There are more files selected than entries in the metadata spreadsheet.');
 		    }
 
 		    // check project name
 		    if (widget.selectedProject.name !== data.metadata.data.project_name.value) {
-			errors.push("The project name in the metadata is "+data.metadata.data.project_name.value+" and the one selected in section 2 is "+widget.selectedProject.name);
+			    errors.push("The project name in the metadata is "+data.metadata.data.project_name.value+" and the one selected in section 2 is "+widget.selectedProject.name);
 		    }
 		    
 		    if (errors.length) {
-			alert("There were inconsistencies in your metadata:\n\n"+errors.join("\n")+"\n\nYou must correct these errors before you can perform the submission.");
-			document.getElementById('submit_job_waiting').style.display = "none";
-			document.getElementById('submit_job_button').style.display = "";
+			    alert("There were inconsistencies in your metadata:\n\n"+errors.join("\n")+"\n\nYou must correct these errors before you can perform the submission.");
+			    document.getElementById('submit_job_waiting').style.display = "none";
+			    document.getElementById('submit_job_button').style.display = "";
 		    } else {
-			widget.submit_job(true);
+		        if (widget.selectedSequenceFiles.length < numlibs) {
+    			    var response = confirm('Warning:\nThere are fewer files selected than entries in the metadata spreadsheet.\nThe exta metadata entries will be ignored.\nPress OK to continue with submission.');
+    			    if (response == true) {
+    			        widget.submit_job(true);
+    			    }
+    		    } else {
+			        widget.submit_job(true);
+		        }
 		    }
 		},
 		error: function(jqXHR, error){
@@ -577,7 +590,6 @@
 		    document.getElementById('submit_job_button').style.display = "";
 		},
 		crossDomain: true,
-		contentType: "application/json",
 		headers: stm.authHeader,
 		type: "POST"
 	    });
@@ -631,21 +643,25 @@
 	jQuery.ajax(url, {
 	    data: JSON.stringify(data),
 	    success: function(data){
-		document.getElementById('submit_job_button').removeAttribute('disabled');	
-		if (data.hasOwnProperty('info')) {
-		    alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor it\'s progress.');
-		    window.location = "?mgpage=pipeline";
-		} else {
-		    alert("There was an error with your submission: "+data.ERROR);
-		}
+		    document.getElementById('submit_job_button').removeAttribute('disabled');	
+		    if (data.hasOwnProperty('info')) {
+		        alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor it\'s progress.');
+		        window.location = "?mgpage=pipeline";
+		    } else {
+		        alert("There was an error with your submission:\n"+data.ERROR);
+		    }
 	    },
 	    error: function(jqXHR, error){
-		alert('There was a technichal error with you submission');
-		console.log(error);
-		console.log(jqXHR);
+	        var response = jQuery.parseJSON(jqXHR.responseText);
+	        if (response.hasOwnProperty('ERROR')) {
+	            alert("There was an error with your submission:\n"+response.ERROR);
+            } else {
+		        alert('There was a technichal error with you submission');
+	        }
+		    console.log(error);
+		    console.log(jqXHR);
 	    },
 	    crossDomain: true,
-	    contentType: "application/json",
 	    headers: stm.authHeader,
 	    type: "POST"
 	});
