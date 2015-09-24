@@ -841,8 +841,18 @@
 			       "pending": "orange",
 			       "queued": "blue" };
 		var title = data[i].state;
+		var isError = "";
+		var errorText = "";
+		if (title == "suspend") {
+		    isError = " class='alert alert-error'";
+		    if (data[i].hasOwnProperty('stdout')) {
+			data[i].stdout = data[i].stdout.replace(/^Error[\s\t]*/, "");
+			data[i].stdout = data[i].stdout.replace(/'/ig, "");
+			errorText = " cursor: help;' title='"+data[i].stdout;
+		    }
+		}
 		var status = '<span style="color: '+colors[title]+';font-size: 19px; cursor: default;" title="'+title+'">&#9679;</span>';
-		html += "<tr><td style='padding-right: 5px;'>"+fn+"</td><td>"+task+"</td><td style='text-align: center;'>"+status+"</td><td><button class='btn btn-mini btn-danger' title='cancel action' onclick='if(confirm(\"really cancel this action?\")){Retina.WidgetInstances.metagenome_upload[1].cancelInboxAction(\""+data[i].id+"\");}'>&times;</button></td></tr>";
+		html += "<tr"+isError+"><td style='padding-right: 5px;"+errorText+"'>"+fn+"</td><td>"+task+"</td><td style='text-align: center;'>"+status+"</td><td><button class='btn btn-mini btn-danger' title='cancel action' onclick='if(confirm(\"really cancel this action?\")){Retina.WidgetInstances.metagenome_upload[1].cancelInboxAction(\""+data[i].id+"\");}'>&times;</button></td></tr>";
 	    }
 	    html += "</table>";
 	}
