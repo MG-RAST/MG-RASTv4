@@ -593,7 +593,7 @@
 		if (task.inputs[i].nofile || i == "mysql.tar" || i == "postgresql.tar") {
 		    continue;
 		}
-		inputs.push(i+" ("+task.inputs[i].size.byteSize()+")" + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.inputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
+		inputs.push(task.inputs[i].filename+" ("+task.inputs[i].size.byteSize()+")" + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.inputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
 	    }
 	}
 	inputs = inputs.join('<br>');
@@ -603,7 +603,7 @@
 		if (task.outputs[i].type == "update") {
 		    continue;
 		}
-		outputs.push(i+" ("+task.outputs[i].size.byteSize()+")"+(task.outputs[i]["delete"] ? " <i>temporary</i>" : "") + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.outputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
+		outputs.push(task.outputs[i].filename+" ("+task.outputs[i].size.byteSize()+")"+(task.outputs[i]["delete"] ? " <i>temporary</i>" : "") + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.outputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
 	    }
 	}
 	outputs = outputs.join('<br>');

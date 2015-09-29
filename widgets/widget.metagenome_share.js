@@ -16,6 +16,8 @@
     widget.total = 0;
     widget.current = 0;
     widget.projectsPerPage = 10;
+    widget.projectRightsLocked = true;
+    widget.metagenomeRightsLocked = true;
     
     widget.display = function (wparams) {
         var widget = Retina.WidgetInstances.metagenome_share[1];
@@ -60,7 +62,7 @@
 
 	if (! stm.DataStore.hasOwnProperty('project')) {
 
-	    content.innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 16px; margin-right: 10px; position: relative; bottom: 2px;'> loading your data</div>";
+	    content.innerHTML = "<div style='height: 200px;'></div>";
 
 	    widget.loadProjects();
 	    
@@ -85,10 +87,10 @@
 		var project = stm.DataStore.project[i];
 		links.push('<li'+(i==widget.current ? ' class="active"' : '')+'><a href="#project'+i+'" data-toggle="tab">'+project.name+'</a></li>');
 		details.push('<div class="tab-pane'+(i==widget.current ? ' active' : '')+'" id="project'+i+'">');
-		details.push('<div class="tabbable"><ul class="nav nav-tabs"><li class="active"><a data-toggle="tab" href="#project'+i+'tab1">Metagenomes</a></li><li class=""><a data-toggle="tab" href="#project'+i+'tab2">Details</a></li><li class=""><a data-toggle="tab" href="#project'+i+'tab3">Access</a></li></ul><div class="tab-content" style="padding-left: 10px;"><div id="project'+i+'tab1" class="tab-pane active">');
+		details.push('<div class="tabbable"><ul class="nav nav-tabs" style="margin-bottom: 0px;"><li class="active"><a data-toggle="tab" href="#project'+i+'tab2">Details</a></li><li class=""><a data-toggle="tab" href="#project'+i+'tab1">Metagenomes</a></li><li class=""><a data-toggle="tab" href="#project'+i+'tab3" onclick="Retina.WidgetInstances.metagenome_share[1].showPermissions(\''+project.id+'\', this.parentNode.parentNode.nextSibling.lastChild);">Access</a></li></ul><div class="tab-content" style="padding-left: 10px;"><div id="project'+i+'tab1" class="tab-pane" style="padding-top: 10px;">');
 		
 		if (project.metagenomes.length) {
-		    details.push("<table class='table table-condensed table-hover'><tr><th>ID</th><th>name</th><th>basepairs</th><th>sequences</th></tr>");
+		    details.push("<p>The project "+project.name+" contains "+project.metagenomes.length+" metagenome"+(project.metagenomes.length>1 ? "s" : "")+" listed below.</p><table class='table table-condensed table-hover'><tr><th>ID</th><th>name</th><th>basepairs</th><th>sequences</th></tr>");
 		    for (var h=0; h<project.metagenomes.length; h++) {
 			details.push("<tr><td>"+project.metagenomes[h].metagenome_id+"</td><td>"+project.metagenomes[h].name+"</td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td></tr>");
 		    }
@@ -97,10 +99,9 @@
 		    details.push("<div class='alert alert-info'>This project has no metagenomes.</div>");
 		}
 		
-		details.push('</div><div id="project'+i+'tab2" class="tab-pane">');
-		details.push(project.description);
+		details.push('</div><div id="project'+i+'tab2" class="tab-pane active">');
+		details.push("<h5>status</h5><div class='alert alert-"+(project.status == "public" ? "success" : "info")+"'>"+project.status+"</div><h5>name</h5><p>"+project.name+"</p><h5>ID</h5><p>"+project.id+"</p><h5>PI</h5><p>"+project.pi+"</p><h5>funding</h5><p>"+project.funding_source+"</p><h5>description</h5><p>"+project.description+"</p>");
 		details.push('</div><div id="project'+i+'tab3" class="tab-pane">');
-		details.push('access');
 		details.push('</div></div></div></div>');
 	    }
 	}
@@ -183,7 +184,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project?edit=1&verbosity=summary&limit='+widget.projectsPerPage+'&offset='+widget.current,
+	    url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit='+widget.projectsPerPage+'&offset='+widget.current,
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_share[1];
 		if (! stm.DataStore.hasOwnProperty('project')) {
@@ -207,5 +208,298 @@
 	    }
 	});
     };
+
+    widget.showPermissions = function (project, target) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];
+	
+	var found = null;
+	for (var i=0; i<stm.DataStore.project.length; i++) {
+	    if (stm.DataStore.project[i] && stm.DataStore.project[i].id == project) {
+		found = i;
+		break;
+	    }
+	}
+	if (found !== null && stm.DataStore.project[found].hasOwnProperty('permissions')) {
+	    // parse the permissions into a nicer format
+
+	    // project permissions
+	    var pperm = stm.DataStore.project[found].permissions.project;
+	    var users = {};
+	    for (var i=0; i<pperm.length; i++) {
+		if (! users.hasOwnProperty(pperm[i][4])) {
+		    // check what kind of scope this is
+		    // this is a reviewer access token
+		    if (pperm[i][5].match(/^Reviewer/)) {
+			users[pperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": "<button class='btn btn-mini' onclick='alert(\""+pperm[i][4].replace(/^token\:/, "")+"\");'>reviewer token</button>", "lastname": "", "sortorder": pperm[i][5], "scope": pperm[i][4], "id": pperm[i][3], "claimed": 0 };
+		    }
+		    // this is a user invitation token
+		    else if (pperm[i][4].match(/^token/)) {
+			users[pperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": pperm[i][5].split(/\|/)[3].replace(/email\:/, ""), "lastname": "", "sortorder": pperm[i][5], "scope": pperm[i][4], "id": pperm[i][3] };
+		    }
+		    // this is a normal user
+		    else if (pperm[i][4].match(/^user\:/)) {
+			users[pperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": pperm[i][1], "lastname": pperm[i][2], "sortorder": pperm[i][2]+", "+pperm[i][1], "scope": pperm[i][4], "id": pperm[i][3] };
+		    }
+		    // this is a group
+		    else {
+			users[pperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": pperm[i][4], "lastname": "", "sortorder": pperm[i][4], "scope": pperm[i][4], "id": pperm[i][3] };
+		    }
+		}
+		if (pperm[i][5].match(/^Reviewer/) && pperm[i][1] != null) {
+		    users[pperm[i][4]].claimed++;
+		}
+		users[pperm[i][4]][pperm[i][0]] = true;
+	    }
+	    var uarray = [];
+	    for (var i in users) {
+		if (users.hasOwnProperty(i)) {
+		    uarray.push(users[i]);
+		}
+	    }
+	    uarray = uarray.sort(Retina.propSort("sortorder"));
+	    var html = "<button class='btn btn-mini' style='float: right;' onclick='Retina.WidgetInstances.metagenome_share[1].addReviewerToken(\""+stm.DataStore.project[found].id+"\", this.parentNode);'>add reviewer token</button><button class='btn btn-mini' style='float: right; margin-left: 5px; margin-right: 5px;'>make public</button><button class='btn btn-mini' style='float: right;' onclick='var email = prompt(\"Please enter the email address to share this project with.\");if(email) { Retina.WidgetInstances.metagenome_share[1].addUser(\""+stm.DataStore.project[found].id+"\", this.parentNode, email);}'>add user</button><h4>project</h4><table class='table table-condensed'><tr><th>user / group</th><th>edit</th><th>view<img src='Retina/images/"+(widget.projectRightsLocked ? "lock" : "unlocked")+".png' style='cursor: pointer; width: 16px; float: right;' title='click to "+(widget.projectRightsLocked ? "unlock" : "lock")+"' onclick='Retina.WidgetInstances.metagenome_share[1].unlockProjectRights(this, \""+project+"\", "+(widget.projectRightsLocked ? "false" : "true")+");'></th></tr>";
+	    var okIcon = '<div style="border: 1px solid black; width: 10px; height: 10px;'+(widget.projectRightsLocked ? "" : ' cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_share[1].updateRight(this.parentNode, \'remove\');')+'"><i class="icon icon-ok" style="position: relative; bottom: 6px; right: 1px;"></i></div>';
+	    var noIcon = '<div style="border: 1px solid black; width: 10px; height: 10px;'+(widget.projectRightsLocked ? "" : ' cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_share[1].updateRight(this.parentNode, \'add\');')+'"></div>';
+	    for (var i=0; i<uarray.length; i++) {
+		html += "<tr><td>"+uarray[i].firstname+" "+(uarray[i].hasOwnProperty('claimed') ? "(claimed "+uarray[i].claimed+" times)" : uarray[i].lastname)+"</td><td righttype='project' rightid='"+uarray[i].id+"' rightname='edit' rightscope='"+uarray[i].scope+"' rightindex='"+found+"'>"+(uarray[i].edit ? okIcon : noIcon)+"</td><td righttype='project' rightid='"+uarray[i].id+"' rightname='view' rightscope='"+uarray[i].scope+"' rightindex='"+found+"'>"+(uarray[i].view ? okIcon : noIcon)+"</td></tr>";
+	    }
+	    html += "</table><h4>metagenomes</h4><table class='table table-condensed'><tr><th>ID</th><th>user / group</th><th>edit</th><th>view<img src='Retina/images/"+(widget.metagenomeRightsLocked ? "lock" : "unlocked")+".png' style='cursor: pointer; width: 16px; float: right;' title='click to "+(widget.metagenomeRightsLocked ? "unlock" : "lock")+"' onclick='Retina.WidgetInstances.metagenome_share[1].unlockMetagenomeRights(this, \""+project+"\", "+(widget.metagenomeRightsLocked ? "false" : "true")+");'></th></tr>";
+
+	    // metagenome permissions
+	    okIcon = '<div style="border: 1px solid black; width: 10px; height: 10px;'+(widget.metagenomeRightsLocked ? "" : ' cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_share[1].updateRight(this.parentNode, \'remove\');')+'"><i class="icon icon-ok" style="position: relative; bottom: 6px; right: 1px;"></i></div>';
+	    noIcon = '<div style="border: 1px solid black; width: 10px; height: 10px;'+(widget.metagenomeRightsLocked ? "" : ' cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_share[1].updateRight(this.parentNode, \'add\');')+'"></div>';
+	    var mperm = stm.DataStore.project[found].permissions.metagenome;
+	    users = {};
+	    for (var i=0; i<mperm.length; i++) {
+		if (! users.hasOwnProperty(mperm[i][3]+mperm[i][4])) {
+		    // check what kind of scope this is
+		    // this is a reviewer access token
+		    if (mperm[i][5].match(/^Reviewer/)) {
+			users[mperm[i][3]+mperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": "<button class='btn btn-mini' onclick='alert(\""+mperm[i][4].replace(/^token\:/, "")+"\");'>reviewer token</button>", "lastname": "", "sortorder": mperm[i][3]+mperm[i][5], "id": mperm[i][3], "scope": mperm[i][4], "claimed": 0 };
+		    }
+		    // this is a user invitation token
+		    else if (mperm[i][4].match(/^token/)) {
+			users[mperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": mperm[i][5].split(/\|/)[3].replace(/email\:/, ""), "lastname": "", "sortorder": mperm[i][3]+mperm[i][5], "scope": mperm[i][4], "id": mperm[i][3] };
+		    }
+		    // this is a normal user
+		    else if (mperm[i][4].match(/^user\:/)) {
+			users[mperm[i][3]+mperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": mperm[i][1], "lastname": mperm[i][2], "sortorder": mperm[i][3]+mperm[i][2]+", "+mperm[i][1], "id": mperm[i][3], "scope": mperm[i][4] };
+		    }
+		    // this is a group
+		    else {
+			if (mperm[i][4].match(/^MGRAST_project/)) {
+			    continue;
+			}
+			users[mperm[i][3]+mperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": mperm[i][4].replace(/_/g, " "), "lastname": "", "sortorder": mperm[i][3]+mperm[i][4], "id": mperm[i][3], "scope": mperm[i][4] };
+		    }
+		}
+		if (mperm[i][5].match(/^Reviewer/) && mperm[i][1] != null) {
+		    users[mperm[i][4]].claimed++;
+		}
+		users[mperm[i][3]+mperm[i][4]][mperm[i][0]] = true;
+	    }
+	    var uarray = [];
+	    for (var i in users) {
+		if (users.hasOwnProperty(i)) {
+		    uarray.push(users[i]);
+		}
+	    }
+	    uarray = uarray.sort(Retina.propSort("sortorder"));
+	    var curr = "";
+	    for (var i=0; i<uarray.length; i++) {
+		var mg = "";
+		if (uarray[i].id != curr) {
+		    curr = uarray[i].id;
+		    mg = "mgm"+uarray[i].id;
+		}
+		html += "<tr><td>"+mg+"</td><td>"+uarray[i].firstname+" "+(uarray[i].hasOwnProperty('claimed') ? "(claimed "+uarray[i].claimed+" times)" : uarray[i].lastname)+"</td><td righttype='metagenome' rightid='"+uarray[i].id+"' rightname='edit' rightscope='"+uarray[i].scope+"' rightindex='"+found+"'>"+(uarray[i].edit ? okIcon : noIcon)+"</td><td righttype='metagenome' rightid='"+uarray[i].id+"' rightname='view' rightscope='"+uarray[i].scope+"' rightindex='"+found+"'>"+(uarray[i].view ? okIcon : noIcon)+"</td></tr>";
+	    }
+	    html += "</table>";
+	    target.innerHTML = html;
+	} else {
+	    target.innerHTML = '<div style="text-align: center; margin-top: 80px;"><img src="Retina/images/waiting.gif" style=""></div>';
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		space: target,
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/project/'+project+'?verbosity=permissions',
+		success: function (data) {
+		    for (var i=0; i<stm.DataStore.project.length; i++) {
+			if (stm.DataStore.project[i].id == project) {
+			    stm.DataStore.project[i].permissions = data.permissions;
+			    break;
+			}
+		    }
+		    Retina.WidgetInstances.metagenome_share[1].showPermissions(data.id, this.space);
+		},
+		error: function (xhr) {
+		    alert("oh noes!");
+		}
+	    });
+	}
+    };
+
+    widget.unlockProjectRights = function (btn, project, lock) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];
+	
+	if (lock) {
+	    widget.projectRightsLocked = true;
+	} else {
+	    widget.projectRightsLocked = false;
+	}
+
+	while (btn.nodeName != "DIV") {
+	    btn = btn.parentNode;
+	}
+	widget.showPermissions(project, btn);
+    };
     
+    widget.unlockMetagenomeRights = function (btn, project, lock) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];
+	
+	if (lock) {
+	    widget.metagenomeRightsLocked = true;
+	} else {
+	    widget.metagenomeRightsLocked = false;
+	}
+
+	while (btn.nodeName != "DIV") {
+	    btn = btn.parentNode;
+	}
+	widget.showPermissions(project, btn);
+    };
+
+    widget.updateRight = function (node, action) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];
+
+	var type = node.getAttribute('righttype');
+	var id = node.getAttribute('rightid');
+	var name = node.getAttribute('rightname');
+	var scope = node.getAttribute('rightscope');
+	var rindex = node.getAttribute('rightindex');
+	var projectID = stm.DataStore.project[rindex].id;
+    
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    node: node,
+	    action: action,
+	    url: RetinaConfig.mgrast_api+'/project/'+projectID+'/updateright?type='+type+'&name='+name+'&scope='+scope+'&action='+action+'&id='+id,
+	    success: function (data) {
+		if (data.hasOwnProperty('OK')) {
+		    var widget = Retina.WidgetInstances.metagenome_share[1];
+		    var node = this.node;
+		    var txt = node.parentNode.firstChild.innerHTML.split(/\s/);
+		    var firstname = txt[0];
+		    var lastname = txt[1] || "";
+		    var type = node.getAttribute('righttype');
+		    var id = node.getAttribute('rightid');
+		    var name = node.getAttribute('rightname');
+		    var scope = node.getAttribute('rightscope');
+		    var rindex = node.getAttribute('rightindex');
+		    var project = stm.DataStore.project[rindex];
+		    var action = this.action;
+		    while (node.nodeName != "DIV") {
+			node = node.parentNode;
+		    }
+		    if (action == 'remove') {
+			for (var i=0; i<project.permissions[type].length; i++) {
+			    var p = project.permissions[type][i];
+			    if (p[0] == name && p[3] == id && p[4] == scope) {
+				project.permissions[type].splice(i, 1);
+				break;
+			    }
+			}
+		    } else {
+			project.permissions[type].push([name, firstname, lastname, id, scope]);
+		    }
+		    widget.showPermissions(project.id, node);
+		} else if (data.hasOwnProperty('ERROR')) {
+		    alert('changing permissions failed: '+data.ERROR);
+		} else {
+		    alert('changing permissions failed');
+		}
+	    },
+	    error: function (xhr, data) {
+		try {
+		    var resp = JSON.parse(xhr.responseText);
+		    alert('changing permissions failed: '+resp.ERROR);
+		} catch (error) {
+		    alert('changing permissions failed');
+		}
+	    }
+	});
+    };
+
+    widget.addReviewerToken = function (projectID, node) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];    
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    node: node,
+	    pid: projectID,
+	    url: RetinaConfig.mgrast_api+'/project/'+projectID+'/updateright?user=reviewer&type=project&name=view',
+	    success: function (data) {
+		if (data.hasOwnProperty('token')) {
+		    var widget = Retina.WidgetInstances.metagenome_share[1];
+		    var found = null;
+		    for (var i=0; i<stm.DataStore.project.length; i++) {
+			if (stm.DataStore.project[i] && stm.DataStore.project[i].id == this.pid) {
+			    delete stm.DataStore.project[i].permissions;
+			    break;
+			}
+		    }
+		    widget.showPermissions(this.pid, this.node);
+		} else if (data.hasOwnProperty('ERROR')) {
+		    alert('adding reviewer token failed: '+data.ERROR);
+		} else {
+		    alert('adding reviewer token failed');
+		}
+	    },
+	    error: function (xhr, data) {
+		try {
+		    var resp = JSON.parse(xhr.responseText);
+		    alert('adding reviewer token failed: '+resp.ERROR);
+		} catch (error) {
+		    alert('adding reviewer token failed');
+		}
+	    }
+	});
+    };
+
+    widget.addUser = function (projectID, node, email) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];    
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    node: node,
+	    pid: projectID,
+	    url: RetinaConfig.mgrast_api+'/project/'+projectID+'/updateright?user='+email+'&type=project&name=view',
+	    success: function (data) {
+		if (data.hasOwnProperty('project')) {
+		    var widget = Retina.WidgetInstances.metagenome_share[1];
+		    var found = null;
+		    stm.DataStore.project.push(data.project[0]);
+		    widget.showPermissions(this.pid, this.node);
+		} else if (data.hasOwnProperty('ERROR')) {
+		    alert('sharing with user failed: '+data.ERROR);
+		} else {
+		    alert('sharing with user failed');
+		}
+	    },
+	    error: function (xhr, data) {
+		try {
+		    var resp = JSON.parse(xhr.responseText);
+		    alert('sharing with user failed: '+resp.ERROR);
+		} catch (error) {
+		    alert('sharing with usern failed');
+		}
+	    }
+	});
+    };
+
 })();
