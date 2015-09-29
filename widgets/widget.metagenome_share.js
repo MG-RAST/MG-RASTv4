@@ -483,16 +483,7 @@
 		if (data.hasOwnProperty('project')) {
 		    var widget = Retina.WidgetInstances.metagenome_share[1];
 		    var found = null;
-		    for (var i=0; i<stm.DataStore.project.length; i++) {
-			if (stm.DataStore.project[i] && stm.DataStore.project[i].id == this.pid) {
-			    
-			    break;
-			}
-		    }
-		    
-		    console.log(data);
-		    return;
-
+		    stm.DataStore.project.push(data.project[0]);
 		    widget.showPermissions(this.pid, this.node);
 		} else if (data.hasOwnProperty('ERROR')) {
 		    alert('sharing with user failed: '+data.ERROR);
