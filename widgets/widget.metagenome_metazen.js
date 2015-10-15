@@ -897,9 +897,9 @@
 	}
 	var data = { "project": {},
 		     "sample": {},
-		     "metagenome": {},
-		     "metatranscriptome": {},
-		     "mimarks-survey": {}
+		     "metagenome": {"investigation_type":"metagenome"},
+		     "metatranscriptome": {"investigation_type":"metatranscriptome"},
+		     "mimarks-survey": {"investigation_type":"mimarks-survey"}
 		   };
 
 	for (var i=0; i<fields.length; i++) {
