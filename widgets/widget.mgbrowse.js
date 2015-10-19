@@ -38,6 +38,7 @@
 	    } else {
 		widget.result_list = Retina.Renderer.create("listselect", {
 		    target: widget.target,
+		    headers: stm.authHeader,
 		    callback: widget.callback || null,
 		    asynch_limit: 100,
 		    synchronous: false,
@@ -62,6 +63,7 @@
 	    } else {
 		widget.result_table = Retina.Renderer.create("table", {
 		    target: widget.target,
+		    headers: stm.authHeader,
 		    rows_per_page: 14,
 		    filter_autodetect: false,
 		    filter: result_table_filter,

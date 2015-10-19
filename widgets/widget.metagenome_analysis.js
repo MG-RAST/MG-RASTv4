@@ -1267,6 +1267,7 @@
 		    jQuery.ajax({ bound: 'profile'+id,
 				  //url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type=feature&source="+source+"&nocutoff=1",
 				  url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type="+type+"&source="+source+"&evalue="+evalue+"&length="+alilength+"&identity="+identity,
+				  headers: stm.authHeader,
 				  dataType: "json",
 				  id: id,
 				  dc: name,
@@ -1321,8 +1322,7 @@
 					  }
 				      }, false); 
 				      return xhr;
-				  },
-				  headers: Retina.WidgetInstances.metagenome_analysis[1].authHeader
+				  }
 				}).then(function(data){
 				    delete stm.DataStore.inprogress[this.bound];
 				    var bar = document.getElementById('progressbar'+this.bound);
