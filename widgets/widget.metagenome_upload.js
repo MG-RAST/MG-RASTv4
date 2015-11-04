@@ -87,6 +87,7 @@
 	    	widget.browser = Retina.Widget.create("shockbrowse", { "target": document.getElementById("browser"),
 	    							       "width": 900,
 	    							       "height": 520,
+								       "querymode": "full",
 	    							       "enableUpload": true,
 	    							       "customPreview": widget.filePreview,
 	    							       "fileUploadCompletedCallback": widget.fileCompleted,
@@ -114,8 +115,8 @@
 											    "callback": widget.downloadInboxDetails } ],
 	    							       "user": stm.user,
 								       "fileSectionColumns": [
-									   { "path": "file.name", "name": "Name", "width": "75%", "type": "file" },
-									   { "path": "attributes.data_type", "name": "Type", "width": "25%" }
+									   { "path": "file.name", "name": "Name", "width": "75%", "type": "file", "sortable": true },
+									   { "path": "attributes.data_type", "name": "Type", "width": "25%", "sortable": true }
 								       ],
 								       "fileDoneAttributes": {
 									   "type": "inbox",
@@ -130,7 +131,7 @@
 	    							       "uploadRestrictions": [ { "expression": /\.rar$/, "text": 'Invalid archive type. Allowed types are gz, zip and bz2' },
 	    										       { "expression": /\.faa$/, "text": "MG-RAST cannot process protein sequences. Please use DNA only." }],
 	    							       "preUploadCustom": widget.fileSelectedForUpload,
-	    							       "presetFilters": { "type": "inbox", "id": stm.user.id },
+	    							       "presetFilters": { "attributes.type": "inbox", "attributes.id": stm.user.id },
 	    							       "shockBase": RetinaConfig.shock_url});
 	    	widget.browser.loginAction({ action: "login", result: "success", user: stm.user, authHeader: stm.authHeader});
 	    }
