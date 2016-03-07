@@ -65,6 +65,10 @@
 	}
 	var content = widget.main;
 	var sidebar = widget.sidebar;
+
+	if (document.getElementById("pageTitle")) {
+	    document.getElementById("pageTitle").innerHTML = "job progress";
+	}
 	
 	// set the output area
 	sidebar.parentNode.className = "span5 sidebar";
@@ -197,21 +201,20 @@
 		}
 		widget.user_table.render();
 		widget.user_table.update({},2);
-
-		if (Retina.cgiParam('admin') && Retina.cgiParam('job')) {
-		    jQuery.ajax({
-			method: "GET",
-			dataType: "json",
-			headers: stm.authHeader,
-			url: RetinaConfig.mgrast_api+'/pipeline/'+Retina.cgiParam('job'),
-			success: function (data) {
-			    if (! stm.DataStore.hasOwnProperty('job')) {
-				stm.DataStore.job = {};
-			    }
-			    stm.DataStore.job[data.data[0].id] = data.data[0];
-			    Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(data.data[0].id);
-			}});
-		}
+	    }
+	    if (Retina.cgiParam('job')) {
+		jQuery.ajax({
+		    method: "GET",
+		    dataType: "json",
+		    headers: stm.authHeader,
+		    url: RetinaConfig.mgrast_api+'/pipeline/'+Retina.cgiParam('job'),
+		    success: function (data) {
+			if (! stm.DataStore.hasOwnProperty('job')) {
+			    stm.DataStore.job = {};
+			}
+			stm.DataStore.job[data.data[0].id] = data.data[0];
+			Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(data.data[0].id);
+		    }});
 	    }
 	}
 	// there is no user, show login required
@@ -482,6 +485,11 @@
 	var widget = this;
 
 	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
+
+	// check if the failure was recent
+	if (Date.now() - Date.parse(job.updatetime) < (48 * 60 * 60 * 1000)) {
+	    html = "but the error occurred less than 48 hours ago. We check the queue daily and handle suspended jobs. If the job is still suspended after 48 hours, please send us a mail.";
+	}
 
 	// SHOCK server was unavailable
 	if (job.notes.match(/lookup shock\.metagenomics.anl\.gov\: no such host/)) {
