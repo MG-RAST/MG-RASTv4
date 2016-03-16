@@ -56,7 +56,7 @@
 			  2: { "type": "text" },
 			  3: { "type": "text" },
 			  4: { "type": "text" } },
-		invisible_columns: { 3: true },
+		invisible_columns: {},
 		sort_autodetect: true,
 		synchronous: false,
 		headers: stm.authHeader,
@@ -216,7 +216,7 @@
 												     email: d.email,
 												     login: d.login },
 											   "token": d.token }), { expires: 7 });
-		window.location = "mgmain.html";
+		window.location = "mgmain.html?mgpage=pipeline";
 	    }}).fail(function(xhr, error) {
 		alert('impersonation failed');
 	    });
@@ -358,12 +358,12 @@
 	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
 
 	if (data) {
-	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")</td></tr>";
+	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].deleteProject(\""+data.id+"\");'>delete</button></td></tr>";
 	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
 	    for (var i=0; i<data.metagenomes.length; i++) {
 		html += "<option>"+data.metagenomes[i][0]+"</option>";
 	    }
-	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID</th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
+	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].createProject();'>create</button></th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
 	} else {
 	    if (pid.match(/^\d+$/)) {
 		pid = "mgp"+pid;
@@ -375,7 +375,8 @@
 		headers: stm.authHeader,
 		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
 		success: function (data) {
-		    Retina.WidgetInstances.admin_debug[1].showProject(data.id, data);
+		    var widget = Retina.WidgetInstances.admin_debug[1];
+		    widget.showProject(data.id, data);
 		},
 		error: function (data) {
 		    document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>retrieving project data failed, is the ID valid?</div>";
@@ -383,6 +384,56 @@
 	}
 
 	document.getElementById('projectSpace').innerHTML = html;
+    };
+
+    widget.deleteProject = function(id) {
+	var widget = this;
+	var fd = new FormData();
+	fd.append('id', id);
+	jQuery.ajax({
+	    method: "POST",
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project/delete',
+	    success: function (data) {
+		if (data.hasOwnProperty('OK')) {
+		    alert('project deleted');
+		    document.getElementById('projectSel').value = "";
+		    document.getElementById('projectSpace').innerHTML = "";
+		} else {
+		    alert(data.ERROR);
+		}
+	    },
+	    error: function (data) {
+		document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>deleting project failed</div>";
+	    }});
+    };
+
+    widget.createProject = function () {
+	var widget = this;
+
+	var name = prompt('select project name');
+	var user = 'paczian';
+	var fd = new FormData();
+	fd.append('user', user);
+	fd.append('name', name);
+	jQuery.ajax({
+	    method: "POST",
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project/create',
+	    success: function (data) {
+		document.getElementById('project_b').value = data.project;
+	    },
+	    error: function (data) {
+		document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>creating project failed</div>";
+	    }});
     };
 
     widget.checkSequenceType = function () {

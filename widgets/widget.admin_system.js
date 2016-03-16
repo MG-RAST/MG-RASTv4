@@ -30,6 +30,8 @@
 
 	    html += "<button class='btn btn-mini' title='refresh' style='margin-bottom: 15px;' onclick='Retina.WidgetInstances.admin_system[1].test_components();'><i class='icon-refresh'></i></button>";
 
+	    html += "<div id='serverstatus' class='alert alert-info' style='text-align: center;'>checking server status... <img src='Retina/images/waiting.gif' style='width: 16px;'></div>";
+	    
 	    html += "<table>";
 	    html += "<tr><td style='width: 150px;'><b>Website</b></td><td id='system_website'></td></tr>";
 	    html += "<tr><td style='width: 150px;'><a href='#awe'><b>AWE</b></a></td><td id='system_AWE'></td></tr>";
@@ -119,8 +121,80 @@
 			  widget.shockDetails(data);
 		      }
 		    });
+
+	// get the server resource information
+	jQuery.ajax({ url: RetinaConfig.mgrast_api+"/server/MG-RAST",
+		      dataType: "json",
+		      headers: stm.authHeader,
+		      success: function(data) {
+			  var widget = Retina.WidgetInstances.admin_system[1];
+			  var html = [];
+			  html.push("<p>MG-RAST server running version "+data.version+"</p>");
+			  html.push("<p>hosting "+parseInt(data.public_metagenomes).formatString()+" public and "+parseInt(data.metagenomes).formatString()+" total metagenomes with "+parseInt(parseInt(data.basepairs) / 1000000000000).formatString(2)+" Tbp and "+parseInt(parseInt(data.sequences) / 1000000000).formatString()+" billion sequences.</p>");
+			  html.push("<p>Server status is "+data.status+", "+(data.info ? " the server message is: '"+data.info+"'" : " there is no server message")+".<button class='btn btn-small pull-right' onclick='Retina.WidgetInstances.admin_system[1].editSystemMessage();'>edit</button></p>");
+			  html.push("<div id='editMessage' style='display: none; margin-top: 20px; padding: 10px; border-radius: 3px; border: 1px solid;'></div>");
+			  document.getElementById('serverstatus').innerHTML = html.join("");
+		      },
+		      error: function(data) {
+			  document.getElementById('serverstatus').innerHTML = "<div class='alert alert-error'>could not access MG-RAST server resource</div>";
+		      }
+		    });
     };
 
+    widget.editSystemMessage = function () {
+	var widget = this;
+
+	var html = [];
+	html.push("<table style='text-align: left;'><tr><td style='padding-right: 50px;'>message</td><td><input type='text' id='serverMessageText'></td></tr><tr><td>message is</td><td><select id='messageStatus'><option>active</option><option>inactive</option></select></td></tr><tr><td>message severity</td><td><select id='severity'><option>info</option><option>down</option></select></td></tr><tr><td colspan=2><button class='btn btn-small' onclick='Retina.WidgetInstances.admin_system[1].setSystemMessage();'>update</button></td></tr></table>");
+
+	document.getElementById('editMessage').innerHTML = html.join("");
+
+	jQuery('#editMessage').toggle();
+    };
+
+    widget.setSystemMessage = function () {
+	var widget = this;
+	
+	// impersonate mgrast
+	jQuery.ajax({ url: RetinaConfig.mgrast_api+"/user/impersonate/mgrast",
+		      dataType: "json",
+		      headers: stm.authHeader,
+		      success: function(data) {
+			  var newNodeAttributes = { "message": document.getElementById('serverMessageText').value,
+						    "severity": document.getElementById('severity').options[document.getElementById('severity').selectedIndex].value,
+						    "status": document.getElementById('messageStatus').options[document.getElementById('messageStatus').selectedIndex].value,
+						    "type": "server" };
+			  document.getElementById('serverstatus').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+			  var fd = new FormData();
+			  fd.append('attributes', new Blob([ JSON.stringify(newNodeAttributes) ], { "type" : "text\/json" }));
+			  jQuery.ajax({ url: RetinaConfig.shock_url+"/node/7ed4f9af-ed76-4de9-9dfe-42bfe4e354e8",
+					headers: { "Authorization": "mgrast "+data.token},
+					contentType: false,
+					processData: false,
+					data: fd,
+					crossDomain: true,
+					type: "PUT",
+					success: function(data) {
+					    var widget = Retina.WidgetInstances.admin_system[1];
+					    document.getElementById('serverstatus').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+					    widget.test_components();
+					},
+					error: function(data) {
+					    var widget = Retina.WidgetInstances.admin_system[1];
+					    document.getElementById('serverstatus').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+					    alert('could not set message');
+					    widget.test_components();
+					}
+				      });
+		      },
+		      error: function(data) {
+			  var widget = Retina.WidgetInstances.admin_system[1];
+			  alert('could not impersonate mgrast');
+			  widget.test_components();
+		      }
+		    });
+    };
+    
     widget.aweDetails = function () {
 	var widget = Retina.WidgetInstances.admin_system[1];
 
