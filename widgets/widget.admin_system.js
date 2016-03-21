@@ -41,6 +41,7 @@
 	    html += "<tr><td><b>metagenome solr</a></td><td id='system_solr'></td></tr>";
 	    html += "<tr><td><b>postgres</a></td><td id='system_postgres'></td></tr>";
 	    html += "<tr><td><b>mySQL</a></td><td id='system_mySQL'></td></tr>";
+	    html += "<tr><td><b>Cassandra</a></td><td id='system_cassandra'></td></tr>";
 	    html += "</table>";
 
 	    html += "<h4 style='margin-top: 50px;'><a name='awe'></a>AWE Details</h4><div id='awe_details'>-</div>";
@@ -90,7 +91,8 @@
 		     'M5NR',
 		     'solr',
 		     'postgres',
-		     'mySQL' ];
+		     'mySQL',
+		     'cassandra' ];
 
 	for (var i=0; i<sites.length; i++) {
 	    document.getElementById('system_'+sites[i]).innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
