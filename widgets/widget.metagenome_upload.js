@@ -25,21 +25,27 @@
 	var content = widget.main;
 	var sidebar = widget.sidebar;
 
+	if (document.getElementById("pageTitle")) {
+	    document.getElementById("pageTitle").innerHTML = "upload";
+	}
+	
 	if (! stm.user) {
-	    content.innerHTML = "<div class='alert alert-info'>You need to be logged in to use this page</div>";
+	    sidebar.parentNode.style.display = 'none';
+	    content.className = "span10 offset1";
+	    content.innerHTML = "<div class='alert alert-info' align=center>In order to submit your data to MG-RAST, you must first<br><button class='btn' style='margin-top: 10px;' onclick='document.getElementById(\"loginModalDisable\").style.display=\"none\";jQuery(\"#loginModal\").modal(\"show\");document.getElementById(\"login\").focus();'>log in</button><span style='position: relative; top: 5px; margin-left: 10px; margin-right: 10px;'>or</span><button class='btn' style='margin-top: 10px;' onclick='window.location=\"mgmain.html?mgpage=register\";'>register a new account</button></div>";
 	    return;
 	}
 
 	// help text
-	sidebar.setAttribute('style', 'padding: 10px;');
-	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h3><dl>';
+	sidebar.setAttribute('style', 'padding: 10px; padding-top: 0px;');
+	var sidehtml = '<h4><img style="height: 16px; margin-right: 10px; margin-top: -4px;" src="Retina/images/help.png">frequent questions</h4><dl>';
 	sidehtml += '<dt>'+widget.expander()+'File Formats</dt><dd style="display: none;">You can upload any fasta, fastq or SFF files. For metadata please use <a href="ftp://ftp.metagenomics.anl.gov/data/misc/metadata/MGRAST_MetaData_template_1.7.xlsx">MS Excel spreadsheets</a> with GSC MIxS compliant metadata. (Check out our <a href="?mgpage=metazen" target=_blank>Metazen tool</a> for assistance creating and filling them out). If you want to upload multiple files at a time you need to place them into an archive (e.g. tar or zip).<br><br></dd>';
 	sidehtml += '<dt>'+widget.expander()+'Metadata</dt><dd style="display: none;">We require metadata for submission of multiple files, sharing with colleagues or data publication. A good strategy is create the metadata file with metazen or copy an existing file. The metadata is not meant to perfectly describe your data, but allow others to discover it for this purpose we use controlled vocabularies as much as possible.<br><br></dd>';
 	sidehtml += '<dt>'+widget.expander()+'Studies and Projects</dt><dd style="display: none;">Older versions of MG-RAST used the term projects, we are now migrating to the use of the term study instead. They are identical otherwise.</dd>';
 	sidehtml += '</dl>';
 
 	// running actions
-	sidehtml += '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions<button class="btn btn-mini" title="refresh" onclick="Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();" style="margin-left: 30px;position: relative; bottom: 2px;"><img style="height: 12px;" src="Retina/images/loop.png"></button></h3>';
+	sidehtml += '<h4><img style="height: 16px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions<button class="btn btn-mini" title="refresh" onclick="Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();" style="margin-left: 30px;position: relative; bottom: 2px;"><img style="height: 12px;" src="Retina/images/loop.png"></button></h4>';
 	sidehtml += "<p>If you perform actions on files in your inbox that take some time to complete, you can view their status here.</p><div id='inboxActions' style='text-align: center;'><img src='Retina/images/waiting.gif' style='width: 32px;'></div>";
 
 	sidebar.innerHTML = sidehtml;
@@ -204,104 +210,102 @@
 	    promise.resolve(html, true, customIndex);
 	} else if (fileType == "sequence") {
 
-	    if (selectedFile.size < (1024 * 1024)) {
-		var html = '<div class="alert alert-error"><strong>Sequence file small</strong><br>You cannot use this file unless it is a 16s or assembled dataset.<br><br><strong>Other datasets with less than 1Mbp will fail to process through the MG-RAST pipeline.</strong></div>';
-		if (confirm('This sequence file is very small and will likely fail to process.\nDo you want to continue uploading?')) {
-		    promise.resolve(html, true, customIndex);
-		} else {
-		    promise.resolve(html, false, customIndex);
+	    fileReader.onload = function(e) {
+		var html = "";
+		var data = e.target.result;
+		var d = data.split(/\n/);
+		var allow = true;
+		var type = "unknown";
+		var IUPAC = false;
+		
+		// FASTA
+		if (d[0].match(/^>/)) {
+		    type = "FASTA";
+		} else if (d[0].match(/^@/)) {
+		    type = "FASTQ";
 		}
-	    } else {
-		fileReader.onload = function(e) {
-		    var html = "";
-		    var data = e.target.result;
-		    var d = data.split(/\n/);
-		    var allow = true;
-		    var type = "unknown";
-		    var IUPAC = false;
-		    
-		    // FASTA
-		    if (d[0].match(/^>/)) {
-			type = "FASTA";
-		    } else if (d[0].match(/^@/)) {
-			type = "FASTQ";
+		if (type == "FASTA" || type == "FASTQ") {
+		    var header = d[0];
+		    var seq = d[1].trim();
+		    var tooShort = 0;
+		    var numSeqs = 1;
+		    var invalidSeqs = 0;
+		    var headers = {};
+		    var numDuplicate = 0;
+		    if (type=="FASTA") {
+			headers[header] = true;
 		    }
-		    if (type == "FASTA" || type == "FASTQ") {
-			var header = d[0];
-			var seq = d[1].trim();
-			var tooShort = 0;
-			var numSeqs = 1;
-			var invalidSeqs = 0;
-			var headers = {};
-			var numDuplicate = 0;
-			if (type=="FASTA") {
-			    headers[header] = true;
-			}
-			for (var i=(type=="FASTA"?2:0); i<d.length - 1; i++) {
-			    var newEntry = false;
-			    if (type == "FASTA") {
-				if (d[i].match(/^>/)) {
-				    header = d[i];
-				    newEntry = true;
-				} else {
-				    seq += d[i].trim();
-				}
-			    } else {
+		    for (var i=(type=="FASTA"?2:0); i<d.length - 1; i++) {
+			var newEntry = false;
+			if (type == "FASTA") {
+			    if (d[i].match(/^>/)) {
 				header = d[i];
-				seq = d[i+1];
-				i += 3;
+				newEntry = true;
+			    } else {
+				seq += d[i].trim();
 			    }
-			    if (newEntry || type=="FASTQ") {
-				if (headers.hasOwnProperty(header)) {
-				    numDuplicate++;
-				} else {
-				    headers[header] = true;
+			} else {
+			    header = d[i];
+			    seq = d[i+1];
+			    i += 3;
+			}
+			if (newEntry || type=="FASTQ") {
+			    if (headers.hasOwnProperty(header)) {
+				numDuplicate++;
+			    } else {
+				headers[header] = true;
+			    }
+			    numSeqs++;
+			    
+			    // sequence contains invalid characters
+			    seq = seq.trim();
+			    if (! seq.match(/^[acgtunx]+$/i)) {
+				if (seq.match(/^[acgtunxrykmswbdhv]+$/i)) {
+				    IUPAC = true;
 				}
-				numSeqs++;
-				
-				// sequence contains invalid characters
-				seq = seq.trim();
-				if (! seq.match(/^[acgtunx-]+$/i)) {
-				    if (seq.match(/^[acgtunxrykmswbdhv-]+$/i)) {
-					IUPAC = true;
-				    }
-				    invalidSeqs++;
-				}
-				if (seq.length < 75) {
-				    tooShort++;
-				}
-				seq = "";
+				invalidSeqs++;
+			    }
+			    if (seq.length < 75) {
+				tooShort++;
+			    }
+			    seq = "";
+			}
+		    }
+		    //numSeqs--;
+		    tooShort--;
+		    var lenInfo = "<p>All of the tested sequences fulfill the minimum length requirement of 75bp.</p>";
+		    if (tooShort > 0) {
+			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.</p>";
+		    }
+		    var validInfo = "<p>This is a valid "+type+" file. "+numSeqs.formatString() + " sequences of this file were tested. ";
+		    if (invalidSeqs || numDuplicate) {
+			validInfo = "<p>"+numSeqs.formatString() + " sequences of this file were tested. ";
+			if (invalidSeqs) {
+			    validInfo += invalidSeqs.formatString() + " of them contain invalid characters. ";
+			    if (IUPAC) {
+				validInfo += "It seems the file contains IUPAC ambiguity characters other than N. Allowed characters are GATC UXN only. ";
 			    }
 			}
-			numSeqs--;
-			tooShort--;
-			var lenInfo = " All of the tested sequences fulfill the minimum length requirement of 75bp.";
-			if (tooShort > 0) {
-			    lenInfo = " "+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.";
+			if (numDuplicate) {
+			    validInfo += numDuplicate + " of them contain duplicate headers. ";
 			}
-			var validInfo = "This is a valid "+type+" file. "+numSeqs.formatString() + " sequences of this file were tested. ";
-			if (invalidSeqs || numDuplicate) {
-			    validInfo = numSeqs.formatString() + " sequences of this file were tested. ";
-			    if (invalidSeqs) {
-				validInfo += invalidSeqs.formatString() + " of them contain invalid characters. ";
-				if (IUPAC) {
-				    validInfo += "It seems the file contains IUPAC ambiguity characters other than N. Allowed characters are GATC UXN- only. ";
-				}
-			    }
-			    if (numDuplicate) {
-				validInfo += numDuplicate + " of them contain duplicate headers. ";
-			    }
-			    validInfo += "The "+type+" file is not in the correct format for processing.";
-			    allow = false;
-			}
-			html += '<div class="alert alert-info">'+validInfo+lenInfo+'</div>';
-		    } else {
-			html = '<div class="alert alert-error">Not a valid sequence file.</div>';
+			validInfo += "The "+type+" file is not in the correct format for processing.";
 			allow = false;
 		    }
-		    this.prom.resolve(html, allow, this.customIndex);
-		};
-	    }
+		    validInfo += "</p>";
+		    if (data.length < (1024 * 1024) && numSeqs < 100) {
+			validInfo += '<p>This dataset is less than 1MB in size and contains less than 100 sequences. It is too small to be processed by the MG-RAST pipeline.</p>';
+			allow = false;
+		    }
+		    
+		    html += '<div class="alert alert-info" style="text-align: left;">'+validInfo+lenInfo+'</div>';
+		} else {
+		    html = '<div class="alert alert-error">Not a valid sequence file.</div>';
+		    allow = false;
+		}
+		this.prom.resolve(html, allow, this.customIndex);
+	    };
+	    
 	    var tenMB = 1024 * 1024 * 10;
 	    fileReader.readAsText(blobSlice.call(selectedFile, 0, selectedFile.size < tenMB ? selectedFile.size : tenMB));
 	} else {
