@@ -82,6 +82,7 @@
     border-radius: 4px;
     overflow-y: auto;
     padding-bottom: 10px;
+    background-color: white;
 }
 
 .tab-pane {
@@ -338,4 +339,40 @@
 }
 .notebookTable {
     font-size: 10pt;
+}
+
+.box {
+    border: 1px outset gray;
+    border-radius: 3px;
+    padding: 10px;
+    box-shadow: 8px 8px 8px #ccc;
+    width: 45%;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.box-wide {
+    width: 100%;
+}
+
+li.active > a.tab-light {
+    background-color: #f5f5f5 !important;
+}
+
+.tab-content-inner {
+    background-color: #f5f5f5 !important;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 20px;
+    border-radius: 4px;
+    height: 585px;
+    overflow-y: auto;
+}
+
+.tabs-left li.active > a {
+    position: relative;
+    left: 1px;
+    z-index: 1;
 }
