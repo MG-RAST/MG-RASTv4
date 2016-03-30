@@ -22,91 +22,21 @@
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap-responsive.min.css">
     <link rel="stylesheet" type="text/css" href="css/mgrast.css">
 
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <!-- page init js -->
+    <script type="text/javascript" src="js/main.js"></script>
+    
     <!-- webapp initialization -->
     <script>
-    jQuery( document ).ready(function(){
-	try {
-	    if (window.opener && window.opener.stm) {
-		window.stm = window.opener.stm;
-	    } else {
-		stm.init({});
-		stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	    }
-	} catch (err) {
-	    stm.init({});
-	    stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	}
-	Retina.init({});
-	    
-	var page  = Retina.cgiParam("mgpage") || "search";
-	
-	var icons = {
-	    "submission": "pipeline",
-	    "upload": "pipeline",
-	    "overview": "publications",
-	    "project": "publications",
-	    "download": "publications", 
-	    "share": "pipeline"
-	};
-	var iconame = icons[page] ? icons[page] : page;
-	
-	var ico = document.getElementById('icon_'+iconame);
-	if (ico) {
-	    ico.className = "icosp icoactivesp";
-	    ico.firstChild.className = "ico icoactive";
-	}
-	
-	document.title = page.charAt(0).toUpperCase()+page.substr(1);
-
-	changeLocation = function(event, loc) {
-	    event = event || window.event;
-	    if (event.shiftKey) {
-		window.open(loc);
-	    } else {
-		window.location = loc;
-	    }
-	};
-	Retina.load_widget("metagenome_"+page).then( function() {
-	    var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
-								 "sidebar": document.getElementById("sidebar") }, true);
-	    
-	    Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
-		var loginAction = function (data) {
-		    if (data.action != "logout" && data.result == "success") {
-			if (stm.user && stm.user.hasOwnProperty("preferences")) {
-			    mgp.display({ "main": document.getElementById("content"),
-					  "sidebar": document.getElementById("sidebar") });
-			    return;
-			}
-			stm.user = data.user;
-			stm.authHeader = { "Authorization": "mgrast "+data.token};
-			mgp.display({ "main": document.getElementById("content"),
-				      "sidebar": document.getElementById("sidebar") });
-		    } else {
-			stm.user = null;
-			stm.authHeader = {};
-			mgp.display({ "main": document.getElementById("content"),
-				      "sidebar": document.getElementById("sidebar") });
-		    }
-		};
-		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				"callback": loginAction,
-						"registerEnabled": true,
-						"registerLink": "mgmain.html?mgpage=register",
-						"helpEnabled": true,
-						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
-						"forgotEnabled": true,
-						"forgotLink": "mgmain.html?mgpage=register&forgot=1",
-						"myDataEnabled": true,
-						"myDataLink": "mgmain.html?mgpage=user" });
-	    });
-	    
-	    Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
-		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-	    });
-	    
-	});
+    jQuery( window ).load(function(){
+	initWebApp();
     });
+
+    if (Retina.cgiParam('mgpage') == 'mydata') {
+	google.load("feeds", "1");
+	google.setOnLoadCallback(showNewsFeed); 
+    }
     </script>
 
     <!-- Google Analytics -->
@@ -118,7 +48,6 @@
 
   ga('create', 'UA-56018972-1', 'auto');
   ga('send', 'pageview');
-
     </script>
 
   </head>
@@ -128,18 +57,21 @@
     <!-- header bar -->
     <div class="header">
 
-      <!-- logo and title -->
+      <!-- logo -->
       <div style="width: 235px; float: left; margin-right: 25px;">
         <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='index.html';">
       </div>
 	  
       <!-- navigation icons -->
       <div class="icorow">
-    	<div class="icosp" id="icon_search" onclick="changeLocation(event, 'mgmain.html?mgpage=search');"><img src="Retina/images/search.png" class="ico" title="Search"><span>Search</span></div>
-    	<div class="icosp" id="icon_pipeline" onclick="changeLocation(event, 'mgmain.html?mgpage=pipeline');"><img src="Retina/images/settings3.png" class="ico" title="Jobs"><span>Job Submission</span></div>
-    	<div class="icosp" id="icon_publications" onclick="changeLocation(event, 'mgmain.html?mgpage=project');"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects"><span>Projects</span></div>
-    	<div class="icosp" id="icon_analysis" onclick="changeLocation(event, 'mgmain.html?mgpage=analysis');"><img src="Retina/images/notebook.png" class="ico" title="Analysis"><span>Analysis</span></div>
+    	<div class="icosp" onclick="changeLocation(event, stm.user ? 'mgmain.html?mgpage=mydata' : 'index.html');"><img src="Retina/images/home-outline.png" class="ico" title="Home"></div>
+    	<div class="icosp" onclick="changeLocation(event, 'mgmain.html?mgpage=search');"><img src="Retina/images/search.png" class="ico" title="Search"></div>
+    	<div class="icosp" onclick="changeLocation(event, 'mgmain.html?mgpage=upload');"><img src="Retina/images/cloud-upload.png" class="ico" title="Upload"></div>
+    	<div class="icosp" onclick="changeLocation(event, 'mgmain.html?mgpage=analysis');"><img src="Retina/images/bar-chart.png" class="ico" title="Analysis"></div>
       </div>
+
+      <!-- title space -->
+      <div style="float: left; color: white; font-weight: lighter; position: relative; top: 15px; font-size: 40px;" id="pageTitle"></div>
 	  
       <div style="float: right;">
     	<!-- user info / login section -->
