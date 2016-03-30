@@ -78,5 +78,6 @@
     { "type": "Text", "style": "Paragraph", "text": "Sampling curves generally rise very quickly at first and then level off towards an asymptote as fewer new species are found per unit of individuals collected. These rarefaction curves are calculated from the table of species abundance. The curves represent the average number of different species annotations for subsamples of the the complete dataset." },
     { "type": "Graphic", "graphicType": "lineChart", "data": [ { "values": "$$rarefaction$$" } ], "height": 400, "settings": { "graphWidth": 700, "showLegend": false }, "error": "insuffient data for a rarefaction curve", "provenance": { "source": "M5NR ontology", "metagenomes": [ "$$name$$" ], "alignment length": "15bp", "e-value": "e-5", "percent identity": "60%", "type": "taxonomic categories", "subselection": "species", "link": "http://api.metagenomics.anl.gov/metagenome/$$id$$?verbosity=stats" } },
     { "type": "Text", "style": "Header", "text": "Metadata", "tocTitle": "Metadata", "tocName": "metadata" },
-    { "type": "Table", "style": "table-striped table-condensed table-bordered", "header": [ "category", "field", "value" ], "dataReference": "allmetadata" }
+    { "type": "Table", "style": "table-striped table-condensed table-bordered", "header": [ "category", "field", "value" ], "dataReference": "allmetadata" },
+    { "type": "Text", "style": "Paragraph", "text": "", "tocName": "Download", "tocLink": "mgmain.html?mgpage=download&metagenome=$$id$$" }
 ]

@@ -9,10 +9,16 @@
     });
     
     widget.setup = function () {
-	window.onresize = function (event) {
-	    jQuery("#masonry").masonry({ itemSelector : '.box' });
-	}
 	return [ Retina.load_renderer("table") ];
+    };
+
+    widget.sections = {
+	'tasks': { 'name': 'tasks', 'icon': 'clock', 'active': true, "html": null, "order": 0 },
+	'news': { 'name': 'news', 'icon': 'bubbles', 'active': true, "html": null, "order": 3 },
+	'jobs': { 'name': 'jobs', 'icon': 'settings3', 'active': true, "html": null, "order": 2 },
+	'studys': { 'name': 'studys', 'icon': 'dna', 'active': true, "html": null, "order": 1 },
+	'collections': { 'name': 'collections', 'icon': 'cart', 'active': false, "html": null, "order": 4 },
+	'profile': { 'name': 'profile', 'icon': 'user', 'active': false, "html": null, "order": 5 }
     };
     
     widget.display = function (wparams) {
@@ -22,22 +28,44 @@
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
 	sidebar.parentNode.style.display = 'none';
 	container.className = "span10 offset1";
-	document.getElementById("pageTitle").innerHTML = "my Data";
+	document.getElementById("pageTitle").innerHTML = "my data";
 	
 	if (stm.user) {
 	    var html = [ '<h3>Welcome back, '+stm.user.firstname+' '+stm.user.lastname+'<div id="toggleBar" style="float: right;"></div></h3>' ];
+
+	    // create the section html
+	    widget.sections["tasks"].html = widget.tasksSection()
+	    widget.sections["news"].html = widget.newsSection()
+	    widget.sections["jobs"].html = widget.jobsSection()
+	    widget.sections["studys"].html = widget.studysSection()
+	    widget.sections["collections"].html = widget.collectionsSection()
+	    widget.sections["profile"].html = widget.profileSection()
+
+	    var order = [];
+	    for (var i in widget.sections) {
+		if (widget.sections.hasOwnProperty(i)) {
+		    order[widget.sections[i].order] = widget.sections[i];
+		}
+	    }
+
+	    // the visible elements
 	    html.push('<div id="masonry">');
 	    
-	    html.push(widget.tasksSection());
-	    html.push(widget.jobsSection());
-	    html.push(widget.newsSection());
-	    html.push(widget.studysSection());
-	    html.push(widget.collectionsSection());
-	    html.push(widget.profileSection());
+	    for (var i=0; i<order.length; i++) {
+		html.push(order[i].html);
+	    }
 	    
-	    html.push('</div><div id="holdingTrack" style="display: none;"></div>');
+	    html.push('</div>');
 	    
 	    container.innerHTML = html.join("\n");
+
+	    for (var i=0; i<order.length; i++) {
+		if (order[i].active) {
+		    document.getElementById(order[i].name+'Section').className = "box";
+		} else {
+		    document.getElementById(order[i].name+'Section').style.display = "none";
+		}
+	    }
 	    
 	    jQuery("#masonry").masonry({ itemSelector : '.box' });
 	    
@@ -67,18 +95,16 @@
 	var widget = this;
 	
 	var html = [ '<div class="btn-group" data-toggle="buttons-checkbox">' ];
+
+	var order = [];
+	for (var i in widget.sections) {
+	    if (widget.sections.hasOwnProperty(i)) {
+		order[widget.sections[i].order] = widget.sections[i];
+	    }
+	}
 	
-	var availableSections = [ { 'name': 'tasks', 'icon': 'clock', 'active': true },
-				  { 'name': 'jobs', 'icon': 'settings3', 'active': true },
-				  { 'name': 'news', 'icon': 'bubbles', 'active': true },
-				  { 'name': 'studys', 'icon': 'dna', 'active': true },
-				  { 'name': 'collections', 'icon': 'cart', 'active': true },
-				  { 'name': 'profile', 'icon': 'user', 'active': true } ];
-	
-	widget.sections = availableSections;
-	
-	for (var i=0; i<availableSections.length; i++) {
-	    html.push('<button type="button" class="btn btn-small active" onclick="Retina.WidgetInstances.metagenome_mydata[1].toggleBox(\''+availableSections[i].name+'\');" title="'+availableSections[i].name+'"><img src="Retina/images/'+availableSections[i].icon+'.png" style="width: 16px;"></button>');
+	for (var i=0; i<order.length; i++) {
+	    html.push('<button type="button" class="btn btn-small'+(order[i].active ? " active" : "")+'" onclick="Retina.WidgetInstances.metagenome_mydata[1].toggleBox(\''+order[i].name+'\');" title="'+order[i].name+'"><img src="Retina/images/'+order[i].icon+'.png" style="width: 16px;"></button>');
 	}
 	
 	html.push('</div>');
@@ -88,22 +114,17 @@
     
     widget.toggleBox = function (box) {
 	var widget = this;
-	
-	for (var i=0; i<widget.sections.length; i++) {
-	    if (box && widget.sections[i].name == box) {
-		if (widget.sections[i].active) {
-		    widget.sections[i].active = false;
-		} else {
-		    widget.sections[i].active = true;
-		}
-		jQuery('#'+box+'Section').toggleClass('box');
-	    }
-	    if (widget.sections[i].active) {
-		document.getElementById('masonry').appendChild(document.getElementById(widget.sections[i].name+'Section'));
-	    } else {
-		document.getElementById('holdingTrack').appendChild(document.getElementById(widget.sections[i].name+'Section'));
-	    }
+
+	if (widget.sections[box].active) {
+	    widget.sections[box].active = false;
+	    document.getElementById(box+"Section").style.display = "none";
+	    document.getElementById(box+"Section").className = "";
+	} else {
+	    widget.sections[box].active = true;
+	    document.getElementById(box+"Section").style.display = "";
+	    document.getElementById(box+"Section").className = "box";
 	}
+	jQuery("#masonry").masonry('reloadItems');
 	jQuery("#masonry").masonry({ itemSelector : '.box' });
     };
     
@@ -111,7 +132,7 @@
       SECTIONS
     */
     widget.jobsSection = function () {
-	var html = [ '<div class="box" id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">running jobs<button class="btn btn-mini" style="float: right;" title="show all jobs in detail" onclick="window.open(\'mgmain.html?mgpage=pipeline\');"><i class="icon icon-eye-open"></i></button><button class="btn btn-mini" style="float: right; margin-right: 5px;" title="submit new job" onclick="window.open(\'mgmain.html?mgpage=upload\');"><img src="Retina/images/settings3.png" style="width: 16px;"></i></button></h4>' ];
+	var html = [ '<div id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my jobs<button class="btn btn-mini" style="float: right;" title="show all jobs in detail" onclick="window.open(\'mgmain.html?mgpage=pipeline\');"><i class="icon icon-eye-open"></i></button><button class="btn btn-mini" style="float: right; margin-right: 5px;" title="upload new job" onclick="window.open(\'mgmain.html?mgpage=upload\');"><img src="Retina/images/cloud-upload.png" style="width: 16px;"></i></button></h4>' ];
 	
 	html.push('<div id="jobDiv"></div>')
 	
@@ -121,7 +142,7 @@
     };
     
     widget.tasksSection = function () {
-	var html = [ '<div class="box" id="tasksSection"><h4 style="margin-top: 0px;"><img src="Retina/images/clock.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">tasks</h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
+	var html = [ '<div id="tasksSection"><h4 style="margin-top: 0px;"><img src="Retina/images/clock.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my tasks</h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
 	
 	html.push('<div id="tasksDiv"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div>')
 	
@@ -131,7 +152,7 @@
     };
     
     widget.studysSection = function () {
-	var html = [ '<div class="box" id="studysSection"><h4 style="margin-top: 0px;"><img src="Retina/images/dna.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my studies<button class="btn btn-mini" style="float: right;" title="show all studies in detail" onclick="window.open(\'mgmain.html?mgpage=share\');"><i class="icon icon-eye-open"></i></button></h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
+	var html = [ '<div id="studysSection"><h4 style="margin-top: 0px;"><img src="Retina/images/dna.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my studies<button class="btn btn-mini" style="float: right;" title="show all studies in detail" onclick="window.open(\'mgmain.html?mgpage=share\');"><i class="icon icon-eye-open"></i></button></h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
 	
 	html.push('<div id="projectDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div>')
 	
@@ -141,15 +162,15 @@
     };
     
     widget.collectionsSection = function () {
-	return '<div class="box" id="collectionsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/cart.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">collections</h4><div id="collectionDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
+	return '<div id="collectionsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/cart.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my collections</h4><div id="collectionDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
     };
     
     widget.profileSection = function () {
-	return '<div class="box" id="profileSection"><h4 style="margin-top: 0px;"><img src="Retina/images/user.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">profile</h4><hr style="margin-top: 2px; margin-bottom: 5px;"><div id="profileDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>'
+	return '<div id="profileSection"><h4 style="margin-top: 0px;"><img src="Retina/images/user.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my profile</h4><hr style="margin-top: 2px; margin-bottom: 5px;"><div id="profileDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>'
     };
     
     widget.newsSection = function () {
-	var html = '<div class="box" id="newsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/bubbles.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">MG-RAST News</h4><div id="newsfeed"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
+	var html = '<div id="newsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/bubbles.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">MG-RAST News</h4><div id="newsfeed"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
 	
 	return html;
     };
@@ -305,7 +326,7 @@
 		headers: stm.authHeader,
 		data_manipulation: widget.showJobs,
 		minwidths: [1,1,1],
-		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+stm.user.id,
+		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&status=suspend&status=in-progress&status=checkout&status=queued&info.user="+stm.user.id,
 		data: { data: [], header: job_columns }
 	    });
 	} else {
@@ -455,7 +476,7 @@
 	    html.push('<ul style="list-style: outside none none; margin-left: 0px;">');
 	    for (var i=0; i<tasks.length; i++) {
 		var task = tasks[i];
-		html.push('<li'+(task.hasOwnProperty('status') ? ' style="padding: 5px; border: 1px solid; margin-bottom: 5px;" class="alert-'+task.status+'"' : '')+'><b>'+task.title+'<a href="'+task.link+'" class="btn btn-mini pull-right"><i class="icon-search"></i></a></b><br>'+task.message+'</li>');
+		html.push('<li'+(task.hasOwnProperty('status') ? ' style="padding: 5px; border: 1px solid; margin-bottom: 5px;" class="alert-'+task.status+'"' : '')+'><b>'+task.title+'<a href="'+task.link+'" class="btn btn-mini pull-right"><i class="icon icon-eye-open"></i></a></b><br>'+task.message+'</li>');
 	    }
 	    html.push('</ul>');
 	} else {

@@ -84,9 +84,8 @@ body {
     z-index: -1;
 }
 
-.myData {
+.news {
     background-color: white;
-    width: 550px;
     height: 170px;
     margin-left: auto;
     margin-right: auto;

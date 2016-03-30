@@ -95,7 +95,7 @@
 			mg.location,
 			mg.sequence_type,
 			mg.seq_method,
-			'<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_collection[1].authenticatedDownload(this, \''+mg.id+'\', \'metadata\');"><i class="icon-download"></i> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_collection[1].authenticatedDownload(this, \''+mg.id+'\', \'submitted\');"><i class="icon-download"></i> submitted</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_collection[1].authenticatedDownload(this, \''+mg.id+'\', \'processed\');"><i class="icon-download"></i> results</button>'
+			'<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_collection[1].authenticatedDownload(this, \''+mg.id+'\', \'metadata\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_collection[1].authenticatedDownload(this, \''+mg.id+'\', \'submitted\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> submitted</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_collection[1].authenticatedDownload(this, \''+mg.id+'\', \'processed\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> results</button>'
 		      ];
 	    rows.push(row);
 	}

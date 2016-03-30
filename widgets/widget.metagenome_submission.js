@@ -28,6 +28,8 @@
 	var content = widget.main;
 	var sidebar = widget.sidebar;
 
+	document.getElementById("pageTitle").innerHTML = "submission";
+	
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<h3><img style="height: 20px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">submission information</h3><ul class="helplist"><li>all submitted data will stay private until the owner makes it public or shares it with another user.</li><li>providing metadata is required to make your data public and will increase your priority in the queue.</li><li>the sooner you choose to make your data public, the higher your priority in the queue will be</li></ul>';
@@ -48,13 +50,13 @@
 	} else {
 	    
 	    // title
-	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
+	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/cloud-upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
 
 	    // new title
 	    html = '<div class="wizard span12">\
 	  <div>\
 	    <li></li>\
-	    <a href="?mgpage=upload">upload<img src="Retina/images/upload.png"></a>\
+	    <a href="?mgpage=upload">upload<img src="Retina/images/cloud-upload.png"></a>\
 	  </div>\
 	  <div class="separator">›</div>\
 	  <div>\

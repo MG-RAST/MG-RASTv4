@@ -21,8 +21,6 @@
 
 	var container = widget.target = wparams ? wparams.main : widget.target;
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
-	document.getElementById('icon_publications').firstChild.title = "Metagenome Overview";
-	document.getElementById('icon_publications').lastChild.innerHTML = "Metagenome";
 
 	if (Retina.cgiParam('metagenome')) {
 	    widget.id = Retina.cgiParam('metagenome');
@@ -30,6 +28,8 @@
 		widget.id = "mgm"+widget.id;
 	    }
 	}
+
+	document.getElementById("pageTitle").innerHTML = "metagenome overview";
 	
         // check if id given
         if (widget.id) {
@@ -123,7 +123,7 @@
 	var mg = stm.DataStore.metagenome[id];
 	
 	// get base numbers
-        var stats  = mg.statistics.sequence_stats;
+        var stats = mg && mg.statistics ? mg.statistics.sequence_stats : null;
 	
 	if (! stats) {
 	    widget.target.innerHTML = '<div class="alert alert-error">no statistical data available for this metagenome</div>';

@@ -23,8 +23,10 @@
 	}
 
 	if (Retina.cgiParam('forgot')) {
+	    document.getElementById("pageTitle").innerHTML = "password recovery";
 	    widget.forgotPassword();
 	} else {
+	    document.getElementById("pageTitle").innerHTML = "register";
 	    widget.newAccount();
 	}
 
@@ -76,7 +78,7 @@
   <hr>\
   <h3><img src="Retina/images/info2.png" style="height: 20px; margin-right: 10px; margin-top: -4px;">can I share my account?</h3>\
   <p>No, you should never share your account with anyone, nor should you create group accounts. MG-RAST offers easy to use mechanisms to securely share data with other users.</p>\
-  <p>You can also create a group of registered users and share data with that group. Even in a classroom situation, you should always create separate accounts for each user.</p>\
+  <p>Even in a classroom situation, you should always create separate accounts for each user.</p>\
 </div>\
 ';
 	

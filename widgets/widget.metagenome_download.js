@@ -17,8 +17,7 @@
     widget.display = function (wparams) {
         widget = Retina.WidgetInstances.metagenome_download[1];
 
-	document.getElementById('icon_publications').firstChild.title = "Metagenome Download";
-	document.getElementById('icon_publications').lastChild.innerHTML = "Download";
+	document.getElementById("pageTitle").innerHTML = "metagenome download";
 
 	if (wparams && wparams.main) {
 	    widget.main = wparams.main;
@@ -142,7 +141,7 @@
 		
 		html += "<div class='span5'><table class='table table-condensed'>";
 		html += "<tr><td colspan=2><b>"+d.file_name+"</b></td></tr>";
-		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+statsbutton+"<button class='btn btn-primary btn-mini' style='float: right; margin-right: 10px;' onclick='Retina.WidgetInstances.metagenome_download[1].authenticatedDownload(this, \""+d.url+"\");'>download</button></td></tr>";
+		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+statsbutton+"<button class='btn btn-mini' style='float: right; margin-right: 10px;' onclick='Retina.WidgetInstances.metagenome_download[1].authenticatedDownload(this, \""+d.url+"\");'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download</button></td></tr>";
 		html += "<tr><td><b>sequence format</b></td><td>"+d.seq_format+"</td></tr>";
 		html += "<tr><td><b>file format</b></td><td>"+d.file_format+"</td></tr>";
 		html += "<tr><td><b>MD5</b></td><td>"+d.file_md5+"</td></tr>";
@@ -259,7 +258,7 @@
               <option>KO</option>\
             </select></td>\
           <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>\
-          <td><button class='btn btn-primary' style='position: relative; bottom: 5px;' onclick='Retina.WidgetInstances.metagenome_download[1].apiDownload();'>download</button><span id='download_progress'></span></td>\
+          <td><button class='btn' style='position: relative; bottom: 5px;' onclick='Retina.WidgetInstances.metagenome_download[1].apiDownload();'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download</button><span id='download_progress'></span></td>\
         </tr>\
       </table>\
     </td></tr></table></div>";

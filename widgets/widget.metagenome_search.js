@@ -13,12 +13,15 @@
     };
     
     widget.query = "";
-    widget.sort = "name";
-    widget.sortDir = "asc";
+    widget.sort = "created";
+    widget.sortDir = "desc";
     widget.offset = 0;
     widget.limit = 20;
     widget.match = "all";
+    widget.total = 0;
     widget.advancedOptions = {};
+    widget.selectedMetagenomes = {};
+    widget.addingMetagenomes = false;
     widget.specialKeyMapping = { "created": "creation date",
 				 "name": "metagenome name",
 				 "seq_method": "sequencing method",
@@ -33,7 +36,8 @@
 				    { "name": "created", "value": "creation date" },
 				    { "name": "name", "value": "metagenome name" },
 				    { "name": "sequence_type", "value": "sequence type" },
-				    { "name": "seq_method", "value": "sequencing method" } ] },
+				    { "name": "seq_method", "value": "sequencing method" },
+				    { "name": "status", "value": "status" }] },
 		       { "name": "Environment",
 			 "items": [ { "name": "feature", "value": "feature" },
 				    { "name": "material", "value": "material" },
@@ -65,6 +69,8 @@
 	var sidebar = widget.sidebar;
 
 	jQuery.extend(widget, params);
+
+	document.getElementById("pageTitle").innerHTML = "search";
 	
 	// set the output area
 	// search field
@@ -93,7 +99,8 @@
 </div>";
 
 	// result section
-	html += "<div id='result' style='overflow-x: scroll; clear: both;'></div>";
+	html += '<div style="position: absolute; opacity: 0.7; background-color: white; display: none; text-align: center; padding-top: 20%;" id="opaq"><img src="Retina/images/waiting.gif"></div>'
+	html += "<div id='result' style='clear: both; min-height: 300px;'></div>";
 
 	content.innerHTML = html;
 
@@ -116,10 +123,10 @@
   font-weight: bold;\
   }\
 </style>\
-<h3 style="margin-left: 10px;">\
-  <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/search.png">\
-  Advanced Search\
-</h3>\
+<h4 style="margin-left: 10px;">\
+  <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/filter.png">\
+  Refine Search\
+</h4>\
 <div id="advanced_div" style="margin-left: 10px; margin-right: 10px;">\
   <p>Add a search term for a specific metadata field to refine your search. You can use the asterisk (*) symbol as a wildcard.</p>\
   <div class="control-group">\
@@ -137,19 +144,25 @@
   </div>\
   <div id="refine_search_terms"></div>\
 </div>\
-<hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
-<h3 style="margin-left: 10px;">\
-  <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/cart.png">\
-  Saved Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
-</h3>\
+<div style="clear: both;"></div>\
+<ul class="nav nav-tabs" id="searchCollectionTab">\
+<li class="active"><a style="margin-left: 10px;" href="#searches_tab">\
+  <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/search.png">\
+  Searches <sup style="color: gray; cursor: help;" id="storedresults">[?]</sup>\
+</a></li>\
+<li><a style="margin-left: 10px;" href="#collections_tab" id="collection_tab">\
+  <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/cart.png">\
+  Collections <sup style="color: gray; cursor: help;" id="storedcollections">[?]</sup>\
+</a></li></ul>\
+<div class="tab-content">\
+<div class="tab-pane active" id="searches_tab">\
 <div id="storedresults_div" style="margin-left: 10px; margin-right: 10px;">\
-'+(stm.user ? '<p>you have no previous searches</p>' : '<p>you must be logged in to view stored searches</p>')+'\
+'+(stm.user ? '<p>you have no searches</p>' : '<p>you must be logged in to view stored searches</p>')+'\
 </div>\
-<hr style="margin-left: 10px; margin-right: 10px; clear: both; position: relative; top: 15px;">\
-<h3 style="margin-left: 10px;">\
-  <img style="height: 20px; position: relative; bottom: 4px; margin-right: 10px;" src="Retina/images/disk.png">\
-  Save Search <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
-</h3>\
+<h5 style="margin-left: 10px; margin-top: 20px;">\
+  <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/disk.png">\
+  create new <sup style="color: gray; cursor: help;" id="storeresults">[?]</sup>\
+</h5>\
 <div id="storeresults_div" style="margin-left: 10px; margin-right: 10px;">\
   <p>Store the parameters of your search query.</p>\
   <div class="control-group">\
@@ -161,23 +174,66 @@
   <label><b>description</b></label>\
   <div class="control-group">\
     <div class="controls">\
-      <textarea id="searchresult_description" placeholder="enter description (optional)" style="width: 320px;" rows=3></textarea>\
+      <textarea id="searchresult_description" placeholder="enter description (optional)" style="width: 270px;" rows=3></textarea>\
     </div>\
   </div>\
   <button class="btn pull-right" type="button" id="storeSearchButton" onclick="Retina.WidgetInstances.metagenome_search[1].storeSearch();">store</button>\
   <div id="search_result_overview"></div>\
+</div></div>\
+<div class="tab-pane" id="collections_tab">\
+<div id="collections_div" style="margin-left: 10px; margin-right: 10px;">\
+'+(stm.user ? '<p>you have no collections</p>' : '<p>you must be logged in to view collections</p>')+'\
+</div>\
+<div id="currentCollection"></div>\
+<h5 style="margin-left: 10px; margin-top: 20px;">\
+  <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/disk.png">\
+  create new <sup style="color: gray; cursor: help;" id="storecollection">[?]</sup>\
+</h5>\
+<div id="storecollection_div" style="margin-left: 10px; margin-right: 10px;">\
+  <p>Store a custom list of metagenomes.</p>\
+  <div class="control-group">\
+    <label class="control-label" for="collection_name">name</label>\
+    <div class="controls">\
+      <input type="text" id="collection_name" style="width: 270px;" placeholder="enter name">\
+    </div>\
+  </div>\
+  <label><b>description</b></label>\
+  <div class="control-group">\
+    <div class="controls">\
+      <textarea id="collection_description" placeholder="enter description (optional)" style="width: 270px;" rows=3></textarea>\
+    </div>\
+  </div>\
+  <button class="btn pull-right" type="button" id="storeCollectionButton" onclick="Retina.WidgetInstances.metagenome_search[1].storeCollection();">create</button>\
+  <div id="collection_overview"></div>\
+</div>\
+</div>\
 </div>\
 ';
 	
 	sidebar.innerHTML = html_sidebar;
+	$('#searchCollectionTab a').click(function (e) {
+	    e.preventDefault();
+	    $(this).tab('show');
+	})
 
-	// check for search preferences
+	// check for search / collection preferences
 	if (stm.user) {
-	    stm.loadPreferences().then(function(){ Retina.WidgetInstances.metagenome_search[1].updateStoredSearches(); });
+	    stm.loadPreferences().then(function(){
+		var widget = Retina.WidgetInstances.metagenome_search[1];
+		widget.updateStoredSearches();
+		widget.updateCollections();
+		if (Retina.cgiParam('collection')) {
+		    document.getElementById('collection_tab').click();
+		    widget.showCollection(Retina.cgiParam('collection'));
+		}
+	    });
 	}
 
+	// tooltips
 	jQuery("#storeresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Saving a search requires you to be logged in.<br><br>You must also choose at least one search parameter.</p>"});
-	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Click on the name of a previously stored search to apply the same search parameters again.</p>"});
+	jQuery("#storedresults").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Store your search query paramters permanently.</p>"});
+	jQuery("#storedcollections").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Create a persistent custom list of metagenomes.</p>"});
+	jQuery("#storecollection").popover({ trigger: "hover", html: true, content: "<p style='font-weight: normal; line-height: 20px; font-size: 14px; margin-bottom: 0px;'>Create a new selection of metagenomes.</p>"});
 
 	var keyselect = document.getElementById('advanced_search_key');
 	var keylist = widget.keylist;
@@ -226,59 +282,13 @@
 	} else if (Retina.cgiParam("stored") != "") {
 	    widget.showStoredSearch(Retina.cgiParam("stored"));
 	}
-
+	
 	Retina.WidgetInstances.metagenome_search[1].queryAPI();
     };
 
-    widget.showStoredSearch = function (index) {
-	var widget = Retina.WidgetInstances.metagenome_search[1];
-	
-	var searches = Retina.keys(stm.user.preferences.searches).sort();
-	var search = stm.user.preferences.searches[searches[index]];
-	widget.refineSearch('restore', search);
-    };
-
-    widget.deleteStoredSearch = function (index) {
-	var widget = Retina.WidgetInstances.metagenome_search[1];
-	
-	var searches = Retina.keys(stm.user.preferences.searches).sort();
-	delete stm.user.preferences.searches[searches[index]];
-	searches = Retina.keys(stm.user.preferences.searches).sort();
-	if (searches.length) {
-	    var sidehtml = "<ul class='selectList'>";
-	    for (var i=0; i<searches.length; i++) {
-		var item = stm.user.preferences.searches[searches[i]];
-		sidehtml += "<li title='"+item.description+"'><a onclick='Retina.WidgetInstances.metagenome_search[1].showStoredSearch("+i+");'>"+item.name+"</a><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_search[1].deleteStoredSearch("+i+");' title='permanently delete this search'>delete</button></li>";
-	    }
-	    sidehtml += "</ul>";
-	    document.getElementById('storedresults_div').innerHTML = sidehtml;
-	} else {
-	    document.getElementById('storedresults_div').innerHTML = "<p>You currently have no stored searches</p>";
-	}
-	stm.storePreferences("search deleted", "there was an error deleting your search");
-    };
-
-    widget.updateStoredSearches = function () {
-	if (stm.user) {
-	    if (! stm.user.hasOwnProperty("preferences")) {
-		stm.user.preferences = {};
-	    }
-	    if (! stm.user.preferences.hasOwnProperty("searches")) {
-		stm.user.preferences.searches = {};
-	    }
-	    var searches = Retina.keys(stm.user.preferences.searches).sort();
-	    if (searches.length) {
-		var sidehtml = "<ul class='selectList'>";
-		for (var i=0; i<searches.length; i++) {
-		    var item = stm.user.preferences.searches[searches[i]];
-		    sidehtml += "<li title='"+item.description+"'><a onclick='Retina.WidgetInstances.metagenome_search[1].showStoredSearch("+i+");'>"+item.name+"</a><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_search[1].deleteStoredSearch("+i+");' title='permanently delete this search'>delete</button></li>";
-		}
-		sidehtml += "</ul>";
-		document.getElementById('storedresults_div').innerHTML = sidehtml;
-	    }
-	}
-    };
-
+    /* 
+       ADVANCED SEARCH
+    */
     widget.refineSearch = function (action, item) {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
 
@@ -301,7 +311,7 @@
 
 		var clear = document.createElement('button');
 		clear.className = "btn btn-small btn-danger";
-		clear.innerHTML = "clear advanced options";
+		clear.innerHTML = "clear filters";
 		clear.addEventListener('click', function () {
 		    Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
 		});
@@ -334,7 +344,7 @@
 	    target.innerHTML = "";
 	    var clear = document.createElement('button');
 	    clear.className = "btn btn-small btn-danger";
-	    clear.innerHTML = "clear advanced options";
+	    clear.innerHTML = "clear filters";
 	    clear.addEventListener('click', function () {
 		Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
 	    });
@@ -362,7 +372,10 @@
 	}
 	widget.queryAPI();
     };
-    
+
+    /* 
+       TABLE
+    */
     widget.resultTable = function (data, total_count) {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
 
@@ -377,17 +390,18 @@
 	    showing = "the first "+num+" matches.";
 	}
 	if (total_count == 0) {
-	    document.getElementById('result_text').innerHTML = "Your search returned no results.";
+	    document.getElementById('result_text').innerHTML = "";
+	    return '<div class="alert alert-warning" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">Your search returned no results.</div>';
 	} else {
 	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count+" results. Showing "+showing;
 	}
 
-	var html = "";
+	var html = [];
 	
-	html += "<table class='table' style='font-size: 12px;'><thead><tr>";
-	var fields = ["sequence_type", "name", "id", "project_name", "biome", "feature", "material", "country", "location"];
-	var fnames = ["Seq&nbsp;Type", "Metagenome", "MG-RAST&nbsp;ID", "Project", "Biome", "Feature", "Material", "Country", "Location"];
-	var widths = [ 85, 105, 105, 85, 85, 85, 85, 85, 85 ];
+	html.push("<table class='table' style='font-size: 12px;' id='result_table'><thead><tr>");
+	var fields = ["created", "project_name", "name", "sequence_type", "biome", "country", "location"];
+	var fnames = ["Created", "Study", "Metagenome", "Seq&nbsp;Type", "Biome", "Country", "Location"];
+	var widths = [ 105, 85, 100, 85, 85, 85 ];
 	for (var i=0;i<fields.length;i++) {
 	    var style_a = "";
 	    var style_d = "";
@@ -398,12 +412,11 @@
                     style_d = "border: 1px solid #0088CC; border-radius: 7px; padding: 2px 1px 1px;";
 		}
             }
-            html += "<th style='min-width: "+widths[i]+"px;'>"+fnames[i]+"&nbsp;<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;"+style_a+"\" />"+
-                "<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;"+style_d+"\" />";
+            html.push("<th style='min-width: "+widths[i]+"px;'>"+fnames[i]+"&nbsp;<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;"+style_d+"\" />");
 	    
-            html += "</th>";
+            html.push("</th>");
 	}
-	html += "</tr></thead><tbody>";
+	html.push("</tr></thead><tbody>");
 	
 	var rows = [];
 	for (var i in data) {
@@ -413,34 +426,35 @@
 	}
 
 	for (var i=0;i<rows.length;i++) {
-	    
-            data[rows[i][0]]["project_id"] = data[rows[i][0]]["project_id"].substr(3);
-            data[rows[i][0]]["id"] = data[rows[i][0]]["id"].substr(3);
-	    
-            html += "<tr>";
-            html += "<td>"+data[rows[i][0]]["sequence_type"]+"</td>";
-            html += "<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='"+data[rows[i][0]]["name"]+"'>"+data[rows[i][0]]["name"]+"</a></td>";
-            html += "<td>"+data[rows[i][0]]["id"]+"</td>";
-            html += "<td><a href='?mgpage=project&project="+data[rows[i][0]]["project_id"]+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>";
-            html += "<td>"+data[rows[i][0]]["biome"]+"</td>";
-            html += "<td>"+data[rows[i][0]]["feature"]+"</td>";
-            html += "<td>"+data[rows[i][0]]["material"]+"</td>";
-            html += "<td>"+data[rows[i][0]]["country"]+"</td>";
-            html += "<td>"+data[rows[i][0]]["location"]+"</td>";
-            html += "</tr>";
+            html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+">");
+	    html.push("<td>"+Retina.dateString(data[rows[i][0]]["created"]).split(/\s/)[0]+"</td>");
+	    html.push("<td><a href='?mgpage=project&project="+data[rows[i][0]]["project_id"]+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>");
+
+            html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='"+data[rows[i][0]]["name"]+"'>"+data[rows[i][0]]["name"]+"</a></td>");
+	    html.push("<td>"+data[rows[i][0]]["sequence_type"]+"</td>");
+            html.push("<td>"+data[rows[i][0]]["biome"]+"</td>");
+            html.push("<td>"+data[rows[i][0]]["country"]+"</td>");
+	    html.push("<td>"+data[rows[i][0]]["location"]+"</td>");
+	    html.push("</tr>");
 	}
         
-	html += "<tbody></table>";
+	html.push("<tbody></table>");
 
 	if (num < total_count) {
-	    html += "<div><table width=100% style='text-align: center;'><tr><td><button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI(true);'>more</button></td></tr></table></div>";
+	    html.push("<div><table width=100% style='text-align: center;'><tr><td><button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI(true);'>more</button></td></tr></table></div>");
 	}
 
-	return html;
+	return html.join("");
     };
 
     widget.queryAPI = function (more) {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	var o = document.getElementById('opaq');
+	o.style.display = "";
+	var t = document.getElementById('result');
+	o.style.width = t.offsetWidth + 'px';
+	o.style.height = t.offsetHeight + 'px';
 	
 	// get params
 	widget.query = document.getElementById("searchtext").value;
@@ -484,7 +498,7 @@
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
 		query_str += "&"+h;
-		query_str += "=\""+widget.advancedOptions[h] + "\"";
+		query_str += "="+widget.advancedOptions[h];
 	    }
 	}
 
@@ -497,8 +511,9 @@
 			   for (var i=0;i<data.data.length;i++) {
 			       stm.DataStore.search[data.data[i]["id"]] = data.data[i];
 			   }
-			   
+			   Retina.WidgetInstances.metagenome_search[1].total = data.total_count;
 			   document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, data.total_count);
+			   document.getElementById('opaq').style.display = 'none';
 		       },
 		       error: function () {
 			   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
@@ -516,11 +531,14 @@
 	widget.queryAPI();
     };
 
+    /* 
+       SEARCHES
+    */
     widget.checkStoreSearch = function () {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
 
 	var btn = document.getElementById('storeSearchButton');
-	if (stm.user && (Retina.keys(widget.advancedOptions).length || widget.query)) {
+	if (stm.user && (Retina.keys(widget.advancedOptions, true).length || widget.query)) {
 	    btn.removeAttribute("disabled");
 	} else {
 	    btn.setAttribute("disabled", "true");
@@ -555,11 +573,197 @@
 		       advancedOptions: widget.advancedOptions };
 
 	if (stm.user.preferences.searches.hasOwnProperty(search.name)) {
-	    alert('you already have a search store with that name');
+	    alert('you already have a search of that name');
 	} else {
 	    stm.user.preferences.searches[search.name] = search;
 	    stm.storePreferences("search stored", "there was an error storing your search");
 	    widget.updateStoredSearches();
 	}
     };
+
+    widget.deleteStoredSearch = function (index) {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+	
+	var searches = Retina.keys(stm.user.preferences.searches, true).sort();
+	delete stm.user.preferences.searches[searches[index]];
+	searches = Retina.keys(stm.user.preferences.searches, true).sort();
+	if (searches.length) {
+	    widget.updateStoredSearches();
+	} else {
+	    document.getElementById('storedresults_div').innerHTML = "<p>You currently have no stored searches</p>";
+	}
+	stm.storePreferences("search deleted", "there was an error deleting your search");
+    };
+
+    widget.updateStoredSearches = function () {
+	if (stm.user) {
+	    if (! stm.user.hasOwnProperty("preferences")) {
+		stm.user.preferences = {};
+	    }
+	    if (! stm.user.preferences.hasOwnProperty("searches")) {
+		stm.user.preferences.searches = {};
+	    }
+	    var searches = Retina.keys(stm.user.preferences.searches, true).sort();
+	    if (searches.length) {
+		var sidehtml = "<ul class='selectList'>";
+		for (var i=0; i<searches.length; i++) {
+		    var item = stm.user.preferences.searches[searches[i]];
+		    sidehtml += "<li title='"+item.description+"'><a onclick='Retina.WidgetInstances.metagenome_search[1].showStoredSearch("+i+");'>"+item.name+"</a><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_search[1].deleteStoredSearch("+i+");' title='permanently delete this search'>delete</button></li>";
+		}
+		sidehtml += "</ul>";
+		document.getElementById('storedresults_div').innerHTML = sidehtml;
+	    }
+	}
+    };
+
+    /* 
+       COLLECTIONS
+    */
+    widget.deleteCollection = function (index) {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+	
+	var collections = Retina.keys(stm.user.preferences.collections, true).sort();
+	delete stm.user.preferences.collections[collections[index]];
+	collections = Retina.keys(stm.user.preferences.collections, true).sort();
+	if (collections.length) {
+	    widget.updateCollections();
+	} else {
+	    document.getElementById('storedresults_div').innerHTML = "<p>You currently have no stored searches</p>";
+	}
+	stm.storePreferences("collection deleted", "there was an error deleting your collection");
+    };
+    
+    widget.updateCollections = function () {
+	if (stm.user) {
+	    if (! stm.user.hasOwnProperty("preferences")) {
+		stm.user.preferences = {};
+	    }
+	    if (! stm.user.preferences.hasOwnProperty("collections")) {
+		stm.user.preferences.collections = {};
+	    }
+	    var collections = Retina.keys(stm.user.preferences.collections, true).sort();
+	    if (collections.length) {
+		var sidehtml = "<ul class='selectList'>";
+		for (var i=0; i<collections.length; i++) {
+		    var item = stm.user.preferences.collections[collections[i]];
+		    sidehtml += "<li title='"+item.description+"'><a onclick='Retina.WidgetInstances.metagenome_search[1].showCollection("+i+");'>"+item.name+"</a><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_search[1].deleteCollection("+i+");' title='permanently delete this collection'>delete</button></li>";
+		}
+		sidehtml += "</ul>";
+		document.getElementById('collections_div').innerHTML = sidehtml;
+	    }
+	}
+    };
+
+    widget.showCollection = function (index) {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	var collections = Retina.keys(stm.user.preferences.collections, true).sort();
+	var collection;
+	var mgs = Retina.keys(widget.selectedMetagenomes, true).sort();
+	if (index !== undefined) {
+	    widget.currentCollection = index;
+	    collection = jQuery.extend(true, {}, stm.user.preferences.collections[collections[widget.currentCollection]]);
+	    widget.selectedMetagenomes = collection.metagenomes;
+	    mgs = Retina.keys(collection.metagenomes, true).sort();
+	} else {
+	    collection = jQuery.extend(true, {}, stm.user.preferences.collections[collections[widget.currentCollection]]);
+	}
+	
+	var html = ['<h5>'+collection.name+'<button class="btn btn-mini btn-info" style="float: right;" onclick="Retina.WidgetInstances.metagenome_search[1].unselectCollection();">unselect</button></h5><p>'+collection.description+'</p><p><b>metagenomes</b></p><div><button class="btn btn-mini btn-'+(widget.addingMetagenomes ? "success" : "info" )+'" style="width: 100%; margin-bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_search[1].'+(widget.addingMetagenomes ? 'updateCollection()' : 'enableCollectionSelection(true)')+';" id="enableAddMetagenomesButton">'+(widget.addingMetagenomes ? " save changes" : "edit metagenomes" )+'</button></div>'];
+	if (mgs.length == 0) {
+	    html.push('<p style="text-align: center;">- this collection is empty -</p>');
+	} else {
+	    html.push('<ul>');
+	    for (var i=0; i<mgs.length; i++) {
+		var btn = '';
+		if (widget.addingMetagenomes) {
+		    btn =  '<button class="btn btn-mini btn-danger" style="float: right;" onclick="delete Retina.WidgetInstances.metagenome_search[1].selectedMetagenomes[\''+mgs[i]+'\'];Retina.WidgetInstances.metagenome_search[1].showCollection();Retina.WidgetInstances.metagenome_search[1].enableCollectionSelection();">x</button>';
+		}
+		html.push('<li style="line-height: 24px; list-style: outside none none; margin-left: -20px; border-bottom: 1px solid #cccccc; margin-top: 1px;" title="'+mgs[i]+'">'+widget.selectedMetagenomes[mgs[i]]+btn+'</li>');
+	    }
+	    html.push('</ul>');
+	    if (widget.addingMetagenomes) {
+		html.push('<button class="btn btn-mini btn-danger" style="width: 100%; margin-bottom: 5px; margin-top: 5px;" onclick="Retina.WidgetInstances.metagenome_search[1].updateCollection(true);">revert changes</button>');
+	    }
+	}
+	document.getElementById('currentCollection').innerHTML = html.join("\n");
+
+	// redraw search result table to highlight the collection members
+	document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, widget.total);
+    };
+
+    widget.updateCollection = function (cancel) {
+	var widget = this;
+
+	var collections = Retina.keys(stm.user.preferences.collections, true).sort();
+	if (cancel) {
+	    widget.selectedMetagenomes = jQuery.extend(true, {}, stm.user.preferences.collections[collections[widget.currentCollection]].metagenomes);
+	} else {
+	    stm.user.preferences.collections[collections[widget.currentCollection]].metagenomes = jQuery.extend(true, {}, widget.selectedMetagenomes);
+	    stm.storePreferences("collection stored", "there was an error storing your collection");
+	}
+	
+	widget.addingMetagenomes = false;
+	widget.showCollection();
+    };
+
+    widget.storeCollection = function () {
+	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	if (! stm.user) {
+	    alert('you must be logged in to create a collection');
+	    return;
+	}
+	
+	var collection = { type: "collection",
+			   metagenomes: widget.selectedMetagenomes,
+			   name: document.getElementById('collection_name').value,
+			   description: document.getElementById('collection_description').value,
+			 };
+
+	if (! stm.user.preferences.hasOwnProperty('collections')) {
+	    stm.user.preferences.collections = {};
+	}
+	if (stm.user.preferences.collections.hasOwnProperty(collection.name)) {
+	    alert('you already have a search store with that name');
+	} else {
+	    stm.user.preferences.collections[collection.name] = collection;
+	    stm.storePreferences("collection stored", "there was an error storing your collection");
+	    widget.updateCollections();
+	}
+    };
+
+    widget.enableCollectionSelection = function (initial) {
+	var widget = this;
+
+	if (widget.addingMetagenomes || initial) {
+	    widget.addingMetagenomes = true;
+	    widget.showCollection();
+	    document.getElementById('result_table').addEventListener('click', function(event) {
+		event = event || window.event;
+		var widget = Retina.WidgetInstances.metagenome_search[1];
+		var href = event.target.parentNode.childNodes[2].childNodes[0].href;
+		var name = event.target.parentNode.childNodes[2].childNodes[0].innerHTML;
+		var mgid = href.substr(href.lastIndexOf('=')+1);
+		if (widget.selectedMetagenomes.hasOwnProperty(mgid)) {
+		    delete widget.selectedMetagenomes[mgid];
+		} else {
+		    widget.selectedMetagenomes[mgid] = name;
+		}
+		widget.showCollection();
+		widget.enableCollectionSelection();
+	    });
+	}
+    };
+
+    widget.unselectCollection = function () {
+	var widget = this;
+
+	widget.selectedMetagenomes = {};
+	widget.addingMetagenomes = false;
+	widget.currentCollection = null;
+	document.getElementById('currentCollection').innerHTML = "";
+	document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, widget.total);
+    };
+    
 })();
