@@ -23,10 +23,11 @@
 	var content = widget.main;
 	var sidebar = widget.sidebar;
 
-	document.getElementById('icon_publications').lastChild.innerHTML = "Project";
 	sidebar.parentNode.style.display = "none";
 	content.className = "span10 offset1";
 
+	document.getElementById("pageTitle").innerHTML = "study";
+	
 	// check if we have a project parameter
 	if (Retina.cgiParam('project')) {
 	    widget.id = Retina.cgiParam('project');
@@ -61,7 +62,12 @@
 
 	    var project = stm.DataStore.project[widget.id];
 	    var id_no_prefix = widget.id.substr(3);
-	    var html = "<h3>"+project.name+" ("+widget.id+")</h3>";
+	    var html = "";
+	    if (project.status == 'private') {
+		html += "<h3 class='alert alert-info'><img style='width: 24px; position: relative; bottom: 5px; opacity: 0.5;' src='Retina/images/lock.png'>"+project.name+"</h3>";
+	    } else {
+		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
+	    }
 	    html += "<table>";
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
@@ -93,7 +99,7 @@
 			    mg.coordinates,
 			    mg.sequence_type,
 			    mg.sequencing_method,
-			    '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'metadata\');"><i class="icon-download"></i> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'submitted\');"><i class="icon-download"></i> submitted</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'processed\');"><i class="icon-download"></i> results</button>'
+			    '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'metadata\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'submitted\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> submitted</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'processed\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> results</button>'
 			  ];
 		rows.push(row);
 	    }

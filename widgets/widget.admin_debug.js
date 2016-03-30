@@ -29,7 +29,11 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>ID Finder</h4><div><div class='input-append'><input type='text' placeholder='enter ID' id='idFinderID'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].idFinder();'>find</button></div><div id='idFinderResult'></div></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div><div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div><h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>ID Finder</h4><div><div class='input-append'><input type='text' placeholder='enter ID' id='idFinderID'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].idFinder();'>find</button></div><div id='idFinderResult'></div></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div>";
+
+//	html += "<div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div>";
+
+	html += "<h4>Change Sequence Type</h4><div class='input-append'><input type='text' id='mgid'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].checkSequenceType();'>check</button></div><div class='input-append' style='margin-left: 25px;'><select id='seqtype'></select><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].changeSequenceType(document.getElementById(\"mgid\").value, document.getElementById(\"seqtype\").options[document.getElementById(\"seqtype\").selectedIndex].value);'>set</button></div>";
 
 	// set the output area
 	widget.main.innerHTML = html;
@@ -352,39 +356,39 @@
 	window.open("mgmain.html?mgpage=pipeline&admin=1&user="+user+"&job="+id);
     };
 
-    widget.showProject = function (pid, data) {
-	var widget = Retina.WidgetInstances.admin_debug[1];
+    // widget.showProject = function (pid, data) {
+    // 	var widget = Retina.WidgetInstances.admin_debug[1];
 
-	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
+    // 	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
 
-	if (data) {
-	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].deleteProject(\""+data.id+"\");'>delete</button></td></tr>";
-	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
-	    for (var i=0; i<data.metagenomes.length; i++) {
-		html += "<option>"+data.metagenomes[i][0]+"</option>";
-	    }
-	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].createProject();'>create</button></th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
-	} else {
-	    if (pid.match(/^\d+$/)) {
-		pid = "mgp"+pid;
-		document.getElementById('projectSel').value = pid;
-	    }
-	    jQuery.ajax({
-		method: "GET",
-		dataType: "json",
-		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
-		success: function (data) {
-		    var widget = Retina.WidgetInstances.admin_debug[1];
-		    widget.showProject(data.id, data);
-		},
-		error: function (data) {
-		    document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>retrieving project data failed, is the ID valid?</div>";
-		}});
-	}
+    // 	if (data) {
+    // 	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].deleteProject(\""+data.id+"\");'>delete</button></td></tr>";
+    // 	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
+    // 	    for (var i=0; i<data.metagenomes.length; i++) {
+    // 		html += "<option>"+data.metagenomes[i][0]+"</option>";
+    // 	    }
+    // 	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].createProject();'>create</button></th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
+    // 	} else {
+    // 	    if (pid.match(/^\d+$/)) {
+    // 		pid = "mgp"+pid;
+    // 		document.getElementById('projectSel').value = pid;
+    // 	    }
+    // 	    jQuery.ajax({
+    // 		method: "GET",
+    // 		dataType: "json",
+    // 		headers: stm.authHeader,
+    // 		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
+    // 		success: function (data) {
+    // 		    var widget = Retina.WidgetInstances.admin_debug[1];
+    // 		    widget.showProject(data.id, data);
+    // 		},
+    // 		error: function (data) {
+    // 		    document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>retrieving project data failed, is the ID valid?</div>";
+    // 		}});
+    // 	}
 
-	document.getElementById('projectSpace').innerHTML = html;
-    };
+    // 	document.getElementById('projectSpace').innerHTML = html;
+    // };
 
     widget.deleteProject = function(id) {
 	var widget = this;
@@ -473,35 +477,35 @@
 	    }});
     };
 
-    widget.moveMetagenomes = function (pid) {
-	var widget = Retina.WidgetInstances.admin_debug[1];
+    // widget.moveMetagenomes = function (pid) {
+    // 	var widget = Retina.WidgetInstances.admin_debug[1];
 
-	var mgs = [];
-	var sel = document.getElementById('project_a').options;
-	for (var i=0; i<sel.length; i++) {
-	    if (sel[i].selected) {
-		mgs.push("move="+sel[i].text);
-	    }
-	}
+    // 	var mgs = [];
+    // 	var sel = document.getElementById('project_a').options;
+    // 	for (var i=0; i<sel.length; i++) {
+    // 	    if (sel[i].selected) {
+    // 		mgs.push("move="+sel[i].text);
+    // 	    }
+    // 	}
 
-	var pid_b = document.getElementById('project_b').value;
-	if (pid_b.match(/^\d$/)) {
-	    pid_b = "mgp" + pid_b;
-	}
+    // 	var pid_b = document.getElementById('project_b').value;
+    // 	if (pid_b.match(/^\d$/)) {
+    // 	    pid_b = "mgp" + pid_b;
+    // 	}
 
-	jQuery.ajax({
-	    method: "GET",
-	    dataType: "json",
-	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+pid_b+"&"+mgs.join("&"),
-	    success: function (data) {
-		Retina.WidgetInstances.admin_debug[1].showProject(pid);
-		document.getElementById('project_message_space').innerHTML = "<div class='alert alert-success'>metagenomes moved successfully</div>";
-	    },
-	    error: function (data) {
-		document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>moving metagenomes failed, is the target ID valid?</div>";
-	    }});
-    };
+    // 	jQuery.ajax({
+    // 	    method: "GET",
+    // 	    dataType: "json",
+    // 	    headers: stm.authHeader,
+    // 	    url: RetinaConfig.mgrast_api+'/project/'+pid+"/movemetagenomes?target="+pid_b+"&"+mgs.join("&"),
+    // 	    success: function (data) {
+    // 		Retina.WidgetInstances.admin_debug[1].showProject(pid);
+    // 		document.getElementById('project_message_space').innerHTML = "<div class='alert alert-success'>metagenomes moved successfully</div>";
+    // 	    },
+    // 	    error: function (data) {
+    // 		document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>moving metagenomes failed, is the target ID valid?</div>";
+    // 	    }});
+    // };
 
     widget.queueTableDataManipulation = function (data) {
 	var result_data = [];

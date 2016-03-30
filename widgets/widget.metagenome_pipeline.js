@@ -89,13 +89,13 @@
 		widget.userID = stm.user.login;
 	    }
 	    // title
-	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
+	    var html = "<div class='btn-group' data-toggle='buttons-checkbox' style='margin-bottom: 20px;'><a href='?mgpage=upload' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/cloud-upload.png'>upload data</a><a href='?mgpage=submission' class='btn btn-large' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings.png'>perform submission</a><a href='?mgpage=pipeline' class='btn btn-large active' style='width: 175px;'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a></div>";
 
 	    // new title
 	    html = '<div class="wizard span12">\
 	  <div>\
 	    <li></li>\
-	    <a href="?mgpage=upload">upload<img src="Retina/images/upload.png"></a>\
+	    <a href="?mgpage=upload">upload<img src="Retina/images/cloud-upload.png"></a>\
 	  </div>\
 	  <div class="separator">›</div>\
 	  <div>\
@@ -121,6 +121,11 @@
 		    var showSubs = [];
 		    for (var i=0; i<data.submissions.length; i++) {
 			var s = data.submissions[i];
+
+			if (s.status == "completed") {
+			    window.sid = s.id;
+			}
+			
 			if (s.status !== 'deleted' && s.status !== 'completed') {
 			    showSubs.push(s);
 			}
@@ -433,6 +438,28 @@
 		    html += "no task has started computation yet.";
 		}
 	    } else {
+/* 
+
+TEST
+
+ */
+		jQuery.ajax({
+		    method: "GET",
+		    headers: stm.authHeader,
+		    url: RetinaConfig.mgrast_api+'/submission/'+sid,
+		    success: function (data) {
+			window.x = data;
+		    }}).fail(function(xhr, error) {
+			console.log(error);
+		    });
+		
+
+/* 
+
+TEST
+
+ */
+
 		// time from submission to completion
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";

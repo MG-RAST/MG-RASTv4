@@ -26,12 +26,12 @@
 	    widget.main = wparams.main;
 	    widget.sidebar = wparams.sidebar;
 	}
-
-	document.getElementById('icon_pipeline').lastChild.innerHTML = "Manage Projects";
 	
 	var content = widget.main;
 	var sidebar = widget.sidebar;
 
+	document.getElementById("pageTitle").innerHTML = "my studies";
+	
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
 	var sidehtml = '<style>.disable {\
@@ -60,22 +60,18 @@
 	    return;
 	}
 
-	if (! stm.DataStore.hasOwnProperty('project')) {
+	widget.loadProjectNames();
 
-	    content.innerHTML = "<div style='height: 200px;'></div>";
+	content.innerHTML = "<div style='height: 200px;'></div>";
 
-	    widget.loadProjects();
-	    
-	    return;
-	}
-	
+	widget.loadProjects();
 	
     };
 
     widget.showProjects = function () {
 	var widget = Retina.WidgetInstances.metagenome_share[1];
 
-	var html = "<h3>Your Projects</h3>";
+	var html = "<h3>my studies</h3>";
 
 	var pre = '<div class="tabbable tabs-left"><ul class="nav nav-tabs" style="width: 300px; word-wrap: break-word; margin-right: 0px;">';
 	var mid = '</ul><div class="tab-content" style="position: relative; right: 11px; bottom: 37px;">';
@@ -85,22 +81,59 @@
 	for (var i=widget.current; i<(widget.current + widget.projectsPerPage); i++) {
 	    if (stm.DataStore.project.hasOwnProperty(i)) {
 		var project = stm.DataStore.project[i];
-		links.push('<li'+(i==widget.current ? ' class="active"' : '')+'><a href="#project'+i+'" data-toggle="tab">'+project.name+'</a></li>');
+		var icon = "";
+		if (project.status !== 'public') {
+		    icon = '';
+		    if (project.metagenomes.length) {
+			var overdue = widget.checkOverdue(project.metagenomes[0]);
+			if (overdue.overdue) {
+			    icon += '<img src="Retina/images/warning.png" style="width: 16px; margin-right: 5px; position: relative; bottom: 2px;" title="this project is overdue for publication">';
+			} else {
+			    icon += '<img src="Retina/images/info.png" style="width: 16px; margin-right: 5px; position: relative; bottom: 2px;" title="this project must be made public soon">';
+			}
+		    }
+		}
+		links.push('<li'+(i==widget.current ? ' class="active"' : '')+'><a href="#project'+i+'" data-toggle="tab" class="tab-light">'+icon+project.name+'</a></li>');
 		details.push('<div class="tab-pane'+(i==widget.current ? ' active' : '')+'" id="project'+i+'">');
-		details.push('<div class="tabbable"><ul class="nav nav-tabs" style="margin-bottom: 0px;"><li class="active"><a data-toggle="tab" href="#project'+i+'tab2">Details</a></li><li class=""><a data-toggle="tab" href="#project'+i+'tab1">Metagenomes</a></li><li class=""><a data-toggle="tab" href="#project'+i+'tab3" onclick="Retina.WidgetInstances.metagenome_share[1].showPermissions(\''+project.id+'\', this.parentNode.parentNode.nextSibling.lastChild);">Access</a></li></ul><div class="tab-content" style="padding-left: 10px;"><div id="project'+i+'tab1" class="tab-pane" style="padding-top: 10px;">');
+		details.push('<div class="tabbable"><ul class="nav nav-tabs" style="margin-bottom: 0px; position: relative; right: 1px;"><li class="active"><a class="tab-light" data-toggle="tab" href="#project'+i+'tab2">Details</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+i+'tab1">Metagenomes</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+i+'tab3" onclick="Retina.WidgetInstances.metagenome_share[1].showPermissions(\''+project.id+'\', this.parentNode.parentNode.nextSibling.lastChild);">Access</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+i+'tab4" onclick="Retina.WidgetInstances.metagenome_share[1].showMetadata(\''+project.id+'\', document.getElementById(\'project'+i+'tab4\'));">Metadata</a></li></ul><div class="tab-content tab-content-inner" style="padding-left: 10px;"><div id="project'+i+'tab1" class="tab-pane" style="padding-top: 10px;">');
 		
 		if (project.metagenomes.length) {
-		    details.push("<p>The project "+project.name+" contains "+project.metagenomes.length+" metagenome"+(project.metagenomes.length>1 ? "s" : "")+" listed below.</p><table class='table table-condensed table-hover'><tr><th>ID</th><th>name</th><th>basepairs</th><th>sequences</th></tr>");
+		    if (project.status !== 'public') {
+			details.push("<button class='btn btn-mini pull-right' name='movemetagenomesButton'"+(stm.DataStore.hasOwnProperty('projectnames') ? "" : " disabled")+" onclick='Retina.WidgetInstances.metagenome_share[1].moveMetagenomes(\""+i+"\");'>move metagenomes</button>");
+		    }
+		    details.push("<p>The project "+project.name+" contains "+project.metagenomes.length+" metagenome"+(project.metagenomes.length>1 ? "s" : "")+" listed below.</p>");
+		    details.push("<div id='targetProject"+i+"' class='alert alert-info' style='display: none;'></div>");
+		    details.push("<table class='table table-condensed table-hover'><tr><th style='display: none;' class='selectcolumn"+i+"'>select</th><th>ID</th><th>name</th><th>basepairs</th><th>sequences</th></tr>");
 		    for (var h=0; h<project.metagenomes.length; h++) {
-			details.push("<tr><td>"+project.metagenomes[h].metagenome_id+"</td><td>"+project.metagenomes[h].name+"</td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td></tr>");
+			details.push("<tr><td style='display: none; text-align: center;' class='selectcolumn"+i+"'><input type='checkbox' style='position: relative; bottom: 3px;' data-id='"+project.metagenomes[h].metagenome_id+"' class='checkbox_"+i+"'></td><td>"+project.metagenomes[h].metagenome_id+"</td><td>"+project.metagenomes[h].name+"</td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td></tr>");
 		    }
 		    details.push("</table>");
 		} else {
 		    details.push("<div class='alert alert-info'>This project has no metagenomes.</div>");
+		    details.push("<div style='text-align: center;'><button class='btn btn-small btn-danger' onclick='if(confirm(\"Really delete this project?\")) { Retina.WidgetInstances.metagenome_share[1].deleteProject(\""+i+"\"); }'>delete project</button></div>");
 		}
 		
 		details.push('</div><div id="project'+i+'tab2" class="tab-pane active">');
-		details.push("<h5>status</h5><div class='alert alert-"+(project.status == "public" ? "success" : "info")+"'>"+project.status+"</div><h5>name</h5><p>"+project.name+"</p><h5>ID</h5><p>"+project.id+"</p><h5>PI</h5><p>"+project.pi+"</p><h5>funding</h5><p>"+project.funding_source+"</p><h5>description</h5><p>"+project.description+"</p>");
+
+		details.push('<h4>status<a href="mgmain.html?mgpage=project&project='+project.id+'" class="btn btn-mini pull-right" title="view project page"><i class="icon icon-eye-open"></i></a></h4>');
+		if (project.status == "public") {
+		    details.push("<div class='alert alert-success'>public</div>");
+		} else {
+		    if (project.metagenomes.length) {
+			var overdue = widget.checkOverdue(project.metagenomes[0]);
+			details.push("<div class='alert alert-"+(overdue.overdue ? "error" : "info")+"' id='statusDiv"+i+"'><b>private</b><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_share[1].makeProjectPublic(\""+i+"\");'>make public</button><br>");
+			if (overdue.overdue) {
+			    details.push("This project was to be made public at "+overdue.duedate+". It is "+overdue.overdue+" days overdue.");
+			} else {
+			    details.push("This project is due to be made public at "+overdue.duedate+".");
+			}
+			details.push("</div>");
+		    } else {
+			details.push("<div class='alert alert-info'><b>private project without metagenomes</b></div>");
+		    }
+		}
+		details.push(widget.projectDetails(i));
+		details.push('</div><div id="project'+i+'tab4" class="tab-pane">');
 		details.push('</div><div id="project'+i+'tab3" class="tab-pane">');
 		details.push('</div></div></div></div>');
 	    }
@@ -149,7 +182,229 @@
 	
 	widget.main.innerHTML = html;
     };
+
+    widget.projectDetails = function (projectid) {
+	var widget = this;
+
+	var project = stm.DataStore.project[projectid];
+
+	var html = '';
+
+	if (project.status == 'public') {
+	    html = '<b>name</b><br><p>'+project.name+'</p><br><br><b>description</b><br><p>'+project.description+'</p><br><br><b>funding source</b><br><p>'+(project.funding_source || "")+'</p><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><th style="padding-bottom: 10px; padding-right: 20px;">eMail</th><td><p>'+(project.metadata.PI_email || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">firstname</th><td><p>'+(project.metadata.PI_firstname || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">lastname</th><td><p>'+(project.metadata.PI_lastname || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization</th><td><p>'+(project.metadata.PI_organization || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization url</th><td><p>'+(project.metadata.PI_organization_url || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization address</th><td><p>'+(project.metadata.PI_organization_address || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization country</th><td><p>'+(project.metadata.PI_organization_country || "")+'</p></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><th style="padding-bottom: 10px; padding-right: 20px;">eMail</th><td><p>'+(project.metadata.email || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">firstname</th><td><p>'+(project.metadata.firstname || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">lastname</th><td><p>'+(project.metadata.lastname || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization</th><td><p>'+(project.metadata.organization || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization url</th><td><p>'+(project.metadata.organization_url || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization address</th><td><p>'+(project.metadata.organization_address || "")+'</p></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization country</th><td><p>'+(project.metadata.organization_country || "")+'</p></td></tr></tbody></table>';
+	} else {
+	    html = '<b>name</b><br><input type="text" value="'+project.name+'" style="width: 465px;" id="md'+projectid+'project_name"><br><br><b>description</b><br><textarea style="width: 465px;" id="md'+projectid+'project_description">'+project.description+'</textarea><br><br><b>funding source</b><br><input type="text" id="md'+projectid+'project_funding" value="'+(project.funding_source || "")+'" style="width: 465px;"><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><th style="padding-bottom: 10px; padding-right: 20px;">eMail</th><td><input type="text" id="md'+projectid+'pi_email" value="'+(project.metadata.PI_email || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">firstname</th><td><input type="text" id="md'+projectid+'pi_firstname" value="'+(project.metadata.PI_firstname || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">lastname</th><td><input type="text" id="md'+projectid+'pi_lastname" value="'+(project.metadata.PI_lastname || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization</th><td><input type="text" id="md'+projectid+'pi_organization" value="'+(project.metadata.PI_organization || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization url</th><td><input type="text" id="md'+projectid+'pi_organization_url" value="'+(project.metadata.PI_organization_url || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization address</th><td><input type="text" id="md'+projectid+'pi_organization_address" value="'+(project.metadata.PI_organization_address || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization country</th><td><input type="text" id="md'+projectid+'pi_organization_country" value="'+(project.metadata.PI_organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><th style="padding-bottom: 10px; padding-right: 20px;">eMail</th><td><input type="text" id="md'+projectid+'email" value="'+(project.metadata.email || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">firstname</th><td><input type="text" id="md'+projectid+'firstname" value="'+(project.metadata.firstname || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">lastname</th><td><input type="text" id="md'+projectid+'lastname" value="'+(project.metadata.lastname || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization</th><td><input type="text" id="md'+projectid+'organization" value="'+(project.metadata.organization || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization url</th><td><input type="text" id="md'+projectid+'organization_url" value="'+(project.metadata.organization_url || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization address</th><td><input type="text" id="md'+projectid+'organization_address" value="'+(project.metadata.organization_address || "")+'" style="width: 300px;"></td></tr><tr><th style="padding-bottom: 10px; padding-right: 20px;">organization country</th><td><input type="text" id="md'+projectid+'organization_country" value="'+(project.metadata.organization_country || "")+'" style="width: 300px;"></td></tr><tr><td colspan="2"><button class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].updateBasicProjectMetadata(\''+projectid+'\');">update</button></td></tr></tbody></table>';
+	}
+
+	return html;
+    };
+
+    widget.updateBasicProjectMetadata = function (projectid) {
+	var widget = this;
+
+	var project = stm.DataStore.project[projectid];
+	var fd = new FormData();
+	fd.append('project_name', document.getElementById("md"+projectid+"project_name").value);
+	fd.append('project_description', document.getElementById("md"+projectid+"project_description").value);
+	fd.append('project_funding', document.getElementById("md"+projectid+"project_funding").value);
+	fd.append('pi_email', document.getElementById("md"+projectid+"pi_email").value);
+	fd.append('pi_firstname', document.getElementById("md"+projectid+"pi_firstname").value);
+	fd.append('pi_lastname', document.getElementById("md"+projectid+"pi_lastname").value);
+	fd.append('pi_organization', document.getElementById("md"+projectid+"pi_organization").value);
+	fd.append('pi_organization_country', document.getElementById("md"+projectid+"pi_organization_country").value);
+	fd.append('pi_organization_url', document.getElementById("md"+projectid+"pi_organization_url").value);
+	fd.append('pi_organization_address', document.getElementById("md"+projectid+"pi_organization_address").value);
+	fd.append('email', document.getElementById("md"+projectid+"email").value);
+	fd.append('firstname', document.getElementById("md"+projectid+"firstname").value);
+	fd.append('lastname', document.getElementById("md"+projectid+"lastname").value);
+	fd.append('organization', document.getElementById("md"+projectid+"organization").value);
+	fd.append('organization_country', document.getElementById("md"+projectid+"organization_country").value);
+	fd.append('organization_url', document.getElementById("md"+projectid+"organization_url").value);
+	fd.append('organization_address', document.getElementById("md"+projectid+"organization_address").value);
+	jQuery.ajax({
+	    method: "POST",
+	    headers: stm.authHeader,
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    crossDomain: true,
+	    url: RetinaConfig.mgrast_api+'/project/'+project.id+"/updatemetadata",
+	    complete: function (jqXHR) {
+		var data = JSON.parse(jqXHR.responseText);
+		if (data.hasOwnProperty('ERROR')) {
+		    alert('updating metadata failed.');
+		} else {
+		    alert('metadata updated');
+		}
+		window.location = "mgmain.html?mgpage=share";
+	    }
+	});
+
+	return true;
+    };
+
+    widget.makeProjectPublic = function (projectid) {
+	var widget = this;
+
+	var project = stm.DataStore.project[projectid];
+	var div = document.getElementById('statusDiv'+projectid);
+	div.className = "alert alert-info";
+	div.innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project/'+project.id+"/makepublic",
+	    complete: function (jqXHR) {
+		var data = JSON.parse(jqXHR.responseText);
+		if (data.hasOwnProperty('ERROR')) {
+		    var div = document.getElementById('statusDiv'+projectid);
+		    div.className = "alert alert-error";
+		    var html = [ "<b>"+data.ERROR+"</b>" ];
+		    if (data.hasOwnProperty('errors')) {
+			html.push("<br><br>The following problems were encountered:<br>");
+			var k = Retina.keys(data.errors);
+			for (var i=0; i<k.length; i++) {
+			    html.push("<br><b>metagenome "+k[i] + "</b>:<br><ul><li>" + data.errors[k[i]].join("</li><li>")+"</li></ul>");
+			}
+		    }
+		    div.innerHTML = html.join("");
+		} else {
+		    alert('project published');
+		    window.location = "mgmain.html?mgpage=share";
+		}
+	    }
+	});
+    };
+
+    widget.checkOverdue = function (metagenome) {
+	var widget = this;
+
+	if (! metagenome.hasOwnProperty('created_on')) {
+	    return { "duedate": 0,
+		     "overdue": null };
+	}
+	
+	var co = metagenome.created_on.substr(0,10).split(/-/);
+	var c = new Date(parseInt(co[0]), parseInt(co[1])-1, parseInt(co[2])).valueOf();
+	var n = Date.now();
+	var prio = metagenome.attributes.priority;
+	if (prio == 'date') {
+	    c += 1000 * 60 * 60 * 24 * 360;		    
+	} else if (prio == '3months') {
+	    c += 1000 * 60 * 60 * 24 * 90;
+	} else if (prio == '6months') {
+	    c += 1000 * 60 * 60 * 24 * 180;
+	}
+	var grace = 1000 * 60 * 60 * 24 * 21; // three weeks grace period
+	c += grace;
+	var duedate = new Date(c);
+	duedate = duedate.toDateString();
+	var overdue = null;
+	if (c < n) {
+	    overdue = parseInt((n - c) / 1000 / 60 / 60 / 24);
+	}
+
+	return { "duedate": duedate,
+		 "overdue": overdue };
+    };
+
+    widget.moveMetagenomes = function (projectid) {
+	var widget = this;
+
+	jQuery(".selectcolumn"+projectid).toggle();
+	jQuery("#targetProject"+projectid).toggle();
+	var project = stm.DataStore.project[projectid];
+	var target = document.getElementById('targetProject'+projectid);
+	var html = [ '<table><tr><td style="padding-right: 10px; font-weight: bold;">target project</td><td><select id="targetProjectSelect'+projectid+'" style="margin-bottom: 0px; width: 100%;">' ];
+	for (var i=0; i<stm.DataStore.projectnames.length; i++) {
+	    if (stm.DataStore.projectnames[i].status == 'private') {
+		html.push('<option value="'+stm.DataStore.projectnames[i].id+'">'+stm.DataStore.projectnames[i].name+'</option>');
+	    }
+	}
+	html.push('</select></td><td>');
+	html.push('<button id="moveButton'+projectid+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].performMove(\''+projectid+'\');">move</button></td></tr></table>');
+	target.innerHTML = html.join("");
+    };
+
+    widget.performMove = function (projectid) {
+	var widget = this;
+	var sourceProject = stm.DataStore.project[projectid];
+	var sourceProjectId = sourceProject.id;
+	var targetProjectId = document.getElementById('targetProjectSelect'+projectid).options[document.getElementById('targetProjectSelect'+projectid).selectedIndex].value;
+
+	var metagenomes = [];
+	jQuery('.checkbox_'+projectid).each(function(index) {
+	    if (jQuery(this)[0].checked) {
+		metagenomes.push( jQuery(this)[0].getAttribute('data-id'));
+	    }
+	});
+	
+	if (metagenomes.length == 0) {
+	    alert('you did not select any metagenomes');
+	    return;
+	}
+	
+	var mgs = [];
+	for (var i=0; i<metagenomes.length; i++) {
+	    mgs.push("move="+metagenomes[i]);
+	}
+
+	var b = document.getElementById('moveButton'+projectid);
+	b.setAttribute('disabled', 'disabled');
+	b.innerHTML = "<img src='Retina/images/waiting.gif' style='width: 16px;'>";
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    pid: projectid,
+	    url: RetinaConfig.mgrast_api+'/project/'+sourceProjectId+"/movemetagenomes?target="+targetProjectId+"&"+mgs.join("&"),
+	    success: function (data) {
+		if (data.hasOwnProperty('ERROR')) {
+		    alert(data.ERROR);
+		} else {
+		    alert('metagenomes moved');
+		    window.location = "mgmain.html?mgpage=share";
+		}
+	    },
+	    error: function (data) {
+		alert('moving metagenomes failed');
+		var b = document.getElementById('moveButton'+this.pid);
+		b.removeAttribute('disabled');
+		b.innerHTML = 'move';
+	    }});
+    };
     
+    widget.deleteProject = function (projectid) {
+	var widget = this;
+
+	var project = stm.DataStore.project[projectid];
+	var fd = new FormData();
+	fd.append('id', project.id);
+	jQuery.ajax({
+	    method: "POST",
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project/delete',
+	    success: function (data) {
+		if (data.hasOwnProperty('OK')) {
+		    alert('project deleted');
+		} else {
+		    alert(data.ERROR);
+		}
+		window.location = "mgmain.html?mgpage=share";
+	    },
+	    error: function (data) {
+		alert('deleting project failed');
+	    }});
+	
+    };
+
     widget.navigate = function (pos) {
 	var widget = Retina.WidgetInstances.metagenome_share[1];
 
@@ -174,6 +429,36 @@
 	}
     };
 
+    widget.loadProjectNames = function () {
+	var widget = this;
+
+	// get the private projects this user has access to
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=minimal&limit=999',
+	    success: function (data) {
+		var widget = Retina.WidgetInstances.metagenome_share[1];
+		if (! stm.DataStore.hasOwnProperty('projectnames')) {
+		    stm.DataStore.projectnames = [];
+		}
+		for (var i=0; i<data.data.length; i++) {
+		    stm.DataStore.projectnames[i] = data.data[i];
+		}
+		var btns = document.getElementsByName('movemetagenomesButton');
+		for (var i=0; i<btns.length; i++) {
+		    btns[i].removeAttribute("disabled");
+		}
+	    },
+	    error: function (xhr) {
+		Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+		Retina.WidgetInstances.metagenome_share[1].main.innerHTML = "<div class='alert alert-error'>There was an error accessing your data</div>";
+		widget.main.setAttribute('class','span7 offset1');
+	    }
+	});
+    };
+    
     widget.loadProjects = function () {
 	var widget = Retina.WidgetInstances.metagenome_share[1];
 	
@@ -211,7 +496,7 @@
 
     widget.showPermissions = function (project, target) {
 	var widget = Retina.WidgetInstances.metagenome_share[1];
-	
+
 	var found = null;
 	for (var i=0; i<stm.DataStore.project.length; i++) {
 	    if (stm.DataStore.project[i] && stm.DataStore.project[i].id == project) {
@@ -257,7 +542,7 @@
 		}
 	    }
 	    uarray = uarray.sort(Retina.propSort("sortorder"));
-	    var html = "<button class='btn btn-mini' style='float: right;' onclick='Retina.WidgetInstances.metagenome_share[1].addReviewerToken(\""+stm.DataStore.project[found].id+"\", this.parentNode);'>add reviewer token</button><button class='btn btn-mini' style='float: right; margin-left: 5px; margin-right: 5px;'>make public</button><button class='btn btn-mini' style='float: right;' onclick='var email = prompt(\"Please enter the email address to share this project with.\");if(email) { Retina.WidgetInstances.metagenome_share[1].addUser(\""+stm.DataStore.project[found].id+"\", this.parentNode, email);}'>add user</button><h4>project</h4><table class='table table-condensed'><tr><th>user / group</th><th>edit</th><th>view<img src='Retina/images/"+(widget.projectRightsLocked ? "lock" : "unlocked")+".png' style='cursor: pointer; width: 16px; float: right;' title='click to "+(widget.projectRightsLocked ? "unlock" : "lock")+"' onclick='Retina.WidgetInstances.metagenome_share[1].unlockProjectRights(this, \""+project+"\", "+(widget.projectRightsLocked ? "false" : "true")+");'></th></tr>";
+	    var html = "<button class='btn btn-mini' style='float: right;' onclick='Retina.WidgetInstances.metagenome_share[1].addReviewerToken(\""+stm.DataStore.project[found].id+"\", this.parentNode);'>add reviewer token</button><button class='btn btn-mini' style='float: right;' onclick='var email = prompt(\"Please enter the email address to share this project with.\");if(email) { Retina.WidgetInstances.metagenome_share[1].addUser(\""+stm.DataStore.project[found].id+"\", this.parentNode, email);}'>add user</button><h4>project</h4><table class='table table-condensed'><tr><th>user / group</th><th>edit</th><th>view<img src='Retina/images/"+(widget.projectRightsLocked ? "lock" : "unlocked")+".png' style='cursor: pointer; width: 16px; float: right;' title='click to "+(widget.projectRightsLocked ? "unlock" : "lock")+"' onclick='Retina.WidgetInstances.metagenome_share[1].unlockProjectRights(this, \""+project+"\", "+(widget.projectRightsLocked ? "false" : "true")+");'></th></tr>";
 	    var okIcon = '<div style="border: 1px solid black; width: 10px; height: 10px;'+(widget.projectRightsLocked ? "" : ' cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_share[1].updateRight(this.parentNode, \'remove\');')+'"><i class="icon icon-ok" style="position: relative; bottom: 6px; right: 1px;"></i></div>';
 	    var noIcon = '<div style="border: 1px solid black; width: 10px; height: 10px;'+(widget.projectRightsLocked ? "" : ' cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_share[1].updateRight(this.parentNode, \'add\');')+'"></div>';
 	    for (var i=0; i<uarray.length; i++) {
@@ -323,7 +608,7 @@
 		dataType: "json",
 		space: target,
 		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project/'+project+'?verbosity=permissions',
+		url: RetinaConfig.mgrast_api+'/project/'+project+'?verbosity=permissions&nocache=1',
 		success: function (data) {
 		    for (var i=0; i<stm.DataStore.project.length; i++) {
 			if (stm.DataStore.project[i].id == project) {
@@ -340,6 +625,109 @@
 	}
     };
 
+    widget.showMetadata = function (project, target) {
+	var widget = this;
+
+	var found = null;
+	for (var i=0; i<stm.DataStore.project.length; i++) {
+	    if (stm.DataStore.project[i] && stm.DataStore.project[i].id == project) {
+		found = i;
+		project = stm.DataStore.project[i];
+		break;
+	    }
+	}
+	if (found == null) {
+	    alert('invalid project id');
+	    return;
+	}
+	
+	var html = [];
+	
+	html.push('<h4>export existing metadata</h4><p>Download the full metadata for this project in JSON format.</p><div style="text-align: center;"><button id="exportMetadataButton'+found+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\');">export metadata</button></div><div style="text-align: center;" id="exportMetadataDiv'+found+'"></div>');
+
+	if (project.status !== 'public') {
+	    html.push('<br><h4>MetaZen</h4><p>MetaZen can assist you in filling out an Excel metadata spreadsheet.</p><div style="text-align: center;"><button class="btn" onclick="window.open(\'mgmain.html?mgpage=metazen\');">open MetaZen</button></div>');
+	    html.push('<br><h4>upload new / updated metadata</h4><p>Upload an Excel metadata spreadsheet with new or updated metadata. You need to include a <b>metagenome_id</b> column to match the libraries to your metagenomes.</p><div style="text-align: center;"><button class="btn" id="uploadMetadataButton'+found+'" onclick="document.getElementById(\'uploadMetadata'+found+'\').click();">upload new metadata</button></div><div id="uploadMetadataDiv'+found+'" style="text-align: center;"></div>');
+	    html.push('<input type="file" id="uploadMetadata'+found+'" style="display: none;" onchange="Retina.WidgetInstances.metagenome_share[1].uploadMetadata(event)">');
+	}
+	
+	target.innerHTML = html.join('');
+    };
+
+    widget.uploadMetadata = function (event) {
+	var widget = Retina.WidgetInstances.metagenome_share[1];
+
+	var id = event.target.id.substr(14);
+	var btn = document.getElementById('uploadMetadata'+id);
+
+	document.getElementById('uploadMetadataButton'+id).setAttribute('disabled', 'disabled');
+	document.getElementById('uploadMetadataDiv'+id).innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px;">';
+	
+	var fd = new FormData();
+	fd.append('project', stm.DataStore.project[id].id);
+	for (var i=0; i<stm.DataStore.project[id].metagenomes.length; i++) {
+	    var mgid = stm.DataStore.project[id].metagenomes[i].metagenome_id;
+	    if (! mgid.match(/^mgm/)) {
+		mgid = "mgm"+mgid;
+	    }
+	    fd.append('metagenome', mgid);
+	}
+	fd.append('map_by_id', "1");
+	fd.append('upload', btn.files[0], btn.files[0].name);
+	jQuery.ajax({
+	    method: "POST",
+	    headers: stm.authHeader,
+	    data: fd,
+	    divid: id,
+	    contentType: false,
+	    processData: false,
+	    url: RetinaConfig.mgrast_api+'/metadata/update',
+	    complete: function(xhr) {
+		var response = JSON.parse(xhr.responseText);
+		if (response.hasOwnProperty('ERROR')) {
+		    document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = '<div class="alert alert-error">'+response.ERROR+'</div>';
+		}
+		else if (response.hasOwnProperty('errors') && response.errors.length) {
+		    var html = "";
+		    var added = "";
+		    if (response.added.length) {
+			html =+ '<div class="alert alert-info">The following metagenomes had metadata added:<br>' + response.added.join('<br>')+'</div>';
+		    }
+		    html =+ '<div class="alert alert-error">' + response.errors.join('<br>')+'</div>';
+		    document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = html;
+		}
+		else {
+		    document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = '<div class="alert alert-success">The metadata for this project was successfully updated.</div>';
+		}
+		document.getElementById('uploadMetadataButton'+this.divid).removeAttribute('disabled');
+	    }
+	});
+    };
+
+    widget.exportMetadata = function (project, div) {
+	var widget = this;
+
+	document.getElementById('exportMetadataButton'+div).setAttribute('disabled', 'disabled');
+	document.getElementById('exportMetadataDiv'+div).innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px;">';
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    divid: div,
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/metadata/export/'+project,
+	    success: function (data) {
+		stm.saveAs(JSON.stringify(data, null, 2), project+"_metadata.json");
+	    },
+	    error: function (xhr) {
+		alert("could not retrieve metadata for this project");
+	    },
+	    complete: function(xhr) {
+		document.getElementById('exportMetadataButton'+this.divid).removeAttribute('disabled');
+		document.getElementById('exportMetadataDiv'+this.divid).innerHTML = '';
+	    }
+	});
+    };
+    
     widget.unlockProjectRights = function (btn, project, lock) {
 	var widget = Retina.WidgetInstances.metagenome_share[1];
 	

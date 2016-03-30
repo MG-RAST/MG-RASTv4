@@ -38,6 +38,9 @@
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
 	}
+
+
+	widget.main.innerHTML = "<div class='alert alert-error'>DEPRECATED</div>";
     };
 
     widget.showUser = function (data) {

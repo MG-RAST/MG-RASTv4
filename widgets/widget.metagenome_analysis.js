@@ -32,6 +32,8 @@
         var index = widget.index;
 
 	jQuery.extend(widget, params);
+
+	document.getElementById("pageTitle").innerHTML = "analysis";
 	
 	// set the output area
 	widget.main.innerHTML = '<div id="data"></div><div id="visualize"></div><div id="videoModal" class="modal hide fade"></div>';
