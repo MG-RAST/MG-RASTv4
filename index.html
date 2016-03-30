@@ -14,26 +14,15 @@
     <script type="text/javascript" src="Retina/js/retina.js"></script>
     <script type="text/javascript" src="Retina/js/bootstrap.min.js"></script>
 
+    <!-- helper plugins js -->
+    <script type="text/javascript" src="Retina/js/feature.min.js"></script>
+    <script type="text/javascript" src="Retina/js/peekabar.js"></script>
+
     <!-- newsfeed read via google jsapi -->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-    google.load("feeds", "1");
-function showNewsFeed () {
-    var feed = new google.feeds.Feed("http://press.igsb.anl.gov/mg-rast/feed/");
-    feed.load(function(result) {
-	if (!result.error) {
-	    var html = '<table class="table table-condensed" style="width: 100%; font-size: 12px;">';
-	    for (var i = 0; i < result.feed.entries.length; i++) {
-		var entry = result.feed.entries[i];
-		var date = entry.publishedDate.replace(/^(\w+,\s\d+\s\w+\s\d+).+$/, "$1");
-		html += '<tr><td style="white-space: nowrap;">'+date+'</td><td><a href="'+entry.link+'" target=_blank>'+entry.title+'</a></td></tr>';
-	    }
-	    html += "</table>";
-	    document.getElementById("newsfeed").innerHTML = html;
-	}});
-}
-google.setOnLoadCallback(showNewsFeed); 
-    </script>
+
+    <!-- page init js -->
+    <script type="text/javascript" src="js/index.js"></script>
 
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
@@ -41,75 +30,15 @@ google.setOnLoadCallback(showNewsFeed);
 
     <!-- webapp initialization -->
     <script type="text/javascript">
-    jQuery( document ).ready(function(){
-	// keybind for searchbox
-	document.getElementById('searchtext').addEventListener("keypress", function(event){
-	    event=event || window.event;
-	    if(event.keyCode=='13') {
-		document.getElementById('searchbutton').click();
-	    }
-	});
-
-	// server status info
-	jQuery.getJSON("http://api.metagenomics.anl.gov/server/MG-RAST", function (data) {
-	    // check if the server is down
-	    if (data.status != "ok") {
-		document.getElementById('searchdiv').style.display = "none";
-		document.getElementById('navdiv').style.display = "none";
-		document.getElementById('error').innerHTML = data.info;
-		document.getElementById('error').style.display = "";
-	    }
-	    // check if there is an info message
-	    else if (data.info) {
-		document.getElementById('info').innerHTML = data.info;
-		document.getElementById('info').style.display = "";
-	    }
-
-	    // print server version
-	    document.getElementById('version').innerHTML = "version "+data.version;
-
-	    // print server stats
-	    var bp = (parseInt(data.basepairs) / 1000000000000).formatString(2);
-	    var seq = parseInt(parseInt(data.sequences) / 1000000000).formatString();
-	    document.getElementById('load').innerHTML = parseInt(data.metagenomes).formatString()+" metagenomes containing "+seq+" billion sequences and "+bp+" Tbp processed.";
-	});
-
-	// webapp initialization
-	stm.init({});
-	stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
-	Retina.init({});
-	Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
-		var loginAction = function (data) {
-		    if (data.action != "logout" && data.result == "success") {
-			if (stm.user && stm.user.hasOwnProperty("preferences")) {
-			    return;
-			}
-			stm.user = data.user;
-			stm.authHeader = { "Authorization": "mgrast "+data.token};
-		    } else {
-			stm.user = null;
-			stm.authHeader = {};
-		    }
-		};
-		Retina.Widget.create('login', { "target": document.getElementById("login_space"),
-		    				"callback": loginAction,
-						"registerEnabled": true,
-						"registerLink": "mgmain.html?mgpage=register",
-						"helpEnabled": true,
-						"helpLink": "http://blog.metagenomics.anl.gov/howto/",
-						"forgotEnabled": true,
-						"forgotLink": "mgmain.html?mgpage=register&forgot=1",
-						"myDataEnabled": true,
-						"myDataLink": "mgmain.html?mgpage=user" });
-	    });
-	    
-	    Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
-		Retina.Widget.create('session', {"target": document.getElementById('session_space'), "noInfo": true});
-	    });
+    jQuery( window ).load(function(){
+	initWebApp();
     });
+
+    google.load("feeds", "1");
+    google.setOnLoadCallback(showNewsFeed);
     </script>
 
-    <!-- Google Analytics -->
+    <!-- google analytics -->
     <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -118,9 +47,8 @@ google.setOnLoadCallback(showNewsFeed);
 
   ga('create', 'UA-56018972-1', 'auto');
   ga('send', 'pageview');
-
-</script>
-
+    </script>
+    
   </head>
 
   <body>
@@ -146,41 +74,68 @@ google.setOnLoadCallback(showNewsFeed);
 	
 	<!-- status messages -->
 	<div id="info" class="alert alert-info" style="display: none;"></div>
+	<div id="warning" class="alert alert-warning" style="display: none;"></div>
 	<div id="error" class="alert alert-error" style="display: none;"></div>
 	
-	<!-- search -->
-	<div id="searchdiv" class="input-append" style="margin-top: 10px; width: 400px; margin-left: auto; margin-right: auto; display: block;">
-	  <input class="search span4" type="text" style="padding-left: 10px;border-radius: 14px 0 0 14px;" placeholder="search MG-RAST" id="searchtext">
-	  <button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="window.open('mgmain.html?mgpage=search&search='+document.getElementById('searchtext').value);" id="searchbutton">search</button>
+	<!-- search & submit -->
+	<div id="searchdiv">
+	  <div class="input-append" style="margin-top: 10px; width: 400px; margin-left: auto; margin-right: auto; display: block; text-align: center;">
+	    <input type="text" class="search span4" style="padding-left: 10px;border-radius: 14px 0 0 14px;" placeholder="search / download" id="searchtext">
+	    <button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="window.location='mgmain.html?mgpage=search&amp;search='+document.getElementById('searchtext').value;" id="searchbutton">search <img src="Retina/images/search.png" style="width: 16px; position: relative; bottom 2px;"></button>
+	  </div>
+	  <div style="margin-top: 10px; text-align: center;">
+	    <button class="btn" onclick="window.location='mgmain.html?mgpage=upload';" style="border-radius: 15px;">upload <img src="Retina/images/cloud-upload.png" style="width: 16px;"></button><button class="btn" onclick="window.location='mgmain.html?mgpage=analysis';" style="border-radius: 15px;  margin-left: 20px;">analyze <img src="Retina/images/bar-chart.png" style="width: 16px; position: relative; bottom: 2px;"></button>
+	  </div>
+	</div>
+
+	<noscript>
+	  <div class="alert alert-error" style="margin-bottom: 30px; margin-top: 30px;"><b>ERROR: javascript disabled</b><br> You cannot use this site without javascript. Please enable it in the security settings of your browser.</div>
+	</noscript>
+	
+	<!-- carousel -->
+	<div id="myCarousel" class="carousel slide" style="margin-top: 30px;">
+	  <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+	  </ol>
+	  <!-- Carousel items -->
+	  <div class="carousel-inner">
+            <div class="active item">
+	      <img src="images/sequence2analysis.png" style="margin-left: auto; margin-right: auto;">
+	      <div class="carousel-caption">
+		<p align=center>Turn your raw sequence into analyzed data.</p>
+	      </div>
+	    </div>
+            <div class="item">
+	      <img src="images/dataprotection.png" style="margin-left: auto; margin-right: auto;">
+	      <div class="carousel-caption">
+		<p align=center>Safely deposit your metagenomic data for public reference.</p>
+	      </div>
+	    </div>
+	    <div class="item">
+	      <img src="images/teach.png" style="margin-left: auto; margin-right: auto;">
+	      <div class="carousel-caption">
+		<p align=center>Teach advanced bioinformatics tools with a shallow learning curve.</p>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	
-	<!-- navigation icons -->
-	<div id="navdiv" class="icorow" style="position: relative; right: 40px;">
-	  <div class="icospan" id="icon_search"><img src="Retina/images/search.png" class="ico" title="Search" onclick="window.location='mgmain.html?mgpage=search';"><br><span>Search</span></div>
-	  <div class="icospan" id="icon_pipeline"><img src="Retina/images/settings3.png" class="ico" title="Submission" onclick="window.location='mgmain.html?mgpage=upload';"><br><span>Submission</span></div>
-	  <div class="icospan" id="icon_publications"><img src="Retina/images/dna.png" class="ico" title="Metagenome Projects" onclick="window.location='mgmain.html?mgpage=project';"><br><span>Projects</span></div>
-	  <div class="icospan" id="icon_analysis"><img src="Retina/images/notebook.png" class="ico" title="Analysis" onclick="window.location='mgmain.html?mgpage=analysis';"><br><span>Analysis</span></div>
-	  
-	  <div class="icospan" id="icon_handbook"><img src="Retina/images/file-pdf.png" class="ico" title="Handbook" onclick="window.open('ftp://ftp.metagenomics.anl.gov/data/manual/mg-rast-manual.pdf');"><br><span>Handbook</span></div>
-	  <div class="icospan" id="icon_tutorials"><img src="Retina/images/wizard.png" class="ico" title="Tutorials" onclick="window.open('https://www.youtube.com/channel/UCoBKJ-yYJu5HK1szy3my91A');"><br><span>Tutorials</span></div>
-	  <div class="icospan" id="icon_forum"><img src="Retina/images/bubbles.png" class="ico" title="Forum" onclick="window.open('https://groups.google.com/forum/#!forum/mg-rast');"><br><span>Forum</span></div>
-	  <div class="icospan" id="icon_feedback"><img src="Retina/images/envelop.png" class="ico" title="Feedback" onclick="window.location='contact.html';"><br><span>Feedback</span></div>
+	<!-- news -->
+	<div class="news">
+	  <p class="newsheadline">News</p>
+	  <div id="newsfeed"><img src="Retina/images/waiting.gif" style="margin-top: 40px; margin-left: 208px;"></div>
 	</div>
 	
       </div>
       
-      <!-- news -->
-      <div class="myData">
-	<p class="newsheadline">News</p>
-	<div id="newsfeed"><img src="Retina/images/waiting.gif" style="margin-top: 40px; margin-left: 250px;"></div>
+      <div class="footer">
+	<div style="width: 200px; margin-left: auto; margin-right: auto; text-align: center;">
+	  <a href="legal.html" target=_blank style="color: gray;">Terms of Service | Funding</a>
+	</div>
       </div>
-      
-    </div>
-    
-    <div class="footer">
-      <div style="width: 200px; margin-left: auto; margin-right: auto; text-align: center;">
-	<a href="legal.html" target=_blank style="color: gray;">Terms of Service | Funding</a>
+
       </div>
-    </div>
   </body>
 </html>
