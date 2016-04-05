@@ -376,3 +376,11 @@ li.active > a.tab-light {
     left: 1px;
     z-index: 1;
 }
+
+h3 {
+    font-weight: 300;
+}
+
+.box h4 {
+    font-weight: 300;
+}
