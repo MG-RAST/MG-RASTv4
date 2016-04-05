@@ -77,7 +77,7 @@
 	    }
 	    
 	    widget.toggleBar();
-	    widget.getJobs();
+	    
 	    widget.getCollections();
 	    widget.getProfile();
 	    widget.getProjects();
@@ -134,7 +134,7 @@
     widget.jobsSection = function () {
 	var html = [ '<div id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my jobs<button class="btn btn-mini" style="float: right;" title="show all jobs in detail" onclick="window.open(\'mgmain.html?mgpage=pipeline\');"><i class="icon icon-eye-open"></i></button><button class="btn btn-mini" style="float: right; margin-right: 5px;" title="upload new job" onclick="window.open(\'mgmain.html?mgpage=upload\');"><img src="Retina/images/cloud-upload.png" style="width: 16px;"></i></button></h4>' ];
 	
-	html.push('<div id="jobDiv"></div>')
+	html.push('<div id="jobDiv"><div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div></div>')
 	
 	html.push('</div>');
 	
@@ -144,7 +144,7 @@
     widget.tasksSection = function () {
 	var html = [ '<div id="tasksSection"><h4 style="margin-top: 0px;"><img src="Retina/images/clock.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my tasks</h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
 	
-	html.push('<div id="tasksDiv"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div>')
+	html.push('<div id="tasksDiv"><div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div></div>')
 	
 	html.push('</div>');
 	
@@ -257,6 +257,7 @@
 		       success: function(data) {
 			   stm.user = data;
 			   Retina.WidgetInstances.metagenome_mydata[1].showProfile();
+			   Retina.WidgetInstances.metagenome_mydata[1].getJobs();
 		       },
 		       error: function () {
 			   Retina.WidgetInstances.metagenome_mydata[1].target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
@@ -286,7 +287,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/user/'+stm.user.id+'?verbosity=priorities',
+	    url: RetinaConfig.mgrast_api+'/user/'+stm.user.login+'?verbosity=priorities',
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_mydata[1];
 		widget.priorities = data.priorities;
@@ -326,7 +327,7 @@
 		headers: stm.authHeader,
 		data_manipulation: widget.showJobs,
 		minwidths: [1,1,1],
-		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&status=suspend&status=in-progress&status=checkout&status=queued&info.user="+stm.user.id,
+		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&state=suspend&state=in-progress&state=checkout&state=queued&info.user="+stm.user.id,
 		data: { data: [], header: job_columns }
 	    });
 	} else {
@@ -534,17 +535,19 @@
 	}
 	
 	// iterate over data rows
-	for (var i=0; i<data.length; i++) {
-	    if (data[i].state == "deleted") {
-		result_data.push({ "job": data[i].info.name,
-				   "stage": "-",
-				   "status": "deleted"
-				 });
-	    } else {
-		result_data.push({ "job": "<a href='?mgpage=pipeline&job="+data[i].info.name+"' target=_blank title='Metagenome\n"+data[i].info.userattr.name+"\nProject\n"+data[i].info.userattr.project_name+"'>"+data[i].info.name+"</a>",
-				   "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
-				   "status": widget.status(data[i].state)
-				 });
+	if (data) {
+	    for (var i=0; i<data.length; i++) {
+		if (data[i].state == "deleted") {
+		    result_data.push({ "job": data[i].info.name,
+				       "stage": "-",
+				       "status": "deleted"
+				     });
+		} else {
+		    result_data.push({ "job": "<a href='?mgpage=pipeline&job="+data[i].info.name+"' target=_blank title='Metagenome\n"+data[i].info.userattr.name+"\nProject\n"+data[i].info.userattr.project_name+"'>"+data[i].info.name+"</a>",
+				       "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
+				       "status": widget.status(data[i].state)
+				     });
+		}
 	    }
 	}
 	
