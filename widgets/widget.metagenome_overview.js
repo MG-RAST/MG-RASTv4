@@ -61,7 +61,7 @@
 				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].variableExtractorMetagenome(data.id);
-				   jQuery.getJSON("data/metagenome_overview.flow.json").then(function(d) {
+				   jQuery.getJSON("data/"+(data.sequence_type == 'Amplicon' ? "amplicon" : "metagenome")+"_overview.flow.json").then(function(d) {
 				       stm.DataStore.flows = { "metagenome_overview": d };
 				       Retina.WidgetInstances.metagenome_overview[1].display();
 				   });
@@ -140,6 +140,11 @@
         var ann_reads   = ('read_count_annotated' in stats) ? parseFloat(stats.read_count_annotated) : 0;
         var aa_reads    = ('read_count_processed_aa' in stats) ? parseFloat(stats.read_count_processed_aa) : 0;
 
+	console.log(raw_seqs);
+	console.log(rna_sims);
+	console.log(r_clusts);
+	console.log(r_clust_seq);
+	
         // first round math
         var qc_fail_seqs  = raw_seqs - qc_seqs;
         var ann_rna_reads = rna_sims ? (rna_sims - r_clusts) + r_clust_seq : 0;
@@ -176,12 +181,14 @@
 		unknown_all = diff;
 	    }
         }
-	
+
 	mg.qc_fail_seqs = qc_fail_seqs;
+	mg.qc_fail_seqs_percent = (qc_fail_seqs / raw_seqs * 100).formatString(2);
 	mg.unknown_all = unknown_all;
 	mg.unkn_aa_reads = unkn_aa_reads;
 	mg.ann_aa_reads = ann_aa_reads;
 	mg.ann_rna_reads = ann_rna_reads;
+	mg.ann_rna_reads_percent = (qc_rna_seqs / ann_rna_reads * 100).formatString(2);
 	
 	mg.taxonomy = {};
 	try {
@@ -189,6 +196,9 @@
 	    for (var h=0; h<taxa.length; h++) {
 		mg.taxonomy[taxa[h]] = [];
 		var d = mg.statistics.taxonomy[taxa[h]];
+		if (d == undefined) {
+		    continue;
+		}
 		for (var j=0; j<d.length; j++) {
 		    mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0]} );
 		}
@@ -203,6 +213,9 @@
 	    for (var h=0; h<onto.length; h++) {
 		mg.ontology[onto[h]] = [];
 		var d = mg.statistics.ontology[onto[h]];
+		if (d == undefined) {
+		    continue;
+		}
 		for (var j=0; j<d.length; j++) {
 		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0]} );
 		}
@@ -212,11 +225,19 @@
 	}
 	
 	var allmetadata = [];
-	var cats = ['env_package', 'library', 'project', 'sample'];
-	for (var h=0; h<cats.length; h++) {
-	    var k = Retina.keys(mg.metadata[cats[h]].data).sort();
-	    for (var i=0; i<k.length; i++) {
-		allmetadata.push([ cats[h], k[i], mg.metadata[cats[h]].data[k[i]] ]);
+	if (mg.hasOwnProperty('metadata')) {
+	    var cats = ['env_package', 'library', 'project', 'sample'];
+	    for (var h=0; h<cats.length; h++) {
+		if (! mg.metadata.hasOwnProperty(cats[h])) {
+		    continue;
+		}
+		if (! mg.metadata[cats[h]].hasOwnProperty('data')) {
+		    continue;
+		}
+		var k = Retina.keys(mg.metadata[cats[h]].data).sort();
+		for (var i=0; i<k.length; i++) {
+		    allmetadata.push([ cats[h], k[i], mg.metadata[cats[h]].data[k[i]] ]);
+		}
 	    }
 	}
 	mg.allmetadata = allmetadata;
@@ -240,11 +261,13 @@
 	
 	var rankabundance = [];
 	try {
-	    var t = mg.statistics.taxonomy.family.sort(function(a,b) {
-		return b[1] - a[1];
-            }).slice(0,50);
-	    for (var i=0; i<t.length; i++) {
-		rankabundance.push( { label: t[i][0], value: t[i][1] } );
+	    if (mg.statistics.taxonomy.family != undefined) {
+		var t = mg.statistics.taxonomy.family.sort(function(a,b) {
+		    return b[1] - a[1];
+		}).slice(0,50);
+		for (var i=0; i<t.length; i++) {
+		    rankabundance.push( { label: t[i][0], value: t[i][1] } );
+		}
 	    }
 	} catch (error) {
 	    console.log("could not extract rankabundance data: " + error);
