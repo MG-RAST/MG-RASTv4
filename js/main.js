@@ -54,7 +54,7 @@ function initWebApp () {
 					    "myDataLink": "mgmain.html?mgpage=mydata" });
 	});
 	Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
-	    Retina.Widget.create('session', { "target": document.getElementById("session_space") });
+	    Retina.Widget.create('session', { "target": document.getElementById("session_space"), "noInfo": true });
 	});
     });
 };
