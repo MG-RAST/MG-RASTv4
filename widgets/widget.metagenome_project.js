@@ -64,7 +64,7 @@
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
 	    if (project.status == 'private') {
-		html += "<h3 class='alert alert-info'><img style='width: 24px; position: relative; bottom: 5px; opacity: 0.5;' src='Retina/images/lock.png'>"+project.name+"</h3>";
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 2px;' onclick='window.open(\"mgmain.html?mgpage=share\");' title='show sharing options'><i class='icon icon-share'></i></button>Private Project: "+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
