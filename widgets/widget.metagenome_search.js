@@ -393,7 +393,7 @@
 	    document.getElementById('result_text').innerHTML = "";
 	    return '<div class="alert alert-warning" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">Your search returned no results.</div>';
 	} else {
-	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count+" results. Showing "+showing;
+	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count.formatString()+" results. Showing "+showing;
 	}
 
 	var html = [];
@@ -401,7 +401,7 @@
 	html.push("<table class='table' style='font-size: 12px;' id='result_table'><thead><tr>");
 	var fields = ["created", "project_name", "name", "sequence_type", "biome", "country", "location"];
 	var fnames = ["Created", "Study", "Metagenome", "Seq&nbsp;Type", "Biome", "Country", "Location"];
-	var widths = [ 105, 85, 100, 85, 85, 85 ];
+	var widths = [ 105, 85, 100, 85, 85, 85, 85 ];
 	for (var i=0;i<fields.length;i++) {
 	    var style_a = "";
 	    var style_d = "";
@@ -430,7 +430,7 @@
 	    html.push("<td>"+Retina.dateString(data[rows[i][0]]["created"]).split(/\s/)[0]+"</td>");
 	    html.push("<td><a href='?mgpage=project&project="+data[rows[i][0]]["project_id"]+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>");
 
-            html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='"+data[rows[i][0]]["name"]+"'>"+data[rows[i][0]]["name"]+"</a></td>");
+            html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px;'></a></td>");
 	    html.push("<td>"+data[rows[i][0]]["sequence_type"]+"</td>");
             html.push("<td>"+data[rows[i][0]]["biome"]+"</td>");
             html.push("<td>"+data[rows[i][0]]["country"]+"</td>");
