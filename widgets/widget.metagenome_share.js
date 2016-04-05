@@ -15,7 +15,7 @@
     widget.offset = 0;
     widget.total = 0;
     widget.current = 0;
-    widget.projectsPerPage = 10;
+    widget.projectsPerPage = 15;
     widget.projectRightsLocked = true;
     widget.metagenomeRightsLocked = true;
     
