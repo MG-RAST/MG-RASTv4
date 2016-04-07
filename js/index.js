@@ -71,12 +71,11 @@ function initWebApp () {
     Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
 	var loginAction = function (data) {
 	    if (data.action != "logout" && data.result == "success") {
-		window.location = 'mgmain.html?mgpage=mydata';
-		if (stm.user && stm.user.hasOwnProperty("preferences")) {
-		    return;
+		if (data.user.hasOwnProperty('tos') && data.user.tos == RetinaConfig.tos) {
+		    window.location = 'mgmain.html?mgpage=mydata';
+		} else {
+		    window.location = 'legal.html';
 		}
-		stm.user = data.user;
-		stm.authHeader = { "Authorization": "mgrast "+data.token};
 	    } else {
 		stm.user = null;
 		stm.authHeader = {};
