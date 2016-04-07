@@ -385,3 +385,7 @@ h3 {
 .box h4 {
     font-weight: 300;
 }
+
+.modal-header h3 {
+    font-weight: 300;
+}
