@@ -112,7 +112,7 @@
   <div class="control-group">\
     <label class="control-label" for="inputSecondaryEmail">Secondary eMail</label>\
     <div class="controls">\
-      <input type="text" id="inputSecondaryEmail" placeholder="secondary email" autocomplete="off" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkSEmail();"><span class="help-inline">optional, for recovery purposes</span>\
+      <input type="text" id="inputSecondaryEmail" placeholder="secondary email" autocomplete="off" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkSEmail();"><span class="help-inline">permanently accessible eMail in case you change organization</span>\
     </div>\
   </div>\
   <div class="control-group">\
@@ -134,7 +134,7 @@
   <div class="control-group">\
     <label class="control-label" for="inputCountry">Country</label>\
     <div class="controls">\
-      <input type="text" id="inputCountry" placeholder="country" data-provide="typeahead" autocomplete="off" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline">If you allow geolocation, this is filled automatically. Otherwise start typing for autocompletion.</span>\
+      <input type="text" id="inputCountry" onchange="Retina.WidgetInstances.metagenome_register[1].checkChina(this);" placeholder="country" data-provide="typeahead" autocomplete="off" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline">If you allow geolocation, this is filled automatically. Otherwise start typing for autocompletion.</span>\
     </div>\
   </div>\
   <div class="control-group">\
@@ -511,6 +511,12 @@
 	    }
 	} else {
 	    document.getElementById('inputURL').focus();
+	}
+    };
+
+    widget.checkChina = function (inp) {
+	if (inp.value == "China") {
+	    alert('If you are unable to see the reCaptcha on this page, please enable access to google');
 	}
     };
 

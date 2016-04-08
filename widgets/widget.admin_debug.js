@@ -218,6 +218,7 @@
 		jQuery.cookie(Retina.WidgetInstances.login[1].cookiename, JSON.stringify({ "user": { firstname: d.firstname,
 												     lastname: d.lastname,
 												     email: d.email,
+												     tos: d.tos,
 												     login: d.login },
 											   "token": d.token }), { expires: 7 });
 		window.location = "mgmain.html?mgpage=pipeline";

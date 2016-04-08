@@ -20,6 +20,10 @@ function initWebApp () {
 	Retina.load_widget({"name": "login", "resource": "Retina/widgets"}).then( function() {
 	    var loginAction = function (data) {
 		if (data.action != "logout" && data.result == "success") {
+		    if (! (data.user.hasOwnProperty('tos') && data.user.tos == RetinaConfig.tos)) {
+			window.location = 'legal.html';
+			return;
+		    }
 		    if (stm.user && stm.user.hasOwnProperty("preferences")) {
 			mgp.display({ "main": document.getElementById("content"),
 				      "sidebar": document.getElementById("sidebar") });
@@ -54,7 +58,7 @@ function initWebApp () {
 					    "myDataLink": "mgmain.html?mgpage=mydata" });
 	});
 	Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
-	    Retina.Widget.create('session', { "target": document.getElementById("session_space") });
+	    Retina.Widget.create('session', { "target": document.getElementById("session_space"), "noInfo": true });
 	});
     });
 };

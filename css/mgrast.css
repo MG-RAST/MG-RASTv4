@@ -310,6 +310,7 @@
     font-size: 20pt;
     margin-bottom: 10px;
     margin-top: 20px;
+    font-weight: 300;
 }
 .notebookSubtitle {
     font-size: 12pt;
@@ -375,4 +376,16 @@ li.active > a.tab-light {
     position: relative;
     left: 1px;
     z-index: 1;
+}
+
+h3 {
+    font-weight: 300;
+}
+
+.box h4 {
+    font-weight: 300;
+}
+
+.modal-header h3 {
+    font-weight: 300;
 }

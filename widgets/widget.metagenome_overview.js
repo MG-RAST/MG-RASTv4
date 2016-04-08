@@ -61,7 +61,7 @@
 				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].variableExtractorMetagenome(data.id);
-				   jQuery.getJSON("data/metagenome_overview.flow.json").then(function(d) {
+				   jQuery.getJSON("data/"+(data.sequence_type == 'Amplicon' ? "metagenome" : "metagenome")+"_overview.flow.json").then(function(d) {
 				       stm.DataStore.flows = { "metagenome_overview": d };
 				       Retina.WidgetInstances.metagenome_overview[1].display();
 				   });
@@ -130,6 +130,28 @@
 	    return;
 	}
 
+	if (mg.hasOwnProperty('metadata') && mg.metadata.hasOwnProperty('library') && mg.metadata.library.data.hasOwnProperty('pubmed_id')) {
+	    var pubmed_ids = mg.metadata.library.data.pubmed_id.split(", ");
+	    
+	    jQuery.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id="+pubmed_ids[0], function (data) {
+		var journal, pubdate;
+		var items = data.children[0].children[0].children;
+		for (var i=0; i<items.length; i++) {
+		    if (items[i].attributes.length) {
+			if (items[i].attributes[0].nodeValue == "FullJournalName") {
+			    journal = items[i].innerHTML;
+			}
+			if (items[i].attributes[0].nodeValue == "PubDate") {
+			    pubdate = items[i].innerHTML;
+			}
+		    }
+		}
+		if (journal && pubdate) {
+		    document.getElementById('pubmed').innerHTML = " - published in <a href='http://www.ncbi.nlm.nih.gov/pubmed/"+pubmed_ids[0]+"' target=_blank>"+journal+", "+pubdate+"</a>";
+		}
+	    });
+	}
+
         var is_rna = (mg.sequence_type == 'Amplicon') ? 1 : 0;
         var raw_seqs    = ('sequence_count_raw' in stats) ? parseFloat(stats.sequence_count_raw) : 0;
         var qc_rna_seqs = ('sequence_count_preprocessed_rna' in stats) ? parseFloat(stats.sequence_count_preprocessed_rna) : 0;
@@ -140,55 +162,21 @@
         var ann_reads   = ('read_count_annotated' in stats) ? parseFloat(stats.read_count_annotated) : 0;
         var aa_reads    = ('read_count_processed_aa' in stats) ? parseFloat(stats.read_count_processed_aa) : 0;
 
-        // first round math
-        var qc_fail_seqs  = raw_seqs - qc_seqs;
-        var ann_rna_reads = rna_sims ? (rna_sims - r_clusts) + r_clust_seq : 0;
-        var ann_aa_reads  = (ann_reads && (ann_reads > ann_rna_reads)) ? ann_reads - ann_rna_reads : 0;
-        var unkn_aa_reads = aa_reads - ann_aa_reads;
-        var unknown_all   = raw_seqs - (qc_fail_seqs + unkn_aa_reads + ann_aa_reads + ann_rna_reads);
-        if (raw_seqs < (qc_fail_seqs + ann_rna_reads)) {
-	    var diff = (qc_fail_seqs + ann_rna_reads) - raw_seqs;
-	    unknown_all = (diff > unknown_all) ? 0 : unknown_all - diff;
-        }
-        // fuzzy math
-        if (is_rna) {
-	    qc_fail_seqs  = raw_seqs - qc_rna_seqs;
-	    unkn_aa_reads = 0;
-	    ann_aa_reads  = 0;
-	    unknown_all   = raw_seqs - (qc_fail_seqs + ann_rna_reads);
-        } else {
-	    if (unknown_all < 0) { unknown_all = 0; }
-	    if (raw_seqs < (qc_fail_seqs + unknown_all + unkn_aa_reads + ann_aa_reads + ann_rna_reads)) {
-      	        var diff = (qc_fail_seqs + unknown_all + unkn_aa_reads + ann_aa_reads + ann_rna_reads) - raw_seqs;
-      	        unknown_all = (diff > unknown_all) ? 0 : unknown_all - diff;
-	    }
-	    if ((unknown_all == 0) && (raw_seqs < (qc_fail_seqs + unkn_aa_reads + ann_aa_reads + ann_rna_reads))) {
-      	        var diff = (qc_fail_seqs + unkn_aa_reads + ann_aa_reads + ann_rna_reads) - raw_seqs;
-      	        unkn_aa_reads = (diff > unkn_aa_reads) ? 0 : unkn_aa_reads - diff;
-	    }
-	    // hack to make MT numbers add up
-	    if ((unknown_all == 0) && (unkn_aa_reads == 0) && (raw_seqs < (qc_fail_seqs + ann_aa_reads + ann_rna_reads))) {
-      	        var diff = (qc_fail_seqs + ann_aa_reads + ann_rna_reads) - raw_seqs;
-      	        ann_rna_reads = (diff > ann_rna_reads) ? 0 : ann_rna_reads - diff;
-	    }
-	    var diff = raw_seqs - (qc_fail_seqs + unkn_aa_reads + ann_aa_reads + ann_rna_reads);
-	    if (unknown_all < diff) {
-		unknown_all = diff;
-	    }
-        }
-	
-	mg.qc_fail_seqs = qc_fail_seqs;
-	mg.unknown_all = unknown_all;
-	mg.unkn_aa_reads = unkn_aa_reads;
-	mg.ann_aa_reads = ann_aa_reads;
-	mg.ann_rna_reads = ann_rna_reads;
-	
+	mg.statistics.sequence_breakdown.unknown_percent = (mg.statistics.sequence_breakdown.unknown / mg.statistics.sequence_breakdown.total * 100).formatString(2);
+	mg.statistics.sequence_breakdown.unknown_prot_percent = (mg.statistics.sequence_breakdown.unknown_prot / mg.statistics.sequence_breakdown.total * 100).formatString(2);
+	mg.statistics.sequence_breakdown.failed_qc_percent = (mg.statistics.sequence_breakdown.failed_qc / mg.statistics.sequence_breakdown.total * 100).formatString(2);
+	mg.statistics.sequence_breakdown.known_rna_percent = (mg.statistics.sequence_breakdown.known_rna / mg.statistics.sequence_breakdown.total * 100).formatString();
+	mg.statistics.sequence_breakdown.known_prot_percent = (mg.statistics.sequence_breakdown.known_prot / mg.statistics.sequence_breakdown.total * 100).formatString(2);
+
 	mg.taxonomy = {};
 	try {
 	    var taxa = [ "domain", "phylum", "class", "order", "family", "genus" ];
 	    for (var h=0; h<taxa.length; h++) {
 		mg.taxonomy[taxa[h]] = [];
 		var d = mg.statistics.taxonomy[taxa[h]];
+		if (d == undefined) {
+		    continue;
+		}
 		for (var j=0; j<d.length; j++) {
 		    mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0]} );
 		}
@@ -203,6 +191,9 @@
 	    for (var h=0; h<onto.length; h++) {
 		mg.ontology[onto[h]] = [];
 		var d = mg.statistics.ontology[onto[h]];
+		if (d == undefined) {
+		    continue;
+		}
 		for (var j=0; j<d.length; j++) {
 		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0]} );
 		}
@@ -212,11 +203,19 @@
 	}
 	
 	var allmetadata = [];
-	var cats = ['env_package', 'library', 'project', 'sample'];
-	for (var h=0; h<cats.length; h++) {
-	    var k = Retina.keys(mg.metadata[cats[h]].data).sort();
-	    for (var i=0; i<k.length; i++) {
-		allmetadata.push([ cats[h], k[i], mg.metadata[cats[h]].data[k[i]] ]);
+	if (mg.hasOwnProperty('metadata')) {
+	    var cats = ['env_package', 'library', 'project', 'sample'];
+	    for (var h=0; h<cats.length; h++) {
+		if (! mg.metadata.hasOwnProperty(cats[h])) {
+		    continue;
+		}
+		if (! mg.metadata[cats[h]].hasOwnProperty('data')) {
+		    continue;
+		}
+		var k = Retina.keys(mg.metadata[cats[h]].data).sort();
+		for (var i=0; i<k.length; i++) {
+		    allmetadata.push([ cats[h], k[i], mg.metadata[cats[h]].data[k[i]] ]);
+		}
 	    }
 	}
 	mg.allmetadata = allmetadata;
@@ -240,11 +239,13 @@
 	
 	var rankabundance = [];
 	try {
-	    var t = mg.statistics.taxonomy.family.sort(function(a,b) {
-		return b[1] - a[1];
-            }).slice(0,50);
-	    for (var i=0; i<t.length; i++) {
-		rankabundance.push( { label: t[i][0], value: t[i][1] } );
+	    if (mg.statistics.taxonomy.family != undefined) {
+		var t = mg.statistics.taxonomy.family.sort(function(a,b) {
+		    return b[1] - a[1];
+		}).slice(0,50);
+		for (var i=0; i<t.length; i++) {
+		    rankabundance.push( { label: t[i][0], value: t[i][1] } );
+		}
 	    }
 	} catch (error) {
 	    console.log("could not extract rankabundance data: " + error);

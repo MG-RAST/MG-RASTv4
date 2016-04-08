@@ -77,7 +77,7 @@
 	    }
 	    
 	    widget.toggleBar();
-	    widget.getJobs();
+	    
 	    widget.getCollections();
 	    widget.getProfile();
 	    widget.getProjects();
@@ -134,7 +134,7 @@
     widget.jobsSection = function () {
 	var html = [ '<div id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my jobs<button class="btn btn-mini" style="float: right;" title="show all jobs in detail" onclick="window.open(\'mgmain.html?mgpage=pipeline\');"><i class="icon icon-eye-open"></i></button><button class="btn btn-mini" style="float: right; margin-right: 5px;" title="upload new job" onclick="window.open(\'mgmain.html?mgpage=upload\');"><img src="Retina/images/cloud-upload.png" style="width: 16px;"></i></button></h4>' ];
 	
-	html.push('<div id="jobDiv"></div>')
+	html.push('<div id="jobDiv"><div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div></div>')
 	
 	html.push('</div>');
 	
@@ -144,7 +144,7 @@
     widget.tasksSection = function () {
 	var html = [ '<div id="tasksSection"><h4 style="margin-top: 0px;"><img src="Retina/images/clock.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my tasks</h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
 	
-	html.push('<div id="tasksDiv"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div>')
+	html.push('<div id="tasksDiv"><div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div></div>')
 	
 	html.push('</div>');
 	
@@ -212,38 +212,64 @@
 	var widget = Retina.WidgetInstances.metagenome_mydata[1];
 	
 	var password = document.getElementById('user_password').value;
+	var password2 = document.getElementById('user_password_repeat').value;
 	var firstname = document.getElementById('user_firstname').value;
 	var lastname = document.getElementById('user_lastname').value;
 	var email = document.getElementById('user_email2').value;
-	
-	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + stm.user.login,
-		      method: "PUT",
-		      dataType: "json",
-		      data: "firstname="+firstname+"&lastname="+lastname+"&email2="+email,
-		      success: function(data) {
-			  Retina.WidgetInstances.metagenome_user[1].display();
-		      },
-		      error: function(jqXHR, error) {
-			  console.log("error: unable to connect to API server");
-			  console.log(error);
-		      },
-		      headers: stm.authHeader
-		    });
-	
-	if (password.length) {
-	    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + stm.user.login+"/setpassword?dwp="+password,
-			  method: "GET",
+	if (email != stm.user.email2) {
+	    alert("You will receive a link at the new email address to activate it.\nUntil you have done so, your email will remain unchanged.");
+	}
+
+	var promises = [];
+
+	if (firstname != stm.user.firstname || lastname != stm.user.lastname || email != stm.user.email2) {
+	    var p1 = jQuery.Deferred();
+	    promises.push(p1);
+	    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + stm.user.login,
+			  method: "PUT",
 			  dataType: "json",
-			  success: function(data) {
-			      alert('password changed');
-			  },
+			  p: p1,
+			  data: "firstname="+firstname+"&lastname="+lastname+"&email2="+email,
 			  error: function(jqXHR, error) {
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
 			  },
+			  completed: function (jqXHR) {
+			      console.log(this);
+			      this.p.resolve();
+			  },
 			  headers: stm.authHeader
 			});
+	}
+	
+	if (password.length) {
+	    if (password != password2) {
+		alert("password and repeat password do not match");
+	    } else {
+		var p2 = jQuery.Deferred();
+		promises.push(p2);
+		jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + stm.user.login+"/setpassword?dwp="+password,
+			      method: "GET",
+			      dataType: "json",
+			      success: function(data) {
+				  alert('password changed');
+			      },
+			      error: function(jqXHR, error) {
+				  console.log("error: unable to connect to API server");
+				  console.log(error);
+			      },
+			      headers: stm.authHeader
+			    });
+	    }
 	    
+	}
+
+	if (promises.length) {
+	    document.getElementById('profileDiv').innerHTML = '<div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div>';
+	    
+	    jQuery.when.apply(this, promises).then(function() {
+		Retina.WidgetInstances.metagenome_mydata[1].getProfile();
+	    });
 	}
     };
     
@@ -256,7 +282,11 @@
 		       headers: stm.authHeader,
 		       success: function(data) {
 			   stm.user = data;
-			   Retina.WidgetInstances.metagenome_mydata[1].showProfile();
+			   var widget = Retina.WidgetInstances.metagenome_mydata[1];
+			   widget.showProfile();
+			   if (! widget.hasOwnProperty('job_table')) {
+			       widget.getJobs();
+			   }
 		       },
 		       error: function () {
 			   Retina.WidgetInstances.metagenome_mydata[1].target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
@@ -286,7 +316,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/user/'+stm.user.id+'?verbosity=priorities',
+	    url: RetinaConfig.mgrast_api+'/user/'+stm.user.login+'?verbosity=priorities',
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_mydata[1];
 		widget.priorities = data.priorities;
@@ -326,7 +356,7 @@
 		headers: stm.authHeader,
 		data_manipulation: widget.showJobs,
 		minwidths: [1,1,1],
-		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&status=suspend&status=in-progress&status=checkout&status=queued&info.user="+stm.user.id,
+		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&state=suspend&state=in-progress&state=checkout&state=queued&info.user="+stm.user.id,
 		data: { data: [], header: job_columns }
 	    });
 	} else {
@@ -505,7 +535,8 @@
 <tr><td style="height: 40px;"><b>email</b></td><td>'+stm.user.email+'</td></tr>\
 <tr><td><b>secondary email</b></td><td><input id="user_email2" type="text" value="'+(stm.user.email2 || "")+'" placeholder="enter secondary email"></td></tr>\
 <tr><td><b>change password</b></td><td><input id="user_password" type="text" placeholder="enter new password" style="margin-bottom: 0px; margin-right: 25px;"></td></tr>\
-<tr><td></td><td align=right><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_user[1].updateUser();">save changes</button></td></tr>\
+<tr><td><b>repeat password</b></td><td><input id="user_password_repeat" type="text" placeholder="repeat new password" style="margin-bottom: 0px; margin-right: 25px;"></td></tr>\
+<tr><td></td><td align=right><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_mydata[1].updateUser();">save changes</button></td></tr>\
 </table>');
 	
 	document.getElementById('profileDiv').innerHTML = html.join("\n");
@@ -534,17 +565,19 @@
 	}
 	
 	// iterate over data rows
-	for (var i=0; i<data.length; i++) {
-	    if (data[i].state == "deleted") {
-		result_data.push({ "job": data[i].info.name,
-				   "stage": "-",
-				   "status": "deleted"
-				 });
-	    } else {
-		result_data.push({ "job": "<a href='?mgpage=pipeline&job="+data[i].info.name+"' target=_blank title='Metagenome\n"+data[i].info.userattr.name+"\nProject\n"+data[i].info.userattr.project_name+"'>"+data[i].info.name+"</a>",
-				   "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
-				   "status": widget.status(data[i].state)
-				 });
+	if (data) {
+	    for (var i=0; i<data.length; i++) {
+		if (data[i].state == "deleted") {
+		    result_data.push({ "job": data[i].info.name,
+				       "stage": "-",
+				       "status": "deleted"
+				     });
+		} else {
+		    result_data.push({ "job": "<a href='?mgpage=pipeline&job="+data[i].info.name+"' target=_blank title='Metagenome\n"+data[i].info.userattr.name+"\nProject\n"+data[i].info.userattr.project_name+"'>"+data[i].info.name+"</a>",
+				       "stage": data[i].remaintasks > 0 ? data[i].tasks[data[i].tasks.length - data[i].remaintasks].cmd.description : "complete",
+				       "status": widget.status(data[i].state)
+				     });
+		}
 	    }
 	}
 	

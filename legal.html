@@ -7,8 +7,24 @@
     <title>Terms of Service</title>
     <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
 
+    <!-- default js -->
+    <script type="text/javascript" src="Retina/js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="Retina/js/stm.js"></script>
+    <script type="text/javascript" src="Retina/js/retina.js"></script>
+
+    <!-- page init js -->
+    <script type="text/javascript" src="js/legal.js"></script>
+    
     <!-- bootstrap style -->
     <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
+
+    <!-- webapp initialization -->
+    <script type="text/javascript">
+      jQuery( window ).load(function(){
+      initWebApp();
+      });
+    </script>
 
   </head>
 
@@ -20,7 +36,7 @@
 	<div class="container" style="width: 100%;">
 
 	  <!-- logo and title -->
-          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgroot.html';">
+          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgmain.html';">
 	  
 	  <h3 style="color: white; padding-left: 350px; font-size: 20px; font-weight: 200;">Terms of Service and Funding Information</h3>
 	  
@@ -64,6 +80,8 @@
 	</ul>
       </p>
 
+      <div id="agreement" style="text-align: center; padding-top: 20px; padding-bottom: 20px;"></div>
+
       <h3>Funding</h3>
 
       <p>This project has been funded in part with Federal funds from the National Institute of Allergy and Infectious Diseases, National Institutes of Health, Department of Health and Human Services, under Contract No. HHSN272200900040C.</p>
@@ -77,6 +95,7 @@
       <p><a href="http://www.biomedcentral.com/1471-2105/9/386" target=_blank>The metagenomics RAST server – a public resource for the automatic phylogenetic and functional analysis of metagenomes</a><br>F Meyer, D Paarmann, M D'Souza, R Olson, EM Glass, M Kubal, T Paczian, A Rodriguez, R Stevens, A Wilke, J Wilkening and RA Edwards<br>BMC Bioinformatics 2008, 9:386</p>
 
     </div>
- 
+
+    <div id="login_space" style="display: none;"></div>
   </body>
 </html>
