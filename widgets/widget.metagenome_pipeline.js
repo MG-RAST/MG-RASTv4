@@ -121,11 +121,6 @@
 		    var showSubs = [];
 		    for (var i=0; i<data.submissions.length; i++) {
 			var s = data.submissions[i];
-
-			if (s.status == "completed") {
-			    window.sid = s.id;
-			}
-			
 			if (s.status !== 'deleted' && s.status !== 'completed') {
 			    showSubs.push(s);
 			}
@@ -438,27 +433,6 @@
 		    html += "no task has started computation yet.";
 		}
 	    } else {
-/* 
-
-TEST
-
- */
-		jQuery.ajax({
-		    method: "GET",
-		    headers: stm.authHeader,
-		    url: RetinaConfig.mgrast_api+'/submission/'+sid,
-		    success: function (data) {
-			window.x = data;
-		    }}).fail(function(xhr, error) {
-			console.log(error);
-		    });
-		
-
-/* 
-
-TEST
-
- */
 
 		// time from submission to completion
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
