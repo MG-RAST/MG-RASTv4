@@ -30,7 +30,7 @@
 	var content = widget.main;
 	var sidebar = widget.sidebar;
 
-	document.getElementById("pageTitle").innerHTML = "my studies";
+	document.getElementById("pageTitle").innerHTML = "study editor";
 	
 	// help text
 	sidebar.setAttribute('style', 'padding: 10px;');
