@@ -465,7 +465,7 @@
 		html += "<p>The job has been in the pipeline for <b>"+time_passed+"</b>. The input file of this job has a size of <b>"+jsize+"</b> and is running with <b>"+jobpriority+"</b> priority. The average wait time for these parameters is currently <b>"+average_wait_time+"</b>.</p>";
 		
 		html += "<p>If you want to stop the computation of this job  and remove it from the system you can delete it using the button below.</p>";
-		html += "<p style='text-align: center;'><button class='btn btn-danger btn-small' onclick='Retina.WidgetInstances.metagenome_pipeline[1].deleteJob(\""+job.info.userattr.id+"\");'>delete</button></p>";
+		html += "<p style='text-align: center;'><button class='btn btn-danger btn-small' id='deleteButton' onclick='Retina.WidgetInstances.metagenome_pipeline[1].deleteJob(\""+job.info.userattr.id+"\");'>delete</button></p>";
 	    }
 	}
 
@@ -639,10 +639,13 @@
 	    var form = new FormData();
 	    form.append('metagenome_id', mgid);
 	    form.append('reason', reason);
+	    jQuery('#deleteButton').prop("disabled",true);
 	    jQuery.ajax({
 		method: "POST",
 		dataType: "json",
 		data: form,
+		processData: false,
+		contentType: false,
 		headers: stm.authHeader, 
 		url: RetinaConfig.mgrast_api+'/job/delete',
 		success: function (data) {
@@ -650,6 +653,7 @@
 		    Retina.WidgetInstances.metagenome_pipeline[1].display();
 		}}).fail(function(xhr, error) {
 		    alert("job deletion failed");
+		    jQuery('#deleteButton').prop("disabled",false);
 		    console.log(error);
 		});
 	}

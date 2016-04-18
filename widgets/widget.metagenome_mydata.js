@@ -152,7 +152,7 @@
     };
     
     widget.studysSection = function () {
-	var html = [ '<div id="studysSection"><h4 style="margin-top: 0px;"><img src="Retina/images/dna.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my studies<button class="btn btn-mini" style="float: right;" title="show all studies in detail" onclick="window.open(\'mgmain.html?mgpage=share\');"><i class="icon icon-eye-open"></i></button></h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
+	var html = [ '<div id="studysSection"><h4 style="margin-top: 0px;"><img src="Retina/images/dna.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my studies<button class="btn btn-mini" style="float: right;" title="show study editor" onclick="window.open(\'mgmain.html?mgpage=share\');"><i class="icon icon-edit"></i></button></h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
 	
 	html.push('<div id="projectDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div>')
 	
