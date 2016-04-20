@@ -17,5 +17,6 @@ var RetinaConfig = {
     "v3BaseLoginUrl": "https://metagenomics.anl.gov/",
     "v3CGIUrl": "http://metagenomics.anl.gov/metagenomics.cgi",
     "v3": false,
+    "serverVersion": "4.0a",
     "tos": "2"
 };
