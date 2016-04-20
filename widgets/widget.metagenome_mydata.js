@@ -132,7 +132,7 @@
       SECTIONS
     */
     widget.jobsSection = function () {
-	var html = [ '<div id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my jobs<button class="btn btn-mini" style="float: right;" title="show all jobs in detail" onclick="window.open(\'mgmain.html?mgpage=pipeline\');"><i class="icon icon-eye-open"></i></button><button class="btn btn-mini" style="float: right; margin-right: 5px;" title="upload new job" onclick="window.open(\'mgmain.html?mgpage=upload\');"><img src="Retina/images/cloud-upload.png" style="width: 16px;"></i></button></h4>' ];
+	var html = [ '<div id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my jobs<a class="btn btn-mini" style="float: right;" title="show all jobs in detail" href="mgmain.html?mgpage=pipeline"><i class="icon icon-eye-open"></i></a><a class="btn btn-mini" style="float: right; margin-right: 5px;" title="upload new job" href="mgmain.html?mgpage=upload"><img src="Retina/images/cloud-upload.png" style="width: 16px;"></i></a></h4>' ];
 	
 	html.push('<div id="jobDiv"><div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div></div>')
 	
@@ -152,7 +152,7 @@
     };
     
     widget.studysSection = function () {
-	var html = [ '<div id="studysSection"><h4 style="margin-top: 0px;"><img src="Retina/images/dna.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my studies<button class="btn btn-mini" style="float: right;" title="show study editor" onclick="window.open(\'mgmain.html?mgpage=share\');"><i class="icon icon-edit"></i></button></h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
+	var html = [ '<div id="studysSection"><h4 style="margin-top: 0px;"><img src="Retina/images/dna.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my studies<a class="btn btn-mini" style="float: right; margin-left: 5px;" title="show my private studies" href="mgmain.html?mgpage=projects"><i class="icon icon-eye-open"></i></a><a class="btn btn-mini" style="float: right;" title="show study editor" href="mgmain.html?mgpage=share"><i class="icon icon-edit"></i></a></h4><hr style="margin-top: 2px; margin-bottom: 5px;">' ];
 	
 	html.push('<div id="projectDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div>')
 	
@@ -382,7 +382,7 @@
 		html.push('<hr style="margin-top: 0px; margin-bottom: 0px;">');
 	    }
 	    if (result.total > result.data.length) {
-		html.push('<button class="btn btn-mini" onclick="window.open(\'mgmain.html?mgpage=share\');" style="width: 100%">...</button>');
+		html.push('<a class="btn btn-mini" href="mgmain.html?mgpage=share" style="width: 100%">...</a>');
 	    }
 	} else {
 	    html.push("<p>- you currently do not have access to any studies -</p>");
