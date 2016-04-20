@@ -56,7 +56,7 @@ function initWebApp () {
 	}
 	
 	// print server version
-	document.getElementById('version').innerHTML = "version "+data.version;
+	document.getElementById('version').innerHTML = "version "+(RetinaConfig.serverVersion ?RetinaConfig.serverVersion : data.version);
 	
 	// print server stats
 	var bp = (parseInt(data.basepairs) / 1000000000000).formatString(2);
