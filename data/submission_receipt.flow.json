@@ -2,7 +2,7 @@
     { "type": "Text", "style": "Title", "text": "Processing Receipt job $$jid$$ ($$info.userattr.name$$) ", "tocTitle": "Home", "tocName": "home" },
     { "type": "Text", "style": "Subtitle", "text": "part of submission $$submission$$ for project '$$info.project$$'"  },
     { "type": "Text", "style": "Paragraph", "text": "An overview of the biological results of this job can be viewed <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$'>here</a>." },
-    { "type": "Text", "style": "Header", "text": "Submission Summary", "tocTitle": "Submission Summary", "tocName": "pipeline_stages" },
+    { "type": "Text", "style": "Header", "text": "Submission Summary", "tocTitle": "Submission Summary", "tocName": "submission_summary" },
     { "type": "Table", "style": "table-condensed table-hover", "data": [ 
 	[ "<b>input file</b>", "$$stats.file_name$$ ($$stats.file_size$$)" ],
 	[ "<b>priority</b>", "$$info.priority$$" ],

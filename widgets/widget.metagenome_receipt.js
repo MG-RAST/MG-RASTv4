@@ -20,6 +20,8 @@
 
 	var container = widget.target = wparams ? wparams.main : widget.target;
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
+	widget.sidebar.parentNode.className = "span3 sidebar affix";
+	widget.sidebar.parentNode.style = "right: 8%; background-color: white;";
 
 	container.innerHTML = '<div style="text-align: center; padding-top: 150px;"><img src="Retina/images/waiting.gif" style="width: 24px;"></div>';
 
