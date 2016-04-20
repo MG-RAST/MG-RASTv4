@@ -74,7 +74,7 @@
             }
 	    
 	    
-	    var notebook = Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: stm.DataStore.flows.metagenome_overview, dataContainer: stm.DataStore.metagenome[widget.id] }).render();	
+	    var notebook = Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: stm.DataStore.flows.metagenome_overview, dataContainer: stm.DataStore.metagenome[widget.id] }).render();
 	} else {
 	    container.innerHTML = '\
 <div id="mg_modal" class="modal show fade" tabindex="-1" style="width: 500px;" role="dialog">\

@@ -1,7 +1,7 @@
 (function () {
     widget = Retina.Widget.extend({
         about: {
-                title: "Metagenome Project Widget",
+                title: "Metagenome Collection Widget",
                 name: "metagenome_collection",
                 author: "Tobias Paczian",
                 requires: [ ]

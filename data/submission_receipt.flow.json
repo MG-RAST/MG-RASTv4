@@ -1,0 +1,34 @@
+[ 
+    { "type": "Text", "style": "Title", "text": "Processing Receipt job $$jid$$ ($$info.userattr.name$$) ", "tocTitle": "Home", "tocName": "home" },
+    { "type": "Text", "style": "Subtitle", "text": "part of submission $$submission$$ for project '$$info.project$$'"  },
+    { "type": "Text", "style": "Paragraph", "text": "An overview of the biological results of this job can be viewed <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$'>here</a>." },
+    { "type": "Text", "style": "Header", "text": "Submission Summary", "tocTitle": "Submission Summary", "tocName": "pipeline_stages" },
+    { "type": "Table", "style": "table-condensed table-hover", "data": [ 
+	[ "<b>input file</b>", "$$stats.file_name$$ ($$stats.file_size$$)" ],
+	[ "<b>priority</b>", "$$info.priority$$" ],
+	[ "<b>submission</b>", "$$submitted$$" ],
+	[ "<b>completion</b>", "$$completed$$" ],
+	[ "<b>duration</b>", "$$totaltime$$" ],
+	[ "<b>compute time</b>", "$$computetime$$" ]
+    ] },
+    { "type": "Text", "style": "Header", "text": "Sequence Statistics", "tocTitle": "Sequence Statistics", "tocName": "sequence_statistics"  },
+    { "type": "Table", "style": "table-condensed table-hover", "data": [ 
+	[ "<b>checksum</b>", "$$stats.checksum$$" ],
+	[ "<b>suffix</b>", "$$stats.suffix$$" ],
+	[ "<b>type</b>", "$$stats.type$$" ],
+	[ "<b>guessed sequencing method</b>", "$$stats.sequencing_method_guess$$" ],
+	[ "<b>sequence content</b>", "$$stats.sequence_content$$" ],
+	[ "<b>sequence type</b>", "$$stats.sequence_type$$" ],
+	[ "<b>basepair count</b>", "$$stats.bp_count$$" ],
+	[ "<b>sequence count</b>", "$$stats.sequence_count$$" ],
+	[ "<b>unique id count</b>", "$$stats.unique_id_count$$" ],
+	[ "<b>length</b>", "$$stats.average_length$$ ± $$stats.standard_deviation_length$$ ($$stats.length_min$$ - $$stats.length_max$$) bp" ],
+	[ "<b>ambiguous characters</b>", "$$stats.ambig_char_count$$" ],
+	[ "<b>ambiguous sequences</b>", "$$stats.ambig_sequence_count$$" ],
+	[ "<b>average ambiguous characters</b>", "$$stats.average_ambig_chars$$" ],
+	[ "<b>gc-content</b>", "$$stats.average_gc_content$$ ± $$stats.standard_deviation_gc_content$$ %" ],
+	[ "<b>gc-ratio</b>", "$$stats.average_gc_ratio$$ ± $$stats.standard_deviation_gc_ratio$$" ]
+    ] },
+    { "type": "Text", "style": "Header", "text": "Pipeline Stages", "tocTitle": "Pipeline Stages", "tocName": "pipeline_stages" },
+    { "type": "Table", "style": "table-condensed", "dataReference": "pipeline_stages" }
+]

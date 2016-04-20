@@ -22,10 +22,10 @@
 	}
 	var content = widget.main;
 	var sidebar = widget.sidebar;
-
+	
 	sidebar.parentNode.style.display = "none";
 	content.className = "span10 offset1";
-
+	
 	document.getElementById("pageTitle").innerHTML = "study";
 	
 	// check if we have a project parameter
@@ -35,11 +35,11 @@
 		widget.id = "mgp"+widget.id;
 	    }
 	}
-
+	
 	// if there is a project, show it
         if (widget.id) {
 	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
-
+	    
 	    // check if required data is loaded
 	    if (! ( stm.DataStore.hasOwnProperty('project') &&
 	            stm.DataStore.project.hasOwnProperty(widget.id))) {
@@ -59,7 +59,7 @@
 		    });
 		return;
             }
-
+	    
 	    var project = stm.DataStore.project[widget.id];
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
@@ -68,6 +68,8 @@
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
+	    
+	    
 	    html += "<table>";
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
@@ -81,7 +83,7 @@
 	    html += "<h4>metagenomes</h4><div id='metagenome_table'><img src='Retina/images/waiting.gif' style='margin-left: 40%;margin-top: 100px;'></div>";
 	    
 	    content.innerHTML = html;
-
+	    
 	    // create the metagenome table
 	    var rows = [];
 	    var url = RetinaConfig.mgrast_ftp+"/metagenome/";
@@ -114,14 +116,14 @@
 		minwidths: [125,175,105,110,85,95,95,100,95,120,70,90,110],
 		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "location", "country", "coordinates", "type", "method", "download" ] }
 	    }).render();
-        }
+	}
 	// else show the project select
 	else {
 	    content.innerHTML = '<h3>select a project to view</h3><div id="project_table"></div>';
-
+	    
 	    // create the job table
 	    var columns = [ "name", "pi", "status" ];
-
+	    
 	    var table_filter = { 0: { "type": "text" },
 				 1: { "type": "text" },
 				 2: { "type": "text" } };
@@ -146,10 +148,10 @@
 	    }
 	    widget.table.render();
 	    widget.table.update({},1);
-        }
+	}
 	
     };
-
+    
     widget.authenticatedDownload = function (button, id, type) {
 	var widget = Retina.WidgetInstances.metagenome_project[1];
 	button.setAttribute('disabled', 'true');
@@ -187,12 +189,12 @@
 			 } );
 	}
     };
-
+    
     widget.tableManipulation = function (data) {
 	for (var i=0; i<data.length; i++) {
 	    data[i].name = "<a href='?mgpage=project&project="+data[i].id+"'>"+data[i].name+"</a>";
 	}
 	return data;
     };
-
+    
 })();

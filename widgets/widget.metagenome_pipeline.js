@@ -599,7 +599,7 @@
 	var inputs = [];
 	for (var i in task.inputs) {
 	    if (task.inputs.hasOwnProperty(i)) {
-		if (task.inputs[i].nofile || i == "mysql.tar" || i == "postgresql.tar") {
+		if (task.inputs[i].nofile || task.inputs[i].filename == "mysql.tar" || task.inputs[i].filename == "postgresql.tar") {
 		    continue;
 		}
 		inputs.push(task.inputs[i].filename+" ("+task.inputs[i].size.byteSize()+")" + (Retina.cgiParam('admin') ? " <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_pipeline[1].downloadHead(\""+task.inputs[i].node+"\", \""+i+"\");'>head 1MB</button>": ""));
