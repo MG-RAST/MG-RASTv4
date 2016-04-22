@@ -61,7 +61,26 @@
 				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].variableExtractorMetagenome(data.id);
-				   jQuery.getJSON("data/"+(data.sequence_type == 'Amplicon' ? "metagenome" : "metagenome")+"_overview.flow.json").then(function(d) {
+				   var url = "data/";
+				   switch (data.sequence_type) {
+				   case 'Amplicon':
+				       url += "amplicon";
+				       break;
+				   case 'MT':
+				       url += "transcriptome";
+				       break;
+				   case 'Assembly':
+				       url += "assembly";
+				       break;
+				   case 'WGS':
+				       url += "shotgun";
+				       break;
+				   default:
+				       url += "shotgun";
+				       break;
+				   }
+				   url += "_overview.flow.json";
+				   jQuery.getJSON(url).then(function(d) {
 				       stm.DataStore.flows = { "metagenome_overview": d };
 				       Retina.WidgetInstances.metagenome_overview[1].display();
 				   });
@@ -219,6 +238,23 @@
 	    }
 	}
 	mg.allmetadata = allmetadata;
+
+	var sourcehits = [];
+	if (mg.hasOwnProperty('statistics') && mg.statistics.hasOwnProperty('source')) {
+	    var labels = ["e^-3 to e^-5", "e^-5 to e^-10", "e^-10 to e^-20", "e^-20 to e^-30", "e^-30 & less" ];
+	    for (var h=0; h<5; h++) {
+		sourcehits.push( { "label": labels[h], "values": [], "labels": [] } );
+		for (var i in mg.statistics.source) {
+		    if (h == 0) {
+			sourcehits[h].labels.push(i);
+		    }
+		    if (mg.statistics.source.hasOwnProperty(i)) {
+			sourcehits[h].values.push(mg.statistics.source[i].evalue[h]);
+		    }
+		}
+	    }
+	}
+	mg.sourcehitsdistribution = sourcehits;
 	
 	var bpprofile = [
 	    { label: "A", values: [] },
@@ -285,6 +321,32 @@
 	    console.log("could not parse kmer data: "+error);
 	}
 	mg.kmer = kmer;
+
+	var sequenceLengthQC = [];
+	var sequenceLengthUpload = [];
+	if (mg.hasOwnProperty('statistics') && mg.statistics.hasOwnProperty('length_histogram')) {
+	    for (var i=0; i<mg.statistics.length_histogram.post_qc.length; i++) {
+		sequenceLengthQC.push({ x: mg.statistics.length_histogram.post_qc[i][0], y: mg.statistics.length_histogram.post_qc[i][1] });
+	    }
+	    for (var i=0; i<mg.statistics.length_histogram.upload.length; i++) {
+		sequenceLengthUpload.push({ x: mg.statistics.length_histogram.upload[i][0], y: mg.statistics.length_histogram.upload[i][1] });
+	    }
+	}
+	mg.sequenceLengthQC = sequenceLengthQC;
+	mg.sequenceLengthUpload = sequenceLengthUpload;
+
+	var sequenceGCQC = [];
+	var sequenceGCUpload = [];
+	if (mg.hasOwnProperty('statistics') && mg.statistics.hasOwnProperty('gc_histogram')) {
+	    for (var i=0; i<mg.statistics.gc_histogram.post_qc.length; i++) {
+		sequenceGCQC.push({ x: mg.statistics.gc_histogram.post_qc[i][0], y: mg.statistics.gc_histogram.post_qc[i][1] });
+	    }
+	    for (var i=0; i<mg.statistics.gc_histogram.upload.length; i++) {
+		sequenceGCUpload.push({ x: mg.statistics.gc_histogram.upload[i][0], y: mg.statistics.gc_histogram.upload[i][1] });
+	    }
+	}
+	mg.sequenceGCQC = sequenceGCQC;
+	mg.sequenceGCUpload = sequenceGCUpload;
     };
     
 })();
