@@ -59,6 +59,9 @@
 				   } else {
 				       data.computationStatus = "incomplete";
 				   }
+				   if (data.pipeline_parameters.assembled == "yes") {
+				       data.sequence_type = "Assembly";
+				   }
 				   stm.DataStore.metagenome[data.id] = data;
 				   Retina.WidgetInstances.metagenome_overview[1].variableExtractorMetagenome(data.id);
 				   var url = "data/";
