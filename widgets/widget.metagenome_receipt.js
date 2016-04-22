@@ -23,6 +23,8 @@
 	widget.sidebar.parentNode.className = "span3 sidebar affix";
 	widget.sidebar.parentNode.style = "right: 8%; background-color: white;";
 
+	document.getElementById("pageTitle").innerHTML = "processing receipt";
+
 	container.innerHTML = '<div style="text-align: center; padding-top: 150px;"><img src="Retina/images/waiting.gif" style="width: 24px;"></div>';
 
 	// get the requested metagenome id
@@ -36,23 +38,23 @@
 	}
 
 	// check if we have data, if not, get it first
-	if (! widget.hasOwnProperty('data')) {
+	if (! widget.hasOwnProperty('submission')) {
 	    widget.getData();
 	    return;
 	}
 
-	Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: widget.flow, dataContainer: widget.dataExtractor(widget.data) }).render();
+	Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: widget.flow, dataContainer: widget.dataExtractor() }).render();
 
     };
 
-    widget.dataExtractor = function (data) {
+    widget.dataExtractor = function () {
 	var widget = this;
 
 	var mg = null;
 	var mgindex = 0;
-	for (var i=0; i<data.status.metagenomes.length; i++) {
-	    if (data.status.metagenomes[i].info.userattr.id == widget.id) {
-		mg = data.status.metagenomes[i];
+	for (var i=0; i<widget.submission.status.metagenomes.length; i++) {
+	    if (widget.submission.status.metagenomes[i].info.userattr.id == widget.id) {
+		mg = widget.submission.status.metagenomes[i];
 		mgindex = i;
 		break;
 	    }
@@ -62,7 +64,7 @@
 	    return;
 	}
 	
-	mg.submission = data.id;
+	mg.submission = widget.submission.id;
 	mg.submitted = Retina.dateString(mg.tasks[0].createddate);
 	mg.completed = Retina.dateString(mg.tasks[mg.tasks.length - 1].completeddate);
 	mg.totaltime = (new Date(mg.tasks[mg.tasks.length - 1].completeddate).valueOf() - new Date(mg.tasks[0].createddate).valueOf()).timestring(1, true);
@@ -112,7 +114,7 @@
 	mg.tasks[0].inputs[0].size = mg.tasks[0].inputs[0].size.byteSize();
 	mg.numstages = mg.tasks.length;
 
-	mg.stats = data.status.sequences[mgindex].stats_info;
+	mg.stats = widget.submission.status.sequences[mgindex].stats_info;
 
 	mg.stats.file_size = mg.stats.file_size.byteSize();
 	mg.stats.bp_count = parseInt(mg.stats.bp_count).formatString();
@@ -120,6 +122,10 @@
 	mg.stats.unique_id_count = parseInt(mg.stats.unique_id_count).formatString();
 	mg.stats.ambig_char_count = parseInt(mg.stats.ambig_char_count).formatString();
 	mg.stats.ambig_sequence_count = parseInt(mg.stats.ambig_sequence_count).formatString();
+
+	mg.details = widget.metagenome;
+
+	console.log(mg);
 	
 	return mg;
     };
@@ -131,34 +137,36 @@
 	jQuery.getJSON("data/submission_receipt.flow.json").complete(function(d) {
 	    var widget = Retina.WidgetInstances.metagenome_receipt[1];
 	    widget.flow = JSON.parse(d.responseText);
-
-	    jQuery.getJSON("data/receipt.json").complete(function(d) {
-	    	widget.data = JSON.parse(d.responseText).save;
-	    	console.log(widget.data);
-	    	widget.display();
-	    });
 	    
-	    // // get the data
-	    // jQuery.ajax({
-	    // 	method: "GET",
-	    // 	headers: stm.authHeader,
-	    // 	url: RetinaConfig.mgrast_api+'/metagenome/'+widget.id,
-	    // 	success: function (data) {
-	    // 	    jQuery.ajax({
-	    // 		method: "GET",
-	    // 		headers: stm.authHeader,
-	    // 		url: RetinaConfig.mgrast_api+'/submission/'+data.submission+'?full=1',
-	    // 		success: function (data) {
-	    // 		    var widget = Retina.WidgetInstances.metagenome_receipt[1];
-	    // 		    stm.DataStore.save = data;
-	    // 		    widget.data = data;
-	    // 		    widget.display();
-	    // 		}}).fail(function(xhr, error) {
-	    // 		    console.log(error);
-	    // 		});
-	    // 	}}).fail(function(xhr, error) {
-	    // 		console.log(error);
-	    // 	});
+	    // get the data
+	    jQuery.ajax({
+	    	method: "GET",
+	    	headers: stm.authHeader,
+	    	url: RetinaConfig.mgrast_api+'/metagenome/'+widget.id,
+	    	success: function (data) {
+		    var widget = Retina.WidgetInstances.metagenome_receipt[1];
+		    widget.metagenome = data;
+
+		    jQuery.getJSON("data/receipt.json").complete(function(d) {
+	    		widget.submission = JSON.parse(d.responseText).save;
+	    		widget.display();
+		    });
+
+	    	    // jQuery.ajax({
+	    	    // 	method: "GET",
+	    	    // 	headers: stm.authHeader,
+	    	    // 	url: RetinaConfig.mgrast_api+'/submission/'+data.submission+'?full=1',
+	    	    // 	success: function (data) {
+	    	    // 	    var widget = Retina.WidgetInstances.metagenome_receipt[1];
+	    	    // 	    stm.DataStore.save = data;
+	    	    // 	    widget.submission = data;
+	    	    // 	    widget.display();
+	    	    // 	}}).fail(function(xhr, error) {
+	    	    // 	    console.log(error);
+	    	    // 	});
+	    	}}).fail(function(xhr, error) {
+	    		console.log(error);
+	    	});
 	});
     };
     
