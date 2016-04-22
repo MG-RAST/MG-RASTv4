@@ -1,7 +1,17 @@
 [ 
-    { "type": "Text", "style": "Title", "text": "Processing Receipt job $$jid$$ ($$info.userattr.name$$) ", "tocTitle": "Home", "tocName": "home" },
+    { "type": "Text", "style": "Title", "text": "$$info.userattr.name$$ (<a href='mgmain.html?mgpage=pipeline&job=$$jid$$'>$$jid$$</a>) <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$' class='btn btn-small pull-right' title='Metagenome Overview'><img src='Retina/images/dna.png' style='width: 16px;'></a>", "tocTitle": "Home", "tocName": "home" },
     { "type": "Text", "style": "Subtitle", "text": "part of submission $$submission$$ for project '$$info.project$$'"  },
     { "type": "Text", "style": "Paragraph", "text": "An overview of the biological results of this job can be viewed <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$'>here</a>." },
+    { "type": "Text", "style": "Header", "text": "User Defined Options", "tocTitle": "User Defined Options", "tocName": "user_options" },
+    { "type": "Table", "style": "table-condensed table-hover", "data": [ 
+	[ "<b>assembled</b>", "$$details.pipeline_parameters.assembled$$" ],
+	[ "<b>dereplication</b>", "$$details.pipeline_parameters.dereplicate$$" ],
+	[ "<b>screening</b>", "$$details.pipeline_parameters.screen_indexes$$" ],
+	[ "<b>publication</b>", "$$details.pipeline_parameters.priority$$" ],
+	[ "<b>dynamic trimming</b>", "$$details.pipeline_parameters.dynamic_trim$$" ],
+	[ "<b>lowest phred score for high quality base</b>", "$$details.pipeline_parameters.min_qual$$" ],
+	[ "<b>maximum low quality bases</b>", "$$details.pipeline_parameters.max_lqb$$" ]
+    ] },
     { "type": "Text", "style": "Header", "text": "Submission Summary", "tocTitle": "Submission Summary", "tocName": "submission_summary" },
     { "type": "Table", "style": "table-condensed table-hover", "data": [ 
 	[ "<b>input file</b>", "$$stats.file_name$$ ($$stats.file_size$$)" ],
