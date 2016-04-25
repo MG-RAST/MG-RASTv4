@@ -43,7 +43,12 @@
 	    return;
 	}
 
-	Retina.Renderer.create('notebook', { target: container, showTOC: true, tocTarget: sidebar, flow: widget.flow, dataContainer: widget.dataExtractor() }).render();
+	var d = widget.dataExtractor();
+	var errors = [];
+	if (d.oldstats) {
+	    errors[8] = true;
+	}
+	Retina.Renderer.create('notebook', { target: container, showTOC: true, errors: errors, tocTarget: sidebar, flow: widget.flow, dataContainer: d }).render();
 
     };
 
@@ -51,17 +56,23 @@
 	var widget = this;
 
 	var mg = null;
-	var mgindex = 0;
 	for (var i=0; i<widget.submission.status.metagenomes.length; i++) {
 	    if (widget.submission.status.metagenomes[i].info.userattr.id == widget.id) {
 		mg = widget.submission.status.metagenomes[i];
-		mgindex = i;
 		break;
 	    }
 	}
 	if (! mg) {
 	    alert("metagenome not found in data");
 	    return;
+	}
+	var filename = mg.tasks[0].inputs[0].filename;
+	var inputfile = null;
+	for (var i=0; i<widget.submission.status.submission.input.files.length; i++) {
+	    if (widget.submission.status.submission.input.files[i].filename == filename) {
+		mg.stats = widget.submission.status.submission.input.files[i].stats_info;
+		break;
+	    }
 	}
 	
 	mg.submission = widget.submission.id;
@@ -114,18 +125,28 @@
 	mg.tasks[0].inputs[0].size = mg.tasks[0].inputs[0].size.byteSize();
 	mg.numstages = mg.tasks.length;
 
-	mg.stats = widget.submission.status.sequences[mgindex].stats_info;
-
-	mg.stats.file_size = mg.stats.file_size.byteSize();
-	mg.stats.bp_count = parseInt(mg.stats.bp_count).formatString();
-	mg.stats.sequence_count = parseInt(mg.stats.sequence_count).formatString();
-	mg.stats.unique_id_count = parseInt(mg.stats.unique_id_count).formatString();
-	mg.stats.ambig_char_count = parseInt(mg.stats.ambig_char_count).formatString();
-	mg.stats.ambig_sequence_count = parseInt(mg.stats.ambig_sequence_count).formatString();
-
+	if (mg.stats) {
+	    mg.stats.file_size = mg.stats.file_size.byteSize();
+	    mg.stats.bp_count = parseInt(mg.stats.bp_count).formatString();
+	    mg.stats.sequence_count = parseInt(mg.stats.sequence_count).formatString();
+	    mg.stats.unique_id_count = parseInt(mg.stats.unique_id_count).formatString();
+	    mg.stats.ambig_char_count = parseInt(mg.stats.ambig_char_count).formatString();
+	    mg.stats.ambig_sequence_count = parseInt(mg.stats.ambig_sequence_count).formatString();
+	} else {
+	    mg.oldstats = true;
+	}
+	
 	mg.details = widget.metagenome;
-
-	console.log(mg);
+	var screens = {  "h_sapiens": "H. sapiens, NCBI v36",
+			 "m_musculus": "M. musculus, NCBI v37",
+			 "r_norvegicus": "R. norvegicus, UCSC rn4",
+			 "b_taurus": "B. taurus, UMD v3.0",
+			 "d_melanogaster": "D. melanogaster, Flybase, r5.22",
+			 "a_thaliana": "A. thaliana, TAIR, TAIR9",
+			 "e_coli": "E. coli, NCBI, st. 536",
+			 "s_scrofa": "Sus scrofa, NCBI v10.2",
+			 "none": "none" };
+	mg.details.pipeline_parameters.screen_indexes = screens[mg.details.pipeline_parameters.screen_indexes];
 	
 	return mg;
     };
@@ -133,41 +154,35 @@
     widget.getData = function () {
 	var widget = this;
 
-	// get the flow
-	jQuery.getJSON("data/submission_receipt.flow.json").complete(function(d) {
-	    var widget = Retina.WidgetInstances.metagenome_receipt[1];
-	    widget.flow = JSON.parse(d.responseText);
-	    
-	    // get the data
-	    jQuery.ajax({
-	    	method: "GET",
-	    	headers: stm.authHeader,
-	    	url: RetinaConfig.mgrast_api+'/metagenome/'+widget.id,
-	    	success: function (data) {
-		    var widget = Retina.WidgetInstances.metagenome_receipt[1];
-		    widget.metagenome = data;
-
-		    jQuery.getJSON("data/receipt.json").complete(function(d) {
-	    		widget.submission = JSON.parse(d.responseText).save;
-	    		widget.display();
-		    });
-
-	    	    // jQuery.ajax({
-	    	    // 	method: "GET",
-	    	    // 	headers: stm.authHeader,
-	    	    // 	url: RetinaConfig.mgrast_api+'/submission/'+data.submission+'?full=1',
-	    	    // 	success: function (data) {
-	    	    // 	    var widget = Retina.WidgetInstances.metagenome_receipt[1];
-	    	    // 	    stm.DataStore.save = data;
-	    	    // 	    widget.submission = data;
-	    	    // 	    widget.display();
-	    	    // 	}}).fail(function(xhr, error) {
-	    	    // 	    console.log(error);
-	    	    // 	});
-	    	}}).fail(function(xhr, error) {
-	    		console.log(error);
-	    	});
-	});
+	// get the data
+	jQuery.ajax({
+	    method: "GET",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/metagenome/'+widget.id,
+	    success: function (data) {
+		var widget = Retina.WidgetInstances.metagenome_receipt[1];
+		widget.metagenome = data;
+		
+	    	jQuery.ajax({
+	    	    method: "GET",
+	    	    headers: stm.authHeader,
+	    	    url: RetinaConfig.mgrast_api+'/submission/'+data.submission+'?full=1',
+	    	    success: function (data) {
+	    	    	var widget = Retina.WidgetInstances.metagenome_receipt[1];
+	    	    	widget.submission = data;
+			
+			// get the flow
+			jQuery.getJSON("data/submission_receipt"+(widget.metagenome.pipeline_parameters.hasOwnProperty('filter_ambig') ? "_fasta" : "")+".flow.json").complete(function(d) {
+			    var widget = Retina.WidgetInstances.metagenome_receipt[1];
+			    widget.flow = JSON.parse(d.responseText);
+	    	    	    widget.display();
+			});
+	    	    }}).fail(function(xhr, error) {
+	    	    	console.log(error);
+	    	    });
+	    }}).fail(function(xhr, error) {
+	    	console.log(error);
+	    });
     };
     
 })();

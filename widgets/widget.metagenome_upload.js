@@ -230,14 +230,27 @@
 		    var tooShort = 0;
 		    var numSeqs = 1;
 		    var invalidSeqs = 0;
+		    var firstInvalidSeq = null;
 		    var headers = {};
 		    var numDuplicate = 0;
+		    var invalidHeaders = 0;
+		    var firstInvalidHeader = null;
 		    if (type=="FASTA") {
 			headers[header] = true;
+			if (header.match(/^>$/)) {
+			    invalidHeaders++;
+			    firstInvalidHeader = 0;
+			}
 		    }
 		    for (var i=(type=="FASTA"?2:0); i<d.length - 1; i++) {
 			var newEntry = false;
 			if (type == "FASTA") {
+			    if (d[i].match(/^>$/)) {
+				invalidHeaders++;
+				if (firstInvalidHeader == null) {
+				    firstInvalidHeader = i;
+				}
+			    }
 			    if (d[i].match(/^>/)) {
 				header = d[i];
 				newEntry = true;
@@ -264,6 +277,9 @@
 				    IUPAC = true;
 				}
 				invalidSeqs++;
+				if (firstInvalidSeq == null) {
+				    firstInvalidSeq = i;
+				}
 			    }
 			    if (seq.length < 75) {
 				tooShort++;
@@ -278,16 +294,19 @@
 			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.</p>";
 		    }
 		    var validInfo = "<p>This is a valid "+type+" file. "+numSeqs.formatString() + " sequences of this file were tested. ";
-		    if (invalidSeqs || numDuplicate) {
+		    if (invalidSeqs || numDuplicate || invalidHeaders) {
 			validInfo = "<p>"+numSeqs.formatString() + " sequences of this file were tested. ";
 			if (invalidSeqs) {
-			    validInfo += invalidSeqs.formatString() + " of them contain invalid characters. ";
+			    validInfo += invalidSeqs.formatString() + " of them contain invalid characters (i.e. line "+(firstInvalidSeq + 1)+"). ";
 			    if (IUPAC) {
 				validInfo += "It seems the file contains IUPAC ambiguity characters other than N. Allowed characters are GATC UXN only. ";
 			    }
 			}
 			if (numDuplicate) {
 			    validInfo += numDuplicate + " of them contain duplicate headers. ";
+			}
+			if (invalidHeaders) {
+			    validInfo += invalidHeaders + " of them contain invalid headers (i.e. line "+(firstInvalidHeader + 1)+"). ";
 			}
 			validInfo += "The "+type+" file is not in the correct format for processing.";
 			allow = false;

@@ -8,9 +8,10 @@
 	[ "<b>dereplication</b>", "$$details.pipeline_parameters.dereplicate$$" ],
 	[ "<b>screening</b>", "$$details.pipeline_parameters.screen_indexes$$" ],
 	[ "<b>publication</b>", "$$details.pipeline_parameters.priority$$" ],
-	[ "<b>dynamic trimming</b>", "$$details.pipeline_parameters.dynamic_trim$$" ],
-	[ "<b>lowest phred score for high quality base</b>", "$$details.pipeline_parameters.min_qual$$" ],
-	[ "<b>maximum low quality bases</b>", "$$details.pipeline_parameters.max_lqb$$" ]
+	[ "<b>length filtering</b>", "$$details.pipeline_parameters.filter_ln$$" ],
+	[ "<b>length filter deviation multiplicator</b>", "$$details.pipeline_parameters.filter_ln_mult$$" ],
+	[ "<b>ambiguous base filtering</b>", "$$details.pipeline_parameters.filter_ambig$$" ],
+	[ "<b>maximum ambiguous basepairs</b>", "$$details.pipeline_parameters.max_ambig$$" ]
     ] },
     { "type": "Text", "style": "Header", "text": "Submission Summary", "tocTitle": "Submission Summary", "tocName": "submission_summary" },
     { "type": "Table", "style": "table-condensed table-hover", "data": [ 

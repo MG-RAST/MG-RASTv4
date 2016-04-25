@@ -243,21 +243,38 @@
 	mg.allmetadata = allmetadata;
 
 	var sourcehits = [];
+	var sourcehitsprotein = [];
+	var sourcehitsrna = [];
+	var rna = { "SSU": true, "LSU": true, "RDP": true, "Greengenes": true };
 	if (mg.hasOwnProperty('statistics') && mg.statistics.hasOwnProperty('source')) {
 	    var labels = ["e^-3 to e^-5", "e^-5 to e^-10", "e^-10 to e^-20", "e^-20 to e^-30", "e^-30 & less" ];
 	    for (var h=0; h<5; h++) {
 		sourcehits.push( { "label": labels[h], "values": [], "labels": [] } );
+		sourcehitsprotein.push( { "label": labels[h], "values": [], "labels": [] } );
+		sourcehitsrna.push( { "label": labels[h], "values": [], "labels": [] } );
 		for (var i in mg.statistics.source) {
 		    if (h == 0) {
 			sourcehits[h].labels.push(i);
+			if (rna[i]) {
+			    sourcehitsrna[h].labels.push(i);
+			} else {
+			    sourcehitsprotein[h].labels.push(i);
+			}
 		    }
 		    if (mg.statistics.source.hasOwnProperty(i)) {
 			sourcehits[h].values.push(mg.statistics.source[i].evalue[h]);
+			if (rna[i]) {
+			    sourcehitsrna[h].values.push(mg.statistics.source[i].evalue[h]);
+			} else {
+			    sourcehitsprotein[h].values.push(mg.statistics.source[i].evalue[h]);
+			}
 		    }
 		}
 	    }
 	}
 	mg.sourcehitsdistribution = sourcehits;
+	mg.sourcehitsdistributionrna = sourcehitsrna;
+	mg.sourcehitsdistributionprotein = sourcehitsprotein;
 	
 	var bpprofile = [
 	    { label: "A", values: [] },
