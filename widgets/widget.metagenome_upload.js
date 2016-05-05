@@ -44,6 +44,8 @@
 	sidehtml += '<dt>'+widget.expander()+'Studies and Projects</dt><dd style="display: none;">Older versions of MG-RAST used the term projects, we are now migrating to the use of the term study instead. They are identical otherwise.</dd>';
 	sidehtml += '</dl>';
 
+	sidehtml += "<div class='alert alert-info'>Uploaded files will remain in your inbox for 72 hours before they are automatically deleted.</div>";
+
 	// running actions
 	sidehtml += '<h4><img style="height: 16px; margin-right: 10px; margin-top: -4px;" src="Retina/images/info2.png">running actions<button class="btn btn-mini" title="refresh" onclick="Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();" style="margin-left: 30px;position: relative; bottom: 2px;"><img style="height: 12px;" src="Retina/images/loop.png"></button></h4>';
 	sidehtml += "<p>If you perform actions on files in your inbox that take some time to complete, you can view their status here.</p><div id='inboxActions' style='text-align: center;'><img src='Retina/images/waiting.gif' style='width: 32px;'></div>";
@@ -226,8 +228,9 @@
 		}
 		if (type == "FASTA" || type == "FASTQ") {
 		    var header = d[0];
-		    var seq = d[1].trim();
+		    var seq = [ d[1].trim() ];
 		    var tooShort = 0;
+		    var tooLong = 0;
 		    var numSeqs = 1;
 		    var invalidSeqs = 0;
 		    var firstInvalidSeq = null;
@@ -255,11 +258,11 @@
 				header = d[i];
 				newEntry = true;
 			    } else {
-				seq += d[i].trim();
+				seq.push(d[i].trim());
 			    }
 			} else {
 			    header = d[i];
-			    seq = d[i+1];
+			    seq = [ d[i+1] ];
 			    i += 3;
 			}
 			if (newEntry || type=="FASTQ") {
@@ -271,7 +274,7 @@
 			    numSeqs++;
 			    
 			    // sequence contains invalid characters
-			    seq = seq.trim();
+			    seq = seq.join("").trim();
 			    if (! seq.match(/^[acgtunx]+$/i)) {
 				if (seq.match(/^[acgtunxrykmswbdhv]+$/i)) {
 				    IUPAC = true;
@@ -284,34 +287,61 @@
 			    if (seq.length < 75) {
 				tooShort++;
 			    }
-			    seq = "";
+			    if (seq.length > (1024 * 1024 * 3)) {
+				tooLong++;
+			    }
+			    seq = [];
 			}
 		    }
+		    if (type == "FASTA") {
+			seq = seq.join("").trim();
+			if (! seq.match(/^[acgtunx]+$/i)) {
+			    if (seq.match(/^[acgtunxrykmswbdhv]+$/i)) {
+				IUPAC = true;
+			    }
+			    invalidSeqs++;
+			    if (firstInvalidSeq == null) {
+				firstInvalidSeq = i;
+			    }
+			}
+			if (seq.length < 75) {
+			    tooShort++;
+			}
+			if (seq.length > (1024 * 1024 * 3)) {
+			    tooLong++;
+			}
+		    }
+		    
 		    //numSeqs--;
 		    tooShort--;
 		    var lenInfo = "<p>All of the tested sequences fulfill the minimum length requirement of 75bp.</p>";
 		    if (tooShort > 0) {
 			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.</p>";
 		    }
-		    var validInfo = "<p>This is a valid "+type+" file. "+numSeqs.formatString() + " sequences of this file were tested. ";
-		    if (invalidSeqs || numDuplicate || invalidHeaders) {
-			validInfo = "<p>"+numSeqs.formatString() + " sequences of this file were tested. ";
+		    var validInfo = "<p>This is a valid "+type+" file. "+numSeqs.formatString() + " sequence"+(numSeqs > 1 ? "s of this file were" : " of this file was")+" tested. ";
+		    if (invalidSeqs || numDuplicate || invalidHeaders || tooLong) {
+			validInfo = "<p>"+numSeqs.formatString() + " sequence"+(numSeqs > 1 ? "s of this file were" : " of this file was")+" tested. ";
 			if (invalidSeqs) {
-			    validInfo += invalidSeqs.formatString() + " of them contain invalid characters (i.e. line "+(firstInvalidSeq + 1)+"). ";
+			    validInfo += invalidSeqs.formatString() + " of them contain"+(invalidSeqs > 1 ? "" : "s")+" invalid characters (i.e. line "+(firstInvalidSeq + 1)+"). ";
 			    if (IUPAC) {
 				validInfo += "It seems the file contains IUPAC ambiguity characters other than N. Allowed characters are GATC UXN only. ";
 			    }
 			}
 			if (numDuplicate) {
-			    validInfo += numDuplicate + " of them contain duplicate headers. ";
+			    validInfo += numDuplicate + " of them contain"+(numDuplicate > 1 ? "" : "s")+" duplicate headers. ";
 			}
 			if (invalidHeaders) {
-			    validInfo += invalidHeaders + " of them contain invalid headers (i.e. line "+(firstInvalidHeader + 1)+"). ";
+			    validInfo += invalidHeaders + " of them contain"+(invalidHeaders > 1 ? "" : "s")+" invalid headers (i.e. line "+(firstInvalidHeader + 1)+"). ";
+			}
+			if (tooLong) {
+			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 3Mb). ";
 			}
 			validInfo += "The "+type+" file is not in the correct format for processing.";
 			allow = false;
 		    }
 		    validInfo += "</p>";
+		    
+		    // check for datasets too small
 		    if (data.length < (1024 * 1024) && numSeqs < 100) {
 			validInfo += '<p>This dataset is less than 1MB in size and contains less than 100 sequences. It is too small to be processed by the MG-RAST pipeline.</p>';
 			allow = false;
