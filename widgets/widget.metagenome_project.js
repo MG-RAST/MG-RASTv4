@@ -4,7 +4,7 @@
                 title: "Metagenome Project Widget",
                 name: "metagenome_project",
                 author: "Tobias Paczian",
-                requires: [ ]
+                requires: [ "rgbcolor.js", "markerclusterer.js" ]
         }
     });
     
@@ -38,7 +38,7 @@
 	
 	// if there is a project, show it
         if (widget.id) {
-	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div>';
+	    content.innerHTML = '<div style="margin-left: auto; margin-right: auto; margin-top: 300px; width: 50px;"><img style="width: 24px;" src="Retina/images/waiting.gif"></div>';
 	    
 	    // check if required data is loaded
 	    if (! ( stm.DataStore.hasOwnProperty('project') &&
@@ -64,10 +64,12 @@
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
 	    if (project.status == 'private') {
-		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 2px;' onclick='window.open(\"mgmain.html?mgpage=share\");' title='show sharing options'><i class='icon icon-share'></i></button>Private Project: "+project.name+"</h3>";
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.open(\"mgmain.html?mgpage=share\");' title='show sharing options'><i class='icon icon-share'></i></button>Private Study: "+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
+
+	    html += "<div style='float: right; margin-left: 30px; margin-bottom: 20px;'><div id='myWorld' style='border: 1px solid black; width: 400px; height: 280px;'></div></div>";
 	    
 	    
 	    html += "<table>";
@@ -116,6 +118,37 @@
 		minwidths: [125,175,105,110,85,95,95,100,95,120,70,90,110],
 		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "location", "country", "coordinates", "type", "method", "download" ] }
 	    }).render();
+
+	    // create a google map of the samples
+	    var markers = [];
+	    for (var i=0; i<project.metagenomes.length; i++) {
+	    	var mg = project.metagenomes[i];
+	    	if (mg.coordinates && mg.coordinates.split(/, /).length == 2) {
+	    	    var coords = mg.coordinates.split(/, /);
+	    	    var marker = new google.maps.Marker({
+	    		position: new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1])),
+	    		value: parseInt(mg.basepairs.replace(/,/g,"")),
+	    		title: mg.name+" - "+parseInt(mg.basepairs.replace(/,/g,"")).baseSize(),
+	    		icon: {
+	    		    path: google.maps.SymbolPath.CIRCLE,
+	    		    scale: 5
+	    		}
+	    	    });
+	    	    markers.push(marker);
+	    	}
+	    }
+	    if (markers.length) {
+		var map = new google.maps.Map(document.getElementById('myWorld'), {
+	    	    center: { lat: 40, lng: 5},
+	    	    zoom: 1,
+		    mapTypeId: google.maps.MapTypeId.HYBRID,
+		    mapTypeControl: false,
+		    streetViewControl: false
+		});
+		var mc = new MarkerClusterer(map, markers);
+	    } else {
+		document.getElementById('myWorld').style.display = "none";
+	    }
 	}
 	// else show the project select
 	else {
@@ -151,7 +184,7 @@
 	}
 	
     };
-    
+
     widget.authenticatedDownload = function (button, id, type) {
 	var widget = Retina.WidgetInstances.metagenome_project[1];
 	button.setAttribute('disabled', 'true');
