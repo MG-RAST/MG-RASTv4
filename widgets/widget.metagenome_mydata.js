@@ -31,7 +31,13 @@
 	document.getElementById("pageTitle").innerHTML = "my data";
 	
 	if (stm.user) {
-	    var html = [ '<h3>Welcome back, '+stm.user.firstname+' '+stm.user.lastname+'<div id="toggleBar" style="float: right;"></div></h3>' ];
+	    var html = [ '<h3 style="width: 94.7%;">Welcome back, '+stm.user.firstname+' '+stm.user.lastname+'<div id="toggleBar" style="float: right;"></div></h3>' ];
+
+	    // add the status
+	    html.push(widget.serverStatusSection());
+
+	    // add tip of the day
+	    html.push(widget.tipSection());
 
 	    // create the section html
 	    widget.sections["tasks"].html = widget.tasksSection()
@@ -83,6 +89,9 @@
 	    widget.getProjects();
 	    widget.getPriorities();
 	    
+	    widget.getServerStatus();
+	    widget.getTip();
+	    
 	} else {
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
 	}
@@ -131,6 +140,10 @@
     /*
       SECTIONS
     */
+    widget.tipSection = function () {
+	return '<div style="padding: 5px; border-radius: 3px; border: 1px solid rgb(204, 204, 204); margin-bottom: 10px; width: 94%;"><img src="Retina/images/bulb.png" style="width: 24px;"><span style="margin-left: 10px; position: relative; top: 1px;"><b>Did you know: </b><span id="tipoftheday"></span></span></div>';
+    }
+    
     widget.jobsSection = function () {
 	var html = [ '<div id="jobsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/settings3.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my jobs<a class="btn btn-mini" style="float: right;" title="show all jobs in detail" href="mgmain.html?mgpage=pipeline"><i class="icon icon-eye-open"></i></a><a class="btn btn-mini" style="float: right; margin-right: 5px;" title="upload new job" href="mgmain.html?mgpage=upload"><img src="Retina/images/cloud-upload.png" style="width: 16px;"></i></a></h4>' ];
 	
@@ -166,13 +179,17 @@
     };
     
     widget.profileSection = function () {
-	return '<div id="profileSection"><h4 style="margin-top: 0px;"><img src="Retina/images/user.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my profile</h4><hr style="margin-top: 2px; margin-bottom: 5px;"><div id="profileDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>'
+	return '<div id="profileSection"><h4 style="margin-top: 0px;"><img src="Retina/images/user.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my profile<button class="btn btn-mini" style="float:right;" onclick="alert(stm.authHeader.Authorization);">show webkey</button></h4><hr style="margin-top: 2px; margin-bottom: 5px;"><div id="profileDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>'
     };
     
     widget.newsSection = function () {
 	var html = '<div id="newsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/bubbles.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">MG-RAST News</h4><div id="newsfeed"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
 	
 	return html;
+    };
+
+    widget.serverStatusSection = function () {
+	return '<div id="serverStatusSection"></div><div style="clear: both;"></div>';
     };
     
     /*
@@ -276,6 +293,20 @@
     /* 
        DATA RETRIEVAL
     */
+    widget.getTip = function () {
+	jQuery.getJSON("data/tipoftheday.json", function (data) {
+	    Retina.WidgetInstances.metagenome_mydata[1].showTip(data[Math.floor((Math.random() * data.length))]);
+	});
+    };
+    
+    widget.getServerStatus = function () {
+	// server status info
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/server/MG-RAST", function (data) {
+	    Retina.WidgetInstances.metagenome_mydata[1].showServerStatus(data);
+	});
+	
+    };
+    
     widget.getProfile = function () {
 	jQuery.ajax( { dataType: "json",
 		       url: RetinaConfig["mgrast_api"]+"/user/"+stm.user.login+"?verbosity=full",
@@ -371,6 +402,45 @@
     /*
       DATA RENDERING
     */
+    widget.showTip = function (data) {
+	var widget = this;
+
+	document.getElementById('tipoftheday').innerHTML = data;
+    };
+    
+    widget.showServerStatus = function (data) {
+	var widget = this;
+
+	var html = "";
+
+	// print server version
+	html += "<div style='position: relative; bottom: 20px;'><div style='font-size: 11px; position: absolute;'>MG-RAST server running version "+(RetinaConfig.serverVersion ? RetinaConfig.serverVersion : data.version)+". ";
+	
+	// print server stats
+	var bp = (parseInt(data.basepairs) / 1000000000000).formatString(2);
+	var seq = parseInt(parseInt(data.sequences) / 1000000000).formatString();
+	html += "Hosting " + parseInt(data.public_metagenomes).formatString() + " public and " + parseInt(data.metagenomes).formatString() + " total metagenomes containing "+seq+" billion sequences and "+bp+" Tbp.";
+
+	html += '</div></div>';
+	
+	html += data.info ? '<div style="width: 91%; margin-bottom: 10px;" class="alert' : '';
+
+	// check if the server is down
+	if (data.status != "ok") {
+	    html += ' alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button>';
+	}
+	// check if there is an info message
+	else if (data.info) {
+	    html += ' alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button>';
+	}
+
+	html += data.info ? data.info + '</div>' : '';
+
+	
+
+	document.getElementById('serverStatusSection').innerHTML = html;
+    };
+    
     widget.showProjects = function (result) {
 	var html = [ ];
 	if (result.hasOwnProperty('data') && result.data.length) {
@@ -385,7 +455,8 @@
 		html.push('<a class="btn btn-mini" href="mgmain.html?mgpage=share" style="width: 100%">...</a>');
 	    }
 	} else {
-	    html.push("<p>- you currently do not have access to any studies -</p>");
+	    html.push("<p style='margin-bottom: 30px;'>You currently do not have access to any projects. For help on uploading, try the tutorial below.</p>");
+	    html.push('<div style="text-align: center;"><iframe width="420" height="315" src="https://www.youtube.com/embed/Bcle_ujyMq0" frameborder="0" allowfullscreen></iframe></div>');
 	}
 	document.getElementById('projectDiv').innerHTML = html.join("\n");
 	jQuery("#masonry").masonry({ itemSelector : '.box' });
