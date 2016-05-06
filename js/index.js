@@ -72,7 +72,9 @@ function initWebApp () {
 	var loginAction = function (data) {
 	    if (data.action != "logout" && data.result == "success") {
 		if (data.user.hasOwnProperty('tos') && data.user.tos == RetinaConfig.tos) {
-		    window.location = 'mgmain.html?mgpage=mydata';
+		    if (! Retina.cgiParam('stay')) {
+			window.location = 'mgmain.html?mgpage=mydata';
+		    }
 		} else {
 		    window.location = 'legal.html';
 		}
