@@ -4,7 +4,7 @@
                 title: "Metagenome Analysis Widget",
                 name: "metagenome_analysis",
                 author: "Tobias Paczian",
-            requires: [ "rgbcolor.js", "html2canvas.js" ]
+            requires: [ "rgbcolor.js", "html2canvas.js", "jszip.min.js" ]
         }
     });
     
@@ -36,7 +36,12 @@
 	document.getElementById("pageTitle").innerHTML = "analysis";
 	
 	// set the output area
-	widget.main.innerHTML = '<div id="data"></div><div id="visualize"></div><div id="videoModal" class="modal hide fade"></div>';
+	widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
+
+	// if (! stm.DataStore.hasOwnProperty('taxonomy')) {
+	//     widget.loadTaxonomy();
+	//     return;
+	// }
 
 	// set the tool area
 	var tools = widget.sidebar;
@@ -143,7 +148,7 @@
     	}
 
     	var demo_data = widget.demoData();
-
+	
     	var containerData = "";
     	if (widget.selectedContainer) {
     	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
@@ -151,16 +156,10 @@
     	    var p = stm.DataStore.profile[pid];
     	    var mdname = "";
     	    if (p.rows.length > 0) {
-    		for (var i in p.rows[0].metadata) {
-    		    if (p.rows[0].metadata.hasOwnProperty(i) && typeof p.rows[0].metadata[i] == 'object') {
-    			mdname = i;
-    		    }
-    		}
-    		p.mdname = mdname;
-    		var cols = p.rows[0].metadata[mdname];
     		var matrixLevels = "";
+		var cols = ["domain", "phylum", "class", "order", "family", "genus", "species" ];
     		for (var i=0; i<cols.length; i++) {
-    		    matrixLevels += "<option value='"+i+"'>"+i+"</option>";
+    		    matrixLevels += "<option value='"+cols[i]+"'>"+cols[i]+"</option>";
     		}
 		
     		containerData = "<div class='form-inline' style='margin-bottom: 20px; display: none;'>select "+mdname+" level <select class='span1' id='matrixLevel' style='margin-right: 10px;'>"+matrixLevels+"</select><button type='button' class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].updateVis();'>draw</button></div>";
@@ -168,7 +167,6 @@
     		containerData = "<p>The selected data container does not contain any data rows.</p>";
     	    }
     	}
-
     	var html = "<h4>visualize - "+demo_data[type].title+"</h4>"+containerData+"<div id='visualizeTarget'></div>";
 
     	container.innerHTML = html;
@@ -196,19 +194,20 @@
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	    var items = "<table>";
 	    for (var i=0; i<c.items.length; i++) {
-		items += "<tr><td>"+c.items[i].name+"</td></tr>";
+		items += "<tr><td>"+c.items[i].name+" ("+c.rows[c.items[i].id].length+" hits)</td></tr>";
 	    }
 	    items += "</table>";
 	    html += "<table>";
 	    html += "<tr><td style='height: 30px;'><b>name</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].renameContainer(this.previousSibling.value);'>update</button></div></td></tr>";
+	    var uname = typeof c.user == "object" ? c.user.firstname+" "+c.user.lastname+" ("+c.user.login+")" : c.user;
 	    html += "<tr><td style='height: 30px;'><b>created</b></td><td>"+c.created+"</td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>by</b></td><td>"+c.user.firstname+" "+c.user.lastname+" ("+c.user.login+")</td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>type</b></td><td>"+c.parameters.type+"</td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>by</b></td><td>"+uname+"</td></tr>";
+	    html += "<tr><td style='height: 30px;'><b>hit type</b></td><td>"+c.parameters.type+"</td></tr>";
 	    html += "<tr><td style='height: 30px;'><b>source</b></td><td>"+c.parameters.source+"</td></tr>";
 	    html += "<tr><td style='height: 30px;'><b>e-value</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.evalue+"' class='span3' id='containerParamevalue'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"evalue\",this.previousSibling.value);'>update</button></div></td></tr>";
 	    html += "<tr><td style='height: 30px;'><b>%-identity</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.identity+"' class='span3' id='containerParamidentity'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"identity\",this.previousSibling.value);'>update</button></div></td></tr>";
-	    html += "<tr><td style='padding-right: 20px; height: 30px;'><b>alignment length</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.length+"' class='span3' id='containerParamlength'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"length\",this.previousSibling.value);'>update</button></div></td></tr>";
-	    html += "<tr><td style='vertical-align: top; height: 30px;'><b>items</b></td><td>"+items+"</td></tr>";
+	    html += "<tr><td style='padding-right: 20px; height: 30px;'><b>alignment length</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.alilength+"' class='span3' id='containerParamlength'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"length\",this.previousSibling.value);'>update</button></div></td></tr>";
+	    html += "<tr><td style='vertical-align: top; height: 30px;'><b>metagenomes</b></td><td>"+items+"</td></tr>";
 	    html += "</table>";
 	} else {
 	    html += "<p>You currently have no data loaded. To do so, click the <span style='border: 1px solid black; border-radius: 3px; padding-bottom: 2px; padding-left: 5px; padding-right: 4px; font-weight: bold;'>+</span> icon on the right.</p>";
@@ -229,30 +228,13 @@
 	}
 
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
-
-	// check if container profiles are good enough
-	for (var i=0; i<container.items.length; i++) {
-	    var id = container.items[i].id+"_"+container.parameters.type+"_"+container.parameters.source;
-	    var p = stm.DataStore.profile[id];
-	    if (parseInt(value) < parseInt(p.params[param])) {
-		if (confirm("The loaded data has lower cutoffs than you are filtering for.\nDo you want to load the required data now? This may take some time.")) {
-		    container.parameters[param] = value;
-		    widget.loadData(ids, container.items, container.parameters);
-		    return;
-		} else {
-		    // set param to lowest
-		    document.getElementById('containerParam'+param).value = widget.cutoffThresholds[param];
-		    return;
-		}
-		break;
-	    }
-	}
 	
 	// update parameter data
-	container.parameters[param] = value;
+	container.parameters[param] = parseFloat(value);
 	document.getElementById('visualize').setAttribute('disabled', 'disabled');
 	widget.performFilter();
 	document.getElementById('visualize').removeAttribute('disabled');
+	widget.editContainer();
     };
 
     // change the container name
@@ -290,16 +272,6 @@
 	
 	var matrixLevel = document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value;
 	var r = widget.currentVisualizationController;
-	
-	/* drilldown */
-	if (filter && filter.level !== null) {
-	    widget.currentFilter = filter;
-	    var sel = document.getElementById('matrixLevel');
-	    if (sel.options.length > filter.level + 1) {
-		matrixLevel = filter.level + 1;
-		document.getElementById('matrixLevel').selectedIndex = parseInt(matrixLevel);
-	    }
-	}
 
 	var b = document.getElementById('visualizeBreadcrumbs');
 	if (b.innerHTML == "") {
@@ -308,7 +280,7 @@
 
 	/* drilldown */
 	if (widget.currentType == 'matrix') {
-	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
+	    var matrix = widget.container2matrix({ level: matrixLevel, filter: filter, colHeader: "name" });
 
 	    if (widget.normalizeData) {
 		matrix.data = widget.transposeMatrix(widget.normalizeMatrix(widget.transposeMatrix(matrix.data)));
@@ -324,12 +296,12 @@
 		var rend = Retina.RendererInstances.matrix[p.rendererIndex];
 		if ((rend.settings.orientation=='transposed' && p.rowIndex == null) || (rend.settings.orientation=='normal' && p.colIndex == null)) {
 		    var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		    var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.cellValue+'\'});">&raquo; '+p.cellValue+' </a>';
+		    var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: \''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value+'\', value: \''+p.cellValue+'\'});">&raquo; '+p.cellValue+' </a>';
 		    if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
 			html = "";
 		    }
 		    document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		    widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
+		    widget.updateVis( { level: document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value,
 					value: p.cellValue } );
 		    
 		}
@@ -343,12 +315,12 @@
 	    r.renderer.settings.onclick = function (p) {
 		var rend = Retina.RendererInstances.graph[p.rendererIndex];
 		var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
+		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: \''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value+'\', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
 		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
 		    html = "";
 		}
 		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
+		widget.updateVis( { level: document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value,
 				    value: p.series } );
 	    };
 	} else if (widget.currentType == 'plot') {
@@ -377,12 +349,12 @@
 	    r.renderer.settings.rowClicked = function (p) {
 		var rend = Retina.RendererInstances.heatmap[p.rendererIndex];
 		var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.label+'\'});">&raquo; '+p.label+' </a>';
+		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: \''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value+'\', value: \''+p.label+'\'});">&raquo; '+p.label+' </a>';
 		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
 		    html = "";
 		}
 		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
+		widget.updateVis( { level: document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value,
 				    value: p.label } );
 	    };
 	} else if (widget.currentType == 'piechart') {
@@ -392,12 +364,12 @@
 	    r.renderer.settings.onclick = function (p) {
 		var rend = Retina.RendererInstances.graph[p.rendererIndex];
 		var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: '+parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value)+', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
+		var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: \''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value+'\', value: \''+p.series+'\'});">&raquo; '+p.series+' </a>';
 		if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
 		    html = "";
 		}
 		document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		widget.updateVis( { level: parseInt(document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value),
+		widget.updateVis( { level:document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value,
 				    value: p.series } );
 	    };
 	} else if (widget.currentType == 'table') {
@@ -413,7 +385,6 @@
 	    r.renderer.settings.x_labels = data.x_labels;
 	    r.renderer.settings.chartArea = [ 120, 0, 0.8, 1 ];
 	    r.renderer.settings.legendArea = [ 0.81, 0.1, 0.97, 1 ];
-	    console.log(data);
 	}
 	r.render(1);	   
     };
@@ -456,9 +427,13 @@
     // all promises for a data container have been fulfilled
     widget.dataContainerReady = function (name, abort) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-	
+
 	var dataContainer = stm.DataStore.dataContainer[name];
+	if (! abort && Retina.keys(stm.DataStore.inprogress).length) {
+	    return;
+	}
 	dataContainer.promises = [];
+	widget.xhr = {};
 	dataContainer.status = abort ? abort : "ready";
 	for (var i=0; i<dataContainer.callbacks.length; i++) {
 	    dataContainer.callbacks[i].call(null, dataContainer);
@@ -592,10 +567,7 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source;
-	var cp = stm.DataStore.profile[pid];
-	var colItem = params.dataColItem || Retina.keys(cp.rows[0].metadata)[0];
-	var colIndex = params.dataColIndex || cp.rows[0].metadata[colItem].length - 1;
+	var levelIndex = {"domain": 0, "phylum": 1, "class": 2, "order": 3, "family": 4, "genus": 5, "species": 6};
 	for (var i=0; i<c.items.length; i++) {
 	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	    var p = stm.DataStore.profile[pid];
@@ -603,10 +575,15 @@
 	    for (var h=0; h<(isFiltered ? c.rows[c.items[i].id].length : p.rows.length); h++) {
 		var row = (isFiltered ? c.rows[c.items[i].id][h] : h);
 		var val = p.data[row][dataRow];
-		var key = (colIndex === null ? p.rows[row].metadata[colItem] : p.rows[row].metadata[colItem][colIndex]);
-
+		var org = p.rows[row].metadata[c.parameters.source]["organism"][0];
+		org = org.replace(/''/g, "'");
+		if (! stm.DataStore.taxonomy["organism"][org]) {
+		    console.log(org);
+		    continue;
+		}
+		var key = stm.DataStore.taxonomy[params.level][stm.DataStore.taxonomy["organism"][org][levelIndex[params.level]]];
 		if (params.filter && params.filter.level !== null && params.filter.value !== null) {
-		    if (p.rows[row].metadata[colItem][params.filter.level] != params.filter.value) {
+		    if (stm.DataStore.taxonomy[params.filter.level || "domain"][p.rows[row].metadata[c.parameters.source]["organism"][0]] != params.filter.value) {
 			continue;
 		    }
 		}
@@ -819,11 +796,6 @@
 	       };
     };
 
-    widget.showHelpVideo = function (id) {
-	document.getElementById('videoModal').innerHTML = "<iframe src='https://www.screenr.com/embed/"+id+"' width='650' height='396' frameborder='0'></iframe>";
-	jQuery('#videoModal').modal({show: true});
-    };
-
     /*
       STATISTICS
      */
@@ -947,95 +919,43 @@
 	document.getElementById("data").style.display = "";
 
 	if (! widget.hasOwnProperty('mgselect')) {
+
+	    // border and title
+	    var html = [ "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Data Loader <span style='cursor: pointer;'><sup>[?]</sup></span></h3><div>" ];
+
+
+	    // params container
+	    html.push("<div>");
+
+	    // protein vs rna
+	    html.push('<div class="span4"><h5>database</h5><div><div class="btn-group" data-toggle="buttons-radio" style="float: left;"><button type="button" class="btn active" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'protein\');">protein</button><button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'RNA\');">RNA</button></div><div id="databaseSelect" style="position: relative; bottom: 3px"></div></div></div>');
+
+	    // hit type
+	    html.push('<div class="span6"><h5>hit type</h5><div><div class="btn-group" data-toggle="buttons-radio">\
+                       <button type="button" class="btn active" onclick="Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.type=\'single\';">representative hit</button>\
+                       <button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.type=\'all\';">best hit</button>\
+                       <button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.type=\'lca\';">lowest common ancestor</button></div></div></div>');
+
+	    // params container close and divider
+	    html.push('</div><div style="clear: both;"></div>');
+
+	     // metagenome selector
+	    html.push('<h5 style="margin-top: 0px;">metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
 	    
-	    var html = "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h4 style='margin-top: 0px;'>Data Loader <span onclick='Retina.WidgetInstances.metagenome_analysis[1].showHelpVideo(\"uGqN\");' style='cursor: pointer;'><sup>[?]</sup></span></h4><div>";
+	    // // already loaded data
+	    // html.push('<h5>data already loaded</h5><div id="availableData"></div>');
+
+	    // data progress
+	    html.push('<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; height: 230px; overflow-y: auto; width: 90%;"></div><div style="clear: both;">');
 	    
-	    html += '\
-<h5><div style="float: left;">select data typ</div><div style="float: left; width: 147px;">e</div><div style="">select parameters</div></h5>\
-<div class="accordion" id="dataSelection" style="float: left;">\
-  <div class="accordion-group">\
-    <div class="accordion-heading">\
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#dataSelection" href="#collapseOrg" onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">\
-        Organism Abundance\
-      </a>\
-    </div>\
-    <div id="collapseOrg" class="accordion-body collapse in">\
-      <div class="accordion-inner">\
-        <ul class="nav nav-pills nav-stacked" id="OrganismAbundanceList" style="margin-bottom: 5px;">\
-          <li class="active" style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">representative hit</a></li>\
-          <li style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">best hit</a></li>\
-          <li style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">lowest common ancestor</a></li>\
-        </ul>\
-      </div>\
-    </div>\
-  </div>\
-  <div class="accordion-group">\
-    <div class="accordion-heading">\
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#dataSelection" href="#collapseFunc" onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">\
-        Functional Abundance\
-      </a>\
-    </div>\
-    <div id="collapseFunc" class="accordion-body collapse">\
-      <div class="accordion-inner">\
-        <ul class="nav nav-pills nav-stacked" id="FunctionalAbundanceList" style="margin-bottom: 5px;">\
-          <li class="active" style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">hierarchical classification</a></li>\
-          <li style="cursor: pointer;"><a onclick="Retina.WidgetInstances.metagenome_analysis[1].setAbundance(this);">all annotations</a></li>\
-        </ul>\
-      </div>\
-    </div>\
-  </div>\
-</div>\
-';
-	
-	html += '\
-<div style="float: left; margin-left: 20px;"><ul class="nav nav-pills" style="margin-bottom: 5px;">\
-  <li style="width: 170px;"><a>Annotation Source</a></li>\
-  <li class="dropdown active">\
-    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">\
-      <span id="currentSource">\
-      <b class="caret"></b>\
-    </a>\
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" id="sources">\
-    </ul>\
-  </li>\
-</ul>\
-';
+	    // close border
+	    html.push('</div>');
 
-	html += '\
-<ul class="nav nav-pills" style="margin-bottom: 5px;">\
-  <li style="width: 170px;"><a>Max. e-Value</a></li>\
-  <li>\
-    <div class="input-prepend" style="margin-bottom: 0px; height: 20px"><span class="add-on">1e-</span><input type="text" value="5" style="width: 40px;" id="evalue"></div>\
-  </li>\
-</ul>\
-';
+	    // fill the content
+	    target.innerHTML = html.join("");
 
-	html += '\
-<ul class="nav nav-pills" style="margin-bottom: 5px;">\
-  <li style="width: 170px;"><a>Min. % Identity</a></li>\
-  <li>\
-    <div class="input-append" style="margin-bottom: 0px; height: 20px"><input type="text" value="60" style="width: 45px;" id="percentidentity"><span class="add-on">%</span></div>\
-  </li>\
-</ul>\
-';
-
-	    html += '\
-<ul class="nav nav-pills" style="margin-bottom: 5px;">\
-  <li style="width: 170px;"><a>Min. Alignment Length</a></li>\
-  <li>\
-    <div class="input-append" style="margin-bottom: 0px; height: 20px"><input type="text" value="15" style="width: 45px;" id="alignmentlength"><span class="add-on">bp</span></div>\
-  </li>\
-</ul></div>\
-';
-
-	    html += "</div>";
-
-	    html += '<div id="dataprogress" style="float: left; margin-left: 20px; height: 230px; overflow-y: auto; width: 380px;"></div><div style="clear: both;"><h5>select metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div></div></div>';
-	    
-	    target.innerHTML = html;
-	    
-	    document.getElementById('currentSource').innerHTML = widget.dataLoadParams.source;
-	    document.getElementById('sources').innerHTML = widget.currentSources();
+	    // show the databases
+	    widget.showDatabases("protein");
 	    
 	    widget.mgselect = Retina.Widget.create('mgbrowse',
 						   { target: document.getElementById("mgselect"),
@@ -1049,107 +969,26 @@
 	}
     }
 
-    widget.currentSources = function () {
-	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+    // show the available databases for either protein or RNA
+    widget.showDatabases = function (which) {
+	var widget = this;
 
-	var html = "";
-	for (var i=0; i<widget.sources[widget.dataLoadParams.abundance].length; i++) {
-	    var c = widget.sources[widget.dataLoadParams.abundance][i];
-	    if (c.match(/^GROUP/)) {
-		html += "<li style='font-weight: bold; position: relative; left: 5px;'>"+c.substr(5)+"</li>";
-		continue;
-	    }
-	    if (widget.dataLoadParams.source == null) {
-		widget.dataLoadParams.source = c;
-	    }
-	    html += "<li><a style='cursor: pointer;' onclick='Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.source=this.innerHTML;document.getElementById(\"currentSource\").innerHTML=this.innerHTML;'>"+c+"</a></li>";
-	}
-	
-	return html;
-    };
+	var html = ['<ul class="nav nav-pills" style="float: left; margin-left: 20px;"><li class="dropdown">\
+<a class="dropdown-toggle" style="border: 1px solid;" data-toggle="dropdown" href="#"><span id="selectedSource">'+widget.sources[which][0]+'</span> <b class="caret"></b></a>\
+<ul class="dropdown-menu" role="menu">'];
 
-    widget.setAbundance = function (elem) {
-	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	for (var i=0; i<widget.sources[which].length; i++) {
+	    html.push(' <li><a href="#" onclick="document.getElementById(\'selectedSource\').innerHTML=\''+widget.sources[which][i]+'\';Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.source=\''+widget.sources[which][i]+'\';">'+widget.sources[which][i]+'</a></li>');
+	}
+	   
+	html.push('</ul></li></ul>');
 
-	var text = elem.innerHTML.match(/(\w+)/);
-	text = text[0];
-
-	if (text == "Organism") {
-	    text = "representative";
-	} else if (text == "Functional") {
-	    text = "hierarchical";
-	}
-
-	var children = [];
-	var c = document.getElementById('OrganismAbundanceList').childNodes;
-	for (var i=0; i<c.length; i++) {
-	    children.push(c[i]);
-	}
-	c = document.getElementById('FunctionalAbundanceList').childNodes;
-	for (var i=0; i<c.length; i++) {
-	    children.push(c[i]);
-	}
-	for (var i=0; i<children.length; i++) {
-	    if (children[i].tagName == "LI") {
-		if (children[i].innerHTML.match(new RegExp(text))) {
-		    children[i].className = "active";
-		} else {
-		    children[i].className = "";
-		}
-	    }
-	}
-	widget.dataLoadParams.abundance = text;
-	widget.dataLoadParams.source = null;
-	document.getElementById('sources').innerHTML = widget.currentSources();
-	document.getElementById('currentSource').innerHTML = widget.dataLoadParams.source;
+	document.getElementById('databaseSelect').innerHTML = html.join("");
+	widget.dataLoadParams.source = widget.sources[which][0];
     };
 
     widget.taxonTitles = [ "domain", "phylum", "class", "order", "family", "genus", "species", "strain" ];
-    widget.sources = { "representative": [ "GROUPProtein",
-					   "IMG",
-					   "TrEMBL",
-					   "PATRIC",
-					   "SwissProt",
-					   "GenBank",
-					   "SEED",
-					   "RefSeq",
-					   "KEGG",
-					   "M5NR",
-					   "GROUPRNA",
-					   "LSU",
-					   "SSU",
-					   "M5RNA",
-					   "RDP",
-					   "Greengenes" ],
-		       "best": [ "GROUPProtein",
-				 "IMG",
-				 "TrEMBL",
-				 "PATRIC",
-				 "SwissProt",
-				 "GenBank",
-				 "SEED",
-				 "RefSeq",
-				 "KEGG",
-				 "M5NR",
-				 "GROUPRNA",
-				 "LSU",
-				 "SSU",
-				 "M5RNA",
-				 "RDP",
-				 "Greengenes" ],
-		       "lowest": [ "LCA" ],
-		       "hierarchical": [ "Subsystems",
-					 "COG",
-					 "NOG",
-					 "KO" ],
-		       "all": [ "IMG",
-				"TrEMBL",
-				"PATRIC",
-				"SwissProt",
-				"GenBank",
-				"SEED",
-				"RefSeq",
-				"KEGG" ] };
+    widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "eggNOG", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC"], "RNA": ["RDP", "LSU", "SSU", "ITS", "Greengenes"] };
 
      widget.loadDone = function (container) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
@@ -1167,7 +1006,7 @@
     };
 
     // create a progress div
-    widget.pDiv = function (id, done, name, type, source) {
+    widget.pDiv = function (id, done, name, type, source, cname) {
 	var progressContainer = document.getElementById('dataprogress');
 	if (document.getElementById(id)) {
 	    return;
@@ -1175,8 +1014,8 @@
 	var div = document.createElement('div');
 	div.setAttribute('id', id);
 	div.setAttribute('class', 'prog');
-	div.setAttribute('style', 'clear: both; width: 300px;');
-	div.innerHTML = '<div>'+name+'</div><div><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px; float: left; margin-right: 5px;"><div class="bar" id="progressbar'+id+'" style="width: '+(done ? '100' : '0' )+'%;"></div></div><div id="progress'+id+'" style="float: left;">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'><button class='btn btn-mini btn-danger' onclick='Retina.WidgetInstances.metagenome_analysis[1].abortLoad(\""+id+"\");' style='margin-left: 5px;'>cancel</button>")+'</div></div>';
+	div.setAttribute('style', 'margin-left: 15px; float: left; width: 300px;');
+	div.innerHTML = '<div>'+name+'</div><div><div class="progress'+(done ? '' : ' progress-striped active')+'" style="width: 100px; float: left; margin-right: 5px;"><div class="bar" id="progressbar'+id+'" style="width: '+(done ? '100' : '0' )+'%;"></div></div><div id="progress'+id+'" style="float: left;">'+(done ? "complete." : "waiting for server... <img src='Retina/images/waiting.gif' style='height: 16px; position: relative; bottom: 2px;'><button class='btn btn-mini btn-danger' onclick='Retina.WidgetInstances.metagenome_analysis[1].abortLoad(\""+id+"\", null, \""+cname+"\");' style='margin-left: 5px;'>cancel</button>")+'</div></div>';
 	progressContainer.appendChild(div);
     };
 
@@ -1184,12 +1023,8 @@
       DATA LOADING BACKEND
      */
 
-    widget.dataLoadParams = { type: "organism",
-			      source: "M5NR",
-			      abundance: "representative",
-			      evalue: 5,
-			      ident: 60,
-			      alilen: 15 };
+    widget.dataLoadParams = { source: "RefSeq",
+			      type: "single" };
 
     widget.xhr = {};
 
@@ -1201,14 +1036,10 @@
 	    stm.DataStore.dataContainer = {};
 	}	
 
-	widget.dataLoadParams.type = document.getElementById('collapseOrg').className.match(/in/) ? "organism" : "function";
-
 	var type = widget.dataLoadParams.type;
 	var source = widget.dataLoadParams.source;
 	var name = collectionName || widget.dataLoadParams.name || "data"+Retina.keys(stm.DataStore.dataContainer).length;
-	var evalue = params ? params.evalue : document.getElementById('evalue').value;
-	var alilength = params ? params["length"] : document.getElementById('alignmentlength').value;
-	var identity = params ? params.identity : document.getElementById('percentidentity').value;
+
 	if (ids.length) {
 	    if (! name) {
 		var i = Retina.keys(stm.DataStore.dataContainer).length;
@@ -1223,6 +1054,7 @@
 		    return;
 		}
 	    }
+	    document.getElementById('dataprogress').innerHTML = "";
 	    stm.DataStore.dataContainer[name] = { id: name,
 						  source: 'load',
 						  type: 'biom',
@@ -1232,11 +1064,11 @@
 						  callbacks: [],
 						  parameters: { type: type,
 								source: source,
-								evalue: evalue,
-								length: alilength,
-								identity: identity },
+								evalue: widget.cutoffThresholds.evalue,
+								identity: widget.cutoffThresholds.identity ,
+								alilength: widget.cutoffThresholds.length },
 						  created: Retina.date_string(new Date().getTime()),
-						  user: stm.user || "public" };
+						  user: stm.user || "anonymous" };
 	    if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
 		stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
 	    }
@@ -1254,38 +1086,27 @@
 	    var needsLoad = true;
 	    if (stm.DataStore.profile.hasOwnProperty(id)) {
 		needsLoad = false;
-		// check if the required cutoffs are available
-		var p = stm.DataStore.profile[id];
-		if (evalue < p.params.evalue || alilength < p.params.alilength || identity < p.params.identity) {
-		    needsLoad = true;
-		}
-		
 	    }
 	    if (needsLoad && ! stm.DataStore.inprogress.hasOwnProperty('profile'+id)) {
-		widget.pDiv('profile'+id, false, ids[i].name, type, source);
+		widget.pDiv('profile'+id, false, ids[i].name, type, source, name);
 
-		stm.DataStore.inprogress['profile'+id] = true;
+		stm.DataStore.inprogress['profile'+id] = 1;
 		stm.DataStore.dataContainer[name].promises.push(
-		    jQuery.ajax({ bound: 'profile'+id,
-				  //url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type=feature&source="+source+"&nocutoff=1",
-				  url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type="+type+"&source="+source+"&evalue="+evalue+"&length="+alilength+"&identity="+identity,
-				  headers: stm.authHeader,
-				  dataType: "json",
-				  id: id,
+		    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?type=feature&asynchronous=1&source="+source+"&nocutoff=1&hit_type="+type,
 				  dc: name,
-				  parms: { evalue: evalue, identity: identity, alilength: alilength },
-				  beforeSend: function (xhr) {
-				      xhr.dc = this.dc;
-				      widget.xhr[this.id] = xhr;
-				  },
-				  success: function(data) {
+				  headers: stm.authHeader,
+				  bound: 'profile'+id,
+				  success: function (data) {
 				      var widget = Retina.WidgetInstances.metagenome_analysis[1];
 				      if (data != null) {
 					  if (data.hasOwnProperty('ERROR')) {
 					      console.log("error: "+data.ERROR);
-					  } else {
-					      data.params = this.parms;
-					      stm.DataStore.profile[this.id] = data;
+					  } else if (data.hasOwnProperty('status')) {
+					      if (data.status == 'done') {
+						  widget.downloadComputedData(this.bound, this.dc, data.url);
+					      } else {
+						  widget.queueDownload(this.bound, data.url, this.dc);
+					      }
 					  }
 				      } else {
 					  console.log("error: invalid return structure from API server");
@@ -1293,74 +1114,154 @@
 				      }
 				  },
 				  error: function(jqXHR, error) {
-				      var widget = Retina.WidgetInstances.metagenome_analysis[1];
-				      
-				      delete stm.DataStore.inprogress[this.bound];
-				      var bar = document.getElementById('progressbar'+this.bound);
-				      if (bar) {
-					  document.getElementById('progress'+this.bound).innerHTML += " - error.";
-					  bar.parentNode.setAttribute('class', 'progress');
-					  bar.setAttribute('class', 'bar bar-error');
-					  bar.style.width = '100%';
-				      }
-				      
-				      console.log("error: "+this.id+" - "+jqXHR.statusText);
+				      Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
 				  },
-				  xhr: function() {
-				      var xhr = new window.XMLHttpRequest();
-				      xhr.bound = this.bound;
-				      xhr.addEventListener("progress", function(evt){
-							   var display = document.getElementById('progress'+this.bound);
-					  if (display) {
-					      if (evt.lengthComputable) {
-						  var bar = document.getElementById('progressbar'+this.bound);
-						  bar.parentNode.setAttribute('class', 'progress')
-						  var percentComplete = parseInt(evt.loaded / evt.total * 100);
-						  display.innerHTML = evt.loaded.byteSize();
-						  bar.style.width = percentComplete +"%";
-					      } else {
-						  display.innerHTML = evt.loaded.byteSize();
-					      }
-					  }
-				      }, false); 
-				      return xhr;
+				  complete: function () {
+				      Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 				  }
-				}).then(function(data){
-				    delete stm.DataStore.inprogress[this.bound];
-				    var bar = document.getElementById('progressbar'+this.bound);
-				    if (bar) {
-					document.getElementById('progress'+this.bound).innerHTML += " - complete.";
-					bar.parentNode.setAttribute('class', 'progress');
-					bar.setAttribute('class', 'bar bar-success');
-					bar.style.width = '100%';
-				    }
 				}));
 	    } else {
-		widget.pDiv('profile'+id, true, ids[i].name, type, source);
+		widget.pDiv('profile'+id, true, ids[i].name, type, source, name);
 	    }
 	}
 	if (ids.length) {
-	    jQuery.when.apply(this, stm.DataStore.dataContainer[name].promises).then(function() {
-		Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(name);
-	    });
+	    Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(name);
 	}
 
 	return;
     };
 
-    widget.abortLoad = function (id) {
+    widget.queueDownload = function (id, url, name) {
+	var widget = this;
+
+	var container = stm.DataStore.dataContainer[name];
+
+	var timeout = stm.DataStore.inprogress[id] > 3 ? 60 : stm.DataStore.inprogress[id] * 10;
+	stm.DataStore.inprogress[id]++;
+	var sid = id.replace(/^profile/, "");
+
+	widget.xhr[sid] = window.setTimeout(widget.checkDownload.bind(null, id, url, name), timeout * 1000);
+    };
+
+    widget.checkDownload = function (id, url, name) {
+	return jQuery.ajax({ url: url,
+			     dc: name,
+			     headers: stm.authHeader,
+			     bound: id,
+			     success: function (data) {
+				 var widget = Retina.WidgetInstances.metagenome_analysis[1];
+				 if (data != null) {
+				     if (data.hasOwnProperty('ERROR')) {
+					 console.log("error: "+data.ERROR);
+				     } else if (data.hasOwnProperty('status')) {
+					 if (data.status == 'done') {
+					     widget.downloadComputedData(this.bound, this.dc, data.url);
+					 } else {
+					     widget.queueDownload(this.bound, data.url, this.dc);
+					 }
+				     }
+				 } else {
+				     console.log("error: invalid return structure from API server");
+				     console.log(data);
+				 }
+			     },
+			     error: function(jqXHR, error) {
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+			     },
+			     complete: function () {
+				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
+			     }
+			   });
+    };
+
+    widget.downloadComputedData = function (id, name, url) {
+	var widget = this;
+
+	return jQuery.ajax({ bound: id,
+			     url: url,
+			     headers: stm.authHeader,
+			     dataType: "json",
+			     id: id,
+			     dc: name,
+			     beforeSend: function (xhr) {
+				 xhr.dc = this.dc;
+				 Retina.WidgetInstances.metagenome_analysis[1].xhr[this.id] = xhr;
+			     },
+			     success: function(data) {
+				 var widget = Retina.WidgetInstances.metagenome_analysis[1];
+				 if (data != null) {
+				     if (data.hasOwnProperty('ERROR')) {
+					 console.log("error: "+data.ERROR);
+				     } else {
+					 var cont = stm.DataStore.dataContainer[this.dc];
+					 stm.DataStore.profile[data.data.id.replace(/feature/, cont.parameters.type)] = data.data;
+				     }
+				 } else {
+				     console.log("error: invalid return structure from API server");
+				     console.log(data);
+				 }
+			     },
+			     error: function(jqXHR, error) {
+				 Retina.WidgetInstances.metagenome_analysis[1].abortLoad(this.bound, error, this.dc);
+			     },
+			     xhr: function() {
+				 var xhr = new window.XMLHttpRequest();
+				 xhr.bound = this.bound;
+				 xhr.addEventListener("progress", function(evt){
+				     var display = document.getElementById('progress'+this.bound);
+				     if (display) {
+					 if (evt.lengthComputable) {
+					     var bar = document.getElementById('progressbar'+this.bound);
+					     bar.parentNode.setAttribute('class', 'progress')
+					     var percentComplete = parseInt(evt.loaded / evt.total * 100);
+					     display.innerHTML = evt.loaded.byteSize();
+					     bar.style.width = percentComplete +"%";
+					 } else {
+					     display.innerHTML = evt.loaded.byteSize();
+					 }
+				     }
+				 }, false); 
+				 return xhr;
+			     },
+			     complete: function () {
+				 delete stm.DataStore.inprogress[this.bound];
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
+			     }
+			   });
+    };
+
+    widget.deleteProgress = function (id) {
+	var widget = this;
+
+	delete stm.DataStore.inprogress[id];
+	var bar = document.getElementById('progressbar'+id);
+	if (bar) {
+	    document.getElementById('progress'+id).innerHTML += " - complete.";
+	    bar.parentNode.setAttribute('class', 'progress');
+	    bar.setAttribute('class', 'bar bar-success');
+	    bar.style.width = '100%';
+	}
+    };
+    
+    widget.abortLoad = function (id, abort, name) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	var sid = id.replace(/^profile/, "");
 	var k = Retina.keys(widget.xhr);
 	for (var i=0; i<k.length; i++) {
-	    widget.xhr[k[i]].abort();
+	    if (typeof widget.xhr[k[i]] == 'number') {
+		window.clearTimeout(widget.xhr[k[i]]);
+	    } else {
+		widget.xhr[k[i]].abort();
+	    }
 	}
-	var container = stm.DataStore.dataContainer[widget.xhr[sid].dc];
+	var container = stm.DataStore.dataContainer[name];
 	widget.xhr = [];
 	container.promises = [];
+	stm.DataStore.inprogress = {};
 	
-	Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(container.id, "abort");
+	Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(container.id, abort || "aborted by user");
     };
 
     /*
@@ -1408,10 +1309,10 @@
 		alert('this feature is not available for this view');
 	    }
 	} else if (type == 'json') {
-	    stm.saveAs(JSON.stringify(widget.container2matrix({ dataColIndex: document.getElementById('matrixLevel') ? document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value : 0, filter: widget.currentFilter }), null, 2), widget.selectedContainer + ".json");
+	    stm.saveAs(JSON.stringify(widget.container2matrix({ dataColIndex: document.getElementById('matrixLevel') ? document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value : 'domain', filter: widget.currentFilter }), null, 2), widget.selectedContainer + ".json");
 	    return;
 	} else if (type == 'tsv') {
-	    var exportData = widget.container2table({ dataColIndex: document.getElementById('matrixLevel') ? document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value : 0, filter: widget.currentFilter });
+	    var exportData = widget.container2table({ dataColIndex: document.getElementById('matrixLevel') ? document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value : 'domain', filter: widget.currentFilter });
 	    var exportString = [];
 	    exportString.push(exportData.header.join("\t"));
 	    for (var i=0; i<exportData.data.length; i++) {
@@ -1437,6 +1338,73 @@
 	// remove the elements
 	document.body.removeChild(href);
 	document.body.removeChild(document.getElementById('canvasResult'));
+    };
+
+    // LOAD BACKGROUND DATA
+    widget.loadTaxonomy = function () {
+	var widget = this;
+
+	// jQuery.getJSON("data/taxonomy.full.json", function (data) {
+	//     stm.DataStore.taxonomy = data;
+	//     Retina.WidgetInstances.metagenome_analysis[1].display();
+	// });
+	
+	JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
+	    if(err) {
+		throw err; // or handle err
+	    }
+	    
+	    var zip = new JSZip();
+	    zip.loadAsync(data).then(function(zip) {
+		zip.file("tax.json").async("string").then(function (tax) {
+	    	    tax = JSON.parse(tax);
+		    var out = { "domain": [], "phylum": [], "className": [], "order": [], "family": [], "genus": [], "species": [], "organism": {} };
+		    for (var d in tax) {
+			if (tax.hasOwnProperty(d)) {
+			    for (var p in tax[d]) {
+				if (tax[d].hasOwnProperty(p)) {
+				    for (var c in tax[d][p]) {
+					if (tax[d][p].hasOwnProperty(c)) {
+					    for (var o in tax[d][p][c]) {
+						if (tax[d][p][c].hasOwnProperty(o)) {
+						    for (var f in tax[d][p][c][o]) {
+							if (tax[d][p][c][o].hasOwnProperty(f)) {
+							    for (var g in tax[d][p][c][o][f]) {
+								if (tax[d][p][c][o][f].hasOwnProperty(g)) {
+								    for (var s in tax[d][p][c][o][f][g]) {
+									if (tax[d][p][c][o][f][g].hasOwnProperty(s)) {
+									    for (var org in tax[d][p][c][o][f][g][s]) {
+										if (tax[d][p][c][o][f][g][s].hasOwnProperty(org)) {
+										    out.organism[org] = [ out.domain.length, out.phylum.length, out.className.length, out.order.length, out.family.length, out.genus.length, out.species.length ];
+										}
+									    }
+									    out.species.push(s);
+									}
+								    }
+								    out.genus.push(g)
+								}
+							    }
+							    out.family.push(f);
+							}
+						    }
+						    out.order.push(o);
+						}
+					    }
+					    out.className.push(c);
+					}
+				    }
+				    out.phylum.push(p);
+				}
+			    }
+			    out.domain.push(d);
+			}
+		    }
+		    
+		    stm.DataStore.taxonomy = out;
+		    Retina.WidgetInstances.metagenome_analysis[1].display();
+		});
+	    });
+	});
     };
 
 })();

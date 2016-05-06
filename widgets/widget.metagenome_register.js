@@ -64,7 +64,7 @@
 	widget.main.innerHTML = html;
 
 	// set up recaptcha
-	grecaptcha.render('recap', { 'sitekey' : '6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z' });
+	grecaptcha.render('recap', { 'sitekey' : '6LfbRfYSAAAAAA2xPI95x5LIKvpW-Zl9Fz5Li5m-' });
     };
 
     widget.newAccount = function () {
@@ -244,7 +244,7 @@
 		if (result.hasOwnProperty('ERROR')) {
 		    alert("Resetting your password failed: "+result.ERROR);
 		} else {
-		    alert('An error occured while resetting your password');
+		    alert('An error occurred while resetting your password');
 		}
 	    });
 	} else {
