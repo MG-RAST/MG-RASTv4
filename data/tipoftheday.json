@@ -1,0 +1,13 @@
+[
+    "You can view alignments between your submitted data and the database entries via the Analysis page.",
+    "MG-RAST has a reviewer feature, allowing you to create anonymous access for journal reviewers.",
+    "Data publication requires the user interaction, MG-RAST will never automatically release data. Data is not public until you release it!",
+    "Changing parameters for comparisons and data exports is a core function of MG-RAST enabling you to narrow comparisons down.",
+    "You can select a taxonomic group (e.g. Actinobacteria) or function (e.g. Lysine Biosynthesis) and extract all sequence features matched to said group or function for downstream analysis.",
+    "MG-RAST has an R interface. <a href='https://cran.r-project.org/web/packages/matR/index.html' target=_blank>",
+    "The MG-RAST API allows platform agnostic access to the data and analysis in MG-RAST. <a href='http:://api.metagenomics.anl.gov/api.html' target=_blank>",
+    "You can retrieve a list of species or set of features linked to a specific functional category, e.g. KEGG pathway or SEED subsystem.",
+    "You can retrieve a set of functions or functional categories (and/or the respective features) for a specific taxonomic group.",
+    "Collections offer a convenient way to group metagenomes and facilitate easier analysis.",
+    "If you upload assembled or or other manipulated sequence data sets, please also upload the raw sequences. This will assist other researchers."
+]
