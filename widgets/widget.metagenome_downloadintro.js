@@ -30,7 +30,7 @@
 
 	// create the html
 	var html = [ "<h3><img src='Retina/images/cloud-download.png' style='width: 24px; margin-right: 10px; position: relative; bottom: 3px;'>Download from MG-RAST</h3>" ];
-	html.push("<p>MG-RAST hosts over 100 Tbp of metagenomic data which can be downloaded in multiple ways described in detail below. Access to private data requires the use of a <a href='#'>webkey</a>. The owner of a dataset has control over sharing access to their data with individuals or the public. </p>");
+	html.push("<p>MG-RAST hosts over 100 Tbp of metagenomic data which can be downloaded in multiple ways described in detail below. Access to private data requires the use of a webkey. The owner of a dataset has control over sharing access to their data with individuals or the public. </p>");
 
 	html.push('<div class="row-fluid">\
             <ul class="thumbnails">\
@@ -52,7 +52,7 @@
                   <div class="caption">\
                     <h3>FTP site</h3>\
                     <p>Our FTP site features downloads for all public projects as well as our non-redundant MD5 database. You will also find our download tools here.</p>\
-                    <p><a class="btn" href="http://ftp.metagenomics.anl.gov">visit FTP site</a> <a class="btn pull-right" href="#">help on FTP site structure</a></p>\
+                    <p style="text-align: center; margin-top: 190px;"><a class="btn" href="http://ftp.metagenomics.anl.gov">visit FTP site</a></p>\
                   </div>\
                 </div>\
               </li>\
@@ -61,9 +61,9 @@
                   <img src="Retina/images/api.png" style="margin-top: 15px;">\
                   <div class="caption">\
                     <h3>API & commandline-tools</h3>\
-                    <p>Through our API you have programmatic access to all data in MG-RAST. Accessing private data requires the use of a <a href="#">webkey</a>. In addition to full downloads, you can also filter the data or join multiple datasets.</p>\
+                    <p>Through our API you have programmatic access to all data in MG-RAST. Accessing private data requires the use of a webkey. In addition to full downloads, you can also filter the data or join multiple datasets.</p>\
                     <p>Our tools include an R client as well as a download tool which grants scripted access to the data.</p>\
-                    <p><a class="btn" href="http://api.metagenomics.anl.gov/api.html">API documentation</a> <a class="btn pull-right" href="#">commandline tools</a></p>\
+                    <p style="text-align: center; margin-top: 120px;"><a class="btn" href="http://api.metagenomics.anl.gov/api.html">API documentation</a></p>\
                   </div>\
                 </div>\
               </li>\
