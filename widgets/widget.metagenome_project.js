@@ -145,7 +145,7 @@
 		    mapTypeControl: false,
 		    streetViewControl: false
 		});
-		var mc = new MarkerClusterer(map, markers);
+		var mc = new MarkerClusterer(map, markers, { "imagePath": "Retina/images/m" });
 	    } else {
 		document.getElementById('myWorld').style.display = "none";
 	    }
