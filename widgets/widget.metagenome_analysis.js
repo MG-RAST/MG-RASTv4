@@ -36,12 +36,20 @@
 	document.getElementById("pageTitle").innerHTML = "analysis";
 	
 	// set the output area
-	widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
-
-	// if (! stm.DataStore.hasOwnProperty('taxonomy')) {
-	//     widget.loadTaxonomy();
-	//     return;
-	// }
+	if (! stm.DataStore.hasOwnProperty('taxonomy')) {
+	    widget.main.innerHTML = '<div id="data">checking local storage... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
+	    stm.readHardStorage("analysis").then( function () {
+		var widget = Retina.WidgetInstances.metagenome_analysis[1];
+		if (stm.DataStore.hasOwnProperty('taxonomy')) {
+		    widget.display();
+		} else {
+		    widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
+		    widget.loadBackgroundData();
+		    return;
+		}
+	    });
+	    return;
+	}
 
 	// set the tool area
 	var tools = widget.sidebar;
@@ -91,7 +99,35 @@
     	var c = stm.DataStore.dataContainer[widget.selectedContainer];
     	var pid = c.items[0].id+"_"+c.parameters.type+"_"+c.parameters.source;
     	var p = stm.DataStore.profile[pid];
-    	var filters = [ null, c.parameters.evalue, c.parameters.identity, c.parameters.alilength ];
+    	var filters = [];
+	if (c.parameters.evalue > widget.cutoffThresholds['evalue']) {
+	    filters.push([ 1, c.parameters.evalue ]);
+	}
+	if (c.parameters.identity > widget.cutoffThresholds['identity']) {
+	    filters.push([ 2, c.parameters.identity ]);
+	}
+	if (c.parameters.alilength > widget.cutoffThresholds['length']) {
+	    filters.push([ 3, c.parameters.alilength ]);
+	}
+	var taxfilters = Retina.keys(c.parameters.taxFilter);
+	for (var i=0; i<taxfilters.length; i++) {
+	    if (Retina.keys(c.parameters.taxFilter[taxfilters[i]]).length == 0) {
+		delete c.parameters.taxFilter[taxfilters[i]];
+	    }
+	}
+	taxfilters = Retina.keys(c.parameters.taxFilter);
+
+	var ontfilters = Retina.keys(c.parameters.ontFilter);
+	for (var i=0; i<ontfilters.length; i++) {
+	    if (Retina.keys(c.parameters.ontFilter[ontfilters[i]]).length == 0) {
+		delete c.parameters.ontFilter[ontfilters[i]];
+	    }
+	}
+	ontfilters = Retina.keys(c.parameters.ontFilter);
+	
+	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6 };
+	var flevelIndex = { "Subsystems-level1": 0, "Subsystems-level2": 1, "Subsystems-level3": 2, "Subsystems-functions": 3, "KO-level1": 0, "KO-level2": 1, "KO-level3": 2, "KO-functions": 0, "COG-level1": 0, "COG-level2": 1, "COG-functions": 2, "NOG-level1": 0, "NOG-level2": 1, "NOG-functions": 3 };
+	
     	var rows = {};
     	for (var i=0; i<c.items.length; i++) {
     	    rows[c.items[i].id] = [];
@@ -99,12 +135,55 @@
     	    var p = stm.DataStore.profile[pid];
     	    for (var h=0; h<p.rows.length; h++) {
     		var stay = true;
-    		for (var j=1; j<filters.length; j++) {
-    		    if (Math.abs(p.data[h][j]) < filters[j]) {
+
+		// test for cutoffs
+		for (var j=0; j<filters.length; j++) {
+    		    if (Math.abs(p.data[h][filters[j][0]]) < filters[j][1]) {
     			stay = false;
     			continue;
     		    }
     		}
+
+		// test for tax filters
+		if (taxfilters.length) {
+		    for (var j=0; j<taxfilters.length; j++) {
+			var org = p.rows[h].metadata.organism[0];
+			var val;
+			if (stm.DataStore.taxonomy.organism.hasOwnProperty(org)) {
+			    val = stm.DataStore.taxonomy[taxfilters[j]][stm.DataStore.taxonomy.organism[org][levelIndex[taxfilters[j]]]];
+			} else {
+			    console.log("org not found: "+org)
+			    stay = false;
+			    continue;
+			}
+			if (! c.parameters.taxFilter[taxfilters[j]][val]) {
+			    stay = false;
+			    continue;
+			}
+		    }
+		}
+
+		// test for function filters
+		// if (ontfilters.length) {
+		//     for (var j=0; j<ontfilters.length; j++) {
+		// 	var func = p.rows[h].metadata['function'][0];
+		// 	var val;
+		// 	var type, level;
+		// 	[ type, level ] = ontfilters[j].split(/-/);
+		// 	if (stm.DataStore.ontology[type]['id'].hasOwnProperty(func)) {
+		// 	    val = stm.DataStore.ontology[type][level][stm.DataStore.ontology[type]['id'][func][flevelIndex[ontfilters[j]]]];
+		// 	} else {
+		// 	    console.log("func not found: "+func)
+		// 	    stay = false;
+		// 	    continue;
+		// 	}
+		// 	if (! c.parameters.ontFilter[ontfilters[j]][val]) {
+		// 	    stay = false;
+		// 	    continue;
+		// 	}
+		//     }
+		// }
+		
     		if (stay) {
     		    rows[c.items[i].id].push(h);
     		}
@@ -157,7 +236,7 @@
     	    var mdname = "";
     	    if (p.rows.length > 0) {
     		var matrixLevels = "";
-		var cols = ["domain", "phylum", "class", "order", "family", "genus", "species" ];
+		var cols = ["domain", "phylum", "className", "order", "family", "genus", "species" ];
     		for (var i=0; i<cols.length; i++) {
     		    matrixLevels += "<option value='"+cols[i]+"'>"+cols[i]+"</option>";
     		}
@@ -167,7 +246,7 @@
     		containerData = "<p>The selected data container does not contain any data rows.</p>";
     	    }
     	}
-    	var html = "<h4>visualize - "+demo_data[type].title+"</h4>"+containerData+"<div id='visualizeTarget'></div>";
+    	var html = "<h4>visualize container " + (widget.selectedContainer ? widget.selectedContainer : "Demo") + " - "+demo_data[type].title+"</h4>"+containerData+"<div id='visualizeTarget'></div>";
 
     	container.innerHTML = html;
 
@@ -178,7 +257,7 @@
     	if (Retina.WidgetInstances.RendererController.length > 1) {
     	    Retina.WidgetInstances.RendererController = [ Retina.WidgetInstances.RendererController[0] ];
     	}
-    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": demo_data[type].renderer, "settings": demo_data[type].settings, "breadcrumbs": 'visualizeBreadcrumbs' });
+    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": demo_data[type].renderer, "settings": demo_data[type].settings, "breadcrumbs": 'visualizeBreadcrumbs', "noControl": true });
 
     	if (widget.selectedContainer) {
     	    widget.updateVis();
@@ -189,52 +268,172 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	var container = document.getElementById('visualize');
-	var html = "<h4>edit data container</h4><p>Here you can view and modify the settings of the selected data container.</p>";
+	var html = [];
+	var onts = ["Subsystems", "KO", "COG", "NOG"];
 	if (widget.selectedContainer) {
+	    html.push("<h3>edit data container<button class='btn btn-danger' style='float: right;' title='delete data container' onclick='if(confirm(\"Really delete this data container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button></h3><p>Here you can view and modify the settings of the selected data container.</p>")
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
-	    var items = "<table>";
-	    for (var i=0; i<c.items.length; i++) {
-		items += "<tr><td>"+c.items[i].name+" ("+c.rows[c.items[i].id].length+" hits)</td></tr>";
-	    }
-	    items += "</table>";
-	    html += "<table>";
-	    html += "<tr><td style='height: 30px;'><b>name</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].renameContainer(this.previousSibling.value);'>update</button></div></td></tr>";
+	    
+	    html.push("<table>");
+	    html.push("<tr><td style='height: 30px; width: 200px;'>name</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].renameContainer(this.previousSibling.value);'>update</button></div></td></tr>");
 	    var uname = typeof c.user == "object" ? c.user.firstname+" "+c.user.lastname+" ("+c.user.login+")" : c.user;
-	    html += "<tr><td style='height: 30px;'><b>created</b></td><td>"+c.created+"</td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>by</b></td><td>"+uname+"</td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>hit type</b></td><td>"+c.parameters.type+"</td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>source</b></td><td>"+c.parameters.source+"</td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>e-value</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.evalue+"' class='span3' id='containerParamevalue'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"evalue\",this.previousSibling.value);'>update</button></div></td></tr>";
-	    html += "<tr><td style='height: 30px;'><b>%-identity</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.identity+"' class='span3' id='containerParamidentity'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"identity\",this.previousSibling.value);'>update</button></div></td></tr>";
-	    html += "<tr><td style='padding-right: 20px; height: 30px;'><b>alignment length</b></td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.alilength+"' class='span3' id='containerParamlength'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"length\",this.previousSibling.value);'>update</button></div></td></tr>";
-	    html += "<tr><td style='vertical-align: top; height: 30px;'><b>metagenomes</b></td><td>"+items+"</td></tr>";
-	    html += "</table>";
+	    html.push("<tr><td style='height: 30px;'>created</td><td>"+c.created+"</td></tr>");
+	    html.push("<tr><td style='height: 30px;'>by</td><td>"+uname+"</td></tr>");
+	    html.push("<tr><td style='height: 30px;'>hit type</td><td>"+c.parameters.type+"</td></tr>");
+	    html.push("<tr><td style='height: 30px;'>source</td><td>"+c.parameters.source+"</td></tr></table>");
+
+	    html.push('<h4>Filter Parameters</h4>');
+	    
+	    html.push("<table><tr><td style='height: 30px; width: 200px;'>e-value</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.evalue+"' class='span3' id='containerParamevalue'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"evalue\",this.previousSibling.value);'>update</button></div></td></tr>");
+	    html.push("<tr><td style='height: 30px;'>%-identity</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.identity+"' class='span3' id='containerParamidentity'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"identity\",this.previousSibling.value);'>update</button></div></td></tr>");
+	    html.push("<tr><td style='padding-right: 20px; height: 30px;'>alignment length</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.alilength+"' class='span3' id='containerParamlength'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"length\",this.previousSibling.value);'>update</button></div></td></tr>");
+
+	    var taxSelect = "<select onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxLevel\",this.options[this.selectedIndex].value);'>";
+	    var taxSelect2 = "<select onchange='if(this.selectedIndex<6){jQuery(\"#taxText\").data(\"typeahead\").source=stm.DataStore.taxonomy[this.options[this.selectedIndex].value];}else{jQuery(\"#taxText\").data(\"typeahead\").source=[];}'>";
+	    var taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];
+	    for (var i=0; i<taxLevels.length; i++) {
+		var sel = "";
+		if (taxLevels[i] == c.parameters.taxLevel) {
+		    sel = " selected=selected";
+		}
+		taxSelect += "<option"+sel+" value='"+taxLevels[i]+"'>"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
+		taxSelect2 += "<option value='"+taxLevels[i]+"'>"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
+	    }
+	    taxSelect += "</select>";
+	    taxSelect2 += "</select>";
+	    
+	    html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>taxonomy display level</td><td>"+taxSelect+"</td></tr>");
+
+	    var taxFilter = taxSelect2 + "<div class='input-append'><input type='text' autocomplete='off' id='taxText'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"add\", this.parentNode.previousSibling.options[this.parentNode.previousSibling.selectedIndex].value, document.getElementById(\"taxText\").value);'>add</button></div>";
+	    html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>taxonomy filters</td><td>"+taxFilter+"</td></tr>");
+
+	    var tf = Retina.keys(c.parameters.taxFilter).sort();
+	    for (var i=0; i<tf.length; i++) {
+		var f = c.parameters.taxFilter[tf[i]];
+		html.push("<tr><td>"+tf[i]+"</td><td>");
+		var v = Retina.keys(f).sort();
+		for (var h=0; h<v.length; h++) {
+		    html.push("<button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"remove\", \""+tf[i]+"\", \""+v[h]+"\");'>"+v[h]+"</button>");
+		}
+		html.push("</td>");
+	    }
+
+	    var ontLevels = { "Subsystems": ["level1","level2","level3","functions"], "KO": ["level1","level2","level3","functions"], "COG": ["level1","level2","functions"], "NOG": ["level1","level2","functions"] };
+	    var ontTypeSelect = '<select id="ontType" onchange="';
+	    for (var i=0; i<onts.length; i++) {
+		ontTypeSelect += 'document.getElementById(\''+onts[i]+'SelectDiv\').style.display=\'none\';';
+	    }
+	    ontTypeSelect += 'document.getElementById(this.options[this.selectedIndex].value+\'SelectDiv\').style.display=\'\';">';
+	    var ontSelects = [];
+	    for (var i=0; i<onts.length; i++) {
+		ontTypeSelect += "<option>"+onts[i]+"</option>";
+		ontSelects.push('<div id="'+onts[i]+'SelectDiv" style="'+(i==0 ? "" : "display: none;")+'"><select id="'+onts[i]+'Select" onchange="jQuery(\'#'+onts[i]+'SelectText\').data(\'typeahead\').source=stm.DataStore.ontology[\''+onts[i]+'\'][this.options[this.selectedIndex].value];">');
+		for (var h=0; h<ontLevels[onts[i]].length; h++) {
+		    ontSelects.push('<option>'+ontLevels[onts[i]][h]+'</option>');
+		}
+		ontSelects.push('</select><div class="input-append"><input type="text" id="'+onts[i]+'SelectText" autocomplete="off"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'ontFilter\', \'add\', document.getElementById(\'ontType\').options[document.getElementById(\'ontType\').selectedIndex].value,this.parentNode.previousSibling.options[this.parentNode.previousSibling.selectedIndex].value, document.getElementById(\''+onts[i]+'SelectText\').value);">add</button></div></div>');
+	    }
+	    ontTypeSelect += '</select>';
+	    
+	    // var ontSelect = "<select>";
+	    // var ontLevels = [ "level1", "level2", "level3", "function" ];
+	    // for (var i=0; i<ontLevels.length; i++) {
+	    // 	ontSelect += "<option>"+ontLevels[i]+"</option>";
+	    // }
+	    // ontSelect += "</select>";
+	    // html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>ontology display level</td><td>"+ontSelect+"</td></tr>");
+
+	    html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>functional hierarchy filters</td><td>"+ontTypeSelect+ontSelects.join("")+"</td></tr>");
+
+	    var of = Retina.keys(c.parameters.ontFilter).sort();
+	    for (var i=0; i<of.length; i++) {
+		var f = c.parameters.ontFilter[of[i]];
+		html.push("<tr><td>"+of[i]+"</td><td>");
+		var v = Retina.keys(f).sort();
+		for (var h=0; h<v.length; h++) {
+		    html.push("<button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"ontFilter\", \"remove\", \""+of[i]+"\", \""+v[h]+"\");'>"+v[h]+"</button>");
+		}
+		html.push("</td>");
+	    }
+	    
+	    html.push("</table>");
+
+	    html.push('<h4>Result Sets</h4>');
+
+	    html.push("<table><th style='text-align: left;'>name</th><th style='text-align: left;'># distinct hits</th></tr>");
+	    for (var i=0; i<c.items.length; i++) {
+		html.push("<tr><td>"+c.items[i].name+"</td><td style='text-align: right;'>"+c.rows[c.items[i].id].length+"</td></tr>");
+	    }
+	    html.push("</table>");
 	} else {
-	    html += "<p>You currently have no data loaded. To do so, click the <span style='border: 1px solid black; border-radius: 3px; padding-bottom: 2px; padding-left: 5px; padding-right: 4px; font-weight: bold;'>+</span> icon on the right.</p>";
+	    html.push("<p>You currently have no data loaded. To do so, click the <span style='border: 1px solid black; border-radius: 3px; padding-bottom: 2px; padding-left: 5px; padding-right: 4px; font-weight: bold;'>+</span> icon on the right.</p>");
 	    document.getElementById('addDataIcon').className = "tool glow";
 	}
 
-	container.innerHTML = html;
+	container.innerHTML = html.join("");
+	if (widget.selectedContainer) {
+	    
+	    jQuery("#taxText").typeahead({"source": stm.DataStore.taxonomy.domain});
+	    for (var i=0; i<onts.length; i++) {
+		jQuery("#"+onts[i]+"SelectText").typeahead({"source": stm.DataStore.ontology[onts[i]].level1});
+	    }
+	}
+    };
+
+    widget.removeDataContainer = function () {
+	var widget = this;
+
+	delete stm.DataStore.dataContainer[widget.selectedContainer];
+	widget.showDataContainers();
+	document.getElementById('dataprogress').innerHTML = '';
+	widget.loadDataUI();
     };
 
     // change a parameter of a container
-    widget.changeContainerParam = function (param, value) {
+    widget.changeContainerParam = function (param, value, value2, value3, value4) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
-	if (widget.cutoffThresholds[param] > value) {
+	if (widget.cutoffThresholds.hasOwnProperty(param) && widget.cutoffThresholds[param] > value) {
 	    document.getElementById('containerParam'+param).value = widget.cutoffThresholds[param];
 	    alert(param+' minimum threshols is '+widget.cutoffThresholds[param]);
 	    return;
 	}
 
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
-	
-	// update parameter data
-	container.parameters[param] = parseFloat(value);
-	document.getElementById('visualize').setAttribute('disabled', 'disabled');
-	widget.performFilter();
-	document.getElementById('visualize').removeAttribute('disabled');
-	widget.editContainer();
+
+	// check if this is a tax filter
+	if (param == 'taxLevel') {
+	    container.parameters.taxLevel = value;
+	} else if (param == 'ontLevel') {
+	    container.parameters.ontLevel = value;
+	} else {
+	    if (param == 'taxFilter') {
+		if (value == "remove") {
+		    delete container.parameters.taxFilter[value2][value3];
+		} else {
+		    if (! container.parameters.taxFilter.hasOwnProperty(value2)) {
+			container.parameters.taxFilter[value2] = {};
+		    }
+		    container.parameters.taxFilter[value2][value3] = true;
+		}
+	    } else if (param == 'ontFilter') {
+		if (value == "remove") {
+		    delete container.parameters.ontFilter[value2][value3];
+		} else {
+		    if (! container.parameters.ontFilter.hasOwnProperty(value2+"-"+value3)) {
+			container.parameters.ontFilter[value2+"-"+value3] = {};
+		    }
+		    container.parameters.ontFilter[value2+"-"+value3][value4] = true;
+		}
+	    } else {
+		// update parameter data
+		container.parameters[param] = parseFloat(value);
+	    }
+	    document.getElementById('visualize').setAttribute('disabled', 'disabled');
+	    widget.performFilter();
+	    document.getElementById('visualize').removeAttribute('disabled');
+	    widget.editContainer();
+	}
     };
 
     // change the container name
@@ -258,35 +457,34 @@
     };
 
     // draw the current visualization with updated parameters
-    widget.updateVis = function (filter, reset) {
+    widget.updateVis = function (matrixLevel, filter, reset) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
-	if (! document.getElementById('matrixLevel')) {
-	    return;
-	}
-
 	if (reset) {
-	    document.getElementById('matrixLevel').selectedIndex = 0;
+	    matrixLevel = document.getElementById('matrixLevel').options[0].value;
 	    document.getElementById('visualizeBreadcrumbs').innerHTML = "";
 	}
+
+	if (! matrixLevel) {
+	    matrixLevel = document.getElementById('matrixLevel').options[0].value;
+	}
 	
-	var matrixLevel = document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value;
 	var r = widget.currentVisualizationController;
 
 	var b = document.getElementById('visualizeBreadcrumbs');
 	if (b.innerHTML == "") {
-	    b.innerHTML = '<a style="cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_analysis[1].updateVis(null, true);">&raquo; All </a>';
+	    b.innerHTML = '<a style="cursor: pointer;" onclick="Retina.WidgetInstances.metagenome_analysis[1].updateVis(null, null, true);">&raquo; All </a>';
 	}
 
 	/* drilldown */
 	if (widget.currentType == 'matrix') {
 	    var matrix = widget.container2matrix({ level: matrixLevel, filter: filter, colHeader: "name" });
 
-	    if (widget.normalizeData) {
-		matrix.data = widget.transposeMatrix(widget.normalizeMatrix(widget.transposeMatrix(matrix.data)));
+	    if (Retina.normalizeData) {
+		matrix.data = Retina.transposeMatrix(Retina.normalizeMatrix(Retina.transposeMatrix(matrix.data)));
 	    }
 	    if (widget.standardizeData) {
-		matrix.data = widget.transposeMatrix(widget.standardizeMatrix(widget.transposeMatrix(matrix.data)));
+		matrix.data = Retina.transposeMatrix(Retina.standardizeMatrix(Retina.transposeMatrix(matrix.data)));
 	    }
 	    r.data(1, { data: matrix.data,
 			rows: matrix.rows,
@@ -295,14 +493,15 @@
 	    r.renderer.settings.callback = function (p) {
 		var rend = Retina.RendererInstances.matrix[p.rendererIndex];
 		if ((rend.settings.orientation=='transposed' && p.rowIndex == null) || (rend.settings.orientation=='normal' && p.colIndex == null)) {
+		    document.getElementById('matrixLevel').selectedIndex++;
 		    var widget = Retina.WidgetInstances.metagenome_analysis[1];
-		    var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis({level: \''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value+'\', value: \''+p.cellValue+'\'});">&raquo; '+p.cellValue+' </a>';
+		    var html = '<a style="cursor: pointer;" onclick="while(this.nextSibling){this.parentNode.removeChild(this.nextSibling);}Retina.WidgetInstances.metagenome_analysis[1].updateVis(\''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value+'\', {level: \''+document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex - 1].value+'\', value: \''+p.cellValue+'\'});">&raquo; '+p.cellValue+' </a>';
 		    if (document.getElementById('matrixLevel').selectedIndex + 1 == document.getElementById('matrixLevel').options.length) {
 			html = "";
 		    }
 		    document.getElementById('visualizeBreadcrumbs').innerHTML += html;
-		    widget.updateVis( { level: document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value,
-					value: p.cellValue } );
+		    widget.updateVis( document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex].value, { level: document.getElementById('matrixLevel').options[document.getElementById('matrixLevel').selectedIndex - 1].value,
+																		    value: p.cellValue } );
 		    
 		}
 	    };
@@ -340,7 +539,7 @@
 	    r.renderer.settings.y_title = "abundance";
 	} else if (widget.currentType == 'heatmap') {
 	    var matrix = widget.container2matrix({ dataColIndex: matrixLevel, filter: filter });
-	    var data = widget.scaleMatrix(matrix.data);
+	    var data = Retina.scaleMatrix(matrix.data);
 	    r.data(1, { data: data,
 			rows: matrix.rows,
 			columns: matrix.cols });
@@ -567,7 +766,7 @@
 	if (c.hasOwnProperty('rows')) {
 	    isFiltered = true;
 	}
-	var levelIndex = {"domain": 0, "phylum": 1, "class": 2, "order": 3, "family": 4, "genus": 5, "species": 6};
+	var levelIndex = {"domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6};
 	for (var i=0; i<c.items.length; i++) {
 	    var pid = c.items[i].id+"_"+c.parameters.type+"_"+c.parameters.source;
 	    var p = stm.DataStore.profile[pid];
@@ -575,7 +774,7 @@
 	    for (var h=0; h<(isFiltered ? c.rows[c.items[i].id].length : p.rows.length); h++) {
 		var row = (isFiltered ? c.rows[c.items[i].id][h] : h);
 		var val = p.data[row][dataRow];
-		var org = p.rows[row].metadata[c.parameters.source]["organism"][0];
+		var org = p.rows[row].metadata["organism"][0];
 		org = org.replace(/''/g, "'");
 		if (! stm.DataStore.taxonomy["organism"][org]) {
 		    console.log(org);
@@ -583,7 +782,7 @@
 		}
 		var key = stm.DataStore.taxonomy[params.level][stm.DataStore.taxonomy["organism"][org][levelIndex[params.level]]];
 		if (params.filter && params.filter.level !== null && params.filter.value !== null) {
-		    if (stm.DataStore.taxonomy[params.filter.level || "domain"][p.rows[row].metadata[c.parameters.source]["organism"][0]] != params.filter.value) {
+		    if (stm.DataStore.taxonomy[params.filter.level][stm.DataStore.taxonomy["organism"][org][levelIndex[params.filter.level]]] != params.filter.value) {
 			continue;
 		    }
 		}
@@ -797,118 +996,6 @@
     };
 
     /*
-      STATISTICS
-     */
-     widget.scaleMatrix = function (matrix) {
-	var maxes = [];
-	
-	for (var i=0; i<matrix[0].length; i++) {
-	    maxes.push(0);
-	}
-	for (var i=0;i<matrix.length;i++) {
-	    for (var h=0; h<matrix[i].length; h++) {
-		if (maxes[h]<matrix[i][h]) {
-		    maxes[h] = matrix[i][h];
-		}
-	    }
-	}
-	for (var i=0;i<matrix.length;i++) {
-	    for (var h=0; h<matrix[i].length; h++) {
-		matrix[i][h] = matrix[i][h] / maxes[h];
-	    }
-	}
-	
-	return matrix;
-    };
-
-    widget.normalizeMatrix = function (matrix) {
-	// first calculate the total for each column
-	var sums = [];
-	for (var i=0; i<matrix.length; i++) {
-
-	    sums[i] = 0;
-	    for (var h=0; h<matrix[i].length; h++) {
-		sums[i] += matrix[i][h];
-	    }
-	}
-
-	// calculate the maximum of the totals
-	var max = 0;
-	for (var i=0; i<sums.length; i++) {
-	    if (max < sums[i]) {
-		max = sums[i];
-	    }
-	}
-
-	// calculate the weight factors for each column
-	var factors = [];
-	for (var i=0; i<sums.length; i++) {
-	    factors[i] = max / sums[i];
-	}
-
-	// apply the weight factors to the cells
-	for (var i=0; i<matrix.length; i++) {
-	    for (var h=0; h<matrix[i].length; h++) {
-		matrix[i][h] = parseInt(matrix[i][h] * factors[i]);
-	    }
-	}
-
-	return matrix;
-    };
-    
-    widget.standardizeMatrix = function (matrix) {
-	// calculate the mean of each column
-	var sums = [];
-	for (var i=0; i<matrix.lenght; i++) {
-	    sums[i] = 0;
-	    for (var h=0; h<matrix[i].length; h++) {
-		sums[i] += matrix[i][h];
-	    }
-	}
-	var means = [];
-	for (var i=0; i<sums.length; i++) {
-	    means[i] = sums[i] / matrix[i].length;
-	}
-
-	// calculate the standard deviation
-	sums = [];
-	for (var i=0; i<matrix.length; i++) {
-	    sums[i] = 0;
-	    for (var h=0; h<matrix[i].length; h++) {
-		sums[i] += Math.pow(matrix[i][h] - means[i], 2);
-	    }
-	}
-	var devs = [];
-	for (var i=0; i<sums.length; i++) {
-	    devs[i] = sums[i] / matrix[i].length;
-	}
-	
-	// calculate the standards
-	for (var i=0; i<matrix.lenght; i++) {
-	    for (var h=0; h<matrix[i].length; h++) {
-		matrix[i][h] = (matrix[i][h] - means[i]) / devs[i];
-	    }
-	}
-
-	return matrix;
-    };
-
-    // switch rows and cols of a matrix
-    widget.transposeMatrix = function (matrix) {
-	var mnew = [];
-	for (var i=0;i<matrix.length; i++) {
-	    for (var h=0;h<matrix[i].length;h++) {
-		if (! mnew[h]) {
-		    mnew[h] = [];
-		}
-		mnew[h][i] = matrix[i][h];
-	    }
-	}
-	
-	return mnew;
-    };
-
-    /*
       DATA LOADING UI
     */
     widget.loadDataUI = function () {
@@ -941,9 +1028,6 @@
 
 	     // metagenome selector
 	    html.push('<h5 style="margin-top: 0px;">metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
-	    
-	    // // already loaded data
-	    // html.push('<h5>data already loaded</h5><div id="availableData"></div>');
 
 	    // data progress
 	    html.push('<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; height: 230px; overflow-y: auto; width: 90%;"></div><div style="clear: both;">');
@@ -987,8 +1071,8 @@
 	widget.dataLoadParams.source = widget.sources[which][0];
     };
 
-    widget.taxonTitles = [ "domain", "phylum", "class", "order", "family", "genus", "species", "strain" ];
-    widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "eggNOG", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC"], "RNA": ["RDP", "LSU", "SSU", "ITS", "Greengenes"] };
+    widget.taxonTitles = [ "domain", "phylum", "className", "order", "family", "genus", "species", "strain" ];
+    widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "LSU", "SSU", "ITS", "Greengenes"] };
 
      widget.loadDone = function (container) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
@@ -1066,7 +1150,9 @@
 								source: source,
 								evalue: widget.cutoffThresholds.evalue,
 								identity: widget.cutoffThresholds.identity ,
-								alilength: widget.cutoffThresholds.length },
+								alilength: widget.cutoffThresholds.length,
+								taxFilter: {},
+								ontFilter: {} },
 						  created: Retina.date_string(new Date().getTime()),
 						  user: stm.user || "anonymous" };
 	    if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
@@ -1341,13 +1427,8 @@
     };
 
     // LOAD BACKGROUND DATA
-    widget.loadTaxonomy = function () {
+    widget.loadBackgroundData = function () {
 	var widget = this;
-
-	// jQuery.getJSON("data/taxonomy.full.json", function (data) {
-	//     stm.DataStore.taxonomy = data;
-	//     Retina.WidgetInstances.metagenome_analysis[1].display();
-	// });
 	
 	JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
 	    if(err) {
@@ -1401,10 +1482,44 @@
 		    }
 		    
 		    stm.DataStore.taxonomy = out;
-		    Retina.WidgetInstances.metagenome_analysis[1].display();
+		    document.getElementById('data').innerHTML = 'loading ontology data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+		    jQuery.getJSON('data/ont.v1.json').then(function(d) {
+			stm.DataStore.ontology = d;
+			document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+			stm.updateHardStorage("analysis", { "ontology": true, "taxonomy": true }).then( function () {
+			    Retina.WidgetInstances.metagenome_analysis[1].display();
+			});
+		    });
 		});
 	    });
 	});
+    };
+
+    widget.testFunctions = function () {
+	var widget = this;
+
+	var profile = "mgm4448226.3_single_SEED";
+
+	var found = 0;
+	var notFound = {};
+	var p = stm.DataStore.profile[profile];
+	for (var i=0; i<p.rows.length; i++) {
+	    for (var h=0; h<p.rows[i].metadata['function'].length; h++) {
+		var func = p.rows[i].metadata['function'][h];
+		if (stm.DataStore.ontology.functions.hasOwnProperty(func)) {
+		    found++;
+		} else {
+		    if (notFound.hasOwnProperty(func)) {
+			notFound[func]++;
+		    } else {
+			notFound[func] = 1;
+		    }
+		}
+	    }
+	}
+	console.log(found);
+	console.log(Retina.keys(notFound).length);
+	console.log(notFound);
     };
 
 })();
