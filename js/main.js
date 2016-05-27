@@ -57,9 +57,11 @@ function initWebApp () {
 					    "myDataEnabled": true,
 					    "myDataLink": "mgmain.html?mgpage=mydata" });
 	});
-	Retina.load_widget({"name": "session", "resource": "Retina/widgets"}).then( function() {
-	    Retina.Widget.create('session', { "target": document.getElementById("session_space"), "noInfo": true });
-	});
+	if (page == 'analysis') {
+	    Retina.load_widget({"name": "profileManager", "resource": "Retina/widgets"}).then( function() {
+		Retina.Widget.create('profileManager', { "target": document.getElementById("session_space") });
+	    });
+	}
     });
 };
 
