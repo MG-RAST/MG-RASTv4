@@ -54,6 +54,7 @@
 
 	// the job template
 	var template = stm.DataStore.jobtemplate[1];
+	var templateShort = stm.DataStore.jobtemplateshort[1];
 
 	// get the names for the task ids and initialize the task counter
 	var tasklabels = [];
@@ -553,16 +554,23 @@
 					 if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
 					     prom.resolve();
 					 } else {
-					     jQuery.ajax( { dataType: "json",
-					 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					 		    headers: stm.authHeader,
-					 		    success: function(data) {
-					 			stm.DataStore.jobtemplate = { 1: data.data[0] };
-					 		    },
-					 		    error: function (xhr) {
-								Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-					 		    }
-					 		  } ).then(function(){ prom.resolve(); });
+					     jQuery.getJSON("data/jobtemplate.json", function (data) {
+						 stm.DataStore.jobtemplate = data;
+						 jQuery.getJSON("data/jobtemplate.json", function (data) {
+						     stm.DataStore.jobtemplateshort = data;
+						 }).then(function(){ prom.resolve(); });
+					     });
+					     // jQuery.ajax( { dataType: "json",
+					     // 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
+					     // 		    headers: stm.authHeader,
+					     // 		    success: function(data) {
+					     // 			stm.DataStore.jobtemplate = { 1: data.data[1] };
+					     // 			stm.DataStore.jobtemplateshort = { 1: data.data[0] };
+					     // 		    },
+					     // 		    error: function (xhr) {
+					     // 			Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+					     // 		    }
+					     // 		  } ).then(function(){ prom.resolve(); });
 					 }
 				     },
 				     error: function (xhr) {
@@ -640,7 +648,7 @@
 		jQuery.ajax( { dataType: "json",
 			       promise: p,
 			       date: d,
-			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
+			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&state=pending&state=in-progress&state=suspend&state=queued&userattr=bp_count",
 			       headers: stm.authHeader,
 			       success: function(data) {
 				   var bps = 0;
