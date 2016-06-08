@@ -54,6 +54,7 @@
 
 	// the job template
 	var template = stm.DataStore.jobtemplate[1];
+	var templateShort = stm.DataStore.jobtemplateshort[1];
 
 	// get the names for the task ids and initialize the task counter
 	var tasklabels = [];
@@ -148,6 +149,9 @@
 
 		// count the current task
 		if (jobsactive[i].state[h] == "in-progress") {
+		    if (! taskcount.hasOwnProperty(jobsactive[i].task[h])) {
+			taskcount[jobsactive[i].task[h]] = [ 0, 0, 0, 0 ];
+		    }
 		    taskcount[jobsactive[i].task[h]][0]++;
 		    taskcount[jobsactive[i].task[h]][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
 		} else {
@@ -282,6 +286,8 @@
 	}
 	html += "</table>";
 
+	html += "<h4>state by submission date of running jobs</h4><div id='statebysubmission'></div>";
+
 	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
 	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
 
@@ -334,6 +340,36 @@
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  data: sdata }).render();
+
+	// state by date graph
+	var sbsdays = {};
+	for (var i=0; i<unfinishedJobs.length; i++) {
+	    var day = unfinishedJobs[i].submitChicago.substr(0,10);
+	    if (! sbsdays.hasOwnProperty(day)) {
+		sbsdays[day] = { "in-progress": 0, "queued": 0, "pending": 0, "suspend": 0 };
+	    }
+	    sbsdays[day][unfinishedJobs[i].state[0]]++;
+	}
+	var datelabels = Retina.keys(sbsdays).sort();
+	var sbsdata = [{ name: "queued", data: [] },{ name: "suspend", data: [] },{ name: "in-progress", data: [] },{ name: "pending", data: [] }];
+	for (var i=0; i<datelabels.length; i++) {
+	    
+	    sbsdata[0].data.push(sbsdays[datelabels[i]]["queued"]);
+	    sbsdata[1].data.push(sbsdays[datelabels[i]]["suspend"]);
+	    sbsdata[2].data.push(sbsdays[datelabels[i]]["in-progress"]);
+	    sbsdata[3].data.push(sbsdays[datelabels[i]]["pending"]);
+	    
+	}
+	Retina.Renderer.create("graph", { target: document.getElementById('statebysubmission'),
+					  width: 3000,
+					  data: sbsdata,
+					  unnormalized: true,
+					  chartArea: [100, 50, 2800, 300],
+					  x_labels: datelabels,
+					  show_legend: true,
+					  legendArea: [2810, 100, 3000, 350 ],
+					  x_labels_rotation: "-45",
+					  type: "stackedColumn" }).render();
 	
 	// task graph s
 	var tdatar = [ { name: "running", data: [] } ];
@@ -550,16 +586,23 @@
 					 if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
 					     prom.resolve();
 					 } else {
-					     jQuery.ajax( { dataType: "json",
-					 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					 		    headers: stm.authHeader,
-					 		    success: function(data) {
-					 			stm.DataStore.jobtemplate = { 1: data.data[0] };
-					 		    },
-					 		    error: function (xhr) {
-								Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-					 		    }
-					 		  } ).then(function(){ prom.resolve(); });
+					     jQuery.getJSON("data/jobtemplate.json", function (data) {
+						 stm.DataStore.jobtemplate = data;
+						 jQuery.getJSON("data/jobtemplate.json", function (data) {
+						     stm.DataStore.jobtemplateshort = data;
+						 }).then(function(){ prom.resolve(); });
+					     });
+					     // jQuery.ajax( { dataType: "json",
+					     // 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
+					     // 		    headers: stm.authHeader,
+					     // 		    success: function(data) {
+					     // 			stm.DataStore.jobtemplate = { 1: data.data[1] };
+					     // 			stm.DataStore.jobtemplateshort = { 1: data.data[0] };
+					     // 		    },
+					     // 		    error: function (xhr) {
+					     // 			Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+					     // 		    }
+					     // 		  } ).then(function(){ prom.resolve(); });
 					 }
 				     },
 				     error: function (xhr) {
@@ -637,7 +680,7 @@
 		jQuery.ajax( { dataType: "json",
 			       promise: p,
 			       date: d,
-			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&userattr=bp_count",
+			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&state=pending&state=in-progress&state=suspend&state=queued&userattr=bp_count",
 			       headers: stm.authHeader,
 			       success: function(data) {
 				   var bps = 0;
