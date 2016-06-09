@@ -25,7 +25,7 @@
 
 	if (stm.user) {
 
-            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
+            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><div id="longtermgraph2"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -286,8 +286,6 @@
 	}
 	html += "</table>";
 
-	html += "<h4>state by submission date of running jobs</h4><div id='statebysubmission'></div>";
-
 	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
 	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
 
@@ -340,36 +338,6 @@
 					  chartArea: [0.1, 0.1, 0.95, 0.7],
 					  x_labels_rotation: "-25",
 					  data: sdata }).render();
-
-	// state by date graph
-	var sbsdays = {};
-	for (var i=0; i<unfinishedJobs.length; i++) {
-	    var day = unfinishedJobs[i].submitChicago.substr(0,10);
-	    if (! sbsdays.hasOwnProperty(day)) {
-		sbsdays[day] = { "in-progress": 0, "queued": 0, "pending": 0, "suspend": 0 };
-	    }
-	    sbsdays[day][unfinishedJobs[i].state[0]]++;
-	}
-	var datelabels = Retina.keys(sbsdays).sort();
-	var sbsdata = [{ name: "queued", data: [] },{ name: "suspend", data: [] },{ name: "in-progress", data: [] },{ name: "pending", data: [] }];
-	for (var i=0; i<datelabels.length; i++) {
-	    
-	    sbsdata[0].data.push(sbsdays[datelabels[i]]["queued"]);
-	    sbsdata[1].data.push(sbsdays[datelabels[i]]["suspend"]);
-	    sbsdata[2].data.push(sbsdays[datelabels[i]]["in-progress"]);
-	    sbsdata[3].data.push(sbsdays[datelabels[i]]["pending"]);
-	    
-	}
-	Retina.Renderer.create("graph", { target: document.getElementById('statebysubmission'),
-					  width: 3000,
-					  data: sbsdata,
-					  unnormalized: true,
-					  chartArea: [100, 50, 2800, 300],
-					  x_labels: datelabels,
-					  show_legend: true,
-					  legendArea: [2810, 100, 3000, 350 ],
-					  x_labels_rotation: "-45",
-					  type: "stackedColumn" }).render();
 	
 	// task graph s
 	var tdatar = [ { name: "running", data: [] } ];
@@ -683,6 +651,7 @@
 			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&state=pending&state=in-progress&state=suspend&state=queued&userattr=bp_count",
 			       headers: stm.authHeader,
 			       success: function(data) {
+				   var states = { "in-progress": 0, "completed": 0, "pending": 0, "suspend": 0, "queued": 0 };
 				   var bps = 0;
 				   var min = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
 				   var max = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
@@ -691,8 +660,9 @@
 				       max = s > max ? s : max;
 				       min = s < min ? s : min;
 				       bps += s;
+				       states[data.data[i].state[0]]++;
 				   }
-				   stm.DataStore.longTermJobData[this.date] = { id: this.date, num: data.data.length, bp: bps, min: min, max: max };
+				   stm.DataStore.longTermJobData[this.date] = { id: this.date, num: data.data.length, bp: bps, min: min, max: max, states: states };
 				   this.promise.resolve();
 			       },
 			       error: function (xhr) {
@@ -723,11 +693,24 @@
 			 //{ name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
 			 { name: "average jobsize (Mbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
 		       ];
+	var longdata2 = [ { name: "completed", data: [] },
+			  { name: "suspend", data: [] },
+			  { name: "in-progress", data: [] },
+			  { name: "pending", data: [] },
+			  { name: "queued", data: [] } ];
 	var sumbp = 0;
 	for (var i=0; i<months.length; i++) {
 	    var item = d[months[i]];
 	    longdata[0].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000000).formatString(3, null, "")));
 	    longdata[1].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000 / item.num).formatString(3, null, "")));
+	    if (! item.legacy) {
+		longdata2[0].data.push(item.states["completed"]);
+		longdata2[1].data.push(item.states["suspend"]);
+		longdata2[2].data.push(item.states["in-progress"]);
+		longdata2[3].data.push(item.states["pending"]);
+		longdata2[4].data.push(item.states["queued"]);
+	    }
+	    
 	    //sumbp += item.legacy ? (item.bp * 1000000000) : item.bp;
 	    //longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
 	}
@@ -738,10 +721,22 @@
 					  y_title: "submitted data (Gbp)",
 					  y2_title: "average jobsize (Mbp)",
 					  x_labels: months,
-					  width: 950,
+					  width: 1100,
 					  chartArea: [100, 0.1, 850, 0.7],
 					  x_labels_rotation: "-35",
 					  type: "column" }).render();
+	
+	Retina.Renderer.create("graph", { target: document.getElementById('longtermgraph2'),
+					  data: longdata2,
+					  unnormalized: true,
+					  show_legend: true,
+					  x_labels: months.slice(32),
+					  width: 1100,
+					  height: 500,
+					  chartArea: [100, 0.1, 850, 0.7],
+					  legendArea: [860,0.1,1100,0.7],
+					  x_labels_rotation: "-35",
+					  type: "stackedColumn" }).render();
     };
 
     // USERS
