@@ -373,7 +373,7 @@ li.active > a.tab-light {
     border-bottom: 1px solid #dddddd;
     padding-bottom: 20px;
     border-radius: 4px;
-    height: 585px;
+    min-height: 585px;
     overflow-y: auto;
 }
 

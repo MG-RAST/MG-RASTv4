@@ -64,7 +64,7 @@
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
 	    if (project.status == 'private') {
-		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.open(\"mgmain.html?mgpage=share\");' title='show sharing options'><i class='icon icon-share'></i></button>Private Study: "+project.name+"</h3>";
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.open(\"mgmain.html?mgpage=share&project="+widget.id+"\");' title='show sharing options'><i class='icon icon-share'></i></button>Private Study: "+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
@@ -91,8 +91,8 @@
 	    var url = RetinaConfig.mgrast_ftp+"/metagenome/";
 	    for (var i=0; i<project.metagenomes.length; i++) {
 		var mg = project.metagenomes[i];
-		var row = [ "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.metagenome_id+"</a>",
-			    "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.name+"</a>",
+		var row = [ project.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.metagenome_id+"</a>",
+			    "<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap("mgm"+mg.metagenome_id) : mg.metagenome_id)+"' target=_blank>"+mg.name+"</a>",
 			    mg.basepairs,
 			    mg.sequences,
 			    mg.biome,

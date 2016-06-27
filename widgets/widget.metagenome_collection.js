@@ -86,8 +86,8 @@
 	var url = RetinaConfig.mgrast_ftp+"/metagenome/";
 	for (var i=0; i<widget.data.length; i++) {
 	    var mg = widget.data[i];
-	    var row = [ "<a href='?mgpage=overview&metagenome="+mg.id+"' target=_blank>"+mg.id+"</a>",
-			"<a href='?mgpage=overview&metagenome="+mg.id+"' target=_blank>"+mg.name+"</a>",
+	    var row = [ mg.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.metagenome_id+"</a>",
+			"<a href='?mgpage=overview&metagenome="+(mg.status == "private" ? Retina.idmap("mgm"+mg.metagenome_id) : mg.metagenome_id)+"' target=_blank>"+mg.name+"</a>",
 			"<a href='?mgpage=project&project="+mg.project_id+"' target=_blank>"+mg.project_name+"</a>",
 			mg.bp_count_preprocessed_l,
 			mg.sequence_count_preprocessed_l,
