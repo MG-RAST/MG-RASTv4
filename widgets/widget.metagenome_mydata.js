@@ -550,7 +550,7 @@
 		}
 		task.title = "metagenome publication";
 		task.status = task.overdue ? "error": "info";
-		task.link = "?mgpage=overview&metagenome="+task.metagenome_id;
+		task.link = "?mgpage=overview&metagenome="+Retina.idmap(task.metagenome_id);
 		task.message = task.metagenome_name + " publication "+(task.overdue ? "was" : "is")+" due "+task.duedate+"."+(task.overdue ? "<br>"+task.overdue : "");
 
 		if (! project_prios.hasOwnProperty(task.project_id)) {

@@ -441,7 +441,7 @@
 		if (RetinaConfig.v3) {
 		    html += "<p>The result data is available for download on the <a href='"+RetinaConfig.v3CGIUrl+"?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='"+RetinaConfig.v3CGIUrl+"?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
 		} else {
-		    html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+job.info.userattr.id+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+job.info.userattr.id+"' target=_blank>metagenome overview page</a>.</p>";
+		    html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+Retina.idmap(job.info.userattr.id)+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+Retina.idmap(job.info.userattr.id)+"' target=_blank>metagenome overview page</a>.</p>";
 		}
 	    }
 	    html += "</p>";
@@ -485,7 +485,7 @@
     widget.errorHandling = function (job) {
 	var widget = this;
 
-	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
+	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+Retina.idmap(job.info.userattr.id))+"' target=_blank>contact our support team</a>.";
 
 	// check if the failure was recent
 	if (Date.now() - Date.parse(job.updatetime) < (48 * 60 * 60 * 1000)) {
@@ -494,7 +494,7 @@
 
 	// SHOCK server was unavailable
 	if (job.notes.match(/lookup shock\.metagenomics.anl\.gov\: no such host/)) {
-	    html = "but the error was likely transient. You can try to <a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"resume\", \""+job.id+"\");'>resume</a> it. If resuming fails, please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+job.info.userattr.id)+"' target=_blank>contact our support team</a>.";
+	    html = "but the error was likely transient. You can try to <a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].adminAction(\"resume\", \""+job.id+"\");'>resume</a> it. If resuming fails, please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+Retina.idmap(job.info.userattr.id))+"' target=_blank>contact our support team</a>.";
 	}
 
 	return html;

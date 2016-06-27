@@ -25,7 +25,7 @@
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
 
 	if (Retina.cgiParam('metagenome')) {
-	    widget.id = Retina.cgiParam('metagenome');
+	    widget.id = Retina.cgiParam('metagenome').match(/^mgm/) ? Retina.cgiParam('metagenome') : Retina.idmap(Retina.cgiParam('metagenome'));
 	    if (! widget.id.match(/^mgm/)) {
 		widget.id = "mgm"+widget.id;
 	    }
@@ -409,6 +409,7 @@
 	if (mg.status == "public") {
 	    mg.staticLink = "<a href='http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"' title='static link'>http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"</a>";
 	} else {
+	    mg.id = Retina.idmap(mg.id);
 	    mg.staticLink = 'private metagenomes cannot be linked';	    
 	}
     };

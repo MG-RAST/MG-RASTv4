@@ -29,12 +29,10 @@
 
 	// get the requested metagenome id
 	if (Retina.cgiParam('metagenome')) {
-	    widget.id = Retina.cgiParam('metagenome');
+	    widget.id = Retina.cgiParam('metagenome').match(/^mgm/) ? Retina.cgiParam('metagenome') : Retina.idmap(Retina.cgiParam('metagenome'));
 	    if (! widget.id.match(/^mgm/)) {
 		widget.id = "mgm"+widget.id;
 	    }
-	} else {
-	    widget.id = "mgm4698514.3";
 	}
 
 	// check if we have data, if not, get it first
@@ -162,6 +160,10 @@
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_receipt[1];
 		widget.metagenome = data;
+		if (! data.hasOwnProperty('submission')) {
+		    widget.target.innerHTML = "<div class='alert'>The processing receipt is only available for metagenomes processed after May 1st 2016.</div>";
+		    return;
+		}
 		
 	    	jQuery.ajax({
 	    	    method: "GET",

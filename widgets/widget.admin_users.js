@@ -176,7 +176,7 @@
 			  for (var i=0; i<data.rights.length; i++) {
 			      var data_id = data.rights[i].data_id;
 			      if (data.rights[i].data_type == 'metagenome') {
-				  data_id = '<a href="mgmain.html?mgpage=overview&metagenome='+data_id+'" target=_blank>'+data_id+'</a>';
+				  data_id = '<a href="mgmain.html?mgpage=overview&metagenome='+Retina.idmap(data_id)+'" target=_blank>'+data_id+'</a>';
 			      }
 			      html += '<tr><td>'+data.rights[i].name+'</td><td>'+data.rights[i].data_type+'</td><td>'+data_id+'</td><td>'+data.rights[i].granted+'</td><td>'+data.rights[i].delegated+'</td></tr>';
 			  }
