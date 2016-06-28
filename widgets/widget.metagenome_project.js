@@ -91,8 +91,9 @@
 	    var url = RetinaConfig.mgrast_ftp+"/metagenome/";
 	    for (var i=0; i<project.metagenomes.length; i++) {
 		var mg = project.metagenomes[i];
-		var row = [ project.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mg.metagenome_id+"' target=_blank>"+mg.metagenome_id+"</a>",
-			    "<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap("mgm"+mg.metagenome_id) : mg.metagenome_id)+"' target=_blank>"+mg.name+"</a>",
+		var mgid = mg.metagenome_id.match(/^mgm/) ? mg.metagenome_id : "mgm"+mg.metagenome_id;
+		var row = [ project.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
+			    "<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap(mgid) : mgid)+"' target=_blank>"+mg.name+"</a>",
 			    mg.basepairs,
 			    mg.sequences,
 			    mg.biome,

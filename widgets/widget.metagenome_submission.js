@@ -504,7 +504,7 @@
 </div>\
 <p>Please note that only private data can be deleted.</p>\
 <div style="height:10px;" class="clear"></div>\
-<div class="control-group"><label class="control-label" for="submitEBI"><b>submit to EBI</b></label><div class="controls"><label class="checkbox"><input id="submitEBI" name="submitEBI" value="submitEBI" type="checkbox" checked>In addition to submitting this project to MG-RAST, also submit to the <a target="blank" href="http://www.ebi.ac.uk/submission/">EBI pipeline</a>.</label></div>\
+<div class="control-group"><label class="control-label" for="submitEBI"><b>submit to EBI</b></label><div class="controls"><label class="checkbox"><input id="submitEBI" name="submitEBI" value="submitEBI" type="checkbox" checked>In addition to submitting this project to MG-RAST, also submit to the <a target="blank" href="http://www.ebi.ac.uk/submission/">EBI archive</a>.</label></div>\
 <div style="height:10px;" class="clear"></div>\
 <div style="margin-bottom: 20px; text-align: center;"><img src="Retina/images/waiting.gif" style="display: none; width: 24px;" id="submit_job_waiting"><input type="button" id="submit_job_button" disabled="" onclick="Retina.WidgetInstances.metagenome_submission[1].submit_job();" value="submit job" class="btn"><span style="margin-left: 20px;"><b>Note: You must complete all previous steps to enable submission.</b></span></div>\
 <p>Upon successful submission, MG-RAST IDs ("Accession numbers") will be automatically assigned to your datasets and data files will be removed from your inbox.</p>';
