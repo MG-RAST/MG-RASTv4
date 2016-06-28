@@ -29,7 +29,11 @@
 
 	// get the requested metagenome id
 	if (Retina.cgiParam('metagenome')) {
-	    widget.id = Retina.cgiParam('metagenome').match(/^mgm/) ? Retina.cgiParam('metagenome') : Retina.idmap(Retina.cgiParam('metagenome'));
+	    var id = Retina.cgiParam('metagenome');
+	    if (id.length < 15 && ! id.match(/^mgm/)) {
+		id = "mgm"+id;
+	    }
+	    widget.id = id.match(/^mgm/) ? id : Retina.idmap(id);
 	    if (! widget.id.match(/^mgm/)) {
 		widget.id = "mgm"+widget.id;
 	    }
