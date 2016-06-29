@@ -158,13 +158,14 @@
     	container.innerHTML = html;
 
 	/* TEST */
-	if (widget.currentType == "barchart") {
-	    widget.graph.settings.target = document.getElementById("visualizeTarget");
-	    jQuery.extend(widget.graph.settings, widget.testVis);
-	    widget.graph.settings.data = stm.DataStore.dataContainer[widget.selectedContainer].matrix;
-	    widget.graph.render();
-	    return;
-	}
+	
+	// if (widget.currentType == "barchart") {
+	//     widget.graph.settings.target = document.getElementById("visualizeTarget");
+	//     jQuery.extend(widget.graph.settings, widget.testVis);
+	//     widget.graph.settings.data = stm.DataStore.dataContainer[widget.selectedContainer].matrix;
+	//     widget.graph.render();
+	//     return;
+	// }
 
 	/* TEST END */
 
