@@ -24,7 +24,7 @@
     widget.cutoffThresholds = {
 	"evalue": 5,
 	"identity": 60,
-	"length": 15
+	"alilength": 15
     };
 
     widget.context = "none";
@@ -62,9 +62,10 @@
 	tools.setAttribute('style', 'padding: 10px;');
 
 	// check the context
-	var toolshtml = "<h4>Data</h4>";
+	var toolshtml = "<h4>Data Containers</h4>";
 	toolshtml += "<div id='availableContainers'></div>";
-	toolshtml += "<hr style='clear: both; margin-top: 15px;'>";
+	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
+	toolshtml += "<div id='currentContainerParams'></div>";
 	toolshtml += "<h4>View</h4>";
 	toolshtml += "<div id='visualContainerSpace'></div>";
 	toolshtml += "<h4>Export</h4>";
@@ -128,7 +129,7 @@
     	var container = document.getElementById('visualize');
 
     	if (type == "container") {
-    	    widget.editContainer();
+    	    widget.showCurrentContainerParams();
     	    return;
     	}
 
@@ -157,13 +158,13 @@
     	container.innerHTML = html;
 
 	/* TEST */
-	// if (widget.currentType == "barchart") {
-	//     widget.graph.settings.target = document.getElementById("visualizeTarget");
-	//     jQuery.extend(widget.graph.settings, widget.testVis);
-	//     widget.graph.settings.data = stm.DataStore.dataContainer[widget.selectedContainer].matrix;
-	//     widget.graph.render();
-	//     return;
-	// }
+	if (widget.currentType == "barchart") {
+	    widget.graph.settings.target = document.getElementById("visualizeTarget");
+	    jQuery.extend(widget.graph.settings, widget.testVis);
+	    widget.graph.settings.data = stm.DataStore.dataContainer[widget.selectedContainer].matrix;
+	    widget.graph.render();
+	    return;
+	}
 
 	/* TEST END */
 
@@ -179,163 +180,6 @@
     	if (widget.selectedContainer) {
     	    widget.updateVis();
     	}
-    };
-
-    widget.editContainer = function () {
-	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-
-	var container = document.getElementById('visualize');
-	var html = [];
-	var onts = { "Subsystems": true, "KO": true, "COG": true, "NOG": true };
-	if (widget.selectedContainer) {
-	    html.push("<h3>edit data container<button class='btn btn-danger' style='float: right;' title='delete data container' onclick='if(confirm(\"Really delete this data container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button></h3><p>Here you can view and modify the settings of the selected data container.</p>")
-	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
-	    
-	    html.push("<table>");
-	    html.push("<tr><td style='height: 30px; width: 200px;'>name</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.id+"'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].renameContainer(this.previousSibling.value);'>update</button></div></td></tr>");
-	    var uname = typeof c.user == "object" ? c.user.firstname+" "+c.user.lastname+" ("+c.user.login+")" : c.user;
-	    html.push("<tr><td style='height: 30px;'>created</td><td>"+c.created+"</td></tr>");
-	    html.push("<tr><td style='height: 30px;'>by</td><td>"+uname+"</td></tr>");
-	    html.push("<tr><td style='height: 30px;'>sources</td><td>"+c.parameters.sources.join(", ")+"</td></tr></table>");
-
-	    html.push('<h4>Filter Parameters</h4>');
-	    
-	    html.push("<table><tr><td style='height: 30px; width: 200px;'>e-value</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.evalue+"' class='span3' id='containerParamevalue'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"evalue\",this.previousSibling.value);'>update</button></div></td></tr>");
-	    html.push("<tr><td style='height: 30px;'>%-identity</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.identity+"' class='span3' id='containerParamidentity'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"identity\",this.previousSibling.value);'>update</button></div></td></tr>");
-	    html.push("<tr><td style='padding-right: 20px; height: 30px;'>alignment length</td><td><div class='input-append' style='margin-bottom: 0px;'><input type='text' value='"+c.parameters.alilength+"' class='span3' id='containerParamlength'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"alilength\",this.previousSibling.value);'>update</button></div></td></tr>");
-	    
-	    var taxSelect = "<select id='taxType' style='width: 120px;'>";
-	    for (var i=0; i<c.parameters.sources.length; i++) {
-		taxSelect += "<option>"+c.parameters.sources[i]+"</option>";
-	    }
-	    taxSelect += "</select><br>";
-	    taxSelect += "<select id='displayTaxSelect' style='width: 120px;"+(c.parameters.displayType == 'function' ? " display: none;" : "")+"' onchange='if(this.selectedIndex<6){jQuery(\"#taxText\").data(\"typeahead\").source=stm.DataStore.taxonomy[this.options[this.selectedIndex].value];}else{jQuery(\"#taxText\").data(\"typeahead\").source=[];}'>";
-	    var taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];
-	    for (var i=0; i<taxLevels.length; i++) {
-		var sel = "";
-		if (taxLevels[i] == c.parameters.displayLevel) {
-		    sel = " selected=selected";
-		}
-		taxSelect += "<option value='"+taxLevels[i]+"'>"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
-	    }
-	    taxSelect += "</select>";
-	    
-	    var taxFilter = taxSelect + "<div class='input-append'><input type='text' autocomplete='off' id='taxText'><button class='btn' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"add\", document.getElementById(\"taxType\").options[document.getElementById(\"taxType\").selectedIndex].value, this.parentNode.previousSibling.options[this.parentNode.previousSibling.selectedIndex].value, document.getElementById(\"taxText\").value);'>add</button></div>";
-	    html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>taxonomy filters</td><td>"+taxFilter+"</td></tr>");
-
-	    html.push("<tr><td colspan=2>");
-	    for (var i=0; i<c.parameters.taxFilter.length; i++) {
-		html.push("<button class='btn btn-mini btn-danger' style='margin-right: 15px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"remove\", \""+i+"\");'><i class='icon icon-remove'></i> "+c.parameters.sources[c.parameters.taxFilter[i].source] + " - " + c.parameters.taxFilter[i].level + " - " + c.parameters.taxFilter[i].value+"</button>");
-	    }
-	    html.push("</td></tr>");
-
-	    var ontLevels = { "Subsystems": ["level1","level2","level3","functions"], "KO": ["level1","level2","level3","functions"], "COG": ["level1","level2","functions"], "NOG": ["level1","level2","functions"] };
-	    var ontTypeSelect = '<select style="width: 120px;" id="ontType" onchange="';
-	    for (var i=0; i<onts.length; i++) {
-		ontTypeSelect += 'document.getElementById(\''+onts[i]+'SelectDiv\').style.display=\'none\';';
-	    }
-	    ontTypeSelect += 'document.getElementById(this.options[this.selectedIndex].value+\'SelectDiv\').style.display=\'\';">';
-	    var ontSelects = [];
-	    for (var i=0; i<c.parameters.sources.length; i++) {
-		if (onts[c.parameters.sources[i]]) {
-		    ontTypeSelect += "<option>"+c.parameters.sources[i]+"</option>";
-		    ontSelects.push('<div id="'+c.parameters.sources[i]+'SelectDiv" style="'+(ontSelects.length ? "display: none;" : "")+'"><select style="width: 120px;" id="'+c.parameters.sources[i]+'Select" onchange="jQuery(\'#'+c.parameters.sources[i]+'SelectText\').data(\'typeahead\').source=stm.DataStore.ontology[\''+c.parameters.sources[i]+'\'][this.options[this.selectedIndex].value];">');
-		    for (var h=0; h<ontLevels[c.parameters.sources[i]].length; h++) {
-			ontSelects.push('<option>'+ontLevels[c.parameters.sources[i]][h]+'</option>');
-		    }
-		    ontSelects.push('</select><div class="input-append"><input type="text" id="'+c.parameters.sources[i]+'SelectText" autocomplete="off"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'ontFilter\', \'add\', document.getElementById(\'ontType\').options[document.getElementById(\'ontType\').selectedIndex].value,this.parentNode.previousSibling.options[this.parentNode.previousSibling.selectedIndex].value, document.getElementById(\''+c.parameters.sources[i]+'SelectText\').value);">add</button></div></div>');
-		}
-	    }
-	    ontTypeSelect += '</select>';
-
-	    if (ontSelects.length) {
-		html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>functional hierarchy filters</td><td>"+ontTypeSelect+ontSelects.join("")+"</td></tr>");
-		
-		html.push("<tr><td colspan=2>");
-		for (var i=0; i<c.parameters.ontFilter.length; i++) {
-		    html.push("<button class='btn btn-mini btn-danger' style='margin-right: 15px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"ontFilter\", \"remove\", \""+i+"\");'><i class='icon icon-remove'></i> "+c.parameters.sources[c.parameters.ontFilter[i].source] + " - " + c.parameters.ontFilter[i].level + " - " + c.parameters.ontFilter[i].value+"</button>");
-		}
-		html.push("</td></tr>");
-	    }
-	    
-	    html.push("</table>");
-
-	    html.push('<h4>Display Parameters</h4>');
-	    html.push('<table>');
-
-	    var mdSelect = [ "<select onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"metadatum\",this.options[this.selectedIndex].value);'>" ];
-	    var mdkeys = Retina.keys(c.items[0]).sort();
-	    for (var i=0; i<mdkeys.length; i++) {
-		var sel = "";
-		if (mdkeys[i] == c.parameters.metadatum) {
-		    sel = " selected=selected";
-		}
-		mdSelect.push("<option"+sel+">"+mdkeys[i]+"</option>");
-	    }
-	    mdSelect.push('</select>');
-
-	    html.push("<tr><td style='vertical-align: top; padding-top: 5px; height: 30px; width: 200px;'>display source</td><td><select onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displaySource\",this.selectedIndex);'>");
-	    for (var i=0; i<c.parameters.sources.length; i++) {
-		var sel = "";
-		if (i == c.parameters.displaySource) {
-		    sel = " selected=selected";
-		}
-		if (c.parameters.displayType == "function" && i==0) {
-		    sel = " disabled=disabled";
-		}
-		html.push("<option"+sel+">"+c.parameters.sources[i]+"</option>");
-	    }
-	    html.push("</select></td></tr>");
-
-	    html.push("<tr><td style='vertical-align: top; padding-top: 5px; height: 30px; width: 200px;'>display type</td><td><select onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
-
-	    var displayLevelSelect = "<select onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
-	    if (c.parameters.displayType == "taxonomy") {
-		for (var i=0; i<taxLevels.length; i++) {
-		    var sel = "";
-		    if (taxLevels[i] == c.parameters.displayLevel) {
-			sel = " selected=selected";
-		    }
-		    displayLevelSelect += "<option value='"+taxLevels[i]+"'>"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
-		}
-	    } else {
-		for (var i=0; i<ontLevels[c.parameters.sources[1]].length; i++) {
-		    var sel = "";
-		    if (ontLevels[c.parameters.sources[1]][i] == c.parameters.displayLevel) {
-			sel = " selected=selected";
-		    }
-		    displayLevelSelect += '<option'+sel+'>'+ontLevels[c.parameters.sources[1]][i]+'</option>';
-		}
-	    }
-	    displayLevelSelect += "</select>";
-	    
-	    html.push("<tr><td style='vertical-align: top; padding-top: 5px; height: 30px; width: 200px;'>display level</td><td>"+displayLevelSelect+"</td></tr>");
-	    html.push("<tr><td style='vertical-align: top; padding-top: 5px;'>metadatum</td><td>"+mdSelect.join('')+"</td></tr>");
-
-	    html.push('</table>');
-	    
-	    html.push('<h4>Result Sets</h4>');
-
-	    html.push("<table><th style='text-align: left;'>name</th><th style='text-align: right; padding-left: 100px;'># total hits</th></tr>");
-	    for (var i=0; i<c.items.length; i++) {
-		html.push("<tr><td>"+c.items[i].name+"</td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
-	    }
-	    html.push("</table>");
-	} else {
-	    html.push("<p>You currently have no data loaded. To do so, click the <span style='border: 1px solid black; border-radius: 3px; padding-bottom: 2px; padding-left: 5px; padding-right: 4px; font-weight: bold;'>+</span> icon on the right.</p>");
-	    document.getElementById('addDataIcon').className = "tool glow";
-	}
-
-	container.innerHTML = html.join("");
-	if (widget.selectedContainer) {
-	    
-	    jQuery("#taxText").typeahead({"source": stm.DataStore.taxonomy.domain});
-	    for (var i=0; i<c.parameters.sources.length; i++) {
-		if (onts[c.parameters.sources[i]]) {
-		    jQuery("#"+c.parameters.sources[i]+"SelectText").typeahead({"source": stm.DataStore.ontology[c.parameters.sources[i]].level1});
-		}
-	    }
-	}
     };
 
     widget.removeDataContainer = function () {
@@ -392,7 +236,13 @@
 	// check if this is a numerical filter
 	else if (param == "evalue" || param == "identity" || param == "alilength") {
 	    container.parameters[param] = parseFloat(value);
-	} else {
+	}
+	else if (param =="default") {
+	    container.parameters.evalue = widget.cutoffThresholds.evalue;
+	    container.parameters.identity = widget.cutoffThresholds.identity;
+	    container.parameters.alilength = widget.cutoffThresholds.alilength;
+	}
+	else {
 	    if (param == "displayType") {
 		if (value == "function") {
 		    container.parameters.displaySource = 1;
@@ -407,7 +257,8 @@
 	widget.container2matrix();
 	
 	document.getElementById('visualize').removeAttribute('disabled');
-	widget.editContainer();
+	widget.showCurrentContainerParams();
+	widget.visualize(widget.currentType);
     };
     
     // change the container name
@@ -423,7 +274,7 @@
 		widget.selectedContainer = newName;
 		stm.DataStore.dataContainer[widget.selectedContainer].id = newName;
 		widget.showDataContainers();
-		widget.editContainer();
+		widget.showCurrentContainerParams();
 	    }
 	} else {
 	    alert("you did not choose a name");
@@ -506,28 +357,228 @@
 
     // display all current data containers
     widget.showDataContainers = function () {
-	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	var widget = this;
 
 	var container = document.getElementById('availableContainers');
 
 	if (container) {
 	    var html = "";
 	    if (stm.DataStore.hasOwnProperty('dataContainer') && Retina.keys(stm.DataStore.dataContainer).length) {
+		widget.showCurrentContainerParams();
 		var keys = Retina.keys(stm.DataStore.dataContainer).sort();
 		for (var i=0; i<keys.length; i++) {
 		    if (! widget.selectedContainer) {
 			widget.selectedContainer = keys[i];
 		    }
 		    var glow = "";
+		    var name = keys[i];
 		    if (keys[i] == widget.selectedContainer) {
 			glow = " glow";
+			name = "<span style='color: blue;'>"+name+"</span>";
 		    }
-		    html += "<div style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].visualize(\"container\");'><img src='Retina/images/data.png' class='tool"+glow+"'><br>"+keys[i]+"</div>";
+		    html += "<div title='click to select and edit data container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");'><img src='Retina/images/data.png' class='tool"+glow+"'><br>"+name+"</div>";
 		}
 		
 	    }
-	    html += "<div style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
+	    html += "<div title='create a new data container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
+	}
+    };
+
+    widget.showCurrentContainerParams = function () {
+	var widget = this;
+
+	// get some basic variables
+	var target = document.getElementById('currentContainerParams');
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var p = c.parameters;
+	var taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];
+	var ontLevels = { "Subsystems": ["level1","level2","level3","functions"], "KO": ["level1","level2","level3","functions"], "COG": ["level1","level2","functions"], "NOG": ["level1","level2","functions"] };
+
+	// container name
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete data container' onclick='if(confirm(\"Really delete this data container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();'><i class='icon icon-edit'></i></button></h4>" ];
+
+	// cutoffs
+	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\',this.nextSibling.value);">e-value</button><input id="evalueInput" type="text" value="'+p.evalue+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'identity\',this.nextSibling.value);">%-ident</button><input id="identityInput" type="text" value="'+p.identity+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'alilength\',this.nextSibling.value);">length</button><input id="alilenInput" type="text" value="'+p.alilength+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<button class="btn btn-mini" title="reset to defaults" style="position: relative; bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'default\')"><i class="icon icon-refresh"></i></button>');
+
+	// display params table
+	html.push('<table style="font-size: 12px;">');
+	
+	// metadatum
+	var mdSelect = [ "<tr><td style='width: 100px;'>metadatum</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"metadatum\",this.options[this.selectedIndex].value);'>" ];
+	var mdkeys = Retina.keys(c.items[0]).sort();
+	for (var i=0; i<mdkeys.length; i++) {
+	    var sel = "";
+	    if (mdkeys[i] == p.metadatum) {
+		sel = " selected=selected";
+	    }
+	    mdSelect.push("<option"+sel+">"+mdkeys[i]+"</option>");
+	}
+	mdSelect.push('</select></td></tr>');
+	html.push(mdSelect.join(''));
+
+	// source
+	html.push("<tr><td>source</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displaySource\",this.selectedIndex);'>");
+	for (var i=0; i<c.parameters.sources.length; i++) {
+	    var sel = "";
+	    if (i == c.parameters.displaySource) {
+		sel = " selected=selected";
+	    }
+	    if (c.parameters.displayType == "function" && i==0) {
+		    sel = " disabled=disabled";
+	    }
+	    html.push("<option"+sel+">"+c.parameters.sources[i]+"</option>");
+	}
+	html.push("</select></td></tr>");
+
+	// type
+	html.push("<tr><td>type</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
+
+	// level
+	var displayLevelSelect = "<select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
+	if (c.parameters.displayType == "taxonomy") {
+	    for (var i=0; i<taxLevels.length; i++) {
+		var sel = "";
+		if (taxLevels[i] == c.parameters.displayLevel) {
+		    sel = " selected=selected";
+		}
+		displayLevelSelect += "<option value='"+taxLevels[i]+"'>"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
+	    }
+	} else {
+	    for (var i=0; i<ontLevels[c.parameters.sources[1]].length; i++) {
+		var sel = "";
+		if (ontLevels[c.parameters.sources[1]][i] == c.parameters.displayLevel) {
+		    sel = " selected=selected";
+		}
+		displayLevelSelect += '<option'+sel+'>'+ontLevels[c.parameters.sources[1]][i]+'</option>';
+	    }
+	}
+	displayLevelSelect += "</select>";
+	html.push('<tr><td>level</td><td>'+displayLevelSelect+'</td></tr>');
+
+	html.push('</table>');
+
+	// filters
+	html.push("<button class='btn btn-mini' style='margin-right: 5px;' title='add filter' onclick='jQuery(\"#addFilterDiv\").toggle();'><i class='icon icon-filter'></i></button><div style='display: none; position: relative; bottom: 10px; left: 65px;' id='addFilterDiv'>");
+
+	// filter form
+
+	// filter source
+	html.push("<select id='taxType' style='margin-bottom: 2px; font-size: 12px; height: 27px;'>");
+	for (var i=0; i<c.parameters.sources.length; i++) {
+	    html.push("<option>"+c.parameters.sources[i]+"</option>");
+	}
+	html.push("</select>");
+	
+	// tax filter
+	html.push('<div id="taxFilterDiv">');
+	html.push("<select style='margin-bottom: 2px; font-size: 12px; height: 27px;' id='displayTaxSelect' onchange='if(this.selectedIndex<6){jQuery(\"#taxText\").data(\"typeahead\").source=stm.DataStore.taxonomy[this.options[this.selectedIndex].value];}else{jQuery(\"#taxText\").data(\"typeahead\").source=[];}'>");
+	for (var i=0; i<taxLevels.length; i++) {
+	    var sel = "";
+	    if (taxLevels[i] == c.parameters.displayLevel) {
+		sel = " selected=selected";
+	    }
+	    html.push("<option value='"+taxLevels[i]+"'>"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>");
+	}
+	html.push("</select>");
+	
+	html.push("<div class='input-append'><input type='text' autocomplete='off' id='taxText' style='margin-bottom: 0px; font-size: 12px; height: 17px; width: 160px;'><button class='btn' style='font-size: 12px; height: 27px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"add\", document.getElementById(\"taxType\").options[document.getElementById(\"taxType\").selectedIndex].value, this.parentNode.previousSibling.options[this.parentNode.previousSibling.selectedIndex].value, document.getElementById(\"taxText\").value);'>add</button></div>");
+	html.push('</div>');
+	
+	// ont filter
+	html.push('<div id="ontFilterDiv">');
+	var ontTypeSelect = [ '<select style="margin-bottom: 2px; font-size: 12px; height: 27px;" id="ontType" onchange="' ];
+	var onts = Retina.keys(ontLevels).sort();
+	for (var i=0; i<onts.length; i++) {
+	    ontTypeSelect.push('document.getElementById(\''+onts[i]+'SelectDiv\').style.display=\'none\';');
+	}
+	ontTypeSelect.push('document.getElementById(this.options[this.selectedIndex].value+\'SelectDiv\').style.display=\'\';">');
+	var ontSelects = [];
+	for (var i=0; i<c.parameters.sources.length; i++) {
+	    if (ontLevels.hasOwnProperty(c.parameters.sources[i])) {
+		ontTypeSelect.push("<option>"+c.parameters.sources[i]+"</option>");
+		ontSelects.push('<div id="'+c.parameters.sources[i]+'SelectDiv" style="'+(ontSelects.length ? "display: none;" : "")+'"><select style="margin-bottom: 2px; font-size: 12px; height: 27px;" id="'+c.parameters.sources[i]+'Select" onchange="jQuery(\'#'+c.parameters.sources[i]+'SelectText\').data(\'typeahead\').source=stm.DataStore.ontology[\''+c.parameters.sources[i]+'\'][this.options[this.selectedIndex].value];">');
+		for (var h=0; h<ontLevels[c.parameters.sources[i]].length; h++) {
+		    ontSelects.push('<option>'+ontLevels[c.parameters.sources[i]][h]+'</option>');
+		}
+		ontSelects.push('</select><div class="input-append"><input type="text" id="'+c.parameters.sources[i]+'SelectText" autocomplete="off" style="margin-bottom: 0px; font-size: 12px; height: 17px; width: 160px;"><button class="btn" style="font-size: 12px; height: 27px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'ontFilter\', \'add\', document.getElementById(\'ontType\').options[document.getElementById(\'ontType\').selectedIndex].value,this.parentNode.previousSibling.options[this.parentNode.previousSibling.selectedIndex].value, document.getElementById(\''+c.parameters.sources[i]+'SelectText\').value);">add</button></div></div>');
+	    }
+	}
+	ontTypeSelect.push('</select>');
+	html.push(ontTypeSelect.join('') + ontSelects.join(''));
+	html.push('</div>');
+	
+	// end filter form
+	html.push('</div>');
+	
+	var hasFilter = false;
+	
+	// ontology
+	for (var i=0; i<c.parameters.ontFilter.length; i++) {
+	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"ontFilter\", \"remove\", \""+i+"\");'>"+c.parameters.sources[c.parameters.ontFilter[i].source] + " - " + c.parameters.ontFilter[i].level + " - " + c.parameters.ontFilter[i].value+"</button>");
+	    hasFilter = true;
+	}
+
+	// taxonomy
+	for (var i=0; i<c.parameters.taxFilter.length; i++) {
+	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"remove\", \""+i+"\");'>"+c.parameters.sources[c.parameters.taxFilter[i].source] + " - " + c.parameters.taxFilter[i].level + " - " + c.parameters.taxFilter[i].value+"</button>");
+	    hasFilter = true;
+	}
+
+	if (! hasFilter) {
+	    html.push('<span style="font-size: 12px;"> - no filter -</span>');
+	}
+	
+	// result data
+	html.push("<table style='font-size: 12px; width: 322px;'><th style='text-align: left;'>ID</th><th style='text-align: right; padding-left: 100px;'>hits</th></tr>");
+	for (var i=0; i<c.items.length; i++) {
+	    html.push("<tr><td title='"+c.items[i].name+"'>"+c.items[i].id+"</td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
+	}
+	html.push("</table>");
+	
+	html.push("<hr>");
+
+	target.innerHTML = html.join("");
+
+	// attach events
+	document.getElementById('containerIDInput').onkeyup = function (e) {
+	    e = e || window.event;
+
+	    if (e.keyCode==13) {
+		Retina.WidgetInstances.metagenome_analysis[1].renameContainer(this.value);
+	    } else if (e.keyCode==27) {
+		document.getElementById("toggleEditContainerName").click();
+	    }
+	};
+	document.getElementById('evalueInput').onkeyup = function (e) {
+	    e = e || window.event;
+
+	    if (e.keyCode==13) {
+		this.previousSibling.click();
+	    }
+	};
+	document.getElementById('identityInput').onkeyup = function (e) {
+	    e = e || window.event;
+
+	    if (e.keyCode==13) {
+		this.previousSibling.click();
+	    }
+	};
+	document.getElementById('alilenInput').onkeyup = function (e) {
+	    e = e || window.event;
+
+	    if (e.keyCode==13) {
+		this.previousSibling.click();
+	    }
+	};
+	jQuery("#taxText").typeahead({"source": stm.DataStore.taxonomy.domain});
+	for (var i=0; i<c.parameters.sources.length; i++) {
+	    if (ontLevels.hasOwnProperty(c.parameters.sources[i])) {
+		jQuery("#"+c.parameters.sources[i]+"SelectText").typeahead({"source": stm.DataStore.ontology[c.parameters.sources[i]].level1});
+	    }
 	}
     };
 
@@ -651,7 +702,7 @@
 	if (c.parameters.identity > widget.cutoffThresholds['identity']) {
 	    filters.push([ 3, c.parameters.identity ]);
 	}
-	if (c.parameters.alilength > widget.cutoffThresholds['length']) {
+	if (c.parameters.alilength > widget.cutoffThresholds['alilength']) {
 	    filters.push([ 4, c.parameters.alilength ]);
 	}
 	
@@ -1061,7 +1112,7 @@
 
 	if (container.status == "ready") {
 	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
-	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(\'container\');document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
+	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(\'matrix\');document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
 	    widget.selectedContainer = container.id;
 	    document.getElementById('dataprogress').innerHTML = html;
 	    widget.container2matrix();
@@ -1139,7 +1190,7 @@
 								metadatum: "id",
 								evalue: widget.cutoffThresholds.evalue,
 								identity: widget.cutoffThresholds.identity,
-								alilength: widget.cutoffThresholds.length,
+								alilength: widget.cutoffThresholds.alilength,
 								taxFilter: [],
 								ontFilter: [] },
 						  created: Retina.date_string(new Date().getTime()),
