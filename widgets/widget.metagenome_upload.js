@@ -121,7 +121,15 @@
 								       "customButtons": [ { "title": "download sequence file details",
 											    "id": "inboxDetailsButton",
 											    "image": "Retina/images/info.png",
-											    "callback": widget.downloadInboxDetails } ],
+											    "callback": widget.downloadInboxDetails },
+											  { "title": "join paired ends",
+											    "id": "mergeMatepairsInfoButton",
+											    "image": "Retina/images/merge.png",
+											    "callback": widget.mergeMatepairInfo },
+											  { "title": "demultiplex",
+											    "id": "demultiplexInfoButton",
+											    "image": "Retina/images/tree_rtl.png",
+											    "callback": widget.demultiplexInfo }],
 	    							       "user": stm.user,
 								       "fileSectionColumns": [
 									   { "path": "file.name", "name": "Name", "width": "75%", "type": "file", "sortable": true },
@@ -154,6 +162,18 @@
 	} else {
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
 	}
+    };
+
+    widget.mergeMatepairInfo = function () {
+	var widget = this;
+
+	alert("To join paired end files, select the first file to join below\nand click the button\n'join paired ends'\nin the righthand window.");
+    };
+
+    widget.demultiplexInfo = function () {
+	var widget = this;
+
+	alert("To demultiplex a file, select a barcode file below.");
     };
 
     // do some convenience checks before the file is uploaded
