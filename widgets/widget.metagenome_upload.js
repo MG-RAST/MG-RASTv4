@@ -167,13 +167,13 @@
     widget.mergeMatepairInfo = function () {
 	var widget = this;
 
-	alert("To join paired end files, select the first file to join below\nand click the button\n'join paired ends'\nin the righthand window.");
+	alert("To join paired end files, select the first file to join in the left window below and click the button 'join paired ends' in the righthand window.");
     };
 
     widget.demultiplexInfo = function () {
 	var widget = this;
 
-	alert("To demultiplex a file, select a barcode file below.");
+	alert("To demultiplex a file, select a barcode file in the left window below.");
     };
 
     // do some convenience checks before the file is uploaded
