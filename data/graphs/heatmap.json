@@ -1,0 +1,170 @@
+{
+  "name": "heatmap",
+  "width": 600,
+  "height": 500,
+  "items": [
+    {
+      "type": "dendogram",
+      "name": "item0",
+      "parameters": {
+        "direction": "ltr",
+        "shiftX": 150,
+        "shiftY": 200,
+        "height": 30,
+        "width": 20,
+        "format": {
+          "stroke": "black",
+          "stroke-width": 1
+        },
+        "id": "item0",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2rowdendogram"
+    },
+    {
+      "type": "dendogram",
+      "name": "item1",
+      "parameters": {
+        "direction": "ttb",
+        "shiftX": 150,
+        "shiftY": 200,
+        "height": 30,
+        "width": 20,
+        "format": {
+          "stroke": "black",
+          "stroke-width": 1
+        },
+        "id": "item1",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2columndendogram"
+    },
+    {
+      "type": "heatmap",
+      "name": "item2",
+      "parameters": {
+        "shiftX": 150,
+        "shiftY": 200,
+        "boxheight": 20,
+        "boxwidth": 20,
+        "format": {
+          "stroke": "black",
+          "stroke-width": 1,
+          "fill": "rgb(0,255,0)"
+        },
+        "colorscale": "green2red",
+        "id": "item2",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2heatmap"
+    },
+    {
+      "type": "colorscale",
+      "name": "item3",
+      "parameters": {
+        "shiftX": 30,
+        "shiftY": 5,
+        "boxheight": 20,
+        "boxwidth": 25,
+        "format": {
+          "stroke": "gray",
+          "fontSize": 10,
+          "fontFamily": "arial",
+          "fontWeight": "normal",
+          "fill": "rgb(0,255,0)"
+        },
+        "colorscale": "green2red",
+        "id": "item3",
+        "groupSettings": {},
+        "data": []
+      }
+    },
+    {
+      "type": "axis",
+      "name": "item4",
+      "parameters": {
+        "direction": "horizontal",
+        "labelPosition": "left-bottom",
+        "labelRotation": 270,
+        "shift": 160,
+        "base": 380,
+        "length": 400,
+        "min": 0,
+        "max": 10,
+        "spaceMajor": 20,
+        "numMinor": 5,
+        "tickShift": 0,
+        "tickBase": 0,
+        "majorTickLength": 10,
+        "minorTickLength": 5,
+        "lineFormat": {
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "labelFormat": {
+          "fontFamily": "Helvetica",
+          "fontWeight": 100,
+          "fontSize": 12
+        },
+        "showLabels": true,
+        "labelOrigin": true,
+        "isLog": false,
+        "noLine": true,
+        "id": "item4",
+        "groupSettings": {},
+        "labels": [
+          "Metagenome B",
+          "Metagenome A"
+        ],
+        "data": []
+      },
+      "data": "matrix2heatmapcolaxis"
+    },
+    {
+      "type": "axis",
+      "name": "item5",
+      "parameters": {
+        "direction": "vertical",
+        "labelPosition": "left-bottom",
+        "labelRotation": 0,
+        "shift": 230,
+        "base": 100,
+        "length": 400,
+        "min": 0,
+        "max": 10,
+        "spaceMajor": 20,
+        "numMinor": 5,
+        "tickShift": 0,
+        "tickBase": 0,
+        "majorTickLength": 10,
+        "minorTickLength": 5,
+        "lineFormat": {
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "labelFormat": {
+          "fontFamily": "Helvetica",
+          "fontWeight": 100,
+          "fontSize": 12
+        },
+        "showLabels": true,
+        "labelOrigin": true,
+        "isLog": false,
+        "noLine": true,
+        "id": "item5",
+        "groupSettings": {},
+        "labels": [
+          "Bacteria",
+          "Viruses",
+          "Archaea",
+          "Eukaryota"
+        ],
+        "data": []
+      },
+      "data": "matrix2heatmaprowaxis"
+    }
+  ]
+}
