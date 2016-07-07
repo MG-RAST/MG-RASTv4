@@ -184,7 +184,7 @@
 	    	    	    widget.display();
 			});
 	    	    }}).fail(function(xhr, error) {
-	    	    	Retina.WidgetInstances.metagenome_receipt[1].target.innerHTML = "<div class='alert'>The processing receipt is only available for metagenomes processed after May 1st 2016.</div>";
+	    	    	Retina.WidgetInstances.metagenome_receipt[1].target.innerHTML = "<div class='alert alert-error'>There was an error retrieving the data for your processing receipt.</div>";
 	    	    });
 	    }}).fail(function(xhr, error) {
 	    	console.log(error);

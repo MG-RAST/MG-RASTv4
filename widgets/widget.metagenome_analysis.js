@@ -27,6 +27,8 @@
 	"alilength": 15
     };
 
+    widget.graphs = {};
+
     widget.context = "none";
     widget.normalizeData = false;
     widget.standardizeData = false;
@@ -78,6 +80,8 @@
 	widget.fillExport();
 
 	widget.loadDataUI();
+
+	widget.loadGraphs();
 
 	widget.graph = Retina.Renderer.create("svg2", {});
     };
@@ -159,14 +163,21 @@
     	container.innerHTML = html;
 
 	/* TEST */
-	
-	// if (widget.currentType == "barchart") {
-	//     widget.graph.settings.target = document.getElementById("visualizeTarget");
-	//     jQuery.extend(widget.graph.settings, widget.testVis);
-	//     widget.graph.settings.data = stm.DataStore.dataContainer[widget.selectedContainer].matrix;
-	//     widget.graph.render();
-	//     return;
-	// }
+	widget.graph = Retina.RendererInstances.svg2[1] = jQuery.extend(true, {}, Retina.RendererInstances.svg2[0]);
+
+	if (widget.currentType == "barchart") {
+	    widget.graph.settings.target = document.getElementById("visualizeTarget");
+	    jQuery.extend(true, widget.graph.settings, widget.graphs.stackedBar);
+	    widget.graph.settings.data = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+	    widget.graph.render();
+	    return;
+	} else if (widget.currentType == "piechart") {
+	    widget.graph.settings.target = document.getElementById("visualizeTarget");
+	    jQuery.extend(true, widget.graph.settings, widget.graphs.pie);
+	    widget.graph.settings.data = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+	    widget.graph.render();
+	    return;
+	}
 
 	/* TEST END */
 
@@ -1629,6 +1640,22 @@
 	}
 	profile.data = p;
 	profile.purged = true;
+    };
+
+    widget.loadGraphs = function () {
+	var widget = this;
+
+	var graphs = [ "pie", "stackedBar" ];
+	for (var i=0; i<graphs.length; i++) {
+	    jQuery.ajax({ url: 'data/graphs/'+graphs[i]+'.json',
+			  graph: graphs[i],
+			  complete: function (xhr) {
+			      var widget = Retina.WidgetInstances.metagenome_analysis[1];
+			      
+			      widget.graphs[this.graph] = JSON.parse(xhr.responseText);
+			  }
+			});
+	}
     };
     
 })();
