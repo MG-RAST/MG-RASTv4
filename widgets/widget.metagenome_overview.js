@@ -50,67 +50,71 @@
 	    
 	    // check if required data is loaded (use stats)
 	    if (! stm.DataStore.hasOwnProperty('metagenome') || ! stm.DataStore.metagenome.hasOwnProperty(widget.id) || ! stm.DataStore.metagenome[widget.id].hasOwnProperty('computationStatus')) {
-		var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
-		jQuery.ajax( { dataType: "json",
-			       url: url,
-			       headers: stm.authHeader,
-			       success: function(data) {
-				   var widget = Retina.WidgetInstances.metagenome_overview[1]
-				   if (! stm.DataStore.hasOwnProperty('metagenome')) {
-				       stm.DataStore.metagenome = {};
+		jQuery.getJSON(RetinaConfig.mgrast_api + '/server/MG-RAST').then(function(d) {
+		    var widget = Retina.WidgetInstances.metagenome_overview[1];
+		    widget.driseeMGRAST = { "min": d.driseemin, "max": d.driseemax, "avg": d.driseeavg, "stdv": d.driseestdv };
+		    var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
+		    jQuery.ajax( { dataType: "json",
+				   url: url,
+				   headers: stm.authHeader,
+				   success: function(data) {
+				       var widget = Retina.WidgetInstances.metagenome_overview[1]
+				       if (! stm.DataStore.hasOwnProperty('metagenome')) {
+					   stm.DataStore.metagenome = {};
+				       }
+				       if (data.hasOwnProperty('statistics')) {
+					   data.computationStatus = "complete";
+				       } else {
+					   data.computationStatus = "incomplete";
+				       }
+				       if (data.pipeline_parameters.assembled == "yes") {
+					   data.sequence_type = "Assembly";
+				       }
+				       stm.DataStore.metagenome[data.id] = data;
+				       
+				       // check public / private status
+				       if (data.status == "private") {
+					   widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share&project='+stm.DataStore.metagenome[data.id].project[0]+'" title="show sharing options"><i class="icon icon-share"></i></a></div>';
+				       }
+				       
+				       widget.variableExtractorMetagenome(data.id);
+				       var url = "data/";
+				       switch (data.sequence_type) {
+				       case 'Amplicon':
+					   url += "amplicon";
+					   document.getElementById("pageTitle").innerHTML = "amplicon metagenome";
+					   break;
+				       case 'MT':
+					   url += "transcriptome";
+					   document.getElementById("pageTitle").innerHTML = "shotgun metatranscriptome";
+					   break;
+				       case 'Assembly':
+					   url += "assembly";
+					   document.getElementById("pageTitle").innerHTML = "assembled shotgun metagenome";
+					   break;
+				       case 'WGS':
+					   url += "shotgun";
+					   document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
+					   break;
+				       default:
+					   url += "shotgun";
+					   document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
+					   break;
+				       }
+				       url += "_overview.flow.json";
+				       jQuery.getJSON(url).then(function(d) {
+					   stm.DataStore.flows = { "metagenome_overview": d };
+					   Retina.WidgetInstances.metagenome_overview[1].display();
+				       });
+				   },
+				   error: function () {
+				       widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
 				   }
-				   if (data.hasOwnProperty('statistics')) {
-				       data.computationStatus = "complete";
-				   } else {
-				       data.computationStatus = "incomplete";
-				   }
-				   if (data.pipeline_parameters.assembled == "yes") {
-				       data.sequence_type = "Assembly";
-				   }
-				   stm.DataStore.metagenome[data.id] = data;
-
-				   // check public / private status
-				   if (data.status == "private") {
-				       widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share" title="show sharing options"><i class="icon icon-share"></i></a></div>';
-				   }
-				   
-				   widget.variableExtractorMetagenome(data.id);
-				   var url = "data/";
-				   switch (data.sequence_type) {
-				   case 'Amplicon':
-				       url += "amplicon";
-				       document.getElementById("pageTitle").innerHTML = "amplicon metagenome";
-				       break;
-				   case 'MT':
-				       url += "transcriptome";
-				       document.getElementById("pageTitle").innerHTML = "shotgun metatranscriptome";
-				       break;
-				   case 'Assembly':
-				       url += "assembly";
-				       document.getElementById("pageTitle").innerHTML = "assembled shotgun metagenome";
-				       break;
-				   case 'WGS':
-				       url += "shotgun";
-				       document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
-				       break;
-				   default:
-				       url += "shotgun";
-				       document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
-				       break;
-				   }
-				   url += "_overview.flow.json";
-				   jQuery.getJSON(url).then(function(d) {
-				       stm.DataStore.flows = { "metagenome_overview": d };
-				       Retina.WidgetInstances.metagenome_overview[1].display();
-				   });
-			       },
-			       error: function () {
-				   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
-			       }
-			     } );
+				 } );
+		});
 		return;
-            }
-	    
+	    }
+										
 	    var notebook = Retina.Renderer.create('notebook', { target: document.getElementById("notebook"), showTOC: true, tocTarget: sidebar, flow: stm.DataStore.flows.metagenome_overview, dataContainer: stm.DataStore.metagenome[widget.id] }).render();
 
 	    // dynamically resolve pubmed
@@ -348,6 +352,15 @@
 	    console.log("could not parse drisee data:" +error);
 	}
 	mg.drisee = drisee;
+	if (mg.statistics.sequence_stats.hasOwnProperty('drisee_score_raw')) {
+	    mg.driseedeviation = { min: parseFloat(widget.driseeMGRAST.min), max: parseFloat(widget.driseeMGRAST.max), mean: parseFloat(widget.driseeMGRAST.avg), stdv: parseFloat(widget.driseeMGRAST.stdv), val: mg.statistics.sequence_stats.drisee_score_raw };
+	    mg.drisee_score = mg.statistics.sequence_stats.drisee_score_raw.formatString(3)+"%";
+	} else {
+	    mg.drisee_score = "not calculated";
+	}
+	
+	mg.alphadiversity = { min: parseFloat(mg.project_alpha_diversity.min), max: parseFloat(mg.project_alpha_diversity.max), mean: parseFloat(mg.project_alpha_diversity.avg), stdv: parseFloat(mg.project_alpha_diversity.stdv), val: mg.statistics.sequence_stats.alpha_diversity_shannon };
+	mg.statistics.sequence_stats.alpha_diversity_shannon = mg.statistics.sequence_stats.alpha_diversity_shannon.formatString(3);
 	
 	var kmer = [];
 	try {
