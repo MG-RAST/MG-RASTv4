@@ -1347,8 +1347,8 @@
 	    }
 	} else if (type == 'svg') {
 	    // the image is svg
-	    if (document.getElementById('graph_div1')) {
-		stm.saveAs(document.getElementById('graph_div1').innerHTML, widget.selectedContainer + ".svg");
+	    if (document.getElementById('SVGdiv1')) {
+		stm.saveAs(document.getElementById('SVGdiv1').innerHTML, widget.selectedContainer + ".svg");
 	    } else {
 		alert('this feature is not available for this view');
 	    }
