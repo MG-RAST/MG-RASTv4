@@ -1,0 +1,203 @@
+{
+  "name": "rarefaction",
+  "width": 700,
+    "height": 500,
+    "controls": [
+	{ "layout":
+	  [
+	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
+	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" }
+	  ]
+	}
+    ],
+    "items": [
+    {
+      "type": "axis",
+      "name": "item0",
+      "parameters": {
+        "direction": "horizontal",
+        "labelPosition": "left-bottom",
+        "labelRotation": 20,
+        "shift": 75,
+        "base": 75,
+        "length": 475,
+        "min": 0,
+        "max": 6,
+        "spaceMajor": 83.33333333333333,
+        "numMinor": 5,
+        "tickShift": 0,
+        "tickBase": 0,
+        "majorTickLength": 10,
+        "minorTickLength": 5,
+        "lineFormat": {
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "labelFormat": {
+          "fontFamily": "Helvetica",
+          "fontWeight": 100,
+          "fontSize": 12
+        },
+        "showLabels": true,
+        "labelOrigin": true,
+        "isLog": false,
+        "noLine": false,
+        "inputType": "plot",
+        "id": "item0",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2valueX"
+    },
+    {
+      "type": "axis",
+      "name": "item1",
+      "parameters": {
+        "direction": "vertical",
+        "labelPosition": "left-bottom",
+        "labelRotation": 0,
+        "shift": 75,
+        "base": 75,
+        "length": 375,
+        "min": 0,
+        "max": 7,
+        "spaceMajor": 57.142857142857146,
+        "numMinor": 5,
+        "tickShift": 0,
+        "tickBase": 0,
+        "majorTickLength": 10,
+        "minorTickLength": 5,
+        "lineFormat": {
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "labelFormat": {
+          "fontFamily": "Helvetica",
+          "fontWeight": 100,
+          "fontSize": 12
+        },
+        "showLabels": true,
+        "labelOrigin": true,
+        "isLog": false,
+        "noLine": false,
+        "inputType": "plot",
+        "id": "item1",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2valueY"
+    },
+    {
+      "type": "legend",
+      "name": "item2",
+      "parameters": {
+        "top": 150,
+        "left": 570,
+        "colors": [
+          "#3366cc",
+          "#dc3912",
+          "#ff9900",
+          "#109618",
+          "#990099",
+          "#0099c6",
+          "#dd4477",
+          "#66aa00",
+          "#b82e2e",
+          "#316395",
+          "#994499",
+          "#22aa99",
+          "#aaaa11",
+          "#6633cc",
+          "#e67300",
+          "#8b0707",
+          "#651067",
+          "#329262",
+          "#5574a6",
+          "#3b3eac",
+          "#b77322",
+          "#16d620",
+          "#b91383",
+          "#f4359e",
+          "#9c5935",
+          "#a9c413",
+          "#2a778d",
+          "#668d1c",
+          "#bea413",
+          "#0c5922",
+          "#743411"
+        ],
+        "format": {
+          "fontSize": 12,
+          "fontFamily": "arial",
+          "fontWeight": "normal"
+        },
+        "inputType": "plot",
+        "id": "item2",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2plotlegend"
+    },
+    {
+      "type": "linechart",
+      "name": "item3",
+      "parameters": {
+        "height": 375,
+        "width": 475,
+        "radius": 0,
+        "shift": 75,
+        "base": 75,
+        "space": 50,
+        "format": {
+          "fill": "white",
+          "stroke": "blue",
+          "strokeWidth": 1
+        },
+        "inputType": "plot",
+        "id": "item3",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2plot"
+    },
+    {
+      "type": "title",
+      "name": "item4",
+      "parameters": {
+        "rotation": 90,
+        "shiftY": 225,
+        "shiftX": 15,
+        "format": {
+          "font-size": 15,
+          "font-family": "arial",
+          "text-anchor": "middle",
+          "transform": "rotate(-90, 15, 250)"
+        },
+        "data": "species count",
+        "inputType": "none",
+        "id": "item4",
+        "groupSettings": {}
+      }
+    },
+    {
+      "type": "title",
+      "name": "item5",
+      "parameters": {
+        "rotation": 0,
+        "shiftY": 500,
+        "shiftX": 350,
+        "format": {
+          "font-size": 15,
+          "font-family": "arial",
+          "text-anchor": "middle",
+          "transform": "rotate(-0, 350, 500)"
+        },
+          "data": "number of reads",
+        "inputType": "none",
+          "id": "item5",
+          "groupSettings": {}
+      }
+    }
+  ]
+
+}
