@@ -1,12 +1,21 @@
 {
   "name": "pie",
   "width": 700,
-  "height": 500,
+    "height": 500,
+    "controls": [
+	{ "layout":
+	  [
+	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
+	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" }
+	  ]
+	}
+    ],
   "items": [
     {
       "type": "donutchart",
       "name": "chart",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "shiftX": 50,
         "shiftY": 50,
         "center": 200,
@@ -21,7 +30,8 @@
     {
       "type": "donutchart",
       "name": "chart",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "shiftX": 50,
         "shiftY": 50,
         "center": 200,
@@ -36,7 +46,8 @@
     {
       "type": "legend",
       "name": "legend",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "top": 50,
         "left": 500,
         "colors": [

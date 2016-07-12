@@ -1,13 +1,22 @@
 {
   "name": "stackedBar",
   "width": 800,
-  "height": 500,
+    "height": 500,
+    "controls": [
+	{ "layout":
+	  [
+	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
+	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" }
+	  ]
+	}
+    ],
   "items": [
     {
       "data": "matrix2stackedvalueaxis",
       "name": "value_axis",
       "type": "axis",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "max": 60000,
         "base": 75,
         "length": 350,
@@ -42,7 +51,8 @@
     },
     {
       "type": "axis",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "max": 20,
         "base": 125,
         "length": 600,
@@ -77,12 +87,13 @@
         "groupSettings": {},
         "data": []
       },
-      "data": "matrix2labelaxis",
+      "data": "matrix2collabelaxis",
       "name": "label_axis"
     },
     {
       "parameters": {
-        "id": "item3",
+          "id": "item3",
+	  "inputType": "matrix",
         "format": {
           "stroke-dasharray": "2,2",
           "stroke": "gray",
@@ -104,7 +115,8 @@
       "data": "matrix2rowlegend",
       "name": "legend",
       "type": "legend",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "colors": [
           "#3366cc",
           "#dc3912",
@@ -154,7 +166,8 @@
       "name": "chart",
       "data": "matrix2stackedbars",
       "type": "barchart",
-      "parameters": {
+	"parameters": {
+	    "inputType": "matrix",
         "base": 125,
         "id": "item5",
         "format": {
