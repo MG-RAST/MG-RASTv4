@@ -1,0 +1,198 @@
+<html>
+<!---
+ENTRY       map00591
+DEFINITION  Linoleic acid metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Linoleic acid metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Linoleic acid metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00591&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00591">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00591 map" -->
+</select>
+<input type="hidden" name="mapno" value="00591" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00591" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00591" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00591.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=597,340,4	href="/dbget-bin/www_bget?C04717"	title="C04717 ((9Z,11E)-(13S)-13-Hydroperoxyoctadeca-9,11-dienoic acid)" />
+<area shape=circle	coords=797,170,4	href="/dbget-bin/www_bget?C14833"	title="C14833 (9,12,13-TriHOME)" />
+<area shape=circle	coords=682,170,4	href="/dbget-bin/www_bget?C14832"	title="C14832 (12,13-Epoxy-9-hydroxy-10-octadecenoate)" />
+<area shape=circle	coords=597,113,4	href="/dbget-bin/www_bget?C14766"	title="C14766 (9-OxoODE)" />
+<area shape=circle	coords=597,453,4	href="/dbget-bin/www_bget?C14765"	title="C14765 (13-OxoODE)" />
+<area shape=circle	coords=597,170,4	href="/dbget-bin/www_bget?C14767"	title="C14767 (9(S)-HODE)" />
+<area shape=circle	coords=796,340,4	href="/dbget-bin/www_bget?C14833"	title="C14833 (9,12,13-TriHOME)" />
+<area shape=circle	coords=796,228,4	href="/dbget-bin/www_bget?C14835"	title="C14835 (9,10,13-TriHOME)" />
+<area shape=circle	coords=682,340,4	href="/dbget-bin/www_bget?C14832"	title="C14832 (12,13-Epoxy-9-hydroxy-10-octadecenoate)" />
+<area shape=circle	coords=682,228,4	href="/dbget-bin/www_bget?C14834"	title="C14834 (9,10-Epoxy-13-hydroxy-11-octadecenoate)" />
+<area shape=circle	coords=455,397,4	href="/dbget-bin/www_bget?C14828"	title="C14828 (9,10-DHOME)" />
+<area shape=circle	coords=340,398,4	href="/dbget-bin/www_bget?C14825"	title="C14825 (9(10)-EpOME)" />
+<area shape=circle	coords=597,227,4	href="/dbget-bin/www_bget?C14827"	title="C14827 (9(S)-HPODE)" />
+<area shape=circle	coords=115,227,4	href="/dbget-bin/www_bget?C00219"	title="C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid)" />
+<area shape=circle	coords=342,170,4	href="/dbget-bin/www_bget?C00157"	title="C00157 (Phosphatidylcholine)" />
+<area shape=circle	coords=455,227,4	href="/dbget-bin/www_bget?C14831"	title="C14831 (8(R)-HPODE)" />
+<area shape=circle	coords=526,227,4	href="/dbget-bin/www_bget?C07338"	title="C07338 ((9Z,12Z)-(11S)-11-Hydroperoxyoctadeca-9,12-dienoic acid)" />
+<area shape=circle	coords=282,398,4	href="/dbget-bin/www_bget?C14826"	title="C14826 (12(13)-EpOME)" />
+<area shape=circle	coords=342,283,4	href="/dbget-bin/www_bget?C01595"	title="C01595 (Linoleate)" />
+<area shape=circle	coords=228,227,4	href="/dbget-bin/www_bget?C06426"	title="C06426 ((6Z,9Z,12Z)-Octadecatrienoic acid)" />
+<area shape=circle	coords=228,279,4	href="/dbget-bin/www_bget?C07289"	title="C07289 (Crepenynate)" />
+<area shape=circle	coords=597,397,4	href="/dbget-bin/www_bget?C14762"	title="C14762 (13(S)-HODE)" />
+<area shape=circle	coords=455,340,4	href="/dbget-bin/www_bget?C04056"	title="C04056 (9-cis,11-trans-Octadecadienoate)" />
+<area shape=circle	coords=455,170,4	href="/dbget-bin/www_bget?C07354"	title="C07354 ((7S,8S)-DiHODE)" />
+<area shape=circle	coords=172,398,4	href="/dbget-bin/www_bget?C14829"	title="C14829 (12,13-DHOME)" />
+<area shape=circle	coords=172,227,4	href="/dbget-bin/www_bget?C03242"	title="C03242 ((8Z,11Z,14Z)-Icosatrienoic acid)" />
+<area shape=circle	coords=311,511,4	href="/dbget-bin/www_bget?C14837"	title="C14837 (9,10-Dihydroxy-12,13-epoxyoctadecanoate)" />
+<area shape=circle	coords=311,454,4	href="/dbget-bin/www_bget?C14836"	title="C14836 (9,10-12,13-Diepoxyoctadecanoate)" />
+<area shape=rect	coords=375,389,421,406	href="/dbget-bin/www_bget?3.3.2.-+R07122"	title="3.3.2.-, 3.3.2.-, R07122" />
+<area shape=rect	coords=193,390,239,407	href="/dbget-bin/www_bget?3.3.2.-+R07121"	title="3.3.2.-, 3.3.2.-, R07121" />
+<area shape=rect	coords=318,356,364,373	href="/dbget-bin/www_bget?K07409+K07413+K07415+K07418+K07424+1.14.14.1+R07055"	title="K07409 (CYP1A2), K07413 (CYP2C), K07415 (CYP2E), K07418 (CYP2J), K07424 (CYP3A), 1.14.14.1, R07055" />
+<area shape=rect	coords=259,356,305,373	href="/dbget-bin/www_bget?K07409+K07413+K07415+K07418+K07424+1.14.14.1+R07056"	title="K07409 (CYP1A2), K07413 (CYP2C), K07415 (CYP2E), K07418 (CYP2J), K07424 (CYP3A), 1.14.14.1, R07056" />
+<area shape=rect	coords=574,413,620,430	href="/dbget-bin/www_bget?K00100+1.1.1.-+R07058"	title="K00100 (E1.1.1.-), 1.1.1.-, R07058" />
+<area shape=rect	coords=550,302,596,319	href="/dbget-bin/www_bget?K00454+1.13.11.12+R03626"	title="K00454 (E1.13.11.12), 1.13.11.12, R03626" />
+<area shape=rect	coords=600,302,646,319	href="/dbget-bin/www_bget?K00460+1.13.11.33+R03626"	title="K00460 (E1.13.11.33, ALOX15), 1.13.11.33, R03626" />
+<area shape=rect	coords=375,332,421,349	href="/dbget-bin/www_bget?5.2.1.5+R03627"	title="5.2.1.5, 5.2.1.5, R03627" />
+<area shape=rect	coords=318,195,364,212	href="/dbget-bin/www_bget?K01047+3.1.1.4+R07064"	title="K01047 (E3.1.1.4, PLA2G), 3.1.1.4, R07064" />
+<area shape=rect	coords=504,250,550,267	href="/dbget-bin/www_bget?1.13.11.45+R05718"	title="1.13.11.45, 1.13.11.45, R05718" />
+<area shape=rect	coords=432,250,478,267	href="/dbget-bin/www_bget?1.13.11.44+R07061"	title="1.13.11.44, 1.13.11.44, R07061" />
+<area shape=rect	coords=432,195,478,212	href="/dbget-bin/www_bget?1.13.11.44+R07062"	title="1.13.11.44, 1.13.11.44, R07062" />
+<area shape=rect	coords=265,266,311,283	href="/dbget-bin/www_bget?K08262+1.14.99.33+R05740"	title="K08262 (E1.14.99.33), 1.14.99.33, R05740" />
+<area shape=rect	coords=265,218,311,235	href="/dbget-bin/www_bget?K00508+1.14.19.3+R07063"	title="K00508 (E1.14.19.3), 1.14.19.3, R07063" />
+<area shape=rect	coords=39,125,202,151	href="/kegg-bin/show_pathway?map00590"	title="map00590" />
+<area shape=rect	coords=40,45,270,71	href="/dbget-bin/www_bget?map00591"	title="map00591" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

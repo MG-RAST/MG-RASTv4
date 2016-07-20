@@ -1,0 +1,179 @@
+<html>
+<!---
+ENTRY       map07213
+DEFINITION  Dopamine receptor agonists/antagonists - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Dopamine receptor agonists/antagonists - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Dopamine receptor agonists/antagonists - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07213&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07213">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07213" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07213" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07213.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=918,675,1073,738	href="/dbget-bin/www_bget?D00726+D02213"	title="D00726 (Metoclopramide (JP15/INN)), D02213 (Metoclopramide hydrochloride (JAN))" />
+<area shape=rect	coords=1058,742,1211,818	href="/dbget-bin/www_bget?D01745+D07868"	title="D01745 (Domperidone (JAN/USAN/INN)), D07868 (Domperidone maleate)" />
+<area shape=rect	coords=768,755,933,818	href="/dbget-bin/www_bget?D03534+D01742"	title="D03534 (Clebopride (USAN)), D01742 (Clebopride malate (JAN))" />
+<area shape=rect	coords=591,672,728,744	href="/dbget-bin/www_bget?D01226+D07312"	title="D01226 (Sulpiride (JP15/USAN/INN)), D07312 (Levosulpiride (INN))" />
+<area shape=rect	coords=389,747,566,810	href="/dbget-bin/www_bget?D01468"	title="D01468 (Nemonapride (JAN/INN))" />
+<area shape=rect	coords=403,637,529,716	href="/dbget-bin/www_bget?D02208+D08549"	title="D02208 (Sultopride hydrochloride (JAN)), D08549 (Sultopride (INN))" />
+<area shape=rect	coords=84,682,230,778	href="/dbget-bin/www_bget?D02371+D07718"	title="D02371 (Clocapramine hydrochloride (JP15)), D07718 (Clocapramine (INN))" />
+<area shape=rect	coords=239,682,378,791	href="/dbget-bin/www_bget?D01548+D08235"	title="D01548 (Mosapramine hydrochloride (JAN)), D08235 (Mosapramine (INN))" />
+<area shape=rect	coords=1015,526,1197,596	href="/dbget-bin/www_bget?D00458+D08456"	title="D00458 (Quetiapine fumarate (JAN/USAN)), D08456 (Quetiapine (INN))" />
+<area shape=rect	coords=1089,405,1197,489	href="/dbget-bin/www_bget?D00454+D06623"	title="D00454 (Olanzapine (JAN/USAN/INN)), D06623 (Olanzapine pamoate (USAN))" />
+<area shape=rect	coords=784,509,961,604	href="/dbget-bin/www_bget?D02372"	title="D02372 (Perospirone hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=785,388,941,487	href="/dbget-bin/www_bget?D00426"	title="D00426 (Risperidone (JAN/USAN/INN))" />
+<area shape=rect	coords=481,397,660,477	href="/dbget-bin/www_bget?D00308"	title="D00308 (Droperidol (JP15/USP/INN))" />
+<area shape=rect	coords=492,528,741,604	href="/dbget-bin/www_bget?D01898"	title="D01898 (Haloperidol decanoate (JAN/USAN))" />
+<area shape=rect	coords=308,531,440,605	href="/dbget-bin/www_bget?D01051"	title="D01051 (Spiperone (JAN/USAN))" />
+<area shape=rect	coords=276,403,455,477	href="/dbget-bin/www_bget?D00136+D08035"	title="D00136 (Haloperidol (JP15/USP/INN)), D08035 (Haloperidol lactate)" />
+<area shape=rect	coords=114,427,226,520	href="/dbget-bin/www_bget?D00270+D00789+D03274+D04034"	title="D00270 (Chlorpromazine (USP/INN)), D00789 (Chlorpromazine hydrochloride (JP15/USP)), D03274 (Chlorpromazine hibenzate (JAN)), D04034 (Chlorpromazine phenolphthalinate (JAN))" />
+<area shape=rect	coords=633,189,735,268	href="/dbget-bin/www_bget?D02004+D07460"	title="D02004 (Apomorphine hydrochloride (USP)), D07460 (Apomorphine (BAN))" />
+<area shape=rect	coords=484,207,623,254	href="/dbget-bin/www_bget?D05575+D00559"	title="D05575 (Pramipexole (USAN/INN)), D00559 (Pramipexole hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=347,210,476,252	href="/dbget-bin/www_bget?D01505+D08558"	title="D01505 (Talipexole hydrochloride (JAN)), D08558 (Talipexole (INN))" />
+<area shape=rect	coords=225,165,339,277	href="/dbget-bin/www_bget?D01462+D08132"	title="D01462 (Lisuride maleate (JAN)), D08132 (Lisuride (INN))" />
+<area shape=rect	coords=77,165,215,277	href="/dbget-bin/www_bget?D03165+D00780"	title="D03165 (Bromocriptine (USAN/INN)), D00780 (Bromocriptine mesilate (JP15))" />
+<area shape=rect	coords=444,59,546,105	href="/dbget-bin/www_bget?D00633+D07870"	title="D00633 (Dopamine hydrochloride (JP15/USP)), D07870 (Dopamine (INN))" />
+<area shape=rect	coords=132,881,190,895	href="/dbget-bin/www_bget?D00815"	title="D00815 (Imipramine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=1274,638,1342,651	href="/dbget-bin/www_bget?D00477+D08421"	title="D00477 (Procainamide hydrochloride (JP15/USP)), D08421 (Procainamide (INN))" />
+<area shape=rect	coords=975,879,1024,893	href="/dbget-bin/www_bget?D00274+D02092"	title="D00274 (Cisapride (USAN/INN)), D02092 (Cisapride (JAN))" />
+<area shape=rect	coords=210,342,277,355	href="/dbget-bin/www_bget?D00494+D00480+D01242+D08432+D08768+D03290"	title="D00494 (Promethazine (JAN/INN)), D00480 (Promethazine hydrochloride (JP15/USP)), D01242 (Promethazine teoclate (JAN/INN)), D08432 (Promethazine maleate), D08768 (Promethazine hibenzate), D03290 (Promethazine methylenedisalicylate (JAN))" />
+<area shape=rect	coords=784,196,1002,262	href="/dbget-bin/www_bget?D01164"	title="D01164 (Aripiprazole (JAN/USAN/INN))" />
+<area shape=rect	coords=976,404,1072,492	href="/dbget-bin/www_bget?D00283"	title="D00283 (Clozapine (JAN/USP/INN))" />
+<area shape=rect	coords=40,45,405,71	href="/dbget-bin/www_bget?map07213"	title="map07213" />
+<area shape=rect	coords=302,332,525,358	href="/kegg-bin/show_pathway?@map07212/D00480"	title="PATH:map07212(D00480)" />
+<area shape=rect	coords=1259,659,1375,685	href="/kegg-bin/show_pathway?@map07037/D00477"	title="PATH:map07037(D00477)" />
+<area shape=rect	coords=885,899,1108,925	href="/kegg-bin/show_pathway?@map07211/D02092"	title="PATH:map07211(D02092)" />
+<area shape=rect	coords=113,899,212,925	href="/kegg-bin/show_pathway?@map07027/D00815"	title="PATH:map07027(D00815)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

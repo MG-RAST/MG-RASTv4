@@ -1,0 +1,211 @@
+<html>
+<!---
+ENTRY       map03050
+DEFINITION  Proteasome - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Proteasome - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Proteasome - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03050&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03050">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The proteasome is a protein-destroying apparatus involved in many essential cellular functions, such as regulation of cell cycle, cell differentiation, signal transduction pathways, antigen processing for appropriate immune responses, stress signaling, inflammatory responses, and apoptosis. It is capable of degrading a variety of cellular proteins in a rapid and timely fashion and most substrate proteins are modified by ubiquitin before their degradation by the proteasome. The proteasome is a large protein complex consisting of a proteolytic core called the 20S particle and ancillary factors that regulate its activity in various ways. The most common form is the 26S proteasome containing one 20S core particle and two 19S regulatory particles that enable the proteasome to degrade ubiquitinated proteins by an ATP-dependent mechanism. Another form is the immunoproteasome containing two 11S regulatory particles, PA28 alpha and PA28 beta, which are induced by interferon gamma under the conditions of intensified immune response. Other regulatory particles include PA28 gamma and PA200. Although PA28 gamma also belongs to a family of activators of the 20S proteasome, it is localized within the nucleus and forms a homoheptamer. PA28 gamma has been implicated in the regulation of cell cycle progression and apoptosis. PA200 has been identified as a large nuclear protein that stimulates proteasomal hydrolysis of peptides.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03050 map" -->
+</select>
+<input type="hidden" name="mapno" value="03050" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03050" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03050" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03050.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=319,644,365,661	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=670,97,716,114	href="/dbget-bin/www_bget?K03033"	title="K03033 (PSMD3, RPN3)" />
+<area shape=rect	coords=716,97,762,114	href="/dbget-bin/www_bget?K03035"	title="K03035 (PSMD12, RPN5)" />
+<area shape=rect	coords=761,97,807,114	href="/dbget-bin/www_bget?K03036"	title="K03036 (PSMD11, RPN6)" />
+<area shape=rect	coords=807,97,853,114	href="/dbget-bin/www_bget?K03037"	title="K03037 (PSMD6, RPN7)" />
+<area shape=rect	coords=670,114,716,131	href="/dbget-bin/www_bget?K03038"	title="K03038 (PSMD7, RPN8)" />
+<area shape=rect	coords=716,114,762,131	href="/dbget-bin/www_bget?K03039"	title="K03039 (PSMD13, RPN9)" />
+<area shape=rect	coords=762,114,808,131	href="/dbget-bin/www_bget?K03030"	title="K03030 (PSMD14, RPN11, POH1)" />
+<area shape=rect	coords=807,114,853,131	href="/dbget-bin/www_bget?K03031"	title="K03031 (PSMD8, RPN12)" />
+<area shape=rect	coords=853,114,899,131	href="/dbget-bin/www_bget?K10881"	title="K10881 (SHFM1, DSS1)" />
+<area shape=rect	coords=670,144,716,161	href="/dbget-bin/www_bget?K03029"	title="K03029 (PSMD4, RPN10)" />
+<area shape=rect	coords=670,195,716,212	href="/dbget-bin/www_bget?K03028"	title="K03028 (PSMD2, RPN1)" />
+<area shape=rect	coords=716,195,762,212	href="/dbget-bin/www_bget?K03032"	title="K03032 (PSMD1, RPN2)" />
+<area shape=rect	coords=762,195,808,212	href="/dbget-bin/www_bget?K06691"	title="K06691 (RPN13)" />
+<area shape=rect	coords=670,212,716,229	href="/dbget-bin/www_bget?K03061"	title="K03061 (PSMC2, RPT1)" />
+<area shape=rect	coords=716,212,762,229	href="/dbget-bin/www_bget?K03062"	title="K03062 (PSMC1, RPT2)" />
+<area shape=rect	coords=899,212,945,229	href="/dbget-bin/www_bget?K03063"	title="K03063 (PSMC4, RPT3)" />
+<area shape=rect	coords=807,212,853,229	href="/dbget-bin/www_bget?K03064"	title="K03064 (PSMC6, RPT4)" />
+<area shape=rect	coords=853,212,899,229	href="/dbget-bin/www_bget?K03065"	title="K03065 (PSMC3, RPT5)" />
+<area shape=rect	coords=762,212,808,229	href="/dbget-bin/www_bget?K03066"	title="K03066 (PSMC5, RPT6)" />
+<area shape=rect	coords=948,113,994,130	href="/dbget-bin/www_bget?K06696"	title="K06696 (PSME1)" />
+<area shape=rect	coords=994,113,1040,130	href="/dbget-bin/www_bget?K06697"	title="K06697 (PSME2)" />
+<area shape=rect	coords=1063,115,1109,132	href="/dbget-bin/www_bget?K06698"	title="K06698 (PSME3)" />
+<area shape=rect	coords=970,211,1016,228	href="/dbget-bin/www_bget?K06699"	title="K06699 (PSME4)" />
+<area shape=rect	coords=676,348,722,365	href="/dbget-bin/www_bget?K02730"	title="K02730 (PSMA6)" />
+<area shape=rect	coords=722,348,768,365	href="/dbget-bin/www_bget?K02726"	title="K02726 (PSMA2)" />
+<area shape=rect	coords=768,348,814,365	href="/dbget-bin/www_bget?K02728"	title="K02728 (PSMA4)" />
+<area shape=rect	coords=814,348,860,365	href="/dbget-bin/www_bget?K02731"	title="K02731 (PSMA7)" />
+<area shape=rect	coords=860,348,906,365	href="/dbget-bin/www_bget?K02729"	title="K02729 (PSMA5)" />
+<area shape=rect	coords=906,348,952,365	href="/dbget-bin/www_bget?K02725"	title="K02725 (PSMA1)" />
+<area shape=rect	coords=952,348,998,365	href="/dbget-bin/www_bget?K02727"	title="K02727 (PSMA3)" />
+<area shape=rect	coords=676,365,722,382	href="/dbget-bin/www_bget?K02738"	title="K02738 (PSMB6)" />
+<area shape=rect	coords=722,365,768,382	href="/dbget-bin/www_bget?K02739"	title="K02739 (PSMB7)" />
+<area shape=rect	coords=768,365,814,382	href="/dbget-bin/www_bget?K02735"	title="K02735 (PSMB3)" />
+<area shape=rect	coords=814,365,860,382	href="/dbget-bin/www_bget?K02734"	title="K02734 (PSMB2)" />
+<area shape=rect	coords=860,365,906,382	href="/dbget-bin/www_bget?K02737"	title="K02737 (PSMB5)" />
+<area shape=rect	coords=906,365,952,382	href="/dbget-bin/www_bget?K02732"	title="K02732 (PSMB1)" />
+<area shape=rect	coords=952,365,998,382	href="/dbget-bin/www_bget?K02736"	title="K02736 (PSMB4)" />
+<area shape=rect	coords=676,432,722,449	href="/dbget-bin/www_bget?K02741"	title="K02741 (PSMB9, LMP2)" />
+<area shape=rect	coords=736,432,782,449	href="/dbget-bin/www_bget?K02733"	title="K02733 (PSMB10, MECL1)" />
+<area shape=rect	coords=792,432,838,449	href="/dbget-bin/www_bget?K02740"	title="K02740 (PSMB8, LMP7)" />
+<area shape=rect	coords=906,432,952,449	href="/dbget-bin/www_bget?K11598"	title="K11598 (PSMB11)" />
+<area shape=rect	coords=1063,348,1109,365	href="/dbget-bin/www_bget?K03432"	title="K03432 (psmA, prcA)" />
+<area shape=rect	coords=1063,365,1109,382	href="/dbget-bin/www_bget?K03433"	title="K03433 (psmB, prcB)" />
+<area shape=rect	coords=1063,211,1109,228	href="/dbget-bin/www_bget?K03420"	title="K03420 (psmR)" />
+<area shape=rect	coords=370,836,416,853	href="/dbget-bin/www_bget?K06700"	title="K06700 (PSMF1)" />
+<area shape=rect	coords=320,804,366,821	href="/dbget-bin/www_bget?K11599"	title="K11599 (POMP, UMP1)" />
+<area shape=rect	coords=270,684,316,701	href="/dbget-bin/www_bget?K02741"	title="K02741 (PSMB9, LMP2)" />
+<area shape=rect	coords=320,684,366,701	href="/dbget-bin/www_bget?K02733"	title="K02733 (PSMB10, MECL1)" />
+<area shape=rect	coords=370,684,416,701	href="/dbget-bin/www_bget?K02740"	title="K02740 (PSMB8, LMP7)" />
+<area shape=rect	coords=320,747,366,764	href="/dbget-bin/www_bget?K06696"	title="K06696 (PSME1)" />
+<area shape=rect	coords=320,764,366,781	href="/dbget-bin/www_bget?K06697"	title="K06697 (PSME2)" />
+<area shape=rect	coords=62,431,191,466	href="/kegg-bin/show_pathway?map04120"	title="map04120" />
+<area shape=rect	coords=40,45,165,71	href="/kegg-bin/show_pathway?map03500"	title="map03500" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

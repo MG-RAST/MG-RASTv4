@@ -1,0 +1,169 @@
+<html>
+<!---
+ENTRY       map07211
+DEFINITION  Serotonin receptor agonists/antagonists - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Serotonin receptor agonists/antagonists - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Serotonin receptor agonists/antagonists - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07211&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07211">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07211" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07211" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07211.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1029,399,1088,413	href="/dbget-bin/www_bget?D06396"	title="D06396 (Renzapride (INN))" />
+<area shape=rect	coords=884,398,936,412	href="/dbget-bin/www_bget?D06353"	title="D06353 (Zacopride hydrochloride (USAN))" />
+<area shape=rect	coords=295,746,352,760	href="/dbget-bin/www_bget?D00454"	title="D00454 (Olanzapine (JAN/USAN/INN))" />
+<area shape=rect	coords=294,538,346,553	href="/dbget-bin/www_bget?D00283"	title="D00283 (Clozapine (JAN/USP/INN))" />
+<area shape=rect	coords=277,384,339,398	href="/dbget-bin/www_bget?D00415"	title="D00415 (Zolmitriptan (JAN/USAN/INN))" />
+<area shape=rect	coords=911,524,972,538	href="/dbget-bin/www_bget?D00677+D04370"	title="D00677 (Granisetron hydrochloride (JAN/USAN)), D04370 (Granisetron (USAN/INN))" />
+<area shape=rect	coords=1094,524,1158,538	href="/dbget-bin/www_bget?D00456+D00678"	title="D00456 (Ondansetron (JAN/USP/INN)), D00678 (Ondansetron hydrochloride hydrate (JAN/USP))" />
+<area shape=rect	coords=1102,631,1163,645	href="/dbget-bin/www_bget?D02016"	title="D02016 (Ramosetron hydrochloride (JAN))" />
+<area shape=rect	coords=910,632,969,646	href="/dbget-bin/www_bget?D02041+D02130"	title="D02041 (Tropisetron hydrochloride (JAN)), D02130 (Tropisetron (INN))" />
+<area shape=rect	coords=734,564,786,578	href="/dbget-bin/www_bget?D01613"	title="D01613 (Azasetron hydrochloride (JAN))" />
+<area shape=rect	coords=733,245,783,260	href="/dbget-bin/www_bget?D00274+D02092"	title="D00274 (Cisapride (USAN/INN)), D02092 (Cisapride (JAN))" />
+<area shape=rect	coords=277,259,338,273	href="/dbget-bin/www_bget?D00451+D00676"	title="D00451 (Sumatriptan (JAN/USP/INN)), D00676 (Sumatriptan succinate (JAN/USAN))" />
+<area shape=rect	coords=477,82,526,96	href="/dbget-bin/www_bget?C00780"	title="C00780 (3-(2-Aminoethyl)-1H-indol-5-ol)" />
+<area shape=rect	coords=719,398,800,412	href="/dbget-bin/www_bget?D00726+D02213+D05008"	title="D00726 (Metoclopramide (JP15/INN)), D02213 (Metoclopramide hydrochloride (JAN)), D05008 (Metoclopramide hydrochloride (USAN))" />
+<area shape=rect	coords=964,245,1019,259	href="/dbget-bin/www_bget?D01994"	title="D01994 (Mosapride citrate hydrate (JAN))" />
+<area shape=rect	coords=134,337,176,351	href="/dbget-bin/www_bget?D01462"	title="D01462 (Lisuride maleate (JAN))" />
+<area shape=rect	coords=120,539,190,554	href="/dbget-bin/www_bget?D00681"	title="D00681 (Methysergide maleate (USP))" />
+<area shape=rect	coords=459,258,513,272	href="/dbget-bin/www_bget?D00702"	title="D00702 (Buspirone hydrochloride (USP))" />
+<area shape=rect	coords=452,398,527,413	href="/dbget-bin/www_bget?D01992"	title="D01992 (Tandospirone citrate (JAN/USAN))" />
+<area shape=rect	coords=462,804,517,818	href="/dbget-bin/www_bget?D02363"	title="D02363 (Ketanserin (USAN/INN))" />
+<area shape=rect	coords=123,745,186,759	href="/dbget-bin/www_bget?D01624"	title="D01624 (Sarpogrelate hydrochloride (JAN))" />
+<area shape=rect	coords=461,539,522,553	href="/dbget-bin/www_bget?D02372"	title="D02372 (Perospirone hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=457,667,518,681	href="/dbget-bin/www_bget?D00426"	title="D00426 (Risperidone (JAN/USAN/INN))" />
+<area shape=rect	coords=40,45,404,71	href="/dbget-bin/www_bget?map07211"	title="map07211" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

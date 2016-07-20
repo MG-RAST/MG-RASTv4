@@ -1,0 +1,160 @@
+<html>
+<!---
+ENTRY       map07015
+DEFINITION  Local analgesics - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Local analgesics - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Local analgesics - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07015&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07015">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07015" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07015" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07015.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=472,481,602,540	href="/dbget-bin/www_bget?D02454"	title="D02454 (Hexylcaine hydrochloride)" />
+<area shape=rect	coords=263,438,391,504	href="/dbget-bin/www_bget?C14169"	title="C14169 (Stovaine)" />
+<area shape=rect	coords=258,318,397,376	href="/dbget-bin/www_bget?C14168"	title="C14168 (3-(Dimethylamino)propyl benzoate)" />
+<area shape=rect	coords=60,438,166,504	href="/dbget-bin/www_bget?C14171"	title="C14171 (Orthoform)" />
+<area shape=rect	coords=55,318,167,376	href="/dbget-bin/www_bget?C14170"	title="C14170 (p-Aminosalicylic acid methyl ester)" />
+<area shape=rect	coords=606,308,730,381	href="/dbget-bin/www_bget?C14167"	title="C14167 (beta-Eucaine)" />
+<area shape=rect	coords=476,296,599,381	href="/dbget-bin/www_bget?C14166"	title="C14166 (alpha-Eucaine)" />
+<area shape=rect	coords=241,573,400,639	href="/dbget-bin/www_bget?D00740"	title="D00740 (Procaine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=58,573,180,633	href="/dbget-bin/www_bget?D00552"	title="D00552 (Ethyl aminobenzoate (JP15))" />
+<area shape=rect	coords=472,580,602,636	href="/dbget-bin/www_bget?D02455"	title="D02455 (Piperocaine hydrochloride)" />
+<area shape=rect	coords=609,575,815,639	href="/dbget-bin/www_bget?D01768"	title="D01768 (Oxybuprocaine hydrochloride (JP15))" />
+<area shape=rect	coords=62,179,179,252	href="/dbget-bin/www_bget?D00110+D02182"	title="D00110 (Cocaine (USP)), D02182 (Cocaine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=609,474,805,540	href="/dbget-bin/www_bget?D00551+D00741"	title="D00551 (Tetracaine (USP/INN)), D00741 (Tetracaine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=47,101,205,136	href="/kegg-bin/show_pathway?map00960"	title="map00960" />
+<area shape=rect	coords=40,45,215,71	href="/dbget-bin/www_bget?map07015"	title="map07015" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,139 @@
+<html>
+<!---
+ENTRY       map03080
+DEFINITION   - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY:  - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/dbget-bin/get_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b> - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')"></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03080">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03080 map" -->
+</select>
+<input type="hidden" name="mapno" value="03080" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03080" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03080" />
+<input type="hidden" name="scale" value="1.0" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03080.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=522,565,568,582	href="/dbget-bin/www_bget?K03205"	title="K03205 (virD4)" />
+<area shape=rect	coords=477,565,523,582	href="/dbget-bin/www_bget?K03196"	title="K03196 (virB11)" />
+<area shape=rect	coords=341,565,387,582	href="/dbget-bin/www_bget?K03203"	title="K03203 (virB8)" />
+<area shape=rect	coords=386,565,432,582	href="/dbget-bin/www_bget?K03204"	title="K03204 (virB9)" />
+<area shape=rect	coords=431,565,477,582	href="/dbget-bin/www_bget?K03195"	title="K03195 (virB10)" />
+<area shape=rect	coords=250,565,296,582	href="/dbget-bin/www_bget?K03201"	title="K03201 (virB6)" />
+<area shape=rect	coords=296,565,342,582	href="/dbget-bin/www_bget?K03202"	title="K03202 (virB7)" />
+<area shape=rect	coords=205,565,251,582	href="/dbget-bin/www_bget?K03200"	title="K03200 (virB5)" />
+<area shape=rect	coords=114,565,160,582	href="/dbget-bin/www_bget?K03198"	title="K03198 (virB3)" />
+<area shape=rect	coords=160,565,206,582	href="/dbget-bin/www_bget?K03199"	title="K03199 (virB4)" />
+<area shape=rect	coords=69,565,115,582	href="/dbget-bin/www_bget?K03197"	title="K03197 (virB2)" />
+<area shape=rect	coords=24,565,70,582	href="/dbget-bin/www_bget?K03194"	title="K03194 (virB1)" />
+<area shape=rect	coords=173,30,408,56	href="/dbget-bin/www_bget?map03080"	title="map03080" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

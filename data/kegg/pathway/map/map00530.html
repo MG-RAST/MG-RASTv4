@@ -1,0 +1,224 @@
+<html>
+<!---
+ENTRY       map00530
+DEFINITION  Aminosugars metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Aminosugars metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Aminosugars metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')"></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00530">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00530 map" -->
+</select>
+<input type="hidden" name="mapno" value="00530" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00530" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00530" />
+<input type="hidden" name="scale" value="1.0" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00530.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=813,362,4	href="/dbget-bin/www_bget?C13952"	title="C13952 (UDP-N-acetyl-D-galactosaminuronic acid)" />
+<area shape=circle	coords=234,135,4	href="/dbget-bin/www_bget?C00734"	title="C00734 (Chitosan)" />
+<area shape=circle	coords=422,181,4	href="/dbget-bin/www_bget?C00461"	title="C00461 (Chitin)" />
+<area shape=circle	coords=341,181,4	href="/dbget-bin/www_bget?C01674"	title="C01674 (Chitobiose)" />
+<area shape=circle	coords=341,256,4	href="/dbget-bin/www_bget?C00140"	title="C00140 (N-Acetyl-D-glucosamine)" />
+<area shape=circle	coords=341,362,4	href="/dbget-bin/www_bget?C00357"	title="C00357 (N-Acetyl-D-glucosamine 6-phosphate)" />
+<area shape=circle	coords=234,256,4	href="/dbget-bin/www_bget?C00329"	title="C00329 (D-Glucosamine)" />
+<area shape=circle	coords=234,362,4	href="/dbget-bin/www_bget?C00352"	title="C00352 (D-Glucosamine 6-phosphate)" />
+<area shape=circle	coords=453,362,4	href="/dbget-bin/www_bget?C04501"	title="C04501 (N-Acetyl-alpha-D-glucosamine 1-phosphate)" />
+<area shape=circle	coords=565,362,4	href="/dbget-bin/www_bget?C00043"	title="C00043 (UDP-N-acetyl-D-glucosamine)" />
+<area shape=circle	coords=565,256,4	href="/dbget-bin/www_bget?C00645"	title="C00645 (N-Acetyl-D-mannosamine)" />
+<area shape=circle	coords=565,133,4	href="/dbget-bin/www_bget?C04257"	title="C04257 (N-Acetyl-D-mannosamine 6-phosphate)" />
+<area shape=circle	coords=677,133,4	href="/dbget-bin/www_bget?C06241"	title="C06241 (N-Acetylneuraminate 9-phosphate)" />
+<area shape=circle	coords=784,133,4	href="/dbget-bin/www_bget?C00270"	title="C00270 (N-Acetylneuraminate)" />
+<area shape=circle	coords=893,133,4	href="/dbget-bin/www_bget?C00128"	title="C00128 (CMP-N-acetylneuraminate)" />
+<area shape=circle	coords=893,258,4	href="/dbget-bin/www_bget?C03691"	title="C03691 (CMP-N-glycoloylneuraminate)" />
+<area shape=circle	coords=788,258,4	href="/dbget-bin/www_bget?C03410"	title="C03410 (N-Glycoloyl-neuraminate)" />
+<area shape=circle	coords=810,309,4	href="/dbget-bin/www_bget?C06240"	title="C06240 (UDP-N-acetyl-D-mannosaminouronate)" />
+<area shape=circle	coords=691,309,4	href="/dbget-bin/www_bget?C01170"	title="C01170 (UDP-N-acetyl-D-mannosamine)" />
+<area shape=circle	coords=694,362,4	href="/dbget-bin/www_bget?C00203"	title="C00203 (UDP-N-acetyl-D-galactosamine)" />
+<area shape=circle	coords=820,433,4	href="/dbget-bin/www_bget?C01050"	title="C01050 (UDP-N-acetylmuramate)" />
+<area shape=circle	coords=457,533,4	href="/dbget-bin/www_bget?C05114"	title="C05114 (Mucopolysaccharide)" />
+<area shape=circle	coords=457,459,4	href="/dbget-bin/www_bget?C00461"	title="C00461 (Chitin)" />
+<area shape=circle	coords=105,256,4	href="/dbget-bin/www_bget?C03752"	title="C03752 (2-Amino-2-deoxy-D-gluconate)" />
+<area shape=circle	coords=696,433,4	href="/dbget-bin/www_bget?C04631"	title="C04631 (UDP-N-acetyl-3-(1-carboxyvinyl)-D-glucosamine)" />
+<area shape=circle	coords=457,496,4	href="/dbget-bin/www_bget?C04573"	title="C04573 (UDP-N-acetyl-2-amino-2-deoxy-D-glucuronate)" />
+<area shape=circle	coords=893,77,4	href="/dbget-bin/www_bget?C04799"	title="C04799 (Colominic acid(non-reducing N- or O-acylneuraminyl residue))" />
+<area shape=circle	coords=234,196,4	href="/dbget-bin/www_bget?C06023"	title="C06023 (D-Glucosaminide)" />
+<area shape=circle	coords=893,354,4	href="/dbget-bin/www_bget?C05005"	title="C05005 (Glycolipid)" />
+<area shape=circle	coords=893,369,4	href="/dbget-bin/www_bget?C00326"	title="C00326 (Glycoprotein)" />
+<area shape=circle	coords=86,362,4	href="/dbget-bin/www_bget?C00085"	title="C00085 (D-Fructose 6-phosphate)" />
+<area shape=circle	coords=341,410,4	href="/dbget-bin/www_bget?C06156"	title="C06156 (alpha-D-Glucosamine 1-phosphate)" />
+<area shape=circle	coords=972,436,4	href="/dbget-bin/www_bget?C03412"	title="C03412 (N-Palmitoylglycoprotein)" />
+<area shape=circle	coords=841,164,4	href="/dbget-bin/www_bget?C00999"	title="C00999 (Ferrocytochrome b5)" />
+<area shape=circle	coords=841,221,4	href="/dbget-bin/www_bget?C00996"	title="C00996 (Ferricytochrome b5)" />
+<area shape=circle	coords=412,305,4	href="/dbget-bin/www_bget?C16698"	title="C16698 (N-Acetylmuramic acid 6-phosphate)" />
+<area shape=circle	coords=493,305,4	href="/dbget-bin/www_bget?C02713"	title="C02713 (N-Acetylmuramate)" />
+<area shape=rect	coords=353,297,399,314	href="/dbget-bin/www_bget?K07106+4.2.-.-+R08555"	title="K07106 (murQ), 4.2.-.-, R08555" />
+<area shape=poly	coords=232,254,111,254,111,258,232,258	href="/dbget-bin/www_bget?R01962"	title="R01962" />
+<area shape=poly	coords=111,256,119,252,119,260	href="/dbget-bin/www_bget?R01962"	title="R01962" />
+<area shape=rect	coords=725,354,771,371	href="/dbget-bin/www_bget?K02474+1.1.1.-+R06894"	title="K02474 (wbpO), 1.1.1.-, R06894" />
+<area shape=rect	coords=817,186,863,203	href="/dbget-bin/www_bget?K00326+1.6.2.2+R00100"	title="K00326 (E1.6.2.2), 1.6.2.2, R00100" />
+<area shape=rect	coords=118,364,164,381	href="/dbget-bin/www_bget?K02564+3.5.99.6+R00765"	title="K02564 (nagB, GNPDA), 3.5.99.6, R00765" />
+<area shape=rect	coords=318,206,364,223	href="/dbget-bin/www_bget?K01207+K12373+3.2.1.52+R00022"	title="K01207 (E3.2.1.52, nagZ), K12373 (HEX), 3.2.1.52, R00022" />
+<area shape=rect	coords=731,425,777,442	href="/dbget-bin/www_bget?K00075+1.1.1.158+R03191+R03192"	title="K00075 (murB), 1.1.1.158, R03191, R03192" />
+<area shape=rect	coords=608,425,654,442	href="/dbget-bin/www_bget?K00790+2.5.1.7+R00660"	title="K00790 (murA), 2.5.1.7, R00660" />
+<area shape=rect	coords=490,488,536,505	href="/dbget-bin/www_bget?1.1.1.136+R00421"	title="1.1.1.136, 1.1.1.136, R00421" />
+<area shape=rect	coords=490,451,536,468	href="/dbget-bin/www_bget?K00698+2.4.1.16+R02335"	title="K00698 (CHS1), 2.4.1.16, R02335" />
+<area shape=rect	coords=608,354,654,371	href="/dbget-bin/www_bget?K02473+5.1.3.7+R00418"	title="K02473 (E5.1.3.7, wbpP), 5.1.3.7, R00418" />
+<area shape=rect	coords=725,301,771,318	href="/dbget-bin/www_bget?K02472+1.1.1.-+R03317"	title="K02472 (wecC), 1.1.1.-, R03317" />
+<area shape=rect	coords=625,303,671,320	href="/dbget-bin/www_bget?K01791+5.1.3.14+R00420"	title="K01791 (wecB), 5.1.3.14, R00420" />
+<area shape=rect	coords=625,277,671,294	href="/dbget-bin/www_bget?3.1.4.-+R02707"	title="3.1.4.-, 3.1.4.-, R02707" />
+<area shape=rect	coords=694,208,740,225	href="/dbget-bin/www_bget?K01654+2.5.1.56+R01804"	title="K01654 (E2.5.1.56, neuB), 2.5.1.56, R01804" />
+<area shape=rect	coords=644,208,690,225	href="/dbget-bin/www_bget?K01639+4.1.3.3+R01811"	title="K01639 (E4.1.3.3, nanA, NPL), 4.1.3.3, R01811" />
+<area shape=rect	coords=818,250,864,267	href="/dbget-bin/www_bget?K00983+2.7.7.43+R04215"	title="K00983 (E2.7.7.43, neuA, CMAS), 2.7.7.43, R04215" />
+<area shape=rect	coords=764,186,810,203	href="/dbget-bin/www_bget?K08080+1.14.18.2+R01803"	title="K08080 (CMAH), 1.14.18.2, R01803" />
+<area shape=rect	coords=816,125,862,142	href="/dbget-bin/www_bget?K00983+2.7.7.43+R01117"	title="K00983 (E2.7.7.43, neuA, CMAS), 2.7.7.43, R01117" />
+<area shape=rect	coords=704,125,750,142	href="/dbget-bin/www_bget?K01097+3.1.3.29+R01805"	title="K01097 (NANP), 3.1.3.29, R01805" />
+<area shape=rect	coords=598,135,644,152	href="/dbget-bin/www_bget?K01654+2.5.1.56+R04435"	title="K01654 (E2.5.1.56, neuB), 2.5.1.56, R04435" />
+<area shape=rect	coords=598,114,644,131	href="/dbget-bin/www_bget?K05304+2.5.1.57+R04435"	title="K05304 (NANS, SAS), 2.5.1.57, R04435" />
+<area shape=rect	coords=543,299,589,316	href="/dbget-bin/www_bget?K01791+5.1.3.14+R00414"	title="K01791 (wecB), 5.1.3.14, R00414" />
+<area shape=rect	coords=563,177,609,194	href="/dbget-bin/www_bget?K01112+3.1.3.-+R02706"	title="K01112 (E3.1.3.-), 3.1.3.-, R02706" />
+<area shape=rect	coords=521,196,567,213	href="/dbget-bin/www_bget?K00885+2.7.1.60+R02705"	title="K00885 (E2.7.1.60, nanK), 2.7.1.60, R02705" />
+<area shape=rect	coords=487,353,533,370	href="/dbget-bin/www_bget?K00972+K04042+K11528+2.7.7.23+R00416"	title="K00972 (E2.7.7.23, UAP1), K04042 (glmU), K11528 (UDP-N-acetylglucosamine pyrophosphorylase [EC:2.7.7.23]), 2.7.7.23, R00416" />
+<area shape=rect	coords=376,353,422,370	href="/dbget-bin/www_bget?K01836+5.4.2.3+R08193"	title="K01836 (E5.4.2.3), 5.4.2.3, R08193" />
+<area shape=rect	coords=495,268,541,285	href="/dbget-bin/www_bget?K01788+5.1.3.9+R02087"	title="K01788 (nanE), 5.1.3.9, R02087" />
+<area shape=rect	coords=264,362,310,379	href="/dbget-bin/www_bget?K01443+3.5.1.25+R02059"	title="K01443 (E3.5.1.25, nagA, AMDHD2), 3.5.1.25, R02059" />
+<area shape=rect	coords=264,343,310,360	href="/dbget-bin/www_bget?K00621+2.3.1.4+R02058"	title="K00621 (E2.3.1.4, GNA1), 2.3.1.4, R02058" />
+<area shape=rect	coords=293,277,339,294	href="/dbget-bin/www_bget?K00884+2.7.1.59+R01201"	title="K00884 (nagK), 2.7.1.59, R01201" />
+<area shape=rect	coords=432,246,478,263	href="/dbget-bin/www_bget?K01787+5.1.3.8+R01207"	title="K01787 (E5.1.3.8, RENBP), 5.1.3.8, R01207" />
+<area shape=rect	coords=399,206,445,223	href="/dbget-bin/www_bget?K01183+3.2.1.14+R01206"	title="K01183 (E3.2.1.14), 3.2.1.14, R01206" />
+<area shape=rect	coords=265,239,311,256	href="/dbget-bin/www_bget?2.3.1.3+R01204"	title="2.3.1.3, 2.3.1.3, R01204" />
+<area shape=rect	coords=211,311,257,328	href="/dbget-bin/www_bget?K02762+2.7.1.69+R02631"	title="K02763 (PTS-Dgl-EIIA, gamP), K02764 (PTS-Dgl-EIIB, gamP), K02765 (PTS-Dgl-EIIC, gamP), 2.7.1.69, R02631" />
+<area shape=rect	coords=236,292,282,309	href="/dbget-bin/www_bget?2.7.1.8+R01961"	title="2.7.1.8, 2.7.1.8, R01961" />
+<area shape=rect	coords=186,292,232,309	href="/dbget-bin/www_bget?K00844+2.7.1.1+R01961"	title="K00844 (HK), 2.7.1.1, R01961" />
+<area shape=rect	coords=870,186,916,203	href="/dbget-bin/www_bget?K08080+1.14.18.2+R01115"	title="K08080 (CMAH), 1.14.18.2, R01115" />
+<area shape=rect	coords=364,174,410,191	href="/dbget-bin/www_bget?K01183+3.2.1.14+R02334"	title="K01183 (E3.2.1.14), 3.2.1.14, R02334" />
+<area shape=rect	coords=212,214,258,231	href="/dbget-bin/www_bget?up:Q56F26+3.2.1.165+R01966"	title="Q56F26, 3.2.1.165, R01966" />
+<area shape=rect	coords=211,152,257,169	href="/dbget-bin/www_bget?K01233+3.2.1.132+R02833"	title="K01233 (E3.2.1.132), 3.2.1.132, R02833" />
+<area shape=rect	coords=315,126,361,143	href="/dbget-bin/www_bget?K01452+3.5.1.41+R02333"	title="K01452 (E3.5.1.41, CDA1), 3.5.1.41, R02333" />
+<area shape=rect	coords=264,402,310,419	href="/dbget-bin/www_bget?K03431+5.4.2.10+R02060"	title="K03431 (glmM), 5.4.2.10, R02060" />
+<area shape=rect	coords=376,402,422,419	href="/dbget-bin/www_bget?K04042+2.3.1.157+R05332"	title="K04042 (glmU), 2.3.1.157, R05332" />
+<area shape=rect	coords=118,343,164,360	href="/dbget-bin/www_bget?K00820+2.6.1.16+R00768"	title="K00820 (E2.6.1.16, glmS), 2.6.1.16, R00768" />
+<area shape=rect	coords=265,258,311,275	href="/dbget-bin/www_bget?3.5.1.33+R01200"	title="3.5.1.33, 3.5.1.33, R01200" />
+<area shape=rect	coords=950,390,996,407	href="/dbget-bin/www_bget?2.3.1.96+R01952"	title="2.3.1.96, 2.3.1.96, R01952" />
+<area shape=rect	coords=343,277,389,294	href="/dbget-bin/www_bget?K02801+2.7.1.69+R05199"	title="K02802 (PTS-Nag-EIIA, nagE), K02803 (PTS-Nag-EIIB, nagE), K02804 (PTS-Nag-EIIC, nagE), 2.7.1.69, R05199" />
+<area shape=poly	coords=891,262,891,348,895,348,895,262	href="/dbget-bin/www_bget?R04289"	title="R04289" />
+<area shape=poly	coords=893,348,889,340,897,340	href="/dbget-bin/www_bget?R04289"	title="R04289" />
+<area shape=poly	coords=891,83,891,129,895,129,895,83	href="/dbget-bin/www_bget?R01119"	title="R01119" />
+<area shape=poly	coords=893,83,897,91,889,91	href="/dbget-bin/www_bget?R01119"	title="R01119" />
+<area shape=rect	coords=434,297,480,314	href="/dbget-bin/www_bget?K11190+2.7.1.69+R08559"	title="K02777 (PTS-Glc-EIIA, crr), K11191 (PTS-Mur-EIIB, murP), K11192 (PTS-Mur-EIIC, murP), 2.7.1.69, R08559" />
+<area shape=rect	coords=179,499,292,534	href="/kegg/pathway/map/map00531.html"	title="map00531" />
+<area shape=rect	coords=624,501,732,536	href="/kegg/pathway/map/map00540.html"	title="map00540" />
+<area shape=rect	coords=777,501,864,536	href="/kegg/pathway/map/map00550.html"	title="map00550" />
+<area shape=rect	coords=868,501,964,536	href="/kegg/pathway/map/map00471.html"	title="map00471" />
+<area shape=rect	coords=31,278,153,313	href="/kegg/pathway/map/map00051.html"	title="map00051" />
+<area shape=rect	coords=40,45,267,71	href="/dbget-bin/www_bget?map00530"	title="map00530" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,235 @@
+<html>
+<!---
+ENTRY       map03040
+DEFINITION  Spliceosome - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Spliceosome - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Spliceosome - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03040&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03040">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+After transcription, eukaryotic mRNA precursors contain protein-coding exons and noncoding introns. In the following splicing, introns are excised and exons are joined by a macromolecular complex, the spliceosome. The standard spliceosome is made up of five small nuclear ribonucleoproteins (snRNPs), U1, U2, U4, U5, and U6 snRNPs, and several spliceosome-associated proteins (SAPs). Spliceosomes are not a simple stable complex, but a dynamic family of particles that assemble on the mRNA precursor and help fold it into a conformation that allows transesterification to proceed. Various spliceosome forms (e.g.  A-, B- and C-complexes) have been identified.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03040 map" -->
+</select>
+<input type="hidden" name="mapno" value="03040" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03040" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03040" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03040.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=57,257,103,274	href="/dbget-bin/www_bget?K12811"	title="K12811 (DDX46, PRP5)" />
+<area shape=rect	coords=57,277,103,294	href="/dbget-bin/www_bget?K12812"	title="K12812 (UAP56, BAT1, SUB2)" />
+<area shape=rect	coords=675,132,721,149	href="/dbget-bin/www_bget?K11093"	title="K11093 (SNRP70)" />
+<area shape=rect	coords=675,149,721,166	href="/dbget-bin/www_bget?K11091"	title="K11091 (SNRPA)" />
+<area shape=rect	coords=675,166,721,183	href="/dbget-bin/www_bget?K11095"	title="K11095 (SNRPC)" />
+<area shape=rect	coords=410,521,456,538	href="/dbget-bin/www_bget?K12813+K12814"	title="K12813 (DHX16), K12814 (PRP2)" />
+<area shape=rect	coords=526,378,572,395	href="/dbget-bin/www_bget?K12815"	title="K12815 (DHX38, PRP16)" />
+<area shape=rect	coords=526,398,572,415	href="/dbget-bin/www_bget?K12816"	title="K12816 (CDC40, PRP17)" />
+<area shape=rect	coords=675,235,721,252	href="/dbget-bin/www_bget?K12821"	title="K12821 (PRPF40, PRP40)" />
+<area shape=rect	coords=675,255,721,272	href="/dbget-bin/www_bget?K12822"	title="K12822 (RBM25, S164)" />
+<area shape=rect	coords=517,260,563,277	href="/dbget-bin/www_bget?K12818"	title="K12818 (DHX8, PRP22)" />
+<area shape=rect	coords=446,155,492,172	href="/dbget-bin/www_bget?K12820"	title="K12820 (DHX15, PRP43)" />
+<area shape=rect	coords=675,115,721,132	href="/dbget-bin/www_bget?K11086+K11087+K11096+K11088+K11097+K11098+K11099"	title="K11086 (SNRPB, SMB), K11087 (SNRPD1, SMD1), K11088 (SNRPD3, SMD3), K11096 (SNRPD2, SMD2), K11097 (SNRPE, SME), K11098 (SNRPF, SMF), K11099 (SNRPG, SMG)" />
+<area shape=rect	coords=675,275,721,292	href="/dbget-bin/www_bget?K12823"	title="K12823 (DDX5, DBP2)" />
+<area shape=rect	coords=675,295,721,312	href="/dbget-bin/www_bget?K12824"	title="K12824 (TCERG1, CA150)" />
+<area shape=rect	coords=740,115,786,132	href="/dbget-bin/www_bget?K11086+K11087+K11096+K11088+K11097+K11098+K11099"	title="K11086 (SNRPB, SMB), K11087 (SNRPD1, SMD1), K11088 (SNRPD3, SMD3), K11096 (SNRPD2, SMD2), K11097 (SNRPE, SME), K11098 (SNRPF, SMF), K11099 (SNRPG, SMG)" />
+<area shape=rect	coords=740,132,786,149	href="/dbget-bin/www_bget?K11092"	title="K11092 (SNRPA1)" />
+<area shape=rect	coords=740,149,786,166	href="/dbget-bin/www_bget?K11094"	title="K11094 (SNRPB2)" />
+<area shape=rect	coords=740,165,786,182	href="/dbget-bin/www_bget?K12825+K12826+K12827"	title="K12825 (SF3A1, SAP114), K12826 (SF3A2, SAP62), K12827 (SF3A3, SAP61, PRP9)" />
+<area shape=rect	coords=740,182,786,199	href="/dbget-bin/www_bget?K12828+K12829+K12830+K12831+K12832+K12833+K12834+K12835"	title="K12828 (SF3B1, SAP155), K12829 (SF3B2, SAP145, CUS1), K12830 (SF3B3, SAP130, RSE1), K12831 (SF3B4, SAP49), K12832 (SF3B5, SF3B10), K12833 (SF3B14), K12834 (PHF5A), K12835 (DDX42, SF3B125)" />
+<area shape=rect	coords=740,235,786,252	href="/dbget-bin/www_bget?K12836+K12837"	title="K12836 (U2AF1), K12837 (U2AF2)" />
+<area shape=rect	coords=740,255,786,272	href="/dbget-bin/www_bget?K12838"	title="K12838 (PUF60)" />
+<area shape=rect	coords=740,275,786,292	href="/dbget-bin/www_bget?K12839"	title="K12839 (SMNDC1, SPF30)" />
+<area shape=rect	coords=740,295,786,312	href="/dbget-bin/www_bget?K12840"	title="K12840 (RBM17, SPF45)" />
+<area shape=rect	coords=740,315,786,332	href="/dbget-bin/www_bget?K12841"	title="K12841 (CHERP)" />
+<area shape=rect	coords=740,335,786,352	href="/dbget-bin/www_bget?K12842"	title="K12842 (SR140)" />
+<area shape=rect	coords=740,355,786,372	href="/dbget-bin/www_bget?K12820"	title="K12820 (DHX15, PRP43)" />
+<area shape=rect	coords=870,441,916,458	href="/dbget-bin/www_bget?K12882+K12883"	title="K12882 (NCBP1, CBP80), K12883 (NCBP2, CBP20)" />
+<area shape=rect	coords=870,461,916,478	href="/dbget-bin/www_bget?K12741+K12884+K12885+K12886+K12887+K12888+K12889"	title="K12741 (HNRNPA1_3), K12884 (HNRNPC), K12885 (RBMX, HNRNPG), K12886 (HNRNPK), K12887 (HNRNPM), K12888 (HNRNPU), K12889 (PCBP1)" />
+<area shape=rect	coords=870,481,916,498	href="/dbget-bin/www_bget?K12890+K12891+K12892+K12893+K12896+K12897+K12900"	title="K12890 (SFRS1_9), K12891 (SFRS2), K12892 (SFRS3), K12893 (SFRS4_5_6), K12896 (SFRS7), K12897 (TRA2), K12900 (FUSIP1)" />
+<area shape=rect	coords=675,441,721,458	href="/dbget-bin/www_bget?K10599"	title="K10599 (PRPF19, PRP19)" />
+<area shape=rect	coords=675,458,721,475	href="/dbget-bin/www_bget?K12860"	title="K12860 (CDC5L, CDC5, CEF1)" />
+<area shape=rect	coords=675,475,721,492	href="/dbget-bin/www_bget?K12861"	title="K12861 (BCAS2)" />
+<area shape=rect	coords=675,492,721,509	href="/dbget-bin/www_bget?K12862"	title="K12862 (PLRG1, PRL1, PRP46)" />
+<area shape=rect	coords=675,509,721,526	href="/dbget-bin/www_bget?K12863"	title="K12863 (CWC15)" />
+<area shape=rect	coords=675,526,721,543	href="/dbget-bin/www_bget?K12864"	title="K12864 (CTNNBL1)" />
+<area shape=rect	coords=675,543,721,560	href="/dbget-bin/www_bget?K03283"	title="K03283 (HSPA1_8)" />
+<area shape=rect	coords=675,567,721,584	href="/dbget-bin/www_bget?K12865"	title="K12865 (PQBP1, NPW38)" />
+<area shape=rect	coords=740,461,786,478	href="/dbget-bin/www_bget?K12867+K12868+K12869"	title="K12867 (SYF1, XAB2), K12868 (SYF2), K12869 (CRN, CRNKL1, CLF1, SYF3)" />
+<area shape=rect	coords=675,584,721,601	href="/dbget-bin/www_bget?K12866"	title="K12866 (WBP11, NPWBP)" />
+<area shape=rect	coords=740,441,786,458	href="/dbget-bin/www_bget?K06063"	title="K06063 (SNW1, SKIIP, SKIP)" />
+<area shape=rect	coords=740,481,786,498	href="/dbget-bin/www_bget?K12870"	title="K12870 (ISY1)" />
+<area shape=rect	coords=740,501,786,518	href="/dbget-bin/www_bget?K12733"	title="K12733 (PPIL1)" />
+<area shape=rect	coords=740,521,786,538	href="/dbget-bin/www_bget?K09564"	title="K09564 (PPIE)" />
+<area shape=rect	coords=740,541,786,558	href="/dbget-bin/www_bget?K12871"	title="K12871 (CCDC12)" />
+<area shape=rect	coords=740,561,786,578	href="/dbget-bin/www_bget?K12872"	title="K12872 (RBM22, SLT11)" />
+<area shape=rect	coords=740,601,786,618	href="/dbget-bin/www_bget?K12874"	title="K12874 (AQR)" />
+<area shape=rect	coords=805,115,851,132	href="/dbget-bin/www_bget?K12621+K12622+K12623+K12624+K12625+K12626+K12627"	title="K12621 (LSM2), K12622 (LSM3), K12623 (LSM4), K12624 (LSM5), K12625 (LSM6), K12626 (LSM7), K12627 (LSM8)" />
+<area shape=rect	coords=805,132,851,149	href="/dbget-bin/www_bget?K11086+K11087+K11096+K11088+K11097+K11098+K11099"	title="K11086 (SNRPB, SMB), K11087 (SNRPD1, SMD1), K11088 (SNRPD3, SMD3), K11096 (SNRPD2, SMD2), K11097 (SNRPE, SME), K11098 (SNRPF, SMF), K11099 (SNRPG, SMG)" />
+<area shape=rect	coords=805,199,851,216	href="/dbget-bin/www_bget?K12844"	title="K12844 (PRPF31)" />
+<area shape=rect	coords=805,183,851,200	href="/dbget-bin/www_bget?K09567"	title="K09567 (PPIH, CYPH)" />
+<area shape=rect	coords=805,166,851,183	href="/dbget-bin/www_bget?K12662"	title="K12662 (PRPF4, PRP4)" />
+<area shape=rect	coords=805,149,851,166	href="/dbget-bin/www_bget?K12843"	title="K12843 (PRPF3, PRP3)" />
+<area shape=rect	coords=805,216,851,233	href="/dbget-bin/www_bget?K12845"	title="K12845 (SNU13, NHP2L)" />
+<area shape=rect	coords=870,114,916,131	href="/dbget-bin/www_bget?K11086+K11087+K11096+K11088+K11097+K11098+K11099"	title="K11086 (SNRPB, SMB), K11087 (SNRPD1, SMD1), K11088 (SNRPD3, SMD3), K11096 (SNRPD2, SMD2), K11097 (SNRPE, SME), K11098 (SNRPF, SMF), K11099 (SNRPG, SMG)" />
+<area shape=rect	coords=870,131,916,148	href="/dbget-bin/www_bget?K12852+K12853"	title="K12852 (EFTUD2), K12853 (SNU114)" />
+<area shape=rect	coords=870,148,916,165	href="/dbget-bin/www_bget?K12854"	title="K12854 (SNRNP200, BRR2)" />
+<area shape=rect	coords=870,165,916,182	href="/dbget-bin/www_bget?K12855"	title="K12855 (PRPF6, PRP6)" />
+<area shape=rect	coords=870,182,916,199	href="/dbget-bin/www_bget?K12856"	title="K12856 (PRPF8, PRP8)" />
+<area shape=rect	coords=870,199,916,216	href="/dbget-bin/www_bget?K12857"	title="K12857 (SNRNP40, PRP8BP)" />
+<area shape=rect	coords=870,216,916,233	href="/dbget-bin/www_bget?K12858"	title="K12858 (DDX23, PRP28)" />
+<area shape=rect	coords=870,233,916,250	href="/dbget-bin/www_bget?K12859"	title="K12859 (TXNL4A, DIB1)" />
+<area shape=rect	coords=805,275,851,292	href="/dbget-bin/www_bget?K12846"	title="K12846 (SNRNP27)" />
+<area shape=rect	coords=805,292,851,309	href="/dbget-bin/www_bget?K12847"	title="K12847 (USP39, SAD1)" />
+<area shape=rect	coords=805,309,851,326	href="/dbget-bin/www_bget?K11984"	title="K11984 (SART1, HAF, SNU66)" />
+<area shape=rect	coords=805,441,851,458	href="/dbget-bin/www_bget?K12875"	title="K12875 (ACIN1, ACINUS)" />
+<area shape=rect	coords=805,458,851,475	href="/dbget-bin/www_bget?K13025"	title="K13025 (eIF-4A3, EIF4A3)" />
+<area shape=rect	coords=805,475,851,492	href="/dbget-bin/www_bget?K12876"	title="K12876 (RBM8A, Y14)" />
+<area shape=rect	coords=805,492,851,509	href="/dbget-bin/www_bget?K12877"	title="K12877 (MAGOH)" />
+<area shape=rect	coords=805,509,851,526	href="/dbget-bin/www_bget?K12812"	title="K12812 (UAP56, BAT1, SUB2)" />
+<area shape=rect	coords=805,526,851,543	href="/dbget-bin/www_bget?K12878+K12879+K12880+K12881"	title="K12878 (THOC1), K12879 (THOC2), K12880 (THOC3), K12881 (THOC4, ALY)" />
+<area shape=rect	coords=575,378,621,395	href="/dbget-bin/www_bget?K12818"	title="K12818 (DHX8, PRP22)" />
+<area shape=rect	coords=575,398,621,415	href="/dbget-bin/www_bget?K12819"	title="K12819 (SLU7)" />
+<area shape=rect	coords=805,335,851,352	href="/dbget-bin/www_bget?K12848"	title="K12848 (SNU23)" />
+<area shape=rect	coords=805,355,851,372	href="/dbget-bin/www_bget?K12849+K12850+K12851"	title="K12849 (PRPF38A), K12850 (PRPF38B), K12851 (PRP38)" />
+<area shape=rect	coords=526,418,572,435	href="/dbget-bin/www_bget?K12817"	title="K12817 (PRPF18, PRP18)" />
+<area shape=rect	coords=740,581,786,598	href="/dbget-bin/www_bget?K12873"	title="K12873 (BUD31, G10)" />
+<area shape=rect	coords=40,45,170,71	href="/dbget-bin/www_bget?map03040"	title="map03040" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,345 @@
+<html>
+<!---
+ENTRY       map01052
+DEFINITION  Type I polyketide structures - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Type I polyketide structures - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Type I polyketide structures - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=01052&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map01052">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 01052 map" -->
+</select>
+<input type="hidden" name="mapno" value="01052" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map01052" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map01052" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map01052.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=225,3083,295,3097	href="/dbget-bin/www_bget?C12151"	title="C12151 (Mycolactone)" />
+<area shape=rect	coords=580,2839,653,2854	href="/dbget-bin/www_bget?C12157"	title="C12157 (Myxalamid S)" />
+<area shape=rect	coords=222,2840,299,2854	href="/dbget-bin/www_bget?C12148"	title="C12148 (Stigmatellin A)" />
+<area shape=rect	coords=583,2610,649,2624	href="/dbget-bin/www_bget?C11300"	title="C11300 (Soraphen A)" />
+<area shape=rect	coords=223,2611,295,2625	href="/dbget-bin/www_bget?C12153"	title="C12153 (Epothilone A)" />
+<area shape=rect	coords=221,2318,274,2332	href="/dbget-bin/www_bget?C08073"	title="C08073 (Natamycin)" />
+<area shape=rect	coords=709,2060,775,2074	href="/dbget-bin/www_bget?C12155"	title="C12155 (Nystatin A1)" />
+<area shape=rect	coords=204,2060,290,2074	href="/dbget-bin/www_bget?C06573"	title="C06573 (Amphotericin B)" />
+<area shape=rect	coords=500,1735,589,1749	href="/dbget-bin/www_bget?C12176"	title="C12176 (Proansamycin X)" />
+<area shape=rect	coords=191,1735,277,1749	href="/dbget-bin/www_bget?C12045"	title="C12045 (Ansamitocin P3)" />
+<area shape=rect	coords=818,1403,858,1417	href="/dbget-bin/www_bget?C01375"	title="C01375 (Tacrolimus)" />
+<area shape=rect	coords=522,1402,564,1417	href="/dbget-bin/www_bget?C12102"	title="C12102 (FK520)" />
+<area shape=rect	coords=201,1404,265,1417	href="/dbget-bin/www_bget?C07909"	title="C07909 (Sirolimus)" />
+<area shape=rect	coords=796,962,884,975	href="/dbget-bin/www_bget?C11984"	title="C11984 (Avermectin A1a)" />
+<area shape=rect	coords=510,961,575,975	href="/dbget-bin/www_bget?C12152"	title="C12152 (Niddamycin)" />
+<area shape=rect	coords=211,961,253,975	href="/dbget-bin/www_bget?C01457"	title="C01457 (Tylosin)" />
+<area shape=rect	coords=809,639,873,652	href="/dbget-bin/www_bget?C11999"	title="C11999 (Pikromycin)" />
+<area shape=rect	coords=506,640,582,652	href="/dbget-bin/www_bget?C01946"	title="C01946 (Oleandomycin)" />
+<area shape=rect	coords=189,639,276,652	href="/dbget-bin/www_bget?C01912"	title="C01912 (Erythromycin)" />
+<area shape=rect	coords=200,321,268,333	href="/dbget-bin/www_bget?C11996"	title="C11996 (Methymycin)" />
+<area shape=rect	coords=677,2319,805,2332	href="/dbget-bin/www_bget?C06690"	title="C06690 (Candicidin D)" />
+<area shape=rect	coords=278,1592,324,1609	href="/dbget-bin/www_bget?up:Q8KUF6"	title="Q8KUF6" />
+<area shape=rect	coords=309,2982,355,2999	href="/dbget-bin/www_bget?up:Q6MZ72"	title="Q6MZ72" />
+<area shape=rect	coords=223,2889,269,2906	href="/dbget-bin/www_bget?up:Q6MZA4"	title="Q6MZA4" />
+<area shape=rect	coords=75,2982,121,2999	href="/dbget-bin/www_bget?up:Q6MZA5"	title="Q6MZA5" />
+<area shape=rect	coords=732,2668,778,2685	href="/dbget-bin/www_bget?up:Q93TW6"	title="Q93TW6" />
+<area shape=rect	coords=683,2682,729,2699	href="/dbget-bin/www_bget?up:Q93TW7"	title="Q93TW7" />
+<area shape=rect	coords=658,2701,704,2718	href="/dbget-bin/www_bget?up:Q93TW8"	title="Q93TW8" />
+<area shape=rect	coords=607,2728,653,2745	href="/dbget-bin/www_bget?up:Q93TW9"	title="Q93TW9" />
+<area shape=rect	coords=549,2687,595,2704	href="/dbget-bin/www_bget?up:Q93TX0"	title="Q93TX0" />
+<area shape=rect	coords=549,2668,595,2685	href="/dbget-bin/www_bget?up:Q93TX1"	title="Q93TX1" />
+<area shape=rect	coords=487,2668,533,2685	href="/dbget-bin/www_bget?up:Q93TX2"	title="Q93TX2" />
+<area shape=rect	coords=266,2803,312,2820	href="/dbget-bin/www_bget?up:Q8RJY1"	title="Q8RJY1" />
+<area shape=rect	coords=319,2825,365,2842	href="/dbget-bin/www_bget?up:Q8RJX6"	title="Q8RJX6" />
+<area shape=rect	coords=363,2803,409,2820	href="/dbget-bin/www_bget?up:Q8RJX8"	title="Q8RJX8" />
+<area shape=rect	coords=363,2784,409,2801	href="/dbget-bin/www_bget?up:Q8RJX9"	title="Q8RJX9" />
+<area shape=rect	coords=391,2685,437,2702	href="/dbget-bin/www_bget?up:Q8RJX7"	title="Q8RJX7" />
+<area shape=rect	coords=266,2679,312,2696	href="/dbget-bin/www_bget?up:Q8RJY0"	title="Q8RJY0" />
+<area shape=rect	coords=227,2660,273,2677	href="/dbget-bin/www_bget?up:Q8RJY2"	title="Q8RJY2" />
+<area shape=rect	coords=191,2679,237,2696	href="/dbget-bin/www_bget?up:Q8RJY3"	title="Q8RJY3" />
+<area shape=rect	coords=158,2660,204,2677	href="/dbget-bin/www_bget?up:Q8RJY4"	title="Q8RJY4" />
+<area shape=rect	coords=125,2679,171,2696	href="/dbget-bin/www_bget?up:Q8RJY5"	title="Q8RJY5" />
+<area shape=rect	coords=78,2709,124,2726	href="/dbget-bin/www_bget?up:Q8RJY6"	title="Q8RJY6" />
+<area shape=rect	coords=617,2589,663,2606	href="/dbget-bin/www_bget?up:Q9ADL7"	title="Q9ADL7" />
+<area shape=rect	coords=713,2486,759,2503	href="/dbget-bin/www_bget?up:Q53840"	title="Q53840" />
+<area shape=rect	coords=595,2406,641,2423	href="/dbget-bin/www_bget?up:Q9ADL4"	title="Q9ADL4" />
+<area shape=rect	coords=480,2486,526,2503	href="/dbget-bin/www_bget?up:Q9ADL6"	title="Q9ADL6" />
+<area shape=rect	coords=329,2564,375,2581	href="/dbget-bin/www_bget?up:Q9KIZ6"	title="Q9KIZ6" />
+<area shape=rect	coords=230,2564,276,2581	href="/dbget-bin/www_bget?up:Q9KIZ5"	title="Q9KIZ5" />
+<area shape=rect	coords=161,2564,207,2581	href="/dbget-bin/www_bget?up:Q9KIZ8"	title="Q9KIZ8" />
+<area shape=rect	coords=329,2432,375,2449	href="/dbget-bin/www_bget?up:Q9KIZ7"	title="Q9KIZ7" />
+<area shape=rect	coords=230,2406,276,2423	href="/dbget-bin/www_bget?up:Q9KIZ4"	title="Q9KIZ4" />
+<area shape=rect	coords=153,2432,199,2449	href="/dbget-bin/www_bget?up:Q9KIZ9"	title="Q9KIZ9" />
+<area shape=rect	coords=78,2469,124,2486	href="/dbget-bin/www_bget?up:Q9KJ00"	title="Q9KJ00" />
+<area shape=rect	coords=874,2267,920,2284	href="/dbget-bin/www_bget?up:Q6W5P6"	title="Q6W5P6" />
+<area shape=rect	coords=673,2267,720,2284	href="/dbget-bin/www_bget?up:Q6W5P7"	title="Q6W5P7" />
+<area shape=rect	coords=570,2267,616,2284	href="/dbget-bin/www_bget?up:Q6W5P8"	title="Q6W5P8" />
+<area shape=rect	coords=824,2114,870,2131	href="/dbget-bin/www_bget?up:Q6W5Q9"	title="Q6W5Q9" />
+<area shape=rect	coords=673,2153,719,2170	href="/dbget-bin/www_bget?up:Q6W5Q0"	title="Q6W5Q0" />
+<area shape=rect	coords=561,2153,607,2170	href="/dbget-bin/www_bget?up:Q6W5P9"	title="Q6W5P9" />
+<area shape=rect	coords=463,2153,509,2170	href="/dbget-bin/www_bget?up:Q6W5Q3"	title="Q6W5Q3" />
+<area shape=rect	coords=363,2152,409,2169	href="/dbget-bin/www_bget?up:Q9EW94"	title="Q9EW94" />
+<area shape=rect	coords=331,2264,377,2281	href="/dbget-bin/www_bget?up:Q9EWA1"	title="Q9EWA1" />
+<area shape=rect	coords=240,2293,286,2310	href="/dbget-bin/www_bget?up:Q9EW92"	title="Q9EW92" />
+<area shape=rect	coords=179,2282,225,2299	href="/dbget-bin/www_bget?up:Q9EWA2"	title="Q9EWA2" />
+<area shape=rect	coords=130,2264,176,2281	href="/dbget-bin/www_bget?up:Q9EWA3"	title="Q9EWA3" />
+<area shape=rect	coords=73,2205,119,2222	href="/dbget-bin/www_bget?up:Q9X992"	title="Q9X992" />
+<area shape=rect	coords=273,2114,319,2131	href="/dbget-bin/www_bget?up:Q9EWA4"	title="Q9EWA4" />
+<area shape=rect	coords=163,2153,209,2170	href="/dbget-bin/www_bget?up:Q9X993"	title="Q9X993" />
+<area shape=rect	coords=912,1893,958,1910	href="/dbget-bin/www_bget?up:Q9L4W8"	title="Q9L4W8" />
+<area shape=rect	coords=878,2013,924,2030	href="/dbget-bin/www_bget?up:Q9L4X3"	title="Q9L4X3" />
+<area shape=rect	coords=821,1855,867,1872	href="/dbget-bin/www_bget?up:Q9L4W6"	title="Q9L4W6" />
+<area shape=rect	coords=772,2033,818,2050	href="/dbget-bin/www_bget?up:Q9L4X0"	title="Q9L4X0" />
+<area shape=rect	coords=622,2025,668,2042	href="/dbget-bin/www_bget?up:Q9L4X1"	title="Q9L4X1" />
+<area shape=rect	coords=691,2013,737,2030	href="/dbget-bin/www_bget?up:Q9L4X2"	title="Q9L4X2" />
+<area shape=rect	coords=569,2013,615,2030	href="/dbget-bin/www_bget?up:Q9L4W5"	title="Q9L4W5" />
+<area shape=rect	coords=691,1893,737,1910	href="/dbget-bin/www_bget?up:Q9L4W3"	title="Q9L4W3" />
+<area shape=rect	coords=558,1893,604,1910	href="/dbget-bin/www_bget?up:Q9L4W4"	title="Q9L4W4" />
+<area shape=rect	coords=403,2013,449,2030	href="/dbget-bin/www_bget?up:Q93NX9"	title="Q93NX9" />
+<area shape=rect	coords=253,2033,299,2050	href="/dbget-bin/www_bget?up:Q93NX6"	title="Q93NX6" />
+<area shape=rect	coords=217,2013,263,2030	href="/dbget-bin/www_bget?up:Q93NX8"	title="Q93NX8" />
+<area shape=rect	coords=147,2025,193,2042	href="/dbget-bin/www_bget?up:Q93NX7"	title="Q93NX7" />
+<area shape=rect	coords=84,2013,130,2030	href="/dbget-bin/www_bget?up:Q93NW8"	title="Q93NW8" />
+<area shape=rect	coords=431,1893,477,1910	href="/dbget-bin/www_bget?up:Q93NX1"	title="Q93NX1" />
+<area shape=rect	coords=345,1855,391,1872	href="/dbget-bin/www_bget?up:Q93NW9"	title="Q93NW9" />
+<area shape=rect	coords=217,1893,263,1910	href="/dbget-bin/www_bget?up:Q93NW6"	title="Q93NW6" />
+<area shape=rect	coords=84,1893,130,1910	href="/dbget-bin/www_bget?up:Q93NW7"	title="Q93NW7" />
+<area shape=rect	coords=661,1680,707,1697	href="/dbget-bin/www_bget?up:RIFF_AMYMD"	title="RIFF_AMYMD" />
+<area shape=rect	coords=671,1605,717,1622	href="/dbget-bin/www_bget?up:O54593"	title="O54593" />
+<area shape=rect	coords=645,1548,691,1565	href="/dbget-bin/www_bget?up:O54591"	title="O54591" />
+<area shape=rect	coords=566,1525,612,1542	href="/dbget-bin/www_bget?up:O52790"	title="O52790" />
+<area shape=rect	coords=473,1536,519,1553	href="/dbget-bin/www_bget?up:O52545"	title="O52545" />
+<area shape=rect	coords=448,1627,494,1644	href="/dbget-bin/www_bget?up:O54666"	title="O54666" />
+<area shape=rect	coords=199,1711,245,1728	href="/dbget-bin/www_bget?up:Q8KUG5"	title="Q8KUG5" />
+<area shape=rect	coords=151,1711,197,1728	href="/dbget-bin/www_bget?up:Q8KUF8"	title="Q8KUF8" />
+<area shape=rect	coords=284,1657,330,1674	href="/dbget-bin/www_bget?up:Q8KUG0"	title="Q8KUG0" />
+<area shape=rect	coords=332,1629,378,1646	href="/dbget-bin/www_bget?up:Q8KUG5"	title="Q8KUG5" />
+<area shape=rect	coords=332,1607,378,1624	href="/dbget-bin/www_bget?up:Q8KUF7"	title="Q8KUF7" />
+<area shape=rect	coords=284,1629,330,1646	href="/dbget-bin/www_bget?up:Q8KUF8"	title="Q8KUF8" />
+<area shape=rect	coords=58,1647,104,1664	href="/dbget-bin/www_bget?up:Q8KUG9"	title="Q8KUG9" />
+<area shape=rect	coords=70,1565,116,1582	href="/dbget-bin/www_bget?up:Q8KUH3"	title="Q8KUH3" />
+<area shape=rect	coords=362,1541,408,1558	href="/dbget-bin/www_bget?up:Q8KUG7"	title="Q8KUG7" />
+<area shape=rect	coords=360,1513,406,1530	href="/dbget-bin/www_bget?up:Q8KUI0"	title="Q8KUI0" />
+<area shape=rect	coords=312,1513,358,1530	href="/dbget-bin/www_bget?up:Q8KUF9"	title="Q8KUF9" />
+<area shape=rect	coords=232,1504,278,1521	href="/dbget-bin/www_bget?up:Q8KUF5"	title="Q8KUF5" />
+<area shape=rect	coords=168,1504,214,1521	href="/dbget-bin/www_bget?up:Q8KUH4"	title="Q8KUH4" />
+<area shape=rect	coords=58,1504,104,1521	href="/dbget-bin/www_bget?up:Q8KUG5"	title="Q8KUG5" />
+<area shape=rect	coords=921,1325,967,1342	href="/dbget-bin/www_bget?up:P95814"	title="P95814" />
+<area shape=rect	coords=855,1147,901,1164	href="/dbget-bin/www_bget?up:Q9ZGA4"	title="Q9ZGA4" />
+<area shape=rect	coords=798,1368,844,1385	href="/dbget-bin/www_bget?up:Q9ZGA5"	title="Q9ZGA5" />
+<area shape=rect	coords=798,1349,844,1366	href="/dbget-bin/www_bget?up:P95815"	title="P95815" />
+<area shape=rect	coords=727,1271,773,1288	href="/dbget-bin/www_bget?up:Q9ZGA6"	title="Q9ZGA6" />
+<area shape=rect	coords=678,1111,724,1128	href="/dbget-bin/www_bget?up:P74838"	title="P74838" />
+<area shape=rect	coords=611,1325,657,1342	href="/dbget-bin/www_bget?up:Q9KID7"	title="Q9KID7" />
+<area shape=rect	coords=487,1368,533,1384	href="/dbget-bin/www_bget?up:Q9KID9"	title="Q9KID9" />
+<area shape=rect	coords=487,1349,533,1366	href="/dbget-bin/www_bget?up:Q9KID6"	title="Q9KID6" />
+<area shape=rect	coords=648,1252,694,1269	href="/dbget-bin/www_bget?up:Q9KIE1"	title="Q9KIE1" />
+<area shape=rect	coords=417,1271,463,1288	href="/dbget-bin/www_bget?up:Q9KID8"	title="Q9KID8" />
+<area shape=rect	coords=545,1147,591,1164	href="/dbget-bin/www_bget?up:Q9KIE0"	title="Q9KIE0" />
+<area shape=rect	coords=369,1111,415,1128	href="/dbget-bin/www_bget?up:Q9KID5"	title="Q9KID5" />
+<area shape=rect	coords=281,1342,327,1359	href="/dbget-bin/www_bget?up:Q54299"	title="Q54299" />
+<area shape=rect	coords=180,1377,226,1394	href="/dbget-bin/www_bget?up:Q54302"	title="Q54302" />
+<area shape=rect	coords=132,1377,178,1394	href="/dbget-bin/www_bget?up:Q59921"	title="Q59921" />
+<area shape=rect	coords=85,1289,131,1306	href="/dbget-bin/www_bget?up:Q54298"	title="Q54298" />
+<area shape=rect	coords=329,1240,375,1257	href="/dbget-bin/www_bget?up:Q54296"	title="Q54296" />
+<area shape=rect	coords=273,1111,319,1128	href="/dbget-bin/www_bget?up:Q54302"	title="Q54302" />
+<area shape=rect	coords=225,1111,271,1128	href="/dbget-bin/www_bget?up:Q59921"	title="Q59921" />
+<area shape=rect	coords=118,1136,164,1153	href="/dbget-bin/www_bget?up:Q54297"	title="Q54297" />
+<area shape=rect	coords=939,770,985,787	href="/dbget-bin/www_bget?sma:SAV_945"	title="SAV_945" />
+<area shape=rect	coords=941,815,987,832	href="/dbget-bin/www_bget?sma:SAV_945"	title="SAV_945" />
+<area shape=rect	coords=892,891,938,908	href="/dbget-bin/www_bget?sma:SAV_941"	title="SAV_941" />
+<area shape=rect	coords=854,858,900,875	href="/dbget-bin/www_bget?sma:SAV_942"	title="SAV_942" />
+<area shape=rect	coords=822,931,868,948	href="/dbget-bin/www_bget?sma:SAV_943"	title="SAV_943" />
+<area shape=rect	coords=697,943,743,960	href="/dbget-bin/www_bget?sma:SAV_937"	title="SAV_937" />
+<area shape=rect	coords=697,924,743,941	href="/dbget-bin/www_bget?sma:SAV_936"	title="SAV_936" />
+<area shape=rect	coords=794,744,840,761	href="/dbget-bin/www_bget?sma:SAV_939"	title="SAV_939" />
+<area shape=rect	coords=704,733,750,750	href="/dbget-bin/www_bget?sma:SAV_938"	title="SAV_938" />
+<area shape=rect	coords=560,895,606,912	href="/dbget-bin/www_bget?up:O30767"	title="O30767" />
+<area shape=rect	coords=505,895,551,912	href="/dbget-bin/www_bget?up:O30768"	title="O30768" />
+<area shape=rect	coords=582,762,628,779	href="/dbget-bin/www_bget?up:O30766"	title="O30766" />
+<area shape=rect	coords=446,813,492,830	href="/dbget-bin/www_bget?up:O30764"	title="O30764" />
+<area shape=rect	coords=475,762,521,779	href="/dbget-bin/www_bget?up:O30765"	title="O30765" />
+<area shape=rect	coords=379,856,425,873	href="/dbget-bin/www_bget?up:Q9XC67"	title="Q9XC67" />
+<area shape=rect	coords=343,816,389,833	href="/dbget-bin/www_bget?up:P95747"	title="P95747" />
+<area shape=rect	coords=391,795,437,812	href="/dbget-bin/www_bget?up:Q59910"	title="Q59910" />
+<area shape=rect	coords=343,795,389,812	href="/dbget-bin/www_bget?up:Q9S4D6"	title="Q9S4D6" />
+<area shape=rect	coords=689,498,735,515	href="/dbget-bin/www_bget?up:O87605"	title="O87605" />
+<area shape=rect	coords=745,435,791,452	href="/dbget-bin/www_bget?up:Q9ZGI5"	title="Q9ZGI5" />
+<area shape=rect	coords=211,612,257,629	href="/dbget-bin/www_bget?up:O33939"	title="O33939" />
+<area shape=rect	coords=198,583,244,600	href="/dbget-bin/www_bget?up:Q9F828"	title="Q9F828" />
+<area shape=rect	coords=319,498,365,515	href="/dbget-bin/www_bget?up:O33935"	title="O33935" />
+<area shape=rect	coords=145,583,191,600	href="/dbget-bin/www_bget?up:A4F7P1"	title="A4F7P1" />
+<area shape=rect	coords=327,436,373,453	href="/dbget-bin/www_bget?up:Q9F829"	title="Q9F829" />
+<area shape=rect	coords=137,436,183,453	href="/dbget-bin/www_bget?up:Q9F830"	title="Q9F830" />
+<area shape=rect	coords=228,288,274,305	href="/dbget-bin/www_bget?up:Q9ZGI3"	title="Q9ZGI3" />
+<area shape=rect	coords=336,215,382,232	href="/dbget-bin/www_bget?up:Q9ZGH7"	title="Q9ZGH7" />
+<area shape=rect	coords=372,498,418,515	href="/dbget-bin/www_bget?up:Q9F826"	title="Q9F826" />
+<area shape=rect	coords=762,573,808,590	href="/dbget-bin/www_bget?up:Q9ZGI2"	title="Q9ZGI2" />
+<area shape=rect	coords=198,895,244,912	href="/dbget-bin/www_bget?up:O33958"	title="O33958" />
+<area shape=rect	coords=430,436,476,453	href="/dbget-bin/www_bget?up:Q9KIV4"	title="Q9KIV4" />
+<area shape=rect	coords=530,406,576,423	href="/dbget-bin/www_bget?up:Q59819"	title="Q59819" />
+<area shape=rect	coords=73,826,119,843	href="/dbget-bin/www_bget?up:O70023"	title="O70023" />
+<area shape=rect	coords=171,762,217,779	href="/dbget-bin/www_bget?up:O33955"	title="O33955" />
+<area shape=rect	coords=115,880,161,897	href="/dbget-bin/www_bget?up:O33954"	title="O33954" />
+<area shape=rect	coords=278,762,324,779	href="/dbget-bin/www_bget?up:O33956"	title="O33956" />
+<area shape=rect	coords=853,435,899,452	href="/dbget-bin/www_bget?up:Q9ZGI4"	title="Q9ZGI4" />
+<area shape=rect	coords=265,406,311,423	href="/dbget-bin/www_bget?up:Q9F823"	title="Q9F823" />
+<area shape=rect	coords=73,795,119,812	href="/dbget-bin/www_bget?up:Q9S4D6"	title="Q9S4D6" />
+<area shape=rect	coords=274,436,320,453	href="/dbget-bin/www_bget?up:A4F7P0"	title="A4F7P0" />
+<area shape=rect	coords=831,573,877,590	href="/dbget-bin/www_bget?up:Q9ZGI3"	title="Q9ZGI3" />
+<area shape=rect	coords=568,436,614,453	href="/dbget-bin/www_bget?up:Q9KIV3"	title="Q9KIV3" />
+<area shape=rect	coords=84,467,130,484	href="/dbget-bin/www_bget?up:P48635"	title="P48635" />
+<area shape=rect	coords=257,895,303,912	href="/dbget-bin/www_bget?up:O33957"	title="O33957" />
+<area shape=rect	coords=532,612,578,629	href="/dbget-bin/www_bget?up:O87831"	title="O87831" />
+<area shape=rect	coords=212,406,258,423	href="/dbget-bin/www_bget?up:Q00441"	title="Q00441" />
+<area shape=rect	coords=263,157,309,174	href="/dbget-bin/www_bget?up:Q9ZGI4"	title="Q9ZGI4" />
+<area shape=rect	coords=154,157,200,174	href="/dbget-bin/www_bget?up:Q9ZGI5"	title="Q9ZGI5" />
+<area shape=rect	coords=98,215,144,232	href="/dbget-bin/www_bget?up:O87605"	title="O87605" />
+<area shape=rect	coords=483,583,529,600	href="/dbget-bin/www_bget??"	title="?" />
+<area shape=rect	coords=264,612,310,629	href="/dbget-bin/www_bget?up:Q9F832"	title="Q9F832" />
+<area shape=rect	coords=121,795,167,812	href="/dbget-bin/www_bget?up:Q59910"	title="Q59910" />
+<area shape=rect	coords=84,436,130,453	href="/dbget-bin/www_bget?up:A4F7N8"	title="A4F7N8" />
+<area shape=rect	coords=920,498,966,515	href="/dbget-bin/www_bget?up:Q9ZGH7"	title="Q9ZGH7" />
+<area shape=rect	coords=616,498,662,515	href="/dbget-bin/www_bget?up:O87830"	title="O87830" />
+<area shape=rect	coords=913,2152,959,2169	href="/dbget-bin/www_bget?up:Q6W5Q7"	title="Q6W5Q7" />
+<area shape=rect	coords=153,1768,311,1794	href="/kegg-bin/show_pathway?map01051"	title="map01051" />
+<area shape=rect	coords=93,989,373,1015	href="/kegg-bin/show_pathway?map00522"	title="map00522" />
+<area shape=rect	coords=40,45,304,71	href="/dbget-bin/www_bget?map01052"	title="map01052" />
+<area shape=rect	coords=161,667,302,693	href="/kegg-bin/show_pathway?@map07020/D00140"	title="PATH:map07020(D00140)" />
+<area shape=rect	coords=473,667,614,693	href="/kegg-bin/show_pathway?@map07020/D02186"	title="PATH:map07020(D02186)" />
+<area shape=rect	coords=163,1027,304,1053	href="/kegg-bin/show_pathway?@map07020/D02490"	title="PATH:map07020(D02490)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

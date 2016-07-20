@@ -1,0 +1,291 @@
+<html>
+<!---
+ENTRY       map00522
+DEFINITION  Biosynthesis of 12-, 14- and 16-membered macrolides - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Biosynthesis of 12-, 14- and 16-membered macrolides - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Biosynthesis of 12-, 14- and 16-membered macrolides - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00522&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00522">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00522 map" -->
+</select>
+<input type="hidden" name="mapno" value="00522" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00522" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00522" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00522.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=563,189,4	href="/dbget-bin/www_bget?C00100"	title="C00100 (Propanoyl-CoA)" />
+<area shape=circle	coords=1036,503,4	href="/dbget-bin/www_bget?C11921"	title="C11921 (dTDP-L-oleandrose)" />
+<area shape=circle	coords=1350,667,4	href="/dbget-bin/www_bget?C11960"	title="C11960 (Avermectin A2b)" />
+<area shape=circle	coords=1337,667,4	href="/dbget-bin/www_bget?C11968"	title="C11968 (Avermectin A1b)" />
+<area shape=circle	coords=1272,502,4	href="/dbget-bin/www_bget?C11921"	title="C11921 (dTDP-L-oleandrose)" />
+<area shape=circle	coords=1350,562,4	href="/dbget-bin/www_bget?C11958"	title="C11958 (Avermectin A2b monosaccharide)" />
+<area shape=circle	coords=1337,562,4	href="/dbget-bin/www_bget?C11966"	title="C11966 (Avermectin A1b monosaccharide)" />
+<area shape=circle	coords=1350,459,4	href="/dbget-bin/www_bget?C11956"	title="C11956 (Avermectin A2b aglycone)" />
+<area shape=circle	coords=1337,459,4	href="/dbget-bin/www_bget?C11964"	title="C11964 (Avermectin A1b aglycone)" />
+<area shape=circle	coords=1208,667,4	href="/dbget-bin/www_bget?C11959"	title="C11959 (Avermectin B2b)" />
+<area shape=circle	coords=1195,667,4	href="/dbget-bin/www_bget?C11967"	title="C11967 (Avermectin B1b)" />
+<area shape=circle	coords=1208,562,4	href="/dbget-bin/www_bget?C11957"	title="C11957 (Avermectin B2b monosaccharide)" />
+<area shape=circle	coords=1195,562,4	href="/dbget-bin/www_bget?C11965"	title="C11965 (Avermectin B1b monosaccharide)" />
+<area shape=circle	coords=1208,459,4	href="/dbget-bin/www_bget?C11955"	title="C11955 (Avermectin B2b aglycone)" />
+<area shape=circle	coords=1195,459,4	href="/dbget-bin/www_bget?C11963"	title="C11963 (Avermectin B1b aglycone)" />
+<area shape=circle	coords=1208,364,4	href="/dbget-bin/www_bget?C11954"	title="C11954 (5-Oxoavermectin ''2b'' aglycone)" />
+<area shape=circle	coords=1195,364,4	href="/dbget-bin/www_bget?C11962"	title="C11962 (5-Oxoavermectin ''1b'' aglycone)" />
+<area shape=circle	coords=1208,298,4	href="/dbget-bin/www_bget?C11953"	title="C11953 (6,8a-Seco-6,8a-deoxy-5-oxoavermectin ''2b'' aglycone)" />
+<area shape=circle	coords=1195,298,4	href="/dbget-bin/www_bget?C11961"	title="C11961 (6,8a-Seco-6,8a-deoxy-5-oxoavermectin ''1b'' aglycone)" />
+<area shape=circle	coords=1201,189,4	href="/dbget-bin/www_bget?C00630"	title="C00630 (2-Methylpropanoyl-CoA)" />
+<area shape=circle	coords=1163,197,4	href="/dbget-bin/www_bget?C00083"	title="C00083 (Malonyl-CoA)" />
+<area shape=circle	coords=1146,234,4	href="/dbget-bin/www_bget?C02557"	title="C02557 (Methylmalonyl-CoA)" />
+<area shape=circle	coords=1107,189,4	href="/dbget-bin/www_bget?C01033"	title="C01033 (2-Methylbutanoyl-CoA)" />
+<area shape=circle	coords=1114,298,4	href="/dbget-bin/www_bget?C11969"	title="C11969 (6,8a-Seco-6,8a-deoxy-5-oxoavermectin ''2a'' aglycone)" />
+<area shape=circle	coords=1101,298,4	href="/dbget-bin/www_bget?C11977"	title="C11977 (6,8a-Seco-6,8a-deoxy-5-oxoavermectin ''1a'' aglycone)" />
+<area shape=circle	coords=1114,364,4	href="/dbget-bin/www_bget?C11970"	title="C11970 (5-Oxoavermectin ''2a'' aglycone)" />
+<area shape=circle	coords=1101,364,4	href="/dbget-bin/www_bget?C11978"	title="C11978 (5-Oxoavermectin ''1a'' aglycone)" />
+<area shape=circle	coords=1114,459,4	href="/dbget-bin/www_bget?C11971"	title="C11971 (Avermectin B2a aglycone)" />
+<area shape=circle	coords=1114,562,4	href="/dbget-bin/www_bget?C11973"	title="C11973 (Avermectin B2a monosaccharide)" />
+<area shape=circle	coords=1101,562,4	href="/dbget-bin/www_bget?C11981"	title="C11981 (Avermectin B1a monosaccharide)" />
+<area shape=circle	coords=1101,459,4	href="/dbget-bin/www_bget?C11979"	title="C11979 (Avermectin B1a aglycone)" />
+<area shape=circle	coords=972,459,4	href="/dbget-bin/www_bget?C11972"	title="C11972 (Avermectin A2a aglycone)" />
+<area shape=circle	coords=959,459,4	href="/dbget-bin/www_bget?C11980"	title="C11980 (Avermectin A1a aglycone)" />
+<area shape=circle	coords=972,562,4	href="/dbget-bin/www_bget?C11974"	title="C11974 (Avermectin A2a monosaccharide)" />
+<area shape=circle	coords=959,562,4	href="/dbget-bin/www_bget?C11982"	title="C11982 (Avermectin A1a monosaccharide)" />
+<area shape=circle	coords=855,234,4	href="/dbget-bin/www_bget?C02557"	title="C02557 (Methylmalonyl-CoA)" />
+<area shape=circle	coords=867,376,4	href="/dbget-bin/www_bget?C11920"	title="C11920 (dTDP-L-olivose)" />
+<area shape=circle	coords=615,365,4	href="/dbget-bin/www_bget?C11994"	title="C11994 (YC-17)" />
+<area shape=circle	coords=615,298,4	href="/dbget-bin/www_bget?C11993"	title="C11993 (10-Deoxymethynolide)" />
+<area shape=circle	coords=634,234,4	href="/dbget-bin/www_bget?C02557"	title="C02557 (Methylmalonyl-CoA)" />
+<area shape=circle	coords=509,298,4	href="/dbget-bin/www_bget?C11997"	title="C11997 (Narbonolide)" />
+<area shape=circle	coords=651,430,4	href="/dbget-bin/www_bget?C11995"	title="C11995 (Neomethymycin)" />
+<area shape=circle	coords=580,430,4	href="/dbget-bin/www_bget?C11996"	title="C11996 (Methymycin)" />
+<area shape=circle	coords=580,562,4	href="/dbget-bin/www_bget?C11986"	title="C11986 (Megalomicin B)" />
+<area shape=circle	coords=580,628,4	href="/dbget-bin/www_bget?C11987"	title="C11987 (Megalomicin C1)" />
+<area shape=circle	coords=580,694,4	href="/dbget-bin/www_bget?C11988"	title="C11988 (Megalomicin C2)" />
+<area shape=circle	coords=492,234,4	href="/dbget-bin/www_bget?C00083"	title="C00083 (Malonyl-CoA)" />
+<area shape=circle	coords=416,234,4	href="/dbget-bin/www_bget?C02557"	title="C02557 (Methylmalonyl-CoA)" />
+<area shape=circle	coords=428,493,4	href="/dbget-bin/www_bget?C11911"	title="C11911 (dTDP-D-desosamine)" />
+<area shape=circle	coords=148,694,4	href="/dbget-bin/www_bget?C01457"	title="C01457 (Tylosin)" />
+<area shape=circle	coords=148,628,4	href="/dbget-bin/www_bget?C00744"	title="C00744 (Macrocin)" />
+<area shape=circle	coords=148,562,4	href="/dbget-bin/www_bget?C02400"	title="C02400 (Demethylmacrocin)" />
+<area shape=circle	coords=148,298,4	href="/dbget-bin/www_bget?C12000"	title="C12000 (Tylactone)" />
+<area shape=circle	coords=148,430,4	href="/dbget-bin/www_bget?C12002"	title="C12002 (5-O-beta-D-Mycaminosyltylonolide)" />
+<area shape=circle	coords=148,364,4	href="/dbget-bin/www_bget?C12001"	title="C12001 (5-O-beta-D-Mycaminosyltylactone)" />
+<area shape=circle	coords=82,303,4	href="/dbget-bin/www_bget?C11933"	title="C11933 (dTDP-D-mycaminose)" />
+<area shape=circle	coords=219,234,4	href="/dbget-bin/www_bget?C02557"	title="C02557 (Methylmalonyl-CoA)" />
+<area shape=circle	coords=77,234,4	href="/dbget-bin/www_bget?C00083"	title="C00083 (Malonyl-CoA)" />
+<area shape=circle	coords=148,189,4	href="/dbget-bin/www_bget?C00100"	title="C00100 (Propanoyl-CoA)" />
+<area shape=circle	coords=344,189,4	href="/dbget-bin/www_bget?C00100"	title="C00100 (Propanoyl-CoA)" />
+<area shape=circle	coords=486,628,4	href="/dbget-bin/www_bget?C11985"	title="C11985 (Megalomicin A)" />
+<area shape=circle	coords=273,628,4	href="/dbget-bin/www_bget?C06653"	title="C06653 (Erythromycin B)" />
+<area shape=circle	coords=486,700,4	href="/dbget-bin/www_bget?C06634"	title="C06634 (Erythromycin E)" />
+<area shape=circle	coords=344,694,4	href="/dbget-bin/www_bget?C01912"	title="C01912 (Erythromycin)" />
+<area shape=circle	coords=783,525,4	href="/dbget-bin/www_bget?C11992"	title="C11992 (L-Oleandrosyl-oleandolide)" />
+<area shape=circle	coords=959,667,4	href="/dbget-bin/www_bget?C11984"	title="C11984 (Avermectin A1a)" />
+<area shape=circle	coords=972,667,4	href="/dbget-bin/www_bget?C11976"	title="C11976 (Avermectin A2a)" />
+<area shape=circle	coords=783,628,4	href="/dbget-bin/www_bget?C01946"	title="C01946 (Oleandomycin)" />
+<area shape=circle	coords=1101,667,4	href="/dbget-bin/www_bget?C11983"	title="C11983 (Avermectin B1a)" />
+<area shape=circle	coords=509,364,4	href="/dbget-bin/www_bget?C11998"	title="C11998 (Narbomycin)" />
+<area shape=circle	coords=712,540,4	href="/dbget-bin/www_bget?C11911"	title="C11911 (dTDP-D-desosamine)" />
+<area shape=circle	coords=1114,667,4	href="/dbget-bin/www_bget?C11975"	title="C11975 (Avermectin B2a)" />
+<area shape=circle	coords=344,459,4	href="/dbget-bin/www_bget?C06630"	title="C06630 (3-O-Mycarosylerythronolide B)" />
+<area shape=circle	coords=509,430,4	href="/dbget-bin/www_bget?C11999"	title="C11999 (Pikromycin)" />
+<area shape=circle	coords=783,364,4	href="/dbget-bin/www_bget?C11990"	title="C11990 (Oleandolide)" />
+<area shape=circle	coords=783,459,4	href="/dbget-bin/www_bget?C11991"	title="C11991 (L-Olivosyl-oleandolide)" />
+<area shape=circle	coords=344,364,4	href="/dbget-bin/www_bget?C06635"	title="C06635 (Erythronolide B)" />
+<area shape=circle	coords=82,452,4	href="/dbget-bin/www_bget?C11912"	title="C11912 (dTDP-6-deoxy-D-allose)" />
+<area shape=circle	coords=344,562,4	href="/dbget-bin/www_bget?C06633"	title="C06633 (Erythromycin D)" />
+<area shape=circle	coords=783,189,4	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=circle	coords=783,298,4	href="/dbget-bin/www_bget?C11989"	title="C11989 (8,8a-Deoxyoleandolide)" />
+<area shape=circle	coords=221,503,4	href="/dbget-bin/www_bget?C11916"	title="C11916 (dTDP-L-mycarose)" />
+<area shape=circle	coords=414,628,4	href="/dbget-bin/www_bget?C06616"	title="C06616 (Erythromycin C)" />
+<area shape=circle	coords=148,496,4	href="/dbget-bin/www_bget?C12003"	title="C12003 (Demethyllactenocin)" />
+<area shape=circle	coords=344,298,4	href="/dbget-bin/www_bget?C03240"	title="C03240 (6-Deoxyerythronolide B)" />
+<area shape=rect	coords=1319,620,1365,637	href="/dbget-bin/www_bget?sma:SAV_945+R06499+R06495"	title="SAV_945, R06499, R06495" />
+<area shape=rect	coords=1319,518,1365,535	href="/dbget-bin/www_bget?sma:SAV_945+R06498+R06494"	title="SAV_945, R06498, R06494" />
+<area shape=rect	coords=1178,394,1224,411	href="/dbget-bin/www_bget?sma:SAV_936+R06475+R06474"	title="SAV_936, R06475, R06474" />
+<area shape=rect	coords=1178,620,1224,637	href="/dbget-bin/www_bget?sma:SAV_945+R06497+R06493"	title="SAV_945, R06497, R06493" />
+<area shape=rect	coords=1178,518,1224,535	href="/dbget-bin/www_bget?sma:SAV_945+R06496+R06492"	title="SAV_945, R06496, R06492" />
+<area shape=rect	coords=1084,620,1130,637	href="/dbget-bin/www_bget?sma:SAV_945+R06489+R06485"	title="SAV_945, R06489, R06485" />
+<area shape=rect	coords=941,620,987,637	href="/dbget-bin/www_bget?sma:SAV_945+R06491+R06487"	title="SAV_945, R06491, R06487" />
+<area shape=rect	coords=941,518,987,535	href="/dbget-bin/www_bget?sma:SAV_945+R06490+R06486"	title="SAV_945, R06490, R06486" />
+<area shape=rect	coords=1249,451,1295,468	href="/dbget-bin/www_bget?sma:SAV_937+R06479+R06478"	title="SAV_937, R06479, R06478" />
+<area shape=rect	coords=1084,243,1130,260	href="/dbget-bin/www_bget?sma:SAV_938+sma:SAV_939+sma:SAV_942+sma:SAV_943+R06481+R06480"	title="SAV_938, SAV_939, SAV_942, SAV_943, R06481, R06480" />
+<area shape=rect	coords=1013,451,1059,468	href="/dbget-bin/www_bget?sma:SAV_937+R06477+R06476"	title="SAV_937, R06477, R06476" />
+<area shape=rect	coords=1084,518,1130,535	href="/dbget-bin/www_bget?sma:SAV_945+R06488+R06484"	title="SAV_945, R06488, R06484" />
+<area shape=rect	coords=1178,243,1224,260	href="/dbget-bin/www_bget?sma:SAV_938+sma:SAV_939+sma:SAV_942+sma:SAV_943+R06483+R06482"	title="SAV_938, SAV_939, SAV_942, SAV_943, R06483, R06482" />
+<area shape=rect	coords=1084,394,1130,411	href="/dbget-bin/www_bget?sma:SAV_936+R06473+R06472"	title="SAV_936, R06473, R06472" />
+<area shape=rect	coords=1178,320,1224,337	href="/dbget-bin/www_bget?sma:SAV_941+R06470+R06468"	title="SAV_941, R06470, R06468" />
+<area shape=rect	coords=1084,320,1130,337	href="/dbget-bin/www_bget?sma:SAV_941+R06467+R06465"	title="SAV_941, R06467, R06465" />
+<area shape=rect	coords=494,620,540,637	href="/dbget-bin/www_bget?up:Q9F838+R06503+R06504+R06505"	title="Q9F838, R06503, R06504, R06505" />
+<area shape=rect	coords=760,568,806,585	href="/dbget-bin/www_bget?up:O87830+R06457"	title="O87830, R06457" />
+<area shape=rect	coords=760,481,806,498	href="/dbget-bin/www_bget?up:O87833+R06456"	title="O87833, R06456" />
+<area shape=rect	coords=760,320,806,337	href="/dbget-bin/www_bget?up:Q59819+R06454"	title="Q59819, R06454" />
+<area shape=rect	coords=760,254,806,271	href="/dbget-bin/www_bget?up:Q9KIV4+up:Q9KIV3+R06453"	title="Q9KIV4, Q9KIV3, R06453" />
+<area shape=rect	coords=485,386,531,403	href="/dbget-bin/www_bget?up:O87605+R06464"	title="O87605, R06464" />
+<area shape=rect	coords=591,320,637,337	href="/dbget-bin/www_bget?up:Q9ZGH7+R06460"	title="Q9ZGH7, R06460" />
+<area shape=rect	coords=296,320,342,337	href="/dbget-bin/www_bget?up:Q00441+R05270"	title="Q00441, R05270" />
+<area shape=rect	coords=346,394,392,411	href="/dbget-bin/www_bget?up:Q9F832+R05530"	title="Q9F832, R05530" />
+<area shape=rect	coords=296,394,342,411	href="/dbget-bin/www_bget?up:O33939+R05530"	title="O33939, R05530" />
+<area shape=rect	coords=124,642,170,659	href="/dbget-bin/www_bget?up:Q9S4D5+2.1.1.101+R02858"	title="Q9S4D5, 2.1.1.101, R02858" />
+<area shape=rect	coords=124,584,170,601	href="/dbget-bin/www_bget?2.1.1.102+R02859"	title="2.1.1.102, 2.1.1.102, R02859" />
+<area shape=rect	coords=124,518,170,535	href="/dbget-bin/www_bget?up:Q9XC67+R06452"	title="Q9XC67, R06452" />
+<area shape=rect	coords=124,461,170,478	href="/dbget-bin/www_bget?up:O70023+R06451"	title="O70023, R06451" />
+<area shape=rect	coords=100,386,146,403	href="/dbget-bin/www_bget?up:Q9S4D6+R06449"	title="Q9S4D6, R06449" />
+<area shape=rect	coords=150,386,196,403	href="/dbget-bin/www_bget?up:Q59910+R06449"	title="Q59910, R06449" />
+<area shape=rect	coords=124,320,170,337	href="/dbget-bin/www_bget?up:P95747+R06450"	title="P95747, R06450" />
+<area shape=rect	coords=392,584,438,601	href="/dbget-bin/www_bget?up:P48635+R05522"	title="P48635, R05522" />
+<area shape=rect	coords=628,386,674,403	href="/dbget-bin/www_bget?up:O87605+R06462"	title="O87605, R06462" />
+<area shape=rect	coords=422,620,468,637	href="/dbget-bin/www_bget?up:Q9F839+R06506"	title="Q9F839, R06506" />
+<area shape=rect	coords=248,584,294,601	href="/dbget-bin/www_bget?up:Q54098+R05532"	title="Q54098, R05532" />
+<area shape=rect	coords=296,503,342,520	href="/dbget-bin/www_bget?up:O33935+R05531"	title="O33935, R05531" />
+<area shape=rect	coords=485,320,531,337	href="/dbget-bin/www_bget?up:Q9ZGH7+R06461"	title="Q9ZGH7, R06461" />
+<area shape=rect	coords=760,394,806,411	href="/dbget-bin/www_bget?up:O87831+R06455"	title="O87831, R06455" />
+<area shape=rect	coords=392,650,438,667	href="/dbget-bin/www_bget?up:Q54098+R05520"	title="Q54098, R05520" />
+<area shape=rect	coords=346,320,392,337	href="/dbget-bin/www_bget?up:Q9F823+R05270"	title="Q9F823, R05270" />
+<area shape=rect	coords=321,254,367,271	href="/dbget-bin/www_bget?K10817+2.3.1.94+R00918"	title="K10817 (E2.3.1.94), 2.3.1.94, R00918" />
+<area shape=rect	coords=124,254,170,271	href="/dbget-bin/www_bget?up:O33954+up:O33955+up:O33956+up:O33957+up:O33958+R06448"	title="O33954, O33955, O33956, O33957, O33958, R06448" />
+<area shape=rect	coords=557,386,603,403	href="/dbget-bin/www_bget?up:O87605+R06463"	title="O87605, R06463" />
+<area shape=rect	coords=346,503,392,520	href="/dbget-bin/www_bget?up:Q9F826+R05531"	title="Q9F826, R05531" />
+<area shape=rect	coords=541,244,587,261	href="/dbget-bin/www_bget?up:Q9ZGI5+up:Q9ZGI4+up:Q9ZGI3+up:Q9ZGI2+up:Q9ZGI1+R06459+R06458"	title="Q9ZGI5, Q9ZGI4, Q9ZGI3, Q9ZGI2, Q9ZGI1, R06459, R06458" />
+<area shape=rect	coords=248,650,294,667	href="/dbget-bin/www_bget?up:P48635+R05521"	title="P48635, R05521" />
+<area shape=rect	coords=273,736,416,764	href="/kegg-bin/show_pathway?map07020"	title="map07020" />
+<area shape=rect	coords=643,129,868,157	href="/kegg-bin/show_pathway?map00280"	title="map00280" />
+<area shape=rect	coords=643,100,762,128	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=40,45,486,71	href="/dbget-bin/www_bget?map00522"	title="map00522" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

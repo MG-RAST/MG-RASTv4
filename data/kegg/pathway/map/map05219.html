@@ -1,0 +1,192 @@
+<html>
+<!---
+ENTRY       map05219
+DEFINITION  Bladder cancer - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Bladder cancer - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Bladder cancer - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05219&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05219">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Bladder cancer arise and progress along two distinctive pathways. The first of these is often preceded by simple and papillary hyperplasia and exhibits a tumour morphology that is low-grade, superficial and papillary. Papillary carcinoma has a tendency to recur locally, but rarely invades and metastasizes. These tumors frequently show a constitutive activation of the receptor tyrosine kinase-Ras pathway, exhibiting activating mutations in the HRAS and fibroblast growth factor receptor 3 (FGFR3) genes. The second tumour pathway is characterized by high-grade muscle-invasive tumours, which either originate from flat carcinoma in situ (CIS)/severe dysplasia or arise de novo. Over half of these tumours show defects in the tumour suppressors p53 and/or the retinoblastoma protein (RB) genes and pathways, and over 50% of these tumours progress to local and distant metastases. Some of the cell cycle-related molecules show evidence of epigenetic modulation through aberrant promoter hypermethylation in invasive bladder cancer. Invasion and metastases are promoted by several factors that alter the tumour microenvironment, including the aberrant expression of  E-cadherins (E-cad), matrix metalloproteinases (MMPs), angiogenic factors such as vascular endothelial growth factor (VEGF).</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05219 map" -->
+</select>
+<input type="hidden" name="mapno" value="05219" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05219" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05219" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05219.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=338,115,384,132	href="/dbget-bin/www_bget?K02833"	title="K02833 (HRAS)" />
+<area shape=rect	coords=773,550,819,567	href="/dbget-bin/www_bget?K01388+K01398+K01403"	title="K01388 (MMP1), K01398 (MMP2), K01403 (MMP9)" />
+<area shape=rect	coords=464,596,510,613	href="/dbget-bin/www_bget?K00758"	title="K00758 (E2.4.2.4, deoA)" />
+<area shape=rect	coords=773,497,819,514	href="/dbget-bin/www_bget?K05448+K05449"	title="K05448 (VEGFA_B), K05449 (VEGFC_D)" />
+<area shape=rect	coords=773,602,819,619	href="/dbget-bin/www_bget?K10030"	title="K10030 (IL8, CXCL8)" />
+<area shape=rect	coords=920,451,966,468	href="/dbget-bin/www_bget?hsa:7057+mmu:21825"	title="7057, 21825" />
+<area shape=rect	coords=232,498,278,515	href="/dbget-bin/www_bget?K04361"	title="K04361 (EGFR, ERBB1)" />
+<area shape=rect	coords=232,566,278,583	href="/dbget-bin/www_bget?K05689"	title="K05689 (CDHE, CDH1)" />
+<area shape=rect	coords=232,473,278,490	href="/dbget-bin/www_bget?K05083"	title="K05083 (ERBB2, HER2)" />
+<area shape=rect	coords=652,294,698,311	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=890,327,936,344	href="/dbget-bin/www_bget?K06625"	title="K06625 (CDKN1A, P21, CIP1)" />
+<area shape=rect	coords=802,146,848,163	href="/dbget-bin/www_bget?K04377"	title="K04377 (MYC)" />
+<area shape=rect	coords=368,197,414,214	href="/dbget-bin/www_bget?K09850"	title="K09850 (RASSF1)" />
+<area shape=rect	coords=532,196,578,213	href="/dbget-bin/www_bget?K08803"	title="K08803 (DAPK)" />
+<area shape=rect	coords=730,294,776,311	href="/dbget-bin/www_bget?K06643"	title="K06643 (MDM2)" />
+<area shape=rect	coords=773,327,819,344	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=999,417,1045,434	href="/dbget-bin/www_bget?K06620+K09389"	title="K06620 (E2F1_3), K09389 (E2F2)" />
+<area shape=rect	coords=999,380,1045,397	href="/dbget-bin/www_bget?K06618"	title="K06618 (RB1)" />
+<area shape=rect	coords=232,147,278,164	href="/dbget-bin/www_bget?K05094"	title="K05094 (FGFR3)" />
+<area shape=rect	coords=916,387,962,404	href="/dbget-bin/www_bget?K02089"	title="K02089 (CDK4)" />
+<area shape=rect	coords=916,370,962,387	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=674,147,720,164	href="/dbget-bin/www_bget?hsa:9252+mmu:73086"	title="9252, 73086" />
+<area shape=rect	coords=970,327,1016,344	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=159,484,205,501	href="/dbget-bin/www_bget?K04357"	title="K04357 (EGF)" />
+<area shape=rect	coords=561,146,607,163	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=486,146,532,163	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=413,146,459,163	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=339,146,385,163	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=304,602,407,637	href="/kegg-bin/show_pathway?map04520"	title="map04520" />
+<area shape=rect	coords=743,446,846,481	href="/kegg-bin/show_pathway?map04370"	title="map04370" />
+<area shape=rect	coords=415,489,518,524	href="/kegg-bin/show_pathway?map04012"	title="map04012" />
+<area shape=rect	coords=743,361,846,396	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=458,88,561,123	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,194,71	href="/dbget-bin/www_bget?map05219"	title="map05219" />
+<area shape=rect	coords=1072,361,1175,396	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

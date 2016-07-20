@@ -1,0 +1,285 @@
+<html>
+<!---
+ENTRY       map00942
+DEFINITION  Anthocyanin biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Anthocyanin biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Anthocyanin biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00942&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00942">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Anthocyanidins (aglycones) and anthocyanins (glycosides) are common plant pigments and belong to a structural subclass of flavonoids characterized by a 2-phenylbenzopyrylium unit. They are derived along the flavonoid modification pathways and further separated into three types, pelargonidin, cyanidin, and delphinidin, due to the different number of hydroxyl groups in the phenyl group.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00942 map" -->
+</select>
+<input type="hidden" name="mapno" value="00942" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00942" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00942" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00942.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=353,1249,4	href="/dbget-bin/www_bget?C16370"	title="C16370 (Delphinidin 3-(6-p-coumaroyl)glucoside)" />
+<area shape=circle	coords=353,302,4	href="/dbget-bin/www_bget?C16368"	title="C16368 (Pelargonidin 3-(6-p-coumaroyl)glucoside)" />
+<area shape=circle	coords=353,417,4	href="/dbget-bin/www_bget?C16349"	title="C16349 (Pelargonidin 3-O-beta-D-glucoside 5-O-(6-coumaroyl-beta-D-glucoside))" />
+<area shape=circle	coords=257,388,4	href="/dbget-bin/www_bget?C08725"	title="C08725 (Pelargonin)" />
+<area shape=circle	coords=449,548,4	href="/dbget-bin/www_bget?C16373"	title="C16373 (Cyanidin-3-O-(6''-O-malonyl-2''-O-glucuronyl)glucoside)" />
+<area shape=circle	coords=353,881,4	href="/dbget-bin/www_bget?C16372"	title="C16372 (Cyanidin 3-glucoside 5-caffeoylglucoside)" />
+<area shape=circle	coords=353,867,4	href="/dbget-bin/www_bget?C16350"	title="C16350 (Cyanidin 3-O-beta-D-glucoside 5-O-(6-coumaroyl-beta-D-glucoside))" />
+<area shape=circle	coords=353,789,4	href="/dbget-bin/www_bget?C16369"	title="C16369 (Cyanidin 3-(6-p-caffeoyl)glucoside)" />
+<area shape=circle	coords=353,1263,4	href="/dbget-bin/www_bget?C16367"	title="C16367 (Delphinidin 3-O-(6-caffeoyl-beta-D-glucoside))" />
+<area shape=circle	coords=353,1359,4	href="/dbget-bin/www_bget?C16351"	title="C16351 (Delphinidin 3-O-beta-D-glucoside 5-O-(6-coumaroyl-beta-D-glucoside))" />
+<area shape=circle	coords=449,1373,4	href="/dbget-bin/www_bget?C16354"	title="C16354 (Albireodelphin)" />
+<area shape=circle	coords=353,775,4	href="/dbget-bin/www_bget?C12095"	title="C12095 (Cyanidin 3-O-(6-O-p-coumaroyl)glucoside)" />
+<area shape=circle	coords=353,431,4	href="/dbget-bin/www_bget?C16371"	title="C16371 (Pelargonidin 3-glucoside 5-caffeoylglucoside)" />
+<area shape=circle	coords=545,1373,4	href="/dbget-bin/www_bget?C08641"	title="C08641 (Gentiodelphin)" />
+<area shape=circle	coords=353,1373,4	href="/dbget-bin/www_bget?C16313"	title="C16313 (Delphinidin 3-glucoside 5-caffoyl-glucoside)" />
+<area shape=circle	coords=257,1312,4	href="/dbget-bin/www_bget?C16312"	title="C16312 (Delphin)" />
+<area shape=circle	coords=353,1312,4	href="/dbget-bin/www_bget?C16314"	title="C16314 (Delphinidin 3,5,3'-triglucoside)" />
+<area shape=circle	coords=449,240,4	href="/dbget-bin/www_bget?C12645"	title="C12645 (Pelargonidin 3-O-rutinoside 5-O-beta-D-glucoside)" />
+<area shape=circle	coords=353,637,4	href="/dbget-bin/www_bget?C12141"	title="C12141 (Peonidin 3-O-glucoside)" />
+<area shape=circle	coords=545,997,4	href="/dbget-bin/www_bget?C16303"	title="C16303 (Ternatin C5)" />
+<area shape=circle	coords=641,1187,4	href="/dbget-bin/www_bget?C16296"	title="C16296 (Malvidin-3-(p-coumaroyl)-rutinoside-5-glucoside)" />
+<area shape=circle	coords=641,997,4	href="/dbget-bin/www_bget?C16302"	title="C16302 (Ternatin A1)" />
+<area shape=circle	coords=545,1187,4	href="/dbget-bin/www_bget?C16295"	title="C16295 (Petunidin-3-(p-coumaroyl)-rutinoside-5-glucoside)" />
+<area shape=circle	coords=449,661,4	href="/dbget-bin/www_bget?C12646"	title="C12646 (Cyanidin 3-O-rutinoside 5-O-beta-D-glucoside)" />
+<area shape=circle	coords=449,1187,4	href="/dbget-bin/www_bget?C16294"	title="C16294 (Delphinidin-3-(p-coumaroyl)-rutinoside-5-glucoside)" />
+<area shape=circle	coords=161,310,4	href="/dbget-bin/www_bget?C05904"	title="C05904 (Pelargonidin)" />
+<area shape=circle	coords=161,1187,4	href="/dbget-bin/www_bget?C05908"	title="C05908 (Delphinidin)" />
+<area shape=circle	coords=449,961,4	href="/dbget-bin/www_bget?C16290"	title="C16290 (Delphinidin 3-O-3'',6''-O-dimalonylglucoside)" />
+<area shape=circle	coords=353,240,4	href="/dbget-bin/www_bget?C12644"	title="C12644 (Pelargonidin 3-O-rutinoside)" />
+<area shape=circle	coords=353,151,4	href="/dbget-bin/www_bget?C12642"	title="C12642 (Pelargonidin 3-O-(6-O-malonyl-beta-D-glucoside))" />
+<area shape=circle	coords=353,204,4	href="/dbget-bin/www_bget?C16305"	title="C16305 (Pelargonidin 3-O-sophoroside)" />
+<area shape=circle	coords=353,997,4	href="/dbget-bin/www_bget?C16301"	title="C16301 (Delphinidin 3-O-(6-O-malonyl-beta-D-glucoside))" />
+<area shape=circle	coords=353,548,4	href="/dbget-bin/www_bget?C12643"	title="C12643 (Cyanidin 3-O-(6-O-malonyl-beta-D-glucoside))" />
+<area shape=circle	coords=449,316,4	href="/dbget-bin/www_bget?C12640"	title="C12640 (Pelargonidin 3-O-(6-caffeoyl-beta-D-glucoside) 5-O-beta-D-glucoside)" />
+<area shape=circle	coords=545,316,4	href="/dbget-bin/www_bget?C12641"	title="C12641 (4'''-Demalonylsalvianin)" />
+<area shape=circle	coords=545,775,4	href="/dbget-bin/www_bget?C16299"	title="C16299 (Malonylshisonin)" />
+<area shape=circle	coords=353,601,4	href="/dbget-bin/www_bget?C16306"	title="C16306 (Cyanidin 3-O-sophoroside)" />
+<area shape=circle	coords=353,1068,4	href="/dbget-bin/www_bget?C16307"	title="C16307 (Delphinidin 3-O-sophoroside)" />
+<area shape=circle	coords=449,775,4	href="/dbget-bin/www_bget?C12096"	title="C12096 (Cyanidin 3-O-(6-O-p-coumaroyl)glucoside-5-O-glucoside)" />
+<area shape=circle	coords=353,1187,4	href="/dbget-bin/www_bget?C16315"	title="C16315 (Tulipanin)" />
+<area shape=circle	coords=161,836,4	href="/dbget-bin/www_bget?C16298"	title="C16298 (Cyanidin 5-O-glucoside)" />
+<area shape=circle	coords=353,316,4	href="/dbget-bin/www_bget?C16297"	title="C16297 (Pelargonidin 3-O-(6-caffeoyl-beta-D-glucoside))" />
+<area shape=circle	coords=353,1104,4	href="/dbget-bin/www_bget?C12139"	title="C12139 (Petunidin 3-O-glucoside)" />
+<area shape=circle	coords=257,697,4	href="/dbget-bin/www_bget?C08604"	title="C08604 (Chrysanthemin)" />
+<area shape=circle	coords=449,997,4	href="/dbget-bin/www_bget?C16304"	title="C16304 (Delphinidin 3-O-(6''-O-malonyl)-beta-glucoside-3'-O-beta-glucoside)" />
+<area shape=circle	coords=161,697,4	href="/dbget-bin/www_bget?C05905"	title="C05905 (Cyanidin)" />
+<area shape=circle	coords=449,151,4	href="/dbget-bin/www_bget?C16288"	title="C16288 (Pelargonidin 3-O-3'',6''-O-dimalonylglucoside)" />
+<area shape=circle	coords=257,1187,4	href="/dbget-bin/www_bget?C12138"	title="C12138 (Delphinidin 3-O-glucoside)" />
+<area shape=circle	coords=449,697,4	href="/dbget-bin/www_bget?C16292"	title="C16292 (Cyanidin-3-(p-coumaroyl)-rutinoside-5-glucoside)" />
+<area shape=circle	coords=353,1140,4	href="/dbget-bin/www_bget?C12140"	title="C12140 (Malvidin 3-O-glucoside)" />
+<area shape=circle	coords=257,836,4	href="/dbget-bin/www_bget?C08639"	title="C08639 (Cyanin)" />
+<area shape=circle	coords=545,697,4	href="/dbget-bin/www_bget?C16293"	title="C16293 (Peonidin-3-(p-coumaroyl)-rutinoside-5-glucoside)" />
+<area shape=circle	coords=353,697,4	href="/dbget-bin/www_bget?C08620"	title="C08620 (Cyanidin 3-O-rutinoside)" />
+<area shape=circle	coords=641,316,4	href="/dbget-bin/www_bget?C12647"	title="C12647 (Salvianin)" />
+<area shape=circle	coords=449,512,4	href="/dbget-bin/www_bget?C16289"	title="C16289 (Cyanidin 3-O-3'',6''-O-dimalonylglucoside)" />
+<area shape=circle	coords=257,310,4	href="/dbget-bin/www_bget?C12137"	title="C12137 (Pelargonidin 3-O-glucoside)" />
+<area shape=poly	coords=358,1185,442,1185,442,1189,358,1189	href="/dbget-bin/www_bget?R07904"	title="R07904" />
+<area shape=poly	coords=442,1187,434,1191,434,1183	href="/dbget-bin/www_bget?R07904"	title="R07904" />
+<area shape=poly	coords=358,1310,536,1310,536,1314,358,1314	href="/dbget-bin/www_bget?R07925"	title="R07925" />
+<area shape=poly	coords=536,1314,538,1313,540,1312,541,1312,543,1313,544,1314,544,1315,544,1317,544,1319,543,1321,547,1321,546,1320,544,1319,543,1318,541,1316,540,1315,539,1314,538,1313,537,1311,536,1310	href="/dbget-bin/www_bget?R07925"	title="R07925" />
+<area shape=poly	coords=543,1321,543,1367,547,1367,547,1321	href="/dbget-bin/www_bget?R07925"	title="R07925" />
+<area shape=poly	coords=545,1367,541,1359,549,1359	href="/dbget-bin/www_bget?R07925"	title="R07925" />
+<area shape=poly	coords=358,695,443,695,443,699,358,699	href="/dbget-bin/www_bget?R07900"	title="R07900" />
+<area shape=poly	coords=443,697,435,701,435,693	href="/dbget-bin/www_bget?R07900"	title="R07900" />
+<area shape=poly	coords=358,314,443,314,443,318,358,318	href="/dbget-bin/www_bget?R07875"	title="R07875" />
+<area shape=poly	coords=443,316,435,320,435,312	href="/dbget-bin/www_bget?R07875"	title="R07875" />
+<area shape=poly	coords=259,691,259,646,263,646,263,691	href="/dbget-bin/www_bget?R06548"	title="R06548" />
+<area shape=poly	coords=259,646,259,644,260,642,261,640,262,639,263,638,264,637,266,636,268,635,270,635,270,639,269,639,268,640,267,640,266,641,265,642,264,643,264,644,263,645,263,646	href="/dbget-bin/www_bget?R06548"	title="R06548" />
+<area shape=poly	coords=270,635,346,635,346,639,270,639	href="/dbget-bin/www_bget?R06548"	title="R06548" />
+<area shape=poly	coords=346,637,338,641,338,633	href="/dbget-bin/www_bget?R06548"	title="R06548" />
+<area shape=poly	coords=550,995,635,995,635,999,550,999	href="/dbget-bin/www_bget?R07915"	title="R07915" />
+<area shape=poly	coords=635,997,627,1001,627,993	href="/dbget-bin/www_bget?R07915"	title="R07915" />
+<area shape=poly	coords=257,1181,257,1113,261,1113,261,1181	href="/dbget-bin/www_bget?R06549"	title="R06549" />
+<area shape=poly	coords=257,1113,257,1111,258,1109,259,1107,260,1106,261,1104,262,1103,264,1103,266,1102,268,1102,268,1106,267,1106,266,1107,265,1107,264,1108,263,1109,262,1110,262,1111,261,1112,261,1113	href="/dbget-bin/www_bget?R06549"	title="R06549" />
+<area shape=poly	coords=268,1102,346,1102,346,1106,268,1106	href="/dbget-bin/www_bget?R06549"	title="R06549" />
+<area shape=poly	coords=346,1104,338,1108,338,1100	href="/dbget-bin/www_bget?R06549"	title="R06549" />
+<area shape=poly	coords=261,1181,261,1149,265,1149,265,1181	href="/dbget-bin/www_bget?R06550"	title="R06550" />
+<area shape=poly	coords=261,1149,261,1147,262,1145,263,1143,264,1142,265,1140,266,1139,268,1139,270,1138,272,1138,272,1142,271,1142,270,1143,269,1143,268,1144,267,1145,266,1146,266,1147,265,1148,265,1149	href="/dbget-bin/www_bget?R06550"	title="R06550" />
+<area shape=poly	coords=272,1138,346,1138,346,1142,272,1142	href="/dbget-bin/www_bget?R06550"	title="R06550" />
+<area shape=poly	coords=346,1140,338,1144,338,1136	href="/dbget-bin/www_bget?R06550"	title="R06550" />
+<area shape=rect	coords=277,143,323,160	href="/dbget-bin/www_bget?K12931+2.3.1.171+R06801"	title="K12931 (3MaT1), 2.3.1.171, R06801" />
+<area shape=rect	coords=372,143,418,160	href="/dbget-bin/www_bget?K12932+2.3.1.-+R07884"	title="K12932 (3MaT2), 2.3.1.-, R07884" />
+<area shape=rect	coords=277,196,323,213	href="/dbget-bin/www_bget?K12933+2.4.1.-+R07877"	title="K12933 (3GGT), 2.4.1.-, R07877" />
+<area shape=rect	coords=181,301,227,318	href="/dbget-bin/www_bget?K12930+2.4.1.115+R06534"	title="K12930 (BZ1), 2.4.1.115, R06534" />
+<area shape=rect	coords=277,301,323,318	href="/dbget-bin/www_bget?2.3.1.-+R07927+R07873"	title="2.3.1.-, 2.3.1.-, R07927, R07873" />
+<area shape=rect	coords=372,232,418,249	href="/dbget-bin/www_bget?2.4.1.116+R06803"	title="2.4.1.116, 2.4.1.116, R06803" />
+<area shape=rect	coords=470,308,516,325	href="/dbget-bin/www_bget?K12934+2.3.1.172+R06799"	title="K12934 (5MaT1), 2.3.1.172, R06799" />
+<area shape=rect	coords=562,308,608,325	href="/dbget-bin/www_bget?K12935+2.3.1.-+R06800"	title="K12935 (5MaT2), 2.3.1.-, R06800" />
+<area shape=rect	coords=277,416,323,433	href="/dbget-bin/www_bget?K12936+2.3.1.153+R07880+R07930"	title="K12936 (5AT), 2.3.1.153, R07880, R07930" />
+<area shape=rect	coords=232,347,278,364	href="/dbget-bin/www_bget?K12338+2.4.1.-+R07874"	title="K12338 (UGT75C1), 2.4.1.-, R07874" />
+<area shape=rect	coords=330,380,376,397	href="/dbget-bin/www_bget?2.3.1.-+R07876"	title="2.3.1.-, 2.3.1.-, R07876" />
+<area shape=rect	coords=372,540,418,557	href="/dbget-bin/www_bget?K12937+2.4.1.-+R07932"	title="K12937 (UGAT), 2.4.1.-, R07932" />
+<area shape=rect	coords=372,504,418,521	href="/dbget-bin/www_bget?K12932+2.3.1.-+R07885"	title="K12932 (3MaT2), 2.3.1.-, R07885" />
+<area shape=rect	coords=277,541,323,558	href="/dbget-bin/www_bget?K12931+2.3.1.171+R06817"	title="K12931 (3MaT1), 2.3.1.171, R06817" />
+<area shape=rect	coords=277,593,323,610	href="/dbget-bin/www_bget?K12933+2.4.1.-+R07878"	title="K12933 (3GGT), 2.4.1.-, R07878" />
+<area shape=rect	coords=372,653,418,670	href="/dbget-bin/www_bget?2.4.1.116+R06819"	title="2.4.1.116, 2.4.1.116, R06819" />
+<area shape=rect	coords=470,690,516,707	href="/dbget-bin/www_bget?2.1.1.-+R07901"	title="2.1.1.-, 2.1.1.-, R07901" />
+<area shape=rect	coords=277,689,323,706	href="/dbget-bin/www_bget?2.4.1.-+R06818"	title="2.4.1.-, 2.4.1.-, R06818" />
+<area shape=rect	coords=181,689,227,706	href="/dbget-bin/www_bget?K12930+2.4.1.115+R06535"	title="K12930 (BZ1), 2.4.1.115, R06535" />
+<area shape=rect	coords=139,774,185,791	href="/dbget-bin/www_bget?K12938+2.4.1.-+R07908"	title="K12938 (GT1), 2.4.1.-, R07908" />
+<area shape=rect	coords=277,773,323,790	href="/dbget-bin/www_bget?2.3.1.-+R06544+R07928"	title="2.3.1.-, 2.3.1.-, R06544, R07928" />
+<area shape=rect	coords=232,794,278,811	href="/dbget-bin/www_bget?K12338+2.4.1.-+R06546"	title="K12338 (UGT75C1), 2.4.1.-, R06546" />
+<area shape=rect	coords=181,828,227,845	href="/dbget-bin/www_bget?K12938+2.4.1.-+R07909"	title="K12938 (GT1), 2.4.1.-, R07909" />
+<area shape=rect	coords=470,766,516,783	href="/dbget-bin/www_bget?K12934+2.3.1.172+R07910"	title="K12934 (5MaT1), 2.3.1.172, R07910" />
+<area shape=rect	coords=372,767,418,784	href="/dbget-bin/www_bget?K12338+2.4.1.-+R06547"	title="K12338 (UGT75C1), 2.4.1.-, R06547" />
+<area shape=rect	coords=330,828,376,845	href="/dbget-bin/www_bget?2.3.1.-+R06545"	title="2.3.1.-, 2.3.1.-, R06545" />
+<area shape=rect	coords=277,865,323,882	href="/dbget-bin/www_bget?K12936+2.3.1.153+R07882+R07931"	title="K12936 (5AT), 2.3.1.153, R07882, R07931" />
+<area shape=rect	coords=372,953,418,970	href="/dbget-bin/www_bget?K12932+2.3.1.-+R07886"	title="K12932 (3MaT2), 2.3.1.-, R07886" />
+<area shape=rect	coords=372,989,418,1006	href="/dbget-bin/www_bget?K12939+2.4.1.238+R07913"	title="K12939 (3GT), 2.4.1.238, R07913" />
+<area shape=rect	coords=468,989,514,1006	href="/dbget-bin/www_bget?2.4.1.-+R07914"	title="2.4.1.-, 2.4.1.-, R07914" />
+<area shape=rect	coords=277,989,323,1006	href="/dbget-bin/www_bget?K12931+2.3.1.171+R07938"	title="K12931 (3MaT1), 2.3.1.171, R07938" />
+<area shape=rect	coords=277,1060,323,1077	href="/dbget-bin/www_bget?K12933+2.4.1.-+R07879"	title="K12933 (3GGT), 2.4.1.-, R07879" />
+<area shape=rect	coords=181,1179,227,1196	href="/dbget-bin/www_bget?K12930+2.4.1.115+R06536"	title="K12930 (BZ1), 2.4.1.115, R06536" />
+<area shape=rect	coords=277,1179,323,1196	href="/dbget-bin/www_bget?2.4.1.-+R07903"	title="2.4.1.-, 2.4.1.-, R07903" />
+<area shape=rect	coords=468,1179,514,1196	href="/dbget-bin/www_bget?2.1.1.-+R07905"	title="2.1.1.-, 2.1.1.-, R07905" />
+<area shape=rect	coords=568,1179,614,1196	href="/dbget-bin/www_bget?2.1.1.-+R07906"	title="2.1.1.-, 2.1.1.-, R07906" />
+<area shape=rect	coords=523,1143,569,1160	href="/dbget-bin/www_bget?2.1.1.-+R07907"	title="2.1.1.-, 2.1.1.-, R07907" />
+<area shape=rect	coords=277,1246,323,1263	href="/dbget-bin/www_bget?2.3.1.-+R07929+R07926"	title="2.3.1.-, 2.3.1.-, R07929, R07926" />
+<area shape=rect	coords=232,1271,278,1288	href="/dbget-bin/www_bget?K12338+2.4.1.-+R07911"	title="K12338 (UGT75C1), 2.4.1.-, R07911" />
+<area shape=rect	coords=277,1304,323,1321	href="/dbget-bin/www_bget?K12939+2.4.1.238+R07912"	title="K12939 (3GT), 2.4.1.238, R07912" />
+<area shape=rect	coords=277,1358,323,1375	href="/dbget-bin/www_bget?K12936+2.3.1.153+R07883+R07944"	title="K12936 (5AT), 2.3.1.153, R07883, R07944" />
+<area shape=rect	coords=372,1365,418,1382	href="/dbget-bin/www_bget?K12939+2.4.1.238+R07923"	title="K12939 (3GT), 2.4.1.238, R07923" />
+<area shape=rect	coords=470,1365,516,1382	href="/dbget-bin/www_bget?2.3.1.-+R07924"	title="2.3.1.-, 2.3.1.-, R07924" />
+<area shape=rect	coords=277,232,323,249	href="/dbget-bin/www_bget?2.4.1.-+R06802"	title="2.4.1.-, 2.4.1.-, R06802" />
+<area shape=poly	coords=359,1185,402,1185,402,1189,359,1189	href="/dbget-bin/www_bget?R07904"	title="R07904" />
+<area shape=poly	coords=402,1187,394,1191,394,1183	href="/dbget-bin/www_bget?R07904"	title="R07904" />
+<area shape=rect	coords=40,45,270,71	href="/dbget-bin/www_bget?map00942"	title="map00942" />
+<area shape=rect	coords=40,242,170,268	href="/kegg-bin/show_pathway?map00941"	title="map00941" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

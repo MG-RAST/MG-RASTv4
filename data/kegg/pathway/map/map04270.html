@@ -1,0 +1,230 @@
+<html>
+<!---
+ENTRY       map04270
+DEFINITION  Vascular smooth muscle contraction - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Vascular smooth muscle contraction - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Vascular smooth muscle contraction - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04270&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04270">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The vascular smooth muscle cell (VSMC) is a highly specialized cell whose principal function is contraction. On contraction, VSMCs shorten, thereby decreasing the diameter of a blood vessel to regulate the blood flow and pressure. <br />&nbsp;&nbsp; The principal mechanisms that regulate the contractile state of VSMCs are changes in cytosolic Ca2+ concentration ([Ca2+]c). In response to vasoconstrictor stimuli, Ca2+ is mobilized from intracellular stores and/or the extracellular space to increase [Ca2+]c in VSMCs. The increase in [Ca2+]c, in turn, activates the Ca2+-CaM-MLCK pathway and stimulates MLC20 phosphorylation, leading to myosin-actin interactions and, hence, the development of contractile force. The sensitivity of contractile myofilaments or  MLC20 phosphorylation to Ca2+ can be secondarily modulated by other signaling pathways. During receptor stimulation, the contractile force is greatly enhanced by the inhibition of myosin phosphatase. Rho/Rho kinase, PKC, and arachidonic acid have been proposed to play a pivotal role in this enhancement. <br />&nbsp;&nbsp; The signaling events that mediate relaxation include the removal of a contractile agonist (passive relaxation) and activation of cyclic nucleotide-dependent signaling pathways in the continued presence of a contractile agonist (active relaxation). Active relaxation occurs through the inhibition of both Ca2+ mobilization and myofilament Ca2+ sensitivity in VSMCs.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04270 map" -->
+</select>
+<input type="hidden" name="mapno" value="04270" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04270" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04270" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04270.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=417,298,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=416,352,4	href="/dbget-bin/www_bget?C00165"	title="C00165 (Diacylglycerol)" />
+<area shape=circle	coords=516,130,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=384,264,4	href="/dbget-bin/www_bget?C00219"	title="C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid)" />
+<area shape=circle	coords=384,204,4	href="/dbget-bin/www_bget?C14748"	title="C14748 (20-HETE)" />
+<area shape=circle	coords=140,180,4	href="/dbget-bin/www_bget?C00238"	title="C00238 (Potassium)" />
+<area shape=circle	coords=116,713,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=397,483,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=circle	coords=347,661,4	href="/dbget-bin/www_bget?C00942"	title="C00942 (3',5'-Cyclic GMP)" />
+<area shape=circle	coords=511,580,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=144,602,4	href="/dbget-bin/www_bget?C00238"	title="C00238 (Potassium)" />
+<area shape=circle	coords=264,546,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=116,445,4	href="/dbget-bin/www_bget?C00212"	title="C00212 (Adenosine)" />
+<area shape=circle	coords=116,476,4	href="/dbget-bin/www_bget?C01312"	title="C01312 (Prostaglandin I2)" />
+<area shape=circle	coords=116,523,4	href="/dbget-bin/www_bget?C16127"	title="C16127 (Adrenomedullin)" />
+<area shape=circle	coords=116,498,4	href="/dbget-bin/www_bget?C16125"	title="C16125 (Calcitonin gene-related peptide 1)" />
+<area shape=circle	coords=116,623,4	href="/dbget-bin/www_bget?C16003"	title="C16003 (Atrial natriuretic peptide)" />
+<area shape=circle	coords=116,652,4	href="/dbget-bin/www_bget?C16004"	title="C16004 (Brain natriuretic peptide)" />
+<area shape=circle	coords=116,681,4	href="/dbget-bin/www_bget?C16005"	title="C16005 (C-Type natriuretic peptide)" />
+<area shape=circle	coords=116,295,4	href="/dbget-bin/www_bget?C02135"	title="C02135 (Angiotensin II)" />
+<area shape=circle	coords=116,260,4	href="/dbget-bin/www_bget?C00547"	title="C00547 (L-Noradrenaline)" />
+<area shape=circle	coords=116,333,4	href="/dbget-bin/www_bget?C16010+C16012+C16013"	title="C16010 (Endothelin-1), C16012 (Endothelin-2), C16013 (Endothelin-3)" />
+<area shape=circle	coords=116,362,4	href="/dbget-bin/www_bget?C13662"	title="C13662 (Arg-vasopressin)" />
+<area shape=circle	coords=116,568,4	href="/dbget-bin/www_bget?C14771+C14770+C14769+C14768"	title="C14771 (14,15-EET), C14770 (11,12-EET), C14769 (8,9-EET), C14768 (5,6-EET)" />
+<area shape=rect	coords=685,123,731,140	href="/dbget-bin/www_bget?K00907"	title="K00907 (MYLK)" />
+<area shape=rect	coords=778,229,824,246	href="/dbget-bin/www_bget?K12751+K12755"	title="K12751 (MYL6), K12755 (MYL9)" />
+<area shape=rect	coords=685,350,731,367	href="/dbget-bin/www_bget?K06269+K06270+K12329"	title="K06269 (PPP1C), K06270 (PPP1R12A, MYPT1), K12329 (PPP1R12B)" />
+<area shape=rect	coords=518,412,564,429	href="/dbget-bin/www_bget?K04514"	title="K04514 (ROCK)" />
+<area shape=rect	coords=451,345,497,362	href="/dbget-bin/www_bget?K02677+K06068"	title="K02677 (CPKC), K06068 (NPKC)" />
+<area shape=rect	coords=427,412,473,429	href="/dbget-bin/www_bget?K04513"	title="K04513 (RHOA)" />
+<area shape=rect	coords=339,412,385,429	href="/dbget-bin/www_bget?K07532+K12330+K12331"	title="K07532 (ARHGEF12, LARG), K12330 (ARHGEF1), K12331 (ARHGEF11)" />
+<area shape=rect	coords=777,299,823,316	href="/dbget-bin/www_bget?K12313+K12315"	title="K12313 (ACTA2), K12315 (ACTG2)" />
+<area shape=rect	coords=168,273,214,290	href="/dbget-bin/www_bget?K04135+K04136+K04137"	title="K04135 (ADRA1A), K04136 (ADRA1B), K04137 (ADRA1D)" />
+<area shape=rect	coords=251,311,297,328	href="/dbget-bin/www_bget?K04634+K04635"	title="K04634 (GNAQ), K04635 (GNA11)" />
+<area shape=rect	coords=261,390,307,407	href="/dbget-bin/www_bget?K04346+K04639"	title="K04346 (GNA12), K04639 (GNA13)" />
+<area shape=rect	coords=336,310,382,327	href="/dbget-bin/www_bget?K05858"	title="K05858 (PLCB)" />
+<area shape=rect	coords=541,219,587,236	href="/dbget-bin/www_bget?K04958+K04959+K04960"	title="K04958 (ITPR1), K04959 (ITPR2), K04960 (ITPR3)" />
+<area shape=rect	coords=581,123,627,140	href="/dbget-bin/www_bget?K02183"	title="K02183 (CALM)" />
+<area shape=rect	coords=169,115,215,132	href="/dbget-bin/www_bget?K04850+K04851+K04853+K04857"	title="K04850 (CACNA1C), K04851 (CACNA1D), K04853 (CACNA1F), K04857 (CACNA1S)" />
+<area shape=rect	coords=562,345,608,362	href="/dbget-bin/www_bget?K12328"	title="K12328 (PPP1R14A)" />
+<area shape=rect	coords=685,651,731,668	href="/dbget-bin/www_bget?K06269+K06270+K12329"	title="K06269 (PPP1C), K06270 (PPP1R12A, MYPT1), K12329 (PPP1R12B)" />
+<area shape=rect	coords=775,571,821,588	href="/dbget-bin/www_bget?K12751+K12755"	title="K12751 (MYL6), K12755 (MYL9)" />
+<area shape=rect	coords=774,636,820,653	href="/dbget-bin/www_bget?K12313+K12315"	title="K12313 (ACTA2), K12315 (ACTG2)" />
+<area shape=rect	coords=169,171,215,188	href="/dbget-bin/www_bget?K04936+K05274+K04937+K04938+K04939+K04941"	title="K04936 (KCNMA1), K04937 (KCNMB1), K04938 (KCNMB2), K04939 (KCNMB3), K04941 (KCNMB4), K05274 (KCNMA3)" />
+<area shape=rect	coords=388,233,434,250	href="/dbget-bin/www_bget?K07425"	title="K07425 (CYP4A)" />
+<area shape=rect	coords=296,257,342,274	href="/dbget-bin/www_bget?K01047"	title="K01047 (E3.1.1.4, PLA2G)" />
+<area shape=rect	coords=679,299,725,316	href="/dbget-bin/www_bget?K12327"	title="K12327 (CALD1)" />
+<area shape=rect	coords=461,299,507,316	href="/dbget-bin/www_bget?K08845+K04365+K04366"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=534,299,580,316	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=607,299,653,316	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=168,450,214,467	href="/dbget-bin/www_bget?K04266+K04267"	title="K04266 (ADORA2A), K04267 (ADORA2B)" />
+<area shape=rect	coords=168,640,214,657	href="/dbget-bin/www_bget?K12323"	title="K12323 (NPR1)" />
+<area shape=rect	coords=319,475,365,492	href="/dbget-bin/www_bget?K08041+K08042+K08043+K08044+K08045+K08046+K08047+K08048+K08049"	title="K08041 (ADCY1), K08042 (ADCY2), K08043 (ADCY3), K08044 (ADCY4), K08045 (ADCY5), K08046 (ADCY6), K08047 (ADCY7), K08048 (ADCY8), K08049 (ADCY9)" />
+<area shape=rect	coords=423,475,469,492	href="/dbget-bin/www_bget?K04345"	title="K04345 (PKA)" />
+<area shape=rect	coords=418,651,464,668	href="/dbget-bin/www_bget?hsa:5592+mmu:19091+rno:54286"	title="5592, 19091, 54286" />
+<area shape=rect	coords=255,705,301,722	href="/dbget-bin/www_bget?K12318+K12319"	title="K12318 (GUCY1A), K12319 (GUCY1B)" />
+<area shape=rect	coords=685,477,731,494	href="/dbget-bin/www_bget?K00907"	title="K00907 (MYLK)" />
+<area shape=rect	coords=541,573,587,590	href="/dbget-bin/www_bget?K04958+K04959+K04960"	title="K04958 (ITPR1), K04959 (ITPR2), K04960 (ITPR3)" />
+<area shape=rect	coords=169,595,215,612	href="/dbget-bin/www_bget?K04936+K05274+K04937+K04938+K04939+K04941"	title="K04936 (KCNMA1), K04937 (KCNMB1), K04938 (KCNMB2), K04939 (KCNMB3), K04941 (KCNMB4), K05274 (KCNMA3)" />
+<area shape=rect	coords=169,538,215,555	href="/dbget-bin/www_bget?K04850+K04851+K04853+K04857"	title="K04850 (CACNA1C), K04851 (CACNA1D), K04853 (CACNA1F), K04857 (CACNA1S)" />
+<area shape=rect	coords=243,475,289,492	href="/dbget-bin/www_bget?K04632"	title="K04632 (GNAS)" />
+<area shape=rect	coords=168,663,214,680	href="/dbget-bin/www_bget?K12324"	title="K12324 (NPR2)" />
+<area shape=rect	coords=168,296,214,313	href="/dbget-bin/www_bget?K04166"	title="K04166 (AGTR1)" />
+<area shape=rect	coords=169,321,215,338	href="/dbget-bin/www_bget?K04197"	title="K04197 (EDNRA)" />
+<area shape=rect	coords=169,345,215,362	href="/dbget-bin/www_bget?K04226+K04227"	title="K04226 (AVPR1A), K04227 (AVPR1B)" />
+<area shape=rect	coords=168,475,214,492	href="/dbget-bin/www_bget?K04263"	title="K04263 (PTGIR)" />
+<area shape=rect	coords=168,500,214,517	href="/dbget-bin/www_bget?K04577+K08447+K08448+K08449"	title="K04577 (CALCRL), K08447 (RAMP1), K08448 (RAMP2), K08449 (RAMP3)" />
+<area shape=rect	coords=778,246,824,263	href="/dbget-bin/www_bget?hsa:4629+mmu:17880+rno:24582"	title="4629, 17880, 24582" />
+<area shape=rect	coords=775,588,821,605	href="/dbget-bin/www_bget?hsa:4629+mmu:17880+rno:24582"	title="4629, 17880, 24582" />
+<area shape=rect	coords=483,613,529,630	href="/dbget-bin/www_bget?K12337"	title="K12337 (MRVI1, IRAG)" />
+<area shape=rect	coords=491,158,603,193	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+<area shape=rect	coords=40,45,387,71	href="/dbget-bin/www_bget?map04270"	title="map04270" />
+<area shape=rect	coords=231,215,343,250	href="/kegg-bin/show_pathway?map00590"	title="map00590" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

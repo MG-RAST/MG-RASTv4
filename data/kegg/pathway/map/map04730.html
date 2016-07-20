@@ -1,0 +1,207 @@
+<html>
+<!---
+ENTRY       map04730
+DEFINITION  Long-term depression - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Long-term depression - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Long-term depression - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04730&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04730">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Cerebellar long-term depression (LTD), thought to be a molecular and cellular basis for cerebellar learning, is a process involving a decrease in the synaptic strength between parallel fiber (PF) and Purkinje cells (PCs) induced by the conjunctive activation of PFs and climbing fiber (CF). Multiple signal transduction pathways have been shown to be involved in this process. Activation of PFs terminating on spines in dendritic branchlets leads to glutamate release and activation of both AMPA and mGluRs. Activation of CFs, which make multiple synaptic contacts on proximal dendrites, also via AMPA receptors, opens voltage-gated calcium channels (VGCCs) and causes a generalized influx of calcium. These cellular signals, generated from two different synaptic origins, trigger a cascade of events culminating in a phosphorylation-dependent, long-term reduction in AMPA receptor sensitivity at the PF-PC synapse. This may take place either through receptor internalization and/or through receptor desensitization.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04730 map" -->
+</select>
+<input type="hidden" name="mapno" value="04730" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04730" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04730" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04730.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=624,257,4	href="/dbget-bin/www_bget?C00219"	title="C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid)" />
+<area shape=circle	coords=128,203,4	href="/dbget-bin/www_bget?C00533"	title="C00533 (Nitric oxide)" />
+<area shape=circle	coords=605,532,4	href="/dbget-bin/www_bget?C00641"	title="C00641 (1,2-Diacyl-sn-glycerol)" />
+<area shape=circle	coords=514,349,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=384,485,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=382,361,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=197,511,4	href="/dbget-bin/www_bget?C00025"	title="C00025 (L-Glutamate)" />
+<area shape=circle	coords=440,153,4	href="/dbget-bin/www_bget?C00942"	title="C00942 (3',5'-Cyclic GMP)" />
+<area shape=circle	coords=384,426,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=514,474,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=381,320,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=575,294,4	href="/dbget-bin/www_bget?C00165"	title="C00165 (Diacylglycerol)" />
+<area shape=circle	coords=625,567,4	href="/dbget-bin/www_bget?C00219"	title="C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid)" />
+<area shape=circle	coords=195,318,4	href="/dbget-bin/www_bget?C00025"	title="C00025 (L-Glutamate)" />
+<area shape=rect	coords=446,524,492,541	href="/dbget-bin/www_bget?K05858"	title="K05858 (PLCB)" />
+<area shape=rect	coords=363,524,409,541	href="/dbget-bin/www_bget?K04634+K04635"	title="K04634 (GNAQ), K04635 (GNA11)" />
+<area shape=rect	coords=290,477,336,494	href="/dbget-bin/www_bget?K05197+K05198+K05199"	title="K05197 (GRIA1), K05198 (GRIA2), K05199 (GRIA3)" />
+<area shape=rect	coords=544,434,590,451	href="/dbget-bin/www_bget?K04961"	title="K04961 (RYR1)" />
+<area shape=rect	coords=446,559,492,576	href="/dbget-bin/www_bget?K01047"	title="K01047 (PLA2G)" />
+<area shape=rect	coords=446,248,492,265	href="/dbget-bin/www_bget?K01047"	title="K01047 (PLA2G)" />
+<area shape=rect	coords=363,632,409,649	href="/dbget-bin/www_bget?K04346+K04534+K04535+K04630+K04632+K04639"	title="K04346 (GNA12), K04534 (GNAO, G-ALPHA-O), K04535 (GNAZ), K04630 (GNAI), K04632 (GNAS), K04639 (GNA13)" />
+<area shape=rect	coords=363,592,409,609	href="/dbget-bin/www_bget?K04346+K04534+K04535+K04630+K04632+K04639"	title="K04346 (GNA12), K04534 (GNAO, G-ALPHA-O), K04535 (GNAZ), K04630 (GNAI), K04632 (GNAS), K04639 (GNA13)" />
+<area shape=rect	coords=363,559,409,576	href="/dbget-bin/www_bget?K04346+K04534+K04535+K04630+K04632+K04639"	title="K04346 (GNA12), K04534 (GNAO, G-ALPHA-O), K04535 (GNAZ), K04630 (GNAI), K04632 (GNAS), K04639 (GNA13)" />
+<area shape=rect	coords=53,195,99,212	href="/dbget-bin/www_bget?K13240"	title="K13240 (NOS1)" />
+<area shape=rect	coords=446,286,492,303	href="/dbget-bin/www_bget?K05858"	title="K05858 (PLCB)" />
+<area shape=rect	coords=363,286,409,303	href="/dbget-bin/www_bget?K04634+K04635"	title="K04634 (GNAQ), K04635 (GNA11)" />
+<area shape=rect	coords=290,524,336,541	href="/dbget-bin/www_bget?K04603+K04604"	title="K04603 (GRM1), K04604 (GRM5)" />
+<area shape=rect	coords=668,285,714,302	href="/dbget-bin/www_bget?K02677"	title="K02677 (CPKC)" />
+<area shape=rect	coords=290,631,336,648	href="/dbget-bin/www_bget?K05087"	title="K05087 (IGF1R)" />
+<area shape=rect	coords=290,591,336,608	href="/dbget-bin/www_bget?K04578"	title="K04578 (CRHR1)" />
+<area shape=rect	coords=85,591,131,608	href="/dbget-bin/www_bget?K05256"	title="K05256 (CRH)" />
+<area shape=rect	coords=85,631,131,648	href="/dbget-bin/www_bget?K05459"	title="K05459 (IGF1)" />
+<area shape=rect	coords=363,146,409,163	href="/dbget-bin/www_bget?K12318+K12319"	title="K12318 (GUCY1A), K12319 (GUCY1B)" />
+<area shape=rect	coords=363,248,409,265	href="/dbget-bin/www_bget?K04346+K04534+K04535+K04630+K04632+K04639"	title="K04346 (GNA12), K04534 (GNAO, G-ALPHA-O), K04535 (GNAZ), K04630 (GNAI), K04632 (GNAS), K04639 (GNA13)" />
+<area shape=rect	coords=290,247,336,264	href="/dbget-bin/www_bget?K05207"	title="K05207 (GRID2)" />
+<area shape=rect	coords=472,146,518,163	href="/dbget-bin/www_bget?K07376"	title="K07376 (PRKG)" />
+<area shape=rect	coords=290,415,336,432	href="/dbget-bin/www_bget?K04344"	title="K04344 (CACNA1A)" />
+<area shape=rect	coords=555,123,601,140	href="/dbget-bin/www_bget?K08067"	title="K08067 (GSBS)" />
+<area shape=rect	coords=290,353,336,370	href="/dbget-bin/www_bget?K05197+K05198+K05199"	title="K05197 (GRIA1), K05198 (GRIA2), K05199 (GRIA3)" />
+<area shape=rect	coords=592,198,638,215	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=516,198,562,215	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=446,198,492,215	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=363,198,409,215	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=634,123,680,140	href="/dbget-bin/www_bget?K03456+K04382"	title="K03456 (PPP2R1), K04382 (PPP2C)" />
+<area shape=rect	coords=446,320,492,337	href="/dbget-bin/www_bget?K05854"	title="K05854 (LYN)" />
+<area shape=rect	coords=290,286,336,303	href="/dbget-bin/www_bget?K04603+K04604"	title="K04603 (GRM1), K04604 (GRM5)" />
+<area shape=rect	coords=535,393,581,410	href="/dbget-bin/www_bget?K04958+K04959+K04960"	title="K04958 (ITPR1), K04959 (ITPR2), K04960 (ITPR3)" />
+<area shape=rect	coords=40,45,235,71	href="/dbget-bin/www_bget?map04730"	title="map04730" />
+<area shape=rect	coords=397,475,499,510	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+<area shape=rect	coords=192,114,285,160	href="/kegg-bin/show_pathway?map04080"	title="map04080" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

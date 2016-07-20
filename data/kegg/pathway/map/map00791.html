@@ -1,0 +1,200 @@
+<html>
+<!---
+ENTRY       map00791
+DEFINITION  Atrazine degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Atrazine degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Atrazine degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00791&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00791">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00791 map" -->
+</select>
+<input type="hidden" name="mapno" value="00791" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00791" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00791" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00791.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=702,90,4	href="/dbget-bin/www_bget?C01566"	title="C01566 (Cyanamide)" />
+<area shape=circle	coords=702,325,4	href="/dbget-bin/www_bget?C08737"	title="C08737 (Melamine)" />
+<area shape=circle	coords=591,325,4	href="/dbget-bin/www_bget?C08733"	title="C08733 (2-Hydroxy-4,6-diamino-1,3,5-triazine)" />
+<area shape=circle	coords=475,325,4	href="/dbget-bin/www_bget?C08734"	title="C08734 (2,4-Dihydroxy-6-amino-1,3,5-triazine)" />
+<area shape=circle	coords=565,251,4	href="/dbget-bin/www_bget?C14149"	title="C14149 (N-Cyclopropylammelide)" />
+<area shape=circle	coords=668,251,4	href="/dbget-bin/www_bget?C14148"	title="C14148 (N-Cyclopropylammeline)" />
+<area shape=circle	coords=765,251,4	href="/dbget-bin/www_bget?C14147"	title="C14147 (Cyromazine)" />
+<area shape=circle	coords=817,151,4	href="/dbget-bin/www_bget?C00011"	title="C00011 (CO2)" />
+<area shape=circle	coords=700,151,4	href="/dbget-bin/www_bget?C01010"	title="C01010 (Urea-1-carboxylate)" />
+<area shape=circle	coords=346,151,4	href="/dbget-bin/www_bget?C06553"	title="C06553 (N-Isopropylammelide)" />
+<area shape=circle	coords=388,237,4	href="/dbget-bin/www_bget?C06558"	title="C06558 (2,4-Dihydroxy-6-(N'-ethyl)amino-1,3,5-triazine)" />
+<area shape=circle	coords=817,90,4	href="/dbget-bin/www_bget?C00086"	title="C00086 (Urea)" />
+<area shape=circle	coords=172,237,4	href="/dbget-bin/www_bget?C06556"	title="C06556 (Deisopropylatrazine)" />
+<area shape=circle	coords=144,325,4	href="/dbget-bin/www_bget?C06559"	title="C06559 (Deethylatrazine)" />
+<area shape=circle	coords=585,151,4	href="/dbget-bin/www_bget?C06555"	title="C06555 (Biuret)" />
+<area shape=circle	coords=352,325,4	href="/dbget-bin/www_bget?C08735"	title="C08735 (2-Chloro-4-hydroxy-6-amino-1,3,5-triazine)" />
+<area shape=circle	coords=219,151,4	href="/dbget-bin/www_bget?C06552"	title="C06552 (Hydroxyatrazine)" />
+<area shape=circle	coords=475,151,4	href="/dbget-bin/www_bget?C06554"	title="C06554 (Cyanuric acid)" />
+<area shape=circle	coords=90,151,4	href="/dbget-bin/www_bget?C06551"	title="C06551 (Atrazine)" />
+<area shape=circle	coords=292,237,4	href="/dbget-bin/www_bget?C06557"	title="C06557 (Deisopropylhydroxyatrazine)" />
+<area shape=circle	coords=230,325,4	href="/dbget-bin/www_bget?C06560"	title="C06560 (Deisopropyldeethylatrazine)" />
+<area shape=rect	coords=731,81,777,98	href="/dbget-bin/www_bget?K06035+4.2.1.69+R00778"	title="K06035 (E4.2.1.69), 4.2.1.69, R00778" />
+<area shape=rect	coords=630,316,676,333	href="/dbget-bin/www_bget?up:Q9EYU0+R06968"	title="Q9EYU0, R06968" />
+<area shape=rect	coords=519,316,565,333	href="/dbget-bin/www_bget?3.5.99.-+R06969"	title="3.5.99.-, 3.5.99.-, R06969" />
+<area shape=rect	coords=700,243,746,260	href="/dbget-bin/www_bget?K01500+3.5.4.-+R06970"	title="K01500 (E3.5.4.-), 3.5.4.-, R06970" />
+<area shape=rect	coords=600,243,646,260	href="/dbget-bin/www_bget?K01500+3.5.4.-+R06971"	title="K01500 (E3.5.4.-), 3.5.4.-, R06971" />
+<area shape=rect	coords=505,244,551,261	href="/dbget-bin/www_bget?K01500+3.5.4.-+R06972"	title="K01500 (E3.5.4.-), 3.5.4.-, R06972" />
+<area shape=rect	coords=453,272,499,289	href="/dbget-bin/www_bget?K08710+3.5.99.4+R06967"	title="K08710 (E3.5.99.4, atzC), 3.5.99.4, R06967" />
+<area shape=rect	coords=388,316,434,333	href="/dbget-bin/www_bget?K03382+3.5.99.3+R06966"	title="K03382 (E3.5.99.3), 3.5.99.3, R06966" />
+<area shape=rect	coords=255,142,301,159	href="/dbget-bin/www_bget?K03382+3.5.99.3+R05559"	title="K03382 (E3.5.99.3), 3.5.99.3, R05559" />
+<area shape=rect	coords=730,143,776,160	href="/dbget-bin/www_bget?K01457+3.5.1.54+R00005"	title="K01457 (E3.5.1.54), 3.5.1.54, R00005" />
+<area shape=rect	coords=105,229,151,246	href="/dbget-bin/www_bget?1.14.15.-+R05564"	title="1.14.15.-, 1.14.15.-, R05564" />
+<area shape=rect	coords=207,286,253,303	href="/dbget-bin/www_bget?1.14.15.-+R05567"	title="1.14.15.-, 1.14.15.-, R05567" />
+<area shape=rect	coords=264,316,310,333	href="/dbget-bin/www_bget?up:Q9EYU0+R05569"	title="Q9EYU0, R05569" />
+<area shape=rect	coords=407,228,453,245	href="/dbget-bin/www_bget?3.5.99.-+R05573"	title="3.5.99.-, 3.5.99.-, R05573" />
+<area shape=rect	coords=508,143,554,160	href="/dbget-bin/www_bget?K03383+3.5.2.15+R05561"	title="K03383 (E3.5.2.15), 3.5.2.15, R05561" />
+<area shape=rect	coords=159,317,205,334	href="/dbget-bin/www_bget?1.14.15.-+R05568"	title="1.14.15.-, 1.14.15.-, R05568" />
+<area shape=rect	coords=380,142,426,159	href="/dbget-bin/www_bget?K08710+3.5.99.4+R05560"	title="K08710 (E3.5.99.4, atzC), 3.5.99.4, R05560" />
+<area shape=rect	coords=128,142,174,159	href="/dbget-bin/www_bget?K05394+3.8.1.8+R05558"	title="K05394 (E3.8.1.8, atzA), 3.8.1.8, R05558" />
+<area shape=rect	coords=206,228,252,245	href="/dbget-bin/www_bget?K01564+3.8.1.-+R05572"	title="K01564 (E3.8.1.-), 3.8.1.-, R05572" />
+<area shape=rect	coords=795,108,841,125	href="/dbget-bin/www_bget?K01427+K01428+K01429+K01430+3.5.1.5+R00131"	title="K01427 (URE), K01428 (ureC), K01429 (ureB), K01430 (ureA), 3.5.1.5, R00131" />
+<area shape=rect	coords=65,286,111,303	href="/dbget-bin/www_bget?1.14.15.-+R05565"	title="1.14.15.-, 1.14.15.-, R05565" />
+<area shape=rect	coords=614,142,660,159	href="/dbget-bin/www_bget?3.5.1.84+R05563"	title="3.5.1.84, 3.5.1.84, R05563" />
+<area shape=rect	coords=312,228,358,245	href="/dbget-bin/www_bget?3.5.99.-+R05574"	title="3.5.99.-, 3.5.99.-, R05574" />
+<area shape=rect	coords=781,207,855,242	href="/kegg-bin/show_pathway?map00790"	title="map00790" />
+<area shape=rect	coords=40,45,241,70	href="/dbget-bin/www_bget?map00791"	title="map00791" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

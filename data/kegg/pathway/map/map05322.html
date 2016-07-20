@@ -1,0 +1,219 @@
+<html>
+<!---
+ENTRY       map05322
+DEFINITION  Systemic lupus erythematosus - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Systemic lupus erythematosus - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Systemic lupus erythematosus - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05322&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05322">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Systemic lupus erythematosus (SLE) is characterized by circulating IgG autoantibodies that are specific for self-antigens, such as DNA, nuclear proteins and certain cytoplasmic components. Immune complexes comprising autoantibody and self-antigen is deposited particulary in the renal glomeruli and mediate a systemic inflammatory response by activating complement or via Fc-gamma-R-mediated neutrophil and macrophage activation.  Activation of complement leads to injury both through formation of the membrane attack complex (C5b-9) or by generation of the anaphylatoxin and cell activator C5a. Neutrophils and macrophages cause tissue injury by the release of oxidants and proteases.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05322 map" -->
+</select>
+<input type="hidden" name="mapno" value="05322" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05322" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05322" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05322.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=1146,549,4	href="/dbget-bin/www_bget?C00027"	title="C00027 (H2O2)" />
+<area shape=circle	coords=457,139,4	href="/dbget-bin/www_bget?C00434"	title="C00434 (Double-stranded DNA)" />
+<area shape=circle	coords=474,208,4	href="/dbget-bin/www_bget?C02737"	title="C02737 (Phosphatidylserine)" />
+<area shape=rect	coords=613,414,659,431	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=1055,592,1101,609	href="/dbget-bin/www_bget?K06498+K06472+K12560+K06463"	title="K06463 (FCGR3, CD16), K06472 (FCGR2A, CD32), K06498 (FCGR1A, CD64), K12560 (FCGR2B, CD32)" />
+<area shape=rect	coords=1056,693,1102,710	href="/dbget-bin/www_bget?K06498+K06472+K12560+K06463"	title="K06463 (FCGR3, CD16), K06472 (FCGR2A, CD32), K06498 (FCGR1A, CD64), K12560 (FCGR2B, CD32)" />
+<area shape=rect	coords=1133,592,1179,609	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=1135,693,1181,710	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=1128,144,1174,161	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=794,440,840,457	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=1122,524,1168,541	href="/dbget-bin/www_bget?K01327"	title="K01327 (ELANE)" />
+<area shape=rect	coords=1122,503,1168,520	href="/dbget-bin/www_bget?K01319"	title="K01319 (CTSG)" />
+<area shape=rect	coords=942,377,988,394	href="/dbget-bin/www_bget?K03994"	title="K03994 (C5)" />
+<area shape=rect	coords=920,182,966,199	href="/dbget-bin/www_bget?K03989"	title="K03989 (C4)" />
+<area shape=rect	coords=920,264,966,281	href="/dbget-bin/www_bget?K03990"	title="K03990 (C3)" />
+<area shape=rect	coords=920,203,966,220	href="/dbget-bin/www_bget?K01332"	title="K01332 (C2)" />
+<area shape=rect	coords=1004,153,1050,170	href="/dbget-bin/www_bget?K01331"	title="K01331 (C1S)" />
+<area shape=rect	coords=1050,144,1096,161	href="/dbget-bin/www_bget?K03986+K03987+K03988"	title="K03986 (C1QA), K03987 (C1QB), K03988 (C1QG)" />
+<area shape=rect	coords=1004,136,1050,153	href="/dbget-bin/www_bget?K01330"	title="K01330 (C1R)" />
+<area shape=rect	coords=1086,377,1132,394	href="/dbget-bin/www_bget?K03995"	title="K03995 (C6)" />
+<area shape=rect	coords=1135,377,1181,394	href="/dbget-bin/www_bget?K03996"	title="K03996 (C7)" />
+<area shape=rect	coords=1086,398,1132,415	href="/dbget-bin/www_bget?K03997+K03998+K03999"	title="K03997 (C8A), K03998 (C8B), K03999 (C8G)" />
+<area shape=rect	coords=1227,346,1273,363	href="/dbget-bin/www_bget?K03994+K03995+K03996+K03997+K03998+K03999"	title="K03994 (C5), K03995 (C6), K03996 (C7), K03997 (C8A), K03998 (C8B), K03999 (C8G)" />
+<area shape=rect	coords=1135,398,1181,415	href="/dbget-bin/www_bget?K04000"	title="K04000 (C9)" />
+<area shape=rect	coords=527,522,573,539	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=527,549,573,566	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=527,571,573,588	href="/dbget-bin/www_bget?K05443"	title="K05443 (IL10, CSIF)" />
+<area shape=rect	coords=677,638,723,655	href="/dbget-bin/www_bget?K03986+K03987+K03988"	title="K03986 (C1QA), K03987 (C1QB), K03988 (C1QG)" />
+<area shape=rect	coords=730,638,776,655	href="/dbget-bin/www_bget?K03989"	title="K03989 (C4)" />
+<area shape=rect	coords=256,141,302,158	href="/dbget-bin/www_bget?K03986+K03987+K03988"	title="K03986 (C1QA), K03987 (C1QB), K03988 (C1QG)" />
+<area shape=rect	coords=309,141,355,158	href="/dbget-bin/www_bget?K03989"	title="K03989 (C4)" />
+<area shape=rect	coords=283,118,329,135	href="/dbget-bin/www_bget?K01332"	title="K01332 (C2)" />
+<area shape=rect	coords=703,661,749,678	href="/dbget-bin/www_bget?K01332"	title="K01332 (C2)" />
+<area shape=rect	coords=183,471,229,488	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=265,471,311,488	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=183,448,229,465	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=265,448,311,465	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=571,472,617,489	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=490,472,536,489	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=490,446,536,463	href="/dbget-bin/www_bget?K03161"	title="K03161 (TNFSF5, CD40L)" />
+<area shape=rect	coords=571,446,617,463	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=496,140,542,157	href="/dbget-bin/www_bget?K11251"	title="K11251 (H2A)" />
+<area shape=rect	coords=548,140,594,157	href="/dbget-bin/www_bget?K11252"	title="K11252 (H2B)" />
+<area shape=rect	coords=496,162,542,179	href="/dbget-bin/www_bget?K11253"	title="K11253 (H3)" />
+<area shape=rect	coords=548,162,594,179	href="/dbget-bin/www_bget?K11254"	title="K11254 (H4)" />
+<area shape=rect	coords=519,202,565,219	href="/dbget-bin/www_bget?K10651+K11089"	title="K10651 (TRIM21, SSA1), K11089 (TROVE2, SSA2)" />
+<area shape=rect	coords=613,140,659,157	href="/dbget-bin/www_bget?K11086"	title="K11086 (SNRPB, SMB)" />
+<area shape=rect	coords=613,162,659,179	href="/dbget-bin/www_bget?K11087+K11088"	title="K11087 (SNRPD1, SMD1), K11088 (SNRPD3, SMD3)" />
+<area shape=rect	coords=678,140,724,157	href="/dbget-bin/www_bget?K05209"	title="K05209 (GRIN2A)" />
+<area shape=rect	coords=625,202,671,219	href="/dbget-bin/www_bget?K05699"	title="K05699 (ACTN)" />
+<area shape=rect	coords=678,202,724,219	href="/dbget-bin/www_bget?K03986+K03987+K03988"	title="K03986 (C1QA), K03987 (C1QB), K03988 (C1QG)" />
+<area shape=rect	coords=572,202,618,219	href="/dbget-bin/www_bget?K11090"	title="K11090 (LA, SSB)" />
+<area shape=rect	coords=678,162,724,179	href="/dbget-bin/www_bget?K05210"	title="K05210 (GRIN2B)" />
+<area shape=rect	coords=286,372,400,407	href="/kegg-bin/show_pathway?map04660"	title="map04660" />
+<area shape=rect	coords=482,371,596,406	href="/kegg-bin/show_pathway?map04514"	title="map04514" />
+<area shape=rect	coords=185,545,299,580	href="/kegg-bin/show_pathway?map04612"	title="map04612" />
+<area shape=rect	coords=337,619,451,654	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=337,686,451,721	href="/kegg-bin/show_pathway?map04630"	title="map04630" />
+<area shape=rect	coords=1011,196,1125,231	href="/kegg-bin/show_pathway?map04610"	title="map04610" />
+<area shape=rect	coords=841,632,955,678	href="/kegg-bin/show_pathway?map04670"	title="map04670" />
+<area shape=rect	coords=646,331,760,366	href="/kegg-bin/show_pathway?map04662"	title="map04662" />
+<area shape=rect	coords=40,45,313,71	href="/dbget-bin/www_bget?map05322"	title="map05322" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,173 @@
+<html>
+<!---
+ENTRY       map07043
+DEFINITION  Antineoplastics - hormones - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antineoplastics - hormones - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antineoplastics - hormones - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07043&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07043">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07043" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07043" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07043.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=771,884,845,897	href="/dbget-bin/www_bget?D01010"	title="D01010 (Levothyroxine sodium (JP15/USP))" />
+<area shape=rect	coords=604,884,670,897	href="/dbget-bin/www_bget?D01011"	title="D01011 (Liothyronine sodium (JP15/USAN))" />
+<area shape=rect	coords=387,884,467,897	href="/dbget-bin/www_bget?D00292"	title="D00292 (Dexamethasone (JP15/USP/INN))" />
+<area shape=rect	coords=228,884,301,897	href="/dbget-bin/www_bget?D00472"	title="D00472 (Prednisolone (JP15/USP/INN))" />
+<area shape=rect	coords=95,884,152,897	href="/dbget-bin/www_bget?D06673+D00473"	title="D06673 (Meprednisone (USP/INN)), D00473 (Prednisone (USP))" />
+<area shape=rect	coords=902,717,959,730	href="/dbget-bin/www_bget?D01161"	title="D01161 (Fulvestrant (JAN/USAN/INN))" />
+<area shape=rect	coords=718,717,783,730	href="/dbget-bin/www_bget?D01602"	title="D01602 (Mepitiostane (JP15/INN))" />
+<area shape=rect	coords=591,717,651,730	href="/dbget-bin/www_bget?D01265"	title="D01265 (Epitiostanol (JAN/INN))" />
+<area shape=rect	coords=928,575,983,587	href="/dbget-bin/www_bget?D02217"	title="D02217 (Raloxifene hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=784,574,842,587	href="/dbget-bin/www_bget?D00967"	title="D00967 (Toremifene citrate (JAN/USAN))" />
+<area shape=rect	coords=603,574,658,587	href="/dbget-bin/www_bget?D00966"	title="D00966 (Tamoxifen citrate (JAN/USP))" />
+<area shape=rect	coords=462,717,523,730	href="/dbget-bin/www_bget?D00963"	title="D00963 (Exemestane (JAN/USP/INN))" />
+<area shape=rect	coords=355,718,408,730	href="/dbget-bin/www_bget?D02451+D03778"	title="D02451 (Fadrozole hydrochloride (USAN)), D03778 (Fadrozole hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=224,717,285,730	href="/dbget-bin/www_bget?D00960"	title="D00960 (Anastrozole (JAN/USAN/INN))" />
+<area shape=rect	coords=105,718,155,730	href="/dbget-bin/www_bget?D00964"	title="D00964 (Letrozole (JAN/USP/INN))" />
+<area shape=rect	coords=418,575,504,587	href="/dbget-bin/www_bget?D00952"	title="D00952 (Megestrol acetate (USAN))" />
+<area shape=rect	coords=224,574,368,587	href="/dbget-bin/www_bget?D00951"	title="D00951 (Medroxyprogesterone acetate (JAN/USP))" />
+<area shape=rect	coords=66,560,153,573	href="/dbget-bin/www_bget?D00327"	title="D00327 (Fluoxymesterone (JP15/USP/INN))" />
+<area shape=rect	coords=838,424,898,437	href="/dbget-bin/www_bget?D00989"	title="D00989 (Leuprorelin acetate (JAN))" />
+<area shape=rect	coords=462,424,514,438	href="/dbget-bin/www_bget?D04405+D00573"	title="D04405 (Goserelin (USAN/INN)), D00573 (Goserelin acetate (JAN))" />
+<area shape=rect	coords=182,404,278,418	href="/dbget-bin/www_bget?D00574"	title="D00574 (Aminoglutethimide (USP/INN))" />
+<area shape=rect	coords=999,241,1063,254	href="/dbget-bin/www_bget?D04066+D02398+D06397"	title="D04066 (Estramustine (USAN/INN)), D02398 (Estramustine phosphate sodium (USAN)), D06397 (Estramustine phosphate sodium hydrate (JAN))" />
+<area shape=rect	coords=833,241,889,254	href="/dbget-bin/www_bget?D00965"	title="D00965 (Nilutamide (USAN/INN))" />
+<area shape=rect	coords=672,241,738,254	href="/dbget-bin/www_bget?D00961"	title="D00961 (Bicalutamide (JAN/USP/INN))" />
+<area shape=rect	coords=536,241,587,254	href="/dbget-bin/www_bget?D00586"	title="D00586 (Flutamide (JAN/USP/INN))" />
+<area shape=rect	coords=342,241,486,254	href="/dbget-bin/www_bget?D00946"	title="D00946 (Fosfestrol (JP15/INN))" />
+<area shape=rect	coords=191,242,298,254	href="/dbget-bin/www_bget?D01299"	title="D01299 (Chlormadinone acetate (JP15/USAN))" />
+<area shape=rect	coords=40,45,303,71	href="/dbget-bin/www_bget?map07043"	title="map07043" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

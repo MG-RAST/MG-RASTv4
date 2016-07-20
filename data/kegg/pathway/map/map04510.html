@@ -1,0 +1,228 @@
+<html>
+<!---
+ENTRY       map04510
+DEFINITION  Focal adhesion - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Focal adhesion - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Focal adhesion - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04510&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04510">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Cell-matrix adhesions play essential roles in important biological processes including cell motility, cell proliferation, cell differentiation, regulation of gene expression and cell survival. At the cell-extracellular matrix contact points, specialized structures are formed and termed focal adhesions, where  bundles of actin filaments are anchored to transmembrane receptors of the integrin family through a multi-molecular complex of junctional plaque proteins. Some of the constituents of focal adhesions participate in the structural link between membrane receptors and the actin cytoskeleton, while others are signalling molecules, including different protein kinases and phosphatases, their substrates, and various adapter proteins. Integrin signaling is dependent upon the non-receptor tyrosine kinase activities of the FAK and src proteins as well as the adaptor protein functions of FAK, src and Shc to initiate downstream signaling events. These signalling events culminate in reorganization of the actin cytoskeleton; a prerequisite for changes in cell shape and motility, and gene expression. Similar morphological alterations and modulation of gene expression are initiated by the binding of growth factors to their respective receptors, emphasizing the considerable crosstalk between adhesion- and growth factor-mediated signalling.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04510 map" -->
+</select>
+<input type="hidden" name="mapno" value="04510" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04510" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04510" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04510.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=604,427,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=645,210,4	href="/dbget-bin/www_bget?C04637"	title="C04637 (1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate)" />
+<area shape=rect	coords=169,248,215,265	href="/dbget-bin/www_bget?K05719+K06493+K06525+K06588+K06589+K06590+K06591"	title="K05719 (ITGB1), K06493 (ITGB3), K06525 (ITGB4), K06588 (ITGB5), K06589 (ITGB6), K06590 (ITGB7), K06591 (ITGB8)" />
+<area shape=rect	coords=169,231,215,248	href="/dbget-bin/www_bget?K06476+K06480+K06481+K06482+K06483+K06484+K06485+K06487+K06583+K06584+K06585+K06586+K06587"	title="K06476 (ITGA2B), K06480 (ITGA1), K06481 (ITGA2), K06482 (ITGA3), K06483 (ITGA4), K06484 (ITGA5), K06485 (ITGA6), K06487 (ITGAV), K06583 (ITGA7), K06584 (ITGA8), K06585 (ITGA9), K06586 (ITGA10), K06587 (ITGA11)" />
+<area shape=rect	coords=423,230,469,247	href="/dbget-bin/www_bget?K04437"	title="K04437 (FLNA)" />
+<area shape=rect	coords=724,357,770,374	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=794,191,840,208	href="/dbget-bin/www_bget?K00907"	title="K00907 (MYLK)" />
+<area shape=rect	coords=862,138,908,155	href="/dbget-bin/www_bget?K10351+K12753+K12754+K12755+K12756+K12757+K12758"	title="K10351 (MYL2), K12753 (MYL5), K12754 (MYL7), K12755 (MYL9), K12756 (MYL10), K12757 (MYL12), K12758 (MYLPF)" />
+<area shape=rect	coords=867,90,913,107	href="/dbget-bin/www_bget?K05740"	title="K05740 (DIAPH1)" />
+<area shape=rect	coords=733,165,779,182	href="/dbget-bin/www_bget?K06269+K06270"	title="K06269 (PPP1C), K06270 (PPP1R12A, MYPT1)" />
+<area shape=rect	coords=676,138,722,155	href="/dbget-bin/www_bget?K04514"	title="K04514 (ROCK)" />
+<area shape=rect	coords=694,319,740,336	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=609,277,655,294	href="/dbget-bin/www_bget?K06276"	title="K06276 (PDPK1)" />
+<area shape=rect	coords=524,257,570,274	href="/dbget-bin/www_bget?K06275"	title="K06275 (PARV)" />
+<area shape=rect	coords=524,319,570,336	href="/dbget-bin/www_bget?K06272"	title="K06272 (ILK)" />
+<area shape=rect	coords=524,232,570,249	href="/dbget-bin/www_bget?K05700"	title="K05700 (VCL)" />
+<area shape=rect	coords=524,207,570,224	href="/dbget-bin/www_bget?K06274"	title="K06274 (VASP)" />
+<area shape=rect	coords=423,369,469,386	href="/dbget-bin/www_bget?K01110"	title="K01110 (E3.1.3.67, PTEN)" />
+<area shape=rect	coords=423,418,469,435	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=423,259,469,276	href="/dbget-bin/www_bget?K06271"	title="K06271 (TLN)" />
+<area shape=rect	coords=524,183,570,200	href="/dbget-bin/www_bget?K06273"	title="K06273 (ZYX)" />
+<area shape=rect	coords=601,166,647,183	href="/dbget-bin/www_bget?hsa:23396+mmu:18717+rno:309419"	title="23396, 18717, 309419" />
+<area shape=rect	coords=423,204,469,221	href="/dbget-bin/www_bget?K05699"	title="K05699 (ACTN)" />
+<area shape=rect	coords=306,418,352,435	href="/dbget-bin/www_bget?K05725"	title="K05725 (PTK2, FAK)" />
+<area shape=rect	coords=359,319,405,336	href="/dbget-bin/www_bget?K03853"	title="K03853 (CAPN2)" />
+<area shape=rect	coords=423,287,469,304	href="/dbget-bin/www_bget?K05760"	title="K05760 (PXN)" />
+<area shape=rect	coords=304,90,350,107	href="/dbget-bin/www_bget?K05732"	title="K05732 (P190)" />
+<area shape=rect	coords=217,345,263,362	href="/dbget-bin/www_bget?K02677"	title="K02677 (CPKC)" />
+<area shape=rect	coords=274,295,320,312	href="/dbget-bin/www_bget?K05704"	title="K05704 (SRC)" />
+<area shape=rect	coords=223,463,269,480	href="/dbget-bin/www_bget?K05703"	title="K05703 (FYN)" />
+<area shape=rect	coords=549,138,595,155	href="/dbget-bin/www_bget?K04513"	title="K04513 (RHOA)" />
+<area shape=rect	coords=355,138,401,155	href="/dbget-bin/www_bget?K04349"	title="K04349 (RASGRF1)" />
+<area shape=rect	coords=76,239,122,256	href="/dbget-bin/www_bget?K03900+K04659+K05635+K05636+K05637+K05717+K06236+K06237+K06238+K06239+K06240+K06241+K06242+K06243+K06244+K06245+K06246+K06247+K06248+K06249+K06250+K06251+K06252+K06253"	title="K03900 (VWF), K04659 (THBS), K05635 (LAMC1), K05636 (LAMB1), K05637 (LAMA1), K05717 (FN1), K06236 (COL1AS), K06237 (COL4A), K06238 (COL6A), K06239 (LAMA2), K06240 (LAMA3), K06241 (LAMA4), K06242 (LAMA5), K06243 (LAMB2), K06244 (LAMB3), K06245 (LAMB4), K06246 (LAMC2), K06247 (LAMC3), K06248 (CHAD), K06249 (RELN), K06250 (SPP1, BNSP, OPN), K06251 (VTN), K06252 (TN), K06253 (IBSP)" />
+<area shape=rect	coords=169,394,215,411	href="/dbget-bin/www_bget?K06278+K12958+K12959"	title="K06278 (CAV1), K12958 (CAV2), K12959 (CAV3)" />
+<area shape=rect	coords=1120,618,1166,635	href="/dbget-bin/www_bget?K04725"	title="K04725 (BIRC2_3_4)" />
+<area shape=rect	coords=869,660,915,677	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=931,660,977,677	href="/dbget-bin/www_bget?K02161"	title="K02161 (BCL2)" />
+<area shape=rect	coords=976,618,1022,635	href="/dbget-bin/www_bget?K04375"	title="K04375 (ELK1)" />
+<area shape=rect	coords=901,618,947,635	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=1120,429,1166,446	href="/dbget-bin/www_bget?K04503+K10151+K10152"	title="K04503 (CCND1), K10151 (CCND2), K10152 (CCND3)" />
+<area shape=rect	coords=826,618,872,635	href="/dbget-bin/www_bget?K04368"	title="K04368 (MAP2K1, MEK1)" />
+<area shape=rect	coords=792,569,838,586	href="/dbget-bin/www_bget?K04365"	title="K04365 (BRAF)" />
+<area shape=rect	coords=619,618,665,635	href="/dbget-bin/www_bget?K04366"	title="K04366 (RAF1)" />
+<area shape=rect	coords=538,618,584,635	href="/dbget-bin/www_bget?K02833"	title="K02833 (HRAS)" />
+<area shape=rect	coords=456,618,502,635	href="/dbget-bin/www_bget?K03099"	title="K03099 (SOS)" />
+<area shape=rect	coords=375,618,421,635	href="/dbget-bin/www_bget?K04364"	title="K04364 (GRB2)" />
+<area shape=rect	coords=169,618,215,635	href="/dbget-bin/www_bget?K04361+K04363+K05083+K05087+K05089+K05096+K05097+K05098+K05099"	title="K04361 (EGFR, ERBB1), K04363 (PDGFRA), K05083 (ERBB2, HER2), K05087 (IGF1R), K05089 (PDGFRB), K05096 (FLT1, VEGFR1), K05097 (FLT4, VEGFR3), K05098 (KDR, VEGFR2), K05099 (MET, HGFR)" />
+<area shape=rect	coords=76,618,122,635	href="/dbget-bin/www_bget?K04357+K04359+K05448+K05449+K05450+K05459+K05460"	title="K04357 (EGF), K04359 (PDGFA_B), K05448 (VEGFA_B), K05449 (VEGFC_D), K05450 (PDGFC_D), K05459 (IGF1), K05460 (HGF)" />
+<area shape=rect	coords=293,618,339,635	href="/dbget-bin/www_bget?K06279"	title="K06279 (SHC)" />
+<area shape=rect	coords=423,525,469,542	href="/dbget-bin/www_bget?K05726"	title="K05726 (BCAR1, CAS)" />
+<area shape=rect	coords=558,525,604,542	href="/dbget-bin/www_bget?K04438"	title="K04438 (CRK, CRKII)" />
+<area shape=rect	coords=647,525,693,542	href="/dbget-bin/www_bget?K06277"	title="K06277 (RAPGEF1, GRF2)" />
+<area shape=rect	coords=766,525,812,542	href="/dbget-bin/www_bget?K04353+K07836"	title="K04353 (RAP1A), K07836 (RAP1B)" />
+<area shape=rect	coords=675,484,721,501	href="/dbget-bin/www_bget?hsa:1793+mmu:330662"	title="1793, 330662" />
+<area shape=rect	coords=888,525,934,542	href="/dbget-bin/www_bget?K04440"	title="K04440 (JNK)" />
+<area shape=rect	coords=976,525,1022,542	href="/dbget-bin/www_bget?K04448"	title="K04448 (JUN)" />
+<area shape=rect	coords=824,418,870,435	href="/dbget-bin/www_bget?K04409+K04410+K05733+K05734+K05735+K05736"	title="K04409 (PAK1), K04410 (PAK2), K05733 (PAK3, MRX30), K05734 (PAK4), K05735 (PAK6), K05736 (PAK7)" />
+<area shape=rect	coords=736,418,782,435	href="/dbget-bin/www_bget?K04392+K07860+K07861"	title="K04392 (RAC1), K07860 (RAC2), K07861 (RAC3)" />
+<area shape=rect	coords=658,418,704,435	href="/dbget-bin/www_bget?K05730"	title="K05730 (VAV)" />
+<area shape=rect	coords=976,319,1022,336	href="/dbget-bin/www_bget?K02105"	title="K02105 (CTNNB1)" />
+<area shape=rect	coords=875,318,921,335	href="/dbget-bin/www_bget?K03083"	title="K03083 (GSK3B)" />
+<area shape=rect	coords=908,241,954,258	href="/dbget-bin/www_bget?K05692"	title="K05692 (ACTB_G1)" />
+<area shape=rect	coords=51,290,163,325	href="/kegg-bin/show_pathway?map04512"	title="map04512" />
+<area shape=rect	coords=51,547,163,593	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=560,453,672,488	href="/kegg-bin/show_pathway?map04070"	title="map04070" />
+<area shape=rect	coords=878,563,990,598	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,199,71	href="/dbget-bin/www_bget?map04510"	title="map04510" />
+<area shape=rect	coords=945,160,1057,195	href="/kegg-bin/show_pathway?map04810"	title="map04810" />
+<area shape=rect	coords=909,415,1003,441	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=927,345,1021,380	href="/kegg-bin/show_pathway?map04310"	title="map04310" />
+<area shape=rect	coords=1096,466,1190,492	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

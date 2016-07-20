@@ -1,0 +1,193 @@
+<html>
+<!---
+ENTRY       map00670
+DEFINITION  One carbon pool by folate - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: One carbon pool by folate - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>One carbon pool by folate - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00670&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00670">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00670 map" -->
+</select>
+<input type="hidden" name="mapno" value="00670" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00670" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00670" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00670.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=120,206,4	href="/dbget-bin/www_bget?C00504"	title="C00504 (Folate)" />
+<area shape=circle	coords=120,298,4	href="/dbget-bin/www_bget?C00415"	title="C00415 (Dihydrofolate)" />
+<area shape=circle	coords=488,216,4	href="/dbget-bin/www_bget?C03479"	title="C03479 (5-Formyltetrahydrofolate)" />
+<area shape=circle	coords=619,301,4	href="/dbget-bin/www_bget?C00143"	title="C00143 (5,10-Methylenetetrahydrofolate)" />
+<area shape=circle	coords=619,436,4	href="/dbget-bin/www_bget?C00440"	title="C00440 (5-Methyltetrahydrofolate)" />
+<area shape=circle	coords=486,444,4	href="/dbget-bin/www_bget?C00664"	title="C00664 (5-Formiminotetrahydrofolate)" />
+<area shape=circle	coords=204,301,4	href="/dbget-bin/www_bget?C00101"	title="C00101 (Tetrahydrofolate)" />
+<area shape=circle	coords=359,301,4	href="/dbget-bin/www_bget?C00234"	title="C00234 (10-Formyltetrahydrofolate)" />
+<area shape=circle	coords=489,301,4	href="/dbget-bin/www_bget?C00445"	title="C00445 (5,10-Methenyltetrahydrofolate)" />
+<area shape=rect	coords=310,445,356,462	href="/dbget-bin/www_bget?K00603+2.1.2.5+R02287"	title="K00603 (E2.1.2.5), 2.1.2.5, R02287" />
+<area shape=rect	coords=310,424,356,441	href="/dbget-bin/www_bget?2.1.2.4+R02729"	title="2.1.2.4, 2.1.2.4, R02729" />
+<area shape=rect	coords=310,402,356,419	href="/dbget-bin/www_bget?K00601+K08289+K11175+K11787+2.1.2.2+R04326"	title="K00601 (E2.1.2.2), K08289 (purT), K11175 (purN), K11787 (GART), 2.1.2.2, R04326" />
+<area shape=rect	coords=464,369,510,386	href="/dbget-bin/www_bget?K01746+4.3.1.4+R02302"	title="K01746 (E4.3.1.4), 4.3.1.4, R02302" />
+<area shape=rect	coords=531,344,577,361	href="/dbget-bin/www_bget?K00295+1.5.1.15+R01218"	title="K00295 (E1.5.1.15), 1.5.1.15, R01218" />
+<area shape=rect	coords=133,289,179,306	href="/dbget-bin/www_bget?K00287+1.5.1.3+R00936+R00939"	title="K00287 (E1.5.1.3, folA), 1.5.1.3, R00936, R00939" />
+<area shape=rect	coords=98,244,144,261	href="/dbget-bin/www_bget?K00287+1.5.1.3+R02236"	title="K00287 (E1.5.1.3, folA), 1.5.1.3, R02236" />
+<area shape=rect	coords=314,205,360,222	href="/dbget-bin/www_bget?K00603+2.1.2.5+R03189"	title="K00603 (E2.1.2.5), 2.1.2.5, R03189" />
+<area shape=rect	coords=621,372,667,389	href="/dbget-bin/www_bget?K00297+1.5.1.20+R01224+R07168"	title="K00297 (E1.5.1.20, metF), 1.5.1.20, R01224, R07168" />
+<area shape=rect	coords=571,372,617,389	href="/dbget-bin/www_bget?1.5.7.1+R01217"	title="1.5.7.1, 1.5.7.1, R01217" />
+<area shape=rect	coords=401,293,447,310	href="/dbget-bin/www_bget?K01491+3.5.4.9+R01655"	title="K01491 (E3.5.4.9, folD), 3.5.4.9, R01655" />
+<area shape=rect	coords=531,293,577,310	href="/dbget-bin/www_bget?K00288+1.5.1.5+R01220"	title="K00288 (E1.5.1.5, folD), 1.5.1.5, R01220" />
+<area shape=rect	coords=511,230,557,247	href="/dbget-bin/www_bget?K01934+6.3.3.2+R02301"	title="K01934 (E6.3.3.2), 6.3.3.2, R02301" />
+<area shape=rect	coords=467,251,513,268	href="/dbget-bin/www_bget?K00605+2.1.2.10+R02300"	title="K00605 (E2.1.2.10, gcvT), 2.1.2.10, R02300" />
+<area shape=rect	coords=261,384,307,401	href="/dbget-bin/www_bget?K00604+2.1.2.9+R03940"	title="K00604 (MTFMT, fmt), 2.1.2.9, R03940" />
+<area shape=rect	coords=261,364,307,381	href="/dbget-bin/www_bget?K00289+1.5.1.6+R00941"	title="K00289 (E1.5.1.6, FTHFD), 1.5.1.6, R00941" />
+<area shape=rect	coords=260,335,306,352	href="/dbget-bin/www_bget?K01433+3.5.1.10+R00944"	title="K01433 (purU), 3.5.1.10, R00944" />
+<area shape=rect	coords=260,293,306,310	href="/dbget-bin/www_bget?K01938+6.3.4.3+R00943"	title="K01938 (E6.3.4.3, fhs), 6.3.4.3, R00943" />
+<area shape=rect	coords=260,249,306,266	href="/dbget-bin/www_bget?K00601+K08289+K11175+K11787+2.1.2.2+R04325"	title="K00601 (E2.1.2.2), K08289 (purT), K11175 (purN), K11787 (GART), 2.1.2.2, R04325" />
+<area shape=rect	coords=260,229,306,246	href="/dbget-bin/www_bget?K00602+2.1.2.3+R04560"	title="K00602 (purH), 2.1.2.3, R04560" />
+<area shape=rect	coords=374,511,420,528	href="/dbget-bin/www_bget?K00560+2.1.1.45+R02101"	title="K00560 (E2.1.1.45, thyA), 2.1.1.45, R02101" />
+<area shape=rect	coords=374,490,420,507	href="/dbget-bin/www_bget?2.1.1.19+R02573"	title="2.1.1.19, 2.1.1.19, R02573" />
+<area shape=rect	coords=374,468,420,485	href="/dbget-bin/www_bget?K00548+2.1.1.13+R00946"	title="K00548 (E2.1.1.13, metH), 2.1.1.13, R00946" />
+<area shape=rect	coords=375,97,421,114	href="/dbget-bin/www_bget?K03465+2.1.1.148+R06613"	title="K03465 (E2.1.1.148, thyX, thy1), 2.1.1.148, R06613" />
+<area shape=rect	coords=375,182,421,199	href="/dbget-bin/www_bget?K00600+2.1.2.1+R00945"	title="K00600 (E2.1.2.1, glyA), 2.1.2.1, R00945" />
+<area shape=rect	coords=375,160,421,177	href="/dbget-bin/www_bget?2.1.2.7+R01225"	title="2.1.2.7, 2.1.2.7, R01225" />
+<area shape=rect	coords=375,139,421,156	href="/dbget-bin/www_bget?2.1.2.8+R01669"	title="2.1.2.8, 2.1.2.8, R01669" />
+<area shape=rect	coords=375,118,421,135	href="/dbget-bin/www_bget?K00605+2.1.2.10+R04125"	title="K00605 (E2.1.2.10, gcvT), 2.1.2.10, R04125" />
+<area shape=rect	coords=40,45,286,71	href="/dbget-bin/www_bget?map00670"	title="map00670" />
+<area shape=rect	coords=36,146,117,181	href="/kegg-bin/show_pathway?map00790"	title="map00790" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

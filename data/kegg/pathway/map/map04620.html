@@ -1,0 +1,244 @@
+<html>
+<!---
+ENTRY       map04620
+DEFINITION  Toll-like receptor signaling pathway - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Toll-like receptor signaling pathway - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Toll-like receptor signaling pathway - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04620&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04620">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Specific families of pattern recognition receptors are responsible for detecting microbial pathogens and generating innate immune responses. Toll-like receptors (TLRs) are membrane-bound receptors identified as homologs of Toll in Drosophila. Mammalian TLRs are expressed on innate immune cells, such as macrophages and dendritic cells, and respond to the membrane components of Gram-positive or Gram-negative bacteria. Pathogen recognition by TLRs provokes rapid activation of innate immunity by inducing production of proinflammatory cytokines and upregulation of costimulatory molecules. TLR signaling pathways are separated into two groups: a MyD88-dependent pathway that leads to the production of proinflammatory cytokines with quick activation of NF-{kappa}B and MAPK, and a MyD88-independent pathway associated with the induction of IFN-beta  and IFN-inducible genes, and maturation of dendritic cells with slow activation of NF-{kappa}B and MAPK.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04620 map" -->
+</select>
+<input type="hidden" name="mapno" value="04620" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04620" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04620" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04620.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=133,665,179,682	href="/dbget-bin/www_bget?K05415"	title="K05415 (IFNB)" />
+<area shape=rect	coords=770,534,816,551	href="/dbget-bin/www_bget?K04467"	title="K04467 (IKBKA, IKKA, CHUK)" />
+<area shape=rect	coords=643,460,689,477	href="/dbget-bin/www_bget?K03175"	title="K03175 (TRAF6)" />
+<area shape=rect	coords=642,489,688,506	href="/dbget-bin/www_bget?K04730"	title="K04730 (IRAK1)" />
+<area shape=rect	coords=561,489,607,506	href="/dbget-bin/www_bget?K04733"	title="K04733 (IRAK4)" />
+<area shape=rect	coords=411,490,457,507	href="/dbget-bin/www_bget?K04729"	title="K04729 (MYD88)" />
+<area shape=rect	coords=307,407,353,424	href="/dbget-bin/www_bget?K04729"	title="K04729 (MYD88)" />
+<area shape=rect	coords=307,299,353,316	href="/dbget-bin/www_bget?K04729"	title="K04729 (MYD88)" />
+<area shape=rect	coords=561,380,607,397	href="/dbget-bin/www_bget?K03175"	title="K03175 (TRAF6)" />
+<area shape=rect	coords=814,308,860,325	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=670,308,716,325	href="/dbget-bin/www_bget?K04415"	title="K04415 (MAP3K8, COT)" />
+<area shape=rect	coords=670,277,716,294	href="/dbget-bin/www_bget?K02580"	title="K02580 (NFKB1)" />
+<area shape=rect	coords=717,550,763,567	href="/dbget-bin/www_bget?K06250"	title="K06250 (SPP1, BNSP, OPN)" />
+<area shape=rect	coords=498,575,544,592	href="/dbget-bin/www_bget?K03174"	title="K03174 (TRAF3)" />
+<area shape=rect	coords=561,397,607,414	href="/dbget-bin/www_bget?K02861"	title="K02861 (RIPK1, RIP1)" />
+<area shape=rect	coords=814,489,860,506	href="/dbget-bin/www_bget?K09447"	title="K09447 (IRF7)" />
+<area shape=rect	coords=814,439,860,456	href="/dbget-bin/www_bget?K09446"	title="K09446 (IRF5)" />
+<area shape=rect	coords=1076,687,1122,704	href="/dbget-bin/www_bget?K12672"	title="K12672 (CXCL11, I-TAC)" />
+<area shape=rect	coords=1076,643,1122,660	href="/dbget-bin/www_bget?K12671"	title="K12671 (CXCL10, IP10)" />
+<area shape=rect	coords=1076,568,1122,585	href="/dbget-bin/www_bget?K05415"	title="K05415 (IFNB)" />
+<area shape=rect	coords=1076,545,1122,562	href="/dbget-bin/www_bget?K05414"	title="K05414 (IFNA)" />
+<area shape=rect	coords=1076,454,1122,471	href="/dbget-bin/www_bget?K05413"	title="K05413 (CD86)" />
+<area shape=rect	coords=1076,410,1122,427	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=690,238,736,255	href="/dbget-bin/www_bget?K07209"	title="K07209 (IKBKB, IKKB)" />
+<area shape=rect	coords=563,299,609,316	href="/dbget-bin/www_bget?K04427"	title="K04427 (MAP3K7, TAK1)" />
+<area shape=rect	coords=814,375,860,392	href="/dbget-bin/www_bget?K04441"	title="K04441 (P38)" />
+<area shape=rect	coords=407,308,453,325	href="/dbget-bin/www_bget?K04730"	title="K04730 (IRAK1)" />
+<area shape=rect	coords=690,221,736,238	href="/dbget-bin/www_bget?K04467"	title="K04467 (IKBKA, IKKA, CHUK)" />
+<area shape=rect	coords=1076,236,1122,253	href="/dbget-bin/www_bget?K10030"	title="K10030 (IL8, CXCL8)" />
+<area shape=rect	coords=307,282,353,299	href="/dbget-bin/www_bget?K05403"	title="K05403 (TIRAP)" />
+<area shape=rect	coords=307,184,353,201	href="/dbget-bin/www_bget?K04729"	title="K04729 (MYD88)" />
+<area shape=rect	coords=307,121,353,138	href="/dbget-bin/www_bget?K04392"	title="K04392 (RAC1)" />
+<area shape=rect	coords=814,404,860,421	href="/dbget-bin/www_bget?K04440"	title="K04440 (JNK)" />
+<area shape=rect	coords=1076,163,1122,180	href="/dbget-bin/www_bget?K04519"	title="K04519 (IL1B)" />
+<area shape=rect	coords=567,575,613,592	href="/dbget-bin/www_bget?K05410"	title="K05410 (TBK1)" />
+<area shape=rect	coords=484,299,530,316	href="/dbget-bin/www_bget?K03175"	title="K03175 (TRAF6)" />
+<area shape=rect	coords=567,558,613,575	href="/dbget-bin/www_bget?K07211"	title="K07211 (IKBKE, IKKE)" />
+<area shape=rect	coords=408,184,454,201	href="/dbget-bin/www_bget?K02373"	title="K02373 (FADD)" />
+<area shape=rect	coords=1076,184,1122,201	href="/dbget-bin/www_bget?K05405"	title="K05405 (IL6)" />
+<area shape=rect	coords=1076,258,1122,275	href="/dbget-bin/www_bget?K12499"	title="K12499 (CCL5)" />
+<area shape=rect	coords=563,265,609,282	href="/dbget-bin/www_bget?K04403"	title="K04403 (MAP3K7IP1, TAB1)" />
+<area shape=rect	coords=484,121,530,138	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=563,282,609,299	href="/dbget-bin/www_bget?K04404"	title="K04404 (MAP3K7IP2, TAB2)" />
+<area shape=rect	coords=815,665,861,682	href="/dbget-bin/www_bget?K11220"	title="K11220 (STAT1)" />
+<area shape=rect	coords=814,238,860,255	href="/dbget-bin/www_bget?K04734"	title="K04734 (NFKBIA)" />
+<area shape=rect	coords=1076,142,1122,159	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=815,567,861,584	href="/dbget-bin/www_bget?K05411"	title="K05411 (IRF3)" />
+<area shape=rect	coords=1076,432,1122,449	href="/dbget-bin/www_bget?K05412"	title="K05412 (CD80)" />
+<area shape=rect	coords=227,184,273,201	href="/dbget-bin/www_bget?K10159"	title="K10159 (TLR2)" />
+<area shape=rect	coords=181,290,227,307	href="/dbget-bin/www_bget?K05400"	title="K05400 (LY96, MD-2)" />
+<area shape=rect	coords=227,408,273,425	href="/dbget-bin/www_bget?K10168"	title="K10168 (TLR5)" />
+<area shape=rect	coords=327,575,373,592	href="/dbget-bin/www_bget?K05401"	title="K05401 (TLR3)" />
+<area shape=rect	coords=227,121,273,138	href="/dbget-bin/www_bget?K10159"	title="K10159 (TLR2)" />
+<area shape=rect	coords=227,104,273,121	href="/dbget-bin/www_bget?K05398"	title="K05398 (TLR1)" />
+<area shape=rect	coords=227,168,273,185	href="/dbget-bin/www_bget?K10169"	title="K10169 (TLR6)" />
+<area shape=rect	coords=149,236,195,253	href="/dbget-bin/www_bget?K05399"	title="K05399 (LBP)" />
+<area shape=rect	coords=327,528,373,545	href="/dbget-bin/www_bget?K10161"	title="K10161 (TLR9)" />
+<area shape=rect	coords=227,299,273,316	href="/dbget-bin/www_bget?K10160"	title="K10160 (TLR4)" />
+<area shape=rect	coords=307,354,353,371	href="/dbget-bin/www_bget?K05409"	title="K05409 (TIRP, TRAM)" />
+<area shape=rect	coords=307,167,353,184	href="/dbget-bin/www_bget?K05402"	title="K05402 (TOLLIP)" />
+<area shape=rect	coords=412,575,458,592	href="/dbget-bin/www_bget?K05842"	title="K05842 (TRIF)" />
+<area shape=rect	coords=307,200,353,217	href="/dbget-bin/www_bget?K05403"	title="K05403 (TIRAP)" />
+<area shape=rect	coords=228,252,274,269	href="/dbget-bin/www_bget?K04391"	title="K04391 (CD14)" />
+<area shape=rect	coords=690,204,736,221	href="/dbget-bin/www_bget?K07210"	title="K07210 (IKBKG, IKKG, NEMO)" />
+<area shape=rect	coords=407,291,453,308	href="/dbget-bin/www_bget?K04733"	title="K04733 (IRAK4)" />
+<area shape=rect	coords=484,184,530,201	href="/dbget-bin/www_bget?K04398"	title="K04398 (CASP8)" />
+<area shape=rect	coords=1076,280,1122,297	href="/dbget-bin/www_bget?hsa:6348+mmu:20302+rno:25542"	title="6348, 20302, 25542" />
+<area shape=rect	coords=1076,666,1122,683	href="/dbget-bin/www_bget?K05416"	title="K05416 (CXCL9)" />
+<area shape=rect	coords=408,121,454,138	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=228,665,274,682	href="/dbget-bin/www_bget?K05130+K05131"	title="K05130 (IFNAR1), K05131 (IFNAR2)" />
+<area shape=rect	coords=327,489,373,506	href="/dbget-bin/www_bget?K05404+K10170"	title="K05404 (TLR7), K10170 (TLR8)" />
+<area shape=rect	coords=676,404,722,421	href="/dbget-bin/www_bget?K04430+K04431"	title="K04430 (MAP2K4, MKK4), K04431 (MAP2K7, MKK7)" />
+<area shape=rect	coords=814,210,860,227	href="/dbget-bin/www_bget?K02580+K04735"	title="K02580 (NFKB1), K04735 (RELA)" />
+<area shape=rect	coords=676,375,722,392	href="/dbget-bin/www_bget?K04432+K04433"	title="K04432 (MAP2K3, MKK3), K04433 (MAP2K6, MKK6)" />
+<area shape=rect	coords=742,308,788,325	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=928,352,974,369	href="/dbget-bin/www_bget?K04379+K04448"	title="K04379 (FOS), K04448 (JUN)" />
+<area shape=rect	coords=1076,205,1122,222	href="/dbget-bin/www_bget?K05406+K05425"	title="K05406 (IL12A), K05425 (IL12B)" />
+<area shape=rect	coords=1076,301,1122,318	href="/dbget-bin/www_bget?hsa:6351+mmu:20303"	title="6351, 20303" />
+<area shape=rect	coords=40,45,378,71	href="/dbget-bin/www_bget?map04620"	title="map04620" />
+<area shape=rect	coords=810,69,921,104	href="/kegg-bin/show_pathway?map04120"	title="map04120" />
+<area shape=rect	coords=568,180,678,206	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=1173,306,1300,341	href="/kegg-bin/show_pathway?map04610"	title="map04610" />
+<area shape=rect	coords=1172,593,1299,639	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=588,689,699,724	href="/kegg-bin/show_pathway?map04630"	title="map04630" />
+<area shape=rect	coords=55,372,169,398	href="/kegg-bin/show_pathway?map02040"	title="map02040" />
+<area shape=rect	coords=55,279,169,314	href="/kegg-bin/show_pathway?map00540"	title="map00540" />
+<area shape=rect	coords=694,332,803,367	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

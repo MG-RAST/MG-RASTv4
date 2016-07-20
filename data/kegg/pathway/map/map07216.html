@@ -1,0 +1,174 @@
+<html>
+<!---
+ENTRY       map07216
+DEFINITION  Catecholamine transferase inhibitors - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Catecholamine transferase inhibitors - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Catecholamine transferase inhibitors - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07216&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07216">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07216" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07216" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07216.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=635,890,693,903	href="/dbget-bin/www_bget?D00781"	title="D00781 (Entacapone (JAN/USAN/INN))" />
+<area shape=rect	coords=324,764,376,777	href="/dbget-bin/www_bget?C15474"	title="C15474 (Tropolone)" />
+<area shape=rect	coords=835,892,893,905	href="/dbget-bin/www_bget?D03241"	title="D03241 (Nitecapone (INN))" />
+<area shape=rect	coords=829,775,890,789	href="/dbget-bin/www_bget?C15477"	title="C15477 (CGP 28014)" />
+<area shape=rect	coords=636,777,688,790	href="/dbget-bin/www_bget?D00786"	title="D00786 (Tolcapone (JAN/USAN/INN))" />
+<area shape=rect	coords=857,282,943,296	href="/dbget-bin/www_bget?D00826"	title="D00826 (Tranylcypromine sulfate)" />
+<area shape=rect	coords=413,450,468,463	href="/dbget-bin/www_bget?D03248"	title="D03248 (Clorgiline (INN))" />
+<area shape=rect	coords=258,469,322,482	href="/dbget-bin/www_bget?D02560"	title="D02560 (Brofaromine (INN))" />
+<area shape=rect	coords=379,287,433,301	href="/dbget-bin/www_bget?D00505"	title="D00505 (Phenelzine sulfate (USP))" />
+<area shape=rect	coords=710,276,759,289	href="/dbget-bin/www_bget?D02564"	title="D02564 (Pargyline hydrochloride (USAN))" />
+<area shape=rect	coords=475,117,522,131	href="/dbget-bin/www_bget?D00346"	title="D00346 (Isoniazid (JP15/USP/INN))" />
+<area shape=rect	coords=389,909,451,922	href="/dbget-bin/www_bget?D01365"	title="D01365 (Trepibutone (JP15/INN))" />
+<area shape=rect	coords=241,909,303,922	href="/dbget-bin/www_bget?D01259"	title="D01259 (Flopropione (JP15/INN))" />
+<area shape=rect	coords=711,527,778,540	href="/dbget-bin/www_bget?C15476"	title="C15476 (Norselegiline)" />
+<area shape=rect	coords=105,468,175,481	href="/dbget-bin/www_bget?D02561"	title="D02561 (Moclobemide (USAN/INN))" />
+<area shape=rect	coords=262,568,319,581	href="/dbget-bin/www_bget?D02559"	title="D02559 (Toloxatone (INN))" />
+<area shape=rect	coords=575,564,635,577	href="/dbget-bin/www_bget?D01097+D04681"	title="D01097 (Lazabemide hydrochloride (JAN/USAN)), D04681 (Lazabemide (USAN/INN))" />
+<area shape=rect	coords=876,449,927,463	href="/dbget-bin/www_bget?D03239"	title="D03239 (Ladostigil tartrate (USAN))" />
+<area shape=rect	coords=233,763,283,777	href="/dbget-bin/www_bget?C01108"	title="C01108 (1,2,3-Trihydroxybenzene)" />
+<area shape=rect	coords=510,288,558,301	href="/dbget-bin/www_bget?D01888"	title="D01888 (Safrazine hydrochloride (JAN))" />
+<area shape=rect	coords=578,450,628,463	href="/dbget-bin/www_bget?D00785+D03731"	title="D00785 (Selegiline hydrochloride (JAN/USP)), D03731 (Selegiline (USAN/INN))" />
+<area shape=rect	coords=101,288,153,301	href="/dbget-bin/www_bget?D02579"	title="D02579 (Iproniazid (INN))" />
+<area shape=rect	coords=225,287,295,301	href="/dbget-bin/www_bget?D02580"	title="D02580 (Isocarboxazid (INN))" />
+<area shape=rect	coords=429,763,468,777	href="/dbget-bin/www_bget?C15475"	title="C15475 (U 0521)" />
+<area shape=rect	coords=108,565,170,579	href="/dbget-bin/www_bget?D02563"	title="D02563 (Befloxatone (INN))" />
+<area shape=rect	coords=89,763,153,776	href="/dbget-bin/www_bget?D00152"	title="D00152 (Phloroglucinol (JAN))" />
+<area shape=rect	coords=718,450,770,464	href="/dbget-bin/www_bget?D02562"	title="D02562 (Rasagiline mesylate (USAN))" />
+<area shape=rect	coords=890,127,999,153	href="/kegg-bin/show_pathway?map07027"	title="map07027" />
+<area shape=rect	coords=40,45,388,71	href="/dbget-bin/www_bget?map07216"	title="map07216" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,184 @@
+<html>
+<!---
+ENTRY       map04614
+DEFINITION  Renin-angiotensin system - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Renin-angiotensin system - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Renin-angiotensin system - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04614&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04614">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04614 map" -->
+</select>
+<input type="hidden" name="mapno" value="04614" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04614" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04614" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04614.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=455,307,4	href="/dbget-bin/www_bget?C02135"	title="C02135 (Angiotensin II)" />
+<area shape=circle	coords=455,473,4	href="/dbget-bin/www_bget?C15849"	title="C15849 (Angiotensin IV)" />
+<area shape=circle	coords=455,390,4	href="/dbget-bin/www_bget?C15848"	title="C15848 (Angiotensin III)" />
+<area shape=circle	coords=455,178,4	href="/dbget-bin/www_bget?C15850"	title="C15850 (Angiotensin (1-7))" />
+<area shape=circle	coords=455,95,4	href="/dbget-bin/www_bget?C15852"	title="C15852 (Angiotensin (1-5))" />
+<area shape=circle	coords=332,178,4	href="/dbget-bin/www_bget?C15851"	title="C15851 (Angiotensin (1-9))" />
+<area shape=circle	coords=230,307,4	href="/dbget-bin/www_bget?C00873"	title="C00873 (Angiotensin I)" />
+<area shape=rect	coords=458,238,504,255	href="/dbget-bin/www_bget?K09708"	title="K09708 (ACEH, ACE2)" />
+<area shape=rect	coords=245,203,291,220	href="/dbget-bin/www_bget?K09708"	title="K09708 (ACEH, ACE2)" />
+<area shape=rect	coords=458,133,504,150	href="/dbget-bin/www_bget?K01283"	title="K01283 (E3.4.15.1, ACE)" />
+<area shape=rect	coords=366,138,412,155	href="/dbget-bin/www_bget?K01283"	title="K01283 (E3.4.15.1, ACE)" />
+<area shape=rect	coords=304,356,350,373	href="/dbget-bin/www_bget?K01283"	title="K01283 (E3.4.15.1, ACE)" />
+<area shape=rect	coords=576,322,622,339	href="/dbget-bin/www_bget?K04166"	title="K04166 (AGTR1)" />
+<area shape=rect	coords=576,275,622,292	href="/dbget-bin/www_bget?K04167"	title="K04167 (AGTR2)" />
+<area shape=rect	coords=343,236,389,253	href="/dbget-bin/www_bget?K01393"	title="K01393 (NLN)" />
+<area shape=rect	coords=343,216,389,233	href="/dbget-bin/www_bget?K01392"	title="K01392 (E3.4.24.15, THOP1)" />
+<area shape=rect	coords=343,256,389,273	href="/dbget-bin/www_bget?K01389"	title="K01389 (MME)" />
+<area shape=rect	coords=407,419,453,436	href="/dbget-bin/www_bget?K11140"	title="K11140 (ANPEP)" />
+<area shape=rect	coords=407,337,453,354	href="/dbget-bin/www_bget?K11141"	title="K11141 (ENPEP)" />
+<area shape=rect	coords=245,223,291,240	href="/dbget-bin/www_bget?K13289"	title="K13289 (CTSA)" />
+<area shape=rect	coords=245,243,291,260	href="/dbget-bin/www_bget?K08780"	title="K08780 (CPA3)" />
+<area shape=rect	coords=576,169,622,186	href="/dbget-bin/www_bget?K04303"	title="K04303 (MAS1)" />
+<area shape=rect	coords=366,158,412,175	href="/dbget-bin/www_bget?K01389"	title="K01389 (MME)" />
+<area shape=rect	coords=576,464,622,481	href="/dbget-bin/www_bget?K01257"	title="K01257 (LNPEP)" />
+<area shape=rect	coords=305,310,351,327	href="/dbget-bin/www_bget?K01329"	title="K01329 (CMA1)" />
+<area shape=rect	coords=305,330,351,347	href="/dbget-bin/www_bget?K01319"	title="K01319 (CTSG)" />
+<area shape=rect	coords=70,298,116,315	href="/dbget-bin/www_bget?K09821"	title="K09821 (AGT)" />
+<area shape=rect	coords=145,310,191,327	href="/dbget-bin/www_bget?K01380"	title="K01380 (REN)" />
+<area shape=rect	coords=40,45,278,71	href="/dbget-bin/www_bget?map04614"	title="map04614" />
+<area shape=rect	coords=117,423,227,459	href="/kegg-bin/show_pathway?map04610"	title="map04610" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,170 @@
+<html>
+<!---
+ENTRY       map00785
+DEFINITION  Lipoic acid metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Lipoic acid metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Lipoic acid metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00785&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00785">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00785 map" -->
+</select>
+<input type="hidden" name="mapno" value="00785" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00785" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00785" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00785.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=179,257,4	href="/dbget-bin/www_bget?C16239"	title="C16239 (Lipoyl-[acp])" />
+<area shape=circle	coords=179,162,4	href="/dbget-bin/www_bget?C05752"	title="C05752 (Octanoyl-[acp])" />
+<area shape=circle	coords=421,162,4	href="/dbget-bin/www_bget?C00725"	title="C00725 (Lipoate)" />
+<area shape=circle	coords=421,257,4	href="/dbget-bin/www_bget?C16238"	title="C16238 (Lipoyl-AMP)" />
+<area shape=circle	coords=279,257,4	href="/dbget-bin/www_bget?C16236"	title="C16236 (Protein N6-(octanoyl)lysine)" />
+<area shape=circle	coords=279,353,4	href="/dbget-bin/www_bget?C16237"	title="C16237 (Protein N6-(lipoyl)lysine)" />
+<area shape=rect	coords=157,196,203,213	href="/dbget-bin/www_bget?K03644+2.8.1.8+R07768"	title="K03644 (lipA), 2.8.1.8, R07768" />
+<area shape=rect	coords=157,296,203,313	href="/dbget-bin/www_bget?K03801+2.3.1.181+R07769"	title="K03801 (lipB), 2.3.1.181, R07769" />
+<area shape=rect	coords=373,296,419,313	href="/dbget-bin/www_bget?K03800+2.7.7.63+R07771"	title="K03800 (lplA), 2.7.7.63, R07771" />
+<area shape=rect	coords=257,296,303,313	href="/dbget-bin/www_bget?K03644+2.8.1.8+R07767"	title="K03644 (lipA), 2.8.1.8, R07767" />
+<area shape=rect	coords=257,196,303,213	href="/dbget-bin/www_bget?K03801+2.3.1.181+R07766"	title="K03801 (lipB), 2.3.1.181, R07766" />
+<area shape=rect	coords=373,196,419,213	href="/dbget-bin/www_bget?K03800+2.7.7.63+R07770"	title="K03800 (lplA), 2.7.7.63, R07770" />
+<area shape=rect	coords=423,196,469,213	href="/dbget-bin/www_bget?up:ACSM1_BOVIN+R07770"	title="ACSM1_BOVIN, R07770" />
+<area shape=rect	coords=423,296,469,313	href="/dbget-bin/www_bget?K10105+6.-.-.-+R07771"	title="K10105 (LIPT1), 6.-.-.-, R07771" />
+<area shape=rect	coords=40,45,247,71	href="/dbget-bin/www_bget?map00785"	title="map00785" />
+<area shape=rect	coords=42,145,129,180	href="/kegg-bin/show_pathway?map00061"	title="map00061" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

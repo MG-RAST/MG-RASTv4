@@ -1,0 +1,194 @@
+<html>
+<!---
+ENTRY       map01056
+DEFINITION  Biosynthesis of type II polyketide backbone - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Biosynthesis of type II polyketide backbone - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Biosynthesis of type II polyketide backbone - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=01056&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map01056">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 01056 map" -->
+</select>
+<input type="hidden" name="mapno" value="01056" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map01056" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map01056" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map01056.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=887,304,4	href="/dbget-bin/www_bget?C12354+C12355+C12356"	title="C12354 (3,5,7,9,11,13,15,17,19-Nonaoxo-eicosanoyl-[acp]), C12355 (3,5,7,9,11,13,15,17,19-Nonaoxo-henicosanoyl-[acp]), C12356 (3,5,7,9,11,13,15,17,19-Nonaoxo-docosanoyl-[acp])" />
+<area shape=circle	coords=415,516,4	href="/dbget-bin/www_bget?C12442"	title="C12442 (18-Carbamoyl-9-hydroxy-3,5,7,11,13,15,17-octaoxo-octadecanoyl-[acp])" />
+<area shape=circle	coords=179,516,4	href="/dbget-bin/www_bget?C12357+C12358+C12359"	title="C12357 (3,5,7,11,13,15-Heptaoxo-9-hydroxy-hexadecanoyl-[acp]), C12358 (3,5,7,11,13,15-Heptaoxo-9-hydroxy-heptadecanoyl-[acp]), C12359 (3,5,7,11,13,15-Heptaoxo-9-hydroxy-octadecanoyl-[acp])" />
+<area shape=circle	coords=415,304,4	href="/dbget-bin/www_bget?C12441"	title="C12441 (18-Carbamoyl-3,5,7,9,11,13,15,17-octaoxo-octadecanoyl-[acp])" />
+<area shape=circle	coords=252,191,4	href="/dbget-bin/www_bget?C00083"	title="C00083 (Malonyl-CoA)" />
+<area shape=circle	coords=179,304,4	href="/dbget-bin/www_bget?C12348+C12349+C12350"	title="C12348 (3,5,7,9,11,13,15-Heptaoxo-hexadecanoyl-[acp]), C12349 (3,5,7,9,11,13,15-Heptaoxo-heptadecanoyl-[acp]), C12350 (3,5,7,9,11,13,15-Heptaoxo-octadecanoyl-[acp])" />
+<area shape=circle	coords=179,126,4	href="/dbget-bin/www_bget?C00024+C00100+C00136+C06625"	title="C00024 (Acetyl-CoA), C00100 (Propanoyl-CoA), C00136 (Butanoyl-CoA), C06625 (Malonamoyl-CoA)" />
+<area shape=circle	coords=664,516,4	href="/dbget-bin/www_bget?C12363+C12364+C12365"	title="C12363 (9-Hydroxy-3,5,7,11,13,15,17,19-nonaoxo-eicosanoyl-[acp]), C12364 (9-Hydroxy-3,5,7,11,13,15,17,19-nonaoxo-henicosanoyl-[acp]), C12365 (9-Hydroxy-3,5,7,11,13,15,17,19-nonaoxo-docosanoyl-[acp])" />
+<area shape=rect	coords=1120,511,1166,528	href="/dbget-bin/www_bget?up:Q53672_STRAA"	title="Q53672_STRAA" />
+<area shape=rect	coords=1074,511,1120,528	href="/dbget-bin/www_bget?up:Q53671_STRAA"	title="Q53671_STRAA" />
+<area shape=rect	coords=1097,528,1143,545	href="/dbget-bin/www_bget?up:Q53673_STRAA"	title="Q53673_STRAA" />
+<area shape=rect	coords=864,528,910,545	href="/dbget-bin/www_bget?up:TCMN_STRGA"	title="TCMN_STRGA" />
+<area shape=rect	coords=887,235,933,252	href="/dbget-bin/www_bget?up:Q54496_STRNO+R06643+R06644+R06645"	title="Q54496_STRNO, R06643, R06644, R06645" />
+<area shape=rect	coords=841,235,887,252	href="/dbget-bin/www_bget?up:Q54495_STRNO+R06643+R06644+R06645"	title="Q54495_STRNO, R06643, R06644, R06645" />
+<area shape=rect	coords=864,252,910,269	href="/dbget-bin/www_bget?up:Q54497_STRNO+R06643+R06644+R06645"	title="Q54497_STRNO, R06643, R06644, R06645" />
+<area shape=rect	coords=415,235,461,252	href="/dbget-bin/www_bget?up:KAS1_STRRM+R06641"	title="KAS1_STRRM, R06641" />
+<area shape=rect	coords=641,719,687,736	href="/dbget-bin/www_bget?up:Q54490_STRNO"	title="Q54490_STRNO" />
+<area shape=rect	coords=179,761,225,778	href="/dbget-bin/www_bget?K05554+4.2.1.-"	title="K05554 (actVII), 4.2.1.-" />
+<area shape=rect	coords=133,761,179,778	href="/dbget-bin/www_bget?sco:SCO5086"	title="SCO5086" />
+<area shape=rect	coords=156,719,202,736	href="/dbget-bin/www_bget?K05554+4.2.1.-"	title="K05554 (actVII), 4.2.1.-" />
+<area shape=rect	coords=156,598,202,615	href="/dbget-bin/www_bget?sco:SCO5086"	title="SCO5086" />
+<area shape=rect	coords=156,252,202,269	href="/dbget-bin/www_bget?K05553+R06635+R06636+R06637"	title="K05553 (actI3), R06635, R06636, R06637" />
+<area shape=rect	coords=156,475,202,492	href="/dbget-bin/www_bget?sco:SCO5086+R06638+R06639+R06640"	title="SCO5086, R06638, R06639, R06640" />
+<area shape=rect	coords=179,235,225,252	href="/dbget-bin/www_bget?K05552+2.3.1.-+R06635+R06636+R06637"	title="K05552 (actI2), 2.3.1.-, R06635, R06636, R06637" />
+<area shape=rect	coords=392,598,438,615	href="/dbget-bin/www_bget?up:Q9ZG83_STRRM"	title="Q9ZG83_STRRM" />
+<area shape=rect	coords=156,778,202,795	href="/dbget-bin/www_bget?K05555+4.-.-.-"	title="K05555 (actIV), 4.-.-.-" />
+<area shape=rect	coords=641,598,687,615	href="/dbget-bin/www_bget?up:Q54491_STRNO"	title="Q54491_STRNO" />
+<area shape=rect	coords=392,719,438,736	href="/dbget-bin/www_bget?up:Q9ZG83_STRRM"	title="Q9ZG83_STRRM" />
+<area shape=rect	coords=392,252,438,269	href="/dbget-bin/www_bget?up:ACPX_STRRM+R06641"	title="ACPX_STRRM, R06641" />
+<area shape=rect	coords=133,235,179,252	href="/dbget-bin/www_bget?K05551+2.3.1.-+R06635+R06636+R06637"	title="K05551 (actI1), 2.3.1.-, R06635, R06636, R06637" />
+<area shape=rect	coords=641,778,687,795	href="/dbget-bin/www_bget?up:Q9RN54_STRNO"	title="Q9RN54_STRNO" />
+<area shape=rect	coords=641,475,687,492	href="/dbget-bin/www_bget?up:Q54491_STRNO+R06646+R06647+R06648"	title="Q54491_STRNO, R06646, R06647, R06648" />
+<area shape=rect	coords=369,235,415,252	href="/dbget-bin/www_bget?R06641"	title="R06641" />
+<area shape=rect	coords=392,475,438,492	href="/dbget-bin/www_bget?R06642"	title="R06642" />
+<area shape=rect	coords=597,145,739,171	href="/kegg-bin/show_pathway?map00253"	title="map00253" />
+<area shape=rect	coords=466,178,588,204	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=466,145,596,171	href="/kegg-bin/show_pathway?map00650"	title="map00650" />
+<area shape=rect	coords=466,116,691,142	href="/kegg-bin/show_pathway?map00280"	title="map00280" />
+<area shape=rect	coords=821,920,1051,946	href="/kegg-bin/show_pathway?map01057"	title="map01057" />
+<area shape=rect	coords=40,45,419,71	href="/dbget-bin/www_bget?map01056"	title="map01056" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,191 @@
+<html>
+<!---
+ENTRY       map05218
+DEFINITION  Melanoma - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Melanoma - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Melanoma - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05218&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05218">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Five distinct stages have been proposed in the evolution of melanoma on the basis of histological criteria: common acquired and congenital nevi without dysplastic changes; dysplastic nevi with structural and architectural atypia; radial-growth phase (RGP) melanoma; vertical-growth phase (VGP) melanoma; and metastatic melanoma. Oncogenic NRAS mutations activate both effector pathways Raf-MEK-ERK and PI3K-Akt. The Raf-MEK-ERK pathway may also be activated via mutations in the BRAF gene. The PI3K-Akt pathway may be activated through loss or mutation of the inhibitory tumor suppressor gene PTEN. These mutations arise early during melanoma pathogenesis and are preserved throughout tumor progression. Moreover, melanoma development is strongly associated with inactivation of the p16INK4a/CDK4,6/pRb and p14ARF/HMD2/p53 tumor suppressor pathways. The vertical-growth phase and metastatic melanoma are notable for striking changes in the control of cell adhesion. Recently, amplification of the MITF gene was demonstrated in 10% of primary melanomas and 20% of metastatic melanomas, suggesting that MITF is a melanoma oncogene.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05218 map" -->
+</select>
+<input type="hidden" name="mapno" value="05218" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05218" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05218" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05218.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=458,235,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=rect	coords=379,122,425,139	href="/dbget-bin/www_bget?K04365"	title="K04365 (BRAF)" />
+<area shape=rect	coords=203,501,249,518	href="/dbget-bin/www_bget?K05689"	title="K05689 (CDHE, CDH1)" />
+<area shape=rect	coords=777,538,823,555	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=279,419,325,436	href="/dbget-bin/www_bget?K07828"	title="K07828 (NRAS)" />
+<area shape=rect	coords=813,166,859,183	href="/dbget-bin/www_bget?K02089"	title="K02089 (CDK4)" />
+<area shape=rect	coords=813,142,859,159	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=725,593,771,610	href="/dbget-bin/www_bget?K09455"	title="K09455 (MITF)" />
+<area shape=rect	coords=406,274,452,291	href="/dbget-bin/www_bget?K01110"	title="K01110 (E3.1.3.67, PTEN)" />
+<area shape=rect	coords=203,189,249,206	href="/dbget-bin/www_bget?K04361+K04362+K04363+K05087+K05089+K05099"	title="K04361 (EGFR, ERBB1), K04362 (FGFR1), K04363 (PDGFRA), K05087 (IGF1R), K05089 (PDGFRB), K05099 (MET, HGFR)" />
+<area shape=rect	coords=125,189,171,206	href="/dbget-bin/www_bget?K04357+K04358+K04359+K05450+K05459+K05460"	title="K04357 (EGF), K04358 (FGF), K04359 (PDGFA_B), K05450 (PDGFC_D), K05459 (IGF1), K05460 (HGF)" />
+<area shape=rect	coords=563,254,609,271	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=854,285,900,302	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=725,384,771,401	href="/dbget-bin/www_bget?K06625"	title="K06625 (CDKN1A, P21, CIP1)" />
+<area shape=rect	coords=773,285,819,302	href="/dbget-bin/www_bget?K06643"	title="K06643 (MDM2)" />
+<area shape=rect	coords=726,314,772,331	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=872,457,918,474	href="/dbget-bin/www_bget?K06620+K09389"	title="K06620 (E2F1_3), K09389 (E2F2)" />
+<area shape=rect	coords=872,420,918,437	href="/dbget-bin/www_bget?K06618"	title="K06618 (RB1)" />
+<area shape=rect	coords=789,427,835,444	href="/dbget-bin/www_bget?K02089+K02091"	title="K02089 (CDK4), K02091 (CDK6)" />
+<area shape=rect	coords=789,410,835,427	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=485,226,531,243	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=379,227,425,244	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=726,452,772,469	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=539,154,585,171	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=460,154,506,171	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=379,154,425,171	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=286,189,332,206	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=566,528,669,563	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=566,584,669,619	href="/kegg-bin/show_pathway?map04916"	title="map04916" />
+<area shape=rect	coords=260,534,363,569	href="/kegg-bin/show_pathway?map04520"	title="map04520" />
+<area shape=rect	coords=540,287,643,322	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=478,102,581,137	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,147,71	href="/dbget-bin/www_bget?map05218"	title="map05218" />
+<area shape=rect	coords=841,342,944,377	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

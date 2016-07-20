@@ -1,0 +1,180 @@
+<html>
+<!---
+ENTRY       map03022
+DEFINITION  Basal transcription factors - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Basal transcription factors - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Basal transcription factors - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03022&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03022">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03022 map" -->
+</select>
+<input type="hidden" name="mapno" value="03022" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03022" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03022" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03022.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=44,296,90,313	href="/dbget-bin/www_bget?K03120"	title="K03120 (TBP)" />
+<area shape=rect	coords=90,296,136,313	href="/dbget-bin/www_bget?K03125"	title="K03125 (TFIID1, KAT4)" />
+<area shape=rect	coords=136,296,182,313	href="/dbget-bin/www_bget?K03128"	title="K03128 (TFIID2, TAF2)" />
+<area shape=rect	coords=182,296,228,313	href="/dbget-bin/www_bget?K03129"	title="K03129 (TFIID3, TAF4)" />
+<area shape=rect	coords=228,296,274,313	href="/dbget-bin/www_bget?K03130"	title="K03130 (TFIID4, TAF5)" />
+<area shape=rect	coords=274,296,320,313	href="/dbget-bin/www_bget?K03131"	title="K03131 (TFIID5, TAF6)" />
+<area shape=rect	coords=320,296,366,313	href="/dbget-bin/www_bget?K03132"	title="K03132 (TFIID6, TAF7)" />
+<area shape=rect	coords=366,296,412,313	href="/dbget-bin/www_bget?K03133"	title="K03133 (TFIID7, TAF9)" />
+<area shape=rect	coords=412,296,458,313	href="/dbget-bin/www_bget?K03134"	title="K03134 (TFIID8, TAF10)" />
+<area shape=rect	coords=458,296,504,313	href="/dbget-bin/www_bget?K03135"	title="K03135 (TFIID9)" />
+<area shape=rect	coords=504,296,550,313	href="/dbget-bin/www_bget?K03126"	title="K03126 (TFIID10, TAF12)" />
+<area shape=rect	coords=550,296,596,313	href="/dbget-bin/www_bget?K03127"	title="K03127 (TFIID11)" />
+<area shape=rect	coords=44,313,90,330	href="/dbget-bin/www_bget?K03124"	title="K03124 (TFIIB)" />
+<area shape=rect	coords=90,313,136,330	href="/dbget-bin/www_bget?K03122"	title="K03122 (TFIIA1)" />
+<area shape=rect	coords=136,313,182,330	href="/dbget-bin/www_bget?K03123"	title="K03123 (TFIIA2)" />
+<area shape=rect	coords=182,313,228,330	href="/dbget-bin/www_bget?K03121"	title="K03121 (TFII-I)" />
+<area shape=rect	coords=44,330,90,347	href="/dbget-bin/www_bget?K03138"	title="K03138 (TFIIF1)" />
+<area shape=rect	coords=90,330,136,347	href="/dbget-bin/www_bget?K03139"	title="K03139 (TFIIF2)" />
+<area shape=rect	coords=136,330,182,347	href="/dbget-bin/www_bget?K03140"	title="K03140 (TFIIF3, TAF14)" />
+<area shape=rect	coords=182,330,228,347	href="/dbget-bin/www_bget?K03136"	title="K03136 (TFIIE1)" />
+<area shape=rect	coords=228,330,274,347	href="/dbget-bin/www_bget?K03137"	title="K03137 (TFIIE2)" />
+<area shape=rect	coords=274,330,320,347	href="/dbget-bin/www_bget?K03141"	title="K03141 (TFIIH1)" />
+<area shape=rect	coords=320,330,366,347	href="/dbget-bin/www_bget?K03142"	title="K03142 (TFIIH2)" />
+<area shape=rect	coords=366,330,412,347	href="/dbget-bin/www_bget?K03143"	title="K03143 (TFIIH3)" />
+<area shape=rect	coords=412,330,458,347	href="/dbget-bin/www_bget?K03144"	title="K03144 (TFIIH4)" />
+<area shape=rect	coords=40,45,402,71	href="/dbget-bin/www_bget?map03022"	title="map03022" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

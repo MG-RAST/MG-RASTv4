@@ -1,0 +1,210 @@
+<html>
+<!---
+ENTRY       map05223
+DEFINITION  Non-small cell lung cancer - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Non-small cell lung cancer - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Non-small cell lung cancer - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05223&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05223">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Non-small-cell lung cancer (NSCLC) accounts for approximately 80% of lung cancer and represents a heterogeneous group of cancers, consisting mainly of squamous cell (SCC), adeno (AC) and large-cell carcinoma. Molecular mechanisms altered in NSCLC include activation of oncogenes, such as K-RAS and c-erbB-2, and inactivation of tumorsuppressor genes, such as p53, p16INK4a, RAR-beta, and RASSF1. Point mutations within the K-RAS gene inactivate GTPase activity and the p21-RAS protein continuously transmits growth signals to the nucleus. Overexpression of c-erbB-2 or EGFR leads to a proliferative advantage. Inactivating mutation of p53 can lead to more rapid proliferation and reduced apoptosis. The protein encoded by the p16INK4a  inhibits formation of CDK-cyclin-D complexes by competitive binding of CDK4 and CDK6. Loss of p16INK4a expression is a common feature of NSCLC RAR-beta is a nuclear receptor that bears vitamin-A-dependent transcriptional activity. RASSF1A is able to form heterodimers with Nore-1, an RAS effector.Therefore loss of RASSF1A might shift the balance of RAS activity towards a growth-promoting effect.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05223 map" -->
+</select>
+<input type="hidden" name="mapno" value="05223" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05223" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05223" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05223.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=686,142,4	href="/dbget-bin/www_bget?C00777+C15493"	title="C00777 (Retinoate), C15493 (9-cis-Retinoic acid)" />
+<area shape=circle	coords=560,450,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=455,492,4	href="/dbget-bin/www_bget?C00165"	title="C00165 (Diacylglycerol)" />
+<area shape=circle	coords=454,450,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=501,322,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=500,552,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=rect	coords=550,485,596,502	href="/dbget-bin/www_bget?K02677"	title="K02677 (CPKC)" />
+<area shape=rect	coords=655,337,701,354	href="/dbget-bin/www_bget?K09408"	title="K09408 (FOXO3)" />
+<area shape=rect	coords=655,315,701,332	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=655,291,701,308	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=568,315,614,332	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=524,337,570,354	href="/dbget-bin/www_bget?K06276"	title="K06276 (PDPK1)" />
+<area shape=rect	coords=422,315,468,332	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=918,261,964,278	href="/dbget-bin/www_bget?K02089+K02091"	title="K02089 (CDK4), K02091 (CDK6)" />
+<area shape=rect	coords=573,253,619,270	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=1001,308,1047,325	href="/dbget-bin/www_bget?K06620+K09389"	title="K06620 (E2F1_3), K09389 (E2F2)" />
+<area shape=rect	coords=522,390,568,407	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=938,489,984,506	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=375,464,421,481	href="/dbget-bin/www_bget?K05859"	title="K05859 (PLCG)" />
+<area shape=rect	coords=195,490,241,507	href="/dbget-bin/www_bget?K08774"	title="K08774 (TGFA)" />
+<area shape=rect	coords=280,466,326,483	href="/dbget-bin/www_bget?K04361"	title="K04361 (EGFR, ERBB1)" />
+<area shape=rect	coords=655,567,701,584	href="/dbget-bin/www_bget?K09408"	title="K09408 (FOXO3)" />
+<area shape=rect	coords=655,521,701,538	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=655,544,701,561	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=573,212,619,229	href="/dbget-bin/www_bget?K04411"	title="K04411 (STK4, MST1)" />
+<area shape=rect	coords=918,278,964,295	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=280,491,326,508	href="/dbget-bin/www_bget?K05083"	title="K05083 (ERBB2, HER2)" />
+<area shape=rect	coords=195,466,241,483	href="/dbget-bin/www_bget?K04357"	title="K04357 (EGF)" />
+<area shape=rect	coords=1001,271,1047,288	href="/dbget-bin/www_bget?K06618"	title="K06618 (RB1)" />
+<area shape=rect	coords=878,125,924,142	href="/dbget-bin/www_bget?K08528"	title="K08528 (NR1B2, RARB)" />
+<area shape=rect	coords=524,566,570,583	href="/dbget-bin/www_bget?K06276"	title="K06276 (PDPK1)" />
+<area shape=rect	coords=449,390,495,407	href="/dbget-bin/www_bget?K03099"	title="K03099 (SOS)" />
+<area shape=rect	coords=375,390,421,407	href="/dbget-bin/www_bget?K04364"	title="K04364 (GRB2)" />
+<area shape=rect	coords=878,142,924,159	href="/dbget-bin/www_bget?K08524+K08525+K08526"	title="K08524 (NR2B1, RXRA), K08525 (NR2B2, RXRB), K08526 (NR2B3, RXRG)" />
+<area shape=rect	coords=459,253,505,270	href="/dbget-bin/www_bget?K09850"	title="K09850 (RASSF1)" />
+<area shape=rect	coords=470,224,516,241	href="/dbget-bin/www_bget?K08015"	title="K08015 (RASSF5, RAPL)" />
+<area shape=rect	coords=908,390,954,407	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=854,234,900,251	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=568,544,614,561	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=422,544,468,561	href="/dbget-bin/www_bget?K00922"	title="K00922 (E2.7.1.153, PIK3C)" />
+<area shape=rect	coords=384,166,430,183	href="/dbget-bin/www_bget?K01522"	title="K01522 (FHIT)" />
+<area shape=rect	coords=743,390,789,407	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=669,390,715,407	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=596,390,642,407	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=342,315,388,332	href="/dbget-bin/www_bget?K07827"	title="K07827 (KRAS, KRAS2)" />
+<area shape=rect	coords=40,45,301,71	href="/dbget-bin/www_bget?map05223"	title="map05223" />
+<area shape=rect	coords=969,212,1074,247	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=969,538,1074,573	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=969,597,1074,632	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=614,469,719,504	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+<area shape=rect	coords=673,419,778,454	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=717,572,822,607	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=345,571,450,606	href="/kegg-bin/show_pathway?map04012"	title="map04012" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

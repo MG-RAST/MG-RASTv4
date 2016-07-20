@@ -1,0 +1,172 @@
+<html>
+<!---
+ENTRY       map04711
+DEFINITION  Circadian rhythm - fly - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Circadian rhythm - fly - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Circadian rhythm - fly - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04711&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04711">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04711 map" -->
+</select>
+<input type="hidden" name="mapno" value="04711" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04711" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04711" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04711.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=307,323,353,340	href="/dbget-bin/www_bget?K12074"	title="K12074 (TIM)" />
+<area shape=rect	coords=190,323,236,340	href="/dbget-bin/www_bget?K12074"	title="K12074 (TIM)" />
+<area shape=rect	coords=317,252,363,269	href="/dbget-bin/www_bget?K12074"	title="K12074 (TIM)" />
+<area shape=rect	coords=639,298,685,315	href="/dbget-bin/www_bget?K09057"	title="K09057 (HLF)" />
+<area shape=rect	coords=639,165,685,182	href="/dbget-bin/www_bget?K12114"	title="K12114 (VRI)" />
+<area shape=rect	coords=551,243,597,260	href="/dbget-bin/www_bget?K02296"	title="K02296 (ARNTL, BMAL1, CYC)" />
+<area shape=rect	coords=551,226,597,243	href="/dbget-bin/www_bget?K02223"	title="K02223 (CLOCK, KAT13D)" />
+<area shape=rect	coords=190,379,236,396	href="/dbget-bin/www_bget?K03083"	title="K03083 (GSK3B)" />
+<area shape=rect	coords=190,252,236,269	href="/dbget-bin/www_bget?K12074"	title="K12074 (TIM)" />
+<area shape=rect	coords=425,226,471,243	href="/dbget-bin/www_bget?K02218"	title="K02218 (CSNK1, CK1)" />
+<area shape=rect	coords=317,218,363,235	href="/dbget-bin/www_bget?K02218"	title="K02218 (CSNK1, CK1)" />
+<area shape=rect	coords=190,218,236,235	href="/dbget-bin/www_bget?K02218"	title="K02218 (CSNK1, CK1)" />
+<area shape=rect	coords=425,243,471,260	href="/dbget-bin/www_bget?K02633"	title="K02633 (PER)" />
+<area shape=rect	coords=317,235,363,252	href="/dbget-bin/www_bget?K02633"	title="K02633 (PER)" />
+<area shape=rect	coords=190,235,236,252	href="/dbget-bin/www_bget?K02633"	title="K02633 (PER)" />
+<area shape=rect	coords=190,146,236,163	href="/dbget-bin/www_bget?K02633"	title="K02633 (PER)" />
+<area shape=rect	coords=190,92,236,109	href="/dbget-bin/www_bget?K02218"	title="K02218 (CSNK1, CK1)" />
+<area shape=rect	coords=40,45,247,71	href="/kegg-bin/show_pathway?map04710"	title="map04710" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,218 @@
+<html>
+<!---
+ENTRY       map03410
+DEFINITION  Base excision repair - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Base excision repair - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Base excision repair - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03410&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03410">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Base excision repair (BER) is the predominant DNA damage repair pathway for the processing of small base lesions, derived from oxidation and alkylation damages. BER is normally defined as DNA repair initiated by lesion-specific DNA glycosylases and completed by either of the two sub-pathways: short-patch BER where only one nucleotide is replaced and long-patch BER where 2-13 nucleotides are replaced. Each sub-pathway of BER relies on the formation of protein complexes that assemble at the site of the DNA lesion and facilitate repair in a coordinated fashion. This process of complex formation appears to provide an increase in specificity and efficiency to the BER pathway, thereby facilitating the maintenance of genome integrity by preventing the accumulation of highly toxic repair intermediates.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03410 map" -->
+</select>
+<input type="hidden" name="mapno" value="03410" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03410" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03410" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03410.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=886,948,932,965	href="/dbget-bin/www_bget?K10771+K10772"	title="K10771 (APEX1), K10772 (APEX2)" />
+<area shape=rect	coords=932,948,978,965	href="/dbget-bin/www_bget?K04799"	title="K04799 (FEN1, RAD2)" />
+<area shape=rect	coords=932,965,978,982	href="/dbget-bin/www_bget?K10798"	title="K10798 (PARP)" />
+<area shape=rect	coords=840,965,886,982	href="/dbget-bin/www_bget?K10747"	title="K10747 (LIG1)" />
+<area shape=rect	coords=931,777,977,794	href="/dbget-bin/www_bget?K10776"	title="K10776 (LIG3)" />
+<area shape=rect	coords=510,921,556,938	href="/dbget-bin/www_bget?K01971+K01972"	title="K01971 (E6.5.1.1, lig), K01972 (E6.5.1.2, ligA, ligB)" />
+<area shape=rect	coords=932,982,978,999	href="/dbget-bin/www_bget?K02324+K02325+K02326+K03506"	title="K02324 (POLE1), K02325 (POLE2), K02326 (POLE3), K03506 (POLE4)" />
+<area shape=rect	coords=886,982,932,999	href="/dbget-bin/www_bget?K02327+K02328+K03504+K03505"	title="K02327 (POLD1), K02328 (POLD2), K03504 (POLD3), K03505 (POLD4)" />
+<area shape=rect	coords=840,948,886,965	href="/dbget-bin/www_bget?K02330"	title="K02330 (POLB)" />
+<area shape=rect	coords=839,785,885,802	href="/dbget-bin/www_bget?K02330"	title="K02330 (POLB)" />
+<area shape=rect	coords=658,601,704,618	href="/dbget-bin/www_bget?K02330"	title="K02330 (POLB)" />
+<area shape=rect	coords=360,591,406,608	href="/dbget-bin/www_bget?K02330"	title="K02330 (POLB)" />
+<area shape=rect	coords=886,965,932,982	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=612,915,658,932	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=612,788,658,805	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=510,788,556,805	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=510,617,556,634	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=361,492,407,509	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=612,449,658,466	href="/dbget-bin/www_bget?K10772"	title="K10772 (APEX2)" />
+<area shape=rect	coords=612,424,658,441	href="/dbget-bin/www_bget?K10771"	title="K10771 (APEX1)" />
+<area shape=rect	coords=510,449,556,466	href="/dbget-bin/www_bget?K01151"	title="K01151 (E3.1.21.2, nfo)" />
+<area shape=rect	coords=510,424,556,441	href="/dbget-bin/www_bget?K01142"	title="K01142 (E3.1.11.2, xthA)" />
+<area shape=rect	coords=664,218,710,235	href="/dbget-bin/www_bget?K03575"	title="K03575 (mutY)" />
+<area shape=rect	coords=613,218,659,235	href="/dbget-bin/www_bget?K03648"	title="K03648 (UNG, UDG)" />
+<area shape=rect	coords=241,243,287,260	href="/dbget-bin/www_bget?K10773"	title="K10773 (NTH)" />
+<area shape=rect	coords=413,469,459,486	href="/dbget-bin/www_bget?K05522"	title="K05522 (nei)" />
+<area shape=rect	coords=361,469,407,486	href="/dbget-bin/www_bget?K10563"	title="K10563 (mutM, fpg)" />
+<area shape=rect	coords=135,218,181,235	href="/dbget-bin/www_bget?K10563"	title="K10563 (mutM, fpg)" />
+<area shape=rect	coords=239,618,285,635	href="/dbget-bin/www_bget?K02330"	title="K02330 (POLB)" />
+<area shape=rect	coords=137,852,183,869	href="/dbget-bin/www_bget?K01971+K01972"	title="K01971 (E6.5.1.1, lig), K01972 (E6.5.1.2, ligA, ligB)" />
+<area shape=rect	coords=239,844,285,861	href="/dbget-bin/www_bget?K10803"	title="K10803 (XRCC1)" />
+<area shape=rect	coords=239,861,285,878	href="/dbget-bin/www_bget?K10776"	title="K10776 (LIG3)" />
+<area shape=rect	coords=388,618,434,635	href="/dbget-bin/www_bget?K10802"	title="K10802 (HMGB1)" />
+<area shape=rect	coords=612,932,658,949	href="/dbget-bin/www_bget?K10747"	title="K10747 (LIG1)" />
+<area shape=rect	coords=612,601,658,618	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=413,591,459,608	href="/dbget-bin/www_bget?K03512"	title="K03512 (POLL)" />
+<area shape=rect	coords=413,492,459,509	href="/dbget-bin/www_bget?K07462"	title="K07462 (recJ)" />
+<area shape=rect	coords=612,805,658,822	href="/dbget-bin/www_bget?K04799"	title="K04799 (FEN1, RAD2)" />
+<area shape=rect	coords=885,785,931,802	href="/dbget-bin/www_bget?K10803"	title="K10803 (XRCC1)" />
+<area shape=rect	coords=308,243,354,260	href="/dbget-bin/www_bget?K10568"	title="K10568 (NEIL2)" />
+<area shape=rect	coords=241,218,287,235	href="/dbget-bin/www_bget?K03660"	title="K03660 (OGG1)" />
+<area shape=rect	coords=725,218,771,235	href="/dbget-bin/www_bget?K10801"	title="K10801 (MBD4)" />
+<area shape=rect	coords=510,243,556,260	href="/dbget-bin/www_bget?K01246"	title="K01246 (E3.2.2.20, tag)" />
+<area shape=rect	coords=664,243,710,260	href="/dbget-bin/www_bget?K03652"	title="K03652 (MPG)" />
+<area shape=rect	coords=613,243,659,260	href="/dbget-bin/www_bget?K03649"	title="K03649 (MUG, TDG)" />
+<area shape=rect	coords=613,269,659,286	href="/dbget-bin/www_bget?K10800"	title="K10800 (SMUG1)" />
+<area shape=rect	coords=308,218,354,235	href="/dbget-bin/www_bget?K10567"	title="K10567 (NEIL1)" />
+<area shape=rect	coords=308,269,354,286	href="/dbget-bin/www_bget?K10569"	title="K10569 (NEIL3)" />
+<area shape=rect	coords=135,424,181,441	href="/dbget-bin/www_bget?K01142"	title="K01142 (E3.1.11.2, xthA)" />
+<area shape=rect	coords=241,424,287,441	href="/dbget-bin/www_bget?K10771"	title="K10771 (APEX1)" />
+<area shape=rect	coords=135,449,181,466	href="/dbget-bin/www_bget?K01151"	title="K01151 (E3.1.21.2, nfo)" />
+<area shape=rect	coords=612,618,658,635	href="/dbget-bin/www_bget?K04475"	title="K02327 (POLD1), K02328 (POLD2), K03504 (POLD3), K03505 (POLD4)" />
+<area shape=rect	coords=241,449,287,466	href="/dbget-bin/www_bget?K10772"	title="K10772 (APEX2)" />
+<area shape=rect	coords=658,618,704,635	href="/dbget-bin/www_bget?K04476"	title="K02324 (POLE1), K02325 (POLE2), K02326 (POLE3), K03506 (POLE4)" />
+<area shape=rect	coords=885,768,931,785	href="/dbget-bin/www_bget?K10798"	title="K10798 (PARP)" />
+<area shape=rect	coords=510,218,556,235	href="/dbget-bin/www_bget?K01247"	title="K01247 (alkA)" />
+<area shape=rect	coords=839,768,885,785	href="/dbget-bin/www_bget?K10771+K10772"	title="K10771 (APEX1), K10772 (APEX2)" />
+<area shape=rect	coords=239,601,285,618	href="/dbget-bin/www_bget?K10803"	title="K10803 (XRCC1)" />
+<area shape=rect	coords=136,617,182,634	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=135,243,181,260	href="/dbget-bin/www_bget?K05522"	title="K05522 (nei)" />
+<area shape=rect	coords=40,45,230,71	href="/dbget-bin/www_bget?map03410"	title="map03410" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

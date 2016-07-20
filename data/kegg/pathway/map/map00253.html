@@ -1,0 +1,200 @@
+<html>
+<!---
+ENTRY       map00253
+DEFINITION  Tetracycline biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Tetracycline biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Tetracycline biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00253&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00253">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00253 map" -->
+</select>
+<input type="hidden" name="mapno" value="00253" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00253" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00253" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00253.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=438,354,4	href="/dbget-bin/www_bget?C06654"	title="C06654 (4-Dedimethyl-6-dehydro-anhydrotetracycline)" />
+<area shape=circle	coords=344,354,4	href="/dbget-bin/www_bget?C02811"	title="C02811 (Anhydrotetracycline)" />
+<area shape=circle	coords=155,404,4	href="/dbget-bin/www_bget?C06624"	title="C06624 (Oxytetracycline)" />
+<area shape=circle	coords=155,354,4	href="/dbget-bin/www_bget?C06570"	title="C06570 (Tetracycline)" />
+<area shape=circle	coords=250,354,4	href="/dbget-bin/www_bget?C03206"	title="C03206 (12-Dehydrotetracycline)" />
+<area shape=circle	coords=273,305,4	href="/dbget-bin/www_bget?C06571"	title="C06571 (Chlortetracycline)" />
+<area shape=circle	coords=405,305,4	href="/dbget-bin/www_bget?C06626"	title="C06626 (4-Dedimethylamine-4-oxo-anhydro-7-Cl-tetracycline)" />
+<area shape=circle	coords=532,354,4	href="/dbget-bin/www_bget?C06627"	title="C06627 (4-Dedimethylamino-4-oxo-anhydrotetracycline)" />
+<area shape=circle	coords=532,251,4	href="/dbget-bin/www_bget?C06628"	title="C06628 (4-Hydroxy-6-methylpretetramide)" />
+<area shape=circle	coords=532,154,4	href="/dbget-bin/www_bget?C06629"	title="C06629 (6-Methylpretetramide)" />
+<area shape=circle	coords=403,154,4	href="/dbget-bin/www_bget?C06625"	title="C06625 (Malonamoyl-CoA)" />
+<area shape=circle	coords=362,205,4	href="/dbget-bin/www_bget?C00083"	title="C00083 (Malonyl-CoA)" />
+<area shape=circle	coords=274,154,4	href="/dbget-bin/www_bget?C02362"	title="C02362 (2-Oxosuccinamate)" />
+<area shape=circle	coords=145,205,4	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=circle	coords=145,154,4	href="/dbget-bin/www_bget?C00152"	title="C00152 (L-Asparagine)" />
+<area shape=poly	coords=409,152,525,152,525,156,409,156	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=525,154,517,158,517,151	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=368,203,416,203,416,207,368,207	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=416,203,417,203,418,202,419,202,420,201,421,200,422,199,422,198,423,197,423,196,427,196,427,198,426,200,425,202,424,203,423,204,422,205,420,206,418,207,416,207	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=423,196,423,163,427,163,427,196	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=423,163,423,161,424,159,425,157,426,156,427,154,428,153,430,153,432,152,434,152,434,156,433,156,432,157,431,157,430,158,429,159,428,160,428,161,427,162,427,163	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=434,152,525,152,525,156,434,156	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=poly	coords=525,154,517,158,517,150	href="/dbget-bin/www_bget?R05464"	title="R05464" />
+<area shape=rect	coords=279,346,325,363	href="/dbget-bin/www_bget?up:Q58PK7+1.14.13.38+R04060"	title="Q58PK7, 1.14.13.38, R04060" />
+<area shape=rect	coords=373,346,419,363	href="/dbget-bin/www_bget?up:Q53657+R05458"	title="Q53657, R05458" />
+<area shape=rect	coords=466,346,512,363	href="/dbget-bin/www_bget?up:Q53658+R05458"	title="Q53658, R05458" />
+<area shape=rect	coords=448,297,494,314	href="/dbget-bin/www_bget?up:Q53659+R05456"	title="Q53659, R05456" />
+<area shape=rect	coords=229,197,275,214	href="/dbget-bin/www_bget?K01961+K01962+K01963+K02160+6.4.1.2+R00742"	title="K01961 (ACCC), K01962 (ACCA), K01963 (ACCD), K02160 (ACCB, bccP), 6.4.1.2, R00742" />
+<area shape=rect	coords=185,146,231,163	href="/dbget-bin/www_bget?2.6.1.14+R01346"	title="2.6.1.14, 2.6.1.14, R01346" />
+<area shape=poly	coords=280,152,396,152,396,156,280,156	href="/dbget-bin/www_bget?R05457"	title="R05457" />
+<area shape=poly	coords=396,154,388,158,388,151	href="/dbget-bin/www_bget?R05457"	title="R05457" />
+<area shape=poly	coords=530,160,530,244,534,244,534,160	href="/dbget-bin/www_bget?R05463"	title="R05463" />
+<area shape=poly	coords=532,244,528,236,536,236	href="/dbget-bin/www_bget?R05463"	title="R05463" />
+<area shape=poly	coords=530,257,530,347,534,347,534,257	href="/dbget-bin/www_bget?R05462"	title="R05462" />
+<area shape=poly	coords=532,347,528,339,536,339	href="/dbget-bin/www_bget?R05462"	title="R05462" />
+<area shape=poly	coords=162,352,244,352,244,356,162,356	href="/dbget-bin/www_bget?R05459"	title="R05459" />
+<area shape=poly	coords=162,354,170,350,170,358	href="/dbget-bin/www_bget?R05459"	title="R05459" />
+<area shape=poly	coords=162,402,241,402,241,406,162,406	href="/dbget-bin/www_bget?R05461"	title="R05461" />
+<area shape=poly	coords=241,402,242,402,243,401,244,401,245,400,246,399,247,398,247,397,248,396,248,395,252,395,252,397,251,399,251,401,250,402,248,404,247,405,245,405,243,406,241,406	href="/dbget-bin/www_bget?R05461"	title="R05461" />
+<area shape=poly	coords=248,395,248,360,252,360,252,395	href="/dbget-bin/www_bget?R05461"	title="R05461" />
+<area shape=poly	coords=162,404,170,400,170,408	href="/dbget-bin/www_bget?R05461"	title="R05461" />
+<area shape=poly	coords=279,303,399,303,399,307,279,307	href="/dbget-bin/www_bget?R05460"	title="R05460" />
+<area shape=poly	coords=279,305,287,301,287,309	href="/dbget-bin/www_bget?R05460"	title="R05460" />
+<area shape=rect	coords=42,342,122,368	href="/kegg-bin/show_pathway?map07019"	title="map07019" />
+<area shape=rect	coords=295,93,522,119	href="/kegg-bin/show_pathway?map01056"	title="map01056" />
+<area shape=rect	coords=40,45,283,71	href="/dbget-bin/www_bget?map00253"	title="map00253" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

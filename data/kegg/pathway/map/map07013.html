@@ -1,0 +1,169 @@
+<html>
+<!---
+ENTRY       map07013
+DEFINITION  Cephalosporins - oral agents - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Cephalosporins - oral agents - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Cephalosporins - oral agents - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07013&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07013">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07013" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07013" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07013.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=41,131,262,212	href="/dbget-bin/www_bget?C00916"	title="C00916 (Cephalosporin C)" />
+<area shape=rect	coords=488,511,723,617	href="/dbget-bin/www_bget?D01415"	title="D01415 (Cefotiam hexetil hydrochloride (JP15))" />
+<area shape=rect	coords=974,650,1169,745	href="/dbget-bin/www_bget?D01680"	title="D01680 (Cefcapene pivoxil hydrochloride hydrate (JP15))" />
+<area shape=rect	coords=973,393,1182,497	href="/dbget-bin/www_bget?D01629"	title="D01629 (Cefetamet pivoxil hydrochloride (JAN))" />
+<area shape=rect	coords=973,520,1186,621	href="/dbget-bin/www_bget?D01628"	title="D01628 (Cefditoren pivoxil (JP15))" />
+<area shape=rect	coords=68,361,248,436	href="/dbget-bin/www_bget?D01949"	title="D01949 (Cefaloglycin (JAN))" />
+<area shape=rect	coords=79,464,221,540	href="/dbget-bin/www_bget?D00263+D00906+D03438"	title="D00263 (Cefalexin (JP15)), D00906 (Cephalexin (USP)), D03438 (Cephalexin hydrochloride (USP))" />
+<area shape=rect	coords=79,568,222,644	href="/dbget-bin/www_bget?D00264"	title="D00264 (Cefradine (JAN/INN))" />
+<area shape=rect	coords=771,646,943,730	href="/dbget-bin/www_bget?D00917"	title="D00917 (Cefdinir (JP15/USAN/INN))" />
+<area shape=rect	coords=65,673,229,749	href="/dbget-bin/www_bget?D00257+D02353"	title="D00257 (Cefadroxil (JP15)), D02353 (Cefadroxil (USP))" />
+<area shape=rect	coords=560,231,706,313	href="/dbget-bin/www_bget?D00923+D07658"	title="D00923 (Ceftizoxime sodium (JP15/USP)), D07658 (Ceftizoxime (INN))" />
+<area shape=rect	coords=504,378,678,469	href="/dbget-bin/www_bget?D00914"	title="D00914 (Cefuroxime axetil (JP15/USP/INN))" />
+<area shape=rect	coords=775,505,920,607	href="/dbget-bin/www_bget?D00922+D02121"	title="D00922 (Ceftibuten (USAN/INN)), D02121 (Ceftibuten (JP15))" />
+<area shape=rect	coords=772,385,946,477	href="/dbget-bin/www_bget?D00258+D07640"	title="D00258 (Cefixime (JP15/USP/INN)), D07640 (Cefixime trihydrate)" />
+<area shape=rect	coords=973,269,1188,361	href="/dbget-bin/www_bget?D00920"	title="D00920 (Cefpodoxime proxetil (JP15/USP))" />
+<area shape=rect	coords=974,143,1183,246	href="/dbget-bin/www_bget?D01686"	title="D01686 (Cefteram pivoxil (JP15))" />
+<area shape=rect	coords=292,507,476,585	href="/dbget-bin/www_bget?D00261+D07651"	title="D00261 (Cefprozil (USP)), D07651 (Cefprozil (INN))" />
+<area shape=rect	coords=307,668,443,744	href="/dbget-bin/www_bget?D00916+D08143"	title="D00916 (Loracarbef (USP)), D08143 (Loracarbef (INN))" />
+<area shape=rect	coords=312,380,449,456	href="/dbget-bin/www_bget?D00256+D02352"	title="D00256 (Cefaclor (JP15)), D02352 (Cefaclor (USP))" />
+<area shape=rect	coords=314,88,567,116	href="/kegg-bin/show_pathway?map00311"	title="map00311" />
+<area shape=rect	coords=571,143,690,189	href="/kegg-bin/show_pathway?map07012"	title="map07012" />
+<area shape=rect	coords=311,143,441,189	href="/kegg-bin/show_pathway?map07012"	title="map07012" />
+<area shape=rect	coords=76,265,263,301	href="/kegg-bin/show_pathway?map07012"	title="map07012" />
+<area shape=rect	coords=40,45,318,71	href="/dbget-bin/www_bget?map07013"	title="map07013" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

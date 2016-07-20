@@ -1,0 +1,222 @@
+<html>
+<!---
+ENTRY       map00945
+DEFINITION  Stilbenoid, diarylheptanoid and gingerol biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Stilbenoid, diarylheptanoid and gingerol biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Stilbenoid, diarylheptanoid and gingerol biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00945&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00945">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Stilbenoids are a group of phenolic compounds, biosynthetically interrelated through their common origin from a C6-C2-C6 intermediate, such as resveratol found in grapes. Stilbenoids can also exist as glycosides (e.g., piceid). Combretastatins are potentially useful stilbenoid natural products with known antitumor activity. Diarylheptanoid is a compound group having phenyl rings at 1,7 positions of n-heptane (C6-C7-C6), such as curcumin found in the ginger family. [6]-Gingerol is a major active component of ginger and has diverse pharmacologic effects.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00945 map" -->
+</select>
+<input type="hidden" name="mapno" value="00945" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00945" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00945" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00945.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=227,485,4	href="/dbget-bin/www_bget?C17747"	title="C17747 (5-Hydroxy-1-(4-hydroxyphenyl)-3-decanone)" />
+<area shape=circle	coords=601,485,4	href="/dbget-bin/www_bget?C10462"	title="C10462 ([6]-Gingerol)" />
+<area shape=circle	coords=418,485,4	href="/dbget-bin/www_bget?C17748"	title="C17748 (1-(3,4-Dihydroxyphenyl)-5-hydroxy-3-decanone)" />
+<area shape=circle	coords=227,407,4	href="/dbget-bin/www_bget?C17744"	title="C17744 (1-(4-Hydroxyphenyl)-1-decene-3,5-dione)" />
+<area shape=circle	coords=601,407,4	href="/dbget-bin/www_bget?C17746"	title="C17746 (1-Dehydro-[6]-gingerdione)" />
+<area shape=circle	coords=418,407,4	href="/dbget-bin/www_bget?C17745"	title="C17745 (1-(3,4-Dihydroxyphenyl)-1-decene-3,5-dione)" />
+<area shape=circle	coords=601,300,4	href="/dbget-bin/www_bget?C00406"	title="C00406 (Feruloyl-CoA)" />
+<area shape=circle	coords=230,300,4	href="/dbget-bin/www_bget?C00223"	title="C00223 (p-Coumaroyl-CoA)" />
+<area shape=circle	coords=230,189,4	href="/dbget-bin/www_bget?C17740"	title="C17740 (p-Coumaroyl-diketide-CoA)" />
+<area shape=circle	coords=601,189,4	href="/dbget-bin/www_bget?C17741"	title="C17741 (Feruloyl-diketide-CoA)" />
+<area shape=circle	coords=230,111,4	href="/dbget-bin/www_bget?C17743"	title="C17743 (Bisdemethoxycurcumin)" />
+<area shape=circle	coords=601,111,4	href="/dbget-bin/www_bget?C10443"	title="C10443 (Curcumin)" />
+<area shape=circle	coords=701,111,4	href="/dbget-bin/www_bget?C17749"	title="C17749 (Curcumin monoglucoside)" />
+<area shape=circle	coords=800,111,4	href="/dbget-bin/www_bget?C17750"	title="C17750 (Curcumin diglucoside)" />
+<area shape=circle	coords=60,297,4	href="/dbget-bin/www_bget?C00540"	title="C00540 (Cinnamoyl-CoA)" />
+<area shape=circle	coords=60,386,4	href="/dbget-bin/www_bget?C01745"	title="C01745 (Pinosylvin)" />
+<area shape=circle	coords=125,386,4	href="/dbget-bin/www_bget?C03582"	title="C03582 (3,4',5-Trihydroxystilbene)" />
+<area shape=circle	coords=125,485,4	href="/dbget-bin/www_bget?C05901"	title="C05901 (3,3',4'5-Tetrahydroxystilbene)" />
+<area shape=circle	coords=502,300,4	href="/dbget-bin/www_bget?C00323"	title="C00323 (Caffeoyl-CoA)" />
+<area shape=circle	coords=325,247,4	href="/dbget-bin/www_bget?C02947"	title="C02947 (4-Coumaroylshikimate)" />
+<area shape=circle	coords=417,247,4	href="/dbget-bin/www_bget?C10434"	title="C10434 (5-O-Caffeoylshikimic acid)" />
+<area shape=circle	coords=325,356,4	href="/dbget-bin/www_bget?C12208"	title="C12208 (p-Coumaroyl quinic acid)" />
+<area shape=circle	coords=418,356,4	href="/dbget-bin/www_bget?C00852"	title="C00852 (Chlorogenate)" />
+<area shape=circle	coords=418,111,4	href="/dbget-bin/www_bget?C17742"	title="C17742 (Demethoxycurcumin)" />
+<area shape=poly	coords=599,479,599,411,603,411,603,479	href="/dbget-bin/www_bget?R08800"	title="R08800" />
+<area shape=poly	coords=601,479,597,471,605,471	href="/dbget-bin/www_bget?R08800"	title="R08800" />
+<area shape=poly	coords=225,479,225,411,229,411,229,479	href="/dbget-bin/www_bget?R08798"	title="R08798" />
+<area shape=poly	coords=227,479,223,471,231,471	href="/dbget-bin/www_bget?R08798"	title="R08798" />
+<area shape=poly	coords=416,479,416,412,420,412,420,479	href="/dbget-bin/www_bget?R08799"	title="R08799" />
+<area shape=poly	coords=418,479,414,471,422,471	href="/dbget-bin/www_bget?R08799"	title="R08799" />
+<area shape=poly	coords=225,401,225,307,229,307,229,401	href="/dbget-bin/www_bget?R08796"	title="R08796" />
+<area shape=poly	coords=227,401,223,393,231,393	href="/dbget-bin/www_bget?R08796"	title="R08796" />
+<area shape=poly	coords=599,401,599,304,603,304,603,401	href="/dbget-bin/www_bget?R08797"	title="R08797" />
+<area shape=poly	coords=601,401,597,393,605,393	href="/dbget-bin/www_bget?R08797"	title="R08797" />
+<area shape=poly	coords=234,109,412,109,412,113,234,113	href="/dbget-bin/www_bget?R08811"	title="R08811" />
+<area shape=poly	coords=412,111,404,115,404,108	href="/dbget-bin/www_bget?R08811"	title="R08811" />
+<area shape=poly	coords=422,109,595,109,595,113,422,113	href="/dbget-bin/www_bget?R08812"	title="R08812" />
+<area shape=poly	coords=595,111,587,115,587,107	href="/dbget-bin/www_bget?R08812"	title="R08812" />
+<area shape=rect	coords=208,217,254,234	href="/dbget-bin/www_bget?K13233+2.3.1.-+R08805"	title="K13233 (DCS), 2.3.1.-, R08805" />
+<area shape=rect	coords=579,235,625,252	href="/dbget-bin/www_bget?K13233+2.3.1.-+R08806"	title="K13233 (DCS), 2.3.1.-, R08806" />
+<area shape=rect	coords=579,144,625,161	href="/dbget-bin/www_bget?K13234+2.3.1.-+R08810"	title="K13234 (CURS), 2.3.1.-, R08810" />
+<area shape=rect	coords=209,144,255,161	href="/dbget-bin/www_bget?K13234+2.3.1.-+R08807"	title="K13234 (CURS), 2.3.1.-, R08807" />
+<area shape=rect	coords=482,181,528,198	href="/dbget-bin/www_bget?K13234+2.3.1.-+R08809"	title="K13234 (CURS), 2.3.1.-, R08809" />
+<area shape=rect	coords=38,327,84,344	href="/dbget-bin/www_bget?K13231+2.3.1.146+R02505"	title="K13231 (STS), 2.3.1.146, R02505" />
+<area shape=rect	coords=103,327,149,344	href="/dbget-bin/www_bget?K13232+2.3.1.95+R01614"	title="K13232 (ST), 2.3.1.95, R01614" />
+<area shape=rect	coords=103,415,149,432	href="/dbget-bin/www_bget?K00517+1.14.-.-+R04257"	title="K00517 (E1.14.-.-), 1.14.-.-, R04257" />
+<area shape=rect	coords=77,289,123,306	href="/dbget-bin/www_bget?K00487+1.14.13.11+R08815"	title="K00487 (CYP73A), 1.14.13.11, R08815" />
+<area shape=rect	coords=300,182,346,199	href="/dbget-bin/www_bget?K13234+2.3.1.-+R08808"	title="K13234 (CURS), 2.3.1.-, R08808" />
+<area shape=rect	coords=253,240,299,257	href="/dbget-bin/www_bget?K13065+2.3.1.133+R02416"	title="K13065 (E2.3.1.133, HCT), 2.3.1.133, R02416" />
+<area shape=rect	coords=343,240,389,257	href="/dbget-bin/www_bget?ath:AT2G40890+1.14.13.36+R06582"	title="AT2G40890, 1.14.13.36, R06582" />
+<area shape=rect	coords=438,240,484,257	href="/dbget-bin/www_bget?K13065+2.3.1.133+R07433"	title="K13065 (E2.3.1.133, HCT), 2.3.1.133, R07433" />
+<area shape=rect	coords=253,348,299,365	href="/dbget-bin/www_bget?K13065+2.3.1.133+R07432"	title="K13065 (E2.3.1.133, HCT), 2.3.1.133, R07432" />
+<area shape=rect	coords=343,348,389,365	href="/dbget-bin/www_bget?ath:AT2G40890+1.14.13.36+R04342"	title="AT2G40890, 1.14.13.36, R04342" />
+<area shape=rect	coords=521,292,567,309	href="/dbget-bin/www_bget?K00588+2.1.1.104+R01942"	title="K00588 (E2.1.1.104), 2.1.1.104, R01942" />
+<area shape=rect	coords=343,289,389,306	href="/dbget-bin/www_bget?K09754+1.14.13.-+R07436"	title="K09754 (CYP98A, C3H), 1.14.13.-, R07436" />
+<area shape=rect	coords=395,316,441,333	href="/dbget-bin/www_bget?2.3.1.99+R01945"	title="2.3.1.99, 2.3.1.99, R01945" />
+<area shape=rect	coords=438,348,484,365	href="/dbget-bin/www_bget?K13065+2.3.1.133+R01945"	title="K13065 (E2.3.1.133, HCT), 2.3.1.133, R01945" />
+<area shape=rect	coords=619,103,665,120	href="/dbget-bin/www_bget?K13235+2.4.1.-+R08813"	title="K13235 (CAUGT2), 2.4.1.-, R08813" />
+<area shape=rect	coords=723,103,769,120	href="/dbget-bin/www_bget?K13235+2.4.1.-+R08814"	title="K13235 (CAUGT2), 2.4.1.-, R08814" />
+<area shape=rect	coords=300,399,346,416	href="/dbget-bin/www_bget?1.14.-.-+R08801"	title="1.14.-.-, 1.14.-.-, R08801" />
+<area shape=rect	coords=300,478,346,495	href="/dbget-bin/www_bget?1.14.-.-+R08802"	title="1.14.-.-, 1.14.-.-, R08802" />
+<area shape=rect	coords=482,399,528,416	href="/dbget-bin/www_bget?2.1.1.-+R08803"	title="2.1.1.-, 2.1.1.-, R08803" />
+<area shape=rect	coords=482,476,528,493	href="/dbget-bin/www_bget?2.1.1.-+R08804"	title="2.1.1.-, 2.1.1.-, R08804" />
+<area shape=rect	coords=40,45,513,71	href="/dbget-bin/www_bget?map00945"	title="map00945" />
+<area shape=rect	coords=14,226,111,261	href="/kegg-bin/show_pathway?map00940"	title="map00940" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

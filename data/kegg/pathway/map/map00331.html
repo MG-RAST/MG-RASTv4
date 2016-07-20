@@ -1,0 +1,175 @@
+<html>
+<!---
+ENTRY       map00331
+DEFINITION  Clavulanic acid biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Clavulanic acid biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Clavulanic acid biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00331&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00331">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00331 map" -->
+</select>
+<input type="hidden" name="mapno" value="00331" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00331" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00331" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00331.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=199,282,4	href="/dbget-bin/www_bget?C06662"	title="C06662 (Clavulanic acid)" />
+<area shape=circle	coords=294,282,4	href="/dbget-bin/www_bget?C06661"	title="C06661 (Clavulanate-9-aldehyde)" />
+<area shape=circle	coords=396,282,4	href="/dbget-bin/www_bget?C06660"	title="C06660 (Clavaminic acid)" />
+<area shape=circle	coords=492,282,4	href="/dbget-bin/www_bget?C06659"	title="C06659 (Dihydroclavaminic acid)" />
+<area shape=circle	coords=492,222,4	href="/dbget-bin/www_bget?C06658"	title="C06658 (Proclavaminic acid)" />
+<area shape=circle	coords=492,159,4	href="/dbget-bin/www_bget?C06657"	title="C06657 (Guanidinoproclavaminic acid)" />
+<area shape=circle	coords=396,159,4	href="/dbget-bin/www_bget?C06656"	title="C06656 (Deoxyguanidinoproclavaminic acid)" />
+<area shape=circle	coords=199,187,4	href="/dbget-bin/www_bget?C00118"	title="C00118 (D-Glyceraldehyde 3-phosphate)" />
+<area shape=circle	coords=294,159,4	href="/dbget-bin/www_bget?C06655"	title="C06655 (L-N2-(2-Carboxyethyl)arginine)" />
+<area shape=circle	coords=199,130,4	href="/dbget-bin/www_bget?C00062"	title="C00062 (L-Arginine)" />
+<area shape=rect	coords=219,151,265,168	href="/dbget-bin/www_bget?K12673+2.5.1.66+R05465"	title="K12673 (ceaS), 2.5.1.66, R05465" />
+<area shape=rect	coords=314,151,360,168	href="/dbget-bin/www_bget?K12674+6.3.3.4+R05467"	title="K12674 (bls), 6.3.3.4, R05467" />
+<area shape=rect	coords=230,274,276,291	href="/dbget-bin/www_bget?K12677+R05471"	title="K12677 (car), R05471" />
+<area shape=rect	coords=425,274,471,291	href="/dbget-bin/www_bget?K12675+1.14.11.21+R05469"	title="K12675 (cs), 1.14.11.21, R05469" />
+<area shape=rect	coords=470,238,516,255	href="/dbget-bin/www_bget?K12675+1.14.11.21+R05468"	title="K12675 (cs), 1.14.11.21, R05468" />
+<area shape=rect	coords=470,176,516,193	href="/dbget-bin/www_bget?K12676+3.5.3.22+R05357"	title="K12676 (pah), 3.5.3.22, R05357" />
+<area shape=rect	coords=417,151,463,168	href="/dbget-bin/www_bget?K12675+1.14.11.21+R05466"	title="K12675 (cs), 1.14.11.21, R05466" />
+<area shape=poly	coords=300,280,391,280,391,284,300,284	href="/dbget-bin/www_bget?R05470"	title="R05470" />
+<area shape=poly	coords=300,282,308,278,308,286	href="/dbget-bin/www_bget?R05470"	title="R05470" />
+<area shape=rect	coords=34,113,150,148	href="/kegg-bin/show_pathway?map00330"	title="map00330" />
+<area shape=rect	coords=40,45,301,71	href="/dbget-bin/www_bget?map00331"	title="map00331" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

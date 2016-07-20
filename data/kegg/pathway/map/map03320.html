@@ -1,0 +1,225 @@
+<html>
+<!---
+ENTRY       map03320
+DEFINITION  PPAR signaling pathway - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: PPAR signaling pathway - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>PPAR signaling pathway - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03320&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03320">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Peroxisome proliferator-activated receptors (PPARs) are nuclear hormone receptors that are activated by fatty acids and their derivatives. PPAR has three subtypes (PPARalpha, beta/delta, and gamma) showing different expression patterns in vertebrates. Each of them is encoded in a separate gene and binds fatty acids and eicosanoids. PPARalpha plays a role in the clearance of circulating or cellular lipids via the regulation of gene expression involved in lipid metabolism in liver and skeletal muscle. PPARbeta/delta is involved in lipid oxidation and cell proliferation. PPARgamma promotes adipocyte differentiation to enhance blood glucose uptake.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03320 map" -->
+</select>
+<input type="hidden" name="mapno" value="03320" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03320" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03320" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03320.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=435,161,4	href="/dbget-bin/www_bget?C02165+C14776"	title="C02165 (Leukotriene B4), C14776 (8(S)-HETE)" />
+<area shape=circle	coords=435,247,4	href="/dbget-bin/www_bget?C15493"	title="C15493 (9-cis-Retinoic acid)" />
+<area shape=circle	coords=435,697,4	href="/dbget-bin/www_bget?C15493"	title="C15493 (9-cis-Retinoic acid)" />
+<area shape=circle	coords=435,613,4	href="/dbget-bin/www_bget?C14767+C14762"	title="C14767 (9(S)-HODE), C14762 (13(S)-HODE)" />
+<area shape=circle	coords=435,470,4	href="/dbget-bin/www_bget?C15493"	title="C15493 (9-cis-Retinoic acid)" />
+<area shape=circle	coords=435,184,4	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08303&search_string=%22C10AB fibrates%22&option=-n"	title="BR:br08303(C10AB fibrates)" />
+<area shape=circle	coords=435,199,4	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08303&search_string=%22S01BC Antiinflammatory agents, non-steroids%22&option=-n"	title="BR:br08303(S01BC Antiinflammatory agents, non-steroids)" />
+<area shape=circle	coords=435,651,4	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08303&search_string=%22S01BC Antiinflammatory agents, non-steroids%22&option=-n"	title="BR:br08303(S01BC Antiinflammatory agents, non-steroids)" />
+<area shape=rect	coords=863,812,909,829	href="/dbget-bin/www_bget?K08771"	title="K08771 (AQP7)" />
+<area shape=rect	coords=813,824,859,841	href="/dbget-bin/www_bget?K00864"	title="K00864 (E2.7.1.30, glpK)" />
+<area shape=rect	coords=813,801,859,818	href="/dbget-bin/www_bget?K01596"	title="K01596 (E4.1.1.32, pckA, PEPCK)" />
+<area shape=rect	coords=863,617,909,634	href="/dbget-bin/www_bget?K08768"	title="K08768 (PLIN)" />
+<area shape=rect	coords=120,123,166,140	href="/dbget-bin/www_bget?K06259"	title="K06259 (CD36)" />
+<area shape=rect	coords=120,151,166,168	href="/dbget-bin/www_bget?K08745+K08746+K08747+K08748+K08749"	title="K08745 (SLC27A1, FATP1), K08746 (SLC27A2, FACVL1, FATP2), K08747 (SLC27A4, FATP4), K08748 (SLC27A5, FATP5), K08749 (SLC27A6, FATP6)" />
+<area shape=rect	coords=205,124,251,141	href="/dbget-bin/www_bget?K08750+K08751+K08752+K08753+K08754+K08755+K08756"	title="K08750 (FABP1, L-FABP), K08751 (FABP2), K08752 (FABP3), K08753 (FABP4, aP2), K08754 (FABP5), K08755 (FABP6), K08756 (FABP7)" />
+<area shape=rect	coords=547,201,593,218	href="/dbget-bin/www_bget?K07294"	title="K07294 (NR1C1, PPARA)" />
+<area shape=rect	coords=547,218,593,235	href="/dbget-bin/www_bget?K08524+K08525+K08526"	title="K08524 (NR2B1, RXRA), K08525 (NR2B2, RXRB), K08526 (NR2B3, RXRG)" />
+<area shape=rect	coords=547,426,593,443	href="/dbget-bin/www_bget?K04504"	title="K04504 (NR1C2, PPARD)" />
+<area shape=rect	coords=547,443,593,460	href="/dbget-bin/www_bget?K08524+K08525+K08526"	title="K08524 (NR2B1, RXRA), K08525 (NR2B2, RXRB), K08526 (NR2B3, RXRG)" />
+<area shape=rect	coords=547,651,593,668	href="/dbget-bin/www_bget?K08530"	title="K08530 (NR1C3, PPARG)" />
+<area shape=rect	coords=547,668,593,685	href="/dbget-bin/www_bget?K08524+K08525+K08526"	title="K08524 (NR2B1, RXRA), K08525 (NR2B2, RXRB), K08526 (NR2B3, RXRG)" />
+<area shape=rect	coords=813,558,859,575	href="/dbget-bin/www_bget?K08764"	title="K08764 (SCP2, SCPX)" />
+<area shape=rect	coords=813,535,859,552	href="/dbget-bin/www_bget?K07513"	title="K07513 (ACAA1)" />
+<area shape=rect	coords=863,569,909,586	href="/dbget-bin/www_bget?K00249"	title="K00249 (E1.3.99.3, ACADM, acd)" />
+<area shape=rect	coords=863,546,909,563	href="/dbget-bin/www_bget?K00255"	title="K00255 (E1.3.99.13, ACADL)" />
+<area shape=rect	coords=813,512,859,529	href="/dbget-bin/www_bget?K07425"	title="K07425 (CYP4A)" />
+<area shape=rect	coords=813,489,859,506	href="/dbget-bin/www_bget?K07514"	title="K07514 (EHHADH)" />
+<area shape=rect	coords=863,523,909,540	href="/dbget-bin/www_bget?K08766"	title="K08766 (E2.3.1.21II, CPT2)" />
+<area shape=rect	coords=863,500,909,517	href="/dbget-bin/www_bget?K08765"	title="K08765 (E2.3.1.21I, CPT1)" />
+<area shape=rect	coords=813,449,859,466	href="/dbget-bin/www_bget?K01897"	title="K01897 (ACSL, fadD)" />
+<area shape=rect	coords=863,437,909,454	href="/dbget-bin/www_bget?K08763"	title="K08763 (OLR1)" />
+<area shape=rect	coords=813,426,859,443	href="/dbget-bin/www_bget?K01059"	title="K01059 (LPL)" />
+<area shape=rect	coords=863,414,909,431	href="/dbget-bin/www_bget?K06259"	title="K06259 (CD36)" />
+<area shape=rect	coords=863,391,909,408	href="/dbget-bin/www_bget?K08747"	title="K08747 (SLC27A4, FATP4)" />
+<area shape=rect	coords=813,403,859,420	href="/dbget-bin/www_bget?K08752"	title="K08752 (FABP3)" />
+<area shape=rect	coords=813,294,859,311	href="/dbget-bin/www_bget?K00489"	title="K00489 (CYP7A1)" />
+<area shape=rect	coords=863,368,909,385	href="/dbget-bin/www_bget?K08745"	title="K08745 (SLC27A1, FATP1)" />
+<area shape=rect	coords=815,105,861,122	href="/dbget-bin/www_bget?hsa:3158+mmu:15360+rno:24450"	title="3158, 15360, 24450" />
+<area shape=rect	coords=813,663,859,680	href="/dbget-bin/www_bget?K06086"	title="K06086 (SORBS1, SH3D5, PONSIN, CAP)" />
+<area shape=rect	coords=863,663,909,680	href="/dbget-bin/www_bget?K01388"	title="K01388 (MMP1)" />
+<area shape=rect	coords=813,640,859,657	href="/dbget-bin/www_bget?K08753"	title="K08753 (FABP4, aP2)" />
+<area shape=rect	coords=813,617,859,634	href="/dbget-bin/www_bget?K08767"	title="K08767 (ANGPTL4, PGAR)" />
+<area shape=rect	coords=813,581,859,598	href="/dbget-bin/www_bget?K00232+K10214"	title="K00232 (E1.3.3.6, ACOX1, ACOX3), K10214 (ACOX2)" />
+<area shape=rect	coords=813,731,859,748	href="/dbget-bin/www_bget?K06272"	title="K06272 (ILK)" />
+<area shape=rect	coords=813,380,859,397	href="/dbget-bin/www_bget?K08750"	title="K08750 (FABP1, L-FABP)" />
+<area shape=rect	coords=863,731,909,748	href="/dbget-bin/www_bget?K06276"	title="K06276 (PDPK1)" />
+<area shape=rect	coords=813,168,859,185	href="/dbget-bin/www_bget?K08758"	title="K08758 (APOA2)" />
+<area shape=rect	coords=863,180,909,197	href="/dbget-bin/www_bget?K08761"	title="K08761 (PLTP)" />
+<area shape=rect	coords=863,640,909,657	href="/dbget-bin/www_bget?K07296"	title="K07296 (ACDC)" />
+<area shape=circle	coords=435,636,4	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08303&search_string=%22A10BG Thiazolidinediones%22&option=-n"	title="BR:br08303(A10BG Thiazolidinediones)" />
+<area shape=rect	coords=813,254,859,271	href="/dbget-bin/www_bget?K00507"	title="K00507 (SCD, desC)" />
+<area shape=rect	coords=863,243,909,260	href="/dbget-bin/www_bget?K10226"	title="K10226 (FADS2)" />
+<area shape=rect	coords=813,191,859,208	href="/dbget-bin/www_bget?K08759"	title="K08759 (APOC3)" />
+<area shape=rect	coords=813,317,859,334	href="/dbget-bin/www_bget?K07431"	title="K07431 (CYP8B)" />
+<area shape=rect	coords=863,294,909,311	href="/dbget-bin/www_bget?K08536"	title="K08536 (NR1H3, LXRA)" />
+<area shape=rect	coords=863,317,909,334	href="/dbget-bin/www_bget?K00488"	title="K00488 (CYP27A)" />
+<area shape=rect	coords=813,145,859,162	href="/dbget-bin/www_bget?K08757"	title="K08757 (APOA1)" />
+<area shape=rect	coords=813,765,859,782	href="/dbget-bin/www_bget?K08770"	title="K08770 (UBC)" />
+<area shape=rect	coords=813,357,859,374	href="/dbget-bin/www_bget?K08762"	title="K08762 (DBI, ACBP)" />
+<area shape=rect	coords=863,157,909,174	href="/dbget-bin/www_bget?K09025"	title="K09025 (APOA5)" />
+<area shape=rect	coords=813,231,859,248	href="/dbget-bin/www_bget?hsa:4199+mmu:17436+rno:24552"	title="4199, 17436, 24552" />
+<area shape=rect	coords=813,697,859,714	href="/dbget-bin/www_bget?K08769"	title="K08769 (UCP1, SLC25A7)" />
+<area shape=rect	coords=504,148,632,183	href="/kegg-bin/show_pathway?map04920"	title="map04920" />
+<area shape=rect	coords=963,134,1102,160	href="/kegg-bin/show_pathway?map00071"	title="map00071" />
+<area shape=rect	coords=958,213,1107,248	href="/kegg-bin/show_pathway?map00072"	title="map00072" />
+<area shape=rect	coords=963,174,1102,200	href="/kegg-bin/show_pathway?map00120"	title="map00120" />
+<area shape=rect	coords=963,264,1102,299	href="/kegg-bin/show_pathway?map00564"	title="map00564" />
+<area shape=rect	coords=48,28,264,54	href="/dbget-bin/www_bget?map03320"	title="map03320" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

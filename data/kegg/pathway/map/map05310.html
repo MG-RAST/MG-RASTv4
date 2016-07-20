@@ -1,0 +1,203 @@
+<html>
+<!---
+ENTRY       map05310
+DEFINITION  Asthma - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Asthma - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Asthma - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05310&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05310">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Inhaled allergens encounter antigen presenting cells (APC) that line the airway. Upon recognition of the antigen and activation by APC, naive T cells differentiate into TH2 cells, a process that is promoted by interleukin 4 (IL-4). Activated TH2 cells stimulate B cells to produce IgE antibodies in response to IL-4 and IL-13. IgE binds the high affinity IgE receptor at the surface of mast cells, the proliferation and differentiation of which is promoted by IL-9.The crosslinking of mast-cell-bound IgE by allergens leads to the release of biologically active mediators (histamine, leukotrienes) by means of degranulation and, so, to the immediate symptoms of allergy. Activated mast cells and Th2 cells also induce the production of IL-5.  IL-5 travels to the bone marrow and regulates the differentiation and egress of eosinophils from the bone marrow into the blood. Moreover activated mast cells and Th2 cells in the lung  generate the cytokines interleukin IL-4, IL-13 and tumour necrosis factor (TNF)-alpha. These cytokines stimulate the generation of eotaxin by lung epithelial cells, fibroblasts and smooth muscle cells. Eotaxin then stimulates the selective recruitment of eosinophils from the airway microvessels into the lung tissue. The activation of eosinophils leads to release of toxic granules and oxygen free radicals that lead to tissue damage and promote the development of chronic inflammation.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05310 map" -->
+</select>
+<input type="hidden" name="mapno" value="05310" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05310" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05310" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05310.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=1031,148,4	href="/dbget-bin/www_bget?C00388"	title="C00388 (1H-Imidazole-4-ethanamine)" />
+<area shape=circle	coords=1030,179,4	href="/dbget-bin/www_bget?C02166"	title="C02166 (Leukotriene C4)" />
+<area shape=circle	coords=1030,239,4	href="/dbget-bin/www_bget?C00696"	title="C00696 (Prostaglandin D2)" />
+<area shape=circle	coords=1030,120,4	href="/dbget-bin/www_bget?C04598"	title="C04598 (2-Acetyl-1-alkyl-sn-glycero-3-phosphocholine)" />
+<area shape=circle	coords=1026,507,4	href="/dbget-bin/www_bget?C05951"	title="C05951 (Leukotriene D4)" />
+<area shape=circle	coords=1027,560,4	href="/dbget-bin/www_bget?C04598"	title="C04598 (2-Acetyl-1-alkyl-sn-glycero-3-phosphocholine)" />
+<area shape=circle	coords=1030,209,4	href="/dbget-bin/www_bget?C05951"	title="C05951 (Leukotriene D4)" />
+<area shape=circle	coords=1026,533,4	href="/dbget-bin/www_bget?C05951"	title="C05951 (Leukotriene D4)" />
+<area shape=rect	coords=142,287,188,304	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=222,287,268,304	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=445,274,491,291	href="/dbget-bin/www_bget?K03161"	title="K03161 (TNFSF5, CD40L)" />
+<area shape=rect	coords=526,274,572,291	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=445,300,491,317	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=526,298,572,315	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=680,105,726,122	href="/dbget-bin/www_bget?K05443"	title="K05443 (IL10, CSIF)" />
+<area shape=rect	coords=680,81,726,98	href="/dbget-bin/www_bget?K05432"	title="K05432 (IL9)" />
+<area shape=rect	coords=818,143,864,160	href="/dbget-bin/www_bget?K08089+K08090+K07983"	title="K07983 (FCER1G), K08089 (FCER1A), K08090 (MS4A2, FCER1B)" />
+<area shape=rect	coords=818,167,864,184	href="/dbget-bin/www_bget?K08089+K08090+K07983"	title="K07983 (FCER1G), K08089 (FCER1A), K08090 (MS4A2, FCER1B)" />
+<area shape=rect	coords=680,59,726,76	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=480,346,526,363	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=480,372,526,389	href="/dbget-bin/www_bget?K05435"	title="K05435 (IL13)" />
+<area shape=rect	coords=1004,448,1050,465	href="/dbget-bin/www_bget?K10787"	title="K10787 (RNASE3, ECP)" />
+<area shape=rect	coords=1004,424,1050,441	href="/dbget-bin/www_bget?K10786"	title="K10786 (PRG2, MBP)" />
+<area shape=rect	coords=659,196,705,213	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=444,427,490,444	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=444,450,490,467	href="/dbget-bin/www_bget?K05435"	title="K05435 (IL13)" />
+<area shape=rect	coords=181,228,227,245	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=1004,472,1050,489	href="/dbget-bin/www_bget?K10788"	title="K10788 (EPX, EPO)" />
+<area shape=rect	coords=715,533,761,550	href="/dbget-bin/www_bget?hsa:6356+mmu:20292"	title="6356, 20292" />
+<area shape=rect	coords=618,455,664,472	href="/dbget-bin/www_bget?K05428"	title="K05428 (IL5)" />
+<area shape=rect	coords=875,312,921,329	href="/dbget-bin/www_bget?K04736"	title="K04736 (IL3)" />
+<area shape=rect	coords=875,337,921,354	href="/dbget-bin/www_bget?K05428"	title="K05428 (IL5)" />
+<area shape=rect	coords=569,244,615,261	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=759,168,805,185	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=760,142,806,159	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=774,328,820,345	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=774,375,820,392	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=774,351,820,368	href="/dbget-bin/www_bget?K05435"	title="K05435 (IL13)" />
+<area shape=rect	coords=268,435,381,470	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=268,502,382,537	href="/kegg-bin/show_pathway?map04630"	title="map04630" />
+<area shape=rect	coords=845,63,959,98	href="/kegg-bin/show_pathway?map04664"	title="map04664" />
+<area shape=rect	coords=233,175,347,210	href="/kegg-bin/show_pathway?map04660"	title="map04660" />
+<area shape=rect	coords=133,369,246,404	href="/kegg-bin/show_pathway?map04612"	title="map04612" />
+<area shape=rect	coords=359,175,473,210	href="/kegg-bin/show_pathway?map04514"	title="map04514" />
+<area shape=rect	coords=618,349,731,384	href="/kegg-bin/show_pathway?map04662"	title="map04662" />
+<area shape=rect	coords=40,45,124,71	href="/dbget-bin/www_bget?map05310"	title="map05310" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

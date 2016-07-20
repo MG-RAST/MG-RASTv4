@@ -1,0 +1,165 @@
+<html>
+<!---
+ENTRY       map07045
+DEFINITION  Antineoplastics - protein kinases inhibitors - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antineoplastics - protein kinases inhibitors - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antineoplastics - protein kinases inhibitors - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07045&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07045">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07045" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07045" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07045.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=971,542,1084,656	href="/dbget-bin/www_bget?D04696"	title="D04696 (Lestaurtinib (USAN/INN))" />
+<area shape=rect	coords=823,533,961,661	href="/dbget-bin/www_bget?D06005"	title="D06005 (Tandutinib (USAN/INN))" />
+<area shape=rect	coords=632,543,782,657	href="/dbget-bin/www_bget?D04014"	title="D04014 (Enzastaurin hydrochloride (USAN))" />
+<area shape=rect	coords=481,546,619,657	href="/dbget-bin/www_bget?D05029"	title="D05029 (Midostaurin (USAN/INN))" />
+<area shape=rect	coords=246,582,424,660	href="/dbget-bin/www_bget?D04024+D08108"	title="D04024 (Lapatinib tosilate hydrate (JAN)), D08108 (Lapatinib (INN))" />
+<area shape=rect	coords=251,465,391,551	href="/dbget-bin/www_bget?D03350"	title="D03350 (Canertinib dihydrochloride (USAN))" />
+<area shape=rect	coords=63,576,194,663	href="/dbget-bin/www_bget?D04023+D07907"	title="D04023 (Erlotinib hydrochloride (JAN/USAN)), D07907 (Erlotinib (INN))" />
+<area shape=rect	coords=59,445,200,520	href="/dbget-bin/www_bget?D01977"	title="D01977 (Gefitinib (JAN/USAN/INN))" />
+<area shape=rect	coords=879,380,1077,448	href="/dbget-bin/www_bget?D05380"	title="D05380 (Pazopanib hydrochloride (USAN))" />
+<area shape=rect	coords=683,390,850,458	href="/dbget-bin/www_bget?D06678+D08947"	title="D06678 (Motesanib), D08947 (Motesanib diphosphate (USAN))" />
+<area shape=rect	coords=902,271,1067,350	href="/dbget-bin/www_bget?D03218"	title="D03218 (Axitinib (JAN/USAN))" />
+<area shape=rect	coords=947,122,1022,243	href="/dbget-bin/www_bget?D06285"	title="D06285 (Vatalanib (USAN/INN))" />
+<area shape=rect	coords=704,132,871,241	href="/dbget-bin/www_bget?D06402+D08552"	title="D06402 (Sunitinib malate (JAN/USAN)), D08552 (Sunitinib (INN))" />
+<area shape=rect	coords=577,123,680,209	href="/dbget-bin/www_bget?D05819"	title="D05819 (Semaxanib (USAN/INN))" />
+<area shape=rect	coords=306,272,494,351	href="/dbget-bin/www_bget?D03252"	title="D03252 (Bosutinib (USAN))" />
+<area shape=rect	coords=85,282,302,353	href="/dbget-bin/www_bget?D03658+D06414"	title="D03658 (Dasatinib (USAN)), D06414 (Dasatinib hydrate (JAN))" />
+<area shape=rect	coords=291,145,537,210	href="/dbget-bin/www_bget?D01441+D08066"	title="D01441 (Imatinib mesilate (JAN)), D08066 (Imatinib (INN))" />
+<area shape=rect	coords=46,119,274,206	href="/dbget-bin/www_bget?D06413+D08953"	title="D06413 (Nilotinib hydrochloride hydrate (JAN)), D08953 (Nilotinib (INN/USAN))" />
+<area shape=rect	coords=658,270,877,346	href="/dbget-bin/www_bget?D06272+D08524"	title="D06272 (Sorafenib tosilate (JAN)), D08524 (Sorafenib (INN))" />
+<area shape=rect	coords=40,45,407,71	href="/dbget-bin/www_bget?map07045"	title="map07045" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

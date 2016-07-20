@@ -1,0 +1,210 @@
+<html>
+<!---
+ENTRY       map00565
+DEFINITION  Ether lipid metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Ether lipid metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Ether lipid metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00565&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00565">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00565 map" -->
+</select>
+<input type="hidden" name="mapno" value="00565" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00565" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00565" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00565.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=539,689,4	href="/dbget-bin/www_bget?C15647"	title="C15647 (2-Acyl-1-(1-alkenyl)-sn-glycero-3-phosphate)" />
+<area shape=circle	coords=468,636,4	href="/dbget-bin/www_bget?C15646"	title="C15646 (1-(1-Alkenyl)-sn-glycero-3-phosphate)" />
+<area shape=circle	coords=371,566,4	href="/dbget-bin/www_bget?C15645"	title="C15645 (1-(1-Alkenyl)-sn-glycerol)" />
+<area shape=circle	coords=325,205,4	href="/dbget-bin/www_bget?C02773"	title="C02773 (1-Alkyl-sn-glycerol)" />
+<area shape=circle	coords=180,349,4	href="/dbget-bin/www_bget?C01264"	title="C01264 (2-Acetyl-1-alkyl-sn-glycero-3-phosphate)" />
+<area shape=circle	coords=612,564,4	href="/dbget-bin/www_bget?C04756"	title="C04756 (O-1-Alk-1-enyl-2-acyl-sn-glycero-3-phosphoethanolamine)" />
+<area shape=circle	coords=180,565,4	href="/dbget-bin/www_bget?C04317"	title="C04317 (1-Organyl-2-lyso-sn-glycero-3-phosphocholine)" />
+<area shape=circle	coords=468,495,4	href="/dbget-bin/www_bget?C01233"	title="C01233 (sn-glycero-3-Phosphoethanolamine)" />
+<area shape=circle	coords=395,277,4	href="/dbget-bin/www_bget?C03968"	title="C03968 (1-Alkyl-sn-glycero-3-phosphate)" />
+<area shape=circle	coords=612,422,4	href="/dbget-bin/www_bget?C03201"	title="C03201 (1-Alkyl-2-acylglycerol)" />
+<area shape=circle	coords=468,566,4	href="/dbget-bin/www_bget?C04635"	title="C04635 (1-(1-Alkenyl)-sn-glycero-3-phosphoethanolamine)" />
+<area shape=circle	coords=180,421,4	href="/dbget-bin/www_bget?C03820"	title="C03820 (1-Alkyl-2-acetyl-sn-glycerol)" />
+<area shape=circle	coords=180,493,4	href="/dbget-bin/www_bget?C04598"	title="C04598 (2-Acetyl-1-alkyl-sn-glycero-3-phosphocholine)" />
+<area shape=circle	coords=395,133,4	href="/dbget-bin/www_bget?C03372"	title="C03372 (Acylglycerone phosphate)" />
+<area shape=circle	coords=395,205,4	href="/dbget-bin/www_bget?C03715"	title="C03715 (O-Alkylglycerone phosphate)" />
+<area shape=circle	coords=313,565,4	href="/dbget-bin/www_bget?C05212"	title="C05212 (1-Radyl-2-acyl-sn-glycero-3-phosphocholine)" />
+<area shape=circle	coords=73,420,4	href="/dbget-bin/www_bget?C04361"	title="C04361 (1-O-Alkyl-2-acetyl-3-acyl-sn-glycerol)" />
+<area shape=circle	coords=504,817,4	href="/dbget-bin/www_bget?C04517"	title="C04517 (1-(1-Alkenyl)-sn-glycero-3-phosphocholine)" />
+<area shape=circle	coords=612,745,4	href="/dbget-bin/www_bget?C03454"	title="C03454 (1-Alkenyl-2-acylglycerol)" />
+<area shape=circle	coords=504,893,4	href="/dbget-bin/www_bget?C00670"	title="C00670 (sn-glycero-3-Phosphocholine)" />
+<area shape=circle	coords=612,818,4	href="/dbget-bin/www_bget?C00958"	title="C00958 (Plasmenylcholine)" />
+<area shape=circle	coords=612,493,4	href="/dbget-bin/www_bget?C04475"	title="C04475 (1-Alkyl-2-acylglycerophosphoethanolamine)" />
+<area shape=circle	coords=612,349,4	href="/dbget-bin/www_bget?C05977"	title="C05977 (2-Acyl-1-alkyl-sn-glycero-3-phosphate)" />
+<area shape=rect	coords=527,798,573,815	href="/dbget-bin/www_bget?2.3.1.25+R03109"	title="2.3.1.25, 2.3.1.25, R03109" />
+<area shape=rect	coords=527,819,573,836	href="/dbget-bin/www_bget?2.3.1.104+R03109"	title="2.3.1.104, 2.3.1.104, R03109" />
+<area shape=rect	coords=302,229,348,246	href="/dbget-bin/www_bget?2.7.1.93+R04126"	title="2.7.1.93, 2.7.1.93, R04126" />
+<area shape=rect	coords=372,229,418,246	href="/dbget-bin/www_bget?K06123+1.1.1.101+R04360"	title="K06123 (E1.1.1.101, AYR1), 1.1.1.101, R04360" />
+<area shape=rect	coords=373,159,419,176	href="/dbget-bin/www_bget?K00803+2.5.1.26+R04311"	title="K00803 (E2.5.1.26, AGPS), 2.5.1.26, R04311" />
+<area shape=rect	coords=590,304,636,321	href="/dbget-bin/www_bget?K00655+2.3.1.51+R04361"	title="K00655 (E2.3.1.51, plsC), 2.3.1.51, R04361" />
+<area shape=rect	coords=590,374,636,391	href="/dbget-bin/www_bget?K01080+3.1.3.4+R04162"	title="K01080 (E3.1.3.4, PPAP2), 3.1.3.4, R04162" />
+<area shape=rect	coords=157,304,203,321	href="/dbget-bin/www_bget?2.3.1.105+R03455"	title="2.3.1.105, 2.3.1.105, R03455" />
+<area shape=rect	coords=157,374,203,391	href="/dbget-bin/www_bget?3.1.3.59+R03454"	title="3.1.3.59, 3.1.3.59, R03454" />
+<area shape=rect	coords=157,444,203,461	href="/dbget-bin/www_bget?K00994+2.7.8.2+R04321"	title="K00994 (CHPT1, CPT1), 2.7.8.2, R04321" />
+<area shape=rect	coords=590,444,636,461	href="/dbget-bin/www_bget?K00993+2.7.8.1+R06364"	title="K00993 (E2.7.8.1), 2.7.8.1, R06364" />
+<area shape=rect	coords=291,444,337,461	href="/dbget-bin/www_bget?K00994+2.7.8.2+R07389"	title="K00994 (CHPT1, CPT1), 2.7.8.2, R07389" />
+<area shape=rect	coords=108,412,154,429	href="/dbget-bin/www_bget?2.3.1.125+R04363"	title="2.3.1.125, 2.3.1.125, R04363" />
+<area shape=rect	coords=136,512,182,529	href="/dbget-bin/www_bget?K01062+3.1.1.47+R04452"	title="K01062 (E3.1.1.47, PAFAH), 3.1.1.47, R04452" />
+<area shape=rect	coords=248,549,294,566	href="/dbget-bin/www_bget?K01047+3.1.1.4+R07387"	title="K01047 (E3.1.1.4, PLA2G), 3.1.1.4, R07387" />
+<area shape=rect	coords=200,567,246,584	href="/dbget-bin/www_bget?2.3.1.63+R03438"	title="2.3.1.63, 2.3.1.63, R03438" />
+<area shape=rect	coords=180,532,226,549	href="/dbget-bin/www_bget?2.3.1.67+R03437"	title="2.3.1.67, 2.3.1.67, R03437" />
+<area shape=rect	coords=518,566,564,583	href="/dbget-bin/www_bget?K01047+3.1.1.4+R07379"	title="K01047 (E3.1.1.4, PLA2G), 3.1.1.4, R07379" />
+<area shape=rect	coords=518,547,564,564	href="/dbget-bin/www_bget?2.3.1.121+R04413"	title="2.3.1.121, 2.3.1.121, R04413" />
+<area shape=rect	coords=589,507,635,524	href="/dbget-bin/www_bget?1.14.99.19+R04571"	title="1.14.99.19, 1.14.99.19, R04571" />
+<area shape=rect	coords=462,516,508,533	href="/dbget-bin/www_bget?3.3.2.5+R03415"	title="3.3.2.5, 3.3.2.5, R03415" />
+<area shape=rect	coords=570,647,616,664	href="/dbget-bin/www_bget?K00993+2.7.8.1+R07384"	title="K00993 (E2.7.8.1), 2.7.8.1, R07384" />
+<area shape=rect	coords=518,647,564,664	href="/dbget-bin/www_bget?K01115+3.1.4.4+R07385"	title="K01115 (E3.1.4.4, PLD), 3.1.4.4, R07385" />
+<area shape=rect	coords=615,669,661,686	href="/dbget-bin/www_bget?K01114+3.1.4.3+R07381"	title="K01114 (plcC), 3.1.4.3, R07381" />
+<area shape=rect	coords=727,669,773,686	href="/dbget-bin/www_bget?2.6.-.-+R07386"	title="2.6.-.-, 2.6.-.-, R07386" />
+<area shape=rect	coords=589,771,635,788	href="/dbget-bin/www_bget?2.7.8.22+R03110"	title="2.7.8.22, 2.7.8.22, R03110" />
+<area shape=rect	coords=482,845,528,862	href="/dbget-bin/www_bget?3.3.2.2+R02745"	title="3.3.2.2, 3.3.2.2, R02745" />
+<area shape=rect	coords=446,586,492,603	href="/dbget-bin/www_bget?K01122+3.1.4.39+R07388"	title="K01122 (E3.1.4.39), 3.1.4.39, R07388" />
+<area shape=rect	coords=446,655,492,672	href="/dbget-bin/www_bget?2.3.1.-+R07382"	title="2.3.1.-, 2.3.1.-, R07382" />
+<area shape=rect	coords=518,718,564,735	href="/dbget-bin/www_bget?3.1.3.-+R07383"	title="3.1.3.-, 3.1.3.-, R07383" />
+<area shape=rect	coords=400,557,446,574	href="/dbget-bin/www_bget?K08743+3.1.4.-+R07380"	title="K08743 (ENPP6), 3.1.4.-, R07380" />
+<area shape=rect	coords=139,120,319,148	href="/kegg-bin/show_pathway?map00564"	title="map00564" />
+<area shape=rect	coords=40,45,259,71	href="/dbget-bin/www_bget?map00565"	title="map00565" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

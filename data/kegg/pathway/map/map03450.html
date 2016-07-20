@@ -1,0 +1,178 @@
+<html>
+<!---
+ENTRY       map03450
+DEFINITION  Non-homologous end-joining - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Non-homologous end-joining - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Non-homologous end-joining - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03450&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03450">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Nonhomologous end joining (NHEJ) eliminates DNA double-strand breaks (DSBs) by direct ligation. NHEJ involves binding of the KU heterodimer to double-stranded DNA ends, recruitment of DNA-PKcs (MRX complex in yeast), processing of ends, and recruitment of the DNA ligase IV (LIG4)-XRCC4 complex, which brings about ligation. A recent study shows that bacteria accomplish NHEJ using just two proteins (Ku and DNA ligase), whereas eukaryotes require many factors. NHEJ repairs DSBs at all stages of the cell cycle, bringing about the ligation of two DNA DSBs without the need for sequence homology, and so is error-prone.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03450 map" -->
+</select>
+<input type="hidden" name="mapno" value="03450" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03450" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03450" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03450.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=883,618,929,635	href="/dbget-bin/www_bget?K10777"	title="K10777 (LIG4, DNL4)" />
+<area shape=rect	coords=575,652,621,669	href="/dbget-bin/www_bget?K10983"	title="K10983 (NEJ1, LIF2)" />
+<area shape=rect	coords=883,499,929,516	href="/dbget-bin/www_bget?K03512"	title="K03512 (POLL)" />
+<area shape=rect	coords=575,618,621,635	href="/dbget-bin/www_bget?K10777"	title="K10777 (LIG4, DNL4)" />
+<area shape=rect	coords=883,523,929,540	href="/dbget-bin/www_bget?K00977"	title="K00977 (E2.7.7.31, DNTT)" />
+<area shape=rect	coords=939,499,985,516	href="/dbget-bin/www_bget?K03513"	title="K03513 (POLM)" />
+<area shape=rect	coords=883,356,929,373	href="/dbget-bin/www_bget?K10887"	title="K10887 (DCLRE1C, ARTEMIS, SCIDA)" />
+<area shape=rect	coords=575,499,621,516	href="/dbget-bin/www_bget?K10981"	title="K10981 (POL4)" />
+<area shape=rect	coords=229,356,275,373	href="/dbget-bin/www_bget?K01971"	title="K01971 (E6.5.1.1, lig)" />
+<area shape=rect	coords=570,370,616,387	href="/dbget-bin/www_bget?K10865"	title="K10865 (MRE11)" />
+<area shape=rect	coords=570,354,616,371	href="/dbget-bin/www_bget?K10866"	title="K10866 (RAD50)" />
+<area shape=rect	coords=883,373,929,390	href="/dbget-bin/www_bget?K06642"	title="K06642 (PRKDC)" />
+<area shape=rect	coords=570,387,616,404	href="/dbget-bin/www_bget?K10868"	title="K10868 (XRS2)" />
+<area shape=rect	coords=227,206,273,223	href="/dbget-bin/www_bget?K10979"	title="K10979 (ku)" />
+<area shape=rect	coords=725,223,771,240	href="/dbget-bin/www_bget?K10885"	title="K10885 (XRCC5, KU80, G22P2)" />
+<area shape=rect	coords=883,635,929,652	href="/dbget-bin/www_bget?K10886"	title="K10886 (XRCC4)" />
+<area shape=rect	coords=725,206,771,223	href="/dbget-bin/www_bget?K10884"	title="K10884 (XRCC6, KU70, G22P1)" />
+<area shape=rect	coords=575,523,621,540	href="/dbget-bin/www_bget?K04799"	title="K04799 (FEN1, RAD2)" />
+<area shape=rect	coords=883,652,929,669	href="/dbget-bin/www_bget?K10980"	title="K10980 (NHEJ1, XLF)" />
+<area shape=rect	coords=575,635,621,652	href="/dbget-bin/www_bget?K10982"	title="K10982 (LIF1)" />
+<area shape=rect	coords=40,45,294,71	href="/kegg-bin/show_pathway?map03440"	title="map03440" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

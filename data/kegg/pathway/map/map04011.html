@@ -1,0 +1,216 @@
+<html>
+<!---
+ENTRY       map04011
+DEFINITION  MAPK signaling pathway - yeast - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: MAPK signaling pathway - yeast - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>MAPK signaling pathway - yeast - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04011&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04011">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The S. cerevisiae genome encodes multiple MAP kinase orthologs. One (Fus3) mediates cellular response to peptide pheromones. Another (Kss1) permits adjustment to nutrient limiting conditions. A third (Hog1) is necessary for survival under hyperosmotic conditions. A fourth (Slt2/Mpk1) is required for repair of injuries to the cell wall. As in mammalian cells, these pathways consist of a conserved module in which three kinases phosphorylate each other in sequence. The MAPK is phosphorylated by the MAPK/ERK kinase (MEK), which is itself phosphorylated by a MEK kinase (MEKK).</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04011 map" -->
+</select>
+<input type="hidden" name="mapno" value="04011" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04011" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04011" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04011.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=736,446,782,463	href="/dbget-bin/www_bget?K09450"	title="K09450 (TEADF)" />
+<area shape=rect	coords=679,471,725,488	href="/dbget-bin/www_bget?K11215"	title="K11215 (STE12)" />
+<area shape=rect	coords=679,427,725,444	href="/dbget-bin/www_bget?K11241+K11242"	title="K11241 (DIG1), K11242 (DIG2)" />
+<area shape=rect	coords=590,471,636,488	href="/dbget-bin/www_bget?sce:YGR040W"	title="YGR040W" />
+<area shape=rect	coords=516,471,562,488	href="/dbget-bin/www_bget?K11226"	title="K11226 (STE7)" />
+<area shape=rect	coords=443,471,489,488	href="/dbget-bin/www_bget?K11228"	title="K11228 (STE11)" />
+<area shape=rect	coords=368,471,414,488	href="/dbget-bin/www_bget?K04409"	title="K04409 (PAK1)" />
+<area shape=rect	coords=293,471,339,488	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=181,443,227,460	href="/dbget-bin/www_bget?sce:YNL098C"	title="YNL098C" />
+<area shape=rect	coords=141,471,187,488	href="/dbget-bin/www_bget?K11246"	title="K11246 (SHO1)" />
+<area shape=rect	coords=793,394,839,411	href="/dbget-bin/www_bget?sce:YGR088W"	title="YGR088W" />
+<area shape=rect	coords=590,293,636,310	href="/dbget-bin/www_bget?K09291"	title="K09291 (TPR)" />
+<area shape=rect	coords=590,273,636,290	href="/dbget-bin/www_bget?K04464"	title="K04464 (MAPK7, ERK5)" />
+<area shape=rect	coords=293,310,339,327	href="/dbget-bin/www_bget?sce:YLR342W"	title="YLR342W" />
+<area shape=rect	coords=293,273,339,290	href="/dbget-bin/www_bget?sce:YPR165W"	title="YPR165W" />
+<area shape=rect	coords=141,273,187,290	href="/dbget-bin/www_bget?K11245"	title="K11245 (MID2)" />
+<area shape=rect	coords=141,244,187,261	href="/dbget-bin/www_bget?K11244"	title="K11244 (WSC)" />
+<area shape=rect	coords=793,159,839,176	href="/dbget-bin/www_bget?K11243"	title="K11243 (FUS1)" />
+<area shape=rect	coords=679,116,725,133	href="/dbget-bin/www_bget?K11241+K11242"	title="K11241 (DIG1), K11242 (DIG2)" />
+<area shape=rect	coords=368,205,414,222	href="/dbget-bin/www_bget?K11238"	title="K11238 (BNI1)" />
+<area shape=rect	coords=67,174,113,191	href="/dbget-bin/www_bget?K11235"	title="K11235 (MFA)" />
+<area shape=rect	coords=141,144,187,161	href="/dbget-bin/www_bget?K11213"	title="K11213 (STE2)" />
+<area shape=rect	coords=141,174,187,191	href="/dbget-bin/www_bget?K04627"	title="K04627 (STE3)" />
+<area shape=rect	coords=67,144,113,161	href="/dbget-bin/www_bget?K11234"	title="K11234 (MFAL)" />
+<area shape=rect	coords=216,159,262,176	href="/dbget-bin/www_bget?sce:YHR005C"	title="YHR005C" />
+<area shape=rect	coords=216,188,262,205	href="/dbget-bin/www_bget?K07972"	title="K07972 (GNB)" />
+<area shape=rect	coords=216,205,262,222	href="/dbget-bin/www_bget?K07973"	title="K07973 (GNG)" />
+<area shape=rect	coords=344,134,390,151	href="/dbget-bin/www_bget?K11237"	title="K11237 (BEM1)" />
+<area shape=rect	coords=368,159,414,176	href="/dbget-bin/www_bget?K04409"	title="K04409 (PAK1)" />
+<area shape=rect	coords=293,196,339,213	href="/dbget-bin/www_bget?K11236"	title="K11236 (CDC24)" />
+<area shape=rect	coords=293,159,339,176	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=478,134,524,151	href="/dbget-bin/www_bget?K11239"	title="K11239 (STE5)" />
+<area shape=rect	coords=443,159,489,176	href="/dbget-bin/www_bget?K11228"	title="K11228 (STE11)" />
+<area shape=rect	coords=516,159,562,176	href="/dbget-bin/www_bget?K11226"	title="K11226 (STE7)" />
+<area shape=rect	coords=590,159,636,176	href="/dbget-bin/www_bget?sce:YBL016W"	title="YBL016W" />
+<area shape=rect	coords=590,213,636,230	href="/dbget-bin/www_bget?K11240"	title="K11240 (MSG5)" />
+<area shape=rect	coords=679,159,725,176	href="/dbget-bin/www_bget?K11215"	title="K11215 (STE12)" />
+<area shape=rect	coords=679,196,725,213	href="/dbget-bin/www_bget?K06652"	title="K06652 (FAR1)" />
+<area shape=rect	coords=736,134,782,151	href="/dbget-bin/www_bget?sce:YMR043W"	title="YMR043W" />
+<area shape=rect	coords=368,273,414,290	href="/dbget-bin/www_bget?K02677"	title="K02677 (CPKC)" />
+<area shape=rect	coords=443,273,489,290	href="/dbget-bin/www_bget?K11229"	title="K11229 (BCK1)" />
+<area shape=rect	coords=516,273,562,290	href="/dbget-bin/www_bget?K08294"	title="K08294 (MKK1_2)" />
+<area shape=rect	coords=679,273,725,290	href="/dbget-bin/www_bget?sce:YPL089C"	title="YPL089C" />
+<area shape=rect	coords=793,273,839,290	href="/dbget-bin/www_bget?sce:YGR032W"	title="YGR032W" />
+<area shape=rect	coords=443,343,489,360	href="/dbget-bin/www_bget?K11228"	title="K11228 (STE11)" />
+<area shape=rect	coords=679,302,725,319	href="/dbget-bin/www_bget?K06649+K06648"	title="K06648 (SWI6), K06649 (SWI4)" />
+<area shape=rect	coords=141,385,187,402	href="/dbget-bin/www_bget?K11231"	title="K11231 (SLN1)" />
+<area shape=rect	coords=368,385,414,402	href="/dbget-bin/www_bget?K11233"	title="K11233 (SSK1)" />
+<area shape=rect	coords=443,385,489,402	href="/dbget-bin/www_bget?K11230"	title="K11230 (SSK2)" />
+<area shape=rect	coords=516,385,562,402	href="/dbget-bin/www_bget?K11227"	title="K11227 (PBS2)" />
+<area shape=rect	coords=590,385,636,402	href="/dbget-bin/www_bget?K04441"	title="K04441 (P38)" />
+<area shape=rect	coords=679,365,725,382	href="/dbget-bin/www_bget?sce:YMR043W"	title="YMR043W" />
+<area shape=rect	coords=679,385,725,402	href="/dbget-bin/www_bget?K09468"	title="K09468 (MSN2_4)" />
+<area shape=rect	coords=793,374,839,391	href="/dbget-bin/www_bget?K01759"	title="K01759 (E4.4.1.5, GLO1, gloA)" />
+<area shape=rect	coords=141,343,187,360	href="/dbget-bin/www_bget?K11246"	title="K11246 (SHO1)" />
+<area shape=rect	coords=368,343,414,360	href="/dbget-bin/www_bget?K04409"	title="K04409 (PAK1)" />
+<area shape=rect	coords=255,385,301,402	href="/dbget-bin/www_bget?K11232"	title="K11232 (YPD1)" />
+<area shape=rect	coords=40,45,270,70	href="/dbget-bin/www_bget?map04011"	title="map04011" />
+<area shape=rect	coords=764,192,834,218	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

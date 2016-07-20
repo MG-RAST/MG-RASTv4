@@ -1,0 +1,169 @@
+<html>
+<!---
+ENTRY       map07046
+DEFINITION  Immunosuppressive agents - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Immunosuppressive agents - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Immunosuppressive agents - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07046&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07046">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07046" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07046" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07046.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=978,853,1039,867	href="/dbget-bin/www_bget?D01566"	title="D01566 (Gusperimus hydrochloride (JAN))" />
+<area shape=rect	coords=814,853,882,867	href="/dbget-bin/www_bget?D04687"	title="D04687 (Lenalidomide (USAN/INN))" />
+<area shape=rect	coords=670,853,734,867	href="/dbget-bin/www_bget?D00754"	title="D00754 (Thalidomide (JAN/USP/INN))" />
+<area shape=rect	coords=949,704,1007,717	href="/dbget-bin/www_bget?D02714"	title="D02714 (Everolimus (JAN/USAN/INN))" />
+<area shape=rect	coords=726,705,778,717	href="/dbget-bin/www_bget?D00753"	title="D00753 (Sirolimus (USAN/INN))" />
+<area shape=rect	coords=951,444,1008,457	href="/dbget-bin/www_bget?D00107"	title="D00107 (Tacrolimus hydrate (JAN))" />
+<area shape=rect	coords=719,444,787,457	href="/dbget-bin/www_bget?D00184"	title="D00184 (Ciclosporin (JP15))" />
+<area shape=rect	coords=980,211,1059,224	href="/dbget-bin/www_bget?D00292"	title="D00292 (Dexamethasone (JP15/USP/INN))" />
+<area shape=rect	coords=832,210,899,224	href="/dbget-bin/www_bget?D00472"	title="D00472 (Prednisolone (JP15/USP/INN))" />
+<area shape=rect	coords=680,210,737,224	href="/dbget-bin/www_bget?D06673+D00473"	title="D06673 (Meprednisone (USP/INN)), D00473 (Prednisone (USP))" />
+<area shape=rect	coords=424,853,494,867	href="/dbget-bin/www_bget?D00214"	title="D00214 (Actinomycin D (JP15))" />
+<area shape=rect	coords=225,812,280,826	href="/dbget-bin/www_bget?D00369"	title="D00369 (Melphalan (JP15/USP/INN))" />
+<area shape=rect	coords=67,813,164,826	href="/dbget-bin/www_bget?D00287"	title="D00287 (Cyclophosphamide hydrate (JP15))" />
+<area shape=rect	coords=372,634,429,647	href="/dbget-bin/www_bget?D02197"	title="D02197 (Vincristine sulfate (JP15/USP))" />
+<area shape=rect	coords=123,634,181,647	href="/dbget-bin/www_bget?D01068"	title="D01068 (Vinblastine sulfate (JP15/USP))" />
+<area shape=rect	coords=125,445,181,458	href="/dbget-bin/www_bget?D00168+D03637"	title="D00168 (Cytarabine (JP15/USP/INN)), D03637 (Cytarabine hydrochloride (USAN))" />
+<area shape=rect	coords=120,359,185,373	href="/dbget-bin/www_bget?D00749"	title="D00749 (Leflunomide (JAN/USAN/INN))" />
+<area shape=rect	coords=449,444,505,457	href="/dbget-bin/www_bget?D01392"	title="D01392 (Mizoribine (JAN/INN))" />
+<area shape=rect	coords=418,336,532,350	href="/dbget-bin/www_bget?D00752+D05094"	title="D00752 (Mycophenolate mofetil (JAN/USAN)), D05094 (Mycophenolate mofetil hydrochloride (USAN))" />
+<area shape=rect	coords=301,337,366,350	href="/dbget-bin/www_bget?D00238+D03033"	title="D00238 (Azathioprine (JP15/USP/INN)), D03033 (Azathioprine sodium (USP))" />
+<area shape=rect	coords=433,215,525,228	href="/dbget-bin/www_bget?D05096+D05095"	title="D05096 (Mycophenolic acid (USAN/INN)), D05095 (Mycophenolate sodium (USAN))" />
+<area shape=rect	coords=296,205,376,218	href="/dbget-bin/www_bget?D00161"	title="D00161 (Mercaptopurine hydrate (JP15))" />
+<area shape=rect	coords=119,205,186,218	href="/dbget-bin/www_bget?D00142+D02115"	title="D00142 (Methotrexate (JP15/USP/INN)), D02115 (Methotrexate sodium)" />
+<area shape=rect	coords=40,45,283,71	href="/dbget-bin/www_bget?map07046"	title="map07046" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

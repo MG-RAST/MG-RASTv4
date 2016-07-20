@@ -1,0 +1,163 @@
+<html>
+<!---
+ENTRY       map07113
+DEFINITION  Furan family - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Furan family - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Furan family - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07113&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07113">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07113" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07113" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07113.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=287,192,330,206	href="/dbget-bin/www_bget?C14279"	title="C14279 (Furfural)" />
+<area shape=rect	coords=718,574,788,589	href="/dbget-bin/www_bget?D00862"	title="D00862 (Nitrofurazone (USP))" />
+<area shape=rect	coords=593,671,650,686	href="/dbget-bin/www_bget?D00833"	title="D00833 (Nifurtimox (INN))" />
+<area shape=rect	coords=86,435,149,450	href="/dbget-bin/www_bget?D00636"	title="D00636 (Amiodarone hydrochloride (JAN))" />
+<area shape=rect	coords=147,283,213,298	href="/dbget-bin/www_bget?D00139"	title="D00139 (Methoxsalen (JP15/USP))" />
+<area shape=rect	coords=275,670,340,685	href="/dbget-bin/www_bget?D02560"	title="D02560 (Brofaromine (INN))" />
+<area shape=rect	coords=438,751,490,766	href="/dbget-bin/www_bget?D01512"	title="D01512 (Befunolol hydrochloride (JAN))" />
+<area shape=rect	coords=597,191,660,206	href="/dbget-bin/www_bget?D02513"	title="D02513 (Nifurpirinol (USAN))" />
+<area shape=rect	coords=737,436,809,451	href="/dbget-bin/www_bget?D00439"	title="D00439 (Nitrofurantoin (JAN/USP/INN))" />
+<area shape=rect	coords=455,419,480,427	href="/dbget-bin/www_bget?C14275"	title="C14275 (Furan)" />
+<area shape=rect	coords=676,280,805,295	href="/dbget-bin/www_bget?C14293"	title="C14293 (5-Nitro-2-furfuryl methyl ether)" />
+<area shape=rect	coords=146,574,213,589	href="/dbget-bin/www_bget?D01833"	title="D01833 (Benziodarone (JAN/INN))" />
+<area shape=rect	coords=414,128,517,142	href="/dbget-bin/www_bget?C14306"	title="C14306 (Nitrofurylacrylamide)" />
+<area shape=rect	coords=40,45,169,71	href="/dbget-bin/www_bget?map07113"	title="map07113" />
+<area shape=rect	coords=62,455,179,481	href="/kegg-bin/show_pathway?@map07037/D00636"	title="PATH:map07037(D00636)" />
+<area shape=rect	coords=122,593,239,619	href="/kegg-bin/show_pathway?@map07037/D01833"	title="PATH:map07037(D01833)" />
+<area shape=rect	coords=168,721,353,747	href="/kegg-bin/show_pathway?@map07216/D02560"	title="PATH:map07216(D02560)" />
+<area shape=rect	coords=255,689,351,715	href="/kegg-bin/show_pathway?@map07027/D02560"	title="PATH:map07027(D02560)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

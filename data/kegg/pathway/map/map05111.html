@@ -1,0 +1,209 @@
+<html>
+<!---
+ENTRY       map05111
+DEFINITION  Vibrio cholerae pathogenic cycle - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Vibrio cholerae pathogenic cycle - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Vibrio cholerae pathogenic cycle - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05111&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05111">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The dual life style of Vibrio cholerae, in the aquatic environment or in the human host, is supported by appropriate gene expression of various factors. During exponential phase, quorum sensing systems mediate degradation of the virulence repressor HapR, which, together with the control of ToxR regulon, in turn leads to induction of virulence factors such as toxin coregulated pilus (TCP) and cholera toxin (CTX), essential for colonization of the host and enterotoxicity, respectively. Contrastively, during conditions of stationary phase, HapR is upregulated and induces hemagglutinin/protease (HapA) production, which will be involved in detachment of V. cholerae from epithelial cells of the host intestine.<br />&nbsp;&nbsp; On the other hand, flagellar and chemotaxis gene transcription is organized into a hierarchy of four classes of genes controlled by some sigma factors.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05111 map" -->
+</select>
+<input type="hidden" name="mapno" value="05111" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05111" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05111" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05111.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=193,655,4	href="/dbget-bin/www_bget?C01558"	title="C01558 (Bile salt)" />
+<area shape=circle	coords=193,596,4	href="/dbget-bin/www_bget?C01558"	title="C01558 (Bile salt)" />
+<area shape=circle	coords=424,460,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=circle	coords=294,361,4	href="/dbget-bin/www_bget?C16640"	title="C16640 (CAI-1)" />
+<area shape=circle	coords=294,232,4	href="/dbget-bin/www_bget?C16421"	title="C16421 (AI-2)" />
+<area shape=rect	coords=632,353,678,370	href="/dbget-bin/www_bget?K10913"	title="K10913 (hapR)" />
+<area shape=rect	coords=519,190,565,207	href="/dbget-bin/www_bget?K03092"	title="K03092 (SIG54, rpoN)" />
+<area shape=rect	coords=519,165,565,182	href="/dbget-bin/www_bget?K10941"	title="K10941 (flrA)" />
+<area shape=rect	coords=499,294,545,311	href="/dbget-bin/www_bget?K10912"	title="K10912 (luxO)" />
+<area shape=rect	coords=314,267,360,284	href="/dbget-bin/www_bget?K10910"	title="K10910 (LUXP)" />
+<area shape=rect	coords=401,371,447,388	href="/dbget-bin/www_bget?K10915"	title="K10915 (CQSA)" />
+<area shape=rect	coords=340,250,386,267	href="/dbget-bin/www_bget?K10909"	title="K10909 (luxQ)" />
+<area shape=rect	coords=531,477,577,494	href="/dbget-bin/www_bget?K10918"	title="K10918 (aphB)" />
+<area shape=rect	coords=690,682,736,699	href="/dbget-bin/www_bget?K10928"	title="K10928 (ctxA)" />
+<area shape=rect	coords=690,699,736,716	href="/dbget-bin/www_bget?K10929"	title="K10929 (ctxB)" />
+<area shape=rect	coords=690,536,736,553	href="/dbget-bin/www_bget?K10930"	title="K10930 (tcpA)" />
+<area shape=rect	coords=239,646,285,663	href="/dbget-bin/www_bget?K08720"	title="K08720 (ompU)" />
+<area shape=rect	coords=617,176,663,193	href="/dbget-bin/www_bget?K10942"	title="K10942 (flrB, fleS)" />
+<area shape=rect	coords=690,425,736,442	href="/dbget-bin/www_bget?K10924"	title="K10924 (mshA)" />
+<area shape=rect	coords=525,537,571,554	href="/dbget-bin/www_bget?K10923"	title="K10923 (tcpN, toxT)" />
+<area shape=rect	coords=741,381,787,398	href="/dbget-bin/www_bget?K08604"	title="K08604 (E3.4.24.25)" />
+<area shape=rect	coords=741,576,787,593	href="/dbget-bin/www_bget?K10935"	title="K10935 (tcpF)" />
+<area shape=rect	coords=690,445,736,462	href="/dbget-bin/www_bget?K10926"	title="K10926 (mshC)" />
+<area shape=rect	coords=340,474,386,491	href="/dbget-bin/www_bget?K05851"	title="K05851 (E4.6.1.1A, cyaA)" />
+<area shape=rect	coords=663,271,709,288	href="/dbget-bin/www_bget?K02405"	title="K02405 (fliA)" />
+<area shape=rect	coords=741,637,787,654	href="/dbget-bin/www_bget?K10937"	title="K10937 (acfB)" />
+<area shape=rect	coords=340,513,386,530	href="/dbget-bin/www_bget?K10919"	title="K10919 (tcpH)" />
+<area shape=rect	coords=690,576,736,593	href="/dbget-bin/www_bget?K10934"	title="K10934 (tcpE)" />
+<area shape=rect	coords=741,445,787,462	href="/dbget-bin/www_bget?K10927"	title="K10927 (mshD)" />
+<area shape=rect	coords=690,556,736,573	href="/dbget-bin/www_bget?K10932"	title="K10932 (tcpC)" />
+<area shape=rect	coords=239,587,285,604	href="/dbget-bin/www_bget?K10940"	title="K10940 (ompT)" />
+<area shape=rect	coords=340,423,386,440	href="/dbget-bin/www_bget?K10914"	title="K10914 (crp)" />
+<area shape=rect	coords=690,637,736,654	href="/dbget-bin/www_bget?K10936"	title="K10936 (acfA)" />
+<area shape=rect	coords=741,657,787,674	href="/dbget-bin/www_bget?K10939"	title="K10939 (acfD)" />
+<area shape=rect	coords=741,425,787,442	href="/dbget-bin/www_bget?K10925"	title="K10925 (mshB)" />
+<area shape=rect	coords=523,382,569,399	href="/dbget-bin/www_bget?K03087"	title="K03087 (SIG2, rpoS)" />
+<area shape=rect	coords=741,556,787,573	href="/dbget-bin/www_bget?K10933"	title="K10933 (tcpD)" />
+<area shape=rect	coords=690,657,736,674	href="/dbget-bin/www_bget?K10938"	title="K10938 (acfC)" />
+<area shape=rect	coords=741,536,787,553	href="/dbget-bin/www_bget?K10931"	title="K10931 (tcpB)" />
+<area shape=rect	coords=531,460,577,477	href="/dbget-bin/www_bget?K10917"	title="K10917 (aphA)" />
+<area shape=rect	coords=340,560,386,577	href="/dbget-bin/www_bget?K10921"	title="K10921 (toxR)" />
+<area shape=rect	coords=420,294,466,311	href="/dbget-bin/www_bget?K10911"	title="K10911 (luxU)" />
+<area shape=rect	coords=340,577,386,594	href="/dbget-bin/www_bget?K10922"	title="K10922 (toxS)" />
+<area shape=rect	coords=663,221,709,238	href="/dbget-bin/www_bget?K10943"	title="K10943 (flrC, fleR)" />
+<area shape=rect	coords=340,530,386,547	href="/dbget-bin/www_bget?K10920"	title="K10920 (tcpP)" />
+<area shape=rect	coords=340,333,386,350	href="/dbget-bin/www_bget?K10916"	title="K10916 (cqsS, luxN)" />
+<area shape=rect	coords=401,211,447,228	href="/dbget-bin/www_bget?K07173"	title="K07173 (luxS)" />
+<area shape=rect	coords=833,711,984,737	href="/kegg-bin/show_pathway?map05110"	title="map05110" />
+<area shape=rect	coords=686,602,837,628	href="/kegg-bin/show_pathway?map03090"	title="map03090" />
+<area shape=rect	coords=891,143,1018,169	href="/kegg-bin/show_pathway?map02030"	title="map02030" />
+<area shape=rect	coords=891,181,1018,207	href="/kegg-bin/show_pathway?map02040"	title="map02040" />
+<area shape=rect	coords=40,45,347,71	href="/dbget-bin/www_bget?map05111"	title="map05111" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

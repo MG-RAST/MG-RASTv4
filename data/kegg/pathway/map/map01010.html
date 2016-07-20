@@ -1,0 +1,180 @@
+<html>
+<!---
+ENTRY       map01010
+DEFINITION  Overview of biosynthetic pathways - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Overview of biosynthetic pathways - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Overview of biosynthetic pathways - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=01010&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map01010">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 01010 map" -->
+</select>
+<input type="hidden" name="mapno" value="01010" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map01010" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map01010" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map01010.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1019,54,1111,89	href="/kegg-bin/show_pathway?@map00500/C00089/C00029/C00760/C00103/C00718/C00369"	title="PATH:map00500(C00089, C00029 (UDP-glucose), C00760 (Cellulose), C00103 (D-Glucose 1-phosphate), C00718 (Amylose), C00369)" />
+<area shape=rect	coords=759,194,921,227	href="/kegg-bin/show_pathway?@map00520/C00029/C00103"	title="PATH:map00520(C00029, C00103)" />
+<area shape=rect	coords=1748,1143,1885,1178	href="/kegg-bin/show_pathway?@map00150/C00535/C00951/C05138/C01227/C04295/C01176/C00280/C05294/C05295"	title="PATH:map00150(C00535, C00951 (Estradiol-17beta), C05138 (17alpha-Hydroxypregnenolone), C01227 (3beta-Hydroxyandrost-5-en-17-one), C04295 (Androst-5-ene-3beta,17beta-diol), C01176 (17alpha-Hydroxyprogesterone), C00280 (Androst-4-ene-3,17-dione), C05294 (19-Hydroxytestosterone), C05295)" />
+<area shape=rect	coords=1598,1290,1783,1325	href="/kegg-bin/show_pathway?@map00140/C00735/C01780/C00410/C01953/C00187/C01124/C02140/C03205/C05488/C00762/C01176/C05138"	title="PATH:map00140(C00735, C01780 (Aldosterone), C00410 (Progesterone), C01953 (Pregnenolone), C00187 (Cholesterol), C01124 (18-Hydroxycorticosterone), C02140 (Corticosterone), C03205 (11-Deoxycorticosterone), C05488 (11-Deoxycortisol), C00762 (Cortisone), C01176 (17alpha-Hydroxyprogesterone), C05138)" />
+<area shape=rect	coords=1816,549,1934,584	href="/kegg-bin/show_pathway?@map00100/C00448/C00751/C01054/C01724/C01902/C05441/C05443/C00187"	title="PATH:map00100(C00448, C00751 (Squalene), C01054 ((S)-2,3-Epoxysqualene), C01724 (Lanosterol), C01902 (Cycloartenol), C05441 (Vitamin D2), C05443 (Vitamin D3), C00187)" />
+<area shape=rect	coords=1409,1046,1537,1081	href="/kegg-bin/show_pathway?@map00120/C00187/C00695/C04483/C02528/C03990"	title="PATH:map00120(C00187, C00695 (3alpha,7alpha,12alpha-Trihydroxy-5beta-cholanate), C04483 (3alpha,12alpha-Dihydroxy-5beta-cholanate), C02528 (Chenodeoxycholate), C03990)" />
+<area shape=rect	coords=140,242,349,268	href="/kegg-bin/show_pathway?map00901"	title="map00901" />
+<area shape=rect	coords=1292,47,1438,82	href="/kegg-bin/show_pathway?@map00860/C00032/C00486/C05306/C00430/C00931/C01024/C01051/C03263/C01079/C02191/C01708/C00500/C03516/C04536/C11829/C11830/C11831/C11832/C11850/C02880/C02139/C05799/C05798/C05307/C05797"	title="PATH:map00860(C00032, C00486 (Bilirubin), C05306 (Chlorophyll a), C00430 (5-Aminolevulinate), C00931 (Porphobilinogen), C01024 (Hydroxymethylbilane), C01051 (Uroporphyrinogen III), C03263 (Coproporphyrinogen III), C01079 (Protoporphyrinogen IX), C02191 (Protoporphyrin), C01708 (Hemoglobin), C00500 (Biliverdin), C03516 (Magnesium protoporphyrin), C04536 (Magnesium protoporphyrin monomethyl ester), C11829 (13(1)-Hydroxy-magnesium-protoporphyrin IX 13-monomethyl ester), C11830 (13(1)-Oxo-magnesium-protoporphyrin IX 13-monomethyl ester), C11831 (Divinylprotochlorophyllide), C11832 (Divinyl chlorophyllide a), C11850 (Divinylchlorophyll a), C02880 (Protochlorophyllide), C02139 (Chlorophyllide), C05799 (Bacterio-chlorophylls), C05798 (Bacterio-pheophytins), C05307 (Chlorophyll b), C05797)" />
+<area shape=rect	coords=1204,419,1286,454	href="/kegg-bin/show_pathway?map00904"	title="map00904" />
+<area shape=rect	coords=640,936,719,971	href="/kegg-bin/show_pathway?@map00020/C00024/C00036/C00158/C00417/C00311/C00026/C00091/C00042/C00122/C00149"	title="PATH:map00020(C00024, C00036 (Oxaloacetate), C00158 (Citrate), C00417 (cis-Aconitate), C00311 (Isocitrate), C00026 (2-Oxoglutarate), C00091 (Succinyl-CoA), C00042 (Succinate), C00122 (Fumarate), C00149)" />
+<area shape=rect	coords=1172,896,1325,931	href="/kegg-bin/show_pathway?map01056"	title="map01056" />
+<area shape=rect	coords=1142,569,1259,604	href="/kegg-bin/show_pathway?@map00902/C01500/C17621/C17622/C06069/C06070/C06071/C01433/C01852/C11636/C01512/C01957"	title="PATH:map00902(C01500, C17621 (10-Hydroxygeraniol), C17622 (10-Oxogeranial), C06069 (Iridodial), C06070 (Iridotrial), C06071 (Deoxyloganin), C01433 (Loganin), C01852 (Secologanin), C11636 (7-Deoxyloganate), C01512 (Loganate), C01957)" />
+<area shape=rect	coords=1118,542,1278,568	href="/kegg-bin/show_pathway?map00902"	title="map00902" />
+<area shape=rect	coords=789,518,911,553	href="/kegg-bin/show_pathway?@map00900/C00129/C11811/C11453/C11436/C11435/C11434/C11437/C00118/C00022"	title="PATH:map00900(C00129, C11811 (1-Hydroxy-2-methyl-2-butenyl 4-diphosphate), C11453 (2-C-Methyl-D-erythritol 2,4-cyclodiphosphate), C11436 (2-Phospho-4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol), C11435 (4-(Cytidine 5'-diphospho)-2-C-methyl-D-erythritol), C11434 (2-C-Methyl-D-erythritol 4-phosphate), C11437 (1-Deoxy-D-xylulose 5-phosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00022)" />
+<area shape=rect	coords=449,469,558,504	href="/kegg-bin/show_pathway?@map00400/C00279/C00074/C04691/C00944/C02637/C00493/C03175/C01269/C00251/C00108/C04302/C01302/C03506/C00078/C00254/C00166/C00079/C01179/C00082"	title="PATH:map00400(C00279, C00074 (Phosphoenolpyruvate), C04691 (2-Dehydro-3-deoxy-D-arabino-heptonate 7-phosphate), C00944 (3-Dehydroquinate), C02637 (3-Dehydroshikimate), C00493 (Shikimate), C03175 (Shikimate 3-phosphate), C01269 (5-O-(1-Carboxyvinyl)-3-phosphoshikimate), C00251 (Chorismate), C00108 (Anthranilate), C04302 (N-(5-Phospho-D-ribosyl)anthranilate), C01302 (1-(2-Carboxyphenylamino)-1-deoxy-D-ribulose 5-phosphate), C03506 (Indoleglycerol phosphate), C00078 (L-Tryptophan), C00254 (Prephenate), C00166 (Phenylpyruvate), C00079 (L-Phenylalanine), C01179 (3-(4-Hydroxyphenyl)pyruvate), C00082)" />
+<area shape=rect	coords=493,194,599,229	href="/kegg-bin/show_pathway?@map00030/C00085/C00279/C00118/C00668/C01172/C01236/C00345/C00199/C00231/C05382/C00117"	title="PATH:map00030(C00085, C00279 (D-Erythrose 4-phosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00668 (alpha-D-Glucose 6-phosphate), C01172 (beta-D-Glucose 6-phosphate), C01236 (D-Glucono-1,5-lactone 6-phosphate), C00345 (6-Phospho-D-gluconate), C00199 (D-Ribulose 5-phosphate), C00231 (D-Xylulose 5-phosphate), C05382 (Sedoheptulose 7-phosphate), C00117)" />
+<area shape=rect	coords=40,45,353,71	href="/dbget-bin/www_bget?map01010"	title="map01010" />
+<area shape=rect	coords=580,48,654,83	href="/kegg-bin/show_pathway?@map00010/C00267/C00668/C05345/C05378/C00118/C00111/C00236/C00197/C01159/C00631/C00074/C00022"	title="PATH:map00010(C00267, C00668 (alpha-D-Glucose 6-phosphate), C05345 (beta-D-Fructose 6-phosphate), C05378 (beta-D-Fructose 1,6-bisphosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00111 (Glycerone phosphate), C00236 (3-Phospho-D-glyceroyl phosphate), C00197 (3-Phospho-D-glycerate), C01159 (2,3-Bisphospho-D-glycerate), C00631 (2-Phospho-D-glycerate), C00074 (Phosphoenolpyruvate), C00022)" />
+<area shape=rect	coords=1483,775,1564,821	href="/kegg-bin/show_pathway?map00100"	title="map00100" />
+<area shape=rect	coords=1816,376,2001,411	href="/kegg-bin/show_pathway?@map00900/C00235/C00129/C00341/C00448/C00353/C04217"	title="PATH:map00900(C00235, C00129 (Isopentenyl diphosphate), C00341 (Geranyl diphosphate), C00448 (trans,trans-Farnesyl diphosphate), C00353 (Geranylgeranyl diphosphate), C04217)" />
+<area shape=rect	coords=929,632,1049,667	href="/kegg-bin/show_pathway?@map00900/C00129/C01143/C01107/C00418/C00356/C00024/C00332"	title="PATH:map00900(C00129, C01143 ((R)-5-Diphosphomevalonate), C01107 ((R)-5-Phosphomevalonate), C00418 ((R)-Mevalonate), C00356 ((S)-3-Hydroxy-3-methylglutaryl-CoA), C00024 (Acetyl-CoA), C00332)" />
+<area shape=rect	coords=380,1224,450,1259	href="/kegg-bin/show_pathway?@map00330/C00014/C00169/C00049/C00327/C03406/C00122/C00062/C00077/C00086"	title="PATH:map00330(C00014, C00169 (Carbamoyl phosphate), C00049 (L-Aspartate), C00327 (L-Citrulline), C03406 (N-(L-Arginino)succinate), C00122 (Fumarate), C00062 (L-Arginine), C00077 (L-Ornithine), C00086)" />
+<area shape=rect	coords=75,937,206,963	href="/kegg-bin/show_pathway?map00960"	title="map00960" />
+<area shape=rect	coords=75,909,206,935	href="/kegg-bin/show_pathway?map00950"	title="map00950" />
+<area shape=rect	coords=1717,135,1857,170	href="/kegg-bin/show_pathway?@map00100/C03427/C05413/C05414/C05430/C05431/C05432/C05434/C05435/C05433/C08592/C02094/C06098/C08614"	title="PATH:map00100(C03427, C05413 (Phytoene), C05414 (Phytofluene), C05430 (zeta-Carotene), C05431 (Neurosporene), C05432 (Lycopene), C05434 (beta-Zeacarotene), C05435 (gamma-Carotene), C05433 (alpha-Carotene), C08592 (Echinenone), C02094 (beta-Carotene), C06098 (Zeaxanthin), C08614)" />
+<area shape=rect	coords=945,1323,1173,1358	href="/kegg-bin/show_pathway?@map00590/C02165/C00219/C05956/C02198/C00909/C00427/C05356"	title="PATH:map00590(C02165, C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid), C05956 (Prostaglandin G2), C02198 (Thromboxane A2), C00909 (Leukotriene A4), C00427 (Prostaglandin H2), C05356)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

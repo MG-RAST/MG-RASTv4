@@ -1,0 +1,264 @@
+<html>
+<!---
+ENTRY       map00440
+DEFINITION  Phosphonate and phosphinate metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Phosphonate and phosphinate metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Phosphonate and phosphinate metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00440&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00440">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Natural products containing carbon-phosphorous bonds, so-called C-P compounds, are derivatives of phosphonate and phosphinate with substitution of alkyl group for hydrogen of phosphorus-hydrogen bonds. C-P compounds have been found in many organisms, but only protists and bacteria, mostly Actinobacteria, have biosynthetic capacity. A common reaction in the biosynthetic pathway is C-P bond forming reaction from phosphoenolpyruvate (PEP) to phosphonopyruvate (PnPy) catalyzed by PEP phosphomutase. 2-Aminoethylphosphonate (AEP) is the most abundant C-P compound in the natural world. AEP derivatives include phosphonoprotein, phosphonoglycan, and phosphonolipid. Other known C-P compounds are bioactive substances used in medicine (antibiotics) and agriculture (herbicide) such as fosfomycin, FR-33289, rhizocticin, and bialaphos.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00440 map" -->
+</select>
+<input type="hidden" name="mapno" value="00440" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00440" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00440" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00440.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=293,146,4	href="/dbget-bin/www_bget?C00074"	title="C00074 (Phosphoenolpyruvate)" />
+<area shape=circle	coords=293,235,4	href="/dbget-bin/www_bget?C02798"	title="C02798 (3-Phosphonopyruvate)" />
+<area shape=circle	coords=203,235,4	href="/dbget-bin/www_bget?C05672"	title="C05672 (2-Amino-3-phosphonopropanoate)" />
+<area shape=circle	coords=387,235,4	href="/dbget-bin/www_bget?C17941"	title="C17941 (2-Oxo-4-phosphonobutanoate)" />
+<area shape=circle	coords=481,235,4	href="/dbget-bin/www_bget?C17942"	title="C17942 (FR 900098)" />
+<area shape=circle	coords=293,343,4	href="/dbget-bin/www_bget?C03167"	title="C03167 (Phosphonoacetaldehyde)" />
+<area shape=circle	coords=392,343,4	href="/dbget-bin/www_bget?C03557"	title="C03557 (2-Aminoethylphosphonate)" />
+<area shape=circle	coords=207,409,4	href="/dbget-bin/www_bget?C06452"	title="C06452 (2-Hydroxypropylphosphonate)" />
+<area shape=circle	coords=118,409,4	href="/dbget-bin/www_bget?C06454"	title="C06454 (Phosphonomycin)" />
+<area shape=circle	coords=206,343,4	href="/dbget-bin/www_bget?C05682"	title="C05682 (Phosphonoacetate)" />
+<area shape=circle	coords=117,343,4	href="/dbget-bin/www_bget?C00033"	title="C00033 (Acetate)" />
+<area shape=circle	coords=388,269,4	href="/dbget-bin/www_bget?C17940+C17944+C17960+C17961"	title="C17940 (Rhizocticin B), C17944 (Rhizocticin A), C17960 (Rhizocticin C), C17961 (Rhizocticin D)" />
+<area shape=circle	coords=293,474,4	href="/dbget-bin/www_bget?C06455"	title="C06455 (Hydroxymethylphosphonate)" />
+<area shape=circle	coords=293,537,4	href="/dbget-bin/www_bget?C17943"	title="C17943 (Formylphosphonate)" />
+<area shape=circle	coords=482,466,4	href="/dbget-bin/www_bget?C05679"	title="C05679 (N-Monomethyl-2-aminoethylphosphonate)" />
+<area shape=circle	coords=482,343,4	href="/dbget-bin/www_bget?C05683"	title="C05683 (2-Aminoethylphosphocholate)" />
+<area shape=circle	coords=482,284,4	href="/dbget-bin/www_bget?C00189"	title="C00189 (Ethanolamine)" />
+<area shape=circle	coords=482,403,4	href="/dbget-bin/www_bget?C05678"	title="C05678 (1-Hydroxy-2-aminoethylphosphonate)" />
+<area shape=circle	coords=482,533,4	href="/dbget-bin/www_bget?C05673"	title="C05673 (CMP-2-aminoethylphosphonate)" />
+<area shape=circle	coords=568,403,4	href="/dbget-bin/www_bget?C05677"	title="C05677 (Lipophosphonoglycan)" />
+<area shape=circle	coords=576,569,4	href="/dbget-bin/www_bget?C05681"	title="C05681 (Ceramide 2-aminoethylphosphonate)" />
+<area shape=circle	coords=567,466,4	href="/dbget-bin/www_bget?C05680"	title="C05680 (N-Dimethyl-2-aminoethylphosphonate)" />
+<area shape=circle	coords=652,466,4	href="/dbget-bin/www_bget?C06459"	title="C06459 (N-Trimethyl-2-aminoethylphosphonate)" />
+<area shape=circle	coords=737,533,4	href="/dbget-bin/www_bget?C05676"	title="C05676 (Diacylglyceryl-N-trimethyl-2-aminoethylphosphonate)" />
+<area shape=circle	coords=737,466,4	href="/dbget-bin/www_bget?C05674"	title="C05674 (CMP-N-trimethyl-2-aminoethylphosphonate)" />
+<area shape=circle	coords=652,534,4	href="/dbget-bin/www_bget?C05675"	title="C05675 (Diacylglyceryl-2-aminoethylphosphonate)" />
+<area shape=circle	coords=293,602,4	href="/dbget-bin/www_bget?C06456"	title="C06456 (Phosphonoformate)" />
+<area shape=circle	coords=293,667,4	href="/dbget-bin/www_bget?C17945"	title="C17945 (Phosphonoformyl-CMP)" />
+<area shape=circle	coords=293,732,4	href="/dbget-bin/www_bget?C06367"	title="C06367 (1-Carboxyvinyl carboxyphosphonate)" />
+<area shape=circle	coords=373,732,4	href="/dbget-bin/www_bget?C17946"	title="C17946 (Carboxyphosphonopyruvate)" />
+<area shape=circle	coords=454,732,4	href="/dbget-bin/www_bget?C06368"	title="C06368 (3-(Hydrohydroxyphosphoryl)pyruvate)" />
+<area shape=circle	coords=534,732,4	href="/dbget-bin/www_bget?C17947"	title="C17947 (2-Phosphinomethylmalate)" />
+<area shape=circle	coords=608,732,4	href="/dbget-bin/www_bget?C17948"	title="C17948 (Deamino-alpha-keto-demethylphosphinothricin)" />
+<area shape=circle	coords=767,732,4	href="/dbget-bin/www_bget?C17949"	title="C17949 (N-Acetyldemethylphosphinothricin)" />
+<area shape=circle	coords=888,732,4	href="/dbget-bin/www_bget?C17950"	title="C17950 (N-Acetyldemethylphosphinothricin tripeptide)" />
+<area shape=circle	coords=767,826,4	href="/dbget-bin/www_bget?C17952"	title="C17952 (N-Acetylphosphinothricin)" />
+<area shape=circle	coords=888,825,4	href="/dbget-bin/www_bget?C17951"	title="C17951 (N-Acetylbialaphos)" />
+<area shape=circle	coords=767,891,4	href="/dbget-bin/www_bget?C05042"	title="C05042 (Phosphinothricin)" />
+<area shape=circle	coords=888,889,4	href="/dbget-bin/www_bget?C06457"	title="C06457 (Bialaphos)" />
+<area shape=circle	coords=687,732,4	href="/dbget-bin/www_bget?C17962"	title="C17962 (Demethylphosphinothricin)" />
+<area shape=circle	coords=116,284,4	href="/dbget-bin/www_bget?C00084"	title="C00084 (Acetaldehyde)" />
+<area shape=circle	coords=293,409,4	href="/dbget-bin/www_bget?C06451"	title="C06451 (2-Hydroxyethylphosphonate)" />
+<area shape=poly	coords=289,341,210,341,210,345,289,345	href="/dbget-bin/www_bget?R04251"	title="R04251" />
+<area shape=poly	coords=210,343,218,339,218,347	href="/dbget-bin/www_bget?R04251"	title="R04251" />
+<area shape=poly	coords=297,337,297,278,301,278,301,337	href="/dbget-bin/www_bget?R08883+R08884+R08885+R08886"	title="R08883, R08884, R08885, R08886" />
+<area shape=poly	coords=297,278,297,276,298,274,299,272,300,271,301,270,302,269,304,268,306,267,308,267,308,271,307,271,306,272,305,272,304,273,303,274,302,275,302,276,301,277,301,278	href="/dbget-bin/www_bget?R08883+R08884+R08885+R08886"	title="R08883, R08884, R08885, R08886" />
+<area shape=poly	coords=308,267,382,267,382,271,308,271	href="/dbget-bin/www_bget?R08883+R08884+R08885+R08886"	title="R08883, R08884, R08885, R08886" />
+<area shape=poly	coords=382,269,374,273,374,265	href="/dbget-bin/www_bget?R08883+R08884+R08885+R08886"	title="R08883, R08884, R08885, R08886" />
+<area shape=poly	coords=291,671,291,726,295,726,295,671	href="/dbget-bin/www_bget?R08887"	title="R08887" />
+<area shape=poly	coords=293,726,289,718,297,718	href="/dbget-bin/www_bget?R08887"	title="R08887" />
+<area shape=rect	coords=270,181,316,198	href="/dbget-bin/www_bget?K01841+5.4.2.9+R00661"	title="K01841 (E5.4.2.9), 5.4.2.9, R00661" />
+<area shape=rect	coords=270,246,316,263	href="/dbget-bin/www_bget?K09459+4.1.1.82+R04053"	title="K09459 (E4.1.1.82), 4.1.1.82, R04053" />
+<area shape=rect	coords=143,334,189,351	href="/dbget-bin/www_bget?K06193+3.11.1.2+R00318"	title="K06193 (phnA), 3.11.1.2, R00318" />
+<area shape=rect	coords=143,275,189,292	href="/dbget-bin/www_bget?K05306+3.11.1.1+R00747"	title="K05306 (phnX), 3.11.1.1, R00747" />
+<area shape=rect	coords=225,400,271,417	href="/dbget-bin/www_bget?K12902+R08862"	title="K12902 (fom3), R08862" />
+<area shape=rect	coords=142,401,188,418	href="/dbget-bin/www_bget?K12903+R08863"	title="K12903 (fom4), R08863" />
+<area shape=rect	coords=746,771,792,788	href="/dbget-bin/www_bget?K12914+R08873"	title="K12914 (phpK), R08873" />
+<area shape=rect	coords=745,845,791,862	href="/dbget-bin/www_bget?K12915+R08874"	title="K12915 (dea), R08874" />
+<area shape=rect	coords=271,490,317,507	href="/dbget-bin/www_bget?K12906+R08865"	title="K12906 (phpE), R08865" />
+<area shape=rect	coords=270,555,316,572	href="/dbget-bin/www_bget?K12907+R08866"	title="K12907 (phpJ), R08866" />
+<area shape=rect	coords=272,621,318,638	href="/dbget-bin/www_bget?K12908+R08867"	title="K12908 (phpF), R08867" />
+<area shape=rect	coords=407,276,453,293	href="/dbget-bin/www_bget?4.99.1.-+R04248"	title="4.99.1.-, 4.99.1.-, R04248" />
+<area shape=poly	coords=397,341,476,341,476,345,397,345	href="/dbget-bin/www_bget?R04252"	title="R04252" />
+<area shape=poly	coords=476,343,468,347,468,340	href="/dbget-bin/www_bget?R04252"	title="R04252" />
+<area shape=poly	coords=390,348,390,457,394,457,394,348	href="/dbget-bin/www_bget?R04250"	title="R04250" />
+<area shape=poly	coords=394,457,394,458,395,459,395,460,396,461,397,462,398,463,399,463,400,464,401,464,401,468,399,468,397,467,395,467,394,466,392,464,391,463,391,461,390,459,390,457	href="/dbget-bin/www_bget?R04250"	title="R04250" />
+<area shape=poly	coords=401,464,476,464,476,468,401,468	href="/dbget-bin/www_bget?R04250"	title="R04250" />
+<area shape=poly	coords=476,465,468,469,468,462	href="/dbget-bin/www_bget?R04250"	title="R04250" />
+<area shape=rect	coords=664,458,710,475	href="/dbget-bin/www_bget?K00968+2.7.7.15+R02590"	title="K00968 (E2.7.7.15, PCYT1), 2.7.7.15, R02590" />
+<area shape=rect	coords=500,525,546,542	href="/dbget-bin/www_bget?K00993+2.7.8.1+R04920"	title="K00993 (E2.7.8.1), 2.7.8.1, R04920" />
+<area shape=rect	coords=714,487,760,504	href="/dbget-bin/www_bget?K00994+2.7.8.2+R04922"	title="K00994 (CHPT1, CPT1), 2.7.8.2, R04922" />
+<area shape=rect	coords=244,361,290,378	href="/dbget-bin/www_bget?K12901+R08861"	title="K12901 (fomC), R08861" />
+<area shape=rect	coords=305,723,351,740	href="/dbget-bin/www_bget?K12909+R08868"	title="K12909 (phpI), R08868" />
+<area shape=rect	coords=386,723,432,740	href="/dbget-bin/www_bget?K12909+R08869"	title="K12909 (phpI), R08869" />
+<area shape=rect	coords=465,724,511,741	href="/dbget-bin/www_bget?K12910+R08870"	title="K12910 (pms), R08870" />
+<area shape=poly	coords=612,730,682,730,682,734,612,734	href="/dbget-bin/www_bget?R08877"	title="R08877" />
+<area shape=poly	coords=682,732,674,736,674,729	href="/dbget-bin/www_bget?R08877"	title="R08877" />
+<area shape=rect	coords=701,723,747,740	href="/dbget-bin/www_bget?K03823+R08871"	title="K03823 (pat), R08871" />
+<area shape=rect	coords=800,724,846,741	href="/dbget-bin/www_bget?K12912+R08872"	title="K12912 (phsB), R08872" />
+<area shape=rect	coords=800,741,846,758	href="/dbget-bin/www_bget?K12913+R08872"	title="K12913 (phsC), R08872" />
+<area shape=rect	coords=800,707,846,724	href="/dbget-bin/www_bget?K12911+R08872"	title="K12911 (phsA), R08872" />
+<area shape=rect	coords=866,771,912,788	href="/dbget-bin/www_bget?K12914+R08875"	title="K12914 (phpK), R08875" />
+<area shape=rect	coords=865,845,911,862	href="/dbget-bin/www_bget?K12915+R08876"	title="K12915 (dea), R08876" />
+<area shape=rect	coords=296,361,342,378	href="/dbget-bin/www_bget?K12904+R08861"	title="K12904 (phpC), R08861" />
+<area shape=rect	coords=229,226,275,243	href="/dbget-bin/www_bget?2.6.1.-+R04051"	title="2.6.1.-, 2.6.1.-, R04051" />
+<area shape=rect	coords=406,395,452,412	href="/dbget-bin/www_bget?K00119+1.1.99.-+R04249"	title="K00119 (E1.1.99.-), 1.1.99.-, R04249" />
+<area shape=poly	coords=487,464,562,464,562,468,487,468	href="/dbget-bin/www_bget?R04925"	title="R04925" />
+<area shape=poly	coords=562,466,554,470,554,463	href="/dbget-bin/www_bget?R04925"	title="R04925" />
+<area shape=poly	coords=572,464,647,464,647,468,572,468	href="/dbget-bin/www_bget?R02592"	title="R02592" />
+<area shape=poly	coords=647,466,639,470,639,463	href="/dbget-bin/www_bget?R02592"	title="R02592" />
+<area shape=poly	coords=656,531,731,531,731,535,656,535	href="/dbget-bin/www_bget?R04923"	title="R04923" />
+<area shape=poly	coords=731,533,723,537,723,530	href="/dbget-bin/www_bget?R04923"	title="R04923" />
+<area shape=poly	coords=487,401,563,401,563,405,487,405	href="/dbget-bin/www_bget?R04924"	title="R04924" />
+<area shape=poly	coords=563,403,555,407,555,400	href="/dbget-bin/www_bget?R04924"	title="R04924" />
+<area shape=poly	coords=298,233,381,233,381,237,298,237	href="/dbget-bin/www_bget?R08881"	title="R08881" />
+<area shape=poly	coords=381,235,373,239,373,232	href="/dbget-bin/www_bget?R08881"	title="R08881" />
+<area shape=poly	coords=392,233,475,233,475,237,392,237	href="/dbget-bin/www_bget?R08882"	title="R08882" />
+<area shape=poly	coords=475,235,467,239,467,232	href="/dbget-bin/www_bget?R08882"	title="R08882" />
+<area shape=poly	coords=537,730,603,730,603,734,537,734	href="/dbget-bin/www_bget?R08888"	title="R08888" />
+<area shape=poly	coords=603,732,595,736,595,729	href="/dbget-bin/www_bget?R08888"	title="R08888" />
+<area shape=rect	coords=501,561,547,578	href="/dbget-bin/www_bget?K01005+2.7.8.-+R04921"	title="K01005 (E2.7.8.-), 2.7.8.-, R04921" />
+<area shape=rect	coords=319,335,365,352	href="/dbget-bin/www_bget?K03430+2.6.1.37+R04152"	title="K03430 (phnW), 2.6.1.37, R04152" />
+<area shape=rect	coords=271,423,317,440	href="/dbget-bin/www_bget?K12905+R08864"	title="K12905 (phpD), R08864" />
+<area shape=rect	coords=407,524,453,541	href="/dbget-bin/www_bget?K00967+2.7.7.14+R04247"	title="K00967 (E2.7.7.14, PCYT2), 2.7.7.14, R04247" />
+<area shape=rect	coords=40,45,397,70	href="/dbget-bin/www_bget?map00440"	title="map00440" />
+<area shape=rect	coords=70,133,163,159	href="/kegg-bin/show_pathway?map00010"	title="map00010" />
+<area shape=rect	coords=435,621,528,656	href="/kegg-bin/show_pathway?map00600"	title="map00600" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,224 @@
+<html>
+<!---
+ENTRY       map00909
+DEFINITION  Sesquiterpenoid biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Sesquiterpenoid biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Sesquiterpenoid biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00909&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00909">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Many sesquiterpenoids (C15 terpenoids) have been isolated from fungi, marine organisms, and Streptomyces species, and a large number are also produced by flowering plants. They are derive from farnesyl pyrophosphate (FPP) and can be cyclized to produce about 300 known skeletal structures. Sesquiterpenoid biosynthesis begins with the loss of pyrophosphate from FPP under the action of sesquiterpene synthesis enzymes, generating an allylic cation that is highly susceptible to intramolecular attacks. Cyclization of the farnesyl cation may take place onto either of the remaining double bonds with the result that 6-, 10-, or 11-membered rings may be formed. This map shows a few examples of acyclic and cyclic sesquiterpenoids.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00909 map" -->
+</select>
+<input type="hidden" name="mapno" value="00909" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00909" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00909" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00909.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=743,175,4	href="/dbget-bin/www_bget?C00448"	title="C00448 (trans,trans-Farnesyl diphosphate)" />
+<area shape=circle	coords=340,259,4	href="/dbget-bin/www_bget?C09704"	title="C09704 (Nerolidol)" />
+<area shape=circle	coords=274,259,4	href="/dbget-bin/www_bget?C09665"	title="C09665 (alpha-Farnesene)" />
+<area shape=circle	coords=207,259,4	href="/dbget-bin/www_bget?C09666"	title="C09666 (beta-Farnesene)" />
+<area shape=circle	coords=139,259,4	href="/dbget-bin/www_bget?C01126"	title="C01126 (2-trans,6-trans-Farnesol)" />
+<area shape=circle	coords=139,368,4	href="/dbget-bin/www_bget?C03220"	title="C03220 (2-cis,6-trans-Farnesol)" />
+<area shape=circle	coords=73,368,4	href="/dbget-bin/www_bget?C03461"	title="C03461 (2-trans,6-trans-Farnesal)" />
+<area shape=circle	coords=213,451,4	href="/dbget-bin/www_bget?C09621"	title="C09621 ((-)-alpha-Bisabolol)" />
+<area shape=circle	coords=278,451,4	href="/dbget-bin/www_bget?C01860"	title="C01860 (Trichodiene)" />
+<area shape=circle	coords=342,451,4	href="/dbget-bin/www_bget?C16028"	title="C16028 (Amorpha-4,11-diene)" />
+<area shape=circle	coords=407,451,4	href="/dbget-bin/www_bget?C16269"	title="C16269 ((+)-epi-Isozizaene)" />
+<area shape=circle	coords=521,259,4	href="/dbget-bin/www_bget?C16143"	title="C16143 ((1E,4S,5E,7R)-Germacra-1(10),5-dien-11-ol)" />
+<area shape=circle	coords=485,368,4	href="/dbget-bin/www_bget?C16286"	title="C16286 (Geosmin)" />
+<area shape=circle	coords=743,259,4	href="/dbget-bin/www_bget?C16141"	title="C16141 ((+)-Germacrene A)" />
+<area shape=circle	coords=668,259,4	href="/dbget-bin/www_bget?C09672"	title="C09672 (Germacrene B)" />
+<area shape=circle	coords=594,259,4	href="/dbget-bin/www_bget?C16142"	title="C16142 ((-)-Germacrene D)" />
+<area shape=circle	coords=555,368,4	href="/dbget-bin/www_bget?C02004"	title="C02004 (Aristolochene)" />
+<area shape=circle	coords=629,368,4	href="/dbget-bin/www_bget?C17277"	title="C17277 ((+)-Valencene)" />
+<area shape=circle	coords=778,368,4	href="/dbget-bin/www_bget?C09723"	title="C09723 (beta-Selinene)" />
+<area shape=circle	coords=703,368,4	href="/dbget-bin/www_bget?C12142"	title="C12142 (Vetispiradiene)" />
+<area shape=circle	coords=829,259,4	href="/dbget-bin/www_bget?C06394"	title="C06394 ((+)-delta-Cadinene)" />
+<area shape=circle	coords=829,368,4	href="/dbget-bin/www_bget?C07667"	title="C07667 (Gossypol)" />
+<area shape=circle	coords=1149,259,4	href="/dbget-bin/www_bget?C09684"	title="C09684 (Humulene)" />
+<area shape=circle	coords=1208,367,4	href="/dbget-bin/www_bget?C01841"	title="C01841 (Pentalenene)" />
+<area shape=circle	coords=1081,259,4	href="/dbget-bin/www_bget?C16829"	title="C16829 (gamma-Humulene)" />
+<area shape=circle	coords=998,258,4	href="/dbget-bin/www_bget?C09699"	title="C09699 (Longifolene)" />
+<area shape=circle	coords=912,259,4	href="/dbget-bin/www_bget?C09629"	title="C09629 (beta-Caryophyllene)" />
+<area shape=circle	coords=440,259,4	href="/dbget-bin/www_bget?C06111"	title="C06111 (Nerolidyl diphosphate)" />
+<area shape=circle	coords=555,427,4	href="/dbget-bin/www_bget?C06079"	title="C06079 (PR-toxin)" />
+<area shape=circle	coords=278,507,4	href="/dbget-bin/www_bget?C06080"	title="C06080 (Nivalenol)" />
+<area shape=poly	coords=276,455,276,502,280,502,280,455	href="/dbget-bin/www_bget?R03740"	title="R03740" />
+<area shape=poly	coords=278,502,274,494,282,494	href="/dbget-bin/www_bget?R03740"	title="R03740" />
+<area shape=poly	coords=553,372,553,422,557,422,557,372	href="/dbget-bin/www_bget?R03798"	title="R03798" />
+<area shape=poly	coords=555,422,551,414,559,414	href="/dbget-bin/www_bget?R03798"	title="R03798" />
+<area shape=rect	coords=117,210,163,227	href="/dbget-bin/www_bget?3.1.7.-+R08697"	title="3.1.7.-, 3.1.7.-, R08697" />
+<area shape=rect	coords=184,210,230,227	href="/dbget-bin/www_bget?up:O48935_MENPI +4.2.3.-+R08695"	title="O48935_MENPI , 4.2.3.-, R08695" />
+<area shape=rect	coords=251,210,297,227	href="/dbget-bin/www_bget?up:Q32WI2_MALDO+4.2.3.-+R08696"	title="Q32WI2_MALDO, 4.2.3.-, R08696" />
+<area shape=rect	coords=318,210,363,229	href="/dbget-bin/www_bget?up:B1NA83_ANTMA+4.2.3.-+R08374"	title="B1NA83_ANTMA, 4.2.3.-, R08374" />
+<area shape=rect	coords=117,314,163,331	href="/dbget-bin/www_bget?5.2.1.9+R03265 "	title="5.2.1.9, 5.2.1.9, R03265 " />
+<area shape=rect	coords=50,314,96,331	href="/dbget-bin/www_bget?1.1.1.216+R03264"	title="1.1.1.216, 1.1.1.216, R03264" />
+<area shape=rect	coords=191,400,237,417	href="/dbget-bin/www_bget?up:TPSD1_ABIGR+4.2.3.-+R08370"	title="TPSD1_ABIGR, 4.2.3.-, R08370" />
+<area shape=rect	coords=255,400,301,417	href="/dbget-bin/www_bget?K12249+4.2.3.6+R02306"	title="K12249 (TRI5), 4.2.3.6, R02306" />
+<area shape=rect	coords=320,400,366,417	href="/dbget-bin/www_bget?up:AMS1_ARTAN+4.2.3.24+R07630"	title="AMS1_ARTAN, 4.2.3.24, R07630" />
+<area shape=rect	coords=385,400,431,417	href="/dbget-bin/www_bget?K10156+4.2.3.-+R07830"	title="K10156 (eizS), 4.2.3.-, R07830" />
+<area shape=poly	coords=736,174,449,174,449,178,736,178	href="/dbget-bin/www_bget?R02310"	title="R02310" />
+<area shape=poly	coords=449,174,447,174,445,175,443,175,442,176,440,178,439,179,439,181,438,183,438,185,442,185,442,184,443,183,443,182,444,181,445,180,446,179,447,179,448,178,449,178	href="/dbget-bin/www_bget?R02310"	title="R02310" />
+<area shape=poly	coords=438,185,438,254,442,254,442,185	href="/dbget-bin/www_bget?R02310"	title="R02310" />
+<area shape=poly	coords=440,254,436,246,444,246	href="/dbget-bin/www_bget?R02310"	title="R02310" />
+<area shape=rect	coords=498,210,544,227	href="/dbget-bin/www_bget?K10187+R07647"	title="K10187 (E4.2.3.22), R07647" />
+<area shape=rect	coords=1126,210,1172,227	href="/dbget-bin/www_bget?4.2.3.-+R08373"	title="4.2.3.-, 4.2.3.-, R08373" />
+<area shape=rect	coords=720,210,766,227	href="/dbget-bin/www_bget?up:Q1PDD2_ARTAN+4.2.3.23+R07649"	title="Q1PDD2_ARTAN, 4.2.3.23, R07649" />
+<area shape=rect	coords=607,328,653,345	href="/dbget-bin/www_bget?up:Q71MJ3_CITSI+4.2.3.-+R08691"	title="Q71MJ3_CITSI, 4.2.3.-, R08691" />
+<area shape=rect	coords=533,328,579,345	href="/dbget-bin/www_bget?up:ARIS_PENRO+4.2.3.9+R02307"	title="ARIS_PENRO, 4.2.3.9, R02307" />
+<area shape=rect	coords=646,210,692,227	href="/dbget-bin/www_bget?up:B4YYR2_9ROSI+4.2.3.-+R08545"	title="B4YYR2_9ROSI, 4.2.3.-, R08545" />
+<area shape=rect	coords=572,210,618,227	href="/dbget-bin/www_bget?K10187+4.2.3.22+R07648"	title="K10187 (E4.2.3.22), 4.2.3.22, R07648" />
+<area shape=rect	coords=681,328,727,345	href="/dbget-bin/www_bget?up:Q39978_HYOMU+4.2.3.21+R06523"	title="Q39978_HYOMU, 4.2.3.21, R06523" />
+<area shape=poly	coords=827,262,827,363,831,363,831,262	href="/dbget-bin/www_bget?R08371"	title="R08371" />
+<area shape=poly	coords=829,363,825,355,833,355	href="/dbget-bin/www_bget?R08371"	title="R08371" />
+<area shape=rect	coords=755,328,801,345	href="/dbget-bin/www_bget?4.2.3.-+R08546"	title="4.2.3.-, 4.2.3.-, R08546" />
+<area shape=rect	coords=807,210,853,227	href="/dbget-bin/www_bget?up:DCS1_GOSHI+4.2.3.13+R02311"	title="DCS1_GOSHI, 4.2.3.13, R02311" />
+<area shape=rect	coords=1058,210,1104,227	href="/dbget-bin/www_bget?up:TPSD5_ABIGR+4.2.3.-+R08540"	title="TPSD5_ABIGR, 4.2.3.-, R08540" />
+<area shape=rect	coords=1185,314,1231,331	href="/dbget-bin/www_bget?K12250+4.2.3.7+R02305"	title="K12250 (E4.2.3.7), 4.2.3.7, R02305" />
+<area shape=rect	coords=976,210,1022,227	href="/dbget-bin/www_bget?up:Q675L0_PICAB+4.2.3.-+R08542"	title="Q675L0_PICAB, 4.2.3.-, R08542" />
+<area shape=rect	coords=462,314,508,331	href="/dbget-bin/www_bget?4.2.3.-+R08543"	title="4.2.3.-, 4.2.3.-, R08543" />
+<area shape=rect	coords=890,210,936,227	href="/dbget-bin/www_bget?up:Q8SA63_ARTAN+4.2.3.-+R08541"	title="Q8SA63_ARTAN, 4.2.3.-, R08541" />
+<area shape=rect	coords=40,45,296,71	href="/dbget-bin/www_bget?map00909"	title="map00909" />
+<area shape=rect	coords=684,69,804,104	href="/kegg-bin/show_pathway?map00900"	title="map00900" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

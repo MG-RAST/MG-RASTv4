@@ -1,0 +1,220 @@
+<html>
+<!---
+ENTRY       map04610
+DEFINITION  Complement and coagulation cascades - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Complement and coagulation cascades - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Complement and coagulation cascades - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04610&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04610">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Blood coagulation is a series of coordinated and calcium-dependent proenzyme-to-serine protease conversions likely to be localized on the surfaces of activated cells in vivo. It culminates in the formation of thrombin, the enzyme responsible for the conversion of soluble fibrinogen to the insoluble fibrin clot. <br />&nbsp;&nbsp; The kallikrein-kinin system is an endogenous metabolic cascade, triggering of which results in the release of vasoactive kinins (bradykinin-related peptides). Kinin peptides are implicated in many physiological and pathological processes including the regulation of blood pressure and sodium homeostasis, inflammatory processes, and the cardioprotective effects of preconditioning.<br />&nbsp;&nbsp; Complement is a system of plasma proteins that is activated by the presence of pathogens. There are three pathways of complement activation: the classical pathway, the lectin pathway, and the alternative pathway. All of these pathways generate a crucial enzymatic activity that, intern, generates the effector molecules of complement. The three main consequences of complement activation are the opsonization of pathogens, the recruitment of inflammatory and immunocompetent cells, and the direct killing of pathogens.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04610 map" -->
+</select>
+<input type="hidden" name="mapno" value="04610" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04610" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04610" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04610.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=712,567,4	href="/dbget-bin/www_bget?C00306"	title="C00306 (Bradykinin)" />
+<area shape=circle	coords=664,208,4	href="/dbget-bin/www_bget?C00290"	title="C00290 (Fibrin)" />
+<area shape=rect	coords=494,614,540,631	href="/dbget-bin/www_bget?K04005"	title="K04005 (CRRY)" />
+<area shape=rect	coords=182,490,228,507	href="/dbget-bin/www_bget?K01328"	title="K01328 (F12)" />
+<area shape=rect	coords=338,230,384,247	href="/dbget-bin/www_bget?K01321"	title="K01321 (F9)" />
+<area shape=rect	coords=575,259,621,276	href="/dbget-bin/www_bget?K03906+K03917"	title="K03906 (F13B), K03917 (F13A1)" />
+<area shape=rect	coords=505,199,551,216	href="/dbget-bin/www_bget?K01313"	title="K01313 (F2)" />
+<area shape=rect	coords=428,216,474,233	href="/dbget-bin/www_bget?K03902"	title="K03902 (F5)" />
+<area shape=rect	coords=428,199,474,216	href="/dbget-bin/www_bget?K01314"	title="K01314 (F10)" />
+<area shape=rect	coords=338,173,384,190	href="/dbget-bin/www_bget?K01320"	title="K01320 (F7)" />
+<area shape=rect	coords=505,326,551,343	href="/dbget-bin/www_bget?K03907"	title="K03907 (THBD, CD141)" />
+<area shape=rect	coords=639,83,685,100	href="/dbget-bin/www_bget?K03914"	title="K03914 (F2R, PAR1)" />
+<area shape=rect	coords=555,135,601,152	href="/dbget-bin/www_bget?K03912"	title="K03912 (SERPIND1, HCF2)" />
+<area shape=rect	coords=582,199,628,216	href="/dbget-bin/www_bget?K03903+K03904+K03905"	title="K03903 (FGA), K03904 (FGB), K03905 (FGG)" />
+<area shape=rect	coords=435,398,481,415	href="/dbget-bin/www_bget?K03908"	title="K03908 (PROS1)" />
+<area shape=rect	coords=435,381,481,398	href="/dbget-bin/www_bget?K01344"	title="K01344 (PROC)" />
+<area shape=rect	coords=297,385,343,402	href="/dbget-bin/www_bget?K03910"	title="K03910 (A2M)" />
+<area shape=rect	coords=297,364,343,381	href="/dbget-bin/www_bget?K03913"	title="K03913 (SERPINA5, PCI)" />
+<area shape=rect	coords=448,105,494,122	href="/dbget-bin/www_bget?K03909"	title="K03909 (TFPI)" />
+<area shape=rect	coords=297,343,343,360	href="/dbget-bin/www_bget?K03911"	title="K03911 (SERPINC1, AT3)" />
+<area shape=rect	coords=384,247,430,264	href="/dbget-bin/www_bget?K03900"	title="K03900 (VWF)" />
+<area shape=rect	coords=338,247,384,264	href="/dbget-bin/www_bget?K03899"	title="K03899 (F8)" />
+<area shape=rect	coords=338,156,384,173	href="/dbget-bin/www_bget?K03901"	title="K03901 (F3, CD142)" />
+<area shape=rect	coords=260,230,306,247	href="/dbget-bin/www_bget?K01323"	title="K01323 (F11)" />
+<area shape=rect	coords=285,558,331,575	href="/dbget-bin/www_bget?K03898"	title="K03898 (KNG)" />
+<area shape=rect	coords=285,520,331,537	href="/dbget-bin/www_bget?K01324"	title="K01324 (KLKB1)" />
+<area shape=rect	coords=625,452,671,469	href="/dbget-bin/www_bget?K03985"	title="K03985 (PLAUR)" />
+<area shape=rect	coords=666,155,712,172	href="/dbget-bin/www_bget?K01300"	title="K01300 (CPB2)" />
+<area shape=rect	coords=392,490,438,507	href="/dbget-bin/www_bget?K01315"	title="K01315 (PLG)" />
+<area shape=rect	coords=297,406,343,423	href="/dbget-bin/www_bget?K03984"	title="K03984 (SERPINA1, AAT)" />
+<area shape=rect	coords=435,539,481,556	href="/dbget-bin/www_bget?K03983"	title="K03983 (SERPINF2, AAP)" />
+<area shape=rect	coords=506,452,552,469	href="/dbget-bin/www_bget?K01348"	title="K01348 (PLAU)" />
+<area shape=rect	coords=506,432,552,449	href="/dbget-bin/www_bget?K01343"	title="K01343 (PLAT)" />
+<area shape=rect	coords=575,385,621,402	href="/dbget-bin/www_bget?K03982"	title="K03982 (SERPINE1, PAI1)" />
+<area shape=rect	coords=661,899,707,916	href="/dbget-bin/www_bget?K04012"	title="K04012 (CR2, CD21)" />
+<area shape=rect	coords=767,559,813,576	href="/dbget-bin/www_bget?K03915+K03916"	title="K03915 (BDKRB1), K03916 (BDKRB2)" />
+<area shape=rect	coords=436,635,482,652	href="/dbget-bin/www_bget?K01333"	title="K01333 (CFI)" />
+<area shape=rect	coords=320,689,366,706	href="/dbget-bin/www_bget?K01334"	title="K01334 (CFD)" />
+<area shape=rect	coords=242,676,288,693	href="/dbget-bin/www_bget?K03990"	title="K03990 (C3)" />
+<area shape=rect	coords=242,659,288,676	href="/dbget-bin/www_bget?K01335"	title="K01335 (CFB)" />
+<area shape=rect	coords=259,610,305,627	href="/dbget-bin/www_bget?K04004"	title="K04004 (HF1)" />
+<area shape=rect	coords=661,923,707,940	href="/dbget-bin/www_bget?K04011"	title="K04011 (CR1, CD35)" />
+<area shape=rect	coords=661,853,707,870	href="/dbget-bin/www_bget?K04010"	title="K04010 (C5R1)" />
+<area shape=rect	coords=661,829,707,846	href="/dbget-bin/www_bget?K04009"	title="K04009 (C3AR1)" />
+<area shape=rect	coords=696,718,742,735	href="/dbget-bin/www_bget?K04000"	title="K04000 (C9)" />
+<area shape=rect	coords=627,656,673,673	href="/dbget-bin/www_bget?K04008"	title="K04008 (CD59)" />
+<area shape=rect	coords=642,718,688,735	href="/dbget-bin/www_bget?K03997+K03998+K03999"	title="K03997 (C8A), K03998 (C8B), K03999 (C8G)" />
+<area shape=rect	coords=588,718,634,735	href="/dbget-bin/www_bget?K03996"	title="K03996 (C7)" />
+<area shape=rect	coords=534,718,580,735	href="/dbget-bin/www_bget?K03995"	title="K03995 (C6)" />
+<area shape=rect	coords=472,752,518,769	href="/dbget-bin/www_bget?K03994"	title="K03994 (C5)" />
+<area shape=rect	coords=298,885,344,902	href="/dbget-bin/www_bget?K04002+K04003"	title="K04002 (C4BPA), K04003 (C4BPB)" />
+<area shape=rect	coords=219,902,265,919	href="/dbget-bin/www_bget?K04001"	title="K04001 (SERPING1, C1INH)" />
+<area shape=rect	coords=242,830,288,847	href="/dbget-bin/www_bget?K01331"	title="K01331 (C1S)" />
+<area shape=rect	coords=242,813,288,830	href="/dbget-bin/www_bget?K01330"	title="K01330 (C1R)" />
+<area shape=rect	coords=196,822,242,839	href="/dbget-bin/www_bget?K03986+K03987+K03988"	title="K03986 (C1QA), K03987 (C1QB), K03988 (C1QG)" />
+<area shape=rect	coords=320,798,366,815	href="/dbget-bin/www_bget?K03989"	title="K03989 (C4)" />
+<area shape=rect	coords=320,781,366,798	href="/dbget-bin/www_bget?K01332"	title="K01332 (C2)" />
+<area shape=rect	coords=157,758,203,775	href="/dbget-bin/www_bget?K03991"	title="K03991 (MBL)" />
+<area shape=rect	coords=219,758,265,775	href="/dbget-bin/www_bget?K03992+K03993"	title="K03992 (MASP1), K03993 (MASP2)" />
+<area shape=rect	coords=494,656,540,673	href="/dbget-bin/www_bget?K04007"	title="K04007 (CD46, MCP)" />
+<area shape=rect	coords=494,635,540,652	href="/dbget-bin/www_bget?K04006"	title="K04006 (DAF, CD55)" />
+<area shape=rect	coords=40,45,385,71	href="/dbget-bin/www_bget?map04610"	title="map04610" />
+<area shape=rect	coords=761,917,880,952	href="/kegg-bin/show_pathway?map04662"	title="map04662" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

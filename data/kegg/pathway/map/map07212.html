@@ -1,0 +1,169 @@
+<html>
+<!---
+ENTRY       map07212
+DEFINITION  Histamine receptor antagonists - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Histamine receptor antagonists - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Histamine receptor antagonists - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07212&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07212">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07212" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07212" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07212.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=917,607,1026,752	href="/dbget-bin/www_bget?D01773"	title="D01773 (Oxatomide (JAN/USAN/INN))" />
+<area shape=rect	coords=786,639,907,739	href="/dbget-bin/www_bget?D00659+D07483"	title="D00659 (Azelastine hydrochloride (JAN/USAN)), D07483 (Azelastine (INN))" />
+<area shape=rect	coords=703,633,777,749	href="/dbget-bin/www_bget?D01332+D08105"	title="D01332 (Ketotifen fumarate (JP15/USAN)), D08105 (Ketotifen (INN))" />
+<area shape=rect	coords=436,544,637,597	href="/dbget-bin/www_bget?D01467+D08494+D08495"	title="D01467 (Roxatidine acetate hydrochloride (JP15/USAN)), D08494 (Roxatidine (INN)), D08495 (Roxatidine acetate (BAN))" />
+<area shape=rect	coords=424,688,616,740	href="/dbget-bin/www_bget?D00440"	title="D00440 (Nizatidine (JAN/USP/INN))" />
+<area shape=rect	coords=287,689,418,744	href="/dbget-bin/www_bget?D00318"	title="D00318 (Famotidine (JP15/USP/INN))" />
+<area shape=rect	coords=67,685,263,735	href="/dbget-bin/www_bget?D00422+D00673+D05699"	title="D00422 (Ranitidine (USAN/INN)), D00673 (Ranitidine hydrochloride (JP15/USP)), D05699 (Ranitidine bismuth citrate (USAN))" />
+<area shape=rect	coords=271,537,423,597	href="/dbget-bin/www_bget?D00295+D03503"	title="D00295 (Cimetidine (JP15/USP/INN)), D03503 (Cimetidine hydrochloride (USP))" />
+<area shape=rect	coords=93,554,246,597	href="/dbget-bin/www_bget?C07448"	title="C07448 (Burimamide)" />
+<area shape=rect	coords=408,377,585,453	href="/dbget-bin/www_bget?D00672+D01096+D08054"	title="D00672 (Hydroxyzine hydrochloride (JP15/USP)), D01096 (Hydroxyzine pamoate (JP15/USP)), D08054 (Hydroxyzine (INN))" />
+<area shape=rect	coords=956,467,1039,481	href="/dbget-bin/www_bget?D00270+D00789+D03274+D04034"	title="D00270 (Chlorpromazine (USP/INN)), D00789 (Chlorpromazine hydrochloride (JP15/USP)), D03274 (Chlorpromazine hibenzate (JAN)), D04034 (Chlorpromazine phenolphthalinate (JAN))" />
+<area shape=rect	coords=496,51,572,101	href="/dbget-bin/www_bget?D04444+D04445+D08040"	title="D04444 (Histamine dihydrochloride (USAN)), D04445 (Histamine phosphate (USP)), D08040 (Histamine (DCF))" />
+<area shape=rect	coords=800,176,903,254	href="/dbget-bin/www_bget?D02148+D08353"	title="D02148 (Phenindamine tartrate (USAN)), D08353 (Phenindamine (INN))" />
+<area shape=rect	coords=640,172,744,254	href="/dbget-bin/www_bget?D00665+D00668+D07398+D07803"	title="D00665 (Chlorpheniramine maleate (JP15/USP)), D00668 (d-Chlorpheniramine maleate (JP15)), D07398 (Chlorphenamine (INN)), D07803 (Dexchlorpheniramine (INN))" />
+<area shape=rect	coords=803,272,891,362	href="/dbget-bin/www_bget?D01782+D08648"	title="D01782 (Triprolidine hydrochloride hydrate (JAN)), D08648 (Triprolidine (INN))" />
+<area shape=rect	coords=718,387,801,467	href="/dbget-bin/www_bget?D00494+D00480+D01242+D03290+D08432+D08768"	title="D00494 (Promethazine (JAN/INN)), D00480 (Promethazine hydrochloride (JP15/USP)), D01242 (Promethazine teoclate (JAN/INN)), D03290 (Promethazine methylenedisalicylate (JAN)), D08432 (Promethazine maleate), D08768 (Promethazine hibenzate)" />
+<area shape=rect	coords=433,299,554,353	href="/dbget-bin/www_bget?D02091+D06246+D08645"	title="D02091 (Tripelennamine hydrochloride (USP)), D06246 (Tripelennamine citrate), D08645 (Tripelennamine (INN))" />
+<area shape=rect	coords=101,162,193,254	href="/dbget-bin/www_bget?D02327+D07878"	title="D02327 (Doxylamine succinate (USP)), D07878 (Doxylamine (INN))" />
+<area shape=rect	coords=437,174,559,246	href="/dbget-bin/www_bget?C14410"	title="C14410 (Phenbenzamine hydrochloride)" />
+<area shape=rect	coords=240,316,342,417	href="/dbget-bin/www_bget?D00666+D03535"	title="D00666 (Clemastine fumarate (JP15/USP)), D03535 (Clemastine (USAN))" />
+<area shape=rect	coords=258,162,351,254	href="/dbget-bin/www_bget?D00300+D00669+D02419+D03285+D03360+D03854"	title="D00300 (Diphenhydramine (JP15/INN)), D00669 (Diphenhydramine hydrochloride (JP15/USP)), D02419 (Diphenhydramine salicylate (JAN)), D03285 (Diphenhydramine tannate (JP15)), D03360 (Diphenhydramine laurylsulfate (JAN)), D03854 (Diphenhydramine citrate (USP))" />
+<area shape=rect	coords=85,317,198,417	href="/dbget-bin/www_bget?D07198+D07684"	title="D07198 (Chlorphenoxamine (INN)), D07684 (Chlorphenoxamine hydrochloride)" />
+<area shape=rect	coords=40,45,325,71	href="/dbget-bin/www_bget?map07212"	title="map07212" />
+<area shape=rect	coords=942,492,1066,527	href="/kegg-bin/show_pathway?@map07213/D00270"	title="PATH:map07213(D00270)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

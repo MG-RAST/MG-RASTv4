@@ -1,0 +1,211 @@
+<html>
+<!---
+ENTRY       map05410
+DEFINITION  Hypertrophic cardiomyopathy (HCM) - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Hypertrophic cardiomyopathy (HCM) - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Hypertrophic cardiomyopathy (HCM) - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05410&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05410">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Hypertrophic cardiomyopathy (HCM) is a primary myocardial disorder with an autosomal dominant pattern of inheritance that is characterized by hypertrophy of the left ventricles with histological features of myocyte hypertrophy, myofibrillar disarray, and interstitial fibrosis. HCM is one of the most common inherited cardiac disorders, with a prevalence in young adults of 1 in 500. Hundreds of mutations in 11 genes that encode protein constituents of the sarcomere have been identified in HCM. These mutations increase the Ca2+  sensitivity of cardiac myofilaments. Increased myofilament Ca2+ sensitivity is expected to increase the ATP utilization by actomyosin at submaximal Ca2+ concentrations, which might cause an imbalance in energy supply and demand in the heart under severe stress. The inefficient use of ATP suggests that an inability to maintain normal ATP levels could be the central abnormality. This theory might be supported by the discovery of the role of a mutant PRKAG2 gene in HCM, which in active form acts as a central sensing mechanism protecting cells from depletion of ATP supplies. The increase in the myofilament Ca2+ sensitivity well account for the diastolic dysfunction of model animals as well as human patients of HCM. It has been widely proposed that left ventricular hypertrophy is not a primary manifestation but develops as compensatory response to sarcomere dysfunction.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05410 map" -->
+</select>
+<input type="hidden" name="mapno" value="05410" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05410" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05410" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05410.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=627,319,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=789,325,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=712,449,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=831,157,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=845,265,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=902,409,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=965,655,4	href="/dbget-bin/www_bget?C16010"	title="C16010 (Endothelin-1)" />
+<area shape=circle	coords=1024,656,4	href="/dbget-bin/www_bget?C02135"	title="C02135 (Angiotensin II)" />
+<area shape=circle	coords=299,506,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=rect	coords=275,200,321,217	href="/dbget-bin/www_bget?K12563"	title="K12563 (SGCD)" />
+<area shape=rect	coords=646,313,692,330	href="/dbget-bin/www_bget?K04850+K04851+K04853+K04857+K04862+K04863+K04864+K04865+K04858+K04859+K04860+K04861+K04866+K04867+K04868+K04869+K04870+K04871+K04872+K04873"	title="K04850 (CACNA1C), K04851 (CACNA1D), K04853 (CACNA1F), K04857 (CACNA1S), K04858 (CACNA2D1), K04859 (CACNA2D2), K04860 (CACNA2D3), K04861 (CACNA2D4), K04862 (CACNB1), K04863 (CACNB2), K04864 (CACNB3), K04865 (CACNB4), K04866 (CACNG1), K04867 (CACNG2), K04868 (CACNG3), K04869 (CACNG4), K04870 (CACNG5), K04871 (CACNG6), K04872 (CACNG7), K04873 (CACNG8)" />
+<area shape=rect	coords=721,314,767,331	href="/dbget-bin/www_bget?K04962"	title="K04962 (RYR2)" />
+<area shape=rect	coords=839,350,885,367	href="/dbget-bin/www_bget?hsa:488+mmu:11938+rno:29693"	title="488, 11938, 29693" />
+<area shape=rect	coords=813,200,859,217	href="/dbget-bin/www_bget?hsa:6546+mmu:20541+rno:29715"	title="6546, 20541, 29715" />
+<area shape=rect	coords=126,202,172,219	href="/dbget-bin/www_bget?K06480+K06481+K06476+K06482+K06483+K06484+K06485+K06583+K06584+K06585+K06586+K06587+K06487"	title="K06476 (ITGA2B), K06480 (ITGA1), K06481 (ITGA2), K06482 (ITGA3), K06483 (ITGA4), K06484 (ITGA5), K06485 (ITGA6), K06487 (ITGAV), K06583 (ITGA7), K06584 (ITGA8), K06585 (ITGA9), K06586 (ITGA10), K06587 (ITGA11)" />
+<area shape=rect	coords=170,202,216,219	href="/dbget-bin/www_bget?K05719+K06493+K06525+K06588+K06589+K06590+K06591"	title="K05719 (ITGB1), K06493 (ITGB3), K06525 (ITGB4), K06588 (ITGB5), K06589 (ITGB6), K06590 (ITGB7), K06591 (ITGB8)" />
+<area shape=rect	coords=321,200,367,217	href="/dbget-bin/www_bget?K12564"	title="K12564 (SGCG)" />
+<area shape=rect	coords=412,200,458,217	href="/dbget-bin/www_bget?K12566"	title="K12566 (SGCB)" />
+<area shape=rect	coords=366,200,412,217	href="/dbget-bin/www_bget?K12565"	title="K12565 (SGCA)" />
+<area shape=rect	coords=456,153,502,170	href="/dbget-bin/www_bget?K06265"	title="K06265 (DAG1)" />
+<area shape=rect	coords=457,200,503,217	href="/dbget-bin/www_bget?K06265"	title="K06265 (DAG1)" />
+<area shape=rect	coords=457,114,503,131	href="/dbget-bin/www_bget?K06239"	title="K06239 (LAMA2)" />
+<area shape=rect	coords=591,504,637,521	href="/dbget-bin/www_bget?K12569"	title="K12569 (EMD)" />
+<area shape=rect	coords=559,529,605,546	href="/dbget-bin/www_bget?K12641"	title="K12641 (LMNA)" />
+<area shape=rect	coords=366,488,412,505	href="/dbget-bin/www_bget?K12044"	title="K12044 (TNNI3)" />
+<area shape=rect	coords=312,472,358,489	href="/dbget-bin/www_bget?K05865"	title="K05865 (TNNC1)" />
+<area shape=rect	coords=148,566,194,583	href="/dbget-bin/www_bget?K12045"	title="K12045 (TNNT2)" />
+<area shape=rect	coords=434,547,480,564	href="/dbget-bin/www_bget?K10373+K10374+K09290+K10375"	title="K09290 (TPM3), K10373 (TPM1), K10374 (TPM2), K10375 (TPM4)" />
+<area shape=rect	coords=404,275,450,292	href="/dbget-bin/www_bget?K10366"	title="K10366 (DMD)" />
+<area shape=rect	coords=414,517,460,534	href="/dbget-bin/www_bget?K12314"	title="K12314 (ACTC1)" />
+<area shape=rect	coords=368,583,414,600	href="/dbget-bin/www_bget?K10351"	title="K10351 (MYL2)" />
+<area shape=rect	coords=163,469,209,486	href="/dbget-bin/www_bget?K12567"	title="K12567 (TTN)" />
+<area shape=rect	coords=182,667,228,684	href="/dbget-bin/www_bget?K12568"	title="K12568 (MYBPC3)" />
+<area shape=rect	coords=107,293,153,310	href="/dbget-bin/www_bget?K07610"	title="K07610 (DES)" />
+<area shape=rect	coords=963,447,1009,464	href="/dbget-bin/www_bget?K07198"	title="K07198 (PRKAA, AMPK)" />
+<area shape=rect	coords=963,464,1009,481	href="/dbget-bin/www_bget?K07199"	title="K07199 (PRKAB)" />
+<area shape=rect	coords=963,481,1009,498	href="/dbget-bin/www_bget?K07200"	title="K07200 (PRKAG)" />
+<area shape=rect	coords=857,619,903,636	href="/dbget-bin/www_bget?K01283"	title="K01283 (E3.4.15.1, ACE)" />
+<area shape=rect	coords=910,619,956,636	href="/dbget-bin/www_bget?K05459"	title="K05459 (IGF1)" />
+<area shape=rect	coords=963,619,1009,636	href="/dbget-bin/www_bget?K04384"	title="K04384 (TGFB)" />
+<area shape=rect	coords=837,645,883,662	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=891,645,937,662	href="/dbget-bin/www_bget?K05405"	title="K05405 (IL6)" />
+<area shape=rect	coords=368,561,414,578	href="/dbget-bin/www_bget?K12749"	title="K12749 (MYL3)" />
+<area shape=rect	coords=370,321,416,338	href="/dbget-bin/www_bget?K05692"	title="K05692 (ACTB_G1)" />
+<area shape=rect	coords=181,298,227,315	href="/dbget-bin/www_bget?K05692"	title="K05692 (ACTB_G1)" />
+<area shape=rect	coords=441,468,487,485	href="/dbget-bin/www_bget?K07610"	title="K07610 (DES)" />
+<area shape=rect	coords=338,609,384,626	href="/dbget-bin/www_bget?hsa:4624+mmu:17888+rno:29556"	title="4624, 17888, 29556" />
+<area shape=rect	coords=338,629,384,646	href="/dbget-bin/www_bget?hsa:4625+mmu:140781+rno:29557"	title="4625, 140781, 29557" />
+<area shape=rect	coords=40,45,360,71	href="/dbget-bin/www_bget?map05410"	title="map05410" />
+<area shape=rect	coords=441,354,560,389	href="/kegg-bin/show_pathway?map04260"	title="map04260" />
+<area shape=rect	coords=317,124,436,159	href="/kegg-bin/show_pathway?map04512"	title="map04512" />
+<area shape=rect	coords=820,574,939,609	href="/kegg-bin/show_pathway?map04630"	title="map04630" />
+<area shape=rect	coords=950,575,1069,610	href="/kegg-bin/show_pathway?map04350"	title="map04350" />
+<area shape=rect	coords=884,533,1003,568	href="/kegg-bin/show_pathway?map04614"	title="map04614" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

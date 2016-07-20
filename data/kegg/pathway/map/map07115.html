@@ -1,0 +1,163 @@
+<html>
+<!---
+ENTRY       map07115
+DEFINITION  Sulfonamide family - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Sulfonamide family - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Sulfonamide family - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07115&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07115">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07115" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07115" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07115.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=500,136,563,150	href="/dbget-bin/www_bget?C14617"	title="C14617 (Chrysoidine free base)" />
+<area shape=rect	coords=485,272,572,286	href="/dbget-bin/www_bget?C07573"	title="C07573 (Prontosil)" />
+<area shape=rect	coords=502,465,554,480	href="/dbget-bin/www_bget?C07458"	title="C07458 (Sulfanilamide)" />
+<area shape=rect	coords=714,578,784,592	href="/dbget-bin/www_bget?D02445"	title="D02445 (Tosylchloramide sodium (INN))" />
+<area shape=rect	coords=188,272,237,285	href="/dbget-bin/www_bget?C06530"	title="C06530 (Cupreine)" />
+<area shape=rect	coords=637,665,685,679	href="/dbget-bin/www_bget?D00592"	title="D00592 (Diaphenylsulfone (JAN))" />
+<area shape=rect	coords=734,329,781,343	href="/dbget-bin/www_bget?D01226"	title="D01226 (Sulpiride (JP15/USAN/INN))" />
+<area shape=rect	coords=267,605,336,619	href="/dbget-bin/www_bget?D02424"	title="D02424 (Glyprothiazol (INN))" />
+<area shape=rect	coords=332,272,381,286	href="/dbget-bin/www_bget?D02433"	title="D02433 (Optochin hydrochloride)" />
+<area shape=rect	coords=634,243,694,257	href="/dbget-bin/www_bget?D00475"	title="D00475 (Probenecid (JP15/USP/INN))" />
+<area shape=rect	coords=75,270,120,284	href="/dbget-bin/www_bget?D02262+D02261"	title="D02262 (Quinine sulfate (JP15/USP)), D02261 (Quinine hydrochloride (JP15))" />
+<area shape=rect	coords=744,464,793,479	href="/dbget-bin/www_bget?D01085+D02192+D05781"	title="D01085 (Saccharin (JP15/NF)), D02192 (Saccharin sodium hydrate (JP15)), D05781 (Saccharin calcium (USP))" />
+<area shape=rect	coords=438,679,624,705	href="/kegg-bin/show_pathway?map07017"	title="map07017" />
+<area shape=rect	coords=211,425,411,451	href="/kegg-bin/show_pathway?map07016"	title="map07016" />
+<area shape=rect	coords=40,45,222,71	href="/dbget-bin/www_bget?map07115"	title="map07115" />
+<area shape=rect	coords=90,679,336,705	href="/kegg-bin/show_pathway?map07018"	title="map07018" />
+<area shape=rect	coords=66,363,135,389	href="/kegg-bin/show_pathway?@map07025/D02261"	title="PATH:map07025(D02261)" />
+<area shape=rect	coords=717,346,805,372	href="/kegg-bin/show_pathway?@map07028/D01226"	title="PATH:map07028(D01226)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

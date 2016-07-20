@@ -1,0 +1,197 @@
+<html>
+<!---
+ENTRY       map04370
+DEFINITION  VEGF signaling pathway - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: VEGF signaling pathway - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>VEGF signaling pathway - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04370&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04370">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+There is now much evidence that VEGFR-2 is the major mediator of VEGF-driven responses in endothelial cells and it is considered to be a crucial signal transducer in both physiologic and pathologic angiogenesis.  The binding of VEGF to VEGFR-2 leads to a cascade of different signaling pathways, resulting in the up-regulation of genes involved in mediating the proliferation and migration of endothelial cells and promoting their survival and vascular permeability. For example, the binding of VEGF to VEGFR-2 leads to dimerization of the receptor, followed by intracellular activation of the PLCgamma;PKC-Raf kinase-MEK-mitogen-activated protein kinase (MAPK) pathway and subsequent initiation of DNA synthesis and cell growth, whereas activation of the phosphatidylinositol 3' -kinase (PI3K)-Akt pathway leads to increased endothelial-cell survival. Activation of PI3K, FAK, and p38 MAPK is implicated in cell migration signaling.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04370 map" -->
+</select>
+<input type="hidden" name="mapno" value="04370" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04370" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04370" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04370.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=583,473,4	href="/dbget-bin/www_bget?C00533"	title="C00533 (Nitric oxide)" />
+<area shape=circle	coords=398,230,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=343,230,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=342,178,4	href="/dbget-bin/www_bget?C00165"	title="C00165 (Diacylglycerol)" />
+<area shape=circle	coords=341,439,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=905,251,4	href="/dbget-bin/www_bget?C01312"	title="C01312 (Prostaglandin I2)" />
+<area shape=rect	coords=278,340,324,357	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=120,301,166,318	href="/dbget-bin/www_bget?K05098"	title="K05098 (KDR, VEGFR2)" />
+<area shape=rect	coords=247,221,293,238	href="/dbget-bin/www_bget?K05859"	title="K05859 (PLCG)" />
+<area shape=rect	coords=483,108,529,125	href="/dbget-bin/www_bget?K04718"	title="K04718 (E2.7.1.91)" />
+<area shape=rect	coords=726,222,772,239	href="/dbget-bin/www_bget?K11987"	title="K11987 (PTGS2, COX2)" />
+<area shape=rect	coords=794,168,840,185	href="/dbget-bin/www_bget?K01047"	title="K01047 (PLA2G)" />
+<area shape=rect	coords=605,357,651,374	href="/dbget-bin/www_bget?K04455"	title="K04455 (HSPB1)" />
+<area shape=rect	coords=496,357,542,374	href="/dbget-bin/www_bget?K04443+K04444"	title="K04443 (MAPKAPK2), K04444 (MAPKAPK3)" />
+<area shape=rect	coords=497,222,543,239	href="/dbget-bin/www_bget?K04348+K06268"	title="K04348 (PPP3C, CNA), K06268 (PPP3R, CNB)" />
+<area shape=rect	coords=350,489,396,506	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=247,410,293,427	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=580,222,626,239	href="/dbget-bin/www_bget?K04446"	title="K04446 (NFATC, NFAT)" />
+<area shape=rect	coords=433,147,479,164	href="/dbget-bin/www_bget?K02677"	title="K02677 (CPKC)" />
+<area shape=rect	coords=495,290,541,307	href="/dbget-bin/www_bget?K05725"	title="K05725 (PTK2, FAK)" />
+<area shape=rect	coords=375,357,421,374	href="/dbget-bin/www_bget?K04441"	title="K04441 (P38)" />
+<area shape=rect	coords=495,312,541,329	href="/dbget-bin/www_bget?K05760"	title="K05760 (PXN)" />
+<area shape=rect	coords=247,174,293,191	href="/dbget-bin/www_bget?K08273"	title="K08273 (SH2D2A, VRAP)" />
+<area shape=rect	coords=176,377,222,394	href="/dbget-bin/www_bget?K05704"	title="K05704 (SRC)" />
+<area shape=rect	coords=247,255,293,272	href="/dbget-bin/www_bget?hsa:25759+mmu:216148+rno:314612"	title="25759, 216148, 314612" />
+<area shape=rect	coords=49,301,95,318	href="/dbget-bin/www_bget?hsa:7422+mmu:22339+rno:83785"	title="7422, 22339, 83785" />
+<area shape=rect	coords=756,126,802,143	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=680,126,726,143	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=630,100,676,117	href="/dbget-bin/www_bget?K04366"	title="K04366 (RAF1)" />
+<area shape=rect	coords=553,89,599,106	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=468,463,514,480	href="/dbget-bin/www_bget?hsa:4846+mmu:18127+rno:24600"	title="4846, 18127, 24600" />
+<area shape=rect	coords=468,502,514,519	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=468,541,514,558	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=531,411,577,428	href="/dbget-bin/www_bget?K04392+K07860+K07861"	title="K04392 (RAC1), K07860 (RAC2), K07861 (RAC3)" />
+<area shape=rect	coords=294,111,405,146	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+<area shape=rect	coords=294,527,396,553	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=558,266,669,292	href="/kegg-bin/show_pathway?map04510"	title="map04510" />
+<area shape=rect	coords=558,139,669,174	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,263,71	href="/dbget-bin/www_bget?map04370"	title="map04370" />
+<area shape=rect	coords=853,170,964,205	href="/kegg-bin/show_pathway?map00590"	title="map00590" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,189 @@
+<html>
+<!---
+ENTRY       map03430
+DEFINITION  Mismatch repair - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Mismatch repair - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Mismatch repair - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03430&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03430">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+DNA mismatch repair (MMR) is a highly conserved biological pathway that plays a key role in maintaining genomic stability. MMR corrects DNA mismatches generated during DNA replication, thereby preventing mutations from becoming permanent in dividing cells. MMR also suppresses homologous recombination and was recently shown to play a role in DNA damage signaling. Defects in MMR are associated with genome-wide instability, predisposition to certain types of cancer including HNPCC, resistance to certain chemotherapeutic agents, and abnormalities in meiosis and sterility in mammalian systems.<br />&nbsp;&nbsp; The Escherichia coli MMR pathway has been extensively studied and is well characterized. In E. coli, the mismatch-activated MutS-MutL-ATP complex licenses MutH to incise the nearest unmethylated GATC sequence. UvrD and an exonuclease generate a gap. This gap is filled by pol III and DNA ligase. The GATC sites are then methylated by Dam. Several human MMR proteins have been identified based on their homology to E. coli MMR proteins. These include human homologs of MutS and MutL. Although E. coli MutS and MutL proteins are homodimers, human MutS and MutL homologs are heterodimers. The role of hemimethylated dGATC sites as a signal for strand discrimination is not conserved from E. coli to human. Human MMR is presumed to be nick-directed in vivo, and is thought to discriminate daughter and template strands using a strand-specific nick.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03430 map" -->
+</select>
+<input type="hidden" name="mapno" value="03430" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03430" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03430" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03430.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=255,766,301,783	href="/dbget-bin/www_bget?K06223"	title="K06223 (dam)" />
+<area shape=rect	coords=123,207,169,224	href="/dbget-bin/www_bget?K03555+K07456"	title="K03555 (mutS), K07456 (mutS2)" />
+<area shape=rect	coords=555,354,601,371	href="/dbget-bin/www_bget?K08735"	title="K08735 (MSH2)" />
+<area shape=rect	coords=601,337,647,354	href="/dbget-bin/www_bget?K08739"	title="K08739 (MLH3)" />
+<area shape=rect	coords=555,337,601,354	href="/dbget-bin/www_bget?K08734"	title="K08734 (MLH1)" />
+<area shape=rect	coords=123,348,169,365	href="/dbget-bin/www_bget?K03573"	title="K03573 (mutH)" />
+<area shape=rect	coords=123,224,169,241	href="/dbget-bin/www_bget?K03572"	title="K03572 (mutL)" />
+<area shape=rect	coords=123,766,169,783	href="/dbget-bin/www_bget?K01971+K01972"	title="K01971 (E6.5.1.1, lig), K01972 (E6.5.1.2, ligA, ligB)" />
+<area shape=rect	coords=123,485,169,502	href="/dbget-bin/www_bget?K03657"	title="K03657 (uvrD, pcrA)" />
+<area shape=rect	coords=601,224,647,241	href="/dbget-bin/www_bget?K08734"	title="K08734 (MLH1)" />
+<area shape=rect	coords=601,766,647,783	href="/dbget-bin/www_bget?K10747"	title="K10747 (LIG1)" />
+<area shape=rect	coords=732,252,778,269	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=255,634,301,651	href="/dbget-bin/www_bget?K04330"	title="K02337 (DPO3A1, dnaE), K02338 (DPO3B, dnaN), K02339 (DPO3C, holC), K02340 (DPO3D1, holA), K02341 (DPO3D2, holB), K02342 (DPO3E, dnaQ), K02343 (DPO3G, dnaX), K02344 (DPO3P, holD), K02345 (DPO3T, holE), K03763 (DPO3A2, polC)" />
+<area shape=rect	coords=255,485,301,502	href="/dbget-bin/www_bget?K01141"	title="K01141 (E3.1.11.1, sbcB)" />
+<area shape=rect	coords=732,634,778,651	href="/dbget-bin/www_bget?K04475"	title="K02327 (POLD1), K02328 (POLD2), K03504 (POLD3), K03505 (POLD4)" />
+<area shape=rect	coords=601,634,647,651	href="/dbget-bin/www_bget?K07466+K10739+K10740+K10741"	title="K07466 (RFA1, RPA1, rpa), K10739 (RFA2, RPA2), K10740 (RPA3), K10741 (RPA4)" />
+<area shape=rect	coords=255,506,301,523	href="/dbget-bin/www_bget?K10857"	title="K10857 (exoX)" />
+<area shape=rect	coords=307,506,353,523	href="/dbget-bin/www_bget?K07462"	title="K07462 (recJ)" />
+<area shape=rect	coords=555,241,601,258	href="/dbget-bin/www_bget?K08737"	title="K08737 (MSH6)" />
+<area shape=rect	coords=732,490,778,507	href="/dbget-bin/www_bget?K10746"	title="K10746 (EXO1)" />
+<area shape=rect	coords=555,297,601,314	href="/dbget-bin/www_bget?K08735"	title="K08735 (MSH2)" />
+<area shape=rect	coords=601,297,647,314	href="/dbget-bin/www_bget?K08736"	title="K08736 (MSH3)" />
+<area shape=rect	coords=601,280,647,297	href="/dbget-bin/www_bget?K10858"	title="K10858 (PMS2)" />
+<area shape=rect	coords=555,224,601,241	href="/dbget-bin/www_bget?K10858"	title="K10858 (PMS2)" />
+<area shape=rect	coords=732,224,778,241	href="/dbget-bin/www_bget?K10754+K10755+K10756"	title="K10754 (RFC1), K10755 (RFC2_4), K10756 (RFC3_5)" />
+<area shape=rect	coords=307,485,353,502	href="/dbget-bin/www_bget?K03601+K03602"	title="K03601 (xseA), K03602 (xseB)" />
+<area shape=rect	coords=601,354,647,371	href="/dbget-bin/www_bget?K08736"	title="K08736 (MSH3)" />
+<area shape=rect	coords=601,241,647,258	href="/dbget-bin/www_bget?K08735"	title="K08735 (MSH2)" />
+<area shape=rect	coords=555,280,601,297	href="/dbget-bin/www_bget?K08734"	title="K08734 (MLH1)" />
+<area shape=rect	coords=123,634,169,651	href="/dbget-bin/www_bget?K03111"	title="K03111 (ssb)" />
+<area shape=rect	coords=721,341,820,366	href="/kegg-bin/show_pathway?map05210"	title="map05210" />
+<area shape=rect	coords=40,44,192,70	href="/dbget-bin/www_bget?map03430"	title="map03430" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

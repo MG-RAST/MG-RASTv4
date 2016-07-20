@@ -1,0 +1,218 @@
+<html>
+<!---
+ENTRY       map00981
+DEFINITION  Insect hormone biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Insect hormone biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Insect hormone biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00981&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00981">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00981 map" -->
+</select>
+<input type="hidden" name="mapno" value="00981" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00981" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00981" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00981.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=996,354,4	href="/dbget-bin/www_bget?C16496"	title="C16496 (3-Epiecdysone)" />
+<area shape=circle	coords=869,354,4	href="/dbget-bin/www_bget?C02513"	title="C02513 (3-Dehydroecdysone)" />
+<area shape=circle	coords=880,265,4	href="/dbget-bin/www_bget?C16506"	title="C16506 ((10S)-Juvenile hormone III acid diol)" />
+<area shape=circle	coords=880,144,4	href="/dbget-bin/www_bget?C16505"	title="C16505 ((10S)-Juvenile hormone III diol)" />
+<area shape=circle	coords=742,461,4	href="/dbget-bin/www_bget?C16495"	title="C16495 (2-Deoxyecdysone)" />
+<area shape=circle	coords=741,354,4	href="/dbget-bin/www_bget?C16497"	title="C16497 (3-Dehydro-2-deoxyecdysone)" />
+<area shape=circle	coords=996,578,4	href="/dbget-bin/www_bget?C16500"	title="C16500 (20,26-Dihydroxyecdysone)" />
+<area shape=circle	coords=869,578,4	href="/dbget-bin/www_bget?C16499"	title="C16499 (26-Hydroxyecdysone)" />
+<area shape=circle	coords=996,461,4	href="/dbget-bin/www_bget?C02633"	title="C02633 (20-Hydroxyecdysone)" />
+<area shape=circle	coords=615,461,4	href="/dbget-bin/www_bget?C16494"	title="C16494 (3beta,5beta-Ketotriol)" />
+<area shape=circle	coords=317,461,4	href="/dbget-bin/www_bget?C01164"	title="C01164 (Cholesta-5,7-dien-3beta-ol)" />
+<area shape=circle	coords=999,144,4	href="/dbget-bin/www_bget?C16507"	title="C16507 ((10S)-Juvenile hormone III diol phosphate)" />
+<area shape=circle	coords=878,86,4	href="/dbget-bin/www_bget?C16508"	title="C16508 (12-trans-Hydroxy juvenile hormone III)" />
+<area shape=circle	coords=623,227,4	href="/dbget-bin/www_bget?C16504"	title="C16504 (Juvenile hormone III acid)" />
+<area shape=circle	coords=869,461,4	href="/dbget-bin/www_bget?C00477"	title="C00477 (Ecdysone)" />
+<area shape=circle	coords=488,461,4	href="/dbget-bin/www_bget?C16493"	title="C16493 (3beta,5beta-Ketodiol)" />
+<area shape=circle	coords=228,461,4	href="/dbget-bin/www_bget?C00187"	title="C00187 (Cholesterol)" />
+<area shape=circle	coords=497,145,4	href="/dbget-bin/www_bget?C16502"	title="C16502 (Farnesoic acid)" />
+<area shape=circle	coords=614,354,4	href="/dbget-bin/www_bget?C16498"	title="C16498 (2,22-Dideoxy-3-dehydroecdysone)" />
+<area shape=circle	coords=408,145,4	href="/dbget-bin/www_bget?C16501"	title="C16501 (Farnesal)" />
+<area shape=circle	coords=229,145,4	href="/dbget-bin/www_bget?C00448"	title="C00448 (trans,trans-Farnesyl diphosphate)" />
+<area shape=circle	coords=405,461,4	href="/dbget-bin/www_bget?C16509"	title="C16509 (14alpha-Hydroxy-5beta-cholest-7-ene-3,6-dione)" />
+<area shape=circle	coords=624,145,4	href="/dbget-bin/www_bget?C16503"	title="C16503 (Methyl farnesoate)" />
+<area shape=circle	coords=752,144,4	href="/dbget-bin/www_bget?C09694"	title="C09694 (Juvenile hormone III)" />
+<area shape=circle	coords=319,145,4	href="/dbget-bin/www_bget?C01493"	title="C01493 (Farnesol)" />
+<area shape=rect	coords=847,505,893,522	href="/dbget-bin/www_bget?1.-.-.-+R08142"	title="1.-.-.-, 1.-.-.-, R08142" />
+<area shape=poly	coords=410,459,482,459,482,463,410,463	href="/dbget-bin/www_bget?R08137"	title="R08137" />
+<area shape=poly	coords=482,461,474,465,474,457	href="/dbget-bin/www_bget?R08137"	title="R08137" />
+<area shape=poly	coords=322,459,399,459,399,463,322,463	href="/dbget-bin/www_bget?R08132"	title="R08132" />
+<area shape=poly	coords=399,461,391,465,391,457	href="/dbget-bin/www_bget?R08132"	title="R08132" />
+<area shape=poly	coords=233,459,311,459,311,463,233,463	href="/dbget-bin/www_bget?R08131"	title="R08131" />
+<area shape=poly	coords=311,461,303,465,303,457	href="/dbget-bin/www_bget?R08131"	title="R08131" />
+<area shape=poly	coords=234,143,313,143,313,147,234,147	href="/dbget-bin/www_bget?R08144"	title="R08144" />
+<area shape=poly	coords=313,145,305,149,305,141	href="/dbget-bin/www_bget?R08144"	title="R08144" />
+<area shape=poly	coords=324,143,402,143,402,147,324,147	href="/dbget-bin/www_bget?R08145"	title="R08145" />
+<area shape=poly	coords=402,145,394,149,394,141	href="/dbget-bin/www_bget?R08145"	title="R08145" />
+<area shape=poly	coords=412,143,491,143,491,147,412,147	href="/dbget-bin/www_bget?R08146"	title="R08146" />
+<area shape=poly	coords=491,145,483,149,483,141	href="/dbget-bin/www_bget?R08146"	title="R08146" />
+<area shape=poly	coords=495,149,495,218,499,218,499,149	href="/dbget-bin/www_bget?R08156"	title="R08156" />
+<area shape=poly	coords=499,218,499,219,500,220,500,221,501,222,502,223,503,224,504,224,505,225,506,225,506,229,504,229,502,228,500,227,499,226,498,225,497,224,496,222,495,220,495,218	href="/dbget-bin/www_bget?R08156"	title="R08156" />
+<area shape=poly	coords=506,225,617,225,617,229,506,229	href="/dbget-bin/www_bget?R08156"	title="R08156" />
+<area shape=poly	coords=617,227,609,231,609,223	href="/dbget-bin/www_bget?R08156"	title="R08156" />
+<area shape=rect	coords=729,257,775,274	href="/dbget-bin/www_bget?K10719+R08152"	title="K10719 (JHEH), R08152" />
+<area shape=rect	coords=535,137,581,154	href="/dbget-bin/www_bget?up:Q9BJJ7_METEN+R08147"	title="Q9BJJ7_METEN, R08147" />
+<area shape=rect	coords=662,136,708,153	href="/dbget-bin/www_bget?up:Q6R7M4_DIPPU+R08148"	title="Q6R7M4_DIPPU, R08148" />
+<area shape=rect	coords=662,219,708,236	href="/dbget-bin/www_bget?K10718+2.1.1.-+R08151"	title="K10718 (JHAMT), 2.1.1.-, R08151" />
+<area shape=rect	coords=662,176,708,193	href="/dbget-bin/www_bget?K01063+3.1.1.59+R08149"	title="K01063 (E3.1.1.59), 3.1.1.59, R08149" />
+<area shape=rect	coords=788,78,834,95	href="/dbget-bin/www_bget?up:O76478_DIPPU+R08155"	title="O76478_DIPPU, R08155" />
+<area shape=rect	coords=788,136,834,153	href="/dbget-bin/www_bget?K10719+R08153"	title="K10719 (JHEH), R08153" />
+<area shape=rect	coords=911,136,957,153	href="/dbget-bin/www_bget?up:Q8T8F5_MANSE+R08154"	title="Q8T8F5_MANSE, R08154" />
+<area shape=rect	coords=858,191,904,208	href="/dbget-bin/www_bget?K01063+3.1.1.59+R08150"	title="K01063 (E3.1.1.59), 3.1.1.59, R08150" />
+<area shape=rect	coords=524,345,570,362	href="/dbget-bin/www_bget?K10720+R08136"	title="K10720 (PHM), R08136" />
+<area shape=rect	coords=524,452,570,469	href="/dbget-bin/www_bget?K10720+R08133"	title="K10720 (PHM), R08133" />
+<area shape=rect	coords=651,345,697,362	href="/dbget-bin/www_bget?K10721+R08138"	title="K10721 (DIB), R08138" />
+<area shape=rect	coords=651,452,697,469	href="/dbget-bin/www_bget?K10721+R08134"	title="K10721 (DIB), R08134" />
+<area shape=rect	coords=781,452,827,469	href="/dbget-bin/www_bget?K10722+R08135"	title="K10722 (SAD), R08135" />
+<area shape=rect	coords=781,345,827,362	href="/dbget-bin/www_bget?K10722+R08139"	title="K10722 (SAD), R08139" />
+<area shape=rect	coords=825,387,871,404	href="/dbget-bin/www_bget?K10724+1.1.3.16+R02373"	title="K10724 (E1.1.3.16), 1.1.3.16, R02373" />
+<area shape=rect	coords=867,406,913,423	href="/dbget-bin/www_bget?1.1.1.-+R08141"	title="1.1.1.-, 1.1.1.-, R08141" />
+<area shape=rect	coords=908,452,954,469	href="/dbget-bin/www_bget?K10723+1.14.99.22+R02374"	title="K10723 (E1.14.99.22), 1.14.99.22, R02374" />
+<area shape=rect	coords=908,346,954,363	href="/dbget-bin/www_bget?1.1.1.-+R08140"	title="1.1.1.-, 1.1.1.-, R08140" />
+<area shape=rect	coords=974,505,1020,522	href="/dbget-bin/www_bget?1.-.-.-+R08143"	title="1.-.-.-, 1.-.-.-, R08143" />
+<area shape=rect	coords=38,134,179,160	href="/kegg-bin/show_pathway?map00100"	title="map00100" />
+<area shape=rect	coords=40,45,293,71	href="/dbget-bin/www_bget?map00981"	title="map00981" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

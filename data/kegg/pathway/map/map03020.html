@@ -1,0 +1,201 @@
+<html>
+<!---
+ENTRY       map03020
+DEFINITION  RNA polymerase - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: RNA polymerase - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>RNA polymerase - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03020&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03020">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03020 map" -->
+</select>
+<input type="hidden" name="mapno" value="03020" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03020" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03020" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03020.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=55,366,101,383	href="/dbget-bin/www_bget?K03043"	title="K03043 (rpoB)" />
+<area shape=rect	coords=55,383,101,400	href="/dbget-bin/www_bget?K03046"	title="K03046 (rpoC)" />
+<area shape=rect	coords=101,376,147,393	href="/dbget-bin/www_bget?K03040"	title="K03040 (rpoA)" />
+<area shape=rect	coords=147,376,193,393	href="/dbget-bin/www_bget?K03060"	title="K03060 (rpoZ)" />
+<area shape=rect	coords=55,451,101,468	href="/dbget-bin/www_bget?K03044"	title="K03044 (RPOB1)" />
+<area shape=rect	coords=101,451,147,468	href="/dbget-bin/www_bget?K03045"	title="K03045 (RPOB2)" />
+<area shape=rect	coords=55,468,101,485	href="/dbget-bin/www_bget?K03042"	title="K03042 (RPOA2)" />
+<area shape=rect	coords=101,468,147,485	href="/dbget-bin/www_bget?K03041"	title="K03041 (RPOA1)" />
+<area shape=rect	coords=147,460,193,477	href="/dbget-bin/www_bget?K03047"	title="K03047 (RPOD)" />
+<area shape=rect	coords=147,477,193,494	href="/dbget-bin/www_bget?K03055"	title="K03055 (RPOK)" />
+<area shape=rect	coords=193,460,239,477	href="/dbget-bin/www_bget?K03049"	title="K03049 (RPOE1)" />
+<area shape=rect	coords=239,460,285,477	href="/dbget-bin/www_bget?K03050"	title="K03050 (RPOE2)" />
+<area shape=rect	coords=285,460,331,477	href="/dbget-bin/www_bget?K03053"	title="K03053 (RPOH)" />
+<area shape=rect	coords=193,477,239,494	href="/dbget-bin/www_bget?K03056"	title="K03056 (RPOL)" />
+<area shape=rect	coords=239,477,285,494	href="/dbget-bin/www_bget?K03057"	title="K03057 (RPOM)" />
+<area shape=rect	coords=377,366,423,383	href="/dbget-bin/www_bget?K03010"	title="K03010 (RPB2)" />
+<area shape=rect	coords=377,383,423,400	href="/dbget-bin/www_bget?K03006"	title="K03006 (RPB1)" />
+<area shape=rect	coords=423,375,469,392	href="/dbget-bin/www_bget?K03011"	title="K03011 (RPB3)" />
+<area shape=rect	coords=469,375,515,392	href="/dbget-bin/www_bget?K03012"	title="K03012 (RPB4)" />
+<area shape=rect	coords=515,375,561,392	href="/dbget-bin/www_bget?K03013"	title="K03013 (RPB5)" />
+<area shape=rect	coords=561,375,607,392	href="/dbget-bin/www_bget?K03014"	title="K03014 (RPB6)" />
+<area shape=rect	coords=607,375,653,392	href="/dbget-bin/www_bget?K03015"	title="K03015 (RPB7)" />
+<area shape=rect	coords=423,392,469,409	href="/dbget-bin/www_bget?K03016"	title="K03016 (RPB8)" />
+<area shape=rect	coords=469,392,515,409	href="/dbget-bin/www_bget?K03017"	title="K03017 (RPB9)" />
+<area shape=rect	coords=515,392,561,409	href="/dbget-bin/www_bget?K03007"	title="K03007 (RPB10)" />
+<area shape=rect	coords=561,392,607,409	href="/dbget-bin/www_bget?K03008"	title="K03008 (RPB11)" />
+<area shape=rect	coords=607,392,653,409	href="/dbget-bin/www_bget?K03009"	title="K03009 (RPB12)" />
+<area shape=rect	coords=377,451,423,468	href="/dbget-bin/www_bget?K03021"	title="K03021 (RPC2)" />
+<area shape=rect	coords=377,468,423,485	href="/dbget-bin/www_bget?K03018"	title="K03018 (RPC1)" />
+<area shape=rect	coords=423,460,469,477	href="/dbget-bin/www_bget?K03023"	title="K03023 (RPC3)" />
+<area shape=rect	coords=469,460,515,477	href="/dbget-bin/www_bget?K03026"	title="K03026 (RPC4)" />
+<area shape=rect	coords=515,460,561,477	href="/dbget-bin/www_bget?K03027"	title="K03027 (RPC5)" />
+<area shape=rect	coords=561,460,607,477	href="/dbget-bin/www_bget?K03019"	title="K03019 (RPC11)" />
+<area shape=rect	coords=423,477,469,494	href="/dbget-bin/www_bget?K03020"	title="K03020 (RPC19)" />
+<area shape=rect	coords=469,477,515,494	href="/dbget-bin/www_bget?K03022"	title="K03022 (RPC25)" />
+<area shape=rect	coords=515,477,561,494	href="/dbget-bin/www_bget?K03024"	title="K03024 (RPC31)" />
+<area shape=rect	coords=561,477,607,494	href="/dbget-bin/www_bget?K03025"	title="K03025 (RPC34)" />
+<area shape=rect	coords=377,537,423,554	href="/dbget-bin/www_bget?K03002"	title="K03002 (RPA2)" />
+<area shape=rect	coords=377,554,423,571	href="/dbget-bin/www_bget?K02999"	title="K02999 (RPA1)" />
+<area shape=rect	coords=423,546,469,563	href="/dbget-bin/www_bget?K03000"	title="K03000 (RPA12)" />
+<area shape=rect	coords=469,546,515,563	href="/dbget-bin/www_bget?K03001"	title="K03001 (RPA14)" />
+<area shape=rect	coords=515,546,561,563	href="/dbget-bin/www_bget?K03003"	title="K03003 (RPA34)" />
+<area shape=rect	coords=561,546,607,563	href="/dbget-bin/www_bget?K03004"	title="K03004 (RPA43)" />
+<area shape=rect	coords=607,546,653,563	href="/dbget-bin/www_bget?K03005"	title="K03005 (RPA49)" />
+<area shape=rect	coords=193,376,239,393	href="/dbget-bin/www_bget?K03048"	title="K03048 (rpoE)" />
+<area shape=rect	coords=285,477,331,494	href="/dbget-bin/www_bget?K03058"	title="K03058 (rpoN)" />
+<area shape=rect	coords=40,45,187,73	href="/dbget-bin/www_bget?map03020"	title="map03020" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

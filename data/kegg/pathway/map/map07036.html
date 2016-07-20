@@ -1,0 +1,158 @@
+<html>
+<!---
+ENTRY       map07036
+DEFINITION  Calcium channel-blocking drugs - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Calcium channel-blocking drugs - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Calcium channel-blocking drugs - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07036&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07036">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07036" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07036" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07036.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=706,652,764,666	href="/dbget-bin/www_bget?D01173"	title="D01173 (Cilnidipine (JAN/INN))" />
+<area shape=rect	coords=709,527,763,540	href="/dbget-bin/www_bget?D04657"	title="D04657 (Lacidipine (USAN/INN))" />
+<area shape=rect	coords=705,401,765,414	href="/dbget-bin/www_bget?D00615+D02914"	title="D00615 (Amlodipine besilate (JAN)), D02914 (Amlodipine maleate (USAN))" />
+<area shape=rect	coords=713,238,755,251	href="/dbget-bin/www_bget?D00631"	title="D00631 (Bepridil hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=425,236,482,251	href="/dbget-bin/www_bget?D01969"	title="D01969 (Gallopamil hydrochloride (JAN))" />
+<area shape=rect	coords=426,525,482,539	href="/dbget-bin/www_bget?D02045"	title="D02045 (Benidipine hydrochloride (JP15))" />
+<area shape=rect	coords=423,401,482,415	href="/dbget-bin/www_bget?D00618"	title="D00618 (Nisoldipine (JAN/USAN/INN))" />
+<area shape=rect	coords=425,655,484,668	href="/dbget-bin/www_bget?D01553"	title="D01553 (Manidipine hydrochloride (JAN))" />
+<area shape=rect	coords=139,654,199,667	href="/dbget-bin/www_bget?D00617"	title="D00617 (Nicardipine hydrochloride (JP15/USAN))" />
+<area shape=rect	coords=143,528,198,541	href="/dbget-bin/www_bget?D00437"	title="D00437 (Nifedipine (JP15/USP/INN))" />
+<area shape=rect	coords=147,386,195,399	href="/dbget-bin/www_bget?D00616+D03830"	title="D00616 (Diltiazem hydrochloride (JP15/USP)), D03830 (Diltiazem malate (USAN))" />
+<area shape=rect	coords=141,237,195,250	href="/dbget-bin/www_bget?D02356+D00619"	title="D02356 (Verapamil (USAN/INN)), D00619 (Verapamil hydrochloride (JP15/USP))" />
+<area shape=rect	coords=40,45,341,71	href="/dbget-bin/www_bget?map07036"	title="map07036" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

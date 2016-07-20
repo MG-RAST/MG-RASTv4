@@ -1,0 +1,213 @@
+<html>
+<!---
+ENTRY       map00643
+DEFINITION  Styrene degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Styrene degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Styrene degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00643&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00643">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00643 map" -->
+</select>
+<input type="hidden" name="mapno" value="00643" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00643" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00643" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00643.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=490,143,4	href="/dbget-bin/www_bget?C05593"	title="C05593 (3-Hydroxyphenylacetate)" />
+<area shape=circle	coords=294,133,4	href="/dbget-bin/www_bget?C02505"	title="C02505 (2-Phenylacetamide)" />
+<area shape=circle	coords=187,133,4	href="/dbget-bin/www_bget?C16074"	title="C16074 (Phenylacetonitrile)" />
+<area shape=circle	coords=88,133,4	href="/dbget-bin/www_bget?C16075"	title="C16075 ((Z)-Phenylacetaldehyde oxime)" />
+<area shape=circle	coords=592,384,4	href="/dbget-bin/www_bget?C00894"	title="C00894 (Propenoyl-CoA)" />
+<area shape=circle	coords=717,333,4	href="/dbget-bin/www_bget?C00084"	title="C00084 (Acetaldehyde)" />
+<area shape=circle	coords=814,384,4	href="/dbget-bin/www_bget?C00186"	title="C00186 ((S)-Lactate)" />
+<area shape=circle	coords=702,384,4	href="/dbget-bin/www_bget?C00827"	title="C00827 (Lactoyl-CoA)" />
+<area shape=circle	coords=369,294,4	href="/dbget-bin/www_bget?C07087"	title="C07087 (2-Hydroxy-6-oxoocta-2,4,7-trienoate)" />
+<area shape=circle	coords=329,327,4	href="/dbget-bin/www_bget?C01998"	title="C01998 (Acrylonitrile)" />
+<area shape=circle	coords=329,388,4	href="/dbget-bin/www_bget?C01659"	title="C01659 (Acrylamide)" />
+<area shape=circle	coords=575,294,4	href="/dbget-bin/www_bget?C03589"	title="C03589 (4-Hydroxy-2-oxopentanoate)" />
+<area shape=circle	coords=480,294,4	href="/dbget-bin/www_bget?C00596"	title="C00596 (2-Hydroxy-2,4-pentadienoate)" />
+<area shape=circle	coords=461,384,4	href="/dbget-bin/www_bget?C00511"	title="C00511 (Propenoate)" />
+<area shape=circle	coords=717,294,4	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=circle	coords=792,253,4	href="/dbget-bin/www_bget?C00164"	title="C00164 (Acetoacetate)" />
+<area shape=circle	coords=792,216,4	href="/dbget-bin/www_bget?C00122"	title="C00122 (Fumarate)" />
+<area shape=circle	coords=690,216,4	href="/dbget-bin/www_bget?C01061"	title="C01061 (4-Fumarylacetoacetate)" />
+<area shape=circle	coords=590,216,4	href="/dbget-bin/www_bget?C01036"	title="C01036 (4-Maleylacetoacetate)" />
+<area shape=circle	coords=490,216,4	href="/dbget-bin/www_bget?C00544"	title="C00544 (Homogentisate)" />
+<area shape=circle	coords=192,294,4	href="/dbget-bin/www_bget?C07084"	title="C07084 (Styrene cis-glycol)" />
+<area shape=circle	coords=91,294,4	href="/dbget-bin/www_bget?C07083"	title="C07083 (Styrene)" />
+<area shape=circle	coords=391,216,4	href="/dbget-bin/www_bget?C05852"	title="C05852 (2-Hydroxyphenylacetate)" />
+<area shape=circle	coords=190,216,4	href="/dbget-bin/www_bget?C00601"	title="C00601 (Phenylacetaldehyde)" />
+<area shape=circle	coords=91,216,4	href="/dbget-bin/www_bget?C02083"	title="C02083 (Styrene oxide)" />
+<area shape=circle	coords=279,294,4	href="/dbget-bin/www_bget?C07085"	title="C07085 (3-Vinylcatechol)" />
+<area shape=circle	coords=290,216,4	href="/dbget-bin/www_bget?C07086"	title="C07086 (Phenylacetic acid)" />
+<area shape=rect	coords=468,166,514,183	href="/dbget-bin/www_bget?K10438+1.14.13.63+R02517"	title="K10438 (E1.14.13.63, phacB), 1.14.13.63, R02517" />
+<area shape=rect	coords=166,154,212,171	href="/dbget-bin/www_bget?K01501+3.5.5.1+R07855"	title="K01501 (E3.5.5.1), 3.5.5.1, R07855" />
+<area shape=rect	coords=271,154,317,171	href="/dbget-bin/www_bget?K01426+3.5.1.4+R02540"	title="K01426 (E3.5.1.4, amiE), 3.5.1.4, R02540" />
+<area shape=rect	coords=214,125,260,142	href="/dbget-bin/www_bget?K01721+4.2.1.84+R07854"	title="K01721 (E4.2.1.84), 4.2.1.84, R07854" />
+<area shape=rect	coords=111,125,157,142	href="/dbget-bin/www_bget?K10566+4.99.1.7+R07638"	title="K10566 (oxdB), 4.99.1.7, R07638" />
+<area shape=rect	coords=733,375,779,392	href="/dbget-bin/www_bget?K01026+2.8.3.1+R05508"	title="K01026 (E2.8.3.1), 2.8.3.1, R05508" />
+<area shape=rect	coords=706,207,752,224	href="/dbget-bin/www_bget?K01555+3.7.1.2+R01364"	title="K01555 (E3.7.1.2, FAH), 3.7.1.2, R01364" />
+<area shape=rect	coords=619,375,665,392	href="/dbget-bin/www_bget?4.2.1.54+R02963"	title="4.2.1.54, 4.2.1.54, R02963" />
+<area shape=rect	coords=613,207,659,224	href="/dbget-bin/www_bget?K01800+5.2.1.2+R03181"	title="K01800 (E5.2.1.2, maiA), 5.2.1.2, R03181" />
+<area shape=rect	coords=501,285,547,302	href="/dbget-bin/www_bget?K02554+4.2.1.80+R02601"	title="K02554 (mhpD), 4.2.1.80, R02601" />
+<area shape=rect	coords=604,285,650,302	href="/dbget-bin/www_bget?K01666+4.1.3.39+R00750"	title="K01666 (E4.1.3.39, mhpE), 4.1.3.39, R00750" />
+<area shape=rect	coords=502,375,548,392	href="/dbget-bin/www_bget?K01039+K01040+2.8.3.12+R05509"	title="K01039 (E2.8.3.12A, gctA), K01040 (E2.8.3.12B, gctB), 2.8.3.12, R05509" />
+<area shape=rect	coords=361,380,407,397	href="/dbget-bin/www_bget?K01426+3.5.1.4+R05551"	title="K01426 (E3.5.1.4, amiE), 3.5.1.4, R05551" />
+<area shape=rect	coords=114,285,160,302	href="/dbget-bin/www_bget?K00465+1.13.11.-+R05417"	title="K00465 (E1.13.11.-), 1.13.11.-, R05417" />
+<area shape=rect	coords=213,207,259,224	href="/dbget-bin/www_bget?K00146+1.2.1.39+R02536"	title="K00146 (feaB), 1.2.1.39, R02536" />
+<area shape=rect	coords=312,207,358,224	href="/dbget-bin/www_bget?K10437+1.14.13.-+R05487"	title="K10437 (PHACA), 1.14.13.-, R05487" />
+<area shape=rect	coords=306,346,352,363	href="/dbget-bin/www_bget?K01721+4.2.1.84+R05379"	title="K01721 (E4.2.1.84), 4.2.1.84, R05379" />
+<area shape=rect	coords=361,319,407,336	href="/dbget-bin/www_bget?K01502+3.5.5.7+R05358"	title="K01502 (E3.5.5.7), 3.5.5.7, R05358" />
+<area shape=rect	coords=412,207,458,224	href="/dbget-bin/www_bget?1.14.13.-+R05450"	title="1.14.13.-, 1.14.13.-, R05450" />
+<area shape=rect	coords=45,249,91,266	href="/dbget-bin/www_bget?up:O06834_PSEFL+R05488"	title="O06834_PSEFL, R05488" />
+<area shape=rect	coords=511,207,557,224	href="/dbget-bin/www_bget?K00451+1.13.11.5+R02519"	title="K00451 (E1.13.11.5, hmgA), 1.13.11.5, R02519" />
+<area shape=rect	coords=296,285,342,302	href="/dbget-bin/www_bget?K00446+1.13.11.2+R05404"	title="K00446 (E1.13.11.2), 1.13.11.2, R05404" />
+<area shape=rect	coords=113,207,159,224	href="/dbget-bin/www_bget?5.3.99.7+R02615"	title="5.3.99.7, 5.3.99.7, R02615" />
+<area shape=rect	coords=206,285,252,302	href="/dbget-bin/www_bget?1.3.1.19+R05354"	title="1.3.1.19, 1.3.1.19, R05354" />
+<area shape=rect	coords=91,249,137,266	href="/dbget-bin/www_bget?up:O06835_PSEFL+R05488"	title="O06835_PSEFL, R05488" />
+<area shape=rect	coords=386,285,432,302	href="/dbget-bin/www_bget?K10216+3.7.1.9+R05362"	title="K10216 (E3.7.1.9), 3.7.1.9, R05362" />
+<area shape=rect	coords=52,349,133,384	href="/kegg-bin/show_pathway?map00642"	title="map00642" />
+<area shape=rect	coords=849,203,925,230	href="/kegg-bin/show_pathway?map00020"	title="map00020" />
+<area shape=rect	coords=775,281,840,308	href="/kegg-bin/show_pathway?map00010"	title="map00010" />
+<area shape=rect	coords=776,313,852,348	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=40,45,231,71	href="/dbget-bin/www_bget?map00643"	title="map00643" />
+<area shape=rect	coords=850,236,926,271	href="/kegg-bin/show_pathway?map00640"	title="map00640" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

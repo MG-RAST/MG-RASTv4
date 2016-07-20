@@ -1,0 +1,199 @@
+<html>
+<!---
+ENTRY       map04914
+DEFINITION  Progesterone-mediated oocyte maturation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Progesterone-mediated oocyte maturation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Progesterone-mediated oocyte maturation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04914&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04914">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Xenopus oocytes are naturally arrested at G2 of meiosis I. Exposure to either insulin/IGF-1 or the steroid hormone progesterone breaks this arrest and induces resumption of the two meiotic division cycles and maturation of the oocyte into a mature, fertilizable egg. This process is termed oocyte maturation. The transition is accompanied by an increase in maturation promoting factor (MPF or Cdc2/cyclin B) which precedes germinal vesicle breakdown (GVBD). Most reports point towards the Mos-MEK1-ERK2 pathway [where ERK is an extracellular signal-related protein kinase, MEK is a MAPK/ERK kinase and Mos is a p42(MAPK) activator] and the polo-like kinase/CDC25 pathway as responsible for the activation of MPF in meiosis, most likely triggered by a decrease in cAMP.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04914 map" -->
+</select>
+<input type="hidden" name="mapno" value="04914" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04914" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04914" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04914.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=284,474,4	href="/dbget-bin/www_bget?C05981+C11554"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate), C11554 (1-Phosphatidyl-1D-myo-inositol 3,4-bisphosphate)" />
+<area shape=circle	coords=219,370,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=circle	coords=74,237,4	href="/dbget-bin/www_bget?C00410"	title="C00410 (Progesterone)" />
+<area shape=rect	coords=122,468,168,485	href="/dbget-bin/www_bget?K05087"	title="K05087 (IGF1R)" />
+<area shape=rect	coords=55,482,101,499	href="/dbget-bin/www_bget?K05459"	title="K05459 (IGF1)" />
+<area shape=rect	coords=55,454,101,471	href="/dbget-bin/www_bget?K04526"	title="K04526 (INS)" />
+<area shape=rect	coords=504,258,550,275	href="/dbget-bin/www_bget?K04367"	title="K04367 (MOS)" />
+<area shape=rect	coords=369,205,415,222	href="/dbget-bin/www_bget?K02602"	title="K02602 (ORB)" />
+<area shape=rect	coords=121,362,167,379	href="/dbget-bin/www_bget?K08041+K08042+K08043+K08044+K08045+K08046+K08047+K08048+K08049"	title="K08041 (ADCY1), K08042 (ADCY2), K08043 (ADCY3), K08044 (ADCY4), K08045 (ADCY5), K08046 (ADCY6), K08047 (ADCY7), K08048 (ADCY8), K08049 (ADCY9)" />
+<area shape=rect	coords=542,475,588,492	href="/dbget-bin/www_bget?xla:379048+xla:379888+xla:397742+xla:398888"	title="379048, 379888, 397742, 398888" />
+<area shape=rect	coords=542,438,588,455	href="/dbget-bin/www_bget?xla:380246"	title="380246" />
+<area shape=rect	coords=249,516,295,533	href="/dbget-bin/www_bget?K07827"	title="K07827 (KRAS, KRAS2)" />
+<area shape=rect	coords=205,467,251,484	href="/dbget-bin/www_bget?xla:443964+xla:447594"	title="443964, 447594" />
+<area shape=rect	coords=857,293,903,310	href="/dbget-bin/www_bget?K02087"	title="K02087 (CDK1, CDC2)" />
+<area shape=rect	coords=277,429,323,446	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=239,395,285,412	href="/dbget-bin/www_bget?K13296"	title="K13296 (PDE3)" />
+<area shape=rect	coords=859,510,905,527	href="/dbget-bin/www_bget?K03348+K03349+K03350+K03351+K03352+K03353+K03354+K03355+K03356+K03357+K03358+K03359+K12456"	title="K03348 (APC1), K03349 (APC2), K03350 (APC3, CDC27), K03351 (APC4), K03352 (APC5), K03353 (APC6, CDC16), K03354 (APC7), K03355 (APC8, CDC23), K03356 (APC9), K03357 (APC10, DOC1), K03358 (APC11), K03359 (APC12, CDC26), K12456 (APC13)" />
+<area shape=rect	coords=787,509,833,526	href="/dbget-bin/www_bget?K03364"	title="K03364 (CDH1)" />
+<area shape=rect	coords=767,466,813,483	href="/dbget-bin/www_bget?K02537+K06679+K06680"	title="K02537 (MAD2), K06679 (MAD1), K06680 (MAD3)" />
+<area shape=rect	coords=732,390,778,407	href="/dbget-bin/www_bget?K02178"	title="K02178 (BUB1)" />
+<area shape=rect	coords=659,362,705,379	href="/dbget-bin/www_bget?K05866+K05867+K06645"	title="K05866 (CDC25B), K05867 (CDC25C), K06645 (CDC25A)" />
+<area shape=rect	coords=542,362,588,379	href="/dbget-bin/www_bget?K06631"	title="K06631 (PLK1)" />
+<area shape=rect	coords=857,277,903,294	href="/dbget-bin/www_bget?K05868"	title="K05868 (CCNB)" />
+<area shape=rect	coords=445,292,491,309	href="/dbget-bin/www_bget?K04079"	title="K04079 (htpG, HSP90A)" />
+<area shape=rect	coords=269,362,315,379	href="/dbget-bin/www_bget?K04345"	title="K04345 (PKA)" />
+<area shape=rect	coords=777,257,823,274	href="/dbget-bin/www_bget?K06633"	title="K06633 (PKMYT)" />
+<area shape=rect	coords=706,257,752,274	href="/dbget-bin/www_bget?K04373"	title="K04373 (RPS6KA, RSK2)" />
+<area shape=rect	coords=640,257,686,274	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=574,258,620,275	href="/dbget-bin/www_bget?K04368"	title="K04368 (MAP2K1, MEK1)" />
+<area shape=rect	coords=214,254,260,271	href="/dbget-bin/www_bget?K04630"	title="K04630 (GNAI)" />
+<area shape=rect	coords=626,156,672,173	href="/dbget-bin/www_bget?K02206"	title="K02206 (CDK2)" />
+<area shape=rect	coords=626,121,672,138	href="/dbget-bin/www_bget?K02087"	title="K02087 (CDK1, CDC2)" />
+<area shape=rect	coords=508,172,554,189	href="/dbget-bin/www_bget?K06627"	title="K06627 (CCNA)" />
+<area shape=rect	coords=508,139,554,156	href="/dbget-bin/www_bget?K08694"	title="K08694 (SPDY, RINGO)" />
+<area shape=rect	coords=287,205,333,222	href="/dbget-bin/www_bget?xla:398349"	title="398349" />
+<area shape=rect	coords=331,154,377,171	href="/dbget-bin/www_bget?K04440+K04441"	title="K04440 (JNK), K04441 (P38)" />
+<area shape=rect	coords=214,137,260,154	href="/dbget-bin/www_bget?K08556"	title="K08556 (NR3C3, PGR)" />
+<area shape=rect	coords=331,121,377,138	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=348,516,394,533	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=610,200,722,235	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,420,71	href="/dbget-bin/www_bget?map04914"	title="map04914" />
+<area shape=rect	coords=847,200,959,226	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

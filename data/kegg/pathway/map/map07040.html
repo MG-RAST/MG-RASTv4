@@ -1,0 +1,175 @@
+<html>
+<!---
+ENTRY       map07040
+DEFINITION  Antineoplastics - alkylating agents - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antineoplastics - alkylating agents - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antineoplastics - alkylating agents - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07040&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07040">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07040" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07040" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07040.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=383,675,416,689	href="/dbget-bin/www_bget?C16250"	title="C16250 (MTIC)" />
+<area shape=rect	coords=912,784,967,797	href="/dbget-bin/www_bget?D01790"	title="D01790 (Oxaliplatin (JAN/USAN/INN))" />
+<area shape=rect	coords=775,784,825,797	href="/dbget-bin/www_bget?D04609"	title="D04609 (Iproplatin (USAN/INN))" />
+<area shape=rect	coords=929,660,984,673	href="/dbget-bin/www_bget?D01416"	title="D01416 (Nedaplatin (JAN/INN))" />
+<area shape=rect	coords=770,660,830,673	href="/dbget-bin/www_bget?D01363"	title="D01363 (Carboplatin (JAN/USP/INN))" />
+<area shape=rect	coords=617,661,663,674	href="/dbget-bin/www_bget?D00275"	title="D00275 (Cisplatin (JP15/USP/INN))" />
+<area shape=rect	coords=900,507,963,519	href="/dbget-bin/www_bget?D01760"	title="D01760 (Ranimustine (JAN/INN))" />
+<area shape=rect	coords=753,506,817,519	href="/dbget-bin/www_bget?D05932"	title="D05932 (Streptozocin (USAN/INN))" />
+<area shape=rect	coords=921,384,975,397	href="/dbget-bin/www_bget?D05822"	title="D05822 (Semustine (USAN/INN))" />
+<area shape=rect	coords=918,291,971,304	href="/dbget-bin/www_bget?D01059"	title="D01059 (Nimustine hydrochloride (JAN))" />
+<area shape=rect	coords=697,291,748,304	href="/dbget-bin/www_bget?D00363"	title="D00363 (Lomustine (USAN/INN))" />
+<area shape=rect	coords=605,195,697,207	href="/dbget-bin/www_bget?C14595"	title="C14595 (Methylnitrosourea)" />
+<area shape=rect	coords=792,194,851,207	href="/dbget-bin/www_bget?D00254"	title="D00254 (Carmustine (USAN/INN))" />
+<area shape=rect	coords=457,784,531,797	href="/dbget-bin/www_bget?D06067"	title="D06067 (Temozolomide (JAN/USAN/INN))" />
+<area shape=rect	coords=359,784,422,797	href="/dbget-bin/www_bget?D00288"	title="D00288 (Dacarbazine (JAN/USP/INN))" />
+<area shape=rect	coords=416,637,462,650	href="/dbget-bin/www_bget?D00248"	title="D00248 (Busulfan (JP15/USP/INN))" />
+<area shape=rect	coords=67,837,127,851	href="/dbget-bin/www_bget?D00208"	title="D00208 (Mitomycin C (JP15))" />
+<area shape=rect	coords=178,785,242,797	href="/dbget-bin/www_bget?D01270"	title="D01270 (Carboquone (JAN/INN))" />
+<area shape=rect	coords=205,654,250,668	href="/dbget-bin/www_bget?D00583"	title="D00583 (Thiotepa (JP15/USP/INN))" />
+<area shape=rect	coords=51,656,154,668	href="/dbget-bin/www_bget?C07642"	title="C07642 (Triethylenemelamine)" />
+<area shape=rect	coords=417,506,533,519	href="/dbget-bin/www_bget?D02398+D06397"	title="D02398 (Estramustine phosphate sodium (USAN)), D06397 (Estramustine phosphate sodium hydrate (JAN))" />
+<area shape=rect	coords=249,506,315,518	href="/dbget-bin/www_bget?D04066"	title="D04066 (Estramustine (USAN/INN))" />
+<area shape=rect	coords=426,376,481,389	href="/dbget-bin/www_bget?D00343"	title="D00343 (Ifosfamide (JAN/USP/INN))" />
+<area shape=rect	coords=235,377,332,390	href="/dbget-bin/www_bget?D00287"	title="D00287 (Cyclophosphamide hydrate (JP15))" />
+<area shape=rect	coords=423,281,477,293	href="/dbget-bin/www_bget?D00369"	title="D00369 (Melphalan (JP15/USP/INN))" />
+<area shape=rect	coords=249,280,316,293	href="/dbget-bin/www_bget?D00266"	title="D00266 (Chlorambucil (USP/INN))" />
+<area shape=rect	coords=271,170,400,183	href="/dbget-bin/www_bget?D01493"	title="D01493 (Nitrogen mustard N-oxide hydrochloride (JAN))" />
+<area shape=rect	coords=55,281,143,293	href="/dbget-bin/www_bget?D04872"	title="D04872 (Mechlorethamine hydrochloride (USP))" />
+<area shape=rect	coords=40,45,358,71	href="/dbget-bin/www_bget?map07040"	title="map07040" />
+<area shape=rect	coords=133,826,294,861	href="/kegg-bin/show_pathway?@map07042/D00208"	title="PATH:map07042(D00208)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

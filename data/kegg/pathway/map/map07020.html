@@ -1,0 +1,165 @@
+<html>
+<!---
+ENTRY       map07020
+DEFINITION  Macrolides and ketolides - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Macrolides and ketolides - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Macrolides and ketolides - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07020&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07020">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07020" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07020" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07020.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1274,345,1463,468	href="/dbget-bin/www_bget?D02391"	title="D02391 (Cethromycin (USAN/INN))" />
+<area shape=rect	coords=1229,176,1501,291	href="/dbget-bin/www_bget?D01078"	title="D01078 (Telithromycin (JAN/USAN/INN))" />
+<area shape=rect	coords=952,720,1178,886	href="/dbget-bin/www_bget?D02492+D02493"	title="D02492 (Tilmicosin (USP/INN)), D02493 (Tilmicosin phosphate (USAN))" />
+<area shape=rect	coords=1006,529,1178,688	href="/dbget-bin/www_bget?D02134+D06390"	title="D02134 (Azithromycin hydrate (JP15)), D06390 (Azithromycin (USP))" />
+<area shape=rect	coords=962,347,1164,495	href="/dbget-bin/www_bget?D01710"	title="D01710 (Roxithromycin (JP15/USAN/INN))" />
+<area shape=rect	coords=999,167,1164,318	href="/dbget-bin/www_bget?D00276"	title="D00276 (Clarithromycin (JP15/USP/INN))" />
+<area shape=rect	coords=693,178,879,369	href="/dbget-bin/www_bget?D02490"	title="D02490 (Tylosin (USP/INN))" />
+<area shape=rect	coords=51,174,231,322	href="/dbget-bin/www_bget?D00140+D02009+D02184+D02524"	title="D00140 (Erythromycin (JP15/USP/INN)), D02009 (Erythromycin lactobionate (JP15/USP)), D02184 (Erythromycin stearate (JP15/USP)), D02524 (Erythromycin gluceptate (USP))" />
+<area shape=rect	coords=490,421,658,606	href="/dbget-bin/www_bget?D01897"	title="D01897 (Rokitamycin (JP15/INN))" />
+<area shape=rect	coords=287,672,443,866	href="/dbget-bin/www_bget?D01339"	title="D01339 (Midecamycin (JP15/INN))" />
+<area shape=rect	coords=490,178,658,369	href="/dbget-bin/www_bget?D01235"	title="D01235 (Josamycin (JP15/USAN/INN))" />
+<area shape=rect	coords=314,421,442,606	href="/dbget-bin/www_bget?D02269+D02000"	title="D02269 (Kitasamycin (JP15/USAN)), D02000 (Kitasamycin tartrate (JP15))" />
+<area shape=rect	coords=302,145,443,369	href="/dbget-bin/www_bget?D02420"	title="D02420 (Acetylspiramycin (JP15))" />
+<area shape=rect	coords=58,414,221,563	href="/dbget-bin/www_bget?D02186"	title="D02186 (Oleandomycin phosphate (JAN))" />
+<area shape=rect	coords=499,648,661,866	href="/dbget-bin/www_bget?D01636"	title="D01636 (Midecamycin acetate (JP15))" />
+<area shape=rect	coords=58,915,218,950	href="/kegg-bin/show_pathway?map00522"	title="map00522" />
+<area shape=rect	coords=40,45,280,71	href="/dbget-bin/www_bget?map07020"	title="map07020" />
+<area shape=rect	coords=61,365,214,391	href="/kegg-bin/show_pathway?@map01052/C01912"	title="PATH:map01052(C01912)" />
+<area shape=rect	coords=61,610,213,636	href="/kegg-bin/show_pathway?@map01052/C01946"	title="PATH:map01052(C01946)" />
+<area shape=rect	coords=714,414,865,440	href="/kegg-bin/show_pathway?@map01052/C01457"	title="PATH:map01052(C01457)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

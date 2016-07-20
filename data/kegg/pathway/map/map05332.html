@@ -1,0 +1,191 @@
+<html>
+<!---
+ENTRY       map05332
+DEFINITION  Graft-versus-host disease - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Graft-versus-host disease - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Graft-versus-host disease - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05332&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05332">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Graft-versus-host disease (GVHD) pathophysiology can be summerized in a three-step process. During step 1, the conditioning regimen (irradiation and/or chemotherapy) leads to damage, activation of host tissues and induction of inflammatory cytokines [tumour necrosis factor (TNF-alpha) and interleukin (IL-1)] secretion. Increased expression of major histocompatibility complex (MHC) antigens and adhesion molecules leads to enhancement of the recognition of host MHC and/or minor histocompatibility antigens by mature donor T cells. <br />&nbsp;&nbsp; Donor T-cell activation in step II is characterized by the predominance of Th1 cells and the secretion of IL-2 and IFN-gamma. These cytokines induce further T-cell expansion, induce cytotoxic T lymphocytes (CTL) and natural killer (NK) cells responses and prime additional mononuclear phagocytes to produce TNF-alpha and IL-1. Also, nitric oxide (NO) is produced by activated macrophages, and it may contribute to the tissue damage seen during step 3. Lipopolysaccharide (LPS), which leaks through the intestinal mucosa that was damaged during step 1, together with IFN-gamma, from step 2, further stimulate macrophages to secrete cytokines and NO. During step 3, the effector phase, activated CTL and NK cells mediate cytotoxicity against target host cells through Fas-Fas ligand interactions and perforin-granzyme B.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05332 map" -->
+</select>
+<input type="hidden" name="mapno" value="05332" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05332" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05332" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05332.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=978,517,4	href="/dbget-bin/www_bget?C00533"	title="C00533 (Nitric oxide)" />
+<area shape=circle	coords=558,538,4	href="/dbget-bin/www_bget?C00338"	title="C00338 (Lipopolysaccharide)" />
+<area shape=rect	coords=418,184,464,201	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=498,184,544,201	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=1000,114,1046,131	href="/dbget-bin/www_bget?K04390"	title="K04390 (TNFRSF6, FAS)" />
+<area shape=rect	coords=923,114,969,131	href="/dbget-bin/www_bget?K04389"	title="K04389 (TNFSF6, FASL)" />
+<area shape=rect	coords=923,86,969,103	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=1000,86,1046,103	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=960,181,1006,198	href="/dbget-bin/www_bget?K01353"	title="K01353 (GZMB)" />
+<area shape=rect	coords=960,156,1006,173	href="/dbget-bin/www_bget?K07818"	title="K07818 (PRF1)" />
+<area shape=rect	coords=498,207,544,224	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=771,256,817,273	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=956,462,1002,479	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=417,207,463,224	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=1000,278,1046,295	href="/dbget-bin/www_bget?K04390"	title="K04390 (TNFRSF6, FAS)" />
+<area shape=rect	coords=923,278,969,295	href="/dbget-bin/www_bget?K04389"	title="K04389 (TNFSF6, FASL)" />
+<area shape=rect	coords=960,343,1006,360	href="/dbget-bin/www_bget?K01353"	title="K01353 (GZMB)" />
+<area shape=rect	coords=960,316,1006,333	href="/dbget-bin/www_bget?K07818"	title="K07818 (PRF1)" />
+<area shape=rect	coords=770,135,816,152	href="/dbget-bin/www_bget?K05429"	title="K05429 (IL2)" />
+<area shape=rect	coords=735,389,781,406	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=326,304,372,321	href="/dbget-bin/www_bget?K05405"	title="K05405 (IL6)" />
+<area shape=rect	coords=326,325,372,342	href="/dbget-bin/www_bget?K04383+K04519"	title="K04383 (IL1A), K04519 (IL1B)" />
+<area shape=rect	coords=956,485,1002,502	href="/dbget-bin/www_bget?K04383+K04519"	title="K04383 (IL1A), K04519 (IL1B)" />
+<area shape=rect	coords=326,348,372,365	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=1000,249,1046,266	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=923,249,969,266	href="/dbget-bin/www_bget?hsa:3811+hsa:3812+hsa:3802+hsa:3803+hsa:3804+hsa:57292+hsa:3821+hsa:3824+mmu:16627+mmu:16634+mmu:16638+mmu:16640+mmu:16641+mmu:16643+rno:29683+rno:25110"	title="3811, 3812, 3802, 3803, 3804, 57292, 3821, 3824, 16627, 16634, 16638, 16640, 16641, 16643, 29683, 25110" />
+<area shape=rect	coords=515,417,629,452	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=512,106,626,141	href="/kegg-bin/show_pathway?map04660"	title="map04660" />
+<area shape=rect	coords=337,106,450,141	href="/kegg-bin/show_pathway?map04612"	title="map04612" />
+<area shape=rect	coords=420,288,534,323	href="/kegg-bin/show_pathway?map04514"	title="map04514" />
+<area shape=rect	coords=40,45,274,71	href="/dbget-bin/www_bget?map05332"	title="map05332" />
+<area shape=rect	coords=1020,187,1133,213	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=836,350,949,385	href="/kegg-bin/show_pathway?map04650"	title="map04650" />
+<area shape=rect	coords=712,541,826,576	href="/kegg-bin/show_pathway?map04620"	title="map04620" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,66 @@
+<html>
+<!---
+ENTRY       map01022
+NAME        mRNA biosynthesis (bacteria) - Standard metabolic pathway
+--->
+<head>
+<title>
+mRNA biosynthesis (bacteria) - Standard metabolic pathway
+</title>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css">
+<script language="JavaScript">
+<!---
+function clr() { status = ""; return true; }
+function note(mes) { status = mes; return true; }
+function btn(bobj,img) {
+    bobj.src = "/Fig/bget/button_" + img + ".gif";
+}
+//--->
+</script>
+</head>
+
+<body>
+<form method="GET" action="/dbget-bin/get_pathway">
+
+<table cellpadding="0" width="100%" cellspacing="0" border="0"><tr><td>
+<a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif"></a>
+&nbsp;&nbsp;&nbsp;<font class="title3"><b>mRNA biosynthesis (bacteria) - Reference pathway</b></font></td>
+<td valign="bottom" align="right"><a target="_blank" href="/kegg/document/help_pathway.html">
+<img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')"></a>
+</td></tr></table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+]
+<br>
+<input type="hidden" name="org_name" value="map">
+<select name="mapno">
+<option value="01020">Protein biosynthesis (bacteria)
+<option value="01021">Protein biosynthesis (eukaryotes)
+<option value="01022" selected>mRNA biosynthesis (bacteria)
+<option value="01023">mRNA biosynthesis (eukaryotes)
+<option value="01024">tRNA and rRNA biosynthesis (bacteria)
+<option value="01025">tRNA biosynthesis (eukaryotes)
+<option value="01026">rRNA biosynthesis (eukaryotes)
+</select>
+<input type="submit" value="Go">
+<br>
+
+<img src="/kegg/pathway/map/map01022.gif" usemap="#mapdata">
+<map name="mapdata">
+<area shape=rect	coords=331,408,377,426	href="/dbget-bin/www_bget?enzyme+2.7.7.6">
+<area shape=circle	coords=371,314,4	href="/dbget-bin/www_bget?compound+C00699">
+<area shape=circle	coords=396,330,4	href="/dbget-bin/www_bget?compound+C00013">
+<area shape=circle	coords=368,450,4	href="/dbget-bin/www_bget?compound+C00699">
+<area shape=circle	coords=388,467,4	href="/dbget-bin/www_bget?compound+C00013">
+<area shape=circle	coords=106,382,4	href="/dbget-bin/www_bget?compound+C00699">
+<area shape=circle	coords=86,398,4	href="/dbget-bin/www_bget?compound+C00013">
+<area shape=circle	coords=665,281,4	href="/dbget-bin/www_bget?compound+C00002">
+<area shape=rect	coords=32,472,129,516	href="/kegg/pathway/map/map01024.html">
+<area shape=rect	coords=31,520,140,552	href="/kegg/pathway/map/map01020.html">
+</map>
+
+</form>
+</body>
+<!---
+///
+--->
+</html>

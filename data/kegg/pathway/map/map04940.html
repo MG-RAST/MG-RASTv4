@@ -1,0 +1,184 @@
+<html>
+<!---
+ENTRY       map04940
+DEFINITION  Type I diabetes mellitus - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Type I diabetes mellitus - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Type I diabetes mellitus - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04940&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04940">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Type I diabetes mellitus is a disease that results from autoimmune destruction of the insulin-producing beta-cells. Certain beta-cell proteins act as autoantigens after being processed by antigen-presenting cell (APC), such as macrophages and dendritic cells, and presented in a complex with MHC-II molecules on the surface of the APC. Then immunogenic signals from APC activate CD4+ T cells, predominantly of the Th1 subset. Antigen-activated Th1 cells produce IL-2 and IFNgamma. They activate macrophages and cytotoxic CD8+ T cells, and these effector cells may kill islet beta-cells by one or both of two types of mechanisms: (1) direct interactions of antigen-specific cytotoxic T cells with a beta-cell autoantigen-MHC-I complex on the beta-cell, and (2) non-specific inflammatory mediators, such as free radicals/oxidants and cytokines (IL-1, TNFalpha, TNFbeta, IFNgamma).<br />&nbsp;&nbsp; Type I diabetes is a polygenic disease. One of the principle determining genetic factors in diabetes incidence is the inheritance of mutant MHC-II alleles. Another plausible candidate gene is the insulin gene.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04940 map" -->
+</select>
+<input type="hidden" name="mapno" value="04940" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04940" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04940" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04940.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=264,577,4	href="/dbget-bin/www_bget?C00704+C00027+C00533"	title="C00704 (O2.-), C00027 (H2O2), C00533 (Nitric oxide)" />
+<area shape=rect	coords=545,205,591,222	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=294,393,340,410	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=143,277,189,294	href="/dbget-bin/www_bget?hsa:3382+rno:81024+mmu:15893+ptr:463264+cfa:475242+gga:420581+xla:379786"	title="3382, 81024, 15893, 463264, 475242, 420581, 379786" />
+<area shape=rect	coords=545,228,591,245	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=491,269,537,286	href="/dbget-bin/www_bget?K05406+K05425"	title="K05406 (IL12A), K05425 (IL12B)" />
+<area shape=rect	coords=143,237,189,254	href="/dbget-bin/www_bget?K01294"	title="K01294 (CPE)" />
+<area shape=rect	coords=437,228,483,245	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=143,217,189,234	href="/dbget-bin/www_bget?K07817"	title="K07817 (PTPRN)" />
+<area shape=rect	coords=143,196,189,213	href="/dbget-bin/www_bget?K01580"	title="K01580 (E4.1.1.15, gadB)" />
+<area shape=rect	coords=143,257,189,274	href="/dbget-bin/www_bget?K04077"	title="K04077 (groEL, HSPD1)" />
+<area shape=rect	coords=519,348,565,365	href="/dbget-bin/www_bget?K05429"	title="K05429 (IL2)" />
+<area shape=rect	coords=143,176,189,193	href="/dbget-bin/www_bget?K04526"	title="K04526 (INS)" />
+<area shape=rect	coords=294,416,340,433	href="/dbget-bin/www_bget?K04389"	title="K04389 (TNFSF6, FASL)" />
+<area shape=rect	coords=240,468,286,485	href="/dbget-bin/www_bget?K01353"	title="K01353 (GZMB)" />
+<area shape=rect	coords=437,205,483,222	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=186,393,232,410	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=186,416,232,433	href="/dbget-bin/www_bget?K04390"	title="K04390 (TNFRSF6, FAS)" />
+<area shape=rect	coords=240,490,286,507	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=576,348,622,365	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=240,449,286,466	href="/dbget-bin/www_bget?K07818"	title="K07818 (PRF1)" />
+<area shape=rect	coords=240,550,286,567	href="/dbget-bin/www_bget?K04383+K04519"	title="K04383 (IL1A), K04519 (IL1B)" />
+<area shape=rect	coords=240,531,286,548	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=240,509,286,526	href="/dbget-bin/www_bget?K05468"	title="K05468 (LTA, TNFB)" />
+<area shape=rect	coords=103,493,175,519	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=595,208,695,243	href="/kegg-bin/show_pathway?map04660"	title="map04660" />
+<area shape=rect	coords=40,45,259,71	href="/dbget-bin/www_bget?map04940"	title="map04940" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

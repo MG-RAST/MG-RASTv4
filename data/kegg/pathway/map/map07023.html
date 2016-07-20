@@ -1,0 +1,157 @@
+<html>
+<!---
+ENTRY       map07023
+DEFINITION  Rifamycins - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Rifamycins - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Rifamycins - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07023&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07023">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07023" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07023" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07023.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=239,390,444,527	href="/dbget-bin/www_bget?D00424"	title="D00424 (Rifabutin (JAN/USP/INN))" />
+<area shape=rect	coords=694,88,902,225	href="/dbget-bin/www_bget?D00879"	title="D00879 (Rifapentine (USAN/INN))" />
+<area shape=rect	coords=696,468,908,627	href="/dbget-bin/www_bget?C14539"	title="C14539 (Krm 1657)" />
+<area shape=rect	coords=495,88,671,220	href="/dbget-bin/www_bget?D00211+D08479"	title="D00211 (Rifampicin (JP15/INN)), D08479 (Rifampicin sodium)" />
+<area shape=rect	coords=238,175,408,311	href="/dbget-bin/www_bget?D02549+D08480"	title="D02549 (Rifamycin (INN)), D08480 (Rifamycin sodium salt)" />
+<area shape=rect	coords=494,468,686,627	href="/dbget-bin/www_bget?D02550"	title="D02550 (Rifalazil (USAN/INN))" />
+<area shape=rect	coords=28,181,201,311	href="/dbget-bin/www_bget?C14540"	title="C14540 (Rifamycin S)" />
+<area shape=rect	coords=695,249,874,385	href="/dbget-bin/www_bget?D02554"	title="D02554 (Rifaximin (USAN/INN))" />
+<area shape=rect	coords=495,249,671,385	href="/dbget-bin/www_bget?D02553"	title="D02553 (Rifamide (USAN))" />
+<area shape=rect	coords=263,337,386,363	href="/kegg-bin/show_pathway?map07114"	title="map07114" />
+<area shape=rect	coords=46,103,197,129	href="/kegg-bin/show_pathway?map01051"	title="map01051" />
+<area shape=rect	coords=40,45,164,71	href="/dbget-bin/www_bget?map07023"	title="map07023" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

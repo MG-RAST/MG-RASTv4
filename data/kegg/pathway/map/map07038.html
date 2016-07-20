@@ -1,0 +1,163 @@
+<html>
+<!---
+ENTRY       map07038
+DEFINITION  Antacids - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antacids - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antacids - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07038&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07038">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07038" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07038" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07038.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=454,466,604,561	href="/dbget-bin/www_bget?D00355"	title="D00355 (Lansoprazole (JAN/USP/INN))" />
+<area shape=rect	coords=1056,352,1238,424	href="/dbget-bin/www_bget?D01920"	title="D01920 (Tenatoprazole (JAN/INN))" />
+<area shape=rect	coords=684,608,813,701	href="/dbget-bin/www_bget?D05906"	title="D05906 (Leminoprazole (INN))" />
+<area shape=rect	coords=436,350,620,420	href="/dbget-bin/www_bget?D00455+D01207+D05259+D05261"	title="D00455 (Omeprazole (JAN/USP/INN)), D01207 (Omeprazole sodium (USAN)), D05259 (Omeprazole magnesium (USAN)), D05261 (Omeprazole sodium injection (JAN))" />
+<area shape=rect	coords=851,631,1020,701	href="/dbget-bin/www_bget?C15664"	title="C15664 (B 823-08)" />
+<area shape=rect	coords=842,483,1026,556	href="/dbget-bin/www_bget?C15665"	title="C15665 (Ro 18-5364)" />
+<area shape=rect	coords=272,403,402,469	href="/dbget-bin/www_bget?D05901"	title="D05901 (Picoprazole (INN))" />
+<area shape=rect	coords=279,264,396,316	href="/dbget-bin/www_bget?D05900"	title="D05900 (Timoprazole (INN))" />
+<area shape=rect	coords=657,464,832,556	href="/dbget-bin/www_bget?D00724+D08463"	title="D00724 (Sodium rabeprazole (JAN)), D08463 (Rabeprazole (INN))" />
+<area shape=rect	coords=653,352,837,421	href="/dbget-bin/www_bget?D01984+D04056+D07917"	title="D01984 (Esomeprazole magnesium hydrate (JAN)), D04056 (Esomeprazole sodium (USAN)), D07917 (Esomeprazole (INN))" />
+<area shape=rect	coords=297,134,379,173	href="/dbget-bin/www_bget?C15663"	title="C15663 (CMN 131)" />
+<area shape=rect	coords=440,620,621,703	href="/dbget-bin/www_bget?D05353+D02593"	title="D05353 (Pantoprazole (USAN/INN)), D02593 (Pantoprazole Sodium Hydrate (JAN))" />
+<area shape=rect	coords=57,449,208,494	href="/dbget-bin/www_bget?D05004"	title="D05004 (Metiamide (USAN/INN))" />
+<area shape=rect	coords=57,303,208,344	href="/dbget-bin/www_bget?C07448"	title="C07448 (Burimamide)" />
+<area shape=rect	coords=78,158,189,198	href="/dbget-bin/www_bget?C07454"	title="C07454 (N-Guanylhistamine)" />
+<area shape=rect	coords=55,606,207,663	href="/dbget-bin/www_bget?D00295+D03503"	title="D00295 (Cimetidine (JP15/USP/INN)), D03503 (Cimetidine hydrochloride (USP))" />
+<area shape=rect	coords=75,687,188,722	href="/kegg-bin/show_pathway?map07212"	title="map07212" />
+<area shape=rect	coords=40,45,143,71	href="/dbget-bin/www_bget?map07038"	title="map07038" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

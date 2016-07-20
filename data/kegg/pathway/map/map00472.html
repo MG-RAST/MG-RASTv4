@@ -1,0 +1,177 @@
+<html>
+<!---
+ENTRY       map00472
+DEFINITION  D-Arginine and D-ornithine metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: D-Arginine and D-ornithine metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>D-Arginine and D-ornithine metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00472&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00472">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00472 map" -->
+</select>
+<input type="hidden" name="mapno" value="00472" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00472" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00472" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00472.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=62,307,4	href="/dbget-bin/www_bget?C03564"	title="C03564 (1-Pyrroline-2-carboxylate)" />
+<area shape=circle	coords=170,307,4	href="/dbget-bin/www_bget?C01110"	title="C01110 (5-Amino-2-oxopentanoic acid)" />
+<area shape=circle	coords=222,140,4	href="/dbget-bin/www_bget?C03341"	title="C03341 (2-Amino-4-oxopentanoic acid)" />
+<area shape=circle	coords=222,210,4	href="/dbget-bin/www_bget?C03943"	title="C03943 ((2R,4S)-2,4-Diaminopentanoate)" />
+<area shape=circle	coords=311,390,4	href="/dbget-bin/www_bget?C03771"	title="C03771 (5-Guanidino-2-oxopentanoate)" />
+<area shape=circle	coords=311,210,4	href="/dbget-bin/www_bget?C00077"	title="C00077 (L-Ornithine)" />
+<area shape=circle	coords=311,307,4	href="/dbget-bin/www_bget?C00515"	title="C00515 (D-Ornithine)" />
+<area shape=circle	coords=401,210,4	href="/dbget-bin/www_bget?C01667"	title="C01667 (Bacitracin)" />
+<area shape=circle	coords=460,210,4	href="/dbget-bin/www_bget?C00062"	title="C00062 (L-Arginine)" />
+<area shape=circle	coords=460,307,4	href="/dbget-bin/www_bget?C00792"	title="C00792 (D-Arginine)" />
+<area shape=rect	coords=200,167,246,184	href="/dbget-bin/www_bget?1.4.1.12+R04200+R04201"	title="1.4.1.12, 1.4.1.12, R04200, R04201" />
+<area shape=rect	coords=200,240,246,257	href="/dbget-bin/www_bget?5.4.3.5+R02461"	title="5.4.3.5, 5.4.3.5, R02461" />
+<area shape=rect	coords=219,299,265,316	href="/dbget-bin/www_bget?K00273+1.4.3.3+R02457"	title="K00273 (E1.4.3.3, DAO), 1.4.3.3, R02457" />
+<area shape=rect	coords=219,333,265,350	href="/dbget-bin/www_bget?K00824+2.6.1.21+R02459"	title="K00824 (E2.6.1.21, dat), 2.6.1.21, R02459" />
+<area shape=rect	coords=263,260,309,277	href="/dbget-bin/www_bget?5.1.1.10+R00672"	title="5.1.1.10, 5.1.1.10, R00672" />
+<area shape=rect	coords=288,241,334,258	href="/dbget-bin/www_bget?5.1.1.9+R00672"	title="5.1.1.9, 5.1.1.9, R00672" />
+<area shape=rect	coords=313,260,359,277	href="/dbget-bin/www_bget?5.1.1.12+R00672"	title="5.1.1.12, 5.1.1.12, R00672" />
+<area shape=rect	coords=367,338,413,355	href="/dbget-bin/www_bget?K00273+1.4.3.3+R02923"	title="K00273 (E1.4.3.3, DAO), 1.4.3.3, R02923" />
+<area shape=rect	coords=367,299,413,316	href="/dbget-bin/www_bget?3.5.3.10+R02458"	title="3.5.3.10, 3.5.3.10, R02458" />
+<area shape=rect	coords=367,382,413,399	href="/dbget-bin/www_bget?K00824+2.6.1.21+R02924"	title="K00824 (E2.6.1.21, dat), 2.6.1.21, R02924" />
+<area shape=rect	coords=438,249,484,266	href="/dbget-bin/www_bget?5.1.1.9+R00567"	title="5.1.1.9, 5.1.1.9, R00567" />
+<area shape=rect	coords=40,45,378,71	href="/dbget-bin/www_bget?map00472"	title="map00472" />
+<area shape=rect	coords=294,134,482,160	href="/kegg-bin/show_pathway?map00330"	title="map00330" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

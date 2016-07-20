@@ -1,0 +1,209 @@
+<html>
+<!---
+ENTRY       map04912
+DEFINITION  GnRH signaling pathway - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: GnRH signaling pathway - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>GnRH signaling pathway - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04912&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04912">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Gonadotropin-releasing hormone (GnRH) secretion from the hypothalamus acts upon its receptor in the anterior pituitary to regulate the production and release of the gonadotropins, LH and FSH. The GnRHR is coupled to Gq/11 proteins to activate phospholipase C which transmits its signal to diacylglycerol (DAG) and inositol 1,4,5-trisphosphate (IP3). DAG activates the intracellular protein kinase C (PKC) pathway and IP3 stimulates release of intracellular calcium. In addition to the classical Gq/11, coupling of Gs is occasionally observed in a cell-specific fashion. Signaling downstream of protein kinase C (PKC) leads to transactivation of the epidermal growth factor (EGF) receptor and activation of mitogen-activated protein kinases (MAPKs), including extracellular-signal-regulated kinase (ERK), Jun N-terminal kinase (JNK) and p38 MAPK. Active MAPKs translocate to the nucleus, resulting in activation of transcription factors and rapid induction of early genes.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04912 map" -->
+</select>
+<input type="hidden" name="mapno" value="04912" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04912" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04912" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04912.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=137,370,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=629,381,4	href="/dbget-bin/www_bget?C00416"	title="C00416 (Phosphatidate)" />
+<area shape=circle	coords=628,351,4	href="/dbget-bin/www_bget?C00219"	title="C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid)" />
+<area shape=circle	coords=398,323,4	href="/dbget-bin/www_bget?C00165"	title="C00165 (Diacylglycerol)" />
+<area shape=circle	coords=429,246,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=541,180,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=615,116,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=rect	coords=421,361,467,378	href="/dbget-bin/www_bget?hsa:5578+hsa:5579+hsa:5580+mmu:18750+mmu:18751+mmu:18753+rno:24680+rno:170538+rno:25023"	title="5578, 5579, 5580, 18750, 18751, 18753, 24680, 170538, 25023" />
+<area shape=rect	coords=466,108,512,125	href="/dbget-bin/www_bget?K08041+K08042+K08043+K08044+K08045+K08046+K08047+K08048+K08049"	title="K08041 (ADCY1), K08042 (ADCY2), K08043 (ADCY3), K08044 (ADCY4), K08045 (ADCY5), K08046 (ADCY6), K08047 (ADCY7), K08048 (ADCY8), K08049 (ADCY9)" />
+<area shape=rect	coords=1017,301,1063,318	href="/dbget-bin/www_bget?K08522"	title="K08522 (CGA)" />
+<area shape=rect	coords=963,301,1009,318	href="/dbget-bin/www_bget?K08521"	title="K08521 (LHB)" />
+<area shape=rect	coords=329,274,375,291	href="/dbget-bin/www_bget?K05858"	title="K05858 (PLCB)" />
+<area shape=rect	coords=620,414,666,431	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=847,108,893,125	href="/dbget-bin/www_bget?K04374"	title="K04374 (ATF4, CREB2)" />
+<area shape=rect	coords=695,171,741,188	href="/dbget-bin/www_bget?K04515"	title="K04515 (CAMK2)" />
+<area shape=rect	coords=622,253,668,270	href="/dbget-bin/www_bget?K04432+K04433"	title="K04432 (MAP2K3, MKK3), K04433 (MAP2K6, MKK6)" />
+<area shape=rect	coords=699,253,745,270	href="/dbget-bin/www_bget?K04441"	title="K04441 (P38)" />
+<area shape=rect	coords=547,253,593,270	href="/dbget-bin/www_bget?K04416+K04420+K04421+K04428"	title="K04416 (MAP3K1, MEKK1), K04420 (MAP3K2, MEKK2), K04421 (MAP3K3, MEKK3), K04428 (MAP3K4, MEKK4)" />
+<area shape=rect	coords=547,297,593,314	href="/dbget-bin/www_bget?K04464"	title="K04464 (MAPK7, ERK5)" />
+<area shape=rect	coords=547,341,593,358	href="/dbget-bin/www_bget?K01047"	title="K01047 (E3.1.1.4, PLA2G)" />
+<area shape=rect	coords=436,171,482,188	href="/dbget-bin/www_bget?K04958+K04959+K04960"	title="K04958 (ITPR1), K04959 (ITPR2), K04960 (ITPR3)" />
+<area shape=rect	coords=600,171,646,188	href="/dbget-bin/www_bget?K02183"	title="K02183 (CALM)" />
+<area shape=rect	coords=256,255,302,272	href="/dbget-bin/www_bget?K04634+K04635"	title="K04634 (GNAQ), K04635 (GNA11)" />
+<area shape=rect	coords=168,416,214,433	href="/dbget-bin/www_bget?K07763"	title="K07763 (MMP14)" />
+<area shape=rect	coords=168,188,214,205	href="/dbget-bin/www_bget?K04280"	title="K04280 (GNRHR)" />
+<area shape=rect	coords=547,371,593,388	href="/dbget-bin/www_bget?K01115"	title="K01115 (E3.1.4.4, PLD)" />
+<area shape=rect	coords=339,108,385,125	href="/dbget-bin/www_bget?K04632"	title="K04632 (GNAS)" />
+<area shape=rect	coords=86,188,132,205	href="/dbget-bin/www_bget?K05252"	title="K05252 (GNRH)" />
+<area shape=rect	coords=547,414,593,431	href="/dbget-bin/www_bget?K05704"	title="K05704 (SRC)" />
+<area shape=rect	coords=123,416,169,433	href="/dbget-bin/www_bget?K01398"	title="K01398 (MMP2)" />
+<area shape=rect	coords=720,108,766,125	href="/dbget-bin/www_bget?K04345"	title="K04345 (PKA)" />
+<area shape=rect	coords=168,360,214,377	href="/dbget-bin/www_bget?K04850+K04851+K04853+K04857"	title="K04850 (CACNA1C), K04851 (CACNA1D), K04853 (CACNA1F), K04857 (CACNA1S)" />
+<area shape=rect	coords=916,551,962,568	href="/dbget-bin/www_bget?K04375"	title="K04375 (ELK1)" />
+<area shape=rect	coords=841,551,887,568	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=1071,301,1117,318	href="/dbget-bin/www_bget?K05250"	title="K05250 (FSH)" />
+<area shape=rect	coords=644,551,690,568	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=548,551,594,568	href="/dbget-bin/www_bget?K04366"	title="K04366 (RAF1)" />
+<area shape=rect	coords=432,551,478,568	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=346,551,392,568	href="/dbget-bin/www_bget?K03099"	title="K03099 (SOS)" />
+<area shape=rect	coords=260,551,306,568	href="/dbget-bin/www_bget?K04364"	title="K04364 (GRB2)" />
+<area shape=rect	coords=168,492,214,509	href="/dbget-bin/www_bget?K04361"	title="K04361 (EGFR, ERBB1)" />
+<area shape=rect	coords=86,492,132,509	href="/dbget-bin/www_bget?K08523"	title="K08523 (HBEGF)" />
+<area shape=rect	coords=595,511,641,528	href="/dbget-bin/www_bget?K05871"	title="K05871 (PTK2B, FAK2)" />
+<area shape=rect	coords=768,414,814,431	href="/dbget-bin/www_bget?K04430+K04431"	title="K04430 (MAP2K4, MKK4), K04431 (MAP2K7, MKK7)" />
+<area shape=rect	coords=841,414,887,431	href="/dbget-bin/www_bget?K04440"	title="K04440 (JNK)" />
+<area shape=rect	coords=915,414,961,431	href="/dbget-bin/www_bget?K04448"	title="K04448 (JUN)" />
+<area shape=rect	coords=694,414,740,431	href="/dbget-bin/www_bget?K04416"	title="K04416 (MAP3K1, MEKK1)" />
+<area shape=rect	coords=51,28,271,54	href="/dbget-bin/www_bget?map04912"	title="map04912" />
+<area shape=rect	coords=551,203,663,238	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+<area shape=rect	coords=681,455,797,490	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=49,524,161,570	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=47,225,163,261	href="/kegg-bin/show_pathway?map04080"	title="map04080" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

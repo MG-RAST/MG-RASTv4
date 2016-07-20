@@ -1,0 +1,270 @@
+<html>
+<!---
+ENTRY       map00908
+DEFINITION  Zeatin biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Zeatin biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Zeatin biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00908&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00908">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Cytokinin is a phytohormone involved in various processes of growth and development in plants. Most abundant cytokinins are adenine-type, where the N6 position of adenine is substituted with an isoprenoid, such as in zeatin, or an aromatic side chain, such as in kinetin. Zeatin can be synthesized in two different pathways: the tRNA pathway and the AMP pathway. In the tRNA pathway zeatin is a recycled product of isopentenylated tRNAs. In the AMP pathway zeatin is synthesized from an isopentenyl donor, dimethylallyl diphosphate (DMAPP), and AMP, ADP, or ATP by isopentenyltransferases. After synthesis cytokinins can be glucosylated.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00908 map" -->
+</select>
+<input type="hidden" name="mapno" value="00908" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00908" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00908" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00908.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=123,441,4	href="/dbget-bin/www_bget?C00020"	title="C00020 (AMP)" />
+<area shape=circle	coords=123,343,4	href="/dbget-bin/www_bget?C00008"	title="C00008 (ADP)" />
+<area shape=circle	coords=124,243,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=541,637,4	href="/dbget-bin/www_bget?C15546"	title="C15546 (O-beta-D-Glucopyranosyl-cis-zeatin)" />
+<area shape=circle	coords=647,574,4	href="/dbget-bin/www_bget?C15545"	title="C15545 (cis-Zeatin)" />
+<area shape=circle	coords=647,495,4	href="/dbget-bin/www_bget?C16449"	title="C16449 (cis-Zeatin riboside)" />
+<area shape=circle	coords=647,417,4	href="/dbget-bin/www_bget?C16441"	title="C16441 (cis-Zeatin riboside monophosphate)" />
+<area shape=circle	coords=647,318,4	href="/dbget-bin/www_bget?C16467"	title="C16467 (cis-Prenyl-tRNA)" />
+<area shape=circle	coords=555,243,4	href="/dbget-bin/www_bget?C00066"	title="C00066 (tRNA)" />
+<area shape=circle	coords=647,219,4	href="/dbget-bin/www_bget?C04432"	title="C04432 (tRNA containing 6-isopentenyladenosine)" />
+<area shape=circle	coords=541,219,4	href="/dbget-bin/www_bget?C00235"	title="C00235 (Dimethylallyl diphosphate)" />
+<area shape=circle	coords=507,417,4	href="/dbget-bin/www_bget?C16445"	title="C16445 (Dihydrozeatin riboside monophosphate)" />
+<area shape=circle	coords=507,495,4	href="/dbget-bin/www_bget?C16447"	title="C16447 (Dihydrozeatin riboside)" />
+<area shape=circle	coords=507,575,4	href="/dbget-bin/www_bget?C02029"	title="C02029 (Dihydrozeatin)" />
+<area shape=circle	coords=401,637,4	href="/dbget-bin/www_bget?C16448"	title="C16448 (Dihydrozeatin-O-glucoside)" />
+<area shape=circle	coords=559,662,4	href="/dbget-bin/www_bget?C00015"	title="C00015 (UDP)" />
+<area shape=circle	coords=419,662,4	href="/dbget-bin/www_bget?C00015"	title="C00015 (UDP)" />
+<area shape=circle	coords=638,662,4	href="/dbget-bin/www_bget?C00029"	title="C00029 (UDP-glucose)" />
+<area shape=circle	coords=498,662,4	href="/dbget-bin/www_bget?C00029"	title="C00029 (UDP-glucose)" />
+<area shape=circle	coords=354,868,4	href="/dbget-bin/www_bget?C00190"	title="C00190 (UDP-D-xylose)" />
+<area shape=circle	coords=353,801,4	href="/dbget-bin/www_bget?C00029"	title="C00029 (UDP-glucose)" />
+<area shape=circle	coords=354,727,4	href="/dbget-bin/www_bget?C00029"	title="C00029 (UDP-glucose)" />
+<area shape=circle	coords=257,843,4	href="/dbget-bin/www_bget?C03300"	title="C03300 (O-beta-D-Xylosylzeatin)" />
+<area shape=circle	coords=256,776,4	href="/dbget-bin/www_bget?C16443"	title="C16443 (trans-Zeatin-7-beta-D-glucoside)" />
+<area shape=circle	coords=275,868,4	href="/dbget-bin/www_bget?C00015"	title="C00015 (UDP)" />
+<area shape=circle	coords=274,801,4	href="/dbget-bin/www_bget?C00015"	title="C00015 (UDP)" />
+<area shape=circle	coords=275,727,4	href="/dbget-bin/www_bget?C00015"	title="C00015 (UDP)" />
+<area shape=circle	coords=257,702,4	href="/dbget-bin/www_bget?C03423"	title="C03423 (O-beta-D-Glucosylzeatin)" />
+<area shape=circle	coords=353,662,4	href="/dbget-bin/www_bget?C00979"	title="C00979 (O-Acetyl-L-serine)" />
+<area shape=circle	coords=274,662,4	href="/dbget-bin/www_bget?C00033"	title="C00033 (Acetate)" />
+<area shape=circle	coords=256,637,4	href="/dbget-bin/www_bget?C01513"	title="C01513 (Lupinate)" />
+<area shape=circle	coords=206,662,4	href="/dbget-bin/www_bget?C00019"	title="C00019 (S-Adenosyl-L-methionine)" />
+<area shape=circle	coords=126,662,4	href="/dbget-bin/www_bget?C00170"	title="C00170 (5'-Methylthioadenosine)" />
+<area shape=circle	coords=109,637,4	href="/dbget-bin/www_bget?C01804"	title="C01804 (Discadenine)" />
+<area shape=circle	coords=126,601,4	href="/dbget-bin/www_bget?C07330"	title="C07330 (3-Methylbut-2-enal)" />
+<area shape=circle	coords=111,575,4	href="/dbget-bin/www_bget?C00147"	title="C00147 (Adenine)" />
+<area shape=circle	coords=215,575,4	href="/dbget-bin/www_bget?C04083"	title="C04083 (N6-(delta2-Isopentenyl)-adenine)" />
+<area shape=circle	coords=215,495,4	href="/dbget-bin/www_bget?C16427"	title="C16427 (Isopentenyl adenosine)" />
+<area shape=circle	coords=363,575,4	href="/dbget-bin/www_bget?C00371"	title="C00371 (Zeatin)" />
+<area shape=circle	coords=363,495,4	href="/dbget-bin/www_bget?C16431"	title="C16431 (trans-Zeatin riboside)" />
+<area shape=circle	coords=363,417,4	href="/dbget-bin/www_bget?C16430"	title="C16430 (trans-Zeatin riboside  monophosphate)" />
+<area shape=circle	coords=363,318,4	href="/dbget-bin/www_bget?C16429"	title="C16429 (trans-Zeatin riboside diphosphate)" />
+<area shape=circle	coords=363,219,4	href="/dbget-bin/www_bget?C16428"	title="C16428 (trans-Zeatin riboside triphosphate)" />
+<area shape=circle	coords=215,417,4	href="/dbget-bin/www_bget?C04713"	title="C04713 (N6-(delta2-Isopentenyl)-adenosine 5'-monophosphate)" />
+<area shape=circle	coords=215,318,4	href="/dbget-bin/www_bget?C16426"	title="C16426 (Isopentenyladenosine-5'-diphosphate)" />
+<area shape=circle	coords=215,219,4	href="/dbget-bin/www_bget?C16424"	title="C16424 (Isopentenyladenosine-5'-triphosphate)" />
+<area shape=circle	coords=108,417,4	href="/dbget-bin/www_bget?C00235"	title="C00235 (Dimethylallyl diphosphate)" />
+<area shape=circle	coords=109,318,4	href="/dbget-bin/www_bget?C00235"	title="C00235 (Dimethylallyl diphosphate)" />
+<area shape=circle	coords=108,219,4	href="/dbget-bin/www_bget?C00235"	title="C00235 (Dimethylallyl diphosphate)" />
+<area shape=rect	coords=577,629,623,646	href="/dbget-bin/www_bget?2.4.1.215+R07260"	title="2.4.1.215, 2.4.1.215, R07260" />
+<area shape=poly	coords=645,223,645,313,649,313,649,223	href="/dbget-bin/www_bget?R08077"	title="R08077" />
+<area shape=poly	coords=647,313,643,305,651,305	href="/dbget-bin/www_bget?R08077"	title="R08077" />
+<area shape=poly	coords=645,322,645,412,649,412,649,322	href="/dbget-bin/www_bget?R08078"	title="R08078" />
+<area shape=poly	coords=647,412,643,404,651,404	href="/dbget-bin/www_bget?R08078"	title="R08078" />
+<area shape=poly	coords=645,421,645,490,649,490,649,421	href="/dbget-bin/www_bget?R08079"	title="R08079" />
+<area shape=poly	coords=647,490,643,482,651,482	href="/dbget-bin/www_bget?R08079"	title="R08079" />
+<area shape=poly	coords=645,499,645,569,649,569,649,499	href="/dbget-bin/www_bget?R08080"	title="R08080" />
+<area shape=poly	coords=647,569,643,561,651,561	href="/dbget-bin/www_bget?R08080"	title="R08080" />
+<area shape=poly	coords=367,493,502,493,502,497,367,497	href="/dbget-bin/www_bget?R08067"	title="R08067" />
+<area shape=poly	coords=502,495,494,499,494,491	href="/dbget-bin/www_bget?R08067"	title="R08067" />
+<area shape=poly	coords=505,500,505,570,509,570,509,500	href="/dbget-bin/www_bget?R08074"	title="R08074" />
+<area shape=poly	coords=507,570,503,562,511,562	href="/dbget-bin/www_bget?R08074"	title="R08074" />
+<area shape=poly	coords=507,500,511,508,503,508	href="/dbget-bin/www_bget?R08074"	title="R08074" />
+<area shape=poly	coords=505,422,505,490,509,490,509,422	href="/dbget-bin/www_bget?R08071"	title="R08071" />
+<area shape=poly	coords=507,490,503,482,511,482	href="/dbget-bin/www_bget?R08071"	title="R08071" />
+<area shape=poly	coords=507,422,511,430,503,430	href="/dbget-bin/www_bget?R08071"	title="R08071" />
+<area shape=poly	coords=367,415,502,415,502,419,367,419	href="/dbget-bin/www_bget?R08065"	title="R08065" />
+<area shape=poly	coords=502,417,494,421,494,413	href="/dbget-bin/www_bget?R08065"	title="R08065" />
+<area shape=poly	coords=213,224,213,313,217,313,217,224	href="/dbget-bin/www_bget?R08061"	title="R08061" />
+<area shape=poly	coords=215,313,211,305,219,305	href="/dbget-bin/www_bget?R08061"	title="R08061" />
+<area shape=poly	coords=215,224,219,232,211,232	href="/dbget-bin/www_bget?R08061"	title="R08061" />
+<area shape=poly	coords=361,224,361,313,365,313,365,224	href="/dbget-bin/www_bget?R08063"	title="R08063" />
+<area shape=poly	coords=363,313,359,305,367,305	href="/dbget-bin/www_bget?R08063"	title="R08063" />
+<area shape=poly	coords=363,224,367,232,359,232	href="/dbget-bin/www_bget?R08063"	title="R08063" />
+<area shape=poly	coords=213,323,213,412,217,412,217,323	href="/dbget-bin/www_bget?R08062"	title="R08062" />
+<area shape=poly	coords=215,412,211,404,219,404	href="/dbget-bin/www_bget?R08062"	title="R08062" />
+<area shape=poly	coords=215,323,219,331,211,331	href="/dbget-bin/www_bget?R08062"	title="R08062" />
+<area shape=poly	coords=361,323,361,412,365,412,365,323	href="/dbget-bin/www_bget?R08064"	title="R08064" />
+<area shape=poly	coords=363,412,359,404,367,404	href="/dbget-bin/www_bget?R08064"	title="R08064" />
+<area shape=poly	coords=363,323,367,331,359,331	href="/dbget-bin/www_bget?R08064"	title="R08064" />
+<area shape=poly	coords=213,422,213,490,217,490,217,422	href="/dbget-bin/www_bget?R08069"	title="R08069" />
+<area shape=poly	coords=215,490,211,482,219,482	href="/dbget-bin/www_bget?R08069"	title="R08069" />
+<area shape=poly	coords=215,422,219,430,211,430	href="/dbget-bin/www_bget?R08069"	title="R08069" />
+<area shape=poly	coords=361,422,361,490,365,490,365,422	href="/dbget-bin/www_bget?R08070"	title="R08070" />
+<area shape=poly	coords=363,490,359,482,367,482	href="/dbget-bin/www_bget?R08070"	title="R08070" />
+<area shape=poly	coords=363,422,367,430,359,430	href="/dbget-bin/www_bget?R08070"	title="R08070" />
+<area shape=poly	coords=219,493,358,493,358,497,219,497	href="/dbget-bin/www_bget?R08066"	title="R08066" />
+<area shape=poly	coords=358,495,350,499,350,491	href="/dbget-bin/www_bget?R08066"	title="R08066" />
+<area shape=poly	coords=213,500,213,570,217,570,217,500	href="/dbget-bin/www_bget?R08072"	title="R08072" />
+<area shape=poly	coords=215,570,211,562,219,562	href="/dbget-bin/www_bget?R08072"	title="R08072" />
+<area shape=poly	coords=215,500,219,508,211,508	href="/dbget-bin/www_bget?R08072"	title="R08072" />
+<area shape=poly	coords=361,500,361,570,365,570,365,500	href="/dbget-bin/www_bget?R08073"	title="R08073" />
+<area shape=poly	coords=363,570,359,562,367,562	href="/dbget-bin/www_bget?R08073"	title="R08073" />
+<area shape=poly	coords=363,500,367,508,359,508	href="/dbget-bin/www_bget?R08073"	title="R08073" />
+<area shape=poly	coords=219,573,357,573,357,577,219,577	href="/dbget-bin/www_bget?R08068"	title="R08068" />
+<area shape=poly	coords=357,575,349,579,349,571	href="/dbget-bin/www_bget?R08068"	title="R08068" />
+<area shape=rect	coords=434,629,480,646	href="/dbget-bin/www_bget?ath:AT2G36750+AT1G22400+AT2G36800+R08076"	title="AT2G36750, AT1G22400, AT2G36800, R08076" />
+<area shape=rect	coords=434,567,480,584	href="/dbget-bin/www_bget?1.3.1.69+R05702"	title="1.3.1.69, 1.3.1.69, R05702" />
+<area shape=rect	coords=272,409,318,426	href="/dbget-bin/www_bget?K10717+R08055"	title="K10717 (CYP735A), R08055" />
+<area shape=rect	coords=272,310,318,327	href="/dbget-bin/www_bget?K10717+R08054"	title="K10717 (CYP735A), R08054" />
+<area shape=rect	coords=143,409,189,426	href="/dbget-bin/www_bget?K10760+2.5.1.27+R04038"	title="K10760 (IPT), 2.5.1.27, R04038" />
+<area shape=rect	coords=143,310,189,327	href="/dbget-bin/www_bget?K10760+R08052"	title="K10760 (IPT), R08052" />
+<area shape=rect	coords=143,211,189,228	href="/dbget-bin/www_bget?K10760+R08051"	title="K10760 (IPT), R08051" />
+<area shape=rect	coords=272,211,318,228	href="/dbget-bin/www_bget?K10717+R08053"	title="K10717 (CYP735A), R08053" />
+<area shape=rect	coords=577,211,623,228	href="/dbget-bin/www_bget?K00791+2.5.1.8+R01122"	title="K00791 (E2.5.1.8, miaA), 2.5.1.8, R01122" />
+<area shape=rect	coords=143,629,189,646	href="/dbget-bin/www_bget?2.5.1.24+R03726"	title="2.5.1.24, 2.5.1.24, R03726" />
+<area shape=rect	coords=143,567,189,584	href="/dbget-bin/www_bget?K00279+1.5.99.12+R05708"	title="K00279 (E1.5.99.12), 1.5.99.12, R05708" />
+<area shape=rect	coords=293,768,339,785	href="/dbget-bin/www_bget?ath:AT5G05870+AT5G05860+R08075"	title="AT5G05870, AT5G05860, R08075" />
+<area shape=rect	coords=293,835,339,852	href="/dbget-bin/www_bget?2.4.2.40+R02119"	title="2.4.2.40, 2.4.2.40, R02119" />
+<area shape=rect	coords=293,694,339,711	href="/dbget-bin/www_bget?2.4.1.203+R02118"	title="2.4.1.203, 2.4.1.203, R02118" />
+<area shape=rect	coords=293,629,339,646	href="/dbget-bin/www_bget?2.5.1.50+R03133"	title="2.5.1.50, 2.5.1.50, R03133" />
+<area shape=rect	coords=40,45,222,71	href="/dbget-bin/www_bget?map00908"	title="map00908" />
+<area shape=rect	coords=47,136,224,162	href="/kegg-bin/show_pathway?map00900"	title="map00900" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

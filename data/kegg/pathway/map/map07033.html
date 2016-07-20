@@ -1,0 +1,185 @@
+<html>
+<!---
+ENTRY       map07033
+DEFINITION  Anticonvulsants - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Anticonvulsants - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Anticonvulsants - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07033&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07033">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07033" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07033" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07033.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=353,513,424,527	href="/dbget-bin/www_bget?D00392"	title="D00392 (Trimethadione (JP15/INN))" />
+<area shape=rect	coords=243,750,294,765	href="/dbget-bin/www_bget?D00293"	title="D00293 (Diazepam (JP15/USP/INN))" />
+<area shape=rect	coords=79,751,146,765	href="/dbget-bin/www_bget?D00504"	title="D00504 (Phenacemide (JAN/INN))" />
+<area shape=rect	coords=618,590,678,604	href="/dbget-bin/www_bget?D02766"	title="D02766 (Valpromide (INN))" />
+<area shape=rect	coords=615,236,660,250	href="/dbget-bin/www_bget?D00708"	title="D00708 (Ethotoin (JAN/USP/INN))" />
+<area shape=rect	coords=993,739,1112,753	href="/dbget-bin/www_bget?C07493"	title="C07493 (10-Hydroxycarbazepine)" />
+<area shape=rect	coords=812,740,886,754	href="/dbget-bin/www_bget?D00533"	title="D00533 (Oxcarbazepine (USAN/INN))" />
+<area shape=rect	coords=1012,500,1063,514	href="/dbget-bin/www_bget?D02097"	title="D02097 (Tiagabine hydrochloride (USP))" />
+<area shape=rect	coords=820,500,885,514	href="/dbget-bin/www_bget?D02718"	title="D02718 (Valrocemide (USAN/INN))" />
+<area shape=rect	coords=1011,588,1065,603	href="/dbget-bin/www_bget?D00535"	title="D00535 (Vigabatrin (JAN/USAN/INN))" />
+<area shape=rect	coords=817,590,887,604	href="/dbget-bin/www_bget?D02717"	title="D02717 (Valnoctamide (USAN/INN))" />
+<area shape=rect	coords=797,868,856,882	href="/dbget-bin/www_bget?D00538"	title="D00538 (Zonisamide (JAN/USAN/INN))" />
+<area shape=rect	coords=1048,869,1101,883	href="/dbget-bin/www_bget?D02716"	title="D02716 (Pregabalin (JAN/USAN/INN))" />
+<area shape=rect	coords=121,390,175,403	href="/dbget-bin/www_bget?D00474"	title="D00474 (Primidone (JP15/USP/INN))" />
+<area shape=rect	coords=832,245,884,259	href="/dbget-bin/www_bget?D00536"	title="D00536 (Felbamate (USAN/INN))" />
+<area shape=rect	coords=811,371,869,385	href="/dbget-bin/www_bget?D00537"	title="D00537 (Topiramate (JAN/USAN/INN))" />
+<area shape=rect	coords=1177,372,1226,385	href="/dbget-bin/www_bget?D01914"	title="D01914 (Piracetam (JAN/USAN/INN))" />
+<area shape=rect	coords=635,869,686,883	href="/dbget-bin/www_bget?D01787"	title="D01787 (Sultiame (JP15))" />
+<area shape=rect	coords=501,869,574,883	href="/dbget-bin/www_bget?D00218+D01196"	title="D00218 (Acetazolamide (JP15/USP/INN)), D01196 (Acetazolamide sodium (JAN))" />
+<area shape=rect	coords=465,512,535,526	href="/dbget-bin/www_bget?D00539"	title="D00539 (Ethosuximide (JP15/USP/INN))" />
+<area shape=rect	coords=360,353,412,367	href="/dbget-bin/www_bget?D00512+D02103"	title="D00512 (Phenytoin (JP15/USP/INN)), D02103 (Phenytoin sodium for injection (JP15))" />
+<area shape=rect	coords=603,354,672,367	href="/dbget-bin/www_bget?D02096"	title="D02096 (Fosphenytoin sodium (USP))" />
+<area shape=rect	coords=611,741,688,755	href="/dbget-bin/www_bget?D00252"	title="D00252 (Carbamazepine (JP15/USP/INN))" />
+<area shape=rect	coords=1044,371,1114,385	href="/dbget-bin/www_bget?D00709"	title="D00709 (Levetiracetam (JAN/USAN/INN))" />
+<area shape=rect	coords=362,236,408,250	href="/dbget-bin/www_bget?C14916"	title="C14916 (Nirvanol)" />
+<area shape=rect	coords=936,869,994,883	href="/dbget-bin/www_bget?D00332"	title="D00332 (Gabapentin (JAN/USAN/INN))" />
+<area shape=rect	coords=243,869,296,883	href="/dbget-bin/www_bget?D01253"	title="D01253 (Clobazam (JAN/USAN/INN))" />
+<area shape=rect	coords=932,371,993,385	href="/dbget-bin/www_bget?D00354"	title="D00354 (Lamotrigine (JAN/USAN/INN))" />
+<area shape=rect	coords=179,89,225,101	href="/dbget-bin/www_bget?D01740"	title="D01740 (Barbital (JP15/INN))" />
+<area shape=rect	coords=620,484,671,498	href="/dbget-bin/www_bget?D00399+D00710"	title="D00399 (Valproic acid (USP)), D00710 (Sodium valproate (JP15))" />
+<area shape=rect	coords=454,236,521,250	href="/dbget-bin/www_bget?D00375"	title="D00375 (Mephenytoin (USP/INN))" />
+<area shape=rect	coords=113,535,230,548	href="/dbget-bin/www_bget?C07499"	title="C07499 (Phenylethylmalonamide)" />
+<area shape=rect	coords=74,869,164,883	href="/dbget-bin/www_bget?D01409"	title="D01409 (Acetylpheneturide (JAN))" />
+<area shape=rect	coords=164,237,233,251	href="/dbget-bin/www_bget?D00506+D00701"	title="D00506 (Phenobarbital (JP15/USP/INN)), D00701 (Phenobarbital sodium (JAN/USP/INN))" />
+<area shape=rect	coords=367,750,425,764	href="/dbget-bin/www_bget?D00531"	title="D00531 (Nitrazepam (JP15/USAN/INN))" />
+<area shape=rect	coords=225,391,282,405	href="/dbget-bin/www_bget?D01382"	title="D01382 (Metharbital (JAN/INN))" />
+<area shape=rect	coords=365,870,427,883	href="/dbget-bin/www_bget?D00280"	title="D00280 (Clonazepam (JP15/USP/INN))" />
+<area shape=rect	coords=1010,245,1092,259	href="/dbget-bin/www_bget?C15341"	title="C15341 (Fluorofelbamate)" />
+<area shape=rect	coords=230,80,301,106	href="/kegg-bin/show_pathway?map07032"	title="map07032" />
+<area shape=rect	coords=40,45,206,71	href="/dbget-bin/www_bget?map07033"	title="map07033" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

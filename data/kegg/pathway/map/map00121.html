@@ -1,0 +1,218 @@
+<html>
+<!---
+ENTRY       map00121
+DEFINITION  Secondary bile acid biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Secondary bile acid biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Secondary bile acid biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00121&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00121">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The secondary bile acids are derived from the primary bile acids by the enzymatic action of intestinal bacteria through the process of deconjugation and dehydroxylation. The secondary bile acids in humans include deoxycholic acid and lithocholic acid, formed from the 7alpha-dehydroxylation of cholic acid and chenodeoxycholic acid, respectively.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00121 map" -->
+</select>
+<input type="hidden" name="mapno" value="00121" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00121" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00121" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00121.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=134,593,4	href="/dbget-bin/www_bget?C05122"	title="C05122 (Taurocholate)" />
+<area shape=circle	coords=109,1454,4	href="/dbget-bin/www_bget?C05466"	title="C05466 (Glycochenodeoxycholate)" />
+<area shape=circle	coords=109,1590,4	href="/dbget-bin/www_bget?C05465"	title="C05465 (Taurochenodeoxycholate)" />
+<area shape=circle	coords=134,498,4	href="/dbget-bin/www_bget?C01921"	title="C01921 (Glycocholate)" />
+<area shape=rect	coords=1415,1902,1565,2007	href="/dbget-bin/www_bget?C17668"	title="C17668 (Haemulcholate)" />
+<area shape=rect	coords=1615,1769,1771,1873	href="/dbget-bin/www_bget?C17654"	title="C17654 (beta-Phocaecholate)" />
+<area shape=rect	coords=1610,1638,1776,1746	href="/dbget-bin/www_bget?C17651"	title="C17651 (alpha-Phocaecholic acid)" />
+<area shape=rect	coords=951,859,1108,962	href="/dbget-bin/www_bget?C04483"	title="C04483 (3alpha,12alpha-Dihydroxy-5beta-cholanate)" />
+<area shape=rect	coords=177,535,223,552	href="/dbget-bin/www_bget?K01442+3.5.1.24"	title="K01442 (E3.5.1.24), 3.5.1.24" />
+<area shape=rect	coords=153,1495,199,1512	href="/dbget-bin/www_bget?K01442+3.5.1.24"	title="K01442 (E3.5.1.24), 3.5.1.24" />
+<area shape=rect	coords=439,1511,485,1528	href="/dbget-bin/www_bget?up:B4YST9+up:P19409+6.-.-.-"	title="B4YST9, P19409, 6.-.-.-" />
+<area shape=rect	coords=689,1510,735,1527	href="/dbget-bin/www_bget?up:B4YST2+up:P07914+up:P19337+1.17.99.5"	title="B4YST2, P07914, P19337, 1.17.99.5" />
+<area shape=rect	coords=915,1510,961,1527	href="/dbget-bin/www_bget?up:P19410+1.-.-.-"	title="P19410, 1.-.-.-" />
+<area shape=rect	coords=1139,1510,1185,1527	href="/dbget-bin/www_bget?up:B4YSU2+up:P19413+3.1.2.26"	title="B4YSU2, P19413, 3.1.2.26" />
+<area shape=rect	coords=1253,1405,1299,1422	href="/dbget-bin/www_bget?up:B4YSU1+up:P19412+4.2.1.106"	title="B4YSU1, P19412, 4.2.1.106" />
+<area shape=rect	coords=438,1163,484,1180	href="/dbget-bin/www_bget?up:B4YST9+up:P19409+6.-.-.-"	title="B4YST9, P19409, 6.-.-.-" />
+<area shape=rect	coords=689,1162,735,1179	href="/dbget-bin/www_bget?up:B4YST2+up:P07914+up:P19337+1.17.99.5"	title="B4YST2, P07914, P19337, 1.17.99.5" />
+<area shape=rect	coords=914,1162,960,1179	href="/dbget-bin/www_bget?up:B4YSU4+up:P32370+1.-.-.-"	title="B4YSU4, P32370, 1.-.-.-" />
+<area shape=rect	coords=1138,1162,1184,1179	href="/dbget-bin/www_bget?up:B4YSU2+up:P19413+3.1.2.26"	title="B4YSU2, P19413, 3.1.2.26" />
+<area shape=rect	coords=1253,1228,1299,1245	href="/dbget-bin/www_bget?up:P32371+4.2.1.-"	title="P32371, 4.2.1.-" />
+<area shape=rect	coords=153,1520,199,1537	href="/dbget-bin/www_bget?K01442+3.5.1.24"	title="K01442 (E3.5.1.24), 3.5.1.24" />
+<area shape=rect	coords=153,1543,199,1560	href="/dbget-bin/www_bget?3.5.1.74"	title="3.5.1.74, 3.5.1.74" />
+<area shape=rect	coords=259,118,413,221	href="/dbget-bin/www_bget?C17644"	title="C17644 (Ursocholate)" />
+<area shape=rect	coords=260,481,416,585	href="/dbget-bin/www_bget?C00695"	title="C00695 (3alpha,7alpha,12alpha-Trihydroxy-5beta-cholanate)" />
+<area shape=rect	coords=613,898,772,1003	href="/dbget-bin/www_bget?C04483"	title="C04483 (3alpha,12alpha-Dihydroxy-5beta-cholanate)" />
+<area shape=rect	coords=953,190,1107,285	href="/dbget-bin/www_bget?C17737"	title="C17737 (Allocholic acid)" />
+<area shape=rect	coords=953,316,1106,417	href="/dbget-bin/www_bget?C17687"	title="C17687 (Allodeoxycholate)" />
+<area shape=rect	coords=954,448,1109,555	href="/dbget-bin/www_bget?C17657"	title="C17657 (Bitocholate)" />
+<area shape=rect	coords=963,724,1115,828	href="/dbget-bin/www_bget?C00695"	title="C00695 (3alpha,7alpha,12alpha-Trihydroxy-5beta-cholanate)" />
+<area shape=rect	coords=1167,856,1324,962	href="/dbget-bin/www_bget?C17646"	title="C17646 (12-Epideoxycholic acid)" />
+<area shape=rect	coords=1380,856,1538,961	href="/dbget-bin/www_bget?C17654"	title="C17654 (beta-Phocaecholate)" />
+<area shape=rect	coords=1165,447,1323,549	href="/dbget-bin/www_bget?C17661"	title="C17661 (Isodeoxycholate)" />
+<area shape=rect	coords=1164,314,1321,418	href="/dbget-bin/www_bget?C17660"	title="C17660 (Isochenodeoxycholate)" />
+<area shape=rect	coords=1600,181,1756,285	href="/dbget-bin/www_bget?C17644"	title="C17644 (Ursocholate)" />
+<area shape=rect	coords=1599,446,1756,556	href="/dbget-bin/www_bget?C17650"	title="C17650 (Vulpecholate)" />
+<area shape=rect	coords=1598,313,1755,419	href="/dbget-bin/www_bget?C07880"	title="C07880 (Ursodiol)" />
+<area shape=rect	coords=1378,180,1537,282	href="/dbget-bin/www_bget?C03990"	title="C03990 (3alpha-Hydroxy-5beta-cholanate)" />
+<area shape=rect	coords=1381,314,1537,424	href="/dbget-bin/www_bget?C17647"	title="C17647 (alpha-Muricholate)" />
+<area shape=rect	coords=1381,448,1537,559	href="/dbget-bin/www_bget?C17726"	title="C17726 (beta-Muricholate)" />
+<area shape=rect	coords=1381,580,1537,688	href="/dbget-bin/www_bget?C17727"	title="C17727 (omega-Muricholate)" />
+<area shape=rect	coords=1379,720,1537,829	href="/dbget-bin/www_bget?C15515"	title="C15515 (6beta-Hydroxylithocholate)" />
+<area shape=rect	coords=1167,720,1323,825	href="/dbget-bin/www_bget?C17662"	title="C17662 (Isoursodeoxycholate)" />
+<area shape=rect	coords=1166,579,1321,683	href="/dbget-bin/www_bget?C17658"	title="C17658 (Isolithocholate)" />
+<area shape=rect	coords=950,582,1106,687	href="/dbget-bin/www_bget?C02528"	title="C02528 (Chenodeoxycholate)" />
+<area shape=rect	coords=1165,183,1321,292	href="/dbget-bin/www_bget?C15517"	title="C15517 (Hyodeoxycholate)" />
+<area shape=rect	coords=1599,577,1755,686	href="/dbget-bin/www_bget?C17649"	title="C17649 (Hyocholate)" />
+<area shape=rect	coords=260,1109,417,1218	href="/dbget-bin/www_bget?C07880"	title="C07880 (Ursodiol)" />
+<area shape=rect	coords=508,1110,665,1218	href="/dbget-bin/www_bget?C17689"	title="C17689 (Ursodeoxycholoyl-CoA)" />
+<area shape=rect	coords=511,1458,664,1565	href="/dbget-bin/www_bget?C05337"	title="C05337 (Chenodeoxycholoyl-CoA)" />
+<area shape=rect	coords=260,1457,417,1567	href="/dbget-bin/www_bget?C02528"	title="C02528 (Chenodeoxycholate)" />
+<area shape=rect	coords=1753,1285,1921,1397	href="/dbget-bin/www_bget?C03990"	title="C03990 (3alpha-Hydroxy-5beta-cholanate)" />
+<area shape=rect	coords=968,1638,1122,1742	href="/dbget-bin/www_bget?C17664"	title="C17664 (Allochenodeoxycholate)" />
+<area shape=rect	coords=966,1903,1123,2011	href="/dbget-bin/www_bget?C17667"	title="C17667 (Avicholate)" />
+<area shape=rect	coords=1179,1772,1343,1878	href="/dbget-bin/www_bget?C17657"	title="C17657 (Bitocholate)" />
+<area shape=rect	coords=1183,1904,1336,2009	href="/dbget-bin/www_bget?C02528"	title="C02528 (Chenodeoxycholate)" />
+<area shape=rect	coords=1404,1636,1569,1741	href="/dbget-bin/www_bget?C00695"	title="C00695 (3alpha,7alpha,12alpha-Trihydroxy-5beta-cholanate)" />
+<area shape=rect	coords=40,45,331,70	href="/dbget-bin/www_bget?map00121"	title="map00121" />
+<area shape=rect	coords=80,653,191,686	href="/kegg-bin/show_pathway?map00120"	title="map00120" />
+<area shape=rect	coords=80,406,191,439	href="/kegg-bin/show_pathway?map00120"	title="map00120" />
+<area shape=rect	coords=55,1363,166,1396	href="/kegg-bin/show_pathway?map00120"	title="map00120" />
+<area shape=rect	coords=54,1651,165,1684	href="/kegg-bin/show_pathway?map00120"	title="map00120" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

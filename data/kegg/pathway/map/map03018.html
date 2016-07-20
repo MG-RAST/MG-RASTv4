@@ -1,0 +1,230 @@
+<html>
+<!---
+ENTRY       map03018
+DEFINITION  RNA degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: RNA degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>RNA degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03018&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03018">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The correct processing, quality control and turnover of cellular RNA molecules are critical to many aspects in the expression of genetic information. In eukaryotes, two major pathways of mRNA decay exist and both pathways are initiated by poly(A) shortening of the mRNA. In the 5' to 3' pathway, this is followed by decapping which then permits the 5' to 3' exonucleolytic degradation of transcripts. In the 3' to 5' pathway, the exosome, a large multisubunit complex, plays a key role. The exosome exists in archaeal cells, too. In bacteria, endoribonuclease E, a key enzyme involved in RNA decay and processing, organizes a protein complex called degradosome. RNase E or R interacts with the phosphate-dependent exoribonuclease polynucleotide phosphorylase, DEAD-box helicases, and additional factors in the RNA-degrading complex.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03018 map" -->
+</select>
+<input type="hidden" name="mapno" value="03018" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03018" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03018" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03018.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=143,674,4	href="/dbget-bin/www_bget?C00201"	title="C00201 (Nucleoside triphosphate)" />
+<area shape=rect	coords=357,649,403,666	href="/dbget-bin/www_bget?K08300"	title="K08300 (rne)" />
+<area shape=rect	coords=357,699,403,716	href="/dbget-bin/www_bget?K08300"	title="K08300 (rne)" />
+<area shape=rect	coords=357,749,403,766	href="/dbget-bin/www_bget?K08300"	title="K08300 (rne)" />
+<area shape=rect	coords=403,649,449,666	href="/dbget-bin/www_bget?K03732"	title="K03732 (rhlB)" />
+<area shape=rect	coords=448,649,494,666	href="/dbget-bin/www_bget?K01689"	title="K01689 (ENO)" />
+<area shape=rect	coords=494,649,540,666	href="/dbget-bin/www_bget?K00962"	title="K00962 (pnp, PNPT1)" />
+<area shape=rect	coords=403,699,449,716	href="/dbget-bin/www_bget?K11927"	title="K11927 (rhlE)" />
+<area shape=rect	coords=448,699,494,716	href="/dbget-bin/www_bget?K12573"	title="K12573 (rnr, vacB)" />
+<area shape=rect	coords=403,749,449,766	href="/dbget-bin/www_bget?K05592+K03654"	title="K03654 (recQ), K05592 (deaD)" />
+<area shape=rect	coords=449,749,495,766	href="/dbget-bin/www_bget?K03628"	title="K03628 (rho)" />
+<area shape=rect	coords=868,691,914,708	href="/dbget-bin/www_bget?K11600"	title="K11600 (RRP41, EXOSC4, SKI6)" />
+<area shape=rect	coords=914,691,960,708	href="/dbget-bin/www_bget?K12589"	title="K12589 (RRP42, EXOSC7)" />
+<area shape=rect	coords=960,708,1006,725	href="/dbget-bin/www_bget?K07573"	title="K07573 (CSL4, EXOSC1)" />
+<area shape=rect	coords=960,691,1006,708	href="/dbget-bin/www_bget?K03679"	title="K03679 (RRP4, EXOSC2)" />
+<area shape=rect	coords=584,288,630,305	href="/dbget-bin/www_bget?K12600"	title="K12600 (SKI3, TTC37)" />
+<area shape=rect	coords=629,288,675,305	href="/dbget-bin/www_bget?K12601+K12602"	title="K12601 (SKI8), K12602 (WDR61, REC14, SKI8)" />
+<area shape=rect	coords=487,100,533,117	href="/dbget-bin/www_bget?K07573"	title="K07573 (CSL4, EXOSC1)" />
+<area shape=rect	coords=555,117,601,134	href="/dbget-bin/www_bget?K11600"	title="K11600 (RRP41, EXOSC4, SKI6)" />
+<area shape=rect	coords=372,117,418,134	href="/dbget-bin/www_bget?K12585"	title="K12585 (DIS3, RRP44)" />
+<area shape=rect	coords=538,288,584,305	href="/dbget-bin/www_bget?K12599"	title="K12599 (SKI2, SKIV2L)" />
+<area shape=rect	coords=533,100,579,117	href="/dbget-bin/www_bget?K03679"	title="K03679 (RRP4, EXOSC2)" />
+<area shape=rect	coords=509,117,555,134	href="/dbget-bin/www_bget?K12589"	title="K12589 (RRP42, EXOSC7)" />
+<area shape=rect	coords=533,134,579,151	href="/dbget-bin/www_bget?K03678"	title="K03678 (RRP45, EXOSC9)" />
+<area shape=rect	coords=464,117,510,134	href="/dbget-bin/www_bget?K12587+K12588"	title="K12587 (EXOSC6, MTR3), K12588 (MTR3)" />
+<area shape=rect	coords=418,117,464,134	href="/dbget-bin/www_bget?K12586"	title="K12586 (RRP43, EXOSC8, OIP2)" />
+<area shape=rect	coords=601,117,647,134	href="/dbget-bin/www_bget?K12590"	title="K12590 (RRP46, EXOSC5)" />
+<area shape=rect	coords=601,100,647,117	href="/dbget-bin/www_bget?K03681"	title="K03681 (RRP40, EXOSC3)" />
+<area shape=rect	coords=422,219,468,236	href="/dbget-bin/www_bget?K12592"	title="K12592 (C1D, LRP1)" />
+<area shape=rect	coords=372,219,418,236	href="/dbget-bin/www_bget?K12591"	title="K12591 (RRP6, EXOSC10)" />
+<area shape=rect	coords=471,219,517,236	href="/dbget-bin/www_bget?K12593+K12594"	title="K12593 (MPHOSPH6, MPP6), K12594 (MPP6)" />
+<area shape=rect	coords=537,219,583,236	href="/dbget-bin/www_bget?K12595"	title="K12595 (SKI7)" />
+<area shape=rect	coords=372,288,418,305	href="/dbget-bin/www_bget?K03514+K12596"	title="K03514 (POLS, TRF4), K12596 (TRF5)" />
+<area shape=rect	coords=418,288,464,305	href="/dbget-bin/www_bget?K12597"	title="K12597 (AIR1_2)" />
+<area shape=rect	coords=464,288,510,305	href="/dbget-bin/www_bget?K12598"	title="K12598 (MTR4, SKIV2L2)" />
+<area shape=rect	coords=419,350,465,367	href="/dbget-bin/www_bget?K12604"	title="K12604 (CNOT1, NOT1)" />
+<area shape=rect	coords=465,350,511,367	href="/dbget-bin/www_bget?K12605"	title="K12605 (CNOT2, NOT2)" />
+<area shape=rect	coords=511,350,557,367	href="/dbget-bin/www_bget?K12580"	title="K12580 (CNOT3, NOT3)" />
+<area shape=rect	coords=557,350,603,367	href="/dbget-bin/www_bget?K10643"	title="K10643 (CNOT4, NOT4, MOT2)" />
+<area shape=rect	coords=373,350,419,367	href="/dbget-bin/www_bget?K12603"	title="K12603 (CNOT6, CCR4)" />
+<area shape=rect	coords=373,367,419,384	href="/dbget-bin/www_bget?K12581"	title="K12581 (CNOT7_8, CAF1, POP2)" />
+<area shape=rect	coords=511,367,557,384	href="/dbget-bin/www_bget?K12608"	title="K12608 (CAF16)" />
+<area shape=rect	coords=419,367,465,384	href="/dbget-bin/www_bget?K12606"	title="K12606 (RCD1, CNOT9, CAF40)" />
+<area shape=rect	coords=465,367,511,384	href="/dbget-bin/www_bget?K12607"	title="K12607 (CNOT10)" />
+<area shape=rect	coords=557,367,603,384	href="/dbget-bin/www_bget?K12609"	title="K12609 (CAF120)" />
+<area shape=rect	coords=73,134,119,151	href="/dbget-bin/www_bget?K12584"	title="K12584 (DCPS, DCS)" />
+<area shape=rect	coords=750,215,796,232	href="/dbget-bin/www_bget?K12610+K12611+K12612"	title="K12610 (DCP1A), K12611 (DCP1B), K12612 (DCP1)" />
+<area shape=rect	coords=750,232,796,249	href="/dbget-bin/www_bget?K12613"	title="K12613 (DCP2)" />
+<area shape=rect	coords=748,350,794,367	href="/dbget-bin/www_bget?K12620"	title="K12620 (LSM1)" />
+<area shape=rect	coords=794,350,840,367	href="/dbget-bin/www_bget?K12621"	title="K12621 (LSM2)" />
+<area shape=rect	coords=840,350,886,367	href="/dbget-bin/www_bget?K12622"	title="K12622 (LSM3)" />
+<area shape=rect	coords=886,350,932,367	href="/dbget-bin/www_bget?K12623"	title="K12623 (LSM4)" />
+<area shape=rect	coords=794,367,840,384	href="/dbget-bin/www_bget?K12624"	title="K12624 (LSM5)" />
+<area shape=rect	coords=840,367,886,384	href="/dbget-bin/www_bget?K12625"	title="K12625 (LSM6)" />
+<area shape=rect	coords=886,367,932,384	href="/dbget-bin/www_bget?K12626"	title="K12626 (LSM7)" />
+<area shape=rect	coords=932,350,978,367	href="/dbget-bin/www_bget?K12627"	title="K12627 (LSM8)" />
+<area shape=rect	coords=905,214,951,231	href="/dbget-bin/www_bget?K12618"	title="K12618 (XRN1, SEP1, KEM1)" />
+<area shape=rect	coords=960,214,1006,231	href="/dbget-bin/www_bget?K12619"	title="K12619 (XRN2, RAT1)" />
+<area shape=rect	coords=796,215,842,232	href="/dbget-bin/www_bget?K12614"	title="K12614 (DDX6, RCK, DHH1)" />
+<area shape=rect	coords=796,232,842,249	href="/dbget-bin/www_bget?K12615"	title="K12615 (EDC3)" />
+<area shape=rect	coords=796,249,842,266	href="/dbget-bin/www_bget?K12616"	title="K12616 (EDC4)" />
+<area shape=rect	coords=842,215,888,232	href="/dbget-bin/www_bget?K12617"	title="K12617 (PATL1, PAT1)" />
+<area shape=rect	coords=629,352,675,369	href="/dbget-bin/www_bget?K01148"	title="K01148 (PARN)" />
+<area shape=rect	coords=355,847,401,864	href="/dbget-bin/www_bget?K04043"	title="K04043 (dnaK)" />
+<area shape=rect	coords=407,847,453,864	href="/dbget-bin/www_bget?K04077"	title="K04077 (groEL, HSPD1)" />
+<area shape=rect	coords=355,869,401,886	href="/dbget-bin/www_bget?K00937"	title="K00937 (ppk)" />
+<area shape=rect	coords=407,869,453,886	href="/dbget-bin/www_bget?K00970"	title="K00970 (E2.7.7.19, pcnB)" />
+<area shape=rect	coords=457,847,503,864	href="/dbget-bin/www_bget?K03666"	title="K03666 (hfq)" />
+<area shape=rect	coords=72,703,118,720	href="/dbget-bin/www_bget?K08311"	title="K08311 (nudH)" />
+<area shape=rect	coords=357,798,403,815	href="/dbget-bin/www_bget?K00962"	title="K00962 (pnp, PNPT1)" />
+<area shape=rect	coords=403,798,449,815	href="/dbget-bin/www_bget?K12573"	title="K12573 (rnr, vacB)" />
+<area shape=rect	coords=449,798,495,815	href="/dbget-bin/www_bget?K12574"	title="K12574 (rnj)" />
+<area shape=rect	coords=40,45,202,71	href="/dbget-bin/www_bget?map03018"	title="map03018" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

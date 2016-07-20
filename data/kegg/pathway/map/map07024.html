@@ -1,0 +1,156 @@
+<html>
+<!---
+ENTRY       map07024
+DEFINITION  Statins - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Statins - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Statins - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07024&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07024">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07024" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07024" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07024.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=81,521,137,534	href="/dbget-bin/www_bget?C00356"	title="C00356 ((S)-3-Hydroxy-3-methylglutaryl-CoA)" />
+<area shape=rect	coords=678,452,736,464	href="/dbget-bin/www_bget?D01862"	title="D01862 (Pitavastatin calcium (JAN))" />
+<area shape=rect	coords=675,636,741,648	href="/dbget-bin/www_bget?D01915"	title="D01915 (Rosuvastatin calcium (JAN/USAN))" />
+<area shape=rect	coords=79,261,132,273	href="/dbget-bin/www_bget?C13963"	title="C13963 (Mevastatin)" />
+<area shape=rect	coords=679,283,738,294	href="/dbget-bin/www_bget?D00887+D02258"	title="D00887 (Atorvastatin calcium (USAN)), D02258 (Atorvastatin calcium hydrate (JAN))" />
+<area shape=rect	coords=486,557,543,569	href="/dbget-bin/www_bget?D00889"	title="D00889 (Cerivastatin sodium (JAN/USAN))" />
+<area shape=rect	coords=489,310,543,322	href="/dbget-bin/www_bget?D00892"	title="D00892 (Fluvastatin sodium (JAN/USAN))" />
+<area shape=rect	coords=298,261,352,274	href="/dbget-bin/www_bget?D00893"	title="D00893 (Pravastatin sodium (JP15/USAN))" />
+<area shape=rect	coords=296,636,356,648	href="/dbget-bin/www_bget?D00434"	title="D00434 (Simvastatin (JAN/USP/INN))" />
+<area shape=rect	coords=299,412,353,424	href="/dbget-bin/www_bget?D00359"	title="D00359 (Lovastatin (USP/INN))" />
+<area shape=rect	coords=40,45,137,71	href="/dbget-bin/www_bget?map07024"	title="map07024" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

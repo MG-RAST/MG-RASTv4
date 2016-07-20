@@ -1,0 +1,184 @@
+<html>
+<!---
+ENTRY       map05217
+DEFINITION  Basal cell carcinoma - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Basal cell carcinoma - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Basal cell carcinoma - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05217&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05217">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The development of basal cell carcinoma is associated with constitutive activation of sonic hedgehog signaling. Normally, ligand-dependent signaling by Hedgehog (Hh) homologs proceeds through binding to the Patched receptor. This binding relieves the Patched-mediated inhibition of signaling through the Smoothened (SMOH) gene product. This signaling ultimately results in the dissociation of the Gli1 transcription factor from an inhibitory complex in the cytoplasm, its subsequent translocation to the nucleus, and activation of target gene expression. The mutations in SMOH, PTCH1, and SHH in BCCs result in continuous activation of target genes. At a cellular level, sonic hedgehog signaling promotes cell proliferation. Mutations in TP53 are also found with high frequency (>50%) in sporadic BCC.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05217 map" -->
+</select>
+<input type="hidden" name="mapno" value="05217" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05217" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05217" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05217.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=132,308,4	href="/dbget-bin/www_bget?C00187"	title="C00187 (Cholesterol)" />
+<area shape=rect	coords=396,330,442,347	href="/dbget-bin/www_bget?K06227"	title="K06227 (COS2)" />
+<area shape=rect	coords=655,331,701,348	href="/dbget-bin/www_bget?hsa:2735+hsa:2736+hsa:2737+mmu:14632+mmu:14633+mmu:14634+rno:140588+rno:140589+rno:304729"	title="2735, 2736, 2737, 14632, 14633, 14634, 140588, 140589, 304729" />
+<area shape=rect	coords=655,357,701,374	href="/dbget-bin/www_bget?K06225+K11101"	title="K06225 (PTCH1), K11101 (PTCH2)" />
+<area shape=rect	coords=655,278,701,295	href="/dbget-bin/www_bget?K04662"	title="K04662 (BMP2_4)" />
+<area shape=rect	coords=655,186,701,203	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=655,384,701,401	href="/dbget-bin/www_bget?K00182+K00312+K00408+K00444+K00445+K00572+K00714+K01064+K01357+K01384+K01558+K03209"	title="K00182 (WNT2), K00312 (WNT3), K00408 (WNT4), K00444 (WNT5), K00445 (WNT6), K00572 (WNT7), K00714 (WNT8), K01064 (WNT9), K01357 (WNT10), K01384 (WNT11), K01558 (WNT16), K03209 (WNT1)" />
+<area shape=rect	coords=109,270,155,287	href="/dbget-bin/www_bget?K11988"	title="K11988 (SHH)" />
+<area shape=rect	coords=457,468,503,485	href="/dbget-bin/www_bget?K02085"	title="K02085 (APC)" />
+<area shape=rect	coords=188,270,234,287	href="/dbget-bin/www_bget?K06225"	title="K06225 (PTCH1)" />
+<area shape=rect	coords=418,347,464,364	href="/dbget-bin/www_bget?K06229"	title="K06229 (SUFU)" />
+<area shape=rect	coords=412,468,458,485	href="/dbget-bin/www_bget?K02157+K04385"	title="K02157 (AXIN1), K04385 (AXIN2)" />
+<area shape=rect	coords=281,485,327,502	href="/dbget-bin/www_bget?K02353"	title="K02353 (DVL)" />
+<area shape=rect	coords=188,484,234,501	href="/dbget-bin/www_bget?K02235+K02329+K02354+K02375+K02376+K02378+K02432+K02534+K02645+K02842"	title="K02235 (FZD2), K02329 (FZD3), K02354 (FZD4), K02375 (FZD5), K02376 (FZD6), K02378 (FZD7), K02432 (FZD1), K02534 (FZD8), K02645 (FZD9), K02842 (FZD10)" />
+<area shape=rect	coords=478,330,524,347	href="/dbget-bin/www_bget?K06230"	title="K06230 (GLI)" />
+<area shape=rect	coords=372,347,418,364	href="/dbget-bin/www_bget?K06228"	title="K06228 (FU)" />
+<area shape=rect	coords=187,330,233,347	href="/dbget-bin/www_bget?K06226"	title="K06226 (SMO)" />
+<area shape=rect	coords=655,305,701,322	href="/dbget-bin/www_bget?K06231"	title="K06231 (HHIP)" />
+<area shape=rect	coords=454,485,500,502	href="/dbget-bin/www_bget?K02105"	title="K02105 (CTNNB1)" />
+<area shape=rect	coords=371,485,417,502	href="/dbget-bin/www_bget?K03083"	title="K03083 (GSK3B)" />
+<area shape=rect	coords=603,486,649,503	href="/dbget-bin/www_bget?K02620+K04490+K04491+K04492"	title="K02620 (TCF7), K04490 (TCF7L1), K04491 (TCF7L2), K04492 (LEF1)" />
+<area shape=rect	coords=40,45,243,71	href="/dbget-bin/www_bget?map05217"	title="map05217" />
+<area shape=rect	coords=255,353,358,388	href="/kegg-bin/show_pathway?map04340"	title="map04340" />
+<area shape=rect	coords=255,517,358,552	href="/kegg-bin/show_pathway?map04310"	title="map04310" />
+<area shape=rect	coords=643,130,746,165	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=780,130,883,165	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=716,271,819,306	href="/kegg-bin/show_pathway?map04350"	title="map04350" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

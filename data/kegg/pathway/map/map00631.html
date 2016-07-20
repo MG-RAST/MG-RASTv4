@@ -1,0 +1,166 @@
+<html>
+<!---
+ENTRY       map00631
+DEFINITION  1,2-Dichloroethane degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: 1,2-Dichloroethane degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>1,2-Dichloroethane degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00631&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00631">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00631 map" -->
+</select>
+<input type="hidden" name="mapno" value="00631" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00631" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00631" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00631.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=176,105,4	href="/dbget-bin/www_bget?C06752"	title="C06752 (1,2-Dichloroethane)" />
+<area shape=circle	coords=176,170,4	href="/dbget-bin/www_bget?C06753"	title="C06753 (2-Chloroethanol)" />
+<area shape=circle	coords=176,235,4	href="/dbget-bin/www_bget?C06754"	title="C06754 (Chloroacetaldehyde)" />
+<area shape=circle	coords=176,365,4	href="/dbget-bin/www_bget?C00160"	title="C00160 (Glycolate)" />
+<area shape=circle	coords=176,300,4	href="/dbget-bin/www_bget?C06755"	title="C06755 (Chloroacetic acid)" />
+<area shape=rect	coords=178,321,224,338	href="/dbget-bin/www_bget?K01560+3.8.1.2+R05287"	title="K01560 (E3.8.1.2), 3.8.1.2, R05287" />
+<area shape=rect	coords=128,321,174,338	href="/dbget-bin/www_bget?K01561+3.8.1.3+R05287"	title="K01561 (E3.8.1.3), 3.8.1.3, R05287" />
+<area shape=rect	coords=153,188,199,205	href="/dbget-bin/www_bget?K00114+1.1.99.8+R05285"	title="K00114 (E1.1.99.8), 1.1.99.8, R05285" />
+<area shape=rect	coords=154,122,200,139	href="/dbget-bin/www_bget?K01563+3.8.1.5+R05284"	title="K01563 (E3.8.1.5, dhaA), 3.8.1.5, R05284" />
+<area shape=rect	coords=154,252,200,269	href="/dbget-bin/www_bget?K00128+1.2.1.3+R05286"	title="K00128 (E1.2.1.3), 1.2.1.3, R05286" />
+<area shape=rect	coords=100,410,255,445	href="/kegg-bin/show_pathway?map00630"	title="map00630" />
+<area shape=rect	coords=54,45,333,71	href="/dbget-bin/www_bget?map00631"	title="map00631" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

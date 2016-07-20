@@ -1,0 +1,216 @@
+<html>
+<!---
+ENTRY       map04350
+DEFINITION  TGF-beta signaling pathway - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: TGF-beta signaling pathway - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>TGF-beta signaling pathway - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04350&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04350">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The transforming growth factor-beta (TGF-beta) family members, which include TGF-betas, activins and bone morphogenetic proteins (BMPs), are structurally related secreted cytokines found in species ranging from worms and insects to mammals. A wide spectrum of cellular functions such as proliferation, apoptosis, differentiation and migration are regulated by TGF-beta family members. TGF-beta family member binds to the Type II receptor and recruits Type I, whereby Type II receptor phosphorylates and activates Type I. The Type I receptor, in turn, phosphorylates receptor-activated Smads ( R-Smads: Smad1, Smad2, Smad3, Smad5, and Smad8).  Once phosphorylated, R-Smads associate with the co-mediator Smad, Smad4, and the heteromeric complex then translocates into the nucleus. In the nucleus, Smad complexes activate specific genes through cooperative interactions with other DNA-binding and coactivator (or co-repressor) proteins.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04350 map" -->
+</select>
+<input type="hidden" name="mapno" value="04350" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04350" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04350" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04350.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=130,293,176,310	href="/dbget-bin/www_bget?hsa:4052+mmu:268977+rno:59107"	title="4052, 268977, 59107" />
+<area shape=rect	coords=57,270,103,287	href="/dbget-bin/www_bget?K04659"	title="K04659 (THBS)" />
+<area shape=rect	coords=443,257,489,274	href="/dbget-bin/www_bget?K03347"	title="K03347 (CUL1, CDC53)" />
+<area shape=rect	coords=443,240,489,257	href="/dbget-bin/www_bget?K03868"	title="K03868 (RBX1, ROC1)" />
+<area shape=rect	coords=494,680,540,697	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=494,663,540,680	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=494,608,540,625	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=494,591,540,608	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=205,689,251,706	href="/dbget-bin/www_bget?K04670"	title="K04670 (ACVR2)" />
+<area shape=rect	coords=205,672,251,689	href="/dbget-bin/www_bget?hsa:130399+mmu:269275+rno:245921"	title="130399, 269275, 245921" />
+<area shape=rect	coords=379,672,425,689	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=130,688,176,705	href="/dbget-bin/www_bget?K04666"	title="K04666 (NODAL)" />
+<area shape=rect	coords=379,636,425,653	href="/dbget-bin/www_bget?K04677"	title="K04677 (SMAD6_7)" />
+<area shape=rect	coords=379,599,425,616	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=744,671,790,688	href="/dbget-bin/www_bget?K04686"	title="K04686 (PITX2)" />
+<area shape=rect	coords=700,390,746,407	href="/dbget-bin/www_bget?K04684"	title="K04684 (SP1)" />
+<area shape=rect	coords=700,373,746,390	href="/dbget-bin/www_bget?K04498"	title="K04498 (EP300, CREBBP, KAT3)" />
+<area shape=rect	coords=814,381,860,398	href="/dbget-bin/www_bget?K04685"	title="K04685 (CDKN2B, P15, INK4B)" />
+<area shape=rect	coords=813,316,859,333	href="/dbget-bin/www_bget?K04377"	title="K04377 (MYC)" />
+<area shape=rect	coords=700,333,746,350	href="/dbget-bin/www_bget?K04683"	title="K04683 (TFDP1)" />
+<area shape=rect	coords=700,316,746,333	href="/dbget-bin/www_bget?K04682"	title="K04682 (E2F4_5)" />
+<area shape=rect	coords=700,299,746,316	href="/dbget-bin/www_bget?K04681"	title="K04681 (RBL)" />
+<area shape=rect	coords=746,133,792,150	href="/dbget-bin/www_bget?K04680"	title="K04680 (ID)" />
+<area shape=rect	coords=205,616,251,633	href="/dbget-bin/www_bget?K04670"	title="K04670 (ACVR2)" />
+<area shape=rect	coords=205,599,251,616	href="/dbget-bin/www_bget?K04675"	title="K04675 (ACVR1)" />
+<area shape=rect	coords=130,616,176,633	href="/dbget-bin/www_bget?K04667"	title="K04667 (INHB)" />
+<area shape=rect	coords=46,627,92,644	href="/dbget-bin/www_bget?K04661"	title="K04661 (FST)" />
+<area shape=rect	coords=76,556,122,573	href="/dbget-bin/www_bget?K04668"	title="K04668 (LEFTY)" />
+<area shape=rect	coords=455,528,501,545	href="/dbget-bin/www_bget?K04688"	title="K04688 (RPS6KB)" />
+<area shape=rect	coords=329,528,375,545	href="/dbget-bin/www_bget?K03456+K04382"	title="K03456 (PPP2R1), K04382 (PPP2C)" />
+<area shape=rect	coords=455,503,501,520	href="/dbget-bin/www_bget?K04514"	title="K04514 (ROCK)" />
+<area shape=rect	coords=329,503,375,520	href="/dbget-bin/www_bget?K04513"	title="K04513 (RHOA)" />
+<area shape=rect	coords=494,324,540,341	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=494,307,540,324	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=379,348,425,365	href="/dbget-bin/www_bget?K04679"	title="K04679 (MADHIP, SARA)" />
+<area shape=rect	coords=379,315,425,332	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=443,274,489,291	href="/dbget-bin/www_bget?K03094"	title="K03094 (SKP1, CBF3D)" />
+<area shape=rect	coords=526,191,572,208	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=494,142,540,159	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=494,125,540,142	href="/dbget-bin/www_bget?K04676"	title="K04676 (SMAD1_5_8)" />
+<area shape=rect	coords=379,228,425,245	href="/dbget-bin/www_bget?K04677"	title="K04677 (SMAD6_7)" />
+<area shape=rect	coords=329,257,375,274	href="/dbget-bin/www_bget?K04678"	title="K04678 (SMURF)" />
+<area shape=rect	coords=205,332,251,349	href="/dbget-bin/www_bget?K04388"	title="K04388 (TGFBR2)" />
+<area shape=rect	coords=205,315,251,332	href="/dbget-bin/www_bget?K04674"	title="K04674 (TGFBR1)" />
+<area shape=rect	coords=130,332,176,349	href="/dbget-bin/www_bget?K04384"	title="K04384 (TGFB)" />
+<area shape=rect	coords=46,338,92,355	href="/dbget-bin/www_bget?K04660"	title="K04660 (DCN)" />
+<area shape=rect	coords=145,239,191,256	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=145,217,191,234	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=205,150,251,167	href="/dbget-bin/www_bget?K04671+K04672"	title="K04671 (BMPR2), K04672 (AMHR2)" />
+<area shape=rect	coords=205,133,251,150	href="/dbget-bin/www_bget?K04673"	title="K04673 (BMPR1)" />
+<area shape=rect	coords=130,150,176,167	href="/dbget-bin/www_bget?K04662+K04663+K04664+K04665"	title="K04662 (BMP2_4), K04663 (BMP7S), K04664 (GDF5_6_7), K04665 (AMH)" />
+<area shape=rect	coords=145,107,191,124	href="/dbget-bin/www_bget?K04658"	title="K04658 (NOG)" />
+<area shape=rect	coords=379,133,425,150	href="/dbget-bin/www_bget?K04676"	title="K04676 (SMAD1_5_8)" />
+<area shape=rect	coords=74,99,120,116	href="/dbget-bin/www_bget?K04657"	title="K04657 (CHRD)" />
+<area shape=rect	coords=40,45,294,71	href="/dbget-bin/www_bget?map04350"	title="map04350" />
+<area shape=rect	coords=914,289,1009,316	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=917,402,1003,431	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=508,389,618,430	href="/kegg-bin/show_pathway?map04120"	title="map04120" />
+<area shape=rect	coords=398,447,501,486	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

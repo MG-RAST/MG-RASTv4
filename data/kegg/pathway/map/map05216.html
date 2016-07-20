@@ -1,0 +1,183 @@
+<html>
+<!---
+ENTRY       map05216
+DEFINITION  Thyroid cancer - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Thyroid cancer - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Thyroid cancer - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05216&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05216">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Papillary thyroid carcinoma (PTC), the most frequent neoplasia originating from the thyroid epithelium, accounts for about 80% of all thyroid cancers. Chimeric oncogenes, created by chromosomal rearrangements involving prevalently RET and, to a less extent, NTRK1 loci, are implicated in the development of papillary carcinoma.These are inappropriately expressed and stimulate constitutive signaling, bypassing the need for receptor activation by growth factors. Alternatively, mutant RAS directly stimulates BRAF, whereas mutant BRAF directly stimulates MEK.<br />&nbsp;&nbsp; Of all thyroid cancers, 15-20% are follicular thyroid carcinoma (FTC). The most distinctive molecular features of follicular carcinoma are the prominence of aneuploidy and the high prevalence of RAS mutations and PAX8-PPAR-gamma rearrangements. The PPAR-gamma rearrangement functions through a dominant-negative effect on the transcriptional activity of wild-type PPAR-gamma. The fusion oncoprotein contributes to malignant transformation by targeting several cellular pathways, some of which are normally engaged by PPAR-gamma.<br />&nbsp;&nbsp; Most poorly differentiated and undifferentiated thyroid carcinomas are considered to derive from pre-existing well-differentiated thyroid carcinoma through additional genetic events, including beta-catenin nuclear accumulation and p53 inactivation, but de novo occurrence might also occur.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05216 map" -->
+</select>
+<input type="hidden" name="mapno" value="05216" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05216" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05216" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05216.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=346,300,392,317	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=739,401,785,418	href="/dbget-bin/www_bget?K08530"	title="K08530 (NR1C3, PPARG)" />
+<area shape=rect	coords=424,300,470,317	href="/dbget-bin/www_bget?K04365"	title="K04365 (BRAF)" />
+<area shape=rect	coords=424,177,470,194	href="/dbget-bin/www_bget?K04365"	title="K04365 (BRAF)" />
+<area shape=rect	coords=579,300,625,317	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=502,300,548,317	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=685,354,731,371	href="/dbget-bin/www_bget?K08530+K09293"	title="K08530 (NR1C3, PPARG), K09293 (PAX8)" />
+<area shape=rect	coords=749,590,795,607	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=739,374,785,391	href="/dbget-bin/www_bget?K08524+K08525+K08526"	title="K08524 (NR2B1, RXRA), K08525 (NR2B2, RXRB), K08526 (NR2B3, RXRG)" />
+<area shape=rect	coords=467,674,513,691	href="/dbget-bin/www_bget?K02105"	title="K02105 (CTNNB1)" />
+<area shape=rect	coords=812,662,858,679	href="/dbget-bin/www_bget?K04377"	title="K04377 (MYC)" />
+<area shape=rect	coords=199,674,245,691	href="/dbget-bin/www_bget?K05689"	title="K05689 (CDHE, CDH1)" />
+<area shape=rect	coords=579,158,625,175	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=812,685,858,702	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=502,158,548,175	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=424,142,470,159	href="/dbget-bin/www_bget?K04365"	title="K04365 (BRAF)" />
+<area shape=rect	coords=346,141,392,158	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=255,109,301,126	href="/dbget-bin/www_bget?K05126+K09288+K09289"	title="K05126 (RET), K09288 (CCDC6, PTC), K09289 (NCOA4, PTC3)" />
+<area shape=rect	coords=199,156,245,173	href="/dbget-bin/www_bget?K03176+K09290+K09291+K09292"	title="K03176 (NTRK1, TRKA), K09290 (TPM3), K09291 (TPR), K09292 (TFG)" />
+<area shape=rect	coords=699,674,745,691	href="/dbget-bin/www_bget?K02620+K04490+K04491+K04492"	title="K02620 (TCF7), K04490 (TCF7L1), K04491 (TCF7L2), K04492 (LEF1)" />
+<area shape=rect	coords=40,45,196,71	href="/dbget-bin/www_bget?map05216"	title="map05216" />
+<area shape=rect	coords=516,221,620,256	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=433,378,537,413	href="/kegg-bin/show_pathway?map03320"	title="map03320" />
+<area shape=rect	coords=723,541,827,576	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=351,709,455,744	href="/kegg-bin/show_pathway?map04520"	title="map04520" />
+<area shape=rect	coords=525,709,629,744	href="/kegg-bin/show_pathway?map04310"	title="map04310" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,167 @@
+<html>
+<!---
+ENTRY       map07042
+DEFINITION  Antineoplastics - agents from natural products - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antineoplastics - agents from natural products - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antineoplastics - agents from natural products - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07042&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07042">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07042" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07042" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07042.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=169,287,444,469	href="/dbget-bin/www_bget?D02177+D03229+D07535"	title="D02177 (Bleomycin sulfate (JP15/USP)), D03229 (Bleomycin hydrochloride (JP15)), D07535 (Bleomycin (INN))" />
+<area shape=rect	coords=1122,776,1335,872	href="/dbget-bin/www_bget?D01061+D08086"	title="D01061 (Irinotecan hydrochloride hydrate (JAN)), D08086 (Irinotecan (INN))" />
+<area shape=rect	coords=1187,608,1333,717	href="/dbget-bin/www_bget?D02168+D08618"	title="D02168 (Nogitecan hydrochloride (JAN)), D08618 (Topotecan (BAN))" />
+<area shape=rect	coords=1095,722,1165,735	href="/dbget-bin/www_bget?C01897"	title="C01897 (Camptothecin)" />
+<area shape=rect	coords=366,649,536,755	href="/dbget-bin/www_bget?D02214+D07901"	title="D02214 (Epirubicin hydrochloride (JP15/USAN)), D07901 (Epirubicin (INN))" />
+<area shape=rect	coords=876,751,1019,883	href="/dbget-bin/www_bget?D00125+D04107"	title="D00125 (Etoposide (JP15/USP/INN)), D04107 (Etoposide phosphate (USAN))" />
+<area shape=rect	coords=751,736,834,749	href="/dbget-bin/www_bget?D05529"	title="D05529 (Podofilox (USAN))" />
+<area shape=rect	coords=875,593,1020,728	href="/dbget-bin/www_bget?D02698"	title="D02698 (Teniposide (USAN/INN))" />
+<area shape=rect	coords=577,607,727,702	href="/dbget-bin/www_bget?D02166+D08224"	title="D02166 (Mitoxantrone hydrochloride (JAN/USP)), D08224 (Mitoxantrone (INN))" />
+<area shape=rect	coords=802,352,1031,465	href="/dbget-bin/www_bget?D01935+D08680"	title="D01935 (Vinorelbine ditartrate (JAN)), D08680 (Vinorelbine (INN))" />
+<area shape=rect	coords=568,339,780,463	href="/dbget-bin/www_bget?D02197+D08679"	title="D02197 (Vincristine sulfate (JP15/USP)), D08679 (Vincristine (INN))" />
+<area shape=rect	coords=805,152,993,276	href="/dbget-bin/www_bget?D06304+D01769"	title="D06304 (Vindesine (USAN/INN)), D01769 (Vindesine sulfate (JAN/USAN))" />
+<area shape=rect	coords=1123,339,1331,468	href="/dbget-bin/www_bget?D02165+D07866"	title="D02165 (Docetaxel hydrate (JAN)), D07866 (Docetaxel (INN))" />
+<area shape=rect	coords=569,158,798,276	href="/dbget-bin/www_bget?D01068+D08675"	title="D01068 (Vinblastine sulfate (JP15/USP)), D08675 (Vinblastine (INN))" />
+<area shape=rect	coords=1142,150,1335,284	href="/dbget-bin/www_bget?D00491+D05333"	title="D00491 (Paclitaxel (JAN/USP/INN)), D05333 (Paclitaxel poliglumex (USAN/INN))" />
+<area shape=rect	coords=358,783,547,889	href="/dbget-bin/www_bget?D01885+D08386"	title="D01885 (Pirarubicin (JP15/INN)), D08386 (Pirarubicin hydrochloride)" />
+<area shape=rect	coords=120,778,289,884	href="/dbget-bin/www_bget?D03899+D01275"	title="D03899 (Doxorubicin (USAN/INN)), D01275 (Doxorubicin hydrochloride (JP15/USP))" />
+<area shape=rect	coords=185,592,356,700	href="/dbget-bin/www_bget?D01264+D07776"	title="D01264 (Daunorubicin hydrochloride (JP15/USP)), D07776 (Daunorubicin (INN))" />
+<area shape=rect	coords=354,479,420,492	href="/dbget-bin/www_bget?D02063+D08336"	title="D02063 (Peplomycin sulfate (JP15/USAN)), D08336 (Peplomycin (INN))" />
+<area shape=rect	coords=304,159,424,256	href="/dbget-bin/www_bget?D00208"	title="D00208 (Mitomycin C (JP15))" />
+<area shape=rect	coords=274,144,340,156	href="/dbget-bin/www_bget?D00214"	title="D00214 (Actinomycin D (JP15))" />
+<area shape=rect	coords=40,45,461,71	href="/dbget-bin/www_bget?map07042"	title="map07042" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

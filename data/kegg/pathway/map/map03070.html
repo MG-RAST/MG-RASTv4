@@ -1,0 +1,237 @@
+<html>
+<!---
+ENTRY       map03070
+DEFINITION  Bacterial secretion system - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Bacterial secretion system - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Bacterial secretion system - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03070&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03070">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Gram-negative bacteria secrete a wide range of proteins whose functions include biogenesis of organelles, such as pilli and flagella, nutrient acquisition, virulence, and efflux of drugs and other toxins. Six distinct secretion systems have been shown to mediate protein export through the inner and outer membranes of Gram-negative bacteria. These pathways are highly conserved throughout the Gram-negative bacterial species. In Gram-positive bacteria, secreted proteins are commonly translocated across the single membrane by the Sec pathway or the two-arginine (Tat) pathway.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03070 map" -->
+</select>
+<input type="hidden" name="mapno" value="03070" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03070" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03070" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03070.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=1057,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=1117,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=1172,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=1289,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=820,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=423,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=127,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=519,568,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=rect	coords=149,789,195,806	href="/dbget-bin/www_bget?K11004"	title="K11004 (hlyB, cyaB)" />
+<area shape=rect	coords=149,772,195,789	href="/dbget-bin/www_bget?K11003"	title="K11003 (hlyD, cyaD)" />
+<area shape=rect	coords=149,755,195,772	href="/dbget-bin/www_bget?K12340"	title="K12340 (tolC)" />
+<area shape=rect	coords=788,755,834,772	href="/dbget-bin/www_bget?K11028"	title="K11028 (vacA)" />
+<area shape=rect	coords=840,755,886,772	href="/dbget-bin/www_bget?K11017"	title="K11017 (shlB, hhdB, hpmB)" />
+<area shape=rect	coords=840,772,886,789	href="/dbget-bin/www_bget?K11016"	title="K11016 (shlA, hhdA, hpmA)" />
+<area shape=rect	coords=892,755,938,772	href="/dbget-bin/www_bget?K12341"	title="K12341 (yadA)" />
+<area shape=rect	coords=892,777,938,794	href="/dbget-bin/www_bget?K12342"	title="K12342 (yadB_C)" />
+<area shape=rect	coords=1329,755,1375,772	href="/dbget-bin/www_bget?K11904"	title="K11904 (vgrG)" />
+<area shape=rect	coords=1329,772,1375,789	href="/dbget-bin/www_bget?K11903"	title="K11903 (hcp)" />
+<area shape=rect	coords=1329,789,1375,806	href="/dbget-bin/www_bget?K11906"	title="K11906 (vasD, lip)" />
+<area shape=rect	coords=1421,840,1467,857	href="/dbget-bin/www_bget?K11915"	title="K11915 (stp1, pppA)" />
+<area shape=rect	coords=1329,806,1375,823	href="/dbget-bin/www_bget?K11891"	title="K11891 (impL, vasK, icmF)" />
+<area shape=rect	coords=1375,806,1421,823	href="/dbget-bin/www_bget?K11892"	title="K11892 (impK, ompA, vasF, dotU)" />
+<area shape=rect	coords=1329,840,1375,857	href="/dbget-bin/www_bget?K11912"	title="K11912 (ppkA)" />
+<area shape=rect	coords=1375,840,1421,857	href="/dbget-bin/www_bget?K11913"	title="K11913 (fha1)" />
+<area shape=rect	coords=1329,823,1375,840	href="/dbget-bin/www_bget?K11907"	title="K11907 (vasG, clpV)" />
+<area shape=rect	coords=279,755,325,772	href="/dbget-bin/www_bget?K03221"	title="K03221 (yscF)" />
+<area shape=rect	coords=371,772,417,789	href="/dbget-bin/www_bget?K04059"	title="K04059 (yscX)" />
+<area shape=rect	coords=325,772,371,789	href="/dbget-bin/www_bget?K04057"	title="K04057 (yscP)" />
+<area shape=rect	coords=279,772,325,789	href="/dbget-bin/www_bget?K04056"	title="K04056 (yscO)" />
+<area shape=rect	coords=279,789,325,806	href="/dbget-bin/www_bget?K03219"	title="K03219 (yscC)" />
+<area shape=rect	coords=279,806,325,823	href="/dbget-bin/www_bget?K04058"	title="K04058 (yscW)" />
+<area shape=rect	coords=279,823,325,840	href="/dbget-bin/www_bget?K03222"	title="K03222 (yscJ)" />
+<area shape=rect	coords=325,823,371,840	href="/dbget-bin/www_bget?K03226"	title="K03226 (yscR)" />
+<area shape=rect	coords=371,823,417,840	href="/dbget-bin/www_bget?K03227"	title="K03227 (yscS)" />
+<area shape=rect	coords=279,840,325,857	href="/dbget-bin/www_bget?K03228"	title="K03228 (yscT)" />
+<area shape=rect	coords=325,840,371,857	href="/dbget-bin/www_bget?K03229"	title="K03229 (yscU)" />
+<area shape=rect	coords=371,840,417,857	href="/dbget-bin/www_bget?K03230"	title="K03230 (yscV)" />
+<area shape=rect	coords=279,857,325,874	href="/dbget-bin/www_bget?K03224"	title="K03224 (yscN)" />
+<area shape=rect	coords=279,874,325,891	href="/dbget-bin/www_bget?K03225"	title="K03225 (yscQ)" />
+<area shape=rect	coords=325,874,371,891	href="/dbget-bin/www_bget?K03223"	title="K03223 (yscL)" />
+<area shape=rect	coords=533,755,579,772	href="/dbget-bin/www_bget?K02453"	title="K02453 (gspD)" />
+<area shape=rect	coords=533,772,579,789	href="/dbget-bin/www_bget?K02465"	title="K02465 (gspS)" />
+<area shape=rect	coords=579,789,625,806	href="/dbget-bin/www_bget?K02455"	title="K02455 (gspF)" />
+<area shape=rect	coords=625,789,671,806	href="/dbget-bin/www_bget?K02456"	title="K02456 (gspG)" />
+<area shape=rect	coords=533,789,579,806	href="/dbget-bin/www_bget?K02452"	title="K02452 (gspC)" />
+<area shape=rect	coords=533,806,579,823	href="/dbget-bin/www_bget?K02457"	title="K02457 (gspH)" />
+<area shape=rect	coords=579,806,625,823	href="/dbget-bin/www_bget?K02458"	title="K02458 (gspI)" />
+<area shape=rect	coords=625,806,671,823	href="/dbget-bin/www_bget?K02459"	title="K02459 (gspJ)" />
+<area shape=rect	coords=533,823,579,840	href="/dbget-bin/www_bget?K02460"	title="K02460 (gspK)" />
+<area shape=rect	coords=579,823,625,840	href="/dbget-bin/www_bget?K02461"	title="K02461 (gspL)" />
+<area shape=rect	coords=625,823,671,840	href="/dbget-bin/www_bget?K02462"	title="K02462 (gspM)" />
+<area shape=rect	coords=533,840,579,857	href="/dbget-bin/www_bget?K02454"	title="K02454 (gspE)" />
+<area shape=rect	coords=533,859,579,876	href="/dbget-bin/www_bget?K02464"	title="K02464 (gspO)" />
+<area shape=rect	coords=533,960,579,977	href="/dbget-bin/www_bget?K03070"	title="K03070 (secA)" />
+<area shape=rect	coords=581,996,627,1013	href="/dbget-bin/www_bget?K03106"	title="K03106 (SRP54, ffh)" />
+<area shape=rect	coords=533,977,579,994	href="/dbget-bin/www_bget?K03110"	title="K03110 (SRPR, ftsY)" />
+<area shape=rect	coords=533,996,579,1013	href="/dbget-bin/www_bget?K03071"	title="K03071 (secB)" />
+<area shape=rect	coords=533,926,579,943	href="/dbget-bin/www_bget?K03072+K03074+K12257"	title="K03072 (secD), K03074 (secF), K12257 (secDF)" />
+<area shape=rect	coords=625,926,671,943	href="/dbget-bin/www_bget?K03075"	title="K03075 (secG)" />
+<area shape=rect	coords=533,943,579,960	href="/dbget-bin/www_bget?K03076"	title="K03076 (secY)" />
+<area shape=rect	coords=579,943,625,960	href="/dbget-bin/www_bget?K03210"	title="K03210 (yajC)" />
+<area shape=rect	coords=625,943,671,960	href="/dbget-bin/www_bget?K03217"	title="K03217 (yidC, spoIIIJ, OXA1)" />
+<area shape=rect	coords=579,926,625,943	href="/dbget-bin/www_bget?K03073"	title="K03073 (secE)" />
+<area shape=rect	coords=767,926,813,943	href="/dbget-bin/www_bget?K03116"	title="K03116 (tatA)" />
+<area shape=rect	coords=859,926,905,943	href="/dbget-bin/www_bget?K03118"	title="K03118 (tatC)" />
+<area shape=rect	coords=905,926,951,943	href="/dbget-bin/www_bget?K03425"	title="K03425 (tatE)" />
+<area shape=rect	coords=813,926,859,943	href="/dbget-bin/www_bget?K03117"	title="K03117 (tatB)" />
+<area shape=rect	coords=1064,772,1110,789	href="/dbget-bin/www_bget?K03197"	title="K03197 (virB2)" />
+<area shape=rect	coords=1156,772,1202,789	href="/dbget-bin/www_bget?K03200"	title="K03200 (virB5)" />
+<area shape=rect	coords=1110,772,1156,789	href="/dbget-bin/www_bget?K03198"	title="K03198 (virB3)" />
+<area shape=rect	coords=1064,789,1110,806	href="/dbget-bin/www_bget?K03202"	title="K03202 (virB7)" />
+<area shape=rect	coords=1110,789,1156,806	href="/dbget-bin/www_bget?K03204"	title="K03204 (virB9)" />
+<area shape=rect	coords=1064,806,1110,823	href="/dbget-bin/www_bget?K03201"	title="K03201 (virB6)" />
+<area shape=rect	coords=1110,806,1156,823	href="/dbget-bin/www_bget?K03203"	title="K03203 (virB8)" />
+<area shape=rect	coords=1156,806,1202,823	href="/dbget-bin/www_bget?K03195"	title="K03195 (virB10)" />
+<area shape=rect	coords=1064,823,1110,840	href="/dbget-bin/www_bget?K03199"	title="K03199 (virB4)" />
+<area shape=rect	coords=1110,823,1156,840	href="/dbget-bin/www_bget?K03196"	title="K03196 (virB11)" />
+<area shape=rect	coords=1156,823,1202,840	href="/dbget-bin/www_bget?K03205"	title="K03205 (virD4)" />
+<area shape=rect	coords=1064,755,1110,772	href="/dbget-bin/www_bget?K03194"	title="K03194 (virB1)" />
+<area shape=rect	coords=40,45,294,70	href="/dbget-bin/www_bget?map03070"	title="map03070" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>
