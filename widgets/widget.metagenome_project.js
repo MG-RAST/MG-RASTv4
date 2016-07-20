@@ -64,7 +64,7 @@
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
 	    if (project.status == 'private') {
-		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.open(\"mgmain.html?mgpage=share&project="+widget.id+"\");' title='show sharing options'><i class='icon icon-share'></i></button>Private Study: "+project.name+"</h3>";
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='show sharing options'><i class='icon icon-share'></i> show sharing options</button>Private Study: "+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
@@ -76,7 +76,8 @@
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
 	    html += "</table>";
-	    html += "<h4>description</h4><p>"+project.description+"</p>";
+	    var custom = "<span id='custom'></span>";
+	    html += "<h4>description</h4>"+custom+"<p>"+project.description+"</p>";
 	    html += "<h4>funding source</h4><p>"+project.funding_source+"</p>";
 	    html += "<h4>contact</h4><address><strong>Administrative</strong><br>";
 	    html += (project.metadata["PI_firstname"]||"-")+" "+(project.metadata["PI_lastname"]||"-")+" ("+(project.metadata["PI_email"]||"-")+")<br>"+(project.metadata["PI_organization"]||"-")+" ("+(project.metadata["PI_organization_url"]||"-")+")<br>";
@@ -85,6 +86,15 @@
 	    html += "<h4>metagenomes</h4><div id='metagenome_table'><img src='Retina/images/waiting.gif' style='margin-left: 40%;margin-top: 100px;'></div>";
 	    
 	    content.innerHTML = html;
+
+	    // check if this project has a custom image and load it if so
+	    jQuery.get(RetinaConfig.shock_url + "/node?querynode&attributes.inUseInProject="+widget.id+"&owner=" + stm.user.login, function(data){
+		if (data && data.data && data.data.length) {
+		    jQuery.get(RetinaConfig.shock_url + "/node/" + data.data[0].id + "?download", function(data) {
+			document.getElementById('custom').innerHTML = data;
+		    });
+		}
+	    });
 	    
 	    // create the metagenome table
 	    var rows = [];
