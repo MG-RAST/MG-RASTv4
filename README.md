@@ -1,31 +1,34 @@
 MG-RASTv4
 =========
 
-next generation metagenome analysis
-
+A rich Java script frontend for the v4 version of MG-RAST.
 
 
 ## Installation with Docker ##
+
+To build this image:
+
+make sure you have cloned the required repositories 
+cd into that directory 
+
+
 
 To build the image either download the Docker file into an empty directory of provide the url to Dockerfile as in this example:
 
 ```bash
 export TAG=`date +"%Y%m%d.%H%M"`
-docker build --force-rm --no-cache --rm -t  mgrast/v4-web:${TAG} https://raw.githubusercontent.com/MG-RAST/MG-RASTv4/master/docker/Dockerfile
+docker build -t . mgrast/v4-web:${TAG}
 ```
 
 Example for manual invocation:
 ```bash
-docker run -p 80:80 -t -i mgrast/v4-web:${TAG} /usr/sbin/apache2ctl -D FOREGROUND
+docker run -t -i mgrast/v4-web:${TAG} 
 ```
 
 ### Other notes ###
 
-```bash
-/usr/sbin/apache2ctl status
-```
-requires
-```bash
-apt-get install lynx
-```
-location of html pages: /var/www/html
+
+location of html pages: /usr/share/nginx/html/
+
+The dockerfile allows building a slim container with alpline base or a fatter one with nginx (debian base). Just look at the Dockerfile
+
