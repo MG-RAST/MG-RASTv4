@@ -5,7 +5,7 @@
     "controls": [
 	{ "general":
 	  [
-	      { "name": "items[2].parameters.colorscale", "type": "select", "description": "what colors should the heatmap range between?",
+	      { "name": "items[1].parameters.colorscale", "type": "select", "description": "what colors should the heatmap range between?",
 		"title": "heatmap color", "options": [ { "label": "green and red", "value": "green2red" }, { "label": "yellow and blue", "value": "blue2yellow" } ] }
 	  ]
 	},
@@ -13,182 +13,213 @@
 	  [
 	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
 	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" },
-	      { "name": "items[2].parameters.boxwidth", "type": "int", "description": "width of a single box", "title": "boxwidth" },
-	      { "name": "items[2].parameters.boxheight", "type": "int", "description": "height of a single box", "title": "boxheight" }
+	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the row titles", "title": "category width" },
+	      { "name": "items[1].parameters.boxwidth", "type": "int", "description": "width of a single box", "title": "boxwidth" },
+	      { "name": "items[1].parameters.boxheight", "type": "int", "description": "height of a single box", "title": "boxheight" }
 	  ]
 	}
     ],
-  "items": [
-	    {
-		"type": "axis",
-		"name": "item0",
-		"parameters": {
-		    "direction": "vertical",
-		    "orientation": "top",
-		    "labelPosition": "left-bottom",
-		    "labelRotation": 0,
-		    "shift": 210,
-		    "base": 100,
-		    "length": 400,
-		    "min": 0,
-		    "max": 10,
-		    "spaceMajor": 20,
-		    "numMinor": 5,
-		    "tickShift": 0,
-		    "tickBase": 0,
-		    "majorTickLength": 10,
-		    "minorTickLength": 5,
-		    "lineFormat": {
-			"stroke": "black",
-			"strokeWidth": 1
-		    },
-		    "labelFormat": {
-			"fontFamily": "Helvetica",
-			"fontWeight": 100,
-			"fontSize": 12
-		    },
-		    "showLabels": true,
-		    "labelOrigin": true,
-		    "isLog": false,
-		    "noLine": true,
-		    "inputType": "matrix",
-		    "id": "item0",
-		    "groupSettings": {},
-		    "labels": [
-			"Viruses",
-			"Archaea",
-			"Eukaryota",
-			"Bacteria"
-		    ],
-		    "data": []
+    "dataAdjustments": [
+	{ "sourceItem": 1,
+	  "targetItem": 0,
+	  "targetItemAttribute": "length",
+	  "dataAttribute": "itemsY",
+	  "sourceItemAttributes": [ "boxheight" ]
+	},
+	{ "sourceItem": 1,
+	  "targetItem": 2,
+	  "targetItemAttribute": "length",
+	  "dataAttribute": "itemsX",
+	  "sourceItemAttributes": [ "boxwidth" ]
+	}
+    ],
+    "connections": { "0": { "base": [ { "type": "pinned",
+					"items": [ { "index": 1,
+						     "attribute": "shiftX" },
+						   { "index": 3,
+						     "attribute": "shiftX" },
+						   { "index": 2,
+						     "attribute": "shift" } ] } ] },
+		     "1": { "colorscale": [ { "type": "equal",
+					      "items": [ { "index": 5,
+							   "attribute": "colorscale" } ] } ],
+			    "boxwidth": [ { "type": "equal",
+					    "items": [ { "index": 2,
+							 "attribute": "spaceMajor" },
+						       { "index": 4,
+							 "attribute": "width" } ] } ],
+			    "boxheight": [ { "type": "equal",
+					     "items": [ { "index": 0,
+							  "attribute": "spaceMajor" },
+							{ "index": 3,
+							  "attribute": "width" } ] } ] },
+		     "5": { "colorscale": [ { "type": "equal",
+					      "items": [ { "index": 1,
+							   "attribute": "colorscale" } ] } ] }
+		   },
+    "items": [
+	{
+	    "type": "axis",
+	    "name": "item0",
+	    "parameters": {
+		"direction": "vertical",
+		"orientation": "top",
+		"labelPosition": "left-bottom",
+		"labelRotation": 0,
+		"shift": 210,
+		"base": 100,
+		"length": 400,
+		"min": 0,
+		"max": 10,
+		"spaceMajor": 20,
+		"numMinor": 5,
+		"tickShift": 0,
+		"tickBase": 0,
+		"majorTickLength": 10,
+		"minorTickLength": 5,
+		"lineFormat": {
+		    "stroke": "black",
+		    "strokeWidth": 1
 		},
-		"data": "matrix2heatmaprowaxis"
-	    },
-	    {
-		"type": "heatmap",
-		"name": "item1",
-		"parameters": {
-		    "shiftX": 150,
-		    "shiftY": 200,
-		    "boxheight": 20,
-		    "boxwidth": 20,
-		    "format": {
-			"stroke": "gray",
-			"stroke-width": 1,
-			"fill": "rgb(-209,255,-209)"
-		    },
-		    "colorscale": "green2red",
-		    "inputType": "matrix",
-		    "id": "item1",
-		    "groupSettings": {},
-		    "data": []
+		"labelFormat": {
+		    "fontFamily": "Helvetica",
+		    "fontWeight": 100,
+		    "fontSize": 12
 		},
-		"data": "matrix2heatmap"
+		"showLabels": true,
+		"labelOrigin": true,
+		"isLog": false,
+		"noLine": true,
+		"inputType": "matrix",
+		"id": "item0",
+		"groupSettings": {},
+		"labels": [],
+		"data": []
 	    },
-	    {
-		"type": "axis",
-		"name": "item2",
-		"parameters": {
-		    "direction": "horizontal",
-		    "orientation": "top",
-		    "labelPosition": "left-bottom",
-		    "labelRotation": 90,
-		    "shift": 165,
-		    "base": 30,
-		    "length": 400,
-		    "min": 0,
-		    "max": 10,
-		    "spaceMajor": 20,
-		    "numMinor": 5,
-		    "tickShift": 0,
-		    "tickBase": 0,
-		    "majorTickLength": 10,
-		    "minorTickLength": 5,
-		    "lineFormat": {
-			"stroke": "black",
-			"strokeWidth": 1
-		    },
-		    "labelFormat": {
-			"fontFamily": "Helvetica",
-			"fontWeight": 100,
-			"fontSize": 12
-		    },
-		    "showLabels": true,
-		    "labelOrigin": true,
-		    "isLog": false,
-		    "noLine": true,
-		    "inputType": "matrix",
-		    "id": "item2",
-		    "groupSettings": {},
-		    "labels": [
-			"Metagenome B",
-			"Metagenome A"
-		    ],
-		    "data": []
+	    "data": "matrix2heatmaprowaxis"
+	},
+	{
+	    "type": "heatmap",
+	    "name": "item1",
+	    "parameters": {
+		"shiftX": 150,
+		"shiftY": 200,
+		"boxheight": 20,
+		"boxwidth": 20,
+		"format": {
+		    "stroke": "gray",
+		    "stroke-width": 1,
+		    "fill": "rgb(-209,255,-209)"
 		},
-		"data": "matrix2heatmapcolaxis"
+		"colorscale": "green2red",
+		"inputType": "matrix",
+		"id": "item1",
+		"groupSettings": {},
+		"data": []
 	    },
-	    {
-		"type": "dendogram",
-		"name": "item3",
-		"parameters": {
-		    "direction": "ltr",
-		    "shiftX": 118,
-		    "shiftY": 165,
-		    "height": 30,
-		    "width": 20,
-		    "format": {
-			"stroke": "black",
-			"stroke-width": 1
-		    },
-		    "inputType": "matrix",
-		    "id": "item3",
-		    "groupSettings": {},
-		    "data": []
+	    "data": "matrix2heatmap"
+	},
+	{
+	    "type": "axis",
+	    "name": "item2",
+	    "parameters": {
+		"direction": "horizontal",
+		"orientation": "top",
+		"labelPosition": "left-bottom",
+		"labelRotation": 90,
+		"shift": 165,
+		"base": 30,
+		"length": 400,
+		"min": 0,
+		"max": 10,
+		"spaceMajor": 20,
+		"numMinor": 5,
+		"tickShift": 0,
+		"tickBase": 0,
+		"majorTickLength": 10,
+		"minorTickLength": 5,
+		"lineFormat": {
+		    "stroke": "black",
+		    "strokeWidth": 1
 		},
-		"data": "matrix2rowdendogram"
-	    },
-	    {
-		"type": "dendogram",
-		"name": "item4",
-		"parameters": {
-		    "direction": "ttb",
-		    "shiftX": 150,
-		    "shiftY": 200,
-		    "height": 30,
-		    "width": 20,
-		    "format": {
-			"stroke": "black",
-			"stroke-width": 1
-		    },
-		    "inputType": "matrix",
-		    "id": "item4",
-		    "groupSettings": {},
-		    "data": []
+		"labelFormat": {
+		    "fontFamily": "Helvetica",
+		    "fontWeight": 100,
+		    "fontSize": 12
 		},
-		"data": "matrix2columndendogram"
+		"showLabels": true,
+		"labelOrigin": true,
+		"isLog": false,
+		"noLine": true,
+		"inputType": "matrix",
+		"id": "item2",
+		"groupSettings": {},
+		"labels": [],
+		"data": []
 	    },
-	    {
-		"type": "colorscale",
-		"name": "item5",
-		"parameters": {
-		    "shiftX": 50,
-		    "shiftY": 0,
-		    "boxheight": 20,
-		    "boxwidth": 25,
-		    "format": {
-			"stroke": "gray",
-			"fontSize": 10,
-			"fontFamily": "arial",
-			"fontWeight": "normal",
-			"fill": "rgb(0,255,0)"
-		    },
-		    "colorscale": "green2red",
-		    "inputType": "matrix",
-		    "id": "item5",
-		    "groupSettings": {},
-		    "data": []
-		}
+	    "data": "matrix2heatmapcolaxis"
+	},
+	{
+	    "type": "dendogram",
+	    "name": "item3",
+	    "parameters": {
+		"direction": "ltr",
+		"shiftX": 118,
+		"shiftY": 165,
+		"height": 30,
+		"width": 20,
+		"format": {
+		    "stroke": "black",
+		    "stroke-width": 1
+		},
+		"inputType": "matrix",
+		"id": "item3",
+		"groupSettings": {},
+		"data": []
+	    },
+	    "data": "matrix2rowdendogram"
+	},
+	{
+	    "type": "dendogram",
+	    "name": "item4",
+	    "parameters": {
+		"direction": "ttb",
+		"shiftX": 150,
+		"shiftY": 200,
+		"height": 30,
+		"width": 20,
+		"format": {
+		    "stroke": "black",
+		    "stroke-width": 1
+		},
+		"inputType": "matrix",
+		"id": "item4",
+		"groupSettings": {},
+		"data": []
+	    },
+	    "data": "matrix2columndendogram"
+	},
+	{
+	    "type": "colorscale",
+	    "name": "item5",
+	    "parameters": {
+		"shiftX": 50,
+		"shiftY": 0,
+		"boxheight": 20,
+		"boxwidth": 25,
+		"format": {
+		    "stroke": "gray",
+		    "fontSize": 10,
+		    "fontFamily": "arial",
+		    "fontWeight": "normal",
+		    "fill": "rgb(0,255,0)"
+		},
+		"colorscale": "green2red",
+		"inputType": "matrix",
+		"id": "item5",
+		"groupSettings": {},
+		"data": []
 	    }
-	]
+	}
+    ]
 }

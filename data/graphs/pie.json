@@ -5,8 +5,8 @@
     "controls": [
 	{ "layout":
 	  [
-	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
-	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" }
+	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
+	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" }
 	  ]
 	}
     ],
