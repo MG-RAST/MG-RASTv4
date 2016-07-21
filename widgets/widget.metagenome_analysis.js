@@ -824,6 +824,8 @@
 
 	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[source+"-"+displayLevel]) + 1;
 	c.matrix = matrix;
+	c.matrix.itemsX = matrix.cols.length;
+	c.matrix.itemsY = matrix.rows.length;
 	c.hierarchy = hier;
 
 	return c;
