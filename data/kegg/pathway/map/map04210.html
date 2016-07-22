@@ -1,0 +1,221 @@
+<html>
+<!---
+ENTRY       map04210
+DEFINITION  Apoptosis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Apoptosis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Apoptosis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04210&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04210">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Apoptosis is a genetically controlled mechanisms of cell death involved in the regulation of tissue homeostasis. The 2 major pathways of apoptosis are the extrinsic (Fas and other TNFR superfamily members and ligands) and the intrinsic (mitochondria-associated) pathways, both of which are found in the cytoplasm. The extrinsic pathway is triggered by death receptor engagement, which initiates a signaling cascade mediated by caspase-8 activation. Caspase-8 both feeds directly into caspase-3 activation and stimulates the release of cytochrome c by the mitochondria. Caspase-3 activation leads to the degradation of cellular proteins necessary to maintain cell survival and integrity. The intrinsic pathway occurs when various apoptotic stimuli trigger the release of cytochrome c from the mitochondria (independently of caspase-8 activation). Cytochrome c interacts with Apaf-1 and caspase-9 to promote the activation of caspase-3. Recent studies point to the ER as a third subcellular compartment implicated in apoptotic execution. Alterations in Ca2+ homeostasis and accumulation of misfolded proteins in the ER cause ER stress. Prolonged ER stress can result in the activation of BAD and/or caspase-12, and execute apoptosis.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04210 map" -->
+</select>
+<input type="hidden" name="mapno" value="04210" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04210" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04210" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04210.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=407,724,453,741	href="/dbget-bin/www_bget?K04348+K06268"	title="K04348 (PPP3C, CNA), K06268 (PPP3R, CNB)" />
+<area shape=rect	coords=753,664,799,681	href="/dbget-bin/www_bget?K02159"	title="K02159 (BAX)" />
+<area shape=rect	coords=753,544,799,561	href="/dbget-bin/www_bget?K04570"	title="K04570 (BCL2L1, bcl-xL)" />
+<area shape=rect	coords=753,183,799,200	href="/dbget-bin/www_bget?K02310"	title="K02310 (DFFA, DFF45)" />
+<area shape=rect	coords=1036,606,1082,623	href="/dbget-bin/www_bget?K02161"	title="K02161 (BCL2)" />
+<area shape=rect	coords=968,652,1014,669	href="/dbget-bin/www_bget?K04728"	title="K04728 (ATM, TEL1)" />
+<area shape=rect	coords=968,606,1014,623	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=884,326,930,343	href="/dbget-bin/www_bget?K01173"	title="K01173 (E3.1.30.-)" />
+<area shape=rect	coords=831,326,877,343	href="/dbget-bin/www_bget?K04727"	title="K04727 (PDCD8, AIF)" />
+<area shape=rect	coords=753,758,799,775	href="/dbget-bin/www_bget?K02187"	title="K02187 (CASP3)" />
+<area shape=rect	coords=753,566,799,583	href="/dbget-bin/www_bget?K02161"	title="K02161 (BCL2)" />
+<area shape=rect	coords=753,522,799,539	href="/dbget-bin/www_bget?K04725"	title="K04725 (BIRC2_3_4)" />
+<area shape=rect	coords=753,215,799,232	href="/dbget-bin/www_bget?K02311"	title="K02311 (DFFB, DFF40)" />
+<area shape=rect	coords=660,758,706,775	href="/dbget-bin/www_bget?K04741"	title="K04741 (CASP12)" />
+<area shape=rect	coords=611,423,657,440	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=611,232,657,249	href="/dbget-bin/www_bget?K04397"	title="K04397 (CASP7)" />
+<area shape=rect	coords=611,183,657,200	href="/dbget-bin/www_bget?K02187"	title="K02187 (CASP3)" />
+<area shape=rect	coords=571,724,617,741	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=571,608,617,625	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=497,544,543,561	href="/dbget-bin/www_bget?K02580+K04735"	title="K02580 (NFKB1), K04735 (RELA)" />
+<area shape=rect	coords=644,305,690,322	href="/dbget-bin/www_bget?K04725"	title="K04725 (BIRC2_3_4)" />
+<area shape=rect	coords=611,90,657,107	href="/dbget-bin/www_bget?K04396"	title="K04396 (CASP6)" />
+<area shape=rect	coords=536,118,582,135	href="/dbget-bin/www_bget?K04725"	title="K04725 (BIRC2_3_4)" />
+<area shape=rect	coords=408,625,454,642	href="/dbget-bin/www_bget?K04345+K04739"	title="K04345 (PKA), K04739 (PRKAR)" />
+<area shape=rect	coords=497,512,543,529	href="/dbget-bin/www_bget?K04734"	title="K04734 (NFKBIA)" />
+<area shape=rect	coords=497,440,543,457	href="/dbget-bin/www_bget?K02084"	title="K02084 (APAF1)" />
+<area shape=rect	coords=497,407,543,424	href="/dbget-bin/www_bget?K08738"	title="K08738 (CYC)" />
+<area shape=rect	coords=445,372,491,389	href="/dbget-bin/www_bget?K02161+K04570"	title="K02161 (BCL2), K04570 (BCL2L1, bcl-xL)" />
+<area shape=rect	coords=497,294,543,311	href="/dbget-bin/www_bget?K04726"	title="K04726 (BID)" />
+<area shape=rect	coords=497,232,543,249	href="/dbget-bin/www_bget?K04398"	title="K04398 (CASP8)" />
+<area shape=rect	coords=497,183,543,200	href="/dbget-bin/www_bget?K04400"	title="K04400 (CASP10)" />
+<area shape=rect	coords=407,758,453,775	href="/dbget-bin/www_bget?K01367+K03853"	title="K01367 (CAPN1), K03853 (CAPN2)" />
+<area shape=rect	coords=407,592,453,609	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=318,469,364,486	href="/dbget-bin/www_bget?K04466"	title="K04466 (MAP3K14, NIK)" />
+<area shape=rect	coords=407,512,453,529	href="/dbget-bin/www_bget?K04467+K07209+K07210"	title="K04467 (IKBKA, IKKA, CHUK), K07209 (IKBKB, IKKB), K07210 (IKBKG, IKKG, NEMO)" />
+<area shape=rect	coords=391,388,437,405	href="/dbget-bin/www_bget?K04724"	title="K04724 (CFLAR, FLIP)" />
+<area shape=rect	coords=266,592,312,609	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=266,392,312,409	href="/dbget-bin/www_bget?K04730+K04731+K04732+K04733"	title="K04730 (IRAK1), K04731 (IRAK2), K04732 (IRAK3), K04733 (IRAK4)" />
+<area shape=rect	coords=266,375,312,392	href="/dbget-bin/www_bget?K04729"	title="K04729 (MYD88)" />
+<area shape=rect	coords=266,349,312,366	href="/dbget-bin/www_bget?K02373"	title="K02373 (FADD)" />
+<area shape=rect	coords=266,332,312,349	href="/dbget-bin/www_bget?K03171"	title="K03171 (TRADD)" />
+<area shape=rect	coords=266,292,312,309	href="/dbget-bin/www_bget?K03173"	title="K03173 (TRAF2)" />
+<area shape=rect	coords=266,275,312,292	href="/dbget-bin/www_bget?K02861"	title="K02861 (RIPK1, RIP1)" />
+<area shape=rect	coords=266,258,312,275	href="/dbget-bin/www_bget?K03171"	title="K03171 (TRADD)" />
+<area shape=rect	coords=266,232,312,249	href="/dbget-bin/www_bget?K02373"	title="K02373 (FADD)" />
+<area shape=rect	coords=266,215,312,232	href="/dbget-bin/www_bget?K03171"	title="K03171 (TRADD)" />
+<area shape=rect	coords=266,161,312,178	href="/dbget-bin/www_bget?K02373"	title="K02373 (FADD)" />
+<area shape=rect	coords=178,664,224,681	href="/dbget-bin/www_bget?K04737+K04738"	title="K04737 (IL3RA), K04738 (CSF2RB, IL3RB)" />
+<area shape=rect	coords=178,603,224,620	href="/dbget-bin/www_bget?K04737+K04738"	title="K04737 (IL3RA), K04738 (CSF2RB, IL3RB)" />
+<area shape=rect	coords=178,574,224,591	href="/dbget-bin/www_bget?K03176"	title="K03176 (NTRK1, TRKA)" />
+<area shape=rect	coords=178,353,224,370	href="/dbget-bin/www_bget?K04386+K04723"	title="K04386 (IL1R1), K04723 (IL1RAP)" />
+<area shape=rect	coords=178,235,224,252	href="/dbget-bin/www_bget?K03158"	title="K03158 (TNFRSF1A, TNFR1)" />
+<area shape=rect	coords=178,175,224,192	href="/dbget-bin/www_bget?K04722"	title="K04722 (TNFRSF10, TRAILR)" />
+<area shape=rect	coords=178,148,224,165	href="/dbget-bin/www_bget?K04390"	title="K04390 (TNFRSF6, FAS)" />
+<area shape=rect	coords=91,626,137,643	href="/dbget-bin/www_bget?K04736"	title="K04736 (IL3)" />
+<area shape=rect	coords=91,574,137,591	href="/dbget-bin/www_bget?K02582"	title="K02582 (NGFB)" />
+<area shape=rect	coords=91,353,137,370	href="/dbget-bin/www_bget?K04383+K04519"	title="K04383 (IL1A), K04519 (IL1B)" />
+<area shape=rect	coords=91,236,137,253	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=91,176,137,193	href="/dbget-bin/www_bget?K04721"	title="K04721 (TNFSF10, TRAIL)" />
+<area shape=rect	coords=91,148,137,165	href="/dbget-bin/www_bget?K04389"	title="K04389 (TNFSF6, FASL)" />
+<area shape=rect	coords=1001,552,1097,592	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=49,407,174,447	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=944,741,1040,781	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=40,45,141,71	href="/dbget-bin/www_bget?map04210"	title="map04210" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

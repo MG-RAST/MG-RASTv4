@@ -1,0 +1,88 @@
+<html>
+<!---
+ENTRY       map00031
+DEFINITION  Inositol metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Inositol metabolism - Reference pathway
+</title>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css">
+<script language="JavaScript">
+<!---
+
+function resize_map(map,scale){
+  var url = "/kegg-bin/resize_map.cgi?map=" + map + "&scale=" + scale;
+  window.location.href = url;
+}
+
+function select_menu(){
+  var form = document.forms[0];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/dbget-bin/get_pathway';
+    form.submit();
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+
+<body>
+<form name="selmenu" method="get">
+
+<table cellpadding="0" width="100%" cellspacing="0" border="0"><tr><td>
+<a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif"></a>
+&nbsp;&nbsp;&nbsp;<font class="title3"><b>Inositol metabolism - Reference pathway</b></font></td>
+<td valign="bottom" align="right"><a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')"></a>
+</td></tr></table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00031">Pathway entry</a>
+]
+<br>
+<table cellpadding="0" cellspacing="0" border="0"><tr><td>
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00031 map" -->
+</select>
+
+<input type="button" value="Go" onclick="select_menu(this.form)">
+</td><td>
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00031" -->
+</td></tr></table>
+<input type="hidden" name="mapno" value="00031">
+<img src="/kegg/pathway/map/map00031.gif" usemap="#mapdata" border=0>
+<map name="mapdata">
+
+<area shape=rect	coords=608,234,654,251	href="/dbget-bin/www_bget?ko+K01803">
+<area shape=rect	coords=686,143,732,160	href="/dbget-bin/www_bget?ko+K00136">
+<area shape=rect	coords=557,356,706,381	href="/kegg/pathway/map/map00030.html">
+<area shape=rect	coords=40,45,226,70	href="http://www.genome.jp/dbget-bin/get_linkdb?pathway+map00031">
+<area shape=circle	coords=276,140,4	href="/dbget-bin/www_bget?compound+C06891">
+<area shape=circle	coords=659,140,4	href="/dbget-bin/www_bget?compound+C00222">
+<area shape=circle	coords=632,281,4	href="/dbget-bin/www_bget?compound+C00118">
+<area shape=circle	coords=557,140,4	href="/dbget-bin/www_bget?compound+C06893">
+<area shape=circle	coords=464,140,4	href="/dbget-bin/www_bget?compound+C06892">
+<area shape=circle	coords=757,141,4	href="/dbget-bin/www_bget?compound+C00024">
+<area shape=circle	coords=632,202,4	href="/dbget-bin/www_bget?compound+C00111">
+<area shape=circle	coords=73,141,4	href="/dbget-bin/www_bget?compound+C00137">
+<area shape=circle	coords=178,141,4	href="/dbget-bin/www_bget?compound+C00691">
+<area shape=rect	coords=686,122,732,139	href="/dbget-bin/www_bget?ko+K00140">
+<area shape=rect	coords=385,132,431,149	href="/dbget-bin/www_bget?ko+K03337">
+<area shape=rect	coords=484,132,530,149	href="/dbget-bin/www_bget?ko+K03338">
+<area shape=rect	coords=572,132,618,149	href="/dbget-bin/www_bget?ko+K03339">
+<area shape=rect	coords=292,132,338,149	href="/dbget-bin/www_bget?ko+K03336">
+<area shape=rect	coords=198,132,244,149	href="/dbget-bin/www_bget?ko+K03335">
+<area shape=rect	coords=102,132,148,149	href="/dbget-bin/www_bget?ko+K00010">
+<area shape=circle	coords=369,141,4	href="/dbget-bin/www_bget?compound+C16737">
+
+</map>
+
+</form>
+</body>
+<!---
+///
+--->
+</html>

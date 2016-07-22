@@ -1,0 +1,213 @@
+<html>
+<!---
+ENTRY       map05212
+DEFINITION  Pancreatic cancer - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Pancreatic cancer - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Pancreatic cancer - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05212&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05212">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Normal duct epithelium progresses to infiltrating cancer through a series of histologically defined precursors (PanINs). The overexpression of HER-2/neu and activating point mutations in the K-ras gene occur early, inactivation of the p16 gene at an intermediate stage, and the inactivation of p53, SMAD4, and BRCA2 occur relatively late. Activated K-ras engages multiple effector pathways.  Although EGF receptors are conventionally regarded as upstream activators of RAS proteins, they can also act as RAS signal transducers via RAS-induced autocrine activation of the EGFR family ligands. Pancreatic ductal adenocarcinoma (PDA) show elevated expression of EGF receptors (e.g. HER2/neu) and their ligands (e.g.TGF-alpha) consistent with the presence of this autocrine loop. Moreover, PDA shows extensive genomic instability and aneuploidy. Telomere attrition and mutations in p53 and BRCA2 are likely to contribute to these phenotypes. Inactivation of the SMAD4 tumour suppressor gene leads to loss of the inhibitory influence of the transforming growth factor-beta signalling pathway.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05212 map" -->
+</select>
+<input type="hidden" name="mapno" value="05212" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05212" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05212" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05212.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=443,195,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=664,388,4	href="/dbget-bin/www_bget?C00416"	title="C00416 (Phosphatidate)" />
+<area shape=circle	coords=414,468,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=rect	coords=253,494,299,511	href="/dbget-bin/www_bget?K05083"	title="K05083 (ERBB2, HER2)" />
+<area shape=rect	coords=334,272,380,289	href="/dbget-bin/www_bget?K07827"	title="K07827 (KRAS, KRAS2)" />
+<area shape=rect	coords=388,226,434,243	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=491,125,537,142	href="/dbget-bin/www_bget?K05729"	title="K05729 (ARHGEF6, MRX46)" />
+<area shape=rect	coords=491,188,537,205	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=594,114,640,131	href="/dbget-bin/www_bget?K04392+K07860+K07861"	title="K04392 (RAC1), K07860 (RAC2), K07861 (RAC3)" />
+<area shape=rect	coords=594,150,640,167	href="/dbget-bin/www_bget?K04467+K07209+K07210"	title="K04467 (IKBKA, IKKA, CHUK), K07209 (IKBKB, IKKB), K07210 (IKBKG, IKKG, NEMO)" />
+<area shape=rect	coords=693,141,739,158	href="/dbget-bin/www_bget?K02580+K04735"	title="K02580 (NFKB1), K04735 (RELA)" />
+<area shape=rect	coords=570,188,616,205	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=648,188,694,205	href="/dbget-bin/www_bget?K04570"	title="K04570 (BCL2L1, bcl-xL)" />
+<area shape=rect	coords=472,273,518,290	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=581,229,627,246	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=586,273,632,290	href="/dbget-bin/www_bget?K04368"	title="K04368 (MAP2K1, MEK1)" />
+<area shape=rect	coords=695,274,741,291	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=421,351,467,368	href="/dbget-bin/www_bget?K08732"	title="K08732 (RALGDS)" />
+<area shape=rect	coords=498,351,544,368	href="/dbget-bin/www_bget?K07834+K07835"	title="K07834 (RALA), K07835 (RALB)" />
+<area shape=rect	coords=577,351,623,368	href="/dbget-bin/www_bget?K08773"	title="K08773 (RALBP1)" />
+<area shape=rect	coords=575,379,621,396	href="/dbget-bin/www_bget?hsa:5337+mmu:18805+rno:25096"	title="5337, 18805, 25096" />
+<area shape=rect	coords=695,305,741,322	href="/dbget-bin/www_bget?K04440"	title="K04440 (JNK)" />
+<area shape=rect	coords=172,467,218,484	href="/dbget-bin/www_bget?K08774"	title="K08774 (TGFA)" />
+<area shape=rect	coords=172,490,218,507	href="/dbget-bin/www_bget?K04357"	title="K04357 (EGF)" />
+<area shape=rect	coords=328,461,374,478	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=328,504,374,521	href="/dbget-bin/www_bget?K11217"	title="K11217 (JAK1)" />
+<area shape=rect	coords=459,461,505,478	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=459,511,505,528	href="/dbget-bin/www_bget?K04692"	title="K04692 (STAT3)" />
+<area shape=rect	coords=459,534,505,551	href="/dbget-bin/www_bget?K11220"	title="K11220 (STAT1)" />
+<area shape=rect	coords=543,444,589,461	href="/dbget-bin/www_bget?K04570"	title="K04570 (BCL2L1, bcl-xL)" />
+<area shape=rect	coords=543,485,589,502	href="/dbget-bin/www_bget?K02580+K04735"	title="K02580 (NFKB1), K04735 (RELA)" />
+<area shape=rect	coords=960,522,1006,539	href="/dbget-bin/www_bget?K05448+K05449"	title="K05448 (VEGFA_B), K05449 (VEGFC_D)" />
+<area shape=rect	coords=824,567,870,584	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=661,351,707,368	href="/dbget-bin/www_bget?K04392+K04393+K07860+K07861"	title="K04392 (RAC1), K04393 (CDC42), K07860 (RAC2), K07861 (RAC3)" />
+<area shape=rect	coords=887,588,933,605	href="/dbget-bin/www_bget?K02089+K02091"	title="K02089 (CDK4), K02091 (CDK6)" />
+<area shape=rect	coords=971,598,1017,615	href="/dbget-bin/www_bget?K06618"	title="K06618 (RB1)" />
+<area shape=rect	coords=971,636,1017,653	href="/dbget-bin/www_bget?K06620+K09389"	title="K06620 (E2F1_3), K09389 (E2F2)" />
+<area shape=rect	coords=172,748,218,765	href="/dbget-bin/www_bget?K04384"	title="K04384 (TGFB)" />
+<area shape=rect	coords=254,738,300,755	href="/dbget-bin/www_bget?K04674"	title="K04674 (TGFBR1)" />
+<area shape=rect	coords=254,755,300,772	href="/dbget-bin/www_bget?K04388"	title="K04388 (TGFBR2)" />
+<area shape=rect	coords=405,748,451,765	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=405,781,451,798	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=877,687,923,704	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=877,772,923,789	href="/dbget-bin/www_bget?K08775"	title="K08775 (BRCA2, FANCD1)" />
+<area shape=rect	coords=877,789,923,806	href="/dbget-bin/www_bget?K04482"	title="K04482 (RAD51)" />
+<area shape=rect	coords=253,477,299,494	href="/dbget-bin/www_bget?K04361"	title="K04361 (EGFR, ERBB1)" />
+<area shape=rect	coords=887,605,933,622	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=809,205,913,231	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=548,299,652,334	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=144,520,248,555	href="/kegg-bin/show_pathway?map04012"	title="map04012" />
+<area shape=rect	coords=317,536,421,571	href="/kegg-bin/show_pathway?map04630"	title="map04630" />
+<area shape=rect	coords=672,680,776,715	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=526,770,630,805	href="/kegg-bin/show_pathway?map04350"	title="map04350" />
+<area shape=rect	coords=1026,569,1130,595	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=988,478,1092,513	href="/kegg-bin/show_pathway?map04370"	title="map04370" />
+<area shape=rect	coords=40,45,224,71	href="/dbget-bin/www_bget?map05212"	title="map05212" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

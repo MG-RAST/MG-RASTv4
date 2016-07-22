@@ -1,0 +1,184 @@
+<html>
+<!---
+ENTRY       map07037
+DEFINITION  Antiarrhythmic drugs - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antiarrhythmic drugs - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antiarrhythmic drugs - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07037&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07037">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07037" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07037" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07037.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=596,437,642,450	href="/dbget-bin/www_bget?D00740"	title="D00740 (Procaine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=1134,316,1188,328	href="/dbget-bin/www_bget?D01856"	title="D01856 (Nifekalant hydrochloride (JAN))" />
+<area shape=rect	coords=1007,244,1059,257	href="/dbget-bin/www_bget?D00647"	title="D00647 (Dofetilide (JAN/USAN/INN))" />
+<area shape=rect	coords=751,243,805,256	href="/dbget-bin/www_bget?D04955"	title="D04955 (Sematilide hydrochloride (USAN))" />
+<area shape=rect	coords=1021,577,1088,589	href="/dbget-bin/www_bget?D02537+D03914"	title="D02537 (Dronedarone (INN)), D03914 (Dronedarone hydrochloride (USAN))" />
+<area shape=rect	coords=1141,678,1191,691	href="/dbget-bin/www_bget?D03037"	title="D03037 (Azimilide dihydrochloride (USAN))" />
+<area shape=rect	coords=1138,455,1180,468	href="/dbget-bin/www_bget?D00648"	title="D00648 (Ibutilide fumarate (USAN))" />
+<area shape=rect	coords=591,577,662,589	href="/dbget-bin/www_bget?D01833"	title="D01833 (Benziodarone (JAN/INN))" />
+<area shape=rect	coords=129,914,181,927	href="/dbget-bin/www_bget?D02358+D00601+D00635+D05011"	title="D02358 (Metoprolol (USAN/INN)), D00601 (Metoprolol tartrate (JP15/USP)), D00635 (Metoprolol succinate (USP)), D05011 (Metoprolol fumarate (USP))" />
+<area shape=rect	coords=131,826,177,840	href="/dbget-bin/www_bget?D00235"	title="D00235 (Atenolol (JP15/USP/INN))" />
+<area shape=rect	coords=890,452,941,465	href="/dbget-bin/www_bget?D00645"	title="D00645 (Bretylium tosylate (USP))" />
+<area shape=rect	coords=896,678,951,691	href="/dbget-bin/www_bget?D03732"	title="D03732 (Dexsotalol hydrochloride (USAN))" />
+<area shape=rect	coords=965,915,1014,928	href="/dbget-bin/www_bget?D00616+D03830"	title="D00616 (Diltiazem hydrochloride (JP15/USP)), D03830 (Diltiazem malate (USAN))" />
+<area shape=rect	coords=129,437,185,450	href="/dbget-bin/www_bget?D02969+D01326"	title="D02969 (Aprindine (USAN/INN)), D01326 (Aprindine hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=771,679,809,692	href="/dbget-bin/www_bget?D01026"	title="D01026 (Sotalol hydrochloride (JAN/USP))" />
+<area shape=rect	coords=182,279,254,292	href="/dbget-bin/www_bget?D00303+D00637"	title="D00303 (Disopyramide (JP15/USAN/INN)), D00637 (Disopyramide phosphate (JAN/USP))" />
+<area shape=rect	coords=113,633,165,647	href="/dbget-bin/www_bget?D00638"	title="D00638 (Flecainide acetate (JAN/USP))" />
+<area shape=rect	coords=1136,915,1179,928	href="/dbget-bin/www_bget?D00631"	title="D00631 (Bepridil hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=761,453,819,465	href="/dbget-bin/www_bget?D02746"	title="D02746 (Acecainide hydrochloride (USAN))" />
+<area shape=rect	coords=283,395,339,408	href="/dbget-bin/www_bget?D00639"	title="D00639 (Mexiletine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=359,636,419,648	href="/dbget-bin/www_bget?D00640"	title="D00640 (Propafenone hydrochloride (JAN/USP))" />
+<area shape=rect	coords=327,915,382,928	href="/dbget-bin/www_bget?D01182"	title="D01182 (Alprenolol hydrochloride (JP15/USAN))" />
+<area shape=rect	coords=757,575,822,588	href="/dbget-bin/www_bget?D02910+D00636"	title="D02910 (Amiodarone (USAN/INN)), D00636 (Amiodarone hydrochloride (JAN))" />
+<area shape=rect	coords=770,914,824,928	href="/dbget-bin/www_bget?D02356+D00619"	title="D02356 (Verapamil (USAN/INN)), D00619 (Verapamil hydrochloride (JP15/USP))" />
+<area shape=rect	coords=441,243,508,256	href="/dbget-bin/www_bget?D00477"	title="D00477 (Procainamide hydrochloride (JP15/USP))" />
+<area shape=rect	coords=496,611,555,623	href="/dbget-bin/www_bget?D01554"	title="D01554 (Pilsicainide hydrochloride hydrate (JAN))" />
+<area shape=rect	coords=285,473,336,486	href="/dbget-bin/www_bget?D02088+D06172"	title="D02088 (Tocainide hydrochloride (USP)), D06172 (Tocainide (USAN/INN))" />
+<area shape=rect	coords=230,610,281,623	href="/dbget-bin/www_bget?D03991"	title="D03991 (Encainide hydrochloride (USAN))" />
+<area shape=rect	coords=315,280,368,293	href="/dbget-bin/www_bget?D00642+D00643+D02272"	title="D00642 (Quinidine gluconate (USP)), D00643 (Quinidine polygalacturonate), D02272 (Quinidine sulfate (JP15/USP))" />
+<area shape=rect	coords=453,437,506,450	href="/dbget-bin/www_bget?D00358+D02086"	title="D00358 (Lidocaine (JP15/USP/INN)), D02086 (Lidocaine injection (JP15))" />
+<area shape=rect	coords=328,827,374,839	href="/dbget-bin/www_bget?D05587"	title="D05587 (Practolol (USAN))" />
+<area shape=rect	coords=81,280,129,293	href="/dbget-bin/www_bget?D01785+D06517"	title="D01785 (Pirmenol hydrochloride hydrate (JAN)), D06517 (Pirmenol hydrochloride (USAN))" />
+<area shape=rect	coords=490,914,534,927	href="/dbget-bin/www_bget?D00513+D01794"	title="D00513 (Pindolol (JP15/USP/INN)), D01794 (Bopindolol malonate (JAN))" />
+<area shape=rect	coords=888,316,937,329	href="/dbget-bin/www_bget?D03547"	title="D03547 (Clofilium phosphate (USAN/INN))" />
+<area shape=rect	coords=492,808,553,821	href="/dbget-bin/www_bget?D00483"	title="D00483 (Propranolol hydrochloride (JP15/USP))" />
+<area shape=rect	coords=747,758,921,785	href="/kegg-bin/show_pathway?map07036"	title="map07036" />
+<area shape=rect	coords=108,683,242,718	href="/kegg-bin/show_pathway?map07214"	title="map07214" />
+<area shape=rect	coords=40,45,247,71	href="/dbget-bin/www_bget?map07037"	title="map07037" />
+<area shape=rect	coords=356,83,576,109	href="/kegg-bin/show_pathway?@map07213/D00477"	title="PATH:map07213(D00477)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

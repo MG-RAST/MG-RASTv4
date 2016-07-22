@@ -1,0 +1,211 @@
+<html>
+<!---
+ENTRY       map05320
+DEFINITION  Autoimmune thyroid disease - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Autoimmune thyroid disease - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Autoimmune thyroid disease - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05320&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05320">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The classification of autoimmune throid disease (AITD) includes Hashimoto's thyroiditis (HT) or chronic autoimmune thyroiditis and its variants, Graves' disease (GD) and autoimmune atrophic thyroiditis or primary myxedema.<br />&nbsp;&nbsp; HT is characterized by the presence of goitre, thyroid autoantibodies against thyroid peroxidase (TPO) and thyroglobulin (Tg) in serum and varying degrees of thyroid dysfunction. During HT, self-reactive CD4+ T lymphocytes (Th) recruit B cells and CD8+ T cells (CTL) into the thyroid. Disease progression leads to the death of thyroid cells and hypothyroidism. Both autoantibodies and thyroid-specific cytotoxic T lymphocytes (CTLs) have been proposed to be responsible for autoimmune thyrocyte depletion.<br />&nbsp;&nbsp; In GD, the TSH-R is the most important autoantigen. Antibodies directed against it mimic the effects of the hormone on thyroid cells, TSH, stimulating autonomous production of thyroxine and triiodothyronine and causing hyperthyroidism.<br />&nbsp;&nbsp; The presence of TSH-R-blocking antibodies that bind the TSH receptor in a similar fashion to the antibodies in patients with Graves' disease but that block rather than activate the receptor explains some cases of atrophic hypothyroidism.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05320 map" -->
+</select>
+<input type="hidden" name="mapno" value="05320" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05320" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05320" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05320.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=212,131,4	href="/dbget-bin/www_bget?C01382"	title="C01382 (Iodine)" />
+<area shape=circle	coords=260,131,4	href="/dbget-bin/www_bget?D00636"	title="D00636 (Amiodarone hydrochloride (JAN))" />
+<area shape=circle	coords=1201,572,4	href="/dbget-bin/www_bget?C02465"	title="C02465 (Triiodothyronine)" />
+<area shape=circle	coords=1201,606,4	href="/dbget-bin/www_bget?C01829"	title="C01829 (O-(4-Hydroxy-3,5-diidophenyl)-3,5-diiodo-L-tyrosine)" />
+<area shape=rect	coords=402,625,448,642	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=483,625,529,642	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=702,625,748,642	href="/dbget-bin/www_bget?K03161"	title="K03161 (TNFSF5, CD40L)" />
+<area shape=rect	coords=785,625,831,642	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=702,648,748,665	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=785,648,831,665	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=826,594,872,611	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=217,402,263,419	href="/dbget-bin/www_bget?K00431"	title="K00431 (TPO)" />
+<area shape=rect	coords=217,430,263,447	href="/dbget-bin/www_bget?K10809"	title="K10809 (TG)" />
+<area shape=rect	coords=217,492,263,509	href="/dbget-bin/www_bget?K04249"	title="K04249 (TSHR)" />
+<area shape=rect	coords=402,258,448,275	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=482,258,528,275	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=701,332,747,349	href="/dbget-bin/www_bget?K03161"	title="K03161 (TNFSF5, CD40L)" />
+<area shape=rect	coords=785,332,831,349	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=701,357,747,374	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=785,357,831,374	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=826,387,872,404	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=1011,584,1057,601	href="/dbget-bin/www_bget?K04249"	title="K04249 (TSHR)" />
+<area shape=rect	coords=1008,682,1054,699	href="/dbget-bin/www_bget?K04249"	title="K04249 (TSHR)" />
+<area shape=rect	coords=1006,196,1052,213	href="/dbget-bin/www_bget?K04390"	title="K04390 (TNFRSF6, FAS)" />
+<area shape=rect	coords=939,678,985,695	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=929,196,975,213	href="/dbget-bin/www_bget?K04389"	title="K04389 (TNFSF6, FASL)" />
+<area shape=rect	coords=929,168,975,185	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=1006,168,1052,185	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=969,259,1015,276	href="/dbget-bin/www_bget?K01353"	title="K01353 (GZMB)" />
+<area shape=rect	coords=969,234,1015,251	href="/dbget-bin/www_bget?K07818"	title="K07818 (PRF1)" />
+<area shape=rect	coords=939,712,985,729	href="/dbget-bin/www_bget?K08522+K05251"	title="K05251 (TSHB), K08522 (CGA)" />
+<area shape=rect	coords=955,328,1001,345	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=939,584,985,601	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=253,179,299,196	href="/dbget-bin/www_bget?K06538"	title="K06538 (CTLA4, CD152)" />
+<area shape=rect	coords=192,179,238,196	href="/dbget-bin/www_bget?hsa:3125"	title="3125" />
+<area shape=rect	coords=747,254,793,271	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=747,276,793,293	href="/dbget-bin/www_bget?K05428"	title="K05428 (IL5)" />
+<area shape=rect	coords=747,693,793,710	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=747,720,793,737	href="/dbget-bin/www_bget?K05428"	title="K05428 (IL5)" />
+<area shape=rect	coords=767,187,813,204	href="/dbget-bin/www_bget?K05429"	title="K05429 (IL2)" />
+<area shape=rect	coords=306,126,352,143	href="/dbget-bin/www_bget?K05414"	title="K05414 (IFNA)" />
+<area shape=rect	coords=402,280,448,297	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=482,281,528,298	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=402,648,448,665	href="/dbget-bin/www_bget?K05413"	title="K05413 (CD86)" />
+<area shape=rect	coords=483,648,529,665	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=747,744,793,761	href="/dbget-bin/www_bget?K05443"	title="K05443 (IL10, CSIF)" />
+<area shape=rect	coords=747,299,793,316	href="/dbget-bin/www_bget?K05443"	title="K05443 (IL10, CSIF)" />
+<area shape=rect	coords=495,369,609,404	href="/kegg-bin/show_pathway?map04660"	title="map04660" />
+<area shape=rect	coords=344,369,457,404	href="/kegg-bin/show_pathway?map04612"	title="map04612" />
+<area shape=rect	coords=414,529,528,564	href="/kegg-bin/show_pathway?map04514"	title="map04514" />
+<area shape=rect	coords=789,483,902,518	href="/kegg-bin/show_pathway?map04662"	title="map04662" />
+<area shape=rect	coords=40,45,298,71	href="/dbget-bin/www_bget?map05320"	title="map05320" />
+<area shape=rect	coords=1161,259,1268,285	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=922,403,1035,438	href="/kegg-bin/show_pathway?map04610"	title="map04610" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

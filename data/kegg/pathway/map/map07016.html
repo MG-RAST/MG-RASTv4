@@ -1,0 +1,172 @@
+<html>
+<!---
+ENTRY       map07016
+DEFINITION  Sulfonamide derivatives - sulfa drugs - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Sulfonamide derivatives - sulfa drugs - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Sulfonamide derivatives - sulfa drugs - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07016&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07016">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07016" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07016" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07016.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=811,294,926,357	href="/dbget-bin/www_bget?D00587+D00433+D05949"	title="D00587 (Sulfadiazine (JAN/USP/INN)), D00433 (Sulfadiazine silver (JP15)), D05949 (Sulfadiazine sodium (USP))" />
+<area shape=rect	coords=1164,443,1320,506	href="/dbget-bin/www_bget?D01141+D02001+D05023"	title="D01141 (Sulfamonomethoxine (JAN/USAN/INN)), D02001 (Sulfamonomethoxine sodium (JAN)), D05023 (Sulfamonomethoxine hydrate (JP15))" />
+<area shape=rect	coords=421,543,588,624	href="/dbget-bin/www_bget?D07060+D02447"	title="D07060 (Succinylsulfathiazole (INN)), D02447 (Succinylsulfathiazole)" />
+<area shape=rect	coords=268,543,421,624	href="/dbget-bin/www_bget?D02440"	title="D02440 (Phthalylsulfathiazole (INN))" />
+<area shape=rect	coords=92,522,262,622	href="/dbget-bin/www_bget?D00448"	title="D00448 (Salazosulfapyridine (JP15))" />
+<area shape=rect	coords=46,417,163,478	href="/dbget-bin/www_bget?D02437"	title="D02437 (Sulfaguanidine (INN))" />
+<area shape=rect	coords=425,398,570,478	href="/dbget-bin/www_bget?D01526"	title="D01526 (Sulfisomidine (JAN))" />
+<area shape=rect	coords=476,114,630,193	href="/dbget-bin/www_bget?C07573"	title="C07573 (Prontosil)" />
+<area shape=rect	coords=291,302,406,360	href="/dbget-bin/www_bget?D01047"	title="D01047 (Sulfathiazole (USP/INN))" />
+<area shape=rect	coords=425,280,570,360	href="/dbget-bin/www_bget?D02436"	title="D02436 (Sulfamethazine (USP))" />
+<area shape=rect	coords=743,542,992,621	href="/dbget-bin/www_bget?D00285"	title="D00285 (Co-Trimoxazole (BAN))" />
+<area shape=rect	coords=584,413,728,478	href="/dbget-bin/www_bget?D00450+D05957"	title="D00450 (Sulfisoxazole (JP15/USP)), D05957 (Sulfisoxazole diolamine (USAN))" />
+<area shape=rect	coords=1164,556,1320,622	href="/dbget-bin/www_bget?D00580"	title="D00580 (Sulfadoxine (JAN/USP/INN))" />
+<area shape=rect	coords=1008,556,1158,622	href="/dbget-bin/www_bget?D02439"	title="D02439 (Sulfamethoxypyridazine (INN))" />
+<area shape=rect	coords=46,302,163,360	href="/dbget-bin/www_bget?D00871"	title="D00871 (Sulfacetamide sodium (USP))" />
+<area shape=rect	coords=686,136,780,193	href="/dbget-bin/www_bget?C07458"	title="C07458 (Sulfanilamide)" />
+<area shape=rect	coords=282,80,418,193	href="/dbget-bin/www_bget?D02433"	title="D02433 (Optochin hydrochloride)" />
+<area shape=rect	coords=169,302,282,360	href="/dbget-bin/www_bget?D02434"	title="D02434 (Sulfapyridine (USP/INN))" />
+<area shape=rect	coords=1008,430,1158,506	href="/dbget-bin/www_bget?D01216"	title="D01216 (Sulfamethopyrazine (JAN))" />
+<area shape=rect	coords=1313,290,1433,357	href="/dbget-bin/www_bget?D01954"	title="D01954 (Sulfaphenazole (JAN/INN))" />
+<area shape=rect	coords=592,543,730,624	href="/dbget-bin/www_bget?D00870"	title="D00870 (Sulfamethizole (JP15/USP/INN))" />
+<area shape=rect	coords=1155,272,1309,357	href="/dbget-bin/www_bget?D01142"	title="D01142 (Sulfadimethoxine (JAN/USP))" />
+<area shape=rect	coords=1008,294,1151,357	href="/dbget-bin/www_bget?D02435"	title="D02435 (Sulfamerazine (INN))" />
+<area shape=rect	coords=799,417,945,479	href="/dbget-bin/www_bget?D00447"	title="D00447 (Sulfamethoxazole (JP15/USP/INN))" />
+<area shape=rect	coords=521,683,793,709	href="/kegg-bin/show_pathway?map07018"	title="map07018" />
+<area shape=rect	coords=866,187,991,213	href="/kegg-bin/show_pathway?map07115"	title="map07115" />
+<area shape=rect	coords=40,45,387,71	href="/dbget-bin/www_bget?map07016"	title="map07016" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

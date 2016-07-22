@@ -1,0 +1,218 @@
+<html>
+<!---
+ENTRY       map05120
+DEFINITION  Epithelial cell signaling in Helicobacter pylori infection - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Epithelial cell signaling in Helicobacter pylori infection - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Epithelial cell signaling in Helicobacter pylori infection - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05120&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05120">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Two major virulence factors of H. pylori are the vacuolating cytotoxin (VacA) and the cag type-IV secretion system (T4SS) and its translocated effector protein, cytotoxin-associated antigen A (CagA).<br />&nbsp;&nbsp; VacA binds to lipid rafts and glycosylphosphatidylinositol-anchored proteins (GPI-APs) of the target cell membrane. After insertion into the plasma membrane, VacA channels are endocytosed and eventually reach late endosomal compartments, increasing their permeability to anions with enhancement of the electrogenic vacuolar ATPase (v-ATPase) proton pump. In the presence of weak bases, osmotically active acidotropic ions will accumulate in the endosomes. This leads to water influx and vesicle swelling, an essential step in vacuole formation. In addition, it is reported that the VacA cleavage product binds to the tyrosine phosphatase receptor zeta (Ptprz) on epithelial cells and the induced signaling leads to the phosphorylation of the G protein-coupled receptor kinase-interactor 1 (Git1) and induces ulcerogenesis in mice.<br />&nbsp;&nbsp; The other virulence factor cag T4SS mediates the translocation of the effector protein CagA, which is subsequently phosphorylated by a Src kinase. Phosphorylated CagA interacts with the protein tyrosine phosphatase SHP-2, thus stimulating its phosphatase activity. Activated SHP-2 is able to induce MAPK signalling through Ras/Raf-dependent and -independent mechanisms. Deregulation of this pathway by CagA may lead to abnormal proliferation and movement of gastric epithelial cells.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05120 map" -->
+</select>
+<input type="hidden" name="mapno" value="05120" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05120" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05120" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05120.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=720,870,4	href="/dbget-bin/www_bget?C01342"	title="C01342 (NH4+)" />
+<area shape=circle	coords=689,837,4	href="/dbget-bin/www_bget?C00080"	title="C00080 (H+)" />
+<area shape=circle	coords=650,870,4	href="/dbget-bin/www_bget?C00014"	title="C00014 (NH3)" />
+<area shape=circle	coords=374,879,4	href="/dbget-bin/www_bget?G00263"	title="G00263 (IV2Fuc,III4Fuc-Lc4-Cer)" />
+<area shape=circle	coords=650,837,4	href="/dbget-bin/www_bget?C00698"	title="C00698 (Cl-)" />
+<area shape=circle	coords=135,619,4	href="/dbget-bin/www_bget?C00086"	title="C00086 (Urea)" />
+<area shape=circle	coords=374,903,4	href="/dbget-bin/www_bget?G00242"	title="G00242 (sialyl Lewis x antigen)" />
+<area shape=circle	coords=270,619,4	href="/dbget-bin/www_bget?C00014"	title="C00014 (NH3)" />
+<area shape=rect	coords=203,814,249,831	href="/dbget-bin/www_bget?up:Q9S3I7_HELPY+up:Q9X745_HELPY+up:Q9X746_HELPY+up:Q9X747_HELPY+up:Q9X748_HELPY+up:Q9X752_HELPY"	title="Q9S3I7_HELPY, Q9X745_HELPY, Q9X746_HELPY, Q9X747_HELPY, Q9X748_HELPY, Q9X752_HELPY" />
+<area shape=rect	coords=203,790,249,807	href="/dbget-bin/www_bget?up:O32642_HELPY"	title="O32642_HELPY" />
+<area shape=rect	coords=203,766,249,783	href="/dbget-bin/www_bget?up:O32641_HELPY"	title="O32641_HELPY" />
+<area shape=rect	coords=291,718,337,735	href="/dbget-bin/www_bget?hpy:HP0887+hpj:jhp0819+hpa:HPAG1_0867"	title="HP0887, jhp0819, HPAG1_0867" />
+<area shape=rect	coords=669,482,715,499	href="/dbget-bin/www_bget?K04441"	title="K04441 (P38)" />
+<area shape=rect	coords=738,523,784,540	href="/dbget-bin/www_bget?K04448"	title="K04448 (JUN)" />
+<area shape=rect	coords=669,523,715,540	href="/dbget-bin/www_bget?K04440"	title="K04440 (JNK)" />
+<area shape=rect	coords=600,523,646,540	href="/dbget-bin/www_bget?K04430"	title="K04430 (MAP2K4, MKK4)" />
+<area shape=rect	coords=635,565,681,582	href="/dbget-bin/www_bget?K04467"	title="K04467 (IKBKA, IKKA, CHUK)" />
+<area shape=rect	coords=635,599,681,616	href="/dbget-bin/www_bget?K07210"	title="K07210 (IKBKG, IKKG, NEMO)" />
+<area shape=rect	coords=635,582,681,599	href="/dbget-bin/www_bget?K07209"	title="K07209 (IKBKB, IKKB)" />
+<area shape=rect	coords=738,573,784,590	href="/dbget-bin/www_bget?K04734"	title="K04734 (NFKBIA)" />
+<area shape=rect	coords=666,787,712,804	href="/dbget-bin/www_bget?K02144+K02145+K02146+K02147+K02148+K02149+K02150+K02151+K02152+K02153+K02154+K02155+K03661+K03662"	title="K02144 (ATPeV54kD), K02145 (ATPeVA, ATP6A1), K02146 (ATPeVAC39, ATP6D), K02147 (ATPeVB, ATP6B1), K02148 (ATPeVC, ATP6C), K02149 (ATPeVD, ATP6M), K02150 (ATPeVE, ATP6E), K02151 (ATPeVF, ATP6S14), K02152 (ATPeVG, ATP6G1), K02153 (ATPeVH, ATP6H), K02154 (ATPeVI, ATP6N1A), K02155 (ATPeVPL, ATP6L), K03661 (ATPeVPF, ATP6F), K03662 (ATPeVS1, ATP6S1)" />
+<area shape=rect	coords=760,736,806,753	href="/dbget-bin/www_bget?K02187"	title="K02187 (CASP3)" />
+<area shape=rect	coords=462,547,508,564	href="/dbget-bin/www_bget?K04409"	title="K04409 (PAK1)" />
+<area shape=rect	coords=738,621,784,638	href="/dbget-bin/www_bget?K02580+K04735"	title="K02580 (NFKB1), K04735 (RELA)" />
+<area shape=rect	coords=867,621,913,638	href="/dbget-bin/www_bget?K12499"	title="K12499 (CCL5)" />
+<area shape=rect	coords=867,534,913,551	href="/dbget-bin/www_bget?hsa:2919+mmu:14825+rno:81503+bta:281212"	title="2919, 14825, 81503, 281212" />
+<area shape=rect	coords=867,510,913,527	href="/dbget-bin/www_bget?K10030"	title="K10030 (IL8, CXCL8)" />
+<area shape=rect	coords=573,435,619,452	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=573,413,619,430	href="/dbget-bin/www_bget?K04392"	title="K04392 (RAC1)" />
+<area shape=rect	coords=532,574,578,591	href="/dbget-bin/www_bget?K04466"	title="K04466 (MAP3K14, NIK)" />
+<area shape=rect	coords=239,648,285,665	href="/dbget-bin/www_bget?K08303"	title="K08303 (putative protease [EC:3.4.-.-])" />
+<area shape=rect	coords=163,619,209,636	href="/dbget-bin/www_bget?K01428"	title="K01428 (ureC)" />
+<area shape=rect	coords=163,602,209,619	href="/dbget-bin/www_bget?K01429+K01430"	title="K01429 (ureB), K01430 (ureA)" />
+<area shape=rect	coords=133,425,179,442	href="/dbget-bin/www_bget?hpy:HP0520+hpy:HP0521+hpy:HP0522+hpy:HP0523+hpy:HP0524+hpy:HP0526+hpy:HP0527+hpy:HP0528+hpy:HP0529+hpy:HP0530+hpy:HP0531+hpy:HP0532+hpy:HP0534+hpy:HP0535+hpy:HP0536+hpy:HP0537+hpy:HP0538+hpy:HP0539+hpy:HP0540+hpy:HP0541+hpy:HP0542+hpy:HP0543+hpy:HP0544+hpy:HP0545+hpy:HP0546+hpy:HP0547+hpy:HP0525+hpj:jhp0469+hpj:jhp0470+hpj:jhp0471+hpj:jhp0472+hpj:jhp0473+hpj:jhp0475+hpj:jhp0476+hpj:jhp0477+hpj:jhp0478+hpj:jhp0479+hpj:jhp0480+hpj:jhp0481+hpj:jhp0482+hpj:jhp0483+hpj:jhp0484+hpj:jhp0485+hpj:jhp0486+hpj:jhp0487+hpj:jhp0488+hpj:jhp0489+hpj:jhp0490+hpj:jhp0491+hpj:jhp0492+hpj:jhp0493+hpj:jhp0494+hpj:jhp0495+hpj:jhp0474+hpa:HPAG1_0495+hpa:HPAG1_0497+hpa:HPAG1_0498+hpa:HPAG1_0499+hpa:HPAG1_0501+hpa:HPAG1_0502+hpa:HPAG1_0503+hpa:HPAG1_0504+hpa:HPAG1_0505+hpa:HPAG1_0506+hpa:HPAG1_0507+hpa:HPAG1_0508+hpa:HPAG1_0510+hpa:HPAG1_0511+hpa:HPAG1_0512+hpa:HPAG1_0513+hpa:HPAG1_0514+hpa:HPAG1_0515+hpa:HPAG1_0516+hpa:HPAG1_0517+hpa:HPAG1_0518+hpa:HPAG1_0519+hpa:HPAG1_0520+hpa:HPAG1_0521+hpa:HPAG1_0522+hpa:HPAG1_0524+hpa:HPAG1_0500"	title="HP0520, HP0521, HP0522, HP0523, HP0524, HP0526, HP0527, HP0528, HP0529, HP0530, HP0531, HP0532, HP0534, HP0535, HP0536, HP0537, HP0538, HP0539, HP0540, HP0541, HP0542, HP0543, HP0544, HP0545, HP0546, HP0547, HP0525, jhp0469, jhp0470, jhp0471, jhp0472, jhp0473, jhp0475, jhp0476, jhp0477, jhp0478, jhp0479, jhp0480, jhp0481, jhp0482, jhp0483, jhp0484, jhp0485, jhp0486, jhp0487, jhp0488, jhp0489, jhp0490, jhp0491, jhp0492, jhp0493, jhp0494, jhp0495, jhp0474, HPAG1_0495, HPAG1_0497, HPAG1_0498, HPAG1_0499, HPAG1_0501, HPAG1_0502, HPAG1_0503, HPAG1_0504, HPAG1_0505, HPAG1_0506, HPAG1_0507, HPAG1_0508, HPAG1_0510, HPAG1_0511, HPAG1_0512, HPAG1_0513, HPAG1_0514, HPAG1_0515, HPAG1_0516, HPAG1_0517, HPAG1_0518, HPAG1_0519, HPAG1_0520, HPAG1_0521, HPAG1_0522, HPAG1_0524, HPAG1_0500" />
+<area shape=rect	coords=381,148,427,165	href="/dbget-bin/www_bget?K05099"	title="K05099 (MET, HGFR)" />
+<area shape=rect	coords=600,104,646,121	href="/dbget-bin/www_bget?K06089+K06735+K06785+K06786"	title="K06089 (F11R, JAM1), K06735 (JAM2), K06785 (JAM3), K06786 (JAM4, JCAM)" />
+<area shape=rect	coords=432,148,478,165	href="/dbget-bin/www_bget?K05859"	title="K05859 (PLCG)" />
+<area shape=rect	coords=381,238,427,255	href="/dbget-bin/www_bget?K06059"	title="K06059 (ADAM17, TACE)" />
+<area shape=rect	coords=290,267,336,284	href="/dbget-bin/www_bget?K08523"	title="K08523 (HBEGF)" />
+<area shape=rect	coords=381,296,427,313	href="/dbget-bin/www_bget?K06704"	title="K06704 (ADAM10)" />
+<area shape=rect	coords=290,339,336,356	href="/dbget-bin/www_bget?K10030"	title="K10030 (IL8, CXCL8)" />
+<area shape=rect	coords=571,121,617,138	href="/dbget-bin/www_bget?K05701"	title="K05701 (TJP1, ZO1)" />
+<area shape=rect	coords=381,339,427,356	href="/dbget-bin/www_bget?K04175+K05050"	title="K04175 (IL8RA, CXCR1), K05050 (IL8RB, CXCR2)" />
+<area shape=rect	coords=600,371,646,388	href="/dbget-bin/www_bget?K05728"	title="K05728 (CSK)" />
+<area shape=rect	coords=381,267,427,284	href="/dbget-bin/www_bget?K04361"	title="K04361 (EGFR, ERBB1)" />
+<area shape=rect	coords=486,326,532,343	href="/dbget-bin/www_bget?hpj:jhp0495+hpy:HP0547+hpa:HPAG1_0524"	title="jhp0495, HP0547, HPAG1_0524" />
+<area shape=rect	coords=520,371,566,388	href="/dbget-bin/www_bget?K05704+K05854"	title="K05704 (SRC), K05854 (LYN)" />
+<area shape=rect	coords=462,680,508,697	href="/dbget-bin/www_bget?K05737"	title="K05737 (GIT1)" />
+<area shape=rect	coords=64,610,110,627	href="/dbget-bin/www_bget?K03191"	title="K03191 (ureI)" />
+<area shape=rect	coords=381,680,427,697	href="/dbget-bin/www_bget?K08114"	title="K08114 (PTPRZ)" />
+<area shape=rect	coords=203,871,249,888	href="/dbget-bin/www_bget?hpj:jhp0833+hpy:HP1243+hpa:HPAG1_0876"	title="jhp0833, HP1243, HPAG1_0876" />
+<area shape=rect	coords=600,326,646,343	href="/dbget-bin/www_bget?K07293"	title="K07293 (PTPN11)" />
+<area shape=rect	coords=532,621,578,638	href="/dbget-bin/www_bget?K08727"	title="K08727 (NOD1, CARD4)" />
+<area shape=rect	coords=203,838,249,855	href="/dbget-bin/www_bget?hpy:HP0797+hpj:jhp0733+hpa:HPAG1_0782"	title="HP0797, jhp0733, HPAG1_0782" />
+<area shape=rect	coords=575,828,621,845	href="/dbget-bin/www_bget?hpy:HP0887+hpj:jhp0819+hpa:HPAG1_0867"	title="HP0887, jhp0819, HPAG1_0867" />
+<area shape=rect	coords=717,784,871,810	href="/kegg-bin/show_pathway?map00190"	title="map00190" />
+<area shape=rect	coords=623,126,720,152	href="/kegg-bin/show_pathway?map04530"	title="map04530" />
+<area shape=rect	coords=959,324,1049,350	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=221,421,406,447	href="/kegg-bin/show_pathway?map03080"	title="map03080" />
+<area shape=rect	coords=683,250,868,285	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,560,71	href="/dbget-bin/www_bget?map05120"	title="map05120" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

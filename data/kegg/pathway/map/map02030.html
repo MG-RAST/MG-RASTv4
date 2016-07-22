@@ -1,0 +1,191 @@
+<html>
+<!---
+ENTRY       map02030
+DEFINITION  Bacterial chemotaxis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Bacterial chemotaxis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Bacterial chemotaxis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=02030&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map02030">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Chemotaxis is the process by which cells sense chemical gradients in their environment and then move towards more favorable conditions. In chemotaxis, events at the receptors control autophosphorylation of the CheA histidine kinase, and the phosphohistidine is the substrate for the response regulator CheY, which catalyzes the transfer of the phosphoryl group to a conserved aspartate. The resulting CheY-P can interact with the switch mechanism in the motor. This interaction causes a change in behavior, such as in direction or speed of rotation of flagella.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 02030 map" -->
+</select>
+<input type="hidden" name="mapno" value="02030" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map02030" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map02030" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map02030.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=809,153,4	href="/dbget-bin/www_bget?C00716"	title="C00716 (DL-Serine)" />
+<area shape=circle	coords=809,187,4	href="/dbget-bin/www_bget?C00049"	title="C00049 (L-Aspartate)" />
+<area shape=circle	coords=730,213,4	href="/dbget-bin/www_bget?C00208"	title="C00208 (Maltose)" />
+<area shape=circle	coords=730,243,4	href="/dbget-bin/www_bget?C00121"	title="C00121 (D-Ribose)" />
+<area shape=circle	coords=730,271,4	href="/dbget-bin/www_bget?C00124"	title="C00124 (D-Galactose)" />
+<area shape=circle	coords=730,299,4	href="/dbget-bin/www_bget?C00107"	title="C00107 (Dipeptide)" />
+<area shape=rect	coords=592,277,638,294	href="/dbget-bin/www_bget?K02557"	title="K02557 (motB)" />
+<area shape=rect	coords=592,260,638,277	href="/dbget-bin/www_bget?K02556"	title="K02556 (motA)" />
+<area shape=rect	coords=483,285,529,302	href="/dbget-bin/www_bget?K02417"	title="K02417 (fliNY, fliN)" />
+<area shape=rect	coords=483,268,529,285	href="/dbget-bin/www_bget?K02416"	title="K02416 (fliM)" />
+<area shape=rect	coords=483,251,529,268	href="/dbget-bin/www_bget?K02410"	title="K02410 (fliG)" />
+<area shape=rect	coords=424,172,470,189	href="/dbget-bin/www_bget?K03414"	title="K03414 (cheZ)" />
+<area shape=rect	coords=375,268,421,285	href="/dbget-bin/www_bget?K03413"	title="K03413 (cheY)" />
+<area shape=rect	coords=268,172,314,189	href="/dbget-bin/www_bget?K00575"	title="K00575 (cheR)" />
+<area shape=rect	coords=267,285,313,302	href="/dbget-bin/www_bget?K03408"	title="K03408 (cheW)" />
+<area shape=rect	coords=267,268,313,285	href="/dbget-bin/www_bget?K03407"	title="K03407 (cheA)" />
+<area shape=rect	coords=268,204,314,221	href="/dbget-bin/www_bget?K03412"	title="K03412 (cheB)" />
+<area shape=rect	coords=852,290,898,307	href="/dbget-bin/www_bget?K05877"	title="K05877 (tap)" />
+<area shape=rect	coords=852,253,898,270	href="/dbget-bin/www_bget?K05876"	title="K05876 (trg)" />
+<area shape=rect	coords=851,179,897,196	href="/dbget-bin/www_bget?K05875"	title="K05875 (tar)" />
+<area shape=rect	coords=852,144,898,161	href="/dbget-bin/www_bget?K05874"	title="K05874 (tsr)" />
+<area shape=rect	coords=770,291,816,308	href="/dbget-bin/www_bget?K12368"	title="K12368 (dppA)" />
+<area shape=rect	coords=770,263,816,280	href="/dbget-bin/www_bget?K10540"	title="K10540 (mglB)" />
+<area shape=rect	coords=770,235,816,252	href="/dbget-bin/www_bget?K10439"	title="K10439 (rbsB)" />
+<area shape=rect	coords=770,205,816,222	href="/dbget-bin/www_bget?K10108"	title="K10108 (malE)" />
+<area shape=rect	coords=852,327,898,344	href="/dbget-bin/www_bget?K03776"	title="K03776 (aer)" />
+<area shape=rect	coords=268,335,314,352	href="/dbget-bin/www_bget?K03415"	title="K03415 (cheV)" />
+<area shape=rect	coords=373,172,419,189	href="/dbget-bin/www_bget?K03410"	title="K03410 (cheC)" />
+<area shape=rect	coords=476,172,522,189	href="/dbget-bin/www_bget?K03409"	title="K03409 (cheX)" />
+<area shape=rect	coords=268,141,314,158	href="/dbget-bin/www_bget?K03411"	title="K03411 (cheD)" />
+<area shape=rect	coords=158,257,204,274	href="/dbget-bin/www_bget?K03406+K05874+K05875+K05876+K05877"	title="K03406 (mcp), K05874 (tsr), K05875 (tar), K05876 (trg), K05877 (tap)" />
+<area shape=rect	coords=158,280,204,297	href="/dbget-bin/www_bget?K03776"	title="K03776 (aer)" />
+<area shape=rect	coords=40,45,245,71	href="/dbget-bin/www_bget?map02030"	title="map02030" />
+<area shape=rect	coords=492,326,611,352	href="/kegg-bin/show_pathway?map02040"	title="map02040" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

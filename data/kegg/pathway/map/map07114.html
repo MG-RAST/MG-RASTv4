@@ -1,0 +1,166 @@
+<html>
+<!---
+ENTRY       map07114
+DEFINITION  Naphthalene family - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Naphthalene family - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Naphthalene family - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07114&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07114">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07114" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07114" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07114.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=365,428,424,442	href="/dbget-bin/www_bget?D02375+D02219"	title="D02375 (Terbinafine (USAN/INN)), D02219 (Terbinafine hydrochloride (JAN))" />
+<area shape=rect	coords=228,426,283,440	href="/dbget-bin/www_bget?D01093"	title="D01093 (Butenafine hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=45,426,152,440	href="/dbget-bin/www_bget?D01558"	title="D01558 (1-Naphthylacetic acid (JAN))" />
+<area shape=rect	coords=73,298,135,312	href="/dbget-bin/www_bget?D00743+D01021"	title="D00743 (Naphazoline hydrochloride (JP15/USP)), D01021 (Naphazoline nitrate (JP15))" />
+<area shape=rect	coords=899,625,959,640	href="/dbget-bin/www_bget?D01670"	title="D01670 (Nafamostat mesilate (JAN))" />
+<area shape=rect	coords=448,347,553,362	href="/dbget-bin/www_bget?C14082"	title="C14082 (1-Methylnaphthalene)" />
+<area shape=rect	coords=622,348,683,363	href="/dbget-bin/www_bget?C11713"	title="C11713 (beta-Naphthol)" />
+<area shape=rect	coords=838,373,909,388	href="/dbget-bin/www_bget?D02549"	title="D02549 (Rifamycin (INN))" />
+<area shape=rect	coords=1095,164,1157,178	href="/dbget-bin/www_bget?D00483"	title="D00483 (Propranolol hydrochloride (JP15/USP))" />
+<area shape=rect	coords=907,163,963,178	href="/dbget-bin/www_bget?D01674"	title="D01674 (Naftopidil (JAN/INN))" />
+<area shape=rect	coords=753,133,813,148	href="/dbget-bin/www_bget?C11714"	title="C11714 (alpha-Naphthol)" />
+<area shape=rect	coords=472,94,535,108	href="/dbget-bin/www_bget?C00829"	title="C00829 (Naphthalene)" />
+<area shape=rect	coords=1107,397,1197,411	href="/dbget-bin/www_bget?D02062"	title="D02062 (Chromomycin A3 (JAN))" />
+<area shape=rect	coords=842,526,907,540	href="/dbget-bin/www_bget?D00425"	title="D00425 (Nabumetone (JAN/USP/INN))" />
+<area shape=rect	coords=1079,526,1130,540	href="/dbget-bin/www_bget?D00118+D00970"	title="D00118 (Naproxen (JP15/USP/INN)), D00970 (Naproxen sodium (USP))" />
+<area shape=rect	coords=160,637,209,652	href="/dbget-bin/www_bget?D00990"	title="D00990 (Nafarelin acetate (JAN/USAN))" />
+<area shape=rect	coords=1113,624,1165,639	href="/dbget-bin/www_bget?D00381"	title="D00381 (Tolnaftate (JP15/USP/INN))" />
+<area shape=rect	coords=450,596,556,610	href="/dbget-bin/www_bget?C14098"	title="C14098 (2-Methylnaphthalene)" />
+<area shape=rect	coords=261,300,353,314	href="/dbget-bin/www_bget?D01342"	title="D01342 (Indocyanine green (JAN/USP))" />
+<area shape=rect	coords=838,390,917,416	href="/kegg-bin/show_pathway?map07023"	title="map07023" />
+<area shape=rect	coords=40,45,225,71	href="/dbget-bin/www_bget?map07114"	title="map07114" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

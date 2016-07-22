@@ -1,0 +1,212 @@
+<html>
+<!---
+ENTRY       map03420
+DEFINITION  Nucleotide excision repair - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Nucleotide excision repair - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Nucleotide excision repair - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03420&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03420">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Nucleotide excision repair (NER) is a mechanism to recognize and repair bulky DNA damage caused by compounds, environmental carcinogens, and exposure to UV-light. In humans hereditary defects in the NER pathway are linked to at least three diseases: xeroderma pigmentosum (XP), Cockayne syndrome (CS), and trichothiodystrophy (TTD). The repair of damaged DNA involves at least 30 polypeptides within two different sub-pathways of NER known as transcription-coupled repair (TCR-NER) and global genome repair (GGR-NER). TCR refers to the expedited repair of lesions located in the actively transcribed strand of genes by RNA polymerase II (RNAP II). In GGR-NER the first step of damage recognition involves XPC-hHR23B complex together with XPE complex (in prokaryotes, uvrAB complex). The following steps of GGR-NER and TCR-NER are similar.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03420 map" -->
+</select>
+<input type="hidden" name="mapno" value="03420" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03420" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03420" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03420.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=707,893,753,910	href="/dbget-bin/www_bget?K03144"	title="K03144 (TFIIH4)" />
+<area shape=rect	coords=707,876,753,893	href="/dbget-bin/www_bget?K03143"	title="K03143 (TFIIH3)" />
+<area shape=rect	coords=707,859,753,876	href="/dbget-bin/www_bget?K03142"	title="K03142 (TFIIH2)" />
+<area shape=rect	coords=707,842,753,859	href="/dbget-bin/www_bget?K03141"	title="K03141 (TFIIH1)" />
+<area shape=rect	coords=661,859,707,876	href="/dbget-bin/www_bget?K10844"	title="K10844 (ERCC2, XPD)" />
+<area shape=rect	coords=661,876,707,893	href="/dbget-bin/www_bget?K10845"	title="K10845 (TTDA)" />
+<area shape=rect	coords=661,842,707,859	href="/dbget-bin/www_bget?K10843"	title="K10843 (ERCC3, XPB)" />
+<area shape=rect	coords=615,876,661,893	href="/dbget-bin/www_bget?K06634"	title="K06634 (CCNH)" />
+<area shape=rect	coords=615,859,661,876	href="/dbget-bin/www_bget?K10842"	title="K10842 (MNAT1)" />
+<area shape=rect	coords=615,842,661,859	href="/dbget-bin/www_bget?K02202"	title="K02202 (CDK7)" />
+<area shape=rect	coords=1058,314,1104,331	href="/dbget-bin/www_bget?K10610"	title="K10610 (DDB1)" />
+<area shape=rect	coords=1058,297,1104,314	href="/dbget-bin/www_bget?K10609"	title="K10609 (CUL4)" />
+<area shape=rect	coords=1058,280,1104,297	href="/dbget-bin/www_bget?K03868"	title="K03868 (RBX1, ROC1)" />
+<area shape=rect	coords=131,311,177,328	href="/dbget-bin/www_bget?K03702"	title="K03702 (uvrB)" />
+<area shape=rect	coords=131,294,177,311	href="/dbget-bin/www_bget?K03701"	title="K03701 (uvrA)" />
+<area shape=rect	coords=271,920,317,937	href="/dbget-bin/www_bget?K01971+K01972"	title="K01971 (E6.5.1.1, lig), K01972 (E6.5.1.2, ligA, ligB)" />
+<area shape=rect	coords=271,800,317,817	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=833,485,879,502	href="/dbget-bin/www_bget?K10842"	title="K10842 (MNAT1)" />
+<area shape=rect	coords=416,344,462,361	href="/dbget-bin/www_bget?K03701"	title="K03701 (uvrA)" />
+<area shape=rect	coords=954,921,1000,938	href="/dbget-bin/www_bget?K10747"	title="K10747 (LIG1)" />
+<area shape=rect	coords=922,805,968,822	href="/dbget-bin/www_bget?K10754+K10755+K10756"	title="K10754 (RFC1), K10755 (RFC2_4), K10756 (RFC3_5)" />
+<area shape=rect	coords=922,788,968,805	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=271,774,317,791	href="/dbget-bin/www_bget?K03657"	title="K03657 (uvrD, pcrA)" />
+<area shape=rect	coords=867,816,913,833	href="/dbget-bin/www_bget?K02324+K02325+K02326+K03506"	title="K02324 (POLE1), K02325 (POLE2), K02326 (POLE3), K03506 (POLE4)" />
+<area shape=rect	coords=923,613,969,630	href="/dbget-bin/www_bget?K10848"	title="K10848 (ERCC4, XPF)" />
+<area shape=rect	coords=1045,468,1091,485	href="/dbget-bin/www_bget?K10846"	title="K10846 (ERCC5, XPG, RAD2)" />
+<area shape=rect	coords=867,788,913,805	href="/dbget-bin/www_bget?K02327+K02328+K03504+K03505"	title="K02327 (POLD1), K02328 (POLD2), K03504 (POLD3), K03505 (POLD4)" />
+<area shape=rect	coords=1102,485,1148,502	href="/dbget-bin/www_bget?K07466+K10739+K10740+K10741"	title="K07466 (RFA1, RPA1, rpa), K10739 (RFA2, RPA2), K10740 (RPA3), K10741 (RPA4)" />
+<area shape=rect	coords=925,519,971,536	href="/dbget-bin/www_bget?K03144"	title="K03144 (TFIIH4)" />
+<area shape=rect	coords=923,630,969,647	href="/dbget-bin/www_bget?K10849"	title="K10849 (ERCC1)" />
+<area shape=rect	coords=1102,468,1148,485	href="/dbget-bin/www_bget?K10847"	title="K10847 (XPA)" />
+<area shape=rect	coords=925,502,971,519	href="/dbget-bin/www_bget?K03143"	title="K03143 (TFIIH3)" />
+<area shape=rect	coords=925,485,971,502	href="/dbget-bin/www_bget?K03142"	title="K03142 (TFIIH2)" />
+<area shape=rect	coords=879,502,925,519	href="/dbget-bin/www_bget?K10845"	title="K10845 (TTDA)" />
+<area shape=rect	coords=416,361,462,378	href="/dbget-bin/www_bget?K03702"	title="K03702 (uvrB)" />
+<area shape=rect	coords=799,331,845,348	href="/dbget-bin/www_bget?K10140"	title="K10140 (DDB2)" />
+<area shape=rect	coords=799,314,845,331	href="/dbget-bin/www_bget?K10610"	title="K10610 (DDB1)" />
+<area shape=rect	coords=799,297,845,314	href="/dbget-bin/www_bget?K10609"	title="K10609 (CUL4)" />
+<area shape=rect	coords=799,280,845,297	href="/dbget-bin/www_bget?K03868"	title="K03868 (RBX1, ROC1)" />
+<area shape=rect	coords=418,245,464,262	href="/dbget-bin/www_bget?K03723"	title="K03723 (mfd)" />
+<area shape=rect	coords=879,468,925,485	href="/dbget-bin/www_bget?K10843"	title="K10843 (ERCC3, XPB)" />
+<area shape=rect	coords=891,314,937,331	href="/dbget-bin/www_bget?K10840"	title="K10840 (CETN2)" />
+<area shape=rect	coords=925,468,971,485	href="/dbget-bin/www_bget?K03141"	title="K03141 (TFIIH1)" />
+<area shape=rect	coords=891,297,937,314	href="/dbget-bin/www_bget?K10839"	title="K10839 (RAD23, HR23)" />
+<area shape=rect	coords=1058,331,1104,348	href="/dbget-bin/www_bget?K10570"	title="K10570 (ERCC8, CKN1, CSA)" />
+<area shape=rect	coords=879,485,925,502	href="/dbget-bin/www_bget?K10844"	title="K10844 (ERCC2, XPD)" />
+<area shape=rect	coords=1117,281,1163,298	href="/dbget-bin/www_bget?K10841"	title="K10841 (ERCC6, CSB, RAD26)" />
+<area shape=rect	coords=891,280,937,297	href="/dbget-bin/www_bget?K10838"	title="K10838 (XPC)" />
+<area shape=rect	coords=833,502,879,519	href="/dbget-bin/www_bget?K06634"	title="K06634 (CCNH)" />
+<area shape=rect	coords=271,630,317,647	href="/dbget-bin/www_bget?K03703"	title="K03703 (uvrC)" />
+<area shape=rect	coords=833,468,879,485	href="/dbget-bin/www_bget?K02202"	title="K02202 (CDK7)" />
+<area shape=rect	coords=1204,224,1307,250	href="/kegg-bin/show_pathway?map03020"	title="map03020" />
+<area shape=rect	coords=531,220,634,246	href="/kegg-bin/show_pathway?map03020"	title="map03020" />
+<area shape=rect	coords=928,349,1059,384	href="/kegg-bin/show_pathway?map04120"	title="map04120" />
+<area shape=rect	coords=40,45,283,71	href="/dbget-bin/www_bget?map03420"	title="map03420" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

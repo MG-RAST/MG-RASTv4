@@ -156,7 +156,7 @@
 	}
 	var link = '<li'+(projectid==widget.current ? ' class="active"' : '')+'><a href="#project'+projectid+'" data-toggle="tab" class="tab-light">'+icon+project.name+'</a></li>';
 	details.push('<div class="tab-pane'+(projectid==widget.current ? ' active' : '')+'" id="project'+projectid+'">');
-	details.push('<div class="tabbable"><ul class="nav nav-tabs" style="margin-bottom: 0px; position: relative; right: 1px;"><li class="active"><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab2">Details</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab1">Metagenomes</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab3" onclick="Retina.WidgetInstances.metagenome_share[1].showPermissions(\''+project.id+'\', this.parentNode.parentNode.nextSibling.lastChild);">Access</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab4" onclick="Retina.WidgetInstances.metagenome_share[1].showMetadata(\''+project.id+'\', document.getElementById(\'project'+projectid+'tab4\'));">Metadata</a></li></ul><div class="tab-content tab-content-inner" style="padding-left: 10px;"><div id="project'+projectid+'tab1" class="tab-pane" style="padding-top: 10px;">');
+	details.push('<div class="tabbable"><ul class="nav nav-tabs" style="margin-bottom: 0px; position: relative; right: 1px;"><li class="active"><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab2">Details</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab1">Metagenomes</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab3" onclick="Retina.WidgetInstances.metagenome_share[1].showPermissions(\''+project.id+'\', this.parentNode.parentNode.nextSibling.lastChild);">Access</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab4" onclick="Retina.WidgetInstances.metagenome_share[1].showMetadata(\''+project.id+'\', document.getElementById(\'project'+projectid+'tab4\'));">Metadata</a></li><li class=""><a class="tab-light" data-toggle="tab" href="#project'+projectid+'tab5" onclick="Retina.WidgetInstances.metagenome_share[1].showCustom(\''+project.id+'\');">Customize Project Page</a></li></ul><div class="tab-content tab-content-inner" style="padding-left: 10px;"><div id="project'+projectid+'tab1" class="tab-pane" style="padding-top: 10px;">');
 	
 	if (project.metagenomes.length) {
 	    if (project.status !== 'public') {
@@ -176,7 +176,7 @@
 	
 	details.push('</div><div id="project'+projectid+'tab2" class="tab-pane active">');
 	
-	details.push('<h4>status<a href="mgmain.html?mgpage=project&project='+project.id+'" class="btn btn-mini pull-right" title="view project page"><i class="icon icon-eye-open"></i></a></h4>');
+	details.push('<h4>status<a href="mgmain.html?mgpage=project&project='+project.id+'" class="btn btn-mini pull-right" title="view project page"><i class="icon icon-eye-open" style="margin-right: 5px; position: relative; top: 2px;"></i> view project page</a></h4>');
 	if (project.status == "public") {
 	    details.push("<div class='alert alert-success'>public</div>");
 	} else {
@@ -195,12 +195,241 @@
 	}
 	details.push(widget.projectDetails(projectid));
 	details.push('</div><div id="project'+projectid+'tab4" class="tab-pane">');
+	details.push('</div><div id="project'+projectid+'tab5" class="tab-pane">');
 	details.push('</div><div id="project'+projectid+'tab3" class="tab-pane">');
 	details.push('</div></div></div></div>');
 	
 	return { "details": details, "link": link };
     };
 
+    widget.showCustomImage = function (nodeid, projectid) {
+	var widget = this;
+
+	document.getElementById('projectCustomImage'+projectid).innerHTML = '<div style="width: 26px; margin-left: auto; margin-right: auto; margin-top: 100px;"><img src="Retina/images/waiting.gif" style="width: 24px;"></div>';
+
+	jQuery.get(RetinaConfig.shock_url+"/node/"+nodeid+"?download", function(data){
+	    document.getElementById('projectCustomImage'+projectid).innerHTML = data;
+	});
+    };
+
+    widget.selectCustomImage = function (nodeid, projectid, remove, oldid) {
+	var widget = this;
+
+	var projecttab = 0;
+	if (projectid.match(/^mgp/)) {
+	    for (var i=0; i<stm.DataStore.project.length; i++) {
+		if (stm.DataStore.project[i].id == projectid) {
+		    projecttab = i;
+		    break;
+		}
+	    }
+	} else {
+	    projecttab = projectid;
+	    projectid = stm.DataStore.project[projecttab].id;
+	}
+	var target = document.getElementById('project'+projecttab+'tab5');
+
+	target.innerHTML = '<div style="width: 26px; margin-left: auto; margin-right: auto; margin-top: 100px;"><img src="Retina/images/waiting.gif" style="width: 24px;"></div>';
+
+	// if the image was assigned to another project, remove it from there first
+	if (oldid) {
+	    var url = RetinaConfig.shock_url+'/node/'+oldid;
+	    jQuery.ajax({ url: url,
+			  dataType: "json",
+			  success: function(data) {
+			      var attributes = data.data.attributes;
+			      delete attributes.inUseInProject;
+			      var url = RetinaConfig.shock_url+'/node/'+data.data.id;
+			      var fd = new FormData();
+			      fd.append('attributes', new Blob([ JSON.stringify(attributes) ], { "type" : "text\/json" }));
+			      jQuery.ajax(url, {
+				  contentType: false,
+				  processData: false,
+				  data: fd,
+				  success: function(data){
+				      console.log('removed');
+				  },
+				  error: function(jqXHR, error){
+				      console.log('removal failed');
+				  },
+				  crossDomain: true,
+				  headers: stm.authHeader,
+				  type: "PUT"
+			      });
+			  },
+			  error: function(jqXHR, error) {
+			      console.log('node retrieval failed');
+			  },
+			  crossDomain: true,
+			  headers: stm.authHeader
+			});
+	}
+
+	// get the node to set the project for and update the attributes
+	var url = RetinaConfig.shock_url+'/node/'+nodeid;
+	jQuery.ajax({ url: url,
+		      pid: projectid,
+		      rem: remove,
+		      dataType: "json",
+		      success: function(data) {
+			  var widget = Retina.WidgetInstances.metagenome_share[1];
+			  var projectid = this.pid;
+			  var projecttab = 0;
+			  if (projectid.match(/^mgp/)) {
+			      for (var i=0; i<stm.DataStore.project.length; i++) {
+				  if (stm.DataStore.project[i].id == projectid) {
+				      projecttab = i;
+				      break;
+				  }
+			      }
+			  } else {
+			      projecttab = projectid;
+			      projectid = stm.DataStore.project[projecttab].id;
+			  }
+			  var target = document.getElementById('project'+projecttab+'tab5');
+			  if (data != null) {
+			      if (data.error != null) {
+				  target.innerHMTL = '<div class="alert alert-error">could not access your myData space</div>';
+			      } else {
+				  var attributes = data.data.attributes;
+				  attributes.inUseInProject = projectid;
+				  if (this.rem) {
+				      delete attributes.inUseInProject;
+				  }
+				  var url = RetinaConfig.shock_url+'/node/'+data.data.id;
+				  var fd = new FormData();
+				  fd.append('attributes', new Blob([ JSON.stringify(attributes) ], { "type" : "text\/json" }));
+				  jQuery.ajax(url, {
+				      contentType: false,
+				      processData: false,
+				      pid: projectid,
+				      data: fd,
+				      success: function(data){
+					  Retina.WidgetInstances.metagenome_share[1].showCustom(this.pid);
+					  alert('image updated');
+				      },
+				      error: function(jqXHR, error){
+					  var projecttab = 0;
+					  var projectid = this.pid;
+					  if (projectid.match(/^mgp/)) {
+					      for (var i=0; i<stm.DataStore.project.length; i++) {
+						  if (stm.DataStore.project[i].id == projectid) {
+						      projecttab = i;
+						      break;
+						  }
+					      }
+					  } else {
+					      projecttab = projectid;
+					      projectid = stm.DataStore.project[projecttab].id;
+					  }
+					  var target = document.getElementById('project'+projecttab+'tab5');
+					  target.innerHMTL = '<div class="alert alert-error">there was an error connecting to your myData space</div>';
+				      },
+				      crossDomain: true,
+				      headers: stm.authHeader,
+				      type: "PUT"
+				  });
+			      }
+			  } else {
+			      target.innerHMTL = '<div class="alert alert-error">there was an error connecting to your myData space</div>';
+			  }
+		      },
+		      error: function(jqXHR, error) {
+			  var widget = Retina.WidgetInstances.metagenome_share[1];
+			  var target = document.getElementById('projectCustom'+this.pid);
+			  target.innerHMTL = '<div class="alert alert-error">could not access your myData space</div>';
+		      },
+		      crossDomain: true,
+		      headers: stm.authHeader
+		    });
+    };
+
+    widget.showCustom = function (projectid) {
+	var widget = this;
+
+	var projecttab = 0;
+	if (projectid.match(/^mgp/)) {
+	    for (var i=0; i<stm.DataStore.project.length; i++) {
+		if (stm.DataStore.project[i].id == projectid) {
+		    projecttab = i;
+		    break;
+		}
+	    }
+	} else {
+	    projecttab = projectid;
+	    projectid = stm.DataStore.project[projecttab].id;
+	}
+	var target = document.getElementById('project'+projecttab+'tab5');
+
+	var html = ['<h4>select custom analysis graphic</h4><p style="margin-bottom: 25px;">You can store analysis graphics on the <a href="?mgpage=analysis" target=_blank>analysis page</a> and export them to your myData space in MG-RAST using the <img src="Retina/images/cloud-upload.png" style="width: 24px; position: relative; bottom: 3px;"> button in the export section. You can then use these graphics to customize your project page.</p>'];
+
+	html.push('<div id="projectCustom'+projectid+'"><div style="width: 26px; margin-left: auto; margin-right: auto;"><img src="Retina/images/waiting.gif" style="width: 25px;"></div></div>');
+
+	target.innerHTML = html.join("");
+
+	var url = RetinaConfig.shock_url + "/node?querynode&attributes.type=analysisObject&attributes.hasVisualization=1&owner=" + stm.user.login;
+	jQuery.ajax({ url: url,
+		      pid: projectid,
+		      dataType: "json",
+		      success: function(data) {
+			  var widget = Retina.WidgetInstances.metagenome_share[1];
+			  var target = document.getElementById('projectCustom'+this.pid);
+			  if (data != null) {
+			      if (data.error != null) {
+				  target.innerHMTL = '<div class="alert alert-error">could not access your myData space</div>';
+			      } else {
+				  if (data.data.length) {
+				      var howmany = 0;
+				      var imageIndex = null;
+				      for (var i=0; i<data.data.length; i++) {
+					  if (data.data[i].attributes.hasOwnProperty('inUseInProject')) {
+					      howmany++;
+					      if (data.data[i].attributes.inUseInProject == this.pid) {
+						  imageIndex = i;
+					      }
+					  }
+				      }
+				      var html = ["<p>You have "+data.data.length+" image"+(data.data.length > 1 ? "s" : "")+" available. "+(howmany ? howmany : "None")+" "+(howmany == 1 ? "is used in a project" : "are used in projects")+".</p>"];
+				      if (howmany < data.data.length || imageIndex !== null) {
+					  html.push('<select style="margin-bottom: 0px;" id="projectCustomSelect'+this.pid+'" onchange="this.selectedIndex==0 ? document.getElementById(\'projectCustomImage'+this.pid+'\').innerHTML=\'<p>- no image -</p>\' : Retina.WidgetInstances.metagenome_share[1].showCustomImage(this.options[this.selectedIndex].value, \''+this.pid+'\');"><option value="'+(imageIndex == null ? 0 : data.data[imageIndex].id)+'">- none -</option>');
+					  for (var i=0; i<data.data.length; i++) {
+					      if (! data.data[i].attributes.hasOwnProperty('inUseInProject')) {
+						  html.push('<option value="'+data.data[i].id+'">'+data.data[i].file.name+'</option>');
+					      } else {
+						  if (imageIndex !== null && imageIndex == i) {
+						      html.push('<option selected="selected" value="'+data.data[i].id+'">'+data.data[i].file.name+'</option>');
+						  }
+					      }
+					  }
+					  html.push('</select> <button class="btn" onclick="var s=document.getElementById(\'projectCustomSelect'+this.pid+'\'); if(s.selectedIndex == 0 && s.options[s.selectedIndex].value !== 0) { Retina.WidgetInstances.metagenome_share[1].selectCustomImage(s.options[s.selectedIndex].value, \''+this.pid+'\',true) } else { Retina.WidgetInstances.metagenome_share[1].selectCustomImage(s.options[s.selectedIndex].value, \''+this.pid+'\''+(imageIndex == null ? "" : ', null, \''+data.data[imageIndex].id+'\'')+'); }">select</button>');
+					  html.push('<h4>preview</h4>');
+					  html.push('<div id="projectCustomImage'+this.pid+'"><p>- no image -</p></div>');
+				      } else {
+					  html.push('<p>You need to create additional graphics or de-select one in another project to choose one here.</p>');
+				      }
+				      target.innerHTML = html.join("");
+				      var sel = document.getElementById('projectCustomSelect'+this.pid);
+				      if (sel.selectedIndex > 0) {
+					  widget.showCustomImage(sel.options[sel.selectedIndex].value, this.pid);
+				      }
+				  } else {
+				      target.innerHMTL = '<div class="alert alert-info">you currently have no images in your myData space</div>';
+				  }
+			      }
+			  } else {
+			      target.innerHMTL = '<div class="alert alert-error">there was an error connecting to your myData space</div>';
+			  }
+		      },
+		      error: function(jqXHR, error) {
+			  var widget = Retina.WidgetInstances.metagenome_share[1];
+			  var target = document.getElementById('projectCustom'+this.pid);
+			  target.innerHMTL = '<div class="alert alert-error">could not access your myData space</div>';
+		      },
+		      crossDomain: true,
+		      headers: stm.authHeader
+		    });
+    };
+    
     widget.projectDetails = function (projectid) {
 	var widget = this;
 

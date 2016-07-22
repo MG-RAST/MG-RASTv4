@@ -1,0 +1,175 @@
+<html>
+<!---
+ENTRY       map07219
+DEFINITION  Cyclooxygenase inhibitors - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Cyclooxygenase inhibitors - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Cyclooxygenase inhibitors - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07219&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07219">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07219" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07219" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07219.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=492,613,602,676	href="/dbget-bin/www_bget?D00127+D05511+D05513"	title="D00127 (Piroxicam (JP15/USP/INN)), D05511 (Piroxicam betadex (USAN)), D05513 (Piroxicam olamine (USAN))" />
+<area shape=rect	coords=311,445,468,495	href="/dbget-bin/www_bget?D00425"	title="D00425 (Nabumetone (JAN/USP/INN))" />
+<area shape=rect	coords=165,447,304,495	href="/dbget-bin/www_bget?D00118+D00970"	title="D00118 (Naproxen (JP15/USP/INN)), D00970 (Naproxen sodium (USP))" />
+<area shape=rect	coords=560,274,917,363	href="/dbget-bin/www_bget?D01765"	title="D01765 (Proglumetacin maleate (JAN))" />
+<area shape=rect	coords=334,275,510,362	href="/dbget-bin/www_bget?D01582"	title="D01582 (Acemetacin (JAN/INN))" />
+<area shape=rect	coords=557,154,695,244	href="/dbget-bin/www_bget?D00120"	title="D00120 (Sulindac (JAN/USP/INN))" />
+<area shape=rect	coords=333,155,474,227	href="/dbget-bin/www_bget?D00141+D02110"	title="D00141 (Indometacin (JP15/INN)), D02110 (Indometacin sodium (JAN))" />
+<area shape=rect	coords=178,283,272,366	href="/dbget-bin/www_bget?D00130"	title="D00130 (Diflunisal (JAN/USP/INN))" />
+<area shape=rect	coords=82,290,164,342	href="/dbget-bin/www_bget?D00109"	title="D00109 (Aspirin (JP15/USP))" />
+<area shape=rect	coords=82,156,160,215	href="/dbget-bin/www_bget?D00566"	title="D00566 (Sodium salicylate (JP15/USP))" />
+<area shape=rect	coords=984,716,1105,815	href="/dbget-bin/www_bget?D03710"	title="D03710 (Etoricoxib (USAN/INN))" />
+<area shape=rect	coords=983,470,1116,569	href="/dbget-bin/www_bget?D00567"	title="D00567 (Celecoxib (JAN/USAN/INN))" />
+<area shape=rect	coords=992,150,1100,232	href="/dbget-bin/www_bget?D00315"	title="D00315 (Etodolac (JP15/USP/INN))" />
+<area shape=rect	coords=807,749,910,811	href="/dbget-bin/www_bget?D02341+D00169"	title="D02341 (Meclofenamic acid (USAN/INN)), D00169 (Meclofenamate sodium (USP))" />
+<area shape=rect	coords=808,654,913,712	href="/dbget-bin/www_bget?D01183"	title="D01183 (Tolfenamic acid (JAN/INN))" />
+<area shape=rect	coords=806,547,914,605	href="/dbget-bin/www_bget?D01581+D03254"	title="D01581 (Flufenamic acid (JAN/USAN/INN)), D03254 (Flufenamate aluminum (JAN))" />
+<area shape=rect	coords=647,432,740,503	href="/dbget-bin/www_bget?D00903+D00904"	title="D00903 (Diclofenac potassium (USAN)), D00904 (Diclofenac sodium (JP15/USP))" />
+<area shape=rect	coords=993,305,1113,384	href="/dbget-bin/www_bget?D00969"	title="D00969 (Meloxicam (JAN/USAN/INN))" />
+<area shape=rect	coords=658,738,766,802	href="/dbget-bin/www_bget?D01767"	title="D01767 (Tenoxicam (JAN/USAN/INN))" />
+<area shape=rect	coords=607,601,769,685	href="/dbget-bin/www_bget?D01397"	title="D01397 (Ampiroxicam (JAN/INN))" />
+<area shape=rect	coords=480,451,628,508	href="/dbget-bin/www_bget?D02355+D00158"	title="D02355 (Tolmetin (USAN/INN)), D00158 (Tolmetin sodium (JAN/USP))" />
+<area shape=rect	coords=319,727,439,788	href="/dbget-bin/www_bget?D01709"	title="D01709 (Loxoprofen sodium hydrate (JP15))" />
+<area shape=rect	coords=182,765,303,814	href="/dbget-bin/www_bget?D02350+D00968"	title="D02350 (Fenoprofen (USAN/INN)), D00968 (Fenoprofen calcium (JAN/USP))" />
+<area shape=rect	coords=183,680,304,729	href="/dbget-bin/www_bget?D00132"	title="D00132 (Ketoprofen (JP15/USP/INN))" />
+<area shape=rect	coords=308,590,468,656	href="/dbget-bin/www_bget?D01475"	title="D01475 (Flurbiprofen axetil (JAN))" />
+<area shape=rect	coords=193,592,299,658	href="/dbget-bin/www_bget?D00330+D02290"	title="D00330 (Flurbiprofen (JP15/USP/INN)), D02290 (Flurbiprofen sodium (USP))" />
+<area shape=rect	coords=56,591,180,644	href="/dbget-bin/www_bget?D00126+D03715+D03718+D06606"	title="D00126 (Ibuprofen (JP15/USP/INN)), D03715 (Dexibuprofen (USAN/INN)), D03718 (Dexibuprofen lysine (USAN)), D06606 (Ibuprofen lysine (USAN))" />
+<area shape=rect	coords=808,443,913,499	href="/dbget-bin/www_bget?D00151"	title="D00151 (Mefenamic acid (JP15/USP/INN))" />
+<area shape=rect	coords=983,594,1088,687	href="/dbget-bin/www_bget?D00568"	title="D00568 (Rofecoxib (JAN/USAN/INN))" />
+<area shape=rect	coords=40,45,280,71	href="/dbget-bin/www_bget?map07219"	title="map07219" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

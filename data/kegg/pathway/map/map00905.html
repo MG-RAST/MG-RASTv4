@@ -1,0 +1,244 @@
+<html>
+<!---
+ENTRY       map00905
+DEFINITION  Brassinosteroid biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Brassinosteroid biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Brassinosteroid biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00905&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00905">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Brassinosteroids are a group of plant steroid hormones that regulate growth and development. More than fifty naturally occurring brassinosteroids have been identified in a wide range of plant species. The most abundant and widely occurring brassinosteroids are C28 steroids, and among them brassinolide (BL) is the most biologically active. Plants have multiple pathways for biosynthesis of BL, which are derived from the steroid biosynthetic pathway. Two pathways from campestanol to castasterone (CS), C6 oxidation and the late-C6 oxidation pathways, operate in many plants. Another branching pathway, the early-C22 oxidation pathway, was demonstrated using a brassinosteroid-deficient mutant of Arabidopsis thaliana. Recently, a new shortcut pathway from campesterol to 6-deoxotyphasterol was demonstrated by a functional analysis of cytochrome P450 monooxygenases responsible for brassinosteroid biosynthesis. Thus, at least four pathways are involved in the biosynthesis of CS, and CS is further metabolized to BL by lactonization of the B ring.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00905 map" -->
+</select>
+<input type="hidden" name="mapno" value="00905" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00905" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00905" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00905.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=648,535,4	href="/dbget-bin/www_bget?C15803"	title="C15803 (6alpha-Hydroxy-castasterone)" />
+<area shape=circle	coords=554,535,4	href="/dbget-bin/www_bget?C15802"	title="C15802 (6-Deoxocastasterone)" />
+<area shape=circle	coords=554,462,4	href="/dbget-bin/www_bget?C15801"	title="C15801 (6-Deoxotyphasterol)" />
+<area shape=circle	coords=554,389,4	href="/dbget-bin/www_bget?C15800"	title="C15800 (3-Dehydro-6-deoxoteasterone)" />
+<area shape=circle	coords=554,316,4	href="/dbget-bin/www_bget?C15799"	title="C15799 (6-Deoxoteasterone)" />
+<area shape=circle	coords=554,242,4	href="/dbget-bin/www_bget?C15798"	title="C15798 (6-Deoxocathasterone)" />
+<area shape=circle	coords=404,242,4	href="/dbget-bin/www_bget?C15797"	title="C15797 (22alpha-Hydroxy-5alpha-campestan-3-one)" />
+<area shape=circle	coords=255,242,4	href="/dbget-bin/www_bget?C15796"	title="C15796 (22alpha-Hydroxy-campest-4-en-3-one)" />
+<area shape=circle	coords=113,242,4	href="/dbget-bin/www_bget?C15795"	title="C15795 (22alpha-Hydroxy-campesterol)" />
+<area shape=circle	coords=743,590,4	href="/dbget-bin/www_bget?C08814"	title="C08814 (Brassinolide)" />
+<area shape=circle	coords=743,535,4	href="/dbget-bin/www_bget?C15794"	title="C15794 (Castasterone)" />
+<area shape=circle	coords=743,462,4	href="/dbget-bin/www_bget?C15793"	title="C15793 (Typhasterol)" />
+<area shape=circle	coords=743,389,4	href="/dbget-bin/www_bget?C15792"	title="C15792 (3-Dehydroteasterone)" />
+<area shape=circle	coords=743,316,4	href="/dbget-bin/www_bget?C15791"	title="C15791 (Teasterone)" />
+<area shape=circle	coords=743,242,4	href="/dbget-bin/www_bget?C15790"	title="C15790 (Cathasterone)" />
+<area shape=circle	coords=743,170,4	href="/dbget-bin/www_bget?C15789"	title="C15789 (6-Oxocampestanol)" />
+<area shape=circle	coords=648,170,4	href="/dbget-bin/www_bget?C15788"	title="C15788 (6alpha-Hydroxycampestanol)" />
+<area shape=circle	coords=554,170,4	href="/dbget-bin/www_bget?C15787"	title="C15787 (Campestanol)" />
+<area shape=circle	coords=404,170,4	href="/dbget-bin/www_bget?C15786"	title="C15786 (5alpha-Campestan-3-one)" />
+<area shape=circle	coords=255,170,4	href="/dbget-bin/www_bget?C15785"	title="C15785 (Campest-4-en-3-one)" />
+<area shape=circle	coords=184,170,4	href="/dbget-bin/www_bget?C15784"	title="C15784 (Campest-4-en-3beta-ol)" />
+<area shape=circle	coords=113,170,4	href="/dbget-bin/www_bget?C01789"	title="C01789 (Campesterol)" />
+<area shape=circle	coords=113,393,4	href="/dbget-bin/www_bget?C16252"	title="C16252 ((22R,23R)-22,23-Dihydroxycampesterol)" />
+<area shape=circle	coords=255,394,4	href="/dbget-bin/www_bget?C16253"	title="C16253 ((22R,23R)-22,23-Dihydroxy-campest-4-en-3-one)" />
+<area shape=circle	coords=404,321,4	href="/dbget-bin/www_bget?C16251"	title="C16251 (3-epi-6-Deoxocathasterone)" />
+<area shape=circle	coords=838,316,4	href="/dbget-bin/www_bget?C17733"	title="C17733 (7-Oxateasterone)" />
+<area shape=circle	coords=838,462,4	href="/dbget-bin/www_bget?C17735"	title="C17735 (7-Oxatyphasterol)" />
+<area shape=poly	coords=402,247,402,316,406,316,406,247	href="/dbget-bin/www_bget?R07788"	title="R07788" />
+<area shape=poly	coords=404,316,400,308,408,308	href="/dbget-bin/www_bget?R07788"	title="R07788" />
+<area shape=poly	coords=404,247,408,255,400,255	href="/dbget-bin/www_bget?R07788"	title="R07788" />
+<area shape=poly	coords=117,240,250,240,250,244,117,244	href="/dbget-bin/www_bget?R07446"	title="R07446" />
+<area shape=poly	coords=250,242,242,246,242,238	href="/dbget-bin/www_bget?R07446"	title="R07446" />
+<area shape=rect	coords=302,234,348,251	href="/dbget-bin/www_bget?K09591+1.3.99.-+R07447"	title="K09591 (DET2), 1.3.99.-, R07447" />
+<area shape=rect	coords=302,162,348,179	href="/dbget-bin/www_bget?K09591+1.3.99.-+R07429"	title="K09591 (DET2), 1.3.99.-, R07429" />
+<area shape=rect	coords=668,518,714,535	href="/dbget-bin/www_bget?K09590+1.14.-.-+R07451"	title="K09590 (CYP85A1, BR6OX1), 1.14.-.-, R07451" />
+<area shape=rect	coords=574,518,620,535	href="/dbget-bin/www_bget?K09590+1.14.-.-+R07450"	title="K09590 (CYP85A1, BR6OX1), 1.14.-.-, R07450" />
+<area shape=rect	coords=626,445,672,462	href="/dbget-bin/www_bget?K09590+1.14.-.-+R07458"	title="K09590 (CYP85A1, BR6OX1), 1.14.-.-, R07458" />
+<area shape=rect	coords=626,372,672,389	href="/dbget-bin/www_bget?K09590+1.14.-.-+R07457"	title="K09590 (CYP85A1, BR6OX1), 1.14.-.-, R07457" />
+<area shape=rect	coords=626,299,672,316	href="/dbget-bin/www_bget?K09590+1.14.-.-+R07455"	title="K09590 (CYP85A1, BR6OX1), 1.14.-.-, R07455" />
+<area shape=rect	coords=721,344,767,361	href="/dbget-bin/www_bget?K09589+1.14.-.-+R07444"	title="K09589 (CYP90D2, D2), 1.14.-.-, R07444" />
+<area shape=rect	coords=532,344,578,361	href="/dbget-bin/www_bget?K09589+1.14.-.-+R07449"	title="K09589 (CYP90D2, D2), 1.14.-.-, R07449" />
+<area shape=rect	coords=721,267,767,284	href="/dbget-bin/www_bget?K12637+K12638+1.14.-.-+R07431"	title="K12637 (CYP90C1, ROT3), K12638 (CYP90D1), 1.14.-.-, R07431" />
+<area shape=rect	coords=532,267,578,284	href="/dbget-bin/www_bget?K12637+K12638+1.14.-.-+R07448"	title="K12637 (CYP90C1, ROT3), K12638 (CYP90D1), 1.14.-.-, R07448" />
+<area shape=rect	coords=721,193,767,210	href="/dbget-bin/www_bget?K09587+1.14.13.-+R07430"	title="K09587 (CYP90B1, DWF4), 1.14.13.-, R07430" />
+<area shape=rect	coords=532,192,578,209	href="/dbget-bin/www_bget?K09587+1.14.13.-+R07454"	title="K09587 (CYP90B1, DWF4), 1.14.13.-, R07454" />
+<area shape=rect	coords=381,193,427,210	href="/dbget-bin/www_bget?K09587+1.14.13.-+R07453"	title="K09587 (CYP90B1, DWF4), 1.14.13.-, R07453" />
+<area shape=rect	coords=232,193,278,210	href="/dbget-bin/www_bget?K09587+1.14.13.-+R07452"	title="K09587 (CYP90B1, DWF4), 1.14.13.-, R07452" />
+<area shape=rect	coords=90,192,136,209	href="/dbget-bin/www_bget?K09587+1.14.13.-+R07445"	title="K09587 (CYP90B1, DWF4), 1.14.13.-, R07445" />
+<area shape=poly	coords=117,168,179,168,179,172,117,172	href="/dbget-bin/www_bget?R07427"	title="R07427" />
+<area shape=poly	coords=179,170,171,174,171,166	href="/dbget-bin/www_bget?R07427"	title="R07427" />
+<area shape=poly	coords=188,168,250,168,250,172,188,172	href="/dbget-bin/www_bget?R07428"	title="R07428" />
+<area shape=poly	coords=250,170,242,174,242,166	href="/dbget-bin/www_bget?R07428"	title="R07428" />
+<area shape=poly	coords=410,240,549,240,549,244,410,244	href="/dbget-bin/www_bget?R07472"	title="R07472" />
+<area shape=poly	coords=549,242,541,246,541,238	href="/dbget-bin/www_bget?R07472"	title="R07472" />
+<area shape=poly	coords=408,168,549,168,549,172,408,172	href="/dbget-bin/www_bget?R07466"	title="R07466" />
+<area shape=poly	coords=549,170,541,174,541,166	href="/dbget-bin/www_bget?R07466"	title="R07466" />
+<area shape=poly	coords=558,168,643,168,643,172,558,172	href="/dbget-bin/www_bget?R07467"	title="R07467" />
+<area shape=poly	coords=643,170,635,174,635,166	href="/dbget-bin/www_bget?R07467"	title="R07467" />
+<area shape=poly	coords=652,168,738,168,738,172,652,172	href="/dbget-bin/www_bget?R07468"	title="R07468" />
+<area shape=poly	coords=738,170,730,174,730,166	href="/dbget-bin/www_bget?R07468"	title="R07468" />
+<area shape=poly	coords=552,466,552,530,556,530,556,466	href="/dbget-bin/www_bget?R07474"	title="R07474" />
+<area shape=poly	coords=554,530,550,522,558,522	href="/dbget-bin/www_bget?R07474"	title="R07474" />
+<area shape=poly	coords=741,466,741,530,745,530,745,466	href="/dbget-bin/www_bget?R07470"	title="R07470" />
+<area shape=poly	coords=743,530,739,522,747,522	href="/dbget-bin/www_bget?R07470"	title="R07470" />
+<area shape=poly	coords=259,392,548,392,548,396,259,396	href="/dbget-bin/www_bget?R07790"	title="R07790" />
+<area shape=poly	coords=548,394,540,398,540,390	href="/dbget-bin/www_bget?R07790"	title="R07790" />
+<area shape=poly	coords=117,391,250,391,250,395,117,395	href="/dbget-bin/www_bget?R07789"	title="R07789" />
+<area shape=poly	coords=250,393,242,397,242,389	href="/dbget-bin/www_bget?R07789"	title="R07789" />
+<area shape=rect	coords=762,454,808,471	href="/dbget-bin/www_bget?K12640+R08841"	title="K12640 (CYP85A2, BR6OX2), R08841" />
+<area shape=rect	coords=765,308,811,325	href="/dbget-bin/www_bget?K12640+R08840"	title="K12640 (CYP85A2, BR6OX2), R08840" />
+<area shape=rect	coords=90,308,136,325	href="/dbget-bin/www_bget?K12637+K12638+1.14.-.-+R07786"	title="K12637 (CYP90C1, ROT3), K12638 (CYP90D1), 1.14.-.-, R07786" />
+<area shape=rect	coords=232,308,278,325	href="/dbget-bin/www_bget?K12637+K12638+1.14.-.-+R07787"	title="K12637 (CYP90C1, ROT3), K12638 (CYP90D1), 1.14.-.-, R07787" />
+<area shape=rect	coords=381,344,427,361	href="/dbget-bin/www_bget?K12637+K12638+1.14.-.-+R07792"	title="K12637 (CYP90C1, ROT3), K12638 (CYP90D1), 1.14.-.-, R07792" />
+<area shape=rect	coords=446,344,492,361	href="/dbget-bin/www_bget?K12637+K12638+1.14.-.-+R07791"	title="K12637 (CYP90C1, ROT3), K12638 (CYP90D1), 1.14.-.-, R07791" />
+<area shape=poly	coords=836,321,836,457,840,457,840,321	href="/dbget-bin/www_bget?R08842"	title="R08842" />
+<area shape=poly	coords=838,457,834,449,842,449	href="/dbget-bin/www_bget?R08842"	title="R08842" />
+<area shape=poly	coords=838,321,842,329,834,329	href="/dbget-bin/www_bget?R08842"	title="R08842" />
+<area shape=rect	coords=721,552,767,569	href="/dbget-bin/www_bget?K12640+1.14.-.-+R07471"	title="K12640 (CYP85A2, BR6OX2), 1.14.-.-, R07471" />
+<area shape=rect	coords=532,419,578,436	href="/dbget-bin/www_bget?K12639+1.14.-.-+R07473"	title="K12639 (CYP724B1, d11), 1.14.-.-, R07473" />
+<area shape=rect	coords=721,419,767,436	href="/dbget-bin/www_bget?K12639+1.14.-.-+R07469"	title="K12639 (CYP724B1, d11), 1.14.-.-, R07469" />
+<area shape=rect	coords=626,316,672,333	href="/dbget-bin/www_bget?K12640+1.14.-.-+R07455"	title="K12640 (CYP85A2, BR6OX2), 1.14.-.-, R07455" />
+<area shape=rect	coords=626,389,672,406	href="/dbget-bin/www_bget?K12640+1.14.-.-+R07457"	title="K12640 (CYP85A2, BR6OX2), 1.14.-.-, R07457" />
+<area shape=rect	coords=626,462,672,479	href="/dbget-bin/www_bget?K12640+1.14.-.-+R07458"	title="K12640 (CYP85A2, BR6OX2), 1.14.-.-, R07458" />
+<area shape=rect	coords=668,535,714,552	href="/dbget-bin/www_bget?K12640+1.14.-.-+R07451"	title="K12640 (CYP85A2, BR6OX2), 1.14.-.-, R07451" />
+<area shape=rect	coords=574,535,620,552	href="/dbget-bin/www_bget?K12640+1.14.-.-+R07450"	title="K12640 (CYP85A2, BR6OX2), 1.14.-.-, R07450" />
+<area shape=rect	coords=55,95,176,121	href="/kegg-bin/show_pathway?map00100"	title="map00100" />
+<area shape=rect	coords=40,45,297,71	href="/dbget-bin/www_bget?map00905"	title="map00905" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

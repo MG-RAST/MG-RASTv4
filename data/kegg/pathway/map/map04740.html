@@ -1,0 +1,178 @@
+<html>
+<!---
+ENTRY       map04740
+DEFINITION  Olfactory transduction - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Olfactory transduction - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Olfactory transduction - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04740&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04740">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Within the compact cilia of the olfactory receptor neurons (ORNs) a cascade of enzymatic activity transduces the binding of an odorant molecule to a receptor into an electrical signal that can be transmitted to the brain. Odorant molecules bind to a receptor protein (R) coupled to an olfactory specific Gs-protein (G) and activate a type III adenylyl cyclase (AC), increasing intracellular cAMP levels. cAMP targets an olfactory-specific cyclic-nucleotide gated ion channel (CNG), allowing cations, particularly Na and Ca, to flow down their electrochemical gradients into the cell, depolarizing the ORN. Furthermore, the Ca entering the cell is able to activate a Ca-activated Cl channel, which would allow Cl to flow out of the cell, thus further increasing the depolarization. Elevated intracellular Ca causes adaptation by at least two different molecular steps: inhibition of the activity of adenylyl cyclase via CAMKII-dependent phosphorylation and down-regulation of the affinity of the CNG channel to cAMP.Longer exposure to odorants can stimulate particulate guanylyl cyclase in cilia to produce cGMP and activate PKG, leading to a further increase in amount and duration of intracellular cAMP levels, which may serve to convert inactive forms of protein kinase A (PKA2) to active forms (PKA*). As part of a feedback loop, PKA can inhibit the activation of particulate guanylyl cyclase.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04740 map" -->
+</select>
+<input type="hidden" name="mapno" value="04740" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04740" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04740" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04740.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=401,323,4	href="/dbget-bin/www_bget?C00942"	title="C00942 (3',5'-Cyclic GMP)" />
+<area shape=circle	coords=290,402,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=circle	coords=275,529,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=614,443,4	href="/dbget-bin/www_bget?C00698"	title="C00698 (Cl-)" />
+<area shape=circle	coords=275,590,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=rect	coords=165,432,211,449	href="/dbget-bin/www_bget?K04515"	title="K04515 (CAMK2)" />
+<area shape=rect	coords=185,298,231,315	href="/dbget-bin/www_bget?K04633"	title="K04633 (GNAL)" />
+<area shape=rect	coords=274,468,320,485	href="/dbget-bin/www_bget?K02183"	title="K02183 (CALM)" />
+<area shape=rect	coords=345,407,391,424	href="/dbget-bin/www_bget?hsa:5137+mmu:18575+rno:81742"	title="5137, 18575, 81742" />
+<area shape=rect	coords=428,205,474,222	href="/dbget-bin/www_bget?K04345"	title="K04345 (PKA)" />
+<area shape=rect	coords=109,395,155,412	href="/dbget-bin/www_bget?K08043"	title="K08043 (ADCY3)" />
+<area shape=rect	coords=531,314,577,331	href="/dbget-bin/www_bget?hsa:3000+mmu:14918+rno:113911"	title="3000, 14918, 113911" />
+<area shape=rect	coords=220,243,266,260	href="/dbget-bin/www_bget?K08327"	title="K08327 (PDC)" />
+<area shape=rect	coords=109,249,155,266	href="/dbget-bin/www_bget?K04257"	title="K04257 (OLFR)" />
+<area shape=rect	coords=200,160,246,177	href="/dbget-bin/www_bget?hsa:409+mmu:216869+rno:25388+ptr:454450+bta:281638+dre:394099"	title="409, 216869, 25388, 454450, 281638, 394099" />
+<area shape=rect	coords=109,552,155,569	href="/dbget-bin/www_bget?K04950+K04951+K04952"	title="K04950 (CNGA3), K04951 (CNGA4), K04952 (CNGB1)" />
+<area shape=rect	coords=262,329,308,346	href="/dbget-bin/www_bget?K07376"	title="K07376 (PRKG)" />
+<area shape=rect	coords=448,388,494,405	href="/dbget-bin/www_bget?K08328"	title="K08328 (GUCA1)" />
+<area shape=rect	coords=247,189,293,206	href="/dbget-bin/www_bget?hsa:157+mmu:320129+rno:25372+bta:282136"	title="157, 320129, 25372, 282136" />
+<area shape=rect	coords=531,433,577,450	href="/dbget-bin/www_bget?K05027+K05028+K05029+K05030"	title="K05027 (CLCA1), K05028 (CLCA2), K05029 (CLCA3), K05030 (CLCA4)" />
+<area shape=rect	coords=40,45,261,71	href="/dbget-bin/www_bget?map04740"	title="map04740" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

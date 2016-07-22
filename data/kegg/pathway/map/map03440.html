@@ -1,0 +1,213 @@
+<html>
+<!---
+ENTRY       map03440
+DEFINITION  Homologous recombination - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Homologous recombination - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Homologous recombination - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03440&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03440">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Homologous recombination (HR) is essential for the accurate repair of DNA double-strand breaks (DSBs), potentially lethal lesions. HR takes place in the late S-G2 phase of the cell cycle and involves the generation of a single-stranded region of DNA, followed by strand invasion, formation of a Holliday junction, DNA synthesis using the intact strand as a template, branch migration and resolution. It is investigated that RecA/Rad51 family proteins play a central role. The breast cancer susceptibility protein Brca2 and the RecQ helicase BLM (Bloom syndrome mutated) are tumor suppressors that maintain genome integrity, at least in part, through HR.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03440 map" -->
+</select>
+<input type="hidden" name="mapno" value="03440" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03440" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03440" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03440.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=662,767,708,784	href="/dbget-bin/www_bget?K03165"	title="K03165 (TOP3)" />
+<area shape=rect	coords=1035,923,1081,940	href="/dbget-bin/www_bget?K10901"	title="K10901 (BLM, RECQL3, SGS1)" />
+<area shape=rect	coords=1200,338,1246,355	href="/dbget-bin/www_bget?K10881"	title="K10881 (SHFM1, DSS1)" />
+<area shape=rect	coords=1133,364,1179,381	href="/dbget-bin/www_bget?K10873"	title="K10873 (RAD52)" />
+<area shape=rect	coords=1131,202,1177,219	href="/dbget-bin/www_bget?K10865"	title="K10865 (MRE11)" />
+<area shape=rect	coords=1131,185,1177,202	href="/dbget-bin/www_bget?K10866"	title="K10866 (RAD50)" />
+<area shape=rect	coords=737,349,783,366	href="/dbget-bin/www_bget?K10880"	title="K10880 (XRCC3)" />
+<area shape=rect	coords=737,366,783,383	href="/dbget-bin/www_bget?K10870"	title="K10870 (RAD51L2, RAD51C)" />
+<area shape=rect	coords=841,383,887,400	href="/dbget-bin/www_bget?K10879"	title="K10879 (XRCC2)" />
+<area shape=rect	coords=681,366,727,383	href="/dbget-bin/www_bget?K10879"	title="K10879 (XRCC2)" />
+<area shape=rect	coords=841,366,887,383	href="/dbget-bin/www_bget?K10871"	title="K10871 (RAD51L3, RAD51D)" />
+<area shape=rect	coords=681,349,727,366	href="/dbget-bin/www_bget?K10871"	title="K10871 (RAD51L3, RAD51D)" />
+<area shape=rect	coords=795,366,841,383	href="/dbget-bin/www_bget?K10870"	title="K10870 (RAD51L2, RAD51C)" />
+<area shape=rect	coords=795,349,841,366	href="/dbget-bin/www_bget?K10869"	title="K10869 (RAD51L1, RAD51B)" />
+<area shape=rect	coords=681,309,727,326	href="/dbget-bin/www_bget?K10870"	title="K10870 (RAD51L2, RAD51C)" />
+<area shape=rect	coords=537,863,583,880	href="/dbget-bin/www_bget?K02317"	title="K02317 (dnaT)" />
+<area shape=rect	coords=491,863,537,880	href="/dbget-bin/www_bget?K02686"	title="K02686 (priB)" />
+<area shape=rect	coords=537,846,583,863	href="/dbget-bin/www_bget?K04067"	title="K04067 (priC)" />
+<area shape=rect	coords=491,220,537,237	href="/dbget-bin/www_bget?K03581"	title="K03581 (recD)" />
+<area shape=rect	coords=553,662,599,679	href="/dbget-bin/www_bget?K03655"	title="K03655 (recG)" />
+<area shape=rect	coords=277,662,323,679	href="/dbget-bin/www_bget?K03655"	title="K03655 (recG)" />
+<area shape=rect	coords=491,679,537,696	href="/dbget-bin/www_bget?K01159"	title="K01159 (ruvC)" />
+<area shape=rect	coords=217,679,263,696	href="/dbget-bin/www_bget?K01159"	title="K01159 (ruvC)" />
+<area shape=rect	coords=491,662,537,679	href="/dbget-bin/www_bget?K03551"	title="K03551 (ruvB)" />
+<area shape=rect	coords=217,662,263,679	href="/dbget-bin/www_bget?K03551"	title="K03551 (ruvB)" />
+<area shape=rect	coords=491,645,537,662	href="/dbget-bin/www_bget?K03550"	title="K03550 (ruvA)" />
+<area shape=rect	coords=491,321,537,338	href="/dbget-bin/www_bget?K03553"	title="K03553 (recA)" />
+<area shape=rect	coords=491,846,537,863	href="/dbget-bin/www_bget?K04066"	title="K04066 (priA)" />
+<area shape=rect	coords=217,494,263,511	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=1035,338,1081,355	href="/dbget-bin/www_bget?K10958"	title="K10958 (RAD57)" />
+<area shape=rect	coords=719,750,765,767	href="/dbget-bin/www_bget?K08991"	title="K08991 (MUS81)" />
+<area shape=rect	coords=277,321,323,338	href="/dbget-bin/www_bget?K03553"	title="K03553 (recA)" />
+<area shape=rect	coords=217,355,263,372	href="/dbget-bin/www_bget?K06187"	title="K06187 (recR)" />
+<area shape=rect	coords=1035,202,1081,219	href="/dbget-bin/www_bget?K10865"	title="K10865 (MRE11)" />
+<area shape=rect	coords=1035,185,1081,202	href="/dbget-bin/www_bget?K10866"	title="K10866 (RAD50)" />
+<area shape=rect	coords=681,292,727,309	href="/dbget-bin/www_bget?K10869"	title="K10869 (RAD51L1, RAD51B)" />
+<area shape=rect	coords=1131,219,1177,236	href="/dbget-bin/www_bget?K10867"	title="K10867 (NBN, NBS1)" />
+<area shape=rect	coords=1133,321,1179,338	href="/dbget-bin/www_bget?K07466+K10739+K10740+K10741"	title="K07466 (RFA1, RPA1, rpa), K10739 (RFA2, RPA2), K10740 (RPA3), K10741 (RPA4)" />
+<area shape=rect	coords=1133,342,1179,359	href="/dbget-bin/www_bget?K04482"	title="K04482 (RAD51)" />
+<area shape=rect	coords=491,494,537,511	href="/dbget-bin/www_bget?K04330"	title="K02337 (DPO3A1, dnaE), K02338 (DPO3B, dnaN), K02339 (DPO3C, holC), K02340 (DPO3D1, holA), K02341 (DPO3D2, holB), K02342 (DPO3E, dnaQ), K02343 (DPO3G, dnaX), K02344 (DPO3P, holD), K02345 (DPO3T, holE), K03763 (DPO3A2, polC)" />
+<area shape=rect	coords=1035,219,1081,236	href="/dbget-bin/www_bget?K10868"	title="K10868 (XRS2)" />
+<area shape=rect	coords=217,186,263,203	href="/dbget-bin/www_bget?K07462"	title="K07462 (recJ)" />
+<area shape=rect	coords=217,321,263,338	href="/dbget-bin/www_bget?K03629"	title="K03629 (recF)" />
+<area shape=rect	coords=491,203,537,220	href="/dbget-bin/www_bget?K03583"	title="K03583 (recC)" />
+<area shape=rect	coords=719,767,765,784	href="/dbget-bin/www_bget?K10882"	title="K10882 (EME1, MMS4)" />
+<area shape=rect	coords=491,186,537,203	href="/dbget-bin/www_bget?K03582"	title="K03582 (recB)" />
+<area shape=rect	coords=1200,321,1246,338	href="/dbget-bin/www_bget?K08775"	title="K08775 (BRCA2, FANCD1)" />
+<area shape=rect	coords=1035,494,1081,511	href="/dbget-bin/www_bget?K10959"	title="K10959 (RAD59)" />
+<area shape=rect	coords=1130,494,1176,511	href="/dbget-bin/www_bget?K10875+K10877"	title="K10875 (RAD54L, RAD54), K10877 (RAD54B)" />
+<area shape=rect	coords=1035,669,1081,686	href="/dbget-bin/www_bget?K04475"	title="K02327 (POLD1), K02328 (POLD2), K03504 (POLD3), K03505 (POLD4)" />
+<area shape=rect	coords=662,750,708,767	href="/dbget-bin/www_bget?K10901"	title="K10901 (BLM, RECQL3, SGS1)" />
+<area shape=rect	coords=217,645,263,662	href="/dbget-bin/www_bget?K03550"	title="K03550 (ruvA)" />
+<area shape=rect	coords=1035,321,1081,338	href="/dbget-bin/www_bget?K10957"	title="K10957 (RAD55)" />
+<area shape=rect	coords=217,338,263,355	href="/dbget-bin/www_bget?K03584"	title="K03584 (recO)" />
+<area shape=rect	coords=277,186,323,203	href="/dbget-bin/www_bget?K03111"	title="K03111 (ssb)" />
+<area shape=rect	coords=40,45,280,71	href="/dbget-bin/www_bget?map03440"	title="map03440" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

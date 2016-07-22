@@ -1,0 +1,194 @@
+<html>
+<!---
+ENTRY       map04950
+DEFINITION  Maturity onset diabetes of the young - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Maturity onset diabetes of the young - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Maturity onset diabetes of the young - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04950&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04950">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+About 2-5% of type II diabetic patients suffer from a monogenic disease with autosomal dominant inheritance. This monogenic form of type II diabetes is called maturity onset diabetes of the young (MODY).<br />&nbsp;&nbsp; We now know that MODY is caused by heterozygous mutations in at least five genes encoding transcription factors: HNF4alpha (MODY1), HNF1alpha (MODY3), PDX1 (MODY4), HNF1beta (MODY5) and NEUROD1 (MODY6). MODY2, which is so far the only subtype not related to a transcription factor, is caused by mutations in the glucokinase gene. Mutations of MODY transcription factor genes lead to abnormal expression of genes involved in pancreatic islet development and metabolism.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04950 map" -->
+</select>
+<input type="hidden" name="mapno" value="04950" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04950" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04950" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04950.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=336,390,382,407	href="/dbget-bin/www_bget?K08034"	title="K08034 (TCF2, HNF1B)" />
+<area shape=rect	coords=461,344,507,361	href="/dbget-bin/www_bget?K06054"	title="K06054 (HES1)" />
+<area shape=rect	coords=79,391,125,408	href="/dbget-bin/www_bget?K08040"	title="K08040 (BHLHB8, MIST1)" />
+<area shape=rect	coords=377,344,423,361	href="/dbget-bin/www_bget?K08026"	title="K08026 (ONECUT1, HNF6)" />
+<area shape=rect	coords=557,844,603,861	href="/dbget-bin/www_bget?K12407"	title="K12407 (GCK)" />
+<area shape=rect	coords=419,706,465,723	href="/dbget-bin/www_bget?K07594"	title="K07594 (IPF1, PDX1)" />
+<area shape=rect	coords=360,798,406,815	href="/dbget-bin/www_bget?K08038"	title="K08038 (FOXA3, HNF3G)" />
+<area shape=rect	coords=574,436,620,453	href="/dbget-bin/www_bget?K08033"	title="K08033 (NEUROD1)" />
+<area shape=rect	coords=79,372,125,389	href="/dbget-bin/www_bget?K06054"	title="K06054 (HES1)" />
+<area shape=rect	coords=434,660,480,677	href="/dbget-bin/www_bget?K07595"	title="K07595 (MAFA)" />
+<area shape=rect	coords=312,798,358,815	href="/dbget-bin/www_bget?K08037"	title="K08037 (NR2A2, HNF4G)" />
+<area shape=rect	coords=557,752,603,769	href="/dbget-bin/www_bget?K08029"	title="K08029 (NKX2-2)" />
+<area shape=rect	coords=501,844,547,861	href="/dbget-bin/www_bget?K04526"	title="K04526 (INS)" />
+<area shape=rect	coords=336,752,382,769	href="/dbget-bin/www_bget?K08036"	title="K08036 (TCF1, HNF1A)" />
+<area shape=rect	coords=606,844,652,861	href="/dbget-bin/www_bget?K08039"	title="K08039 (IAPP)" />
+<area shape=rect	coords=525,436,571,453	href="/dbget-bin/www_bget?K08032"	title="K08032 (PAX4)" />
+<area shape=rect	coords=133,469,179,486	href="/dbget-bin/www_bget?K08031"	title="K08031 (PAX6)" />
+<area shape=rect	coords=442,844,488,861	href="/dbget-bin/www_bget?K07593"	title="K07593 (SLC2A2, GLUT2)" />
+<area shape=rect	coords=606,752,652,769	href="/dbget-bin/www_bget?K08033"	title="K08033 (NEUROD1)" />
+<area shape=rect	coords=253,752,299,769	href="/dbget-bin/www_bget?K08030"	title="K08030 (NKX6-1)" />
+<area shape=rect	coords=394,844,440,861	href="/dbget-bin/www_bget?K12406"	title="K12406 (PKLR)" />
+<area shape=rect	coords=419,239,465,256	href="/dbget-bin/www_bget?K08027"	title="K08027 (NR5A2, FTF)" />
+<area shape=rect	coords=419,390,465,407	href="/dbget-bin/www_bget?K08028"	title="K08028 (NEUROG3)" />
+<area shape=rect	coords=483,660,529,677	href="/dbget-bin/www_bget?K08031"	title="K08031 (PAX6)" />
+<area shape=rect	coords=419,752,465,769	href="/dbget-bin/www_bget?K07292"	title="K07292 (NR2A1, HNF4A)" />
+<area shape=rect	coords=419,193,465,210	href="/dbget-bin/www_bget?K07594"	title="K07594 (IPF1, PDX1)" />
+<area shape=rect	coords=419,436,465,453	href="/dbget-bin/www_bget?K08029"	title="K08029 (NKX2-2)" />
+<area shape=rect	coords=436,101,482,118	href="/dbget-bin/www_bget?K08024"	title="K08024 (HHEX, HEX, PRH)" />
+<area shape=rect	coords=485,101,531,118	href="/dbget-bin/www_bget?K08025"	title="K08025 (HLXB9, HB9)" />
+<area shape=rect	coords=477,436,523,453	href="/dbget-bin/www_bget?K08031"	title="K08031 (PAX6)" />
+<area shape=rect	coords=419,528,465,545	href="/dbget-bin/www_bget?K08030"	title="K08030 (NKX6-1)" />
+<area shape=rect	coords=377,660,423,677	href="/dbget-bin/www_bget?K08035"	title="K08035 (FOXA2, HNF3B)" />
+<area shape=rect	coords=189,469,235,486	href="/dbget-bin/www_bget?K07594"	title="K07594 (IPF1, PDX1)" />
+<area shape=rect	coords=377,147,423,164	href="/dbget-bin/www_bget?K08026"	title="K08026 (ONECUT1, HNF6)" />
+<area shape=rect	coords=40,45,388,71	href="/dbget-bin/www_bget?map04950"	title="map04950" />
+<area shape=rect	coords=388,900,495,935	href="/kegg-bin/show_pathway?map04930"	title="map04930" />
+<area shape=rect	coords=501,900,606,935	href="/kegg-bin/show_pathway?map04910"	title="map04910" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

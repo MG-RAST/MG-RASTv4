@@ -1,0 +1,190 @@
+<html>
+<!---
+ENTRY       map04130
+DEFINITION  SNARE interactions in vesicular transport - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: SNARE interactions in vesicular transport - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>SNARE interactions in vesicular transport - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04130&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04130">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04130 map" -->
+</select>
+<input type="hidden" name="mapno" value="04130" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04130" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04130" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04130.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=296,657,342,674	href="/dbget-bin/www_bget?K08497"	title="K08497 (SEC20)" />
+<area shape=rect	coords=296,640,342,657	href="/dbget-bin/www_bget?K08507"	title="K08507 (USE1)" />
+<area shape=rect	coords=296,623,342,640	href="/dbget-bin/www_bget?K08492"	title="K08492 (STX18)" />
+<area shape=rect	coords=198,623,244,640	href="/dbget-bin/www_bget?K08491"	title="K08491 (STX17)" />
+<area shape=rect	coords=176,576,222,593	href="/dbget-bin/www_bget?K08504"	title="K08504 (BET1)" />
+<area shape=rect	coords=272,494,318,511	href="/dbget-bin/www_bget?K08516"	title="K08516 (YKT6)" />
+<area shape=rect	coords=272,477,318,494	href="/dbget-bin/www_bget?K08495"	title="K08495 (GOSR1, GOS1)" />
+<area shape=rect	coords=272,460,318,477	href="/dbget-bin/www_bget?K08490"	title="K08490 (STX5)" />
+<area shape=rect	coords=223,494,269,511	href="/dbget-bin/www_bget?K08517"	title="K08517 (SEC22)" />
+<area shape=rect	coords=223,477,269,494	href="/dbget-bin/www_bget?K08496"	title="K08496 (GOSR2, BOS1)" />
+<area shape=rect	coords=223,460,269,477	href="/dbget-bin/www_bget?K08490"	title="K08490 (STX5)" />
+<area shape=rect	coords=272,383,318,400	href="/dbget-bin/www_bget?K08509"	title="K08509 (SNAP29)" />
+<area shape=rect	coords=223,403,269,420	href="/dbget-bin/www_bget?K08498+K08499+K08500"	title="K08498 (STX6), K08499 (TLG1), K08500 (SYP6)" />
+<area shape=rect	coords=223,383,269,400	href="/dbget-bin/www_bget?K08489"	title="K08489 (STX16)" />
+<area shape=rect	coords=223,363,269,380	href="/dbget-bin/www_bget?K08487"	title="K08487 (STX11)" />
+<area shape=rect	coords=394,325,440,342	href="/dbget-bin/www_bget?K08516"	title="K08516 (YKT6)" />
+<area shape=rect	coords=482,299,528,316	href="/dbget-bin/www_bget?K08493"	title="K08493 (VTI1)" />
+<area shape=rect	coords=482,282,528,299	href="/dbget-bin/www_bget?K08501+K08502+K08503"	title="K08501 (STX8), K08502 (VAM7), K08503 (SYP5)" />
+<area shape=rect	coords=482,265,528,282	href="/dbget-bin/www_bget?K08488"	title="K08488 (STX7)" />
+<area shape=rect	coords=339,125,385,142	href="/dbget-bin/www_bget?K08513"	title="K08513 (VAMP4)" />
+<area shape=rect	coords=324,96,370,113	href="/dbget-bin/www_bget?K08514"	title="K08514 (VAMP5)" />
+<area shape=rect	coords=258,93,304,110	href="/dbget-bin/www_bget?K08508"	title="K08508 (SNAP23)" />
+<area shape=rect	coords=247,640,293,657	href="/dbget-bin/www_bget?K08506"	title="K08506 (SYP7)" />
+<area shape=rect	coords=96,130,142,147	href="/dbget-bin/www_bget?K08508"	title="K08508 (SNAP23)" />
+<area shape=rect	coords=213,93,259,110	href="/dbget-bin/www_bget?K04560+K08486"	title="K04560 (STX1A), K08486 (STX3S)" />
+<area shape=rect	coords=51,130,97,147	href="/dbget-bin/www_bget?K04560+K08486"	title="K04560 (STX1A), K08486 (STX3S)" />
+<area shape=rect	coords=360,378,406,395	href="/dbget-bin/www_bget?K08505"	title="K08505 (SFT1)" />
+<area shape=rect	coords=361,576,407,593	href="/dbget-bin/www_bget?K08517"	title="K08517 (SEC22)" />
+<area shape=rect	coords=240,197,286,214	href="/dbget-bin/www_bget?K08513"	title="K08513 (VAMP4)" />
+<area shape=rect	coords=103,254,149,271	href="/dbget-bin/www_bget?K08512"	title="K08512 (VAMP8)" />
+<area shape=rect	coords=91,231,137,248	href="/dbget-bin/www_bget?K08510"	title="K08510 (VAMP1_2_3)" />
+<area shape=rect	coords=382,281,428,298	href="/dbget-bin/www_bget?K08515"	title="K08515 (VAMP7)" />
+<area shape=rect	coords=402,148,448,165	href="/dbget-bin/www_bget?K08489"	title="K08489 (STX16)" />
+<area shape=rect	coords=402,165,448,182	href="/dbget-bin/www_bget?K08498+K08499+K08500"	title="K08498 (STX6), K08499 (TLG1), K08500 (SYP6)" />
+<area shape=rect	coords=402,182,448,199	href="/dbget-bin/www_bget?K08493"	title="K08493 (VTI1)" />
+<area shape=rect	coords=40,45,416,71	href="/dbget-bin/www_bget?map04130"	title="map04130" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

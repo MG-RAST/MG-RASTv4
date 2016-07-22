@@ -1,0 +1,196 @@
+<html>
+<!---
+ENTRY       map07220
+DEFINITION  Cholinergic and anticholinergic drugs - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Cholinergic and anticholinergic drugs - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Cholinergic and anticholinergic drugs - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07220&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07220">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07220" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07220" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07220.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1105,145,1287,194	href="/dbget-bin/www_bget?D07869+D00670"	title="D07869 (Donepezil (INN)), D00670 (Donepezil hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=1289,528,1441,603	href="/dbget-bin/www_bget?D08441+D01007"	title="D08441 (Propiverine (INN)), D01007 (Propiverine hydrochloride (JAN))" />
+<area shape=rect	coords=1163,532,1280,605	href="/dbget-bin/www_bget?D01103"	title="D01103 (Trospium chloride (JAN/USAN/INN))" />
+<area shape=rect	coords=1226,386,1367,468	href="/dbget-bin/www_bget?D08389+D01297+D05276"	title="D08389 (Pirenzepine (INN)), D01297 (Pirenzepine hydrochloride (USAN)), D05276 (Pirenzepine hydrochloride hydrate (JP15))" />
+<area shape=rect	coords=566,755,795,828	href="/dbget-bin/www_bget?D01491"	title="D01491 (Butropium bromide (JP15/INN))" />
+<area shape=rect	coords=803,753,942,825	href="/dbget-bin/www_bget?D00721"	title="D00721 (Methanthelinium bromide (INN))" />
+<area shape=rect	coords=973,751,1116,825	href="/dbget-bin/www_bget?D00481"	title="D00481 (Propantheline bromide (JP15/USP/INN))" />
+<area shape=rect	coords=1150,750,1283,823	href="/dbget-bin/www_bget?D00720"	title="D00720 (Mepenzolate bromide (JP15/INN))" />
+<area shape=rect	coords=1299,754,1402,826	href="/dbget-bin/www_bget?D02535"	title="D02535 (Timepidium bromide (JP15))" />
+<area shape=rect	coords=1311,653,1433,726	href="/dbget-bin/www_bget?D01201+D08595"	title="D01201 (Tiemonium iodide (JAN/INN)), D08595 (Tiemonium methylsulfate)" />
+<area shape=rect	coords=1181,649,1293,726	href="/dbget-bin/www_bget?D01815"	title="D01815 (Oxapium iodide (JP15/INN))" />
+<area shape=rect	coords=1050,650,1163,726	href="/dbget-bin/www_bget?D01600"	title="D01600 (Diphenylpiperidinomethyldioxolan iodide (JAN))" />
+<area shape=rect	coords=876,649,1015,723	href="/dbget-bin/www_bget?D08382+D01165"	title="D08382 (Piperidolate (INN)), D01165 (Piperidolate hydrochloride (JAN))" />
+<area shape=rect	coords=724,649,867,723	href="/dbget-bin/www_bget?D01315"	title="D01315 (Methylbenactyzium bromide (JP15/INN))" />
+<area shape=rect	coords=571,660,714,726	href="/dbget-bin/www_bget?D07820+D00717"	title="D07820 (Dicycloverine (INN)), D00717 (Dicyclomine hydrochloride (JAN/USP))" />
+<area shape=rect	coords=730,518,870,591	href="/dbget-bin/www_bget?D02772"	title="D02772 (Adiphenine hydrochloride (USAN))" />
+<area shape=rect	coords=570,519,723,587	href="/dbget-bin/www_bget?C11760"	title="C11760 (Amprotropine)" />
+<area shape=rect	coords=1006,416,1138,481	href="/dbget-bin/www_bget?D04116"	title="D04116 (Eucatropine hydrochloride (USP))" />
+<area shape=rect	coords=877,407,995,462	href="/dbget-bin/www_bget?D00397"	title="D00397 (Tropicamide (JP15/USP/INN))" />
+<area shape=rect	coords=737,398,866,465	href="/dbget-bin/www_bget?D07759+D01002"	title="D07759 (Cyclopentolate (INN)), D01002 (Cyclopentolate hydrochloride (JP15/USP))" />
+<area shape=rect	coords=592,392,728,467	href="/dbget-bin/www_bget?D01004"	title="D01004 (Homatropine hydrobromide (JP15/USP))" />
+<area shape=rect	coords=361,695,510,764	href="/dbget-bin/www_bget?D01946"	title="D01946 (Oxitropium bromide (JAN/INN))" />
+<area shape=rect	coords=368,609,502,679	href="/dbget-bin/www_bget?D01929"	title="D01929 (Tiotropium bromide hydrate (JAN))" />
+<area shape=rect	coords=358,517,513,588	href="/dbget-bin/www_bget?D02212"	title="D02212 (Ipratropium bromide hydrate (JP15))" />
+<area shape=rect	coords=375,360,511,425	href="/dbget-bin/www_bget?D00113+D02069"	title="D00113 (Atropine (USP)), D02069 (Atropine sulfate (JP15/USP))" />
+<area shape=rect	coords=170,784,340,851	href="/dbget-bin/www_bget?D01451"	title="D01451 (Scopolamine butylbromide (JP15))" />
+<area shape=rect	coords=57,696,194,763	href="/dbget-bin/www_bget?D00715+D01976"	title="D00715 (Hyoscine methobromide (INN)), D01976 (N-Methylscopolamine methylsulfate (JAN))" />
+<area shape=rect	coords=190,608,318,681	href="/dbget-bin/www_bget?D00138+D02071"	title="D00138 (Scopolamine (INN)), D02071 (Scopolamine hydrobromide (JP15/USP))" />
+<area shape=rect	coords=187,500,306,575	href="/dbget-bin/www_bget?D08305+D00774+D02599"	title="D08305 (Orphenadrine (INN)), D00774 (Orphenadrine citrate (USP)), D02599 (Orphenadrine hydrochloride)" />
+<area shape=rect	coords=61,497,165,574	href="/dbget-bin/www_bget?D00779+D02246+D02247"	title="D00779 (Biperiden (JAN/USP/INN)), D02246 (Biperiden hydrochloride (JP15/USP)), D02247 (Biperiden lactate (JAN/USP))" />
+<area shape=rect	coords=184,387,297,480	href="/dbget-bin/www_bget?D07511+D00778"	title="D07511 (Benzatropine (INN)), D00778 (Benztropine mesilate (JAN))" />
+<area shape=rect	coords=62,397,163,469	href="/dbget-bin/www_bget?D08638+D00787"	title="D08638 (Trihexyphenidyl (INN)), D00787 (Trihexyphenidyl hydrochloride (JP15/USP))" />
+<area shape=rect	coords=1314,238,1445,296	href="/dbget-bin/www_bget?D02193"	title="D02193 (Ecothiopate iodide (JP15/INN))" />
+<area shape=rect	coords=1316,155,1377,214	href="/dbget-bin/www_bget?D00043"	title="D00043 (Isoflurophate (USP))" />
+<area shape=rect	coords=1174,210,1270,290	href="/dbget-bin/www_bget?D04292+D02173"	title="D04292 (Galantamine (USAN/INN)), D02173 (Galantamine hydrobromide (JAN/USAN))" />
+<area shape=rect	coords=1018,242,1162,298	href="/dbget-bin/www_bget?D03822+D02558"	title="D03822 (Rivastigmine (JAN/USAN/INN)), D02558 (Rivastigmine tartrate)" />
+<area shape=rect	coords=1019,166,1098,213	href="/dbget-bin/www_bget?D08555+D02068"	title="D08555 (Tacrine (INN)), D02068 (Tacrine hydrochloride (USP))" />
+<area shape=rect	coords=788,245,1001,304	href="/dbget-bin/www_bget?D01001"	title="D01001 (Ambenonium chloride (JP15/INN))" />
+<area shape=rect	coords=873,186,976,230	href="/dbget-bin/www_bget?D00994"	title="D00994 (Edrophonium chloride (JP15/USP/INN))" />
+<area shape=rect	coords=827,122,959,169	href="/dbget-bin/www_bget?D00487"	title="D00487 (Pyridostigmine bromide (JP15/USP/INN))" />
+<area shape=rect	coords=621,247,760,298	href="/dbget-bin/www_bget?D08261+D00995+D00998"	title="D08261 (Neostigmine (BAN)), D00995 (Neostigmine bromide (JAN/USP/INN)), D00998 (Neostigmine methylsulfate (JP15/USP))" />
+<area shape=rect	coords=620,127,757,188	href="/dbget-bin/www_bget?D00196+D02418+D03826"	title="D00196 (Physostigmine (USP)), D02418 (Physostigmine salicylate (JAN/USP)), D03826 (Physostigmine sulfate (USP))" />
+<area shape=rect	coords=187,154,292,196	href="/dbget-bin/www_bget?D00999"	title="D00999 (Acetylcholine chloride (JP15/USP/INN))" />
+<area shape=rect	coords=430,221,575,279	href="/dbget-bin/www_bget?D06330+D06331"	title="D06330 (Xanomeline (USAN)), D06331 (Xanomeline tartrate (USAN))" />
+<area shape=rect	coords=444,155,539,195	href="/dbget-bin/www_bget?D06000"	title="D06000 (Talsaclidine fumarate (USAN))" />
+<area shape=rect	coords=299,235,403,278	href="/dbget-bin/www_bget?D01000"	title="D01000 (Bethanechol chloride (JP15/USP))" />
+<area shape=rect	coords=299,154,403,194	href="/dbget-bin/www_bget?D04970"	title="D04970 (Methacholine chloride (USAN/INN))" />
+<area shape=rect	coords=187,235,292,278	href="/dbget-bin/www_bget?D00524"	title="D00524 (Carbachol (JAN/USP/INN))" />
+<area shape=rect	coords=51,228,170,273	href="/dbget-bin/www_bget?D00525+D02200+D05478+D08376"	title="D00525 (Pilocarpine (JAN/USP)), D02200 (Pilocarpine hydrochloride (JP15/USP)), D05478 (Pilocarpine nitrate (USP)), D08376 (Pilocarpine borate)" />
+<area shape=rect	coords=52,130,168,180	href="/dbget-bin/www_bget?C07473"	title="C07473 (Muscarine)" />
+<area shape=rect	coords=40,45,386,71	href="/dbget-bin/www_bget?map07220"	title="map07220" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

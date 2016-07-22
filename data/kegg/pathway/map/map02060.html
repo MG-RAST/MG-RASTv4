@@ -1,0 +1,271 @@
+<html>
+<!---
+ENTRY       map02060
+DEFINITION  Phosphotransferase system (PTS) - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Phosphotransferase system (PTS) - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Phosphotransferase system (PTS) - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=02060&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map02060">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The phosphoenolpyruvate (PEP)-dependent phosphotransferase system (PTS) is a major mechanism used by bacteria for uptake of carbohydrates, particularly hexoses, hexitols, and disaccharides, where the source of energy is from PEP. The PTS consists of two general components, enzyme I (EI) and histidine phosphocarrier protein (HPr), and of membrane-bound sugar specific permeases (enzymes II). Each enzyme II (EII) complex consists of one or two hydrophobic integral membrane domains (domains C and D) and two hydrophilic domains (domains A and B). EII complexes may exist as distinct proteins or as a single multidomain protein. The PTS catalyzes the uptake of carbohydrates and their conversion into their respective phosphoesters during transport. There are four successive phosphoryl transfers in the PTS. Initial autophosphorylation of EI, using PEP as a substrate, is followed by transfer of the phosphoryl group from EI to HPr. EIIA catalyzes the self-phosphoryl transfer from HPr after which the phosphoryl group is transferred to histidine or cysteine residues of EIIB. The sugar is transported through the membrane-bound EIIC and is phosphorylated by the appropriate sugar-specific EIIB.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 02060 map" -->
+</select>
+<input type="hidden" name="mapno" value="02060" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map02060" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map02060" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map02060.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=661,575,4	href="/dbget-bin/www_bget?C06377"	title="C06377 (D-Galactosamine 6-phosphate)" />
+<area shape=circle	coords=508,289,4	href="/dbget-bin/www_bget?C11544"	title="C11544 (2(alpha-D-Mannosyl)-D-glycerate)" />
+<area shape=circle	coords=129,523,4	href="/dbget-bin/www_bget?C01083"	title="C01083 (alpha,alpha-Trehalose)" />
+<area shape=circle	coords=129,484,4	href="/dbget-bin/www_bget?C06186+C01451"	title="C06186 (Arbutin), C01451 (Salicin)" />
+<area shape=circle	coords=283,523,4	href="/dbget-bin/www_bget?C00689"	title="C00689 (alpha,alpha'-Trehalose 6-phosphate)" />
+<area shape=circle	coords=283,484,4	href="/dbget-bin/www_bget?C06187+C06188"	title="C06187 (Arbutin 6-phosphate), C06188 (Salicin 6-phosphate)" />
+<area shape=circle	coords=661,519,4	href="/dbget-bin/www_bget?C06376"	title="C06376 (N-Acetyl-D-galactosamine 6-phosphate)" />
+<area shape=circle	coords=129,327,4	href="/dbget-bin/www_bget?C00208"	title="C00208 (Maltose)" />
+<area shape=circle	coords=283,327,4	href="/dbget-bin/www_bget?C05737"	title="C05737 (Maltose 6-phosphate)" />
+<area shape=circle	coords=283,250,4	href="/dbget-bin/www_bget?C00092"	title="C00092 (D-Glucose 6-phosphate)" />
+<area shape=circle	coords=129,250,4	href="/dbget-bin/www_bget?C00293"	title="C00293 (Glucose)" />
+<area shape=circle	coords=283,289,4	href="/dbget-bin/www_bget?C00357"	title="C00357 (N-Acetyl-D-glucosamine 6-phosphate)" />
+<area shape=circle	coords=129,289,4	href="/dbget-bin/www_bget?C00140"	title="C00140 (N-Acetyl-D-glucosamine)" />
+<area shape=circle	coords=283,406,4	href="/dbget-bin/www_bget?C16688"	title="C16688 (Sucrose-6-phosphate)" />
+<area shape=circle	coords=129,406,4	href="/dbget-bin/www_bget?C00089"	title="C00089 (Sucrose)" />
+<area shape=circle	coords=283,610,4	href="/dbget-bin/www_bget?C06187"	title="C06187 (Arbutin 6-phosphate)" />
+<area shape=circle	coords=129,610,4	href="/dbget-bin/www_bget?C06186"	title="C06186 (Arbutin)" />
+<area shape=circle	coords=283,445,4	href="/dbget-bin/www_bget?C01135"	title="C01135 (Phospho-beta-D-glucoside)" />
+<area shape=circle	coords=129,445,4	href="/dbget-bin/www_bget?C00963"	title="C00963 (beta-D-Glucoside)" />
+<area shape=circle	coords=129,562,4	href="/dbget-bin/www_bget?C02713"	title="C02713 (N-Acetylmuramate)" />
+<area shape=circle	coords=283,562,4	href="/dbget-bin/www_bget?C16698"	title="C16698 (N-Acetylmuramic acid 6-phosphate)" />
+<area shape=circle	coords=283,367,4	href="/dbget-bin/www_bget?C00352"	title="C00352 (D-Glucosamine 6-phosphate)" />
+<area shape=circle	coords=129,367,4	href="/dbget-bin/www_bget?C00329"	title="C00329 (D-Glucosamine)" />
+<area shape=circle	coords=298,104,4	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=circle	coords=204,104,4	href="/dbget-bin/www_bget?C00074"	title="C00074 (Phosphoenolpyruvate)" />
+<area shape=circle	coords=661,691,4	href="/dbget-bin/www_bget?C06311"	title="C06311 (Galactitol 1-phosphate)" />
+<area shape=circle	coords=508,691,4	href="/dbget-bin/www_bget?C01697"	title="C01697 (Galactitol)" />
+<area shape=circle	coords=661,747,4	href="/dbget-bin/www_bget?C16186"	title="C16186 (L-Ascorbate 6-phosphate)" />
+<area shape=circle	coords=508,747,4	href="/dbget-bin/www_bget?C00072"	title="C00072 (Ascorbate)" />
+<area shape=circle	coords=661,635,4	href="/dbget-bin/www_bget?C01096"	title="C01096 (Sorbitol 6-phosphate)" />
+<area shape=circle	coords=508,635,4	href="/dbget-bin/www_bget?C00794"	title="C00794 (D-Sorbitol)" />
+<area shape=circle	coords=283,676,4	href="/dbget-bin/www_bget?C05396"	title="C05396 (Lactose 6-phosphate)" />
+<area shape=circle	coords=129,675,4	href="/dbget-bin/www_bget?C00243"	title="C00243 (Lactose)" />
+<area shape=circle	coords=129,724,4	href="/dbget-bin/www_bget?C00185"	title="C00185 (Cellobiose)" />
+<area shape=circle	coords=508,575,4	href="/dbget-bin/www_bget?C02262"	title="C02262 (D-Galactosamine)" />
+<area shape=circle	coords=508,519,4	href="/dbget-bin/www_bget?C01132"	title="C01132 (N-Acetyl-D-galactosamine)" />
+<area shape=circle	coords=661,463,4	href="/dbget-bin/www_bget?C02888"	title="C02888 (Sorbose 1-phosphate)" />
+<area shape=circle	coords=508,463,4	href="/dbget-bin/www_bget?C01452"	title="C01452 (Sorbose)" />
+<area shape=circle	coords=661,351,4	href="/dbget-bin/www_bget?C00275"	title="C00275 (D-Mannose 6-phosphate)" />
+<area shape=circle	coords=508,351,4	href="/dbget-bin/www_bget?C00159"	title="C00159 (D-Mannose)" />
+<area shape=circle	coords=661,407,4	href="/dbget-bin/www_bget?C01094"	title="C01094 (D-Fructose 1-phosphate)" />
+<area shape=circle	coords=508,407,4	href="/dbget-bin/www_bget?C00095"	title="C00095 (D-Fructose)" />
+<area shape=circle	coords=661,251,4	href="/dbget-bin/www_bget?C00644"	title="C00644 (D-Mannitol 1-phosphate)" />
+<area shape=circle	coords=508,251,4	href="/dbget-bin/www_bget?C00392"	title="C00392 (Mannitol)" />
+<area shape=circle	coords=661,289,4	href="/dbget-bin/www_bget?C16699"	title="C16699 (2-O-(6-Phospho-alpha-mannosyl)-D-glycerate)" />
+<area shape=circle	coords=1028,250,4	href="/dbget-bin/www_bget?C01094"	title="C01094 (D-Fructose 1-phosphate)" />
+<area shape=circle	coords=874,250,4	href="/dbget-bin/www_bget?C00095"	title="C00095 (D-Fructose)" />
+<area shape=circle	coords=1044,373,4	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=circle	coords=950,373,4	href="/dbget-bin/www_bget?C00074"	title="C00074 (Phosphoenolpyruvate)" />
+<area shape=circle	coords=874,515,4	href="/dbget-bin/www_bget?C00697"	title="C00697 (Nitrogen)" />
+<area shape=circle	coords=1044,104,4	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=circle	coords=950,104,4	href="/dbget-bin/www_bget?C00074"	title="C00074 (Phosphoenolpyruvate)" />
+<area shape=rect	coords=204,241,250,258	href="/dbget-bin/www_bget?K02777"	title="K02777 (PTS-Glc-EIIA, crr)" />
+<area shape=rect	coords=158,241,204,258	href="/dbget-bin/www_bget?K02778+K02779"	title="K02778 (PTS-Glc-EIIB, ptsG), K02779 (PTS-Glc-EIIC, ptsG)" />
+<area shape=rect	coords=158,281,204,298	href="/dbget-bin/www_bget?K02802+K02803+K02804"	title="K02802 (PTS-Nag-EIIA, nagE), K02803 (PTS-Nag-EIIB, nagE), K02804 (PTS-Nag-EIIC, nagE)" />
+<area shape=rect	coords=158,398,204,415	href="/dbget-bin/www_bget?K02808+K02809+K02810"	title="K02808 (PTS-Scr-EIIA, scrA), K02809 (PTS-Scr-EIIB, scrA), K02810 (PTS-Scr-EIIC, scrA)" />
+<area shape=rect	coords=158,601,204,618	href="/dbget-bin/www_bget?K02750"	title="K02750 (PTS-Arb-EIIC, glvC)" />
+<area shape=rect	coords=204,610,250,627	href="/dbget-bin/www_bget?K02749"	title="K02749 (PTS-Arb-EIIB, glvB)" />
+<area shape=rect	coords=158,437,204,454	href="/dbget-bin/www_bget?K02755+K02756+K02757"	title="K02755 (PTS-Bgl-EIIA, bglF), K02756 (PTS-Bgl-EIIB, bglF), K02757 (PTS-Bgl-EIIC, bglF)" />
+<area shape=rect	coords=204,593,250,610	href="/dbget-bin/www_bget?K02777"	title="K02777 (PTS-Glc-EIIA, crr)" />
+<area shape=rect	coords=158,554,204,571	href="/dbget-bin/www_bget?K11191+K11192"	title="K11191 (PTS-Mur-EIIB, murP), K11192 (PTS-Mur-EIIC, murP)" />
+<area shape=rect	coords=204,554,250,571	href="/dbget-bin/www_bget?K02777"	title="K02777 (PTS-Glc-EIIA, crr)" />
+<area shape=rect	coords=158,476,204,493	href="/dbget-bin/www_bget?K02752+K02753"	title="K02752 (PTS-Asc-EIIB, ascF), K02753 (PTS-Asc-EIIC, ascF)" />
+<area shape=rect	coords=204,476,250,493	href="/dbget-bin/www_bget?K02777"	title="K02777 (PTS-Glc-EIIA, crr)" />
+<area shape=rect	coords=158,319,204,336	href="/dbget-bin/www_bget?K02790+K02791"	title="K02790 (PTS-Mal-EIIB, malX), K02791 (PTS-Mal-EIIC, malX)" />
+<area shape=rect	coords=204,319,250,336	href="/dbget-bin/www_bget?K02777"	title="K02777 (PTS-Glc-EIIA, crr)" />
+<area shape=rect	coords=158,515,204,532	href="/dbget-bin/www_bget?K02818+K02819"	title="K02818 (PTS-Tre-EIIB, treB), K02819 (PTS-Tre-EIIC, treB)" />
+<area shape=rect	coords=204,515,250,532	href="/dbget-bin/www_bget?K02777+K02817"	title="K02777 (PTS-Glc-EIIA, crr), K02817 (PTS-Tre-EIIA, treP)" />
+<area shape=rect	coords=158,359,204,376	href="/dbget-bin/www_bget?K02763+K02764+K02765"	title="K02763 (PTS-Dgl-EIIA, gamP), K02764 (PTS-Dgl-EIIB, gamP), K02765 (PTS-Dgl-EIIC, gamP)" />
+<area shape=rect	coords=225,95,271,112	href="/dbget-bin/www_bget?K08483"	title="K08483 (PTS-EI.PTSI, ptsI)" />
+<area shape=rect	coords=226,162,272,179	href="/dbget-bin/www_bget?K02784"	title="K02784 (PTS-HPR.PTSH, ptsH)" />
+<area shape=rect	coords=583,690,629,707	href="/dbget-bin/www_bget?K02774"	title="K02774 (PTS-Gat-EIIB, gatB)" />
+<area shape=rect	coords=537,682,583,699	href="/dbget-bin/www_bget?K02775"	title="K02775 (PTS-Gat-EIIC, gatC)" />
+<area shape=rect	coords=583,673,629,690	href="/dbget-bin/www_bget?K02773"	title="K02773 (PTS-Gat-EIIA, gatA)" />
+<area shape=rect	coords=537,737,583,754	href="/dbget-bin/www_bget?K03475"	title="K03475 (PTS-Ula-EIIC, ulaA, sgaT)" />
+<area shape=rect	coords=583,730,629,747	href="/dbget-bin/www_bget?K02821"	title="K02821 (PTS-Ula-EIIA, ulaC, sgaA)" />
+<area shape=rect	coords=583,747,629,764	href="/dbget-bin/www_bget?K02822"	title="K02822 (PTS-Ula-EIIB, ulaB, sgaB)" />
+<area shape=rect	coords=583,635,629,652	href="/dbget-bin/www_bget?K02782"	title="K02782 (PTS-Gut-EIIB, srlE)" />
+<area shape=rect	coords=583,618,629,635	href="/dbget-bin/www_bget?K02781"	title="K02781 (PTS-Gut-EIIA, srlB)" />
+<area shape=rect	coords=537,626,583,643	href="/dbget-bin/www_bget?K02783"	title="K02783 (PTS-Gut-EIIC, srlA)" />
+<area shape=rect	coords=158,668,204,685	href="/dbget-bin/www_bget?K02787+K02788"	title="K02787 (PTS-Lac-EIIB, lacE), K02788 (PTS-Lac-EIIC, lacE)" />
+<area shape=rect	coords=204,668,250,685	href="/dbget-bin/www_bget?K02786"	title="K02786 (PTS-Lac-EIIA, lacF)" />
+<area shape=rect	coords=158,716,204,733	href="/dbget-bin/www_bget?K02761"	title="K02761 (PTS-Cel-EIIC, celB)" />
+<area shape=rect	coords=204,724,250,741	href="/dbget-bin/www_bget?K02760"	title="K02760 (PTS-Cel-EIIB, celA)" />
+<area shape=rect	coords=204,707,250,724	href="/dbget-bin/www_bget?K02759"	title="K02759 (PTS-Cel-EIIA, celC)" />
+<area shape=rect	coords=583,575,629,592	href="/dbget-bin/www_bget?K10984"	title="K10984 (PTS-Gam-EIIB, agaB)" />
+<area shape=rect	coords=583,558,629,575	href="/dbget-bin/www_bget?K02744"	title="K02744 (PTS-Aga-EIIA, agaF)" />
+<area shape=rect	coords=537,575,583,592	href="/dbget-bin/www_bget?K10986"	title="K10986 (PTS-Gam-EIID, agaD)" />
+<area shape=rect	coords=537,558,583,575	href="/dbget-bin/www_bget?K10985"	title="K10985 (PTS-Gam-EIIC, agaC)" />
+<area shape=rect	coords=583,519,629,536	href="/dbget-bin/www_bget?K02745"	title="K02745 (PTS-Aga-EIIB, agaV)" />
+<area shape=rect	coords=537,519,583,536	href="/dbget-bin/www_bget?K02747"	title="K02747 (PTS-Aga-EIID, agaE)" />
+<area shape=rect	coords=537,502,583,519	href="/dbget-bin/www_bget?K02746"	title="K02746 (PTS-Aga-EIIC, agaW)" />
+<area shape=rect	coords=583,502,629,519	href="/dbget-bin/www_bget?K02744"	title="K02744 (PTS-Aga-EIIA, agaF)" />
+<area shape=rect	coords=537,463,583,480	href="/dbget-bin/www_bget?K02815"	title="K02815 (PTS-Sor-EIID, sorM)" />
+<area shape=rect	coords=537,446,583,463	href="/dbget-bin/www_bget?K02814"	title="K02814 (PTS-Sor-EIIC, sorA)" />
+<area shape=rect	coords=583,463,629,480	href="/dbget-bin/www_bget?K02813"	title="K02813 (PTS-Sor-EIIB, sorB)" />
+<area shape=rect	coords=583,446,629,463	href="/dbget-bin/www_bget?K02812"	title="K02812 (PTS-Sor-EIIA, sorF)" />
+<area shape=rect	coords=537,350,583,367	href="/dbget-bin/www_bget?K02796"	title="K02796 (PTS-Man-EIID, manZ)" />
+<area shape=rect	coords=537,333,583,350	href="/dbget-bin/www_bget?K02795"	title="K02795 (PTS-Man-EIIC, manY)" />
+<area shape=rect	coords=583,342,629,359	href="/dbget-bin/www_bget?K02793+K02794"	title="K02793 (PTS-Man-EIIA, manX), K02794 (PTS-Man-EIIB, manX)" />
+<area shape=rect	coords=537,407,583,424	href="/dbget-bin/www_bget?K02771"	title="K02771 (PTS-Fru1-EIID, levG)" />
+<area shape=rect	coords=537,390,583,407	href="/dbget-bin/www_bget?K11196"	title="K11196 (PTS-Fru1-EIIC, levF)" />
+<area shape=rect	coords=583,407,629,424	href="/dbget-bin/www_bget?K11195"	title="K11195 (PTS-Fru1-EIIB, levE)" />
+<area shape=rect	coords=583,390,629,407	href="/dbget-bin/www_bget?K11194"	title="K11194 (PTS-Fru1-EIIA, levD)" />
+<area shape=rect	coords=537,242,583,259	href="/dbget-bin/www_bget?K02798+K02799+K02800"	title="K02798 (PTS-Mtl-EIIA, mtlA), K02799 (PTS-Mtl-EIIB, mtlA), K02800 (PTS-Mtl-EIIC, mtlA)" />
+<area shape=rect	coords=537,281,583,298	href="/dbget-bin/www_bget?K11198+K11199+K11200"	title="K11198 (PTS-Mng-EIIA, mngA, hrsA), K11199 (PTS-Mng-EIIB, mngA, hrsA), K11200 (PTS-Mng-EIIC, mngA, hrsA)" />
+<area shape=rect	coords=904,242,950,259	href="/dbget-bin/www_bget?K02769+K02770"	title="K02769 (PTS-Fru-EIIB, fruA), K02770 (PTS-Fru-EIIC, fruA)" />
+<area shape=rect	coords=950,242,996,259	href="/dbget-bin/www_bget?K02768"	title="K02768 (PTS-Fru-EIIA, fruB)" />
+<area shape=rect	coords=973,431,1019,448	href="/dbget-bin/www_bget?K08485"	title="K08485 (PTS-HPR.PTSO, ptsO, npr)" />
+<area shape=rect	coords=973,365,1019,382	href="/dbget-bin/www_bget?K08484"	title="K08484 (PTS-EI.PTSP, ptsP)" />
+<area shape=rect	coords=950,508,996,525	href="/dbget-bin/www_bget?K02806"	title="K02806 (PTS-Ntr-EIIA, ptsN)" />
+<area shape=rect	coords=973,95,1019,112	href="/dbget-bin/www_bget?K08483"	title="K08483 (PTS-EI.PTSI, ptsI)" />
+<area shape=rect	coords=973,161,1019,178	href="/dbget-bin/www_bget?K11183"	title="K11183 (PTS-HPR.FRUB, fruB, fpr)" />
+<area shape=rect	coords=40,45,327,71	href="/dbget-bin/www_bget?map02060"	title="map02060" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

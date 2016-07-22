@@ -1,0 +1,181 @@
+<html>
+<!---
+ENTRY       map00511
+DEFINITION  Other glycan degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Other glycan degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Other glycan degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00511&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00511">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00511 map" -->
+</select>
+<input type="hidden" name="mapno" value="00511" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00511" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00511" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00511.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=poly	coords=96,147,126,147,126,151,96,151	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=168,147,198,147,198,151,168,151	href="/dbget-bin/www_bget?K01190+K12111+K12112+K12309+3.2.1.23"	title="K01190 (lacZ), K12111 (ebgA), K12112 (ebgC), K12309 (GLB1, ELNR1), 3.2.1.23" />
+<area shape=poly	coords=333,152,363,182,367,182,337,152	href="/dbget-bin/www_bget?K12311+K12312+K01191+3.2.1.24"	title="K01191 (E3.2.1.24), K12311 (MAN2B1, LAMAN), K12312 (MAN2B2), 3.2.1.24" />
+<area shape=poly	coords=332,238,362,208,366,208,336,238	href="/dbget-bin/www_bget?K12311+K01191+3.2.1.24"	title="K01191 (E3.2.1.24), K12311 (MAN2B1, LAMAN), 3.2.1.24" />
+<area shape=poly	coords=498,153,528,183,532,183,502,153	href="/dbget-bin/www_bget?K01206+3.2.1.51"	title="K01206 (E3.2.1.51, FUCA), 3.2.1.51" />
+<area shape=poly	coords=591,194,621,194,621,198,591,198	href="/dbget-bin/www_bget?K01444+3.5.1.26"	title="K01444 (E3.5.1.26), 3.5.1.26" />
+<area shape=poly	coords=259,147,289,147,289,151,259,151	href="/dbget-bin/www_bget?K12373+3.2.1.52"	title="K12373 (HEX), 3.2.1.52" />
+<area shape=poly	coords=96,238,126,238,126,242,96,242	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=168,238,198,238,198,242,168,242	href="/dbget-bin/www_bget?K01190+K12111+K12112+K12309+3.2.1.23"	title="K01190 (lacZ), K12111 (ebgA), K12112 (ebgC), K12309 (GLB1, ELNR1), 3.2.1.23" />
+<area shape=poly	coords=259,238,289,238,289,242,259,242	href="/dbget-bin/www_bget?K12373+3.2.1.52"	title="K12373 (HEX), 3.2.1.52" />
+<area shape=poly	coords=333,194,363,194,363,198,333,198	href="/dbget-bin/www_bget?K12373+3.2.1.52"	title="K12373 (HEX), 3.2.1.52" />
+<area shape=poly	coords=410,194,440,194,440,198,410,198	href="/dbget-bin/www_bget?K01192+3.2.1.25"	title="K01192 (E3.2.1.25, MANBA, manB), 3.2.1.25" />
+<area shape=poly	coords=500,194,530,194,530,198,500,198	href="/dbget-bin/www_bget?K01227+3.2.1.96"	title="K01227 (E3.2.1.96), 3.2.1.96" />
+<area shape=poly	coords=260,344,290,374,294,374,264,344	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=97,418,127,418,127,422,97,422	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=192,418,222,418,222,422,192,422	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=259,419,289,389,293,389,263,419	href="/dbget-bin/www_bget?K01190+K12111+K12112+K12309+3.2.1.23"	title="K01190 (lacZ), K12111 (ebgA), K12112 (ebgC), K12309 (GLB1, ELNR1), 3.2.1.23" />
+<area shape=poly	coords=349,385,379,415,383,415,353,385	href="/dbget-bin/www_bget?K12373+3.2.1.52"	title="K12373 (HEX), 3.2.1.52" />
+<area shape=poly	coords=347,464,377,434,381,434,351,464	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=254,464,284,464,284,468,254,468	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=160,464,190,464,190,468,160,468	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=167,341,197,341,197,345,167,345	href="/dbget-bin/www_bget?K01186+K12357+3.2.1.18"	title="K01186 (NEU1), K12357 (NEU2_3_4), 3.2.1.18" />
+<area shape=poly	coords=422,424,452,424,452,428,422,428	href="/dbget-bin/www_bget?K01190+K12111+K12112+K12309+3.2.1.23"	title="K01190 (lacZ), K12111 (ebgA), K12112 (ebgC), K12309 (GLB1, ELNR1), 3.2.1.23" />
+<area shape=poly	coords=492,424,522,424,522,428,492,428	href="/dbget-bin/www_bget?K01201+3.2.1.45"	title="K01201 (E3.2.1.45, GBA, srfJ), 3.2.1.45" />
+<area shape=rect	coords=40,45,277,71	href="/dbget-bin/www_bget?map00511"	title="map00511" />
+<area shape=rect	coords=600,118,724,144	href="/kegg-bin/show_pathway?map00510"	title="map00510" />
+<area shape=rect	coords=600,321,765,356	href="/kegg-bin/show_pathway?map00604"	title="map00604" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

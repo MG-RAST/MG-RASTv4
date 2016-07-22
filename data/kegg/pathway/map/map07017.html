@@ -1,0 +1,176 @@
+<html>
+<!---
+ENTRY       map07017
+DEFINITION  Sulfonamide derivatives - diuretics - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Sulfonamide derivatives - diuretics - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Sulfonamide derivatives - diuretics - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07017&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07017">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07017" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07017" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07017.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1041,837,1184,897	href="/dbget-bin/www_bget?D01895"	title="D01895 (Tripamide (JAN/USAN/INN))" />
+<area shape=rect	coords=428,594,584,653	href="/dbget-bin/www_bget?D00657"	title="D00657 (Polythiazide (JAN/USAN/INN))" />
+<area shape=rect	coords=424,812,553,874	href="/dbget-bin/www_bget?D01877"	title="D01877 (Mefruside (JP15/USAN/INN))" />
+<area shape=rect	coords=834,738,962,819	href="/dbget-bin/www_bget?D00431"	title="D00431 (Metolazone (JAN/USP/INN))" />
+<area shape=rect	coords=569,812,675,874	href="/dbget-bin/www_bget?D01605"	title="D01605 (Meticrane (JP15/INN))" />
+<area shape=rect	coords=786,586,957,655	href="/dbget-bin/www_bget?D01241"	title="D01241 (Penflutizide (JAN/INN))" />
+<area shape=rect	coords=1049,496,1179,582	href="/dbget-bin/www_bget?D01634"	title="D01634 (Piretanide (JAN/USAN/INN))" />
+<area shape=rect	coords=1049,710,1179,808	href="/dbget-bin/www_bget?D00382"	title="D00382 (Torasemide (JAN/INN))" />
+<area shape=rect	coords=1049,355,1179,432	href="/dbget-bin/www_bget?D00247"	title="D00247 (Bumetanide (JP15/USP/INN))" />
+<area shape=rect	coords=1049,608,1179,672	href="/dbget-bin/www_bget?D01323"	title="D01323 (Azosemide (JAN/USAN/INN))" />
+<area shape=rect	coords=1049,256,1179,322	href="/dbget-bin/www_bget?D00331"	title="D00331 (Furosemide (JP15/USP/INN))" />
+<area shape=rect	coords=66,550,208,601	href="/dbget-bin/www_bget?D02441"	title="D02441 (Ethoxzolamide)" />
+<area shape=rect	coords=458,243,561,296	href="/dbget-bin/www_bget?D00519+D03471"	title="D00519 (Chlorothiazide (JAN/USP/INN)), D03471 (Chlorothiazide sodium (USP))" />
+<area shape=rect	coords=237,403,345,461	href="/dbget-bin/www_bget?D01822"	title="D01822 (Clofenamide (JAN/INN))" />
+<area shape=rect	coords=237,540,345,609	href="/dbget-bin/www_bget?D00518"	title="D00518 (Diclofenamide (JP15/INN))" />
+<area shape=rect	coords=553,718,699,784	href="/dbget-bin/www_bget?D00345"	title="D00345 (Indapamide (USP))" />
+<area shape=rect	coords=424,718,543,784	href="/dbget-bin/www_bget?D00272"	title="D00272 (Chlortalidone (JAN/INN))" />
+<area shape=rect	coords=701,755,832,819	href="/dbget-bin/www_bget?D00461"	title="D00461 (Quinethazone (JAN/INN))" />
+<area shape=rect	coords=817,232,926,297	href="/dbget-bin/www_bget?D02453"	title="D02453 (Flumethiazide (INN))" />
+<area shape=rect	coords=820,385,923,454	href="/dbget-bin/www_bget?D00654"	title="D00654 (Hydroflumethiazide (JAN/USP/INN))" />
+<area shape=rect	coords=83,255,194,302	href="/dbget-bin/www_bget?D00218+D01196"	title="D00218 (Acetazolamide (JP15/USP/INN)), D01196 (Acetazolamide sodium (JAN))" />
+<area shape=rect	coords=108,139,161,152	href="/dbget-bin/www_bget?C07458"	title="C07458 (Sulfanilamide)" />
+<area shape=rect	coords=452,391,559,448	href="/dbget-bin/www_bget?D00340"	title="D00340 (Hydrochlorothiazide (JP15/USP/INN))" />
+<area shape=rect	coords=450,484,568,551	href="/dbget-bin/www_bget?D00658"	title="D00658 (Trichlormethiazide (JP15/USP/INN))" />
+<area shape=rect	coords=607,389,776,449	href="/dbget-bin/www_bget?D00651"	title="D00651 (Benzthiazide (JAN/INN))" />
+<area shape=rect	coords=79,426,192,482	href="/dbget-bin/www_bget?D00655"	title="D00655 (Methazolamide (JAN/USP/INN))" />
+<area shape=rect	coords=796,484,948,551	href="/dbget-bin/www_bget?D00650"	title="D00650 (Bendroflumethiazide (JAN/USP/INN))" />
+<area shape=rect	coords=268,155,475,182	href="/kegg-bin/show_pathway?map07016"	title="map07016" />
+<area shape=rect	coords=80,331,190,357	href="/kegg-bin/show_pathway?map07033"	title="map07033" />
+<area shape=rect	coords=268,124,394,151	href="/kegg-bin/show_pathway?map07115"	title="map07115" />
+<area shape=rect	coords=40,45,361,71	href="/dbget-bin/www_bget?map07017"	title="map07017" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

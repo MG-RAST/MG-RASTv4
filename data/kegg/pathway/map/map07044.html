@@ -1,0 +1,181 @@
+<html>
+<!---
+ENTRY       map07044
+DEFINITION  Antivirals - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antivirals - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antivirals - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07044&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07044">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07044" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07044" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07044.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1056,669,1261,743	href="/dbget-bin/www_bget?D06676"	title="D06676 (Raltegravir (INN))" />
+<area shape=rect	coords=1059,497,1250,592	href="/dbget-bin/www_bget?D06670"	title="D06670 (Maraviroc (JAN/INN))" />
+<area shape=rect	coords=1115,351,1220,432	href="/dbget-bin/www_bget?D00896"	title="D00896 (Efavirenz (JAN/INN))" />
+<area shape=rect	coords=1061,261,1224,317	href="/dbget-bin/www_bget?D00895"	title="D00895 (Delavirdine mesilate (JAN))" />
+<area shape=rect	coords=1116,152,1203,230	href="/dbget-bin/www_bget?D00435"	title="D00435 (Nevirapine (JAN/USP/INN))" />
+<area shape=rect	coords=862,636,981,708	href="/dbget-bin/www_bget?D03537"	title="D03537 (Clevudine (USAN))" />
+<area shape=rect	coords=715,678,807,743	href="/dbget-bin/www_bget?D06675"	title="D06675 (Telbivudine (USAN/INN))" />
+<area shape=rect	coords=709,598,801,653	href="/dbget-bin/www_bget?D01199"	title="D01199 (Emtricitabine (JAN/USAN/INN))" />
+<area shape=rect	coords=870,551,988,607	href="/dbget-bin/www_bget?D04757"	title="D04757 (Lobucavir (USAN/INN))" />
+<area shape=rect	coords=689,514,814,573	href="/dbget-bin/www_bget?D04008"	title="D04008 (Entecavir hydrate (JAN))" />
+<area shape=rect	coords=883,424,1000,492	href="/dbget-bin/www_bget?D06074+D01982"	title="D06074 (Tenofovir (USAN)), D01982 (Tenofovir disoproxil fumarate (JAN/USAN))" />
+<area shape=rect	coords=710,430,825,491	href="/dbget-bin/www_bget?D02768+D01655"	title="D02768 (Adefovir (USAN/INN)), D01655 (Adefovir pivoxil (JAN))" />
+<area shape=rect	coords=577,418,677,489	href="/dbget-bin/www_bget?D00353"	title="D00353 (Lamivudine (JAN/USP/INN))" />
+<area shape=rect	coords=879,316,984,394	href="/dbget-bin/www_bget?D00273"	title="D00273 (Cidofovir (USAN/INN))" />
+<area shape=rect	coords=860,240,1010,288	href="/dbget-bin/www_bget?D00891+D02734"	title="D00891 (Abacavir sulfate (JAN/USAN)), D02734 (Abacavir succinate (USAN))" />
+<area shape=rect	coords=858,166,985,215	href="/dbget-bin/www_bget?D00296"	title="D00296 (Didanosine (JAN/USAN/INN))" />
+<area shape=rect	coords=697,254,822,318	href="/dbget-bin/www_bget?D00445"	title="D00445 (Sanilvudine (JAN))" />
+<area shape=rect	coords=559,269,683,319	href="/dbget-bin/www_bget?D00412"	title="D00412 (Zalcitabine (JAN/USP/INN))" />
+<area shape=rect	coords=261,643,394,728	href="/dbget-bin/www_bget?D00902+D01937"	title="D00902 (Zanamivir (USAN/INN)), D01937 (Zanamivir hydrate (JAN))" />
+<area shape=rect	coords=164,655,218,717	href="/dbget-bin/www_bget?D00901"	title="D00901 (Rimantadine hydrochloride (USAN))" />
+<area shape=rect	coords=52,657,96,720	href="/dbget-bin/www_bget?D00777"	title="D00777 (Amantadine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=474,109,536,122	href="/dbget-bin/www_bget?D01907"	title="D01907 (Fludarabine phosphate (JAN/USP))" />
+<area shape=rect	coords=371,497,497,553	href="/dbget-bin/www_bget?D05407+D02124"	title="D05407 (Penciclovir (USAN/INN)), D02124 (Penciclovir sodium (USAN))" />
+<area shape=rect	coords=240,496,367,554	href="/dbget-bin/www_bget?D00333+D04301"	title="D00333 (Ganciclovir (JAN/USP/INN)), D04301 (Ganciclovir sodium (USAN))" />
+<area shape=rect	coords=559,149,676,215	href="/dbget-bin/www_bget?D00413"	title="D00413 (Zidovudine (JAN/USP/INN))" />
+<area shape=rect	coords=366,288,492,342	href="/dbget-bin/www_bget?D00423"	title="D00423 (Ribavirin (JAN/USP/INN))" />
+<area shape=rect	coords=387,386,499,453	href="/dbget-bin/www_bget?D00579+D02267"	title="D00579 (Foscarnet sodium (USAN/INN)), D02267 (Foscarnet sodium hydrate (JAN))" />
+<area shape=rect	coords=190,394,366,443	href="/dbget-bin/www_bget?D00398"	title="D00398 (Valaciclovir hydrochloride (JAN))" />
+<area shape=rect	coords=193,286,313,342	href="/dbget-bin/www_bget?D01734"	title="D01734 (Sorivudine (JAN/USAN/INN))" />
+<area shape=rect	coords=44,391,171,458	href="/dbget-bin/www_bget?D00222"	title="D00222 (Aciclovir (JAN/INN))" />
+<area shape=rect	coords=363,176,497,231	href="/dbget-bin/www_bget?D00406+D06298"	title="D00406 (Vidarabine (USP)), D06298 (Vidarabine (JAN))" />
+<area shape=rect	coords=196,144,315,230	href="/dbget-bin/www_bget?D00391"	title="D00391 (Trifluridine (USP/INN))" />
+<area shape=rect	coords=41,157,163,228	href="/dbget-bin/www_bget?D00342"	title="D00342 (Idoxuridine (JP15/USP/INN))" />
+<area shape=rect	coords=397,645,512,741	href="/dbget-bin/www_bget?D00900"	title="D00900 (Oseltamivir phosphate (JAN/USAN))" />
+<area shape=rect	coords=40,45,148,71	href="/dbget-bin/www_bget?map07044"	title="map07044" />
+<area shape=rect	coords=415,67,536,102	href="/kegg-bin/show_pathway?@map07041/D01907"	title="PATH:map07041(D01907)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

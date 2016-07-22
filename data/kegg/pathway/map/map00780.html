@@ -1,0 +1,185 @@
+<html>
+<!---
+ENTRY       map00780
+DEFINITION  Biotin metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Biotin metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Biotin metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00780&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00780">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00780 map" -->
+</select>
+<input type="hidden" name="mapno" value="00780" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00780" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00780" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00780.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=152,137,4	href="/dbget-bin/www_bget?C02656"	title="C02656 (6-Carboxyhexanoate)" />
+<area shape=circle	coords=280,137,4	href="/dbget-bin/www_bget?C01063"	title="C01063 (6-Carboxyhexanoyl-CoA)" />
+<area shape=circle	coords=410,137,4	href="/dbget-bin/www_bget?C01092"	title="C01092 (8-Amino-7-oxononanoate)" />
+<area shape=circle	coords=313,195,4	href="/dbget-bin/www_bget?C01909"	title="C01909 (Dethiobiotin)" />
+<area shape=circle	coords=410,195,4	href="/dbget-bin/www_bget?C01037"	title="C01037 (7,8-Diaminononanoate)" />
+<area shape=circle	coords=313,260,4	href="/dbget-bin/www_bget?C00120"	title="C00120 (Biotin)" />
+<area shape=circle	coords=338,300,4	href="/dbget-bin/www_bget?C00047"	title="C00047 (L-Lysine)" />
+<area shape=circle	coords=410,260,4	href="/dbget-bin/www_bget?C05552"	title="C05552 (N6-D-Biotinyl-L-lysine)" />
+<area shape=circle	coords=78,260,4	href="/dbget-bin/www_bget?C01894"	title="C01894 (Biotinyl-CoA)" />
+<area shape=circle	coords=166,260,4	href="/dbget-bin/www_bget?C05921"	title="C05921 (Biotinyl-5'-AMP)" />
+<area shape=circle	coords=313,408,4	href="/dbget-bin/www_bget?C06250"	title="C06250 (Holo-[carboxylase])" />
+<area shape=rect	coords=196,262,242,279	href="/dbget-bin/www_bget?K01942+6.3.4.9+R01074"	title="K01942 (HLCS), 6.3.4.9, R01074" />
+<area shape=rect	coords=196,410,242,427	href="/dbget-bin/www_bget?K01942+6.3.4.11+R05145"	title="K01942 (HLCS), 6.3.4.11, R05145" />
+<area shape=rect	coords=244,410,290,427	href="/dbget-bin/www_bget?K01942+K01947+K03524+6.3.4.15+R05145"	title="K01942 (HLCS), K01947 (birA-coaX), K03524 (birA), 6.3.4.15, R05145" />
+<area shape=rect	coords=196,389,242,406	href="/dbget-bin/www_bget?K01942+6.3.4.9+R05145"	title="K01942 (HLCS), 6.3.4.9, R05145" />
+<area shape=rect	coords=244,281,290,298	href="/dbget-bin/www_bget?K01942+K01947+K03524+6.3.4.15+R01074"	title="K01942 (HLCS), K01947 (birA-coaX), K03524 (birA), 6.3.4.15, R01074" />
+<area shape=rect	coords=196,281,242,298	href="/dbget-bin/www_bget?K01942+6.3.4.11+R01074"	title="K01942 (HLCS), 6.3.4.11, R01074" />
+<area shape=rect	coords=345,251,391,268	href="/dbget-bin/www_bget?K01435+3.5.1.12+R01077"	title="K01435 (BTD), 3.5.1.12, R01077" />
+<area shape=rect	coords=291,215,337,232	href="/dbget-bin/www_bget?K01012+2.8.1.6+R01078"	title="K01012 (E2.8.1.6, bioB), 2.8.1.6, R01078" />
+<area shape=rect	coords=344,187,390,204	href="/dbget-bin/www_bget?K01935+6.3.3.3+R03182"	title="K01935 (bioD), 6.3.3.3, R03182" />
+<area shape=rect	coords=388,154,434,171	href="/dbget-bin/www_bget?K00833+2.6.1.62+R03231"	title="K00833 (E2.6.1.62, bioA), 2.6.1.62, R03231" />
+<area shape=rect	coords=338,400,384,417	href="/dbget-bin/www_bget?K01423+3.4.-.-+R04869"	title="K01423 (E3.4.-.-), 3.4.-.-, R04869" />
+<area shape=rect	coords=321,129,367,146	href="/dbget-bin/www_bget?K00652+2.3.1.47+R03210"	title="K00652 (bioF), 2.3.1.47, R03210" />
+<area shape=rect	coords=192,129,238,146	href="/dbget-bin/www_bget?K01906+6.2.1.14+R03209"	title="K01906 (bioW), 6.2.1.14, R03209" />
+<area shape=rect	coords=244,389,290,406	href="/dbget-bin/www_bget?K01942+6.3.4.10+R05145"	title="K01942 (HLCS), 6.3.4.10, R05145" />
+<area shape=rect	coords=105,252,151,269	href="/dbget-bin/www_bget?6.2.1.11+R03762"	title="6.2.1.11, 6.2.1.11, R03762" />
+<area shape=rect	coords=217,241,263,258	href="/dbget-bin/www_bget?6.2.1.11+R01074"	title="6.2.1.11, 6.2.1.11, R01074" />
+<area shape=rect	coords=244,262,290,279	href="/dbget-bin/www_bget?K01942+6.3.4.10+R01074"	title="K01942 (HLCS), 6.3.4.10, R01074" />
+<area shape=rect	coords=180,339,306,385	href="/kegg-bin/show_pathway?map00960"	title="map00960" />
+<area shape=rect	coords=40,45,217,71	href="/dbget-bin/www_bget?map00780"	title="map00780" />
+<area shape=rect	coords=203,303,287,337	href="/kegg-bin/show_pathway?map00310"	title="map00310" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

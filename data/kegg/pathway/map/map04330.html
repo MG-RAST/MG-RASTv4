@@ -1,0 +1,183 @@
+<html>
+<!---
+ENTRY       map04330
+DEFINITION  Notch signaling pathway - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Notch signaling pathway - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Notch signaling pathway - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04330&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04330">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The Notch signaling pathway is an evolutionarily conserved, intercellular signaling mechanism essential for proper embryonic development in all metazoan organisms in the Animal kingdom. The Notch proteins (Notch1-Notch4 in vertebrates) are single-pass receptors that are activated by the Delta (or Delta-like) and Jagged/Serrate families of membrane-bound ligands. They are transported to the plasma membrane as cleaved, but otherwise intact polypeptides. Interaction with ligand leads to two additional proteolytic cleavages that liberate the Notch intracellular domain (NICD) from the plasma membrane. The NICD translocates to the nucleus, where it forms a complex with the DNA binding protein CSL, displacing a histone deacetylase (HDAc)-co-repressor (CoR) complex from CSL. Components of an activation complex, such as MAML1 and histone acetyltransferases (HATs), are recruited to the NICD-CSL complex, leading to the transcriptional activation of Notch target genes.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04330 map" -->
+</select>
+<input type="hidden" name="mapno" value="04330" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04330" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04330" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04330.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=240,281,286,298	href="/dbget-bin/www_bget?K06171"	title="K06171 (NCSTN)" />
+<area shape=rect	coords=286,281,332,298	href="/dbget-bin/www_bget?K06172"	title="K06172 (APH1)" />
+<area shape=rect	coords=286,264,332,281	href="/dbget-bin/www_bget?K04505+K04522+K06060"	title="K04505 (PSEN1, PS1), K04522 (PSEN2, PS2), K06060 (PSENN, PSN)" />
+<area shape=rect	coords=640,316,686,333	href="/dbget-bin/www_bget?K06067"	title="K06067 (HDAC1_2)" />
+<area shape=rect	coords=684,293,730,310	href="/dbget-bin/www_bget?K06066"	title="K06066 (CIR)" />
+<area shape=rect	coords=623,293,669,310	href="/dbget-bin/www_bget?K04497"	title="K04497 (GROUCHO)" />
+<area shape=rect	coords=573,293,619,310	href="/dbget-bin/www_bget?K04496"	title="K04496 (CTBP)" />
+<area shape=rect	coords=600,270,646,287	href="/dbget-bin/www_bget?K06064"	title="K06064 (HAIRLESS)" />
+<area shape=rect	coords=670,270,716,287	href="/dbget-bin/www_bget?K06065"	title="K06065 (NCOR2, SMRT)" />
+<area shape=rect	coords=787,225,833,242	href="/dbget-bin/www_bget?K06056"	title="K06056 (PTCRA)" />
+<area shape=rect	coords=787,196,833,213	href="/dbget-bin/www_bget?K06054+K06055"	title="K06054 (HES1), K06055 (HES5)" />
+<area shape=rect	coords=640,211,686,228	href="/dbget-bin/www_bget?K06053"	title="K06053 (RBPSUH, RBPJK)" />
+<area shape=rect	coords=662,172,708,189	href="/dbget-bin/www_bget?K06063"	title="K06063 (SNW1, SKIIP, SKIP)" />
+<area shape=rect	coords=585,180,631,197	href="/dbget-bin/www_bget?K04498+K06062"	title="K04498 (EP300, CREBBP, KAT3), K06062 (PCAF, KAT2, GCN5)" />
+<area shape=rect	coords=585,163,631,180	href="/dbget-bin/www_bget?K06061"	title="K06061 (MAML)" />
+<area shape=rect	coords=123,310,169,327	href="/dbget-bin/www_bget?K06059"	title="K06059 (ADAM17, TACE)" />
+<area shape=rect	coords=240,264,286,281	href="/dbget-bin/www_bget?K06170"	title="K06170 (PEN2)" />
+<area shape=rect	coords=310,185,356,202	href="/dbget-bin/www_bget?K06058"	title="K06058 (DTX)" />
+<area shape=rect	coords=274,155,320,172	href="/dbget-bin/www_bget?K06057"	title="K06057 (NUMBL)" />
+<area shape=rect	coords=60,257,106,274	href="/dbget-bin/www_bget?K06052"	title="K06052 (JAGGED)" />
+<area shape=rect	coords=166,211,212,228	href="/dbget-bin/www_bget?K02599"	title="K02599 (NOTCH)" />
+<area shape=rect	coords=221,136,267,153	href="/dbget-bin/www_bget?K02353"	title="K02353 (DVL)" />
+<area shape=rect	coords=114,135,160,152	href="/dbget-bin/www_bget?K05948"	title="K05948 (FNG)" />
+<area shape=rect	coords=60,211,106,228	href="/dbget-bin/www_bget?K06051"	title="K06051 (DLL)" />
+<area shape=rect	coords=339,375,449,416	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,280,71	href="/dbget-bin/www_bget?map04330"	title="map04330" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

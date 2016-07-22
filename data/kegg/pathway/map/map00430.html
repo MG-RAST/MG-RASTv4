@@ -1,0 +1,202 @@
+<html>
+<!---
+ENTRY       map00430
+DEFINITION  Taurine and hypotaurine metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Taurine and hypotaurine metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Taurine and hypotaurine metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00430&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00430">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00430 map" -->
+</select>
+<input type="hidden" name="mapno" value="00430" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00430" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00430" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00430.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=243,395,4	href="/dbget-bin/www_bget?C00094"	title="C00094 (Sulfite)" />
+<area shape=circle	coords=211,364,4	href="/dbget-bin/www_bget?C06735"	title="C06735 (Aminoacetaldehyde)" />
+<area shape=circle	coords=412,400,4	href="/dbget-bin/www_bget?C00041"	title="C00041 (L-Alanine)" />
+<area shape=circle	coords=412,335,4	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=circle	coords=499,471,4	href="/dbget-bin/www_bget?C14179"	title="C14179 (Sulfoacetate)" />
+<area shape=circle	coords=259,432,4	href="/dbget-bin/www_bget?C00227"	title="C00227 (Acetyl phosphate)" />
+<area shape=circle	coords=166,432,4	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=circle	coords=243,193,4	href="/dbget-bin/www_bget?C00606"	title="C00606 (3-Sulfino-L-alanine)" />
+<area shape=circle	coords=362,193,4	href="/dbget-bin/www_bget?C00519"	title="C00519 (Hypotaurine)" />
+<area shape=circle	coords=243,144,4	href="/dbget-bin/www_bget?C01678"	title="C01678 (Cysteamine)" />
+<area shape=circle	coords=141,193,4	href="/dbget-bin/www_bget?C00097"	title="C00097 (L-Cysteine)" />
+<area shape=circle	coords=243,302,4	href="/dbget-bin/www_bget?C00506"	title="C00506 (L-Cysteate)" />
+<area shape=circle	coords=362,303,4	href="/dbget-bin/www_bget?C00245"	title="C00245 (Taurine)" />
+<area shape=circle	coords=362,432,4	href="/dbget-bin/www_bget?C00593"	title="C00593 (Sulfoacetaldehyde)" />
+<area shape=circle	coords=362,510,4	href="/dbget-bin/www_bget?C05123"	title="C05123 (2-Hydroxyethanesulfonate)" />
+<area shape=circle	coords=499,302,4	href="/dbget-bin/www_bget?C01959"	title="C01959 (Taurocyamine)" />
+<area shape=circle	coords=625,302,4	href="/dbget-bin/www_bget?C03149"	title="C03149 (N-Phosphotaurocyamine)" />
+<area shape=circle	coords=497,230,4	href="/dbget-bin/www_bget?C05844"	title="C05844 (5-L-Glutamyl-taurine)" />
+<area shape=circle	coords=226,341,4	href="/dbget-bin/www_bget?C05122"	title="C05122 (Taurocholate)" />
+<area shape=circle	coords=259,511,4	href="/dbget-bin/www_bget?C00033"	title="C00033 (Acetate)" />
+<area shape=rect	coords=251,356,297,373	href="/dbget-bin/www_bget?K03119+1.14.11.17+R05320"	title="K03119 (E1.14.11.17, tauD), 1.14.11.17, R05320" />
+<area shape=rect	coords=313,464,359,481	href="/dbget-bin/www_bget?K05888+R06981"	title="K05888 (E1.1.2.-), R06981" />
+<area shape=rect	coords=405,463,451,480	href="/dbget-bin/www_bget?1.2.1.73+R06980"	title="1.2.1.73, 1.2.1.73, R06980" />
+<area shape=rect	coords=390,359,436,376	href="/dbget-bin/www_bget?K00259+1.4.1.1+R00396"	title="K00259 (ald), 1.4.1.1, R00396" />
+<area shape=rect	coords=190,424,236,441	href="/dbget-bin/www_bget?K00625+2.3.1.8+R00230"	title="K00625 (E2.3.1.8, pta), 2.3.1.8, R00230" />
+<area shape=rect	coords=297,424,343,441	href="/dbget-bin/www_bget?K03852+2.3.3.15+R05651"	title="K03852 (E2.3.3.15), 2.3.3.15, R05651" />
+<area shape=rect	coords=339,359,385,376	href="/dbget-bin/www_bget?K03851+2.6.1.77+R05652"	title="K03851 (E2.6.1.77), 2.6.1.77, R05652" />
+<area shape=rect	coords=452,359,498,376	href="/dbget-bin/www_bget?K07255+K07256+1.4.2.-+R01685"	title="K07255 (tauX), K07256 (tauY), 1.4.2.-, R01685" />
+<area shape=rect	coords=536,293,582,310	href="/dbget-bin/www_bget?2.7.3.4+R03785"	title="2.7.3.4, 2.7.3.4, R03785" />
+<area shape=rect	coords=277,304,323,321	href="/dbget-bin/www_bget?K01594+4.1.1.29+R01682"	title="K01594 (E4.1.1.29, CSAD), 4.1.1.29, R01682" />
+<area shape=rect	coords=277,283,323,300	href="/dbget-bin/www_bget?K01580+4.1.1.15+R01682"	title="K01580 (E4.1.1.15, gadB), 4.1.1.15, R01682" />
+<area shape=rect	coords=164,293,210,310	href="/dbget-bin/www_bget?4.4.1.10+R00901"	title="4.4.1.10, 4.4.1.10, R00901" />
+<area shape=rect	coords=340,235,386,252	href="/dbget-bin/www_bget?1.8.1.3+R01681"	title="1.8.1.3, 1.8.1.3, R01681" />
+<area shape=rect	coords=164,186,210,203	href="/dbget-bin/www_bget?K00456+1.13.11.20+R00893"	title="K00456 (E1.13.11.20, CDO1), 1.13.11.20, R00893" />
+<area shape=rect	coords=277,136,323,153	href="/dbget-bin/www_bget?K10712+1.13.11.19+R02467"	title="K10712 (E1.13.11.19, ADO), 1.13.11.19, R02467" />
+<area shape=rect	coords=277,195,323,212	href="/dbget-bin/www_bget?K01594+4.1.1.29+R02466"	title="K01594 (E4.1.1.29, CSAD), 4.1.1.29, R02466" />
+<area shape=rect	coords=277,174,323,191	href="/dbget-bin/www_bget?K01580+4.1.1.15+R02466"	title="K01580 (E4.1.1.15, gadB), 4.1.1.15, R02466" />
+<area shape=rect	coords=423,222,469,239	href="/dbget-bin/www_bget?K00681+2.3.2.2+R01687"	title="K00681 (ggt), 2.3.2.2, R01687" />
+<area shape=rect	coords=251,331,297,348	href="/dbget-bin/www_bget?K00659+2.3.1.65+R03720"	title="K00659 (BAAT), 2.3.1.65, R03720" />
+<area shape=rect	coords=236,464,282,481	href="/dbget-bin/www_bget?K00925+2.7.2.1+R00315"	title="K00925 (E2.7.2.1, ackA), 2.7.2.1, R00315" />
+<area shape=poly	coords=241,197,241,296,245,296,245,197	href="/dbget-bin/www_bget?R02434"	title="R02434" />
+<area shape=poly	coords=243,296,239,288,247,288	href="/dbget-bin/www_bget?R02434"	title="R02434" />
+<area shape=rect	coords=112,378,186,413	href="/kegg-bin/show_pathway?map00920"	title="map00920" />
+<area shape=rect	coords=35,416,109,451	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=40,45,364,71	href="/dbget-bin/www_bget?map00430"	title="map00430" />
+<area shape=rect	coords=32,149,108,184	href="/kegg-bin/show_pathway?map00480"	title="map00480" />
+<area shape=rect	coords=50,107,155,142	href="/kegg-bin/show_pathway?map00460"	title="map00460" />
+<area shape=rect	coords=156,230,236,276	href="/kegg-bin/show_pathway?map00270"	title="map00270" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

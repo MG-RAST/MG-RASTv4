@@ -1,0 +1,200 @@
+<html>
+<!---
+ENTRY       map05330
+DEFINITION  Allograft rejection - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Allograft rejection - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Allograft rejection - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05330&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05330">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+After transplantation of organ allografts, there are two pathways of antigen presentation. In the direct pathway, recipient T cells react to intact allogeneic MHC molecules expressed on the surface of donor cells. This pathway would activate host CD4 or CD8 T cells. In contrast, donor MHC molecules (and all other proteins) shed from the graft can be taken up by host APCs and presented to recipient T cells in the context of self-MHC molecules - the indirect pathway. Such presentation activates predominantly CD4 T cells. A direct cytotoxic T-cell attack on graft cells can be made only by T cells that recognize the graft MHC molecules directly. Nontheless, T cells with indirect allospecificity can contribute to graft rejection by activating macrophages, which cause tissue injury and fibrosis, and are also likely to be important in the development of an alloantibody response to graft.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05330 map" -->
+</select>
+<input type="hidden" name="mapno" value="05330" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05330" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05330" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05330.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=979,342,4	href="/dbget-bin/www_bget?C00533"	title="C00533 (Nitric oxide)" />
+<area shape=rect	coords=178,486,224,503	href="/dbget-bin/www_bget?K06751+K06752"	title="K06751 (MHC1), K06752 (MHC2)" />
+<area shape=rect	coords=630,209,676,226	href="/dbget-bin/www_bget?K05429"	title="K05429 (IL2)" />
+<area shape=rect	coords=374,517,420,534	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=455,517,501,534	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=374,316,420,333	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=454,316,500,333	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=709,515,755,532	href="/dbget-bin/www_bget?K03161"	title="K03161 (TNFSF5, CD40L)" />
+<area shape=rect	coords=793,515,839,532	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=709,540,755,557	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=793,540,839,557	href="/dbget-bin/www_bget?K06752"	title="K06752 (MHC2)" />
+<area shape=rect	coords=833,489,879,506	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=1000,153,1046,170	href="/dbget-bin/www_bget?K04390"	title="K04390 (TNFRSF6, FAS)" />
+<area shape=rect	coords=923,153,969,170	href="/dbget-bin/www_bget?K04389"	title="K04389 (TNFSF6, FASL)" />
+<area shape=rect	coords=923,125,969,142	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=1000,125,1046,142	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=960,220,1006,237	href="/dbget-bin/www_bget?K01353"	title="K01353 (GZMB)" />
+<area shape=rect	coords=960,195,1006,212	href="/dbget-bin/www_bget?K07818"	title="K07818 (PRF1)" />
+<area shape=rect	coords=937,530,983,547	href="/dbget-bin/www_bget?K06856"	title="K06856 (IGH)" />
+<area shape=rect	coords=755,439,801,456	href="/dbget-bin/www_bget?K05430"	title="K05430 (IL4)" />
+<area shape=rect	coords=755,460,801,477	href="/dbget-bin/www_bget?K05428"	title="K05428 (IL5)" />
+<area shape=rect	coords=374,338,420,355	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=454,339,500,356	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=455,540,501,557	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=755,482,801,499	href="/dbget-bin/www_bget?K05443"	title="K05443 (IL10, CSIF)" />
+<area shape=rect	coords=375,131,421,148	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=455,131,501,148	href="/dbget-bin/www_bget?K10784+K10785"	title="K10784 (TRAV), K10785 (TRBV)" />
+<area shape=rect	coords=755,379,801,396	href="/dbget-bin/www_bget?K04687"	title="K04687 (IFNG)" />
+<area shape=rect	coords=375,153,421,170	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=455,154,501,171	href="/dbget-bin/www_bget?K06470"	title="K06470 (CD28)" />
+<area shape=rect	coords=793,323,839,340	href="/dbget-bin/www_bget?K03160"	title="K03160 (TNFRSF5, CD40)" />
+<area shape=rect	coords=709,323,755,340	href="/dbget-bin/www_bget?K03161"	title="K03161 (TNFSF5, CD40L)" />
+<area shape=rect	coords=956,310,1002,327	href="/dbget-bin/www_bget?K03156"	title="K03156 (TNFA)" />
+<area shape=rect	coords=416,192,462,209	href="/dbget-bin/www_bget?K05406+K05425"	title="K05406 (IL12A), K05425 (IL12B)" />
+<area shape=rect	coords=374,540,420,557	href="/dbget-bin/www_bget?K05412+K05413"	title="K05412 (CD80), K05413 (CD86)" />
+<area shape=rect	coords=1007,530,1053,547	href="/dbget-bin/www_bget?K06751+K06752"	title="K06751 (MHC1), K06752 (MHC2)" />
+<area shape=rect	coords=470,230,584,265	href="/kegg-bin/show_pathway?map04660"	title="map04660" />
+<area shape=rect	coords=152,565,265,600	href="/kegg-bin/show_pathway?map04612"	title="map04612" />
+<area shape=rect	coords=377,409,491,444	href="/kegg-bin/show_pathway?map04514"	title="map04514" />
+<area shape=rect	coords=722,608,835,643	href="/kegg-bin/show_pathway?map04662"	title="map04662" />
+<area shape=rect	coords=40,45,230,71	href="/dbget-bin/www_bget?map05330"	title="map05330" />
+<area shape=rect	coords=1037,207,1150,233	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=899,609,1012,644	href="/kegg-bin/show_pathway?map04610"	title="map04610" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

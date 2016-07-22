@@ -1,0 +1,210 @@
+<html>
+<!---
+ENTRY       map05220
+DEFINITION  Chronic myeloid leukemia - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Chronic myeloid leukemia - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Chronic myeloid leukemia - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05220&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05220">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Chronic myelogenous leukaemia (CML) is a biphasic disease, initiated by expression of the BCR/ABL fusion gene product in self-renewing, haematopoietic stem cells (HSCs). HSCs can differentiate into common myeloid progenitors (CMPs), which then differentiate into granulocyte/macrophage progenitors (GMPs). HSCs can also differentiate into common lymphoid progenitors (CLPs), which are the progenitors of lymphocytes such as T cells and B cells. The initial chronic phase of CML (CML-CP) is characterized by a massive expansion of the granulocytic-cell series. Acquisition of additional genetic mutations beyond expression of BCR/ABL causes the progression of CML from chronic phase to blast phase (CML-BP), characterized by an accumulation of myeloid or lymphoid blast cells. <br />&nbsp;&nbsp; The BCR/ABL fusion gene encodes p210BCR/ABL, an oncoprotein, which, unlike the normal p145 c-Abl, has constitutive tyrosine kinase activity and is predominantly localized in the cytoplasm. The tyrosine kinase activity is essential for cell transformation and the cytoplasmic localization of BCR/ABL allows the assembly of phosphorylated substrates in multiprotein complexes that transmit mitogenic and antiapoptotic signals. Additional cytogenetic and molecular changes are frequently found in patients with CML during the progression of the disease from chronic to blast phase. Some of the genetic changes include mutations in TP53, RB, and CDKN2A (also known as p16INK4A), or overexpression of genes such as EVI1. Additional chromosome translocations are also observed, such as t(3;21)(q26;q22), which generates AML1/EVI1. AML1/EVI-1 represses TGF-beta-mediated growth inhibitory signal.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05220 map" -->
+</select>
+<input type="hidden" name="mapno" value="05220" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05220" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05220" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05220.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=506,174,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=rect	coords=921,748,967,765	href="/dbget-bin/www_bget?K04462+K08367"	title="K04462 (EVI1), K08367 (RUNX1, AML1)" />
+<area shape=rect	coords=1032,364,1078,381	href="/dbget-bin/www_bget?K04570"	title="K04570 (BCL2L1, bcl-xL)" />
+<area shape=rect	coords=473,226,519,243	href="/dbget-bin/www_bget?K07293"	title="K07293 (PTPN11)" />
+<area shape=rect	coords=278,165,324,182	href="/dbget-bin/www_bget?K06619+K08878"	title="K06619 (ABL1), K08878 (BCR1, BCR)" />
+<area shape=rect	coords=892,199,938,216	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=955,669,1001,686	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=146,790,192,807	href="/dbget-bin/www_bget?K04384"	title="K04384 (TGFB)" />
+<area shape=rect	coords=1001,755,1047,772	href="/dbget-bin/www_bget?K06067"	title="K06067 (HDAC1_2)" />
+<area shape=rect	coords=1001,738,1047,755	href="/dbget-bin/www_bget?K04496"	title="K04496 (CTBP)" />
+<area shape=rect	coords=921,726,967,743	href="/dbget-bin/www_bget?K04462"	title="K04462 (EVI1)" />
+<area shape=rect	coords=891,335,937,352	href="/dbget-bin/www_bget?K04377"	title="K04377 (MYC)" />
+<area shape=rect	coords=228,799,274,816	href="/dbget-bin/www_bget?K04388"	title="K04388 (TGFBR2)" />
+<area shape=rect	coords=228,782,274,799	href="/dbget-bin/www_bget?K04674"	title="K04674 (TGFBR1)" />
+<area shape=rect	coords=370,362,416,379	href="/dbget-bin/www_bget?K11223+K11224"	title="K11223 (STAT5A), K11224 (STAT5B)" />
+<area shape=rect	coords=403,822,449,839	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=772,175,818,192	href="/dbget-bin/www_bget?K02580+K04735"	title="K02580 (NFKB1), K04735 (RELA)" />
+<area shape=rect	coords=772,141,818,158	href="/dbget-bin/www_bget?K04734"	title="K04734 (NFKBIA)" />
+<area shape=rect	coords=693,232,739,249	href="/dbget-bin/www_bget?K06624"	title="K06624 (CDKN1B, P27, KIP1)" />
+<area shape=rect	coords=693,199,739,216	href="/dbget-bin/www_bget?K06643"	title="K06643 (MDM2)" />
+<area shape=rect	coords=693,140,739,157	href="/dbget-bin/www_bget?K04467+K07209+K07210"	title="K04467 (IKBKA, IKKA, CHUK), K07209 (IKBKB, IKKB), K07210 (IKBKG, IKKG, NEMO)" />
+<area shape=rect	coords=693,112,739,129	href="/dbget-bin/www_bget?K04570"	title="K04570 (BCL2L1, bcl-xL)" />
+<area shape=rect	coords=622,112,668,129	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=1016,435,1062,452	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=886,531,932,548	href="/dbget-bin/www_bget?K06625"	title="K06625 (CDKN1A, P21, CIP1)" />
+<area shape=rect	coords=449,254,495,271	href="/dbget-bin/www_bget?K03099"	title="K03099 (SOS)" />
+<area shape=rect	coords=389,234,435,251	href="/dbget-bin/www_bget?K04364"	title="K04364 (GRB2)" />
+<area shape=rect	coords=389,295,435,312	href="/dbget-bin/www_bget?K06279"	title="K06279 (SHC)" />
+<area shape=rect	coords=410,199,456,216	href="/dbget-bin/www_bget?K08091"	title="K08091 (GAB2)" />
+<area shape=rect	coords=354,182,400,199	href="/dbget-bin/www_bget?K04438"	title="K04438 (CRK, CRKII)" />
+<area shape=rect	coords=354,165,400,182	href="/dbget-bin/www_bget?K04707"	title="K04707 (CBL)" />
+<area shape=rect	coords=354,148,400,165	href="/dbget-bin/www_bget?K04438"	title="K04438 (CRK, CRKII)" />
+<area shape=rect	coords=934,435,980,452	href="/dbget-bin/www_bget?K06643"	title="K06643 (MDM2)" />
+<area shape=rect	coords=886,465,932,482	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=1033,604,1079,621	href="/dbget-bin/www_bget?K06620+K09389"	title="K06620 (E2F1_3), K09389 (E2F2)" />
+<area shape=rect	coords=1033,567,1079,584	href="/dbget-bin/www_bget?K06618"	title="K06618 (RB1)" />
+<area shape=rect	coords=403,790,449,807	href="/dbget-bin/www_bget?hsa:4088+mmu:17127+rno:25631"	title="4088, 17127, 25631" />
+<area shape=rect	coords=950,574,996,591	href="/dbget-bin/www_bget?K02089+K02091"	title="K02089 (CDK4), K02091 (CDK6)" />
+<area shape=rect	coords=950,557,996,574	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=535,165,581,182	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=429,166,475,183	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=887,599,933,616	href="/dbget-bin/www_bget?K06621"	title="K06621 (CDKN2A, P16, INK4A)" />
+<area shape=rect	coords=772,264,818,281	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=693,264,739,281	href="/dbget-bin/www_bget?K04368+K04369"	title="K04368 (MAP2K1, MEK1), K04369 (MAP2K2, MEK2)" />
+<area shape=rect	coords=612,264,658,281	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=530,264,576,281	href="/dbget-bin/www_bget?K02833+K07827+K07828"	title="K02833 (HRAS), K07827 (KRAS, KRAS2), K07828 (NRAS)" />
+<area shape=rect	coords=730,658,833,693	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=522,752,625,787	href="/kegg-bin/show_pathway?map04350"	title="map04350" />
+<area shape=rect	coords=114,575,226,610	href="/kegg-bin/show_pathway?map04640"	title="map04640" />
+<area shape=rect	coords=868,102,971,137	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=622,289,725,324	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=40,45,279,71	href="/dbget-bin/www_bget?map05220"	title="map05220" />
+<area shape=rect	coords=1001,489,1104,524	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

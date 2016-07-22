@@ -1,0 +1,52 @@
+<html>
+<!---
+ENTRY       map05112
+DEFINITION   - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY:  - Reference pathway
+</title>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css">
+<script language="JavaScript">
+<!---
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+
+<body>
+<form name="selmenu" method="GET" action="/dbget-bin/get_pathway">
+
+<table cellpadding="0" width="100%" cellspacing="0" border="0"><tr><td>
+<a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif"></a>
+&nbsp;&nbsp;&nbsp;<font class="title3"><b> - Reference pathway</b></font></td>
+<td valign="bottom" align="right"><a target="_blank" href="/kegg/document/help_pathway.html">
+<img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')"></a>
+</td></tr></table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+| <a href="http://www.genome.jp/kegg-bin/path_ref_list?pathway=05112">Reference list</a>
+]
+<br>
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05112 map" -->
+</select>
+
+<input type="submit" value="Go">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_pathway_objects btn_deforg 05112" -->
+<input type="hidden" name="mapno" value="05112">
+<br>
+<img src="/kegg/pathway/map/map05112.gif" usemap="#mapdata" border=0>
+<map name="mapdata">
+
+<area shape=rect	coords=531,160,624,196	href="/kegg/pathway/vch/vch03090.html">
+<area shape=rect	coords=45,21,214,47	href="http://www.genome.jp/dbget-bin/get_linkdb?pathway+map05112">
+
+</map>
+
+</form>
+</body>
+<!---
+///
+--->
+</html>

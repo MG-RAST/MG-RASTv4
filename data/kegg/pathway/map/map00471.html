@@ -1,0 +1,187 @@
+<html>
+<!---
+ENTRY       map00471
+DEFINITION  D-Glutamine and D-glutamate metabolism - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: D-Glutamine and D-glutamate metabolism - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>D-Glutamine and D-glutamate metabolism - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00471&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00471">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00471 map" -->
+</select>
+<input type="hidden" name="mapno" value="00471" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00471" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00471" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00471.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=196,132,4	href="/dbget-bin/www_bget?C00064"	title="C00064 (L-Glutamine)" />
+<area shape=circle	coords=345,132,4	href="/dbget-bin/www_bget?C00819"	title="C00819 (D-Glutamine)" />
+<area shape=circle	coords=559,128,4	href="/dbget-bin/www_bget?C03933"	title="C03933 (5-D-Glutamyl-D-glutamyl-peptide)" />
+<area shape=circle	coords=74,209,4	href="/dbget-bin/www_bget?C05723"	title="C05723 (Poly-gamma-D-glutamate)" />
+<area shape=circle	coords=196,209,4	href="/dbget-bin/www_bget?C00025"	title="C00025 (L-Glutamate)" />
+<area shape=circle	coords=345,209,4	href="/dbget-bin/www_bget?C00217"	title="C00217 (D-Glutamate)" />
+<area shape=circle	coords=438,170,4	href="/dbget-bin/www_bget?C02671"	title="C02671 (D-Glutamyl-peptide)" />
+<area shape=circle	coords=559,212,4	href="/dbget-bin/www_bget?C00692"	title="C00692 (UDP-N-acetylmuramoyl-L-alanyl-D-glutamate)" />
+<area shape=circle	coords=438,238,4	href="/dbget-bin/www_bget?C01212"	title="C01212 (UDP-N-acetylmuramoyl-L-alanine)" />
+<area shape=circle	coords=438,304,4	href="/dbget-bin/www_bget?C01050"	title="C01050 (UDP-N-acetylmuramate)" />
+<area shape=circle	coords=345,304,4	href="/dbget-bin/www_bget?C02237"	title="C02237 (5-Oxo-D-proline)" />
+<area shape=circle	coords=196,304,4	href="/dbget-bin/www_bget?C00026"	title="C00026 (2-Oxoglutarate)" />
+<area shape=rect	coords=479,120,525,137	href="/dbget-bin/www_bget?2.3.2.1+R04012"	title="2.3.2.1, 2.3.2.1, R04012" />
+<area shape=rect	coords=415,268,461,285	href="/dbget-bin/www_bget?K01924+6.3.2.8+R03193"	title="K01924 (murC), 6.3.2.8, R03193" />
+<area shape=rect	coords=481,203,527,220	href="/dbget-bin/www_bget?K01925+6.3.2.9+R02783"	title="K01925 (murD), 6.3.2.9, R02783" />
+<area shape=rect	coords=321,247,367,264	href="/dbget-bin/www_bget?4.2.1.48+R01583"	title="4.2.1.48, 4.2.1.48, R01583" />
+<area shape=rect	coords=218,247,264,264	href="/dbget-bin/www_bget?1.4.3.7+R00279"	title="1.4.3.7, 1.4.3.7, R00279" />
+<area shape=rect	coords=164,247,210,264	href="/dbget-bin/www_bget?K00261+1.4.1.3+R00243+R00248"	title="K00261 (E1.4.1.3), 1.4.1.3, R00243, R00248" />
+<area shape=rect	coords=247,194,293,211	href="/dbget-bin/www_bget?K01776+5.1.1.3+R00260"	title="K01776 (E5.1.1.3, murI), 5.1.1.3, R00260" />
+<area shape=rect	coords=370,161,416,178	href="/dbget-bin/www_bget?K05597+3.5.1.38+R01579"	title="K05597 (E3.5.1.38), 3.5.1.38, R01579" />
+<area shape=rect	coords=322,161,368,178	href="/dbget-bin/www_bget?3.5.1.35+R01579"	title="3.5.1.35, 3.5.1.35, R01579" />
+<area shape=rect	coords=274,161,320,178	href="/dbget-bin/www_bget?K01425+3.5.1.2+R01579"	title="K01425 (E3.5.1.2, glsA), 3.5.1.2, R01579" />
+<area shape=rect	coords=247,134,293,151	href="/dbget-bin/www_bget?5.1.1.10+R00579"	title="5.1.1.10, 5.1.1.10, R00579" />
+<area shape=rect	coords=247,113,293,130	href="/dbget-bin/www_bget?5.1.1.9+R00579"	title="5.1.1.9, 5.1.1.9, R00579" />
+<area shape=rect	coords=148,161,194,178	href="/dbget-bin/www_bget?K01425+3.5.1.2+R00256"	title="K01425 (E3.5.1.2, glsA), 3.5.1.2, R00256" />
+<area shape=rect	coords=198,161,244,178	href="/dbget-bin/www_bget?K05597+3.5.1.38+R00256"	title="K05597 (E3.5.1.38), 3.5.1.38, R00256" />
+<area shape=rect	coords=268,247,314,264	href="/dbget-bin/www_bget?1.4.3.15+R00279"	title="1.4.3.15, 1.4.3.15, R00279" />
+<area shape=rect	coords=40,45,409,71	href="/dbget-bin/www_bget?map00471"	title="map00471" />
+<area shape=rect	coords=644,195,732,230	href="/kegg-bin/show_pathway?map00550"	title="map00550" />
+<area shape=rect	coords=495,287,650,322	href="/kegg-bin/show_pathway?map00520"	title="map00520" />
+<area shape=rect	coords=62,291,143,317	href="/kegg-bin/show_pathway?map00020"	title="map00020" />
+<area shape=rect	coords=62,251,137,286	href="/kegg-bin/show_pathway?map00251"	title="map00251" />
+<area shape=rect	coords=52,116,154,151	href="/kegg-bin/show_pathway?map00460"	title="map00460" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

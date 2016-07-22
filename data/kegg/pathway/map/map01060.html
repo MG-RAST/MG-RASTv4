@@ -1,0 +1,325 @@
+<html>
+<!---
+ENTRY       map01060
+DEFINITION  Biosynthesis of plant secondary metabolites - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Biosynthesis of plant secondary metabolites - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Biosynthesis of plant secondary metabolites - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=01060&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map01060">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 01060 map" -->
+</select>
+<input type="hidden" name="mapno" value="01060" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map01060" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map01060" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map01060.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=396,568,493,646	href="/dbget-bin/www_bget?C01852"	title="C01852 (Secologanin)" />
+<area shape=rect	coords=434,937,537,993	href="/dbget-bin/www_bget?C01179"	title="C01179 (3-(4-Hydroxyphenyl)pyruvate)" />
+<area shape=rect	coords=242,949,331,994	href="/dbget-bin/www_bget?C03765"	title="C03765 (4-Hydroxyphenylacetaldehyde)" />
+<area shape=rect	coords=436,1038,537,1094	href="/dbget-bin/www_bget?C00355"	title="C00355 (3,4-Dihydroxy-L-phenylalanine)" />
+<area shape=rect	coords=449,1141,526,1179	href="/dbget-bin/www_bget?C00483"	title="C00483 (Tyramine)" />
+<area shape=rect	coords=308,1137,383,1178	href="/dbget-bin/www_bget?C03758"	title="C03758 (Dopamine)" />
+<area shape=rect	coords=600,1130,699,1178	href="/dbget-bin/www_bget?C00082"	title="C00082 (L-Tyrosine)" />
+<area shape=rect	coords=596,1246,698,1299	href="/dbget-bin/www_bget?C01179"	title="C01179 (3-(4-Hydroxyphenyl)pyruvate)" />
+<area shape=rect	coords=602,1369,690,1420	href="/dbget-bin/www_bget?C00166"	title="C00166 (Phenylpyruvate)" />
+<area shape=rect	coords=456,1367,543,1420	href="/dbget-bin/www_bget?C00079"	title="C00079 (L-Phenylalanine)" />
+<area shape=rect	coords=409,1523,604,1580	href="/dbget-bin/www_bget?C06866"	title="C06866 (Capsaicin)" />
+<area shape=rect	coords=1240,1198,1314,1248	href="/dbget-bin/www_bget?C00049"	title="C00049 (L-Aspartate)" />
+<area shape=rect	coords=882,1563,936,1609	href="/dbget-bin/www_bget?C01234"	title="C01234 (1-Aminocyclopropane-1-carboxylate)" />
+<area shape=rect	coords=778,1568,822,1606	href="/dbget-bin/www_bget?C06547"	title="C06547 (Ethylene)" />
+<area shape=rect	coords=1128,1180,1188,1232	href="/dbget-bin/www_bget?C00253"	title="C00253 (Nicotinate)" />
+<area shape=rect	coords=929,1131,1006,1183	href="/dbget-bin/www_bget?C00152"	title="C00152 (L-Asparagine)" />
+<area shape=rect	coords=964,1348,1032,1363	href="/dbget-bin/www_bget?C00073"	title="C00073 (L-Methionine)" />
+<area shape=rect	coords=752,1373,845,1388	href="/dbget-bin/www_bget?C03089"	title="C03089 (5-Methylthio-D-ribose)" />
+<area shape=rect	coords=873,1272,950,1297	href="/dbget-bin/www_bget?C01180"	title="C01180 (4-Methylthio-2-oxobutanoic acid)" />
+<area shape=rect	coords=772,1317,866,1342	href="/dbget-bin/www_bget?C04188"	title="C04188 (S-Methyl-5-thio-D-ribose 1-phosphate)" />
+<area shape=rect	coords=912,1413,978,1438	href="/dbget-bin/www_bget?C00019"	title="C00019 (S-Adenosyl-L-methionine)" />
+<area shape=rect	coords=792,1413,859,1438	href="/dbget-bin/www_bget?C00170"	title="C00170 (5'-Methylthioadenosine)" />
+<area shape=rect	coords=1218,1076,1278,1126	href="/dbget-bin/www_bget?C00188"	title="C00188 (L-Threonine)" />
+<area shape=rect	coords=1307,1467,1368,1510	href="/dbget-bin/www_bget?C00047"	title="C00047 (L-Lysine)" />
+<area shape=rect	coords=1652,1491,1890,1523	href="/dbget-bin/www_bget?C07289"	title="C07289 (Crepenynate)" />
+<area shape=rect	coords=1903,1476,2034,1532	href="/dbget-bin/www_bget?C00712"	title="C00712 ((9Z)-Octadecenoic acid)" />
+<area shape=rect	coords=1904,1553,2034,1600	href="/dbget-bin/www_bget?C01595"	title="C01595 (Linoleate)" />
+<area shape=rect	coords=1901,1623,2036,1674	href="/dbget-bin/www_bget?C06427"	title="C06427 ((9Z,12Z,15Z)-Octadecatrienoic acid)" />
+<area shape=rect	coords=2050,1491,2286,1525	href="/dbget-bin/www_bget?C08366"	title="C08366 (Sterculic acid)" />
+<area shape=rect	coords=1610,996,1722,1045	href="/dbget-bin/www_bget?C00356"	title="C00356 ((S)-3-Hydroxy-3-methylglutaryl-CoA)" />
+<area shape=rect	coords=1621,881,1708,920	href="/dbget-bin/www_bget?C00418"	title="C00418 ((R)-Mevalonate)" />
+<area shape=rect	coords=2091,1619,2186,1675	href="/dbget-bin/www_bget?C08491"	title="C08491 ((-)-Jasmonic acid)" />
+<area shape=rect	coords=1634,739,1704,785	href="/dbget-bin/www_bget?C11434"	title="C11434 (2-C-Methyl-D-erythritol 4-phosphate)" />
+<area shape=rect	coords=1789,740,1862,771	href="/dbget-bin/www_bget?C00129"	title="C00129 (Isopentenyl diphosphate)" />
+<area shape=rect	coords=1796,1261,1911,1295	href="/dbget-bin/www_bget?C06423"	title="C06423 (Octanoic acid)" />
+<area shape=rect	coords=1751,1296,1956,1326	href="/dbget-bin/www_bget?C00249"	title="C00249 (Hexadecanoic acid)" />
+<area shape=rect	coords=1739,1330,1971,1365	href="/dbget-bin/www_bget?C01530"	title="C01530 (Octadecanoic acid)" />
+<area shape=rect	coords=1994,1246,2063,1287	href="/dbget-bin/www_bget?C10138"	title="C10138 (gamma-Coniceine)" />
+<area shape=rect	coords=2112,1245,2184,1285	href="/dbget-bin/www_bget?C06523"	title="C06523 (Coniine)" />
+<area shape=rect	coords=1766,1141,1848,1179	href="/dbget-bin/www_bget?C00083"	title="C00083 (Malonyl-CoA)" />
+<area shape=rect	coords=1950,1094,2043,1171	href="/dbget-bin/www_bget?C09049+C09010"	title="C09049 (Visnagin), C09010 (Khellin)" />
+<area shape=rect	coords=2081,742,2206,774	href="/dbget-bin/www_bget?C00341"	title="C00341 (Geranyl diphosphate)" />
+<area shape=rect	coords=2130,883,2241,915	href="/dbget-bin/www_bget?C01500"	title="C01500 (Geraniol)" />
+<area shape=rect	coords=2417,735,2593,775	href="/dbget-bin/www_bget?C00448"	title="C00448 (trans,trans-Farnesyl diphosphate)" />
+<area shape=rect	coords=2432,851,2721,894	href="/dbget-bin/www_bget?C00751"	title="C00751 (Squalene)" />
+<area shape=rect	coords=2453,959,2574,1046	href="/dbget-bin/www_bget?C01054"	title="C01054 ((S)-2,3-Epoxysqualene)" />
+<area shape=rect	coords=2430,1113,2584,1206	href="/dbget-bin/www_bget?C01902"	title="C01902 (Cycloartenol)" />
+<area shape=rect	coords=2305,1316,2458,1420	href="/dbget-bin/www_bget?C08817"	title="C08817 (Fucosterol)" />
+<area shape=rect	coords=2458,1322,2608,1422	href="/dbget-bin/www_bget?C01753"	title="C01753 (Sitosterol)" />
+<area shape=rect	coords=2612,1318,2762,1422	href="/dbget-bin/www_bget?C05442"	title="C05442 (Stigmasterol)" />
+<area shape=rect	coords=2764,1320,2915,1422	href="/dbget-bin/www_bget?C01789"	title="C01789 (Campesterol)" />
+<area shape=rect	coords=2744,1504,2889,1618	href="/dbget-bin/www_bget?C08814"	title="C08814 (Brassinolide)" />
+<area shape=rect	coords=2314,1515,2478,1606	href="/dbget-bin/www_bget?C08898"	title="C08898 (Diosgenin)" />
+<area shape=rect	coords=2743,1642,2900,1756	href="/dbget-bin/www_bget?C15794"	title="C15794 (Castasterone)" />
+<area shape=rect	coords=2316,1658,2479,1747	href="/dbget-bin/www_bget?C08902"	title="C08902 (Hecogenin)" />
+<area shape=rect	coords=1627,501,1706,552	href="/dbget-bin/www_bget?C11437"	title="C11437 (1-Deoxy-D-xylulose 5-phosphate)" />
+<area shape=rect	coords=1784,570,1860,602	href="/dbget-bin/www_bget?C00235"	title="C00235 (Dimethylallyl diphosphate)" />
+<area shape=rect	coords=2132,650,2355,682	href="/dbget-bin/www_bget?C05427"	title="C05427 (Phytyl diphosphate)" />
+<area shape=rect	coords=2393,649,2614,684	href="/dbget-bin/www_bget?C00353"	title="C00353 (Geranylgeranyl diphosphate)" />
+<area shape=rect	coords=2308,487,2696,531	href="/dbget-bin/www_bget?C05413"	title="C05413 (Phytoene)" />
+<area shape=rect	coords=2132,531,2362,577	href="/dbget-bin/www_bget?C02477"	title="C02477 (alpha-Tocopherol)" />
+<area shape=rect	coords=2312,400,2698,444	href="/dbget-bin/www_bget?C05432"	title="C05432 (Lycopene)" />
+<area shape=rect	coords=2335,288,2672,336	href="/dbget-bin/www_bget?C05435"	title="C05435 (gamma-Carotene)" />
+<area shape=rect	coords=2360,178,2648,235	href="/dbget-bin/www_bget?C02094"	title="C02094 (beta-Carotene)" />
+<area shape=rect	coords=2657,329,2949,386	href="/dbget-bin/www_bget?C05433"	title="C05433 (alpha-Carotene)" />
+<area shape=rect	coords=2061,609,2113,624	href="/dbget-bin/www_bget?C01628"	title="C01628 (Vitamin K)" />
+<area shape=rect	coords=1110,1281,1179,1354	href="/dbget-bin/www_bget?C03722"	title="C03722 (Pyridine-2,3-dicarboxylate)" />
+<area shape=rect	coords=1300,1710,1367,1764	href="/dbget-bin/www_bget?C00450"	title="C00450 ((S)-2,3,4,5-Tetrahydropyridine-2-carboxylate)" />
+<area shape=rect	coords=1068,1479,1121,1521	href="/dbget-bin/www_bget?C01672"	title="C01672 (Cadaverine)" />
+<area shape=rect	coords=1297,1591,1374,1633	href="/dbget-bin/www_bget?C04076"	title="C04076 (L-2-Aminoadipate 6-semialdehyde)" />
+<area shape=rect	coords=1207,1594,1242,1634	href="/dbget-bin/www_bget?C06181"	title="C06181 (Piperideine)" />
+<area shape=rect	coords=1938,194,2071,314	href="/dbget-bin/www_bget?C00032"	title="C00032 (Heme)" />
+<area shape=rect	coords=1942,343,2091,537	href="/dbget-bin/www_bget?C05306"	title="C05306 (Chlorophyll a)" />
+<area shape=rect	coords=1367,1261,1431,1276	href="/dbget-bin/www_bget?C00036"	title="C00036 (Oxaloacetate)" />
+<area shape=rect	coords=1514,1291,1549,1306	href="/dbget-bin/www_bget?C00158"	title="C00158 (Citrate)" />
+<area shape=rect	coords=1507,1331,1573,1346	href="/dbget-bin/www_bget?C00417"	title="C00417 (cis-Aconitate)" />
+<area shape=rect	coords=1502,1371,1548,1386	href="/dbget-bin/www_bget?C00311"	title="C00311 (Isocitrate)" />
+<area shape=rect	coords=1408,1420,1483,1435	href="/dbget-bin/www_bget?C00026"	title="C00026 (2-Oxoglutarate)" />
+<area shape=rect	coords=1348,1394,1419,1409	href="/dbget-bin/www_bget?C00091"	title="C00091 (Succinyl-CoA)" />
+<area shape=rect	coords=1339,1365,1388,1380	href="/dbget-bin/www_bget?C00042"	title="C00042 (Succinate)" />
+<area shape=rect	coords=1334,1328,1381,1343	href="/dbget-bin/www_bget?C00122"	title="C00122 (Fumarate)" />
+<area shape=rect	coords=1348,1296,1403,1311	href="/dbget-bin/www_bget?C00149"	title="C00149 ((S)-Malate)" />
+<area shape=rect	coords=2750,185,2858,239	href="/dbget-bin/www_bget?C06082"	title="C06082 (Abscisate)" />
+<area shape=rect	coords=410,1743,506,1820	href="/dbget-bin/www_bget?C00766"	title="C00766 (Flavanone)" />
+<area shape=rect	coords=277,1605,373,1679	href="/dbget-bin/www_bget?C01495"	title="C01495 (Flavonol)" />
+<area shape=rect	coords=756,928,841,979	href="/dbget-bin/www_bget?C00079"	title="C00079 (L-Phenylalanine)" />
+<area shape=rect	coords=984,1031,1045,1077	href="/dbget-bin/www_bget?C00183"	title="C00183 (L-Valine)" />
+<area shape=rect	coords=1268,1011,1316,1062	href="/dbget-bin/www_bget?C00041"	title="C00041 (L-Alanine)" />
+<area shape=rect	coords=1423,1044,1470,1092	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=rect	coords=863,1008,936,1058	href="/dbget-bin/www_bget?C00123"	title="C00123 (L-Leucine)" />
+<area shape=rect	coords=1423,1159,1479,1197	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=rect	coords=981,122,1057,226	href="/dbget-bin/www_bget?C04734"	title="C04734 (1-(5'-Phosphoribosyl)-5-formamido-4-imidazolecarboxamide)" />
+<area shape=rect	coords=1105,129,1187,227	href="/dbget-bin/www_bget?C04677"	title="C04677 (1-(5'-Phosphoribosyl)-5-amino-4-imidazolecarboxamide)" />
+<area shape=rect	coords=1247,186,1354,234	href="/dbget-bin/www_bget?C00119"	title="C00119 (5-Phospho-alpha-D-ribose 1-diphosphate)" />
+<area shape=rect	coords=1408,174,1490,235	href="/dbget-bin/www_bget?C00668"	title="C00668 (alpha-D-Glucose 6-phosphate)" />
+<area shape=rect	coords=1554,174,1634,236	href="/dbget-bin/www_bget?C00103"	title="C00103 (D-Glucose 1-phosphate)" />
+<area shape=rect	coords=1694,176,1786,234	href="/dbget-bin/www_bget?C00029"	title="C00029 (UDP-glucose)" />
+<area shape=rect	coords=1416,114,1471,129	href="/dbget-bin/www_bget?C00267"	title="C00267 (alpha-D-Glucose)" />
+<area shape=rect	coords=1259,64,1341,113	href="/dbget-bin/www_bget?C00135"	title="C00135 (L-Histidine)" />
+<area shape=rect	coords=1401,308,1494,357	href="/dbget-bin/www_bget?C05345"	title="C05345 (beta-D-Fructose 6-phosphate)" />
+<area shape=rect	coords=1405,429,1480,444	href="/dbget-bin/www_bget?C05378"	title="C05378 (beta-D-Fructose 1,6-bisphosphate)" />
+<area shape=rect	coords=1414,503,1484,554	href="/dbget-bin/www_bget?C00118"	title="C00118 (D-Glyceraldehyde 3-phosphate)" />
+<area shape=rect	coords=1264,499,1347,553	href="/dbget-bin/www_bget?C00279"	title="C00279 (D-Erythrose 4-phosphate)" />
+<area shape=rect	coords=1408,703,1482,752	href="/dbget-bin/www_bget?C00197"	title="C00197 (3-Phospho-D-glycerate)" />
+<area shape=rect	coords=1409,828,1473,843	href="/dbget-bin/www_bget?C00631"	title="C00631 (2-Phospho-D-glycerate)" />
+<area shape=rect	coords=1421,910,1470,959	href="/dbget-bin/www_bget?C00074"	title="C00074 (Phosphoenolpyruvate)" />
+<area shape=rect	coords=1403,628,1482,643	href="/dbget-bin/www_bget?C00236"	title="C00236 (3-Phospho-D-glyceroyl phosphate)" />
+<area shape=rect	coords=1048,900,1114,979	href="/dbget-bin/www_bget?C02637"	title="C02637 (3-Dehydroshikimate)" />
+<area shape=rect	coords=928,902,989,978	href="/dbget-bin/www_bget?C00493"	title="C00493 (Shikimate)" />
+<area shape=rect	coords=904,790,1014,847	href="/dbget-bin/www_bget?C00251"	title="C00251 (Chorismate)" />
+<area shape=rect	coords=754,780,839,859	href="/dbget-bin/www_bget?C00254"	title="C00254 (Prephenate)" />
+<area shape=rect	coords=928,673,981,735	href="/dbget-bin/www_bget?C00108"	title="C00108 (Anthranilate)" />
+<area shape=rect	coords=749,647,838,727	href="/dbget-bin/www_bget?C00078"	title="C00078 (L-Tryptophan)" />
+<area shape=rect	coords=504,675,585,729	href="/dbget-bin/www_bget?C00398"	title="C00398 (Tryptamine)" />
+<area shape=rect	coords=253,653,390,738	href="/dbget-bin/www_bget?C03470"	title="C03470 (3-alpha(S)-Strictosidine)" />
+<area shape=rect	coords=251,518,394,591	href="/dbget-bin/www_bget?C16724"	title="C16724 (Strictosamide)" />
+<area shape=rect	coords=1554,309,1618,359	href="/dbget-bin/www_bget?C00065"	title="C00065 (L-Serine)" />
+<area shape=rect	coords=1671,309,1710,357	href="/dbget-bin/www_bget?C00037"	title="C00037 (Glycine)" />
+<area shape=rect	coords=1779,309,1867,357	href="/dbget-bin/www_bget?C00430"	title="C00430 (5-Aminolevulinate)" />
+<area shape=rect	coords=1660,388,1724,438	href="/dbget-bin/www_bget?C00097"	title="C00097 (L-Cysteine)" />
+<area shape=rect	coords=692,1746,765,1818	href="/dbget-bin/www_bget?C00423"	title="C00423 (trans-Cinnamate)" />
+<area shape=rect	coords=795,1748,866,1819	href="/dbget-bin/www_bget?C00903"	title="C00903 (Cinnamaldehyde)" />
+<area shape=rect	coords=898,1747,961,1817	href="/dbget-bin/www_bget?C02394"	title="C02394 (Cinnamyl alcohol)" />
+<area shape=rect	coords=1084,1076,1156,1126	href="/dbget-bin/www_bget?C00407"	title="C00407 (L-Isoleucine)" />
+<area shape=rect	coords=1302,1852,1366,1902	href="/dbget-bin/www_bget?C00408"	title="C00408 (L-Pipecolate)" />
+<area shape=rect	coords=588,161,657,224	href="/dbget-bin/www_bget?C00385+C07481+C07130+C07480+C13747"	title="C00385 (Xanthine), C07481 (Caffeine), C07130 (Theophylline), C07480 (Theobromine), C13747 (1,7-Dimethylxanthine)" />
+<area shape=rect	coords=706,131,787,228	href="/dbget-bin/www_bget?C00655"	title="C00655 (Xanthosine 5'-phosphate)" />
+<area shape=rect	coords=829,129,906,227	href="/dbget-bin/www_bget?C00130"	title="C00130 (IMP)" />
+<area shape=rect	coords=707,298,785,394	href="/dbget-bin/www_bget?C00144"	title="C00144 (GMP)" />
+<area shape=rect	coords=828,299,903,393	href="/dbget-bin/www_bget?C00020"	title="C00020 (AMP)" />
+<area shape=rect	coords=950,307,1036,382	href="/dbget-bin/www_bget?C00371"	title="C00371 (Zeatin)" />
+<area shape=rect	coords=1524,1492,1611,1540	href="/dbget-bin/www_bget?C00064"	title="C00064 (L-Glutamine)" />
+<area shape=rect	coords=1422,1588,1509,1632	href="/dbget-bin/www_bget?C00025"	title="C00025 (L-Glutamate)" />
+<area shape=rect	coords=1430,1714,1518,1762	href="/dbget-bin/www_bget?C00077"	title="C00077 (L-Ornithine)" />
+<area shape=rect	coords=1568,1715,1678,1764	href="/dbget-bin/www_bget?C00062"	title="C00062 (L-Arginine)" />
+<area shape=rect	coords=1574,1855,1608,1902	href="/dbget-bin/www_bget?C06178"	title="C06178 (1-Methylpyrrolinium)" />
+<area shape=rect	coords=1428,1979,1501,2026	href="/dbget-bin/www_bget?C06366"	title="C06366 (Homospermidine)" />
+<area shape=rect	coords=1436,1864,1494,1902	href="/dbget-bin/www_bget?C00134"	title="C00134 (Putrescine)" />
+<area shape=rect	coords=2282,945,2403,971	href="/kegg-bin/show_pathway?@map00902/C01500/C17621/C17622/C06069/C06070/C06071/C01433/C01852/C11636/C01512/C01957"	title="PATH:map00902(C01500, C17621 (10-Hydroxygeraniol), C17622 (10-Oxogeranial), C06069 (Iridodial), C06070 (Iridotrial), C06071 (Deoxyloganin), C01433 (Loganin), C01852 (Secologanin), C11636 (7-Deoxyloganate), C01512 (Loganate), C01957)" />
+<area shape=rect	coords=2203,716,2387,742	href="/kegg-bin/show_pathway?@map00900/C00235/C00129/C00341/C00448/C00353"	title="PATH:map00900(C00235, C00129 (Isopentenyl diphosphate), C00341 (Geranyl diphosphate), C00448 (trans,trans-Farnesyl diphosphate), C00353)" />
+<area shape=rect	coords=2740,418,2871,444	href="/kegg-bin/show_pathway?map00906"	title="map00906" />
+<area shape=rect	coords=2096,368,2227,394	href="/kegg-bin/show_pathway?@map00860/C00032/C00486/C05306/C00430/C00931/C01024/C01051/C03263/C01079/C02191/C01708/C00500/C03516/C04536/C11829/C11830/C11831/C11832/C11850/C02880/C02139/C05799/C05798/C05307/C05797"	title="PATH:map00860(C00032, C00486 (Bilirubin), C05306 (Chlorophyll a), C00430 (5-Aminolevulinate), C00931 (Porphobilinogen), C01024 (Hydroxymethylbilane), C01051 (Uroporphyrinogen III), C03263 (Coproporphyrinogen III), C01079 (Protoporphyrinogen IX), C02191 (Protoporphyrin), C01708 (Hemoglobin), C00500 (Biliverdin), C03516 (Magnesium protoporphyrin), C04536 (Magnesium protoporphyrin monomethyl ester), C11829 (13(1)-Hydroxy-magnesium-protoporphyrin IX 13-monomethyl ester), C11830 (13(1)-Oxo-magnesium-protoporphyrin IX 13-monomethyl ester), C11831 (Divinylprotochlorophyllide), C11832 (Divinyl chlorophyllide a), C11850 (Divinylchlorophyll a), C02880 (Protochlorophyllide), C02139 (Chlorophyllide), C05799 (Bacterio-chlorophylls), C05798 (Bacterio-pheophytins), C05307 (Chlorophyll b), C05797)" />
+<area shape=rect	coords=1623,835,1754,861	href="/kegg-bin/show_pathway?@map00900/C00129/C11811/C11453/C11436/C11435/C11434/C11437/C00118/C00022"	title="PATH:map00900(C00129, C11811 (1-Hydroxy-2-methyl-2-butenyl 4-diphosphate), C11453 (2-C-Methyl-D-erythritol 2,4-cyclodiphosphate), C11436 (2-Phospho-4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol), C11435 (4-(Cytidine 5'-diphospho)-2-C-methyl-D-erythritol), C11434 (2-C-Methyl-D-erythritol 4-phosphate), C11437 (1-Deoxy-D-xylulose 5-phosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00022)" />
+<area shape=rect	coords=40,45,441,71	href="/dbget-bin/www_bget?map01060"	title="map01060" />
+<area shape=rect	coords=2630,1516,2723,1553	href="/kegg-bin/show_pathway?map00905"	title="map00905" />
+<area shape=rect	coords=1749,975,1863,1001	href="/kegg-bin/show_pathway?@map00900/C00129/C01143/C01107/C00418/C00356/C00024/C00332"	title="PATH:map00900(C00129, C01143 ((R)-5-Diphosphomevalonate), C01107 ((R)-5-Phosphomevalonate), C00418 ((R)-Mevalonate), C00356 ((S)-3-Hydroxy-3-methylglutaryl-CoA), C00024 (Acetyl-CoA), C00332)" />
+<area shape=rect	coords=1903,875,2064,912	href="/kegg-bin/show_pathway?map01056"	title="map01056" />
+<area shape=rect	coords=1408,1335,1481,1361	href="/kegg-bin/show_pathway?@map00020/C00024/C00036/C00158/C00417/C00311/C00026/C00091/C00042/C00122/C00149"	title="PATH:map00020(C00024, C00036 (Oxaloacetate), C00158 (Citrate), C00417 (cis-Aconitate), C00311 (Isocitrate), C00026 (2-Oxoglutarate), C00091 (Succinyl-CoA), C00042 (Succinate), C00122 (Fumarate), C00149)" />
+<area shape=rect	coords=871,2084,979,2121	href="/kegg-bin/show_pathway?map00940"	title="map00940" />
+<area shape=rect	coords=264,1868,390,1905	href="/kegg-bin/show_pathway?map00944"	title="map00944" />
+<area shape=rect	coords=264,1913,357,1950	href="/kegg-bin/show_pathway?map00943"	title="map00943" />
+<area shape=rect	coords=38,1741,121,1778	href="/kegg-bin/show_pathway?map00941"	title="map00941" />
+<area shape=rect	coords=305,1454,476,1479	href="/kegg-bin/show_pathway?map00950"	title="map00950" />
+<area shape=rect	coords=664,428,758,465	href="/kegg-bin/show_pathway?map00901"	title="map00901" />
+<area shape=rect	coords=2668,682,2747,719	href="/kegg-bin/show_pathway?map00904"	title="map00904" />
+<area shape=rect	coords=1125,1868,1288,1904	href="/kegg-bin/show_pathway?map00960"	title="map00960" />
+<area shape=rect	coords=2262,1222,2355,1259	href="/kegg-bin/show_pathway?map00902"	title="map00902" />
+<area shape=rect	coords=2584,1262,2699,1288	href="/kegg-bin/show_pathway?map00100"	title="map00100" />
+<area shape=rect	coords=1810,267,1903,304	href="/kegg-bin/show_pathway?@map00500/C00089/C00029/C00760/C00103/C00718/C00369"	title="PATH:map00500(C00089, C00029 (UDP-glucose), C00760 (Cellulose), C00103 (D-Glucose 1-phosphate), C00718 (Amylose), C00369)" />
+<area shape=rect	coords=1471,79,1553,106	href="/kegg-bin/show_pathway?@map00010/C00267/C00668/C05345/C05378/C00118/C00111/C00236/C00197/C01159/C00631/C00074/C00022"	title="PATH:map00010(C00267, C00668 (alpha-D-Glucose 6-phosphate), C05345 (beta-D-Fructose 6-phosphate), C05378 (beta-D-Fructose 1,6-bisphosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00111 (Glycerone phosphate), C00236 (3-Phospho-D-glyceroyl phosphate), C00197 (3-Phospho-D-glycerate), C01159 (2,3-Bisphospho-D-glycerate), C00631 (2-Phospho-D-glycerate), C00074 (Phosphoenolpyruvate), C00022)" />
+<area shape=rect	coords=1240,273,1351,311	href="/kegg-bin/show_pathway?@map00030/C00085/C00279/C00118/C00668/C01172/C01236/C00345/C00199/C00231/C05382/C00117"	title="PATH:map00030(C00085, C00279 (D-Erythrose 4-phosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00668 (alpha-D-Glucose 6-phosphate), C01172 (beta-D-Glucose 6-phosphate), C01236 (D-Glucono-1,5-lactone 6-phosphate), C00345 (6-Phospho-D-gluconate), C00199 (D-Ribulose 5-phosphate), C00231 (D-Xylulose 5-phosphate), C05382 (Sedoheptulose 7-phosphate), C00117)" />
+<area shape=rect	coords=1079,333,1192,359	href="/kegg-bin/show_pathway?map00908"	title="map00908" />
+<area shape=rect	coords=1023,750,1130,776	href="/kegg-bin/show_pathway?@map00400/C00279/C00074/C04691/C00944/C02637/C00493/C03175/C01269/C00251/C00108/C04302/C01302/C03506/C00078/C00254/C00166/C00079/C01179/C00082"	title="PATH:map00400(C00279, C00074 (Phosphoenolpyruvate), C04691 (2-Dehydro-3-deoxy-D-arabino-heptonate 7-phosphate), C00944 (3-Dehydroquinate), C02637 (3-Dehydroshikimate), C00493 (Shikimate), C03175 (Shikimate 3-phosphate), C01269 (5-O-(1-Carboxyvinyl)-3-phosphoshikimate), C00251 (Chorismate), C00108 (Anthranilate), C04302 (N-(5-Phospho-D-ribosyl)anthranilate), C01302 (1-(2-Carboxyphenylamino)-1-deoxy-D-ribulose 5-phosphate), C03506 (Indoleglycerol phosphate), C00078 (L-Tryptophan), C00254 (Prephenate), C00166 (Phenylpyruvate), C00079 (L-Phenylalanine), C01179 (3-(4-Hydroxyphenyl)pyruvate), C00082)" />
+<area shape=rect	coords=483,310,602,336	href="/kegg-bin/show_pathway?map00230"	title="map00230" />
+<area shape=rect	coords=483,348,602,374	href="/kegg-bin/show_pathway?map00232"	title="map00232" />
+<area shape=rect	coords=1572,272,1733,298	href="/kegg-bin/show_pathway?@map00520/C00029/C00103"	title="PATH:map00520(C00029, C00103)" />
+<area shape=rect	coords=618,1579,727,1616	href="/kegg-bin/show_pathway?map01061"	title="map01061" />
+<area shape=rect	coords=37,386,247,423	href="/kegg-bin/show_pathway?map01063"	title="map01063" />
+<area shape=rect	coords=314,188,525,225	href="/kegg-bin/show_pathway?map01065"	title="map01065" />
+<area shape=rect	coords=1946,1751,2151,1788	href="/kegg-bin/show_pathway?map01064"	title="map01064" />
+<area shape=rect	coords=1518,1676,1597,1701	href="/kegg-bin/show_pathway?@map00330/C00014/C00169/C00049/C00327/C03406/C00122/C00062/C00077/C00086"	title="PATH:map00330(C00014, C00169 (Carbamoyl phosphate), C00049 (L-Aspartate), C00327 (L-Citrulline), C03406 (N-(L-Arginino)succinate), C00122 (Fumarate), C00062 (L-Arginine), C00077 (L-Ornithine), C00086)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

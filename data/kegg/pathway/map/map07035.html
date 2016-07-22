@@ -1,0 +1,166 @@
+<html>
+<!---
+ENTRY       map07035
+DEFINITION  Prostaglandins - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Prostaglandins - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Prostaglandins - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07035&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07035">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07035" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07035" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07035.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=229,423,264,438	href="/dbget-bin/www_bget?C00427"	title="C00427 (Prostaglandin H2)" />
+<area shape=rect	coords=849,551,887,565	href="/dbget-bin/www_bget?C15450"	title="C15450 (S 1033)" />
+<area shape=rect	coords=678,576,741,591	href="/dbget-bin/www_bget?D02724"	title="D02724 (Bimatoprost (JAN/USAN/INN))" />
+<area shape=rect	coords=824,771,937,784	href="/dbget-bin/www_bget?D01452"	title="D01452 (Isopropyl unoprostone (JAN))" />
+<area shape=rect	coords=681,707,738,721	href="/dbget-bin/www_bget?D01964"	title="D01964 (Travoprost (JAN/USAN/INN))" />
+<area shape=rect	coords=849,695,910,710	href="/dbget-bin/www_bget?D00356"	title="D00356 (Latanoprost (JAN/USAN/INN))" />
+<area shape=rect	coords=387,771,451,785	href="/dbget-bin/www_bget?D02726"	title="D02726 (Meteneprost (USAN/INN))" />
+<area shape=rect	coords=231,771,293,785	href="/dbget-bin/www_bget?D02725"	title="D02725 (Sulprostone (USAN/INN))" />
+<area shape=rect	coords=136,655,198,669	href="/dbget-bin/www_bget?D02343+D00682"	title="D02343 (Carboprost (USAN/INN)), D00682 (Carboprost tromethamine (USP))" />
+<area shape=rect	coords=461,558,517,572	href="/dbget-bin/www_bget?D02073"	title="D02073 (Gemeprost (JAN/USAN/INN))" />
+<area shape=rect	coords=285,558,354,572	href="/dbget-bin/www_bget?D00079"	title="D00079 (Dinoprostone (JAN/USP/INN))" />
+<area shape=rect	coords=636,315,685,329	href="/dbget-bin/www_bget?D02723"	title="D02723 (Ecraprost (USAN/INN))" />
+<area shape=rect	coords=783,198,834,213	href="/dbget-bin/www_bget?D02722"	title="D02722 (Limaprost (INN))" />
+<area shape=rect	coords=311,199,375,213	href="/dbget-bin/www_bget?D00419"	title="D00419 (Misoprostol (JAN/USAN/INN))" />
+<area shape=rect	coords=116,558,169,572	href="/dbget-bin/www_bget?D00081+D01352"	title="D00081 (Dinoprost (JP15/USAN/INN)), D01352 (Dinoprost tromethamine (JAN/USP))" />
+<area shape=rect	coords=138,198,200,212	href="/dbget-bin/www_bget?D02719"	title="D02719 (Rosaprostol (INN))" />
+<area shape=rect	coords=583,199,639,213	href="/dbget-bin/www_bget?D00180+D02705"	title="D00180 (Alprostadil (JP15/USP/INN)), D02705 (Alprostadil alfadex (JP15))" />
+<area shape=rect	coords=138,313,198,328	href="/dbget-bin/www_bget?D01869"	title="D01869 (Ornoprostil (JAN/INN))" />
+<area shape=rect	coords=319,314,366,328	href="/dbget-bin/www_bget?D01891"	title="D01891 (Enprostil (JAN/USAN/INN))" />
+<area shape=rect	coords=41,374,129,400	href="/kegg-bin/show_pathway?map07034"	title="map07034" />
+<area shape=rect	coords=40,45,189,71	href="/dbget-bin/www_bget?map07035"	title="map07035" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,197 @@
+<html>
+<!---
+ENTRY       map04260
+DEFINITION  Cardiac muscle contraction - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Cardiac muscle contraction - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Cardiac muscle contraction - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04260&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04260">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Contraction of the heart is a complex process initiated by the electrical excitation of cardiac myocytes (excitation-contraction coupling, ECC). In cardiac myocytes, Ca2+ influx induced by activation of voltage-dependent L-type Ca channels (DHP receptors) upon membrane depolarization triggers the release of Ca2+ via Ca2+ release channels (ryanodine receptors) of sarcoplasmic reticulum (SR) through a Ca2+ -induced Ca release (CICR) mechanism. Ca2+ ions released via the CICR mechanism diffuse through the cytosolic space to contractile proteins to bind to troponinC resulting in the release of inhibition induced by troponinI. The Ca2+ binding to troponinC thereby triggers the sliding of thin and thick filaments, that is, the activation of a crossbridge and subsequent cardiac force development and/or cell shortening. Recovery occurs as Ca2+ is pumped out of the cell by the Na+/Ca2+ exchanger (NCX) or is returned to the sarcoplasmic reticulum (SR) by sarco(endo)plasmic Ca2+ -ATPase (SERCA) pumps on the non-junctional region of the SR.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04260 map" -->
+</select>
+<input type="hidden" name="mapno" value="04260" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04260" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04260" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04260.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=195,269,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=388,279,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=652,365,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=193,476,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=280,486,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=688,67,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=414,364,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=839,394,4	href="/dbget-bin/www_bget?C00080"	title="C00080 (H+)" />
+<area shape=circle	coords=838,279,4	href="/dbget-bin/www_bget?C00080"	title="C00080 (H+)" />
+<area shape=circle	coords=821,317,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=757,316,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=773,394,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=758,90,4	href="/dbget-bin/www_bget?C00238"	title="C00238 (Potassium)" />
+<area shape=circle	coords=748,189,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=815,189,4	href="/dbget-bin/www_bget?C00080"	title="C00080 (H+)" />
+<area shape=circle	coords=825,92,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=rect	coords=212,261,258,278	href="/dbget-bin/www_bget?K04850+K04851+K04853+K04857+K04862+K04863+K04864+K04865+K04858+K04859+K04860+K04861+K04866+K04867+K04868+K04869+K04870+K04871+K04872+K04873"	title="K04850 (CACNA1C), K04851 (CACNA1D), K04853 (CACNA1F), K04857 (CACNA1S), K04858 (CACNA2D1), K04859 (CACNA2D2), K04860 (CACNA2D3), K04861 (CACNA2D4), K04862 (CACNB1), K04863 (CACNB2), K04864 (CACNB3), K04865 (CACNB4), K04866 (CACNG1), K04867 (CACNG2), K04868 (CACNG3), K04869 (CACNG4), K04870 (CACNG5), K04871 (CACNG6), K04872 (CACNG7), K04873 (CACNG8)" />
+<area shape=rect	coords=310,266,356,283	href="/dbget-bin/www_bget?K04962"	title="K04962 (RYR2)" />
+<area shape=rect	coords=659,131,705,148	href="/dbget-bin/www_bget?hsa:6546+mmu:20541+rno:29715"	title="6546, 20541, 29715" />
+<area shape=rect	coords=212,473,258,490	href="/dbget-bin/www_bget?hsa:6546+mmu:20541+rno:29715"	title="6546, 20541, 29715" />
+<area shape=rect	coords=502,296,548,313	href="/dbget-bin/www_bget?hsa:488+mmu:11938+rno:29693"	title="488, 11938, 29693" />
+<area shape=rect	coords=392,392,438,409	href="/dbget-bin/www_bget?K05865"	title="K05865 (TNNC1)" />
+<area shape=rect	coords=354,428,400,445	href="/dbget-bin/www_bget?K12044"	title="K12044 (TNNI3)" />
+<area shape=rect	coords=630,392,676,409	href="/dbget-bin/www_bget?K05865"	title="K05865 (TNNC1)" />
+<area shape=rect	coords=432,428,478,445	href="/dbget-bin/www_bget?K12045"	title="K12045 (TNNT2)" />
+<area shape=rect	coords=376,491,422,508	href="/dbget-bin/www_bget?K12314"	title="K12314 (ACTC1)" />
+<area shape=rect	coords=401,474,447,491	href="/dbget-bin/www_bget?K10373+K10374+K09290+K10375"	title="K09290 (TPM3), K10373 (TPM1), K10374 (TPM2), K10375 (TPM4)" />
+<area shape=rect	coords=376,545,422,562	href="/dbget-bin/www_bget?hsa:4624+mmu:17888+rno:29556+hsa:4625+mmu:140781+rno:29557+hsa:4634+mmu:17897+rno:24585+hsa:4633+mmu:17906+rno:363925"	title="4624, 17888, 29556, 4625, 140781, 29557, 4634, 17897, 24585, 4633, 17906, 363925" />
+<area shape=rect	coords=595,428,641,445	href="/dbget-bin/www_bget?K12044"	title="K12044 (TNNI3)" />
+<area shape=rect	coords=673,428,719,445	href="/dbget-bin/www_bget?K12045"	title="K12045 (TNNT2)" />
+<area shape=rect	coords=625,491,671,508	href="/dbget-bin/www_bget?K12314"	title="K12314 (ACTC1)" />
+<area shape=rect	coords=650,474,696,491	href="/dbget-bin/www_bget?K10373+K10374+K09290+K10375"	title="K09290 (TPM3), K10373 (TPM1), K10374 (TPM2), K10375 (TPM4)" />
+<area shape=rect	coords=625,545,671,562	href="/dbget-bin/www_bget?hsa:4624+mmu:17888+rno:29556+hsa:4625+mmu:140781+rno:29557+hsa:4634+mmu:17897+rno:24585+hsa:4633+mmu:17906+rno:363925"	title="4624, 17888, 29556, 4625, 140781, 29557, 4634, 17897, 24585, 4633, 17906, 363925" />
+<area shape=rect	coords=742,346,788,363	href="/dbget-bin/www_bget?hsa:6546+mmu:20541+rno:29715"	title="6546, 20541, 29715" />
+<area shape=rect	coords=807,346,853,363	href="/dbget-bin/www_bget?K12041"	title="K12041 (SLC9A6, NHE6)" />
+<area shape=rect	coords=856,271,902,288	href="/dbget-bin/www_bget?K00411+K00412+K00413+K00414+K00415+K00416+K00417+K00418+K00419+K00420+K02262+K02256+K02261+K02263+K02264+K02265+K02266+K02267+K02268+K02270+K02271+K02272+K02273"	title="K00411 (RIP1, UQCRFS1, petA), K00412 (CYTB, petB), K00413 (CYT1, CYC1, petC), K00414 (QCR1, UQCRC1), K00415 (QCR2, UQCRC2), K00416 (QCR6, UQCRH), K00417 (QCR7, UQCRB), K00418 (QCR8, UQCRQ), K00419 (QCR9, UCRC), K00420 (QCR10, UQCR), K02256 (COX1), K02261 (COX2), K02262 (COX3), K02263 (COX4), K02264 (COX5A), K02265 (COX5B), K02266 (COX6A), K02267 (COX6B), K02268 (COX6C), K02270 (COX7A), K02271 (COX7B), K02272 (COX7C), K02273 (COX8)" />
+<area shape=rect	coords=729,131,775,148	href="/dbget-bin/www_bget?K01539+K01540+K01538"	title="K01538 (FXYD2, ATP1G1), K01539 (ATP1A), K01540 (ATP1B)" />
+<area shape=rect	coords=797,132,843,149	href="/dbget-bin/www_bget?K05742"	title="K05742 (SLC9A1, NHE1)" />
+<area shape=rect	coords=40,45,297,71	href="/dbget-bin/www_bget?map04260"	title="map04260" />
+<area shape=rect	coords=424,164,542,199	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

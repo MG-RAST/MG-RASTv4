@@ -1,0 +1,219 @@
+<html>
+<!---
+ENTRY       map00965
+DEFINITION  Betalain biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Betalain biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Betalain biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00965&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00965">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Betalains are water-soluble nitrogen-containing pigments that are present in plants belonging to the order Caryophyllales (such as cactus and amaranth families) and in higher fungi. They contain betalamic acid as the chromophore and are classified into two types: betacyanins and betaxanthins. Betacyanins contain a cyclo-DOPA residue and exhibit red/violet coloration, while betaxanthins contain different amino acids or amino side chains and exhibit a yellow/orange coloration. The condensation of betalamic acid with amino acids (including cyclo-DOPA or amines) in plants is a spontaneous reaction, not an enzyme-catalyzed reaction.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00965 map" -->
+</select>
+<input type="hidden" name="mapno" value="00965" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00965" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00965" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00965.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=269,298,4	href="/dbget-bin/www_bget?C00082"	title="C00082 (L-Tyrosine)" />
+<area shape=circle	coords=230,267,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=269,218,4	href="/dbget-bin/www_bget?C08565"	title="C08565 (Portulacaxanthin II)" />
+<area shape=circle	coords=457,298,4	href="/dbget-bin/www_bget?C00822"	title="C00822 (Dopaquinone)" />
+<area shape=circle	coords=577,298,4	href="/dbget-bin/www_bget?C05604"	title="C05604 (2-Carboxy-2,3-dihydro-5,6-dihydroxyindole)" />
+<area shape=circle	coords=702,298,4	href="/dbget-bin/www_bget?C17751"	title="C17751 (cyclo-Dopa 5-O-glucoside)" />
+<area shape=circle	coords=818,298,4	href="/dbget-bin/www_bget?C17752"	title="C17752 (cyclo-Dopa-glucuronylglucoside)" />
+<area shape=circle	coords=122,552,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=122,467,4	href="/dbget-bin/www_bget?C17758"	title="C17758 (4,5-seco-Dopa)" />
+<area shape=circle	coords=269,552,4	href="/dbget-bin/www_bget?C08557"	title="C08557 (Miraxanthin-V)" />
+<area shape=circle	coords=651,444,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=778,222,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=577,468,4	href="/dbget-bin/www_bget?C17756"	title="C17756 (2-Descarboxy-cyclo-dopa)" />
+<area shape=circle	coords=789,382,4	href="/dbget-bin/www_bget?C17754"	title="C17754 (3-Methoxytyramine-betaxanthin)" />
+<area shape=circle	coords=421,270,4	href="/dbget-bin/www_bget?C00355"	title="C00355 (3,4-Dihydroxy-L-phenylalanine)" />
+<area shape=circle	coords=269,382,4	href="/dbget-bin/www_bget?C00355"	title="C00355 (3,4-Dihydroxy-L-phenylalanine)" />
+<area shape=circle	coords=818,150,4	href="/dbget-bin/www_bget?C08537"	title="C08537 (Amaranthin)" />
+<area shape=circle	coords=927,150,4	href="/dbget-bin/www_bget?C08542"	title="C08542 (Celosianin II)" />
+<area shape=circle	coords=662,222,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=702,150,4	href="/dbget-bin/www_bget?C08540"	title="C08540 (Betanin)" />
+<area shape=circle	coords=269,467,4	href="/dbget-bin/www_bget?C03758"	title="C03758 (Dopamine)" />
+<area shape=circle	coords=789,468,4	href="/dbget-bin/www_bget?C17757"	title="C17757 (2-Descarboxy-betanidin)" />
+<area shape=circle	coords=457,382,4	href="/dbget-bin/www_bget?C05587"	title="C05587 (3-Methoxytyramine)" />
+<area shape=circle	coords=269,150,4	href="/dbget-bin/www_bget?C08543"	title="C08543 (Dopaxanthin)" />
+<area shape=circle	coords=457,468,4	href="/dbget-bin/www_bget?C17755"	title="C17755 (Dopamine quinone)" />
+<area shape=circle	coords=702,98,4	href="/dbget-bin/www_bget?C08544"	title="C08544 (Gomphrenin-I)" />
+<area shape=circle	coords=457,150,4	href="/dbget-bin/www_bget?C17753"	title="C17753 (Dopaxanthin quinone)" />
+<area shape=circle	coords=577,150,4	href="/dbget-bin/www_bget?C08539"	title="C08539 (Betanidin)" />
+<area shape=circle	coords=927,118,4	href="/dbget-bin/www_bget?C08552"	title="C08552 (Lampranthin II)" />
+<area shape=circle	coords=537,222,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=651,358,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=153,127,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=circle	coords=300,499,4	href="/dbget-bin/www_bget?C08538"	title="C08538 (Betalamic acid)" />
+<area shape=rect	coords=480,293,545,303	href="/dbget-bin/www_bget?R02962"	title="R02962" />
+<area shape=rect	coords=661,377,726,387	href="/dbget-bin/www_bget?R08831"	title="R08831" />
+<area shape=rect	coords=661,463,726,473	href="/dbget-bin/www_bget?R08834"	title="R08834" />
+<area shape=rect	coords=476,463,541,473	href="/dbget-bin/www_bget?R08833"	title="R08833" />
+<area shape=rect	coords=237,511,302,521	href="/dbget-bin/www_bget?R08835"	title="R08835" />
+<area shape=rect	coords=90,495,155,505	href="/dbget-bin/www_bget?R08837"	title="R08837" />
+<area shape=rect	coords=237,245,302,255	href="/dbget-bin/www_bget?R08825"	title="R08825" />
+<area shape=rect	coords=544,199,609,209	href="/dbget-bin/www_bget?R08821"	title="R08821" />
+<area shape=rect	coords=670,199,735,209	href="/dbget-bin/www_bget?R08820"	title="R08820" />
+<area shape=rect	coords=787,199,852,209	href="/dbget-bin/www_bget?R08818"	title="R08818" />
+<area shape=rect	coords=479,145,544,155	href="/dbget-bin/www_bget?R08829"	title="R08829" />
+<area shape=rect	coords=163,145,228,155	href="/dbget-bin/www_bget?R08827"	title="R08827" />
+<area shape=rect	coords=340,290,386,307	href="/dbget-bin/www_bget?K00505+1.14.18.1+R02078"	title="K00505 (E1.14.18.1), 1.14.18.1, R02078" />
+<area shape=rect	coords=740,290,786,307	href="/dbget-bin/www_bget?2.4.1.-+R08817"	title="2.4.1.-, 2.4.1.-, R08817" />
+<area shape=rect	coords=848,142,894,159	href="/dbget-bin/www_bget?2.3.1.-+R08819"	title="2.3.1.-, 2.3.1.-, R08819" />
+<area shape=rect	coords=613,146,659,163	href="/dbget-bin/www_bget?up:Q9SMG6+2.4.1.-+R08822"	title="Q9SMG6, 2.4.1.-, R08822" />
+<area shape=rect	coords=613,91,659,108	href="/dbget-bin/www_bget?up:Q8W237+2.4.1.-+R08830"	title="Q8W237, 2.4.1.-, R08830" />
+<area shape=rect	coords=246,410,292,427	href="/dbget-bin/www_bget?K01593+4.1.1.28+R02080"	title="K01593 (E4.1.1.28, DDC), 4.1.1.28, R02080" />
+<area shape=rect	coords=340,460,386,477	href="/dbget-bin/www_bget?1.10.3.-+R08832"	title="1.10.3.-, 1.10.3.-, R08832" />
+<area shape=rect	coords=340,373,386,390	href="/dbget-bin/www_bget?K00545+2.1.1.6+R04301"	title="K00545 (COMT), 2.1.1.6, R04301" />
+<area shape=rect	coords=246,329,292,346	href="/dbget-bin/www_bget?K00505+1.14.18.1+R00731"	title="K00505 (E1.14.18.1), 1.14.18.1, R00731" />
+<area shape=rect	coords=99,410,145,427	href="/dbget-bin/www_bget?up:Q7XA48+1.13.11.-+R08836"	title="Q7XA48, 1.13.11.-, R08836" />
+<area shape=rect	coords=246,179,292,196	href="/dbget-bin/www_bget?1.14.18.-+R08826"	title="1.14.18.-, 1.14.18.-, R08826" />
+<area shape=rect	coords=848,110,894,127	href="/dbget-bin/www_bget?2.3.1.-+R08823"	title="2.3.1.-, 2.3.1.-, R08823" />
+<area shape=rect	coords=613,290,659,307	href="/dbget-bin/www_bget?up:Q59J80+up:Q59J81+2.4.1.-+R08816"	title="Q59J80, Q59J81, 2.4.1.-, R08816" />
+<area shape=rect	coords=340,141,386,158	href="/dbget-bin/www_bget?1.10.3.-+R08828"	title="1.10.3.-, 1.10.3.-, R08828" />
+<area shape=rect	coords=740,142,786,159	href="/dbget-bin/www_bget?2.4.1.-+R08824"	title="2.4.1.-, 2.4.1.-, R08824" />
+<area shape=rect	coords=40,45,238,71	href="/dbget-bin/www_bget?map00965"	title="map00965" />
+<area shape=rect	coords=156,282,233,317	href="/kegg-bin/show_pathway?map00400"	title="map00400" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

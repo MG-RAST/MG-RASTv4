@@ -1,0 +1,166 @@
+<html>
+<!---
+ENTRY       map07034
+DEFINITION  Eicosanoids - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Eicosanoids - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Eicosanoids - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07034&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07034">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07034" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07034" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07034.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=142,494,374,594	href="/dbget-bin/www_bget?D00411"	title="D00411 (Zafirlukast (JAN/USAN/INN))" />
+<area shape=rect	coords=651,248,800,307	href="/dbget-bin/www_bget?C00427"	title="C00427 (Prostaglandin H2)" />
+<area shape=rect	coords=93,248,248,299	href="/dbget-bin/www_bget?C00909"	title="C00909 (Leukotriene A4)" />
+<area shape=rect	coords=46,613,270,697	href="/dbget-bin/www_bget?D02732+D08408"	title="D02732 (Pranlukast hydrate (JAN)), D08408 (Pranlukast (INN))" />
+<area shape=rect	coords=287,606,488,700	href="/dbget-bin/www_bget?D00529+D08229"	title="D00529 (Montelukast sodium (JAN/USAN)), D08229 (Montelukast (INN))" />
+<area shape=rect	coords=884,636,1048,726	href="/dbget-bin/www_bget?D01128"	title="D01128 (Ramatroban (JAN/INN))" />
+<area shape=rect	coords=883,526,1047,616	href="/dbget-bin/www_bget?D01123"	title="D01123 (Seratrodast (JAN/USAN/INN))" />
+<area shape=rect	coords=1078,540,1210,595	href="/dbget-bin/www_bget?D01683+D01684+D08327"	title="D01683 (Ozagrel hydrochloride hydrate (JAN)), D01684 (Ozagrel sodium (JAN)), D08327 (Ozagrel (INN))" />
+<area shape=rect	coords=92,368,268,420	href="/dbget-bin/www_bget?C02165"	title="C02165 (Leukotriene B4)" />
+<area shape=rect	coords=890,383,1038,440	href="/dbget-bin/www_bget?C02198"	title="C02198 (Thromboxane A2)" />
+<area shape=rect	coords=645,380,819,488	href="/dbget-bin/www_bget?D00106+D01337"	title="D00106 (Epoprostenol (USAN/INN)), D01337 (Epoprostenol sodium (JAN/USAN))" />
+<area shape=rect	coords=711,198,746,212	href="/dbget-bin/www_bget?C05956"	title="C05956 (Prostaglandin G2)" />
+<area shape=rect	coords=498,151,584,166	href="/dbget-bin/www_bget?C00219"	title="C00219 ((5Z,8Z,11Z,14Z)-Icosatetraenoic acid)" />
+<area shape=rect	coords=162,198,214,212	href="/dbget-bin/www_bget?C05356"	title="C05356 (5(S)-HPETE)" />
+<area shape=rect	coords=685,566,855,670	href="/dbget-bin/www_bget?D02721+D08065"	title="D02721 (Iloprost (INN)), D08065 (Iloprost tromethamine)" />
+<area shape=rect	coords=518,551,679,671	href="/dbget-bin/www_bget?D02720+D01551"	title="D02720 (Beraprost (USAN)), D01551 (Beraprost sodium (JAN/USAN))" />
+<area shape=rect	coords=487,177,595,212	href="/kegg-bin/show_pathway?map04664"	title="map04664" />
+<area shape=rect	coords=643,109,794,144	href="/kegg-bin/show_pathway?map04080"	title="map04080" />
+<area shape=rect	coords=1115,332,1212,358	href="/kegg-bin/show_pathway?map07035"	title="map07035" />
+<area shape=rect	coords=462,76,627,102	href="/kegg-bin/show_pathway?map00590"	title="map00590" />
+<area shape=rect	coords=40,45,159,71	href="/dbget-bin/www_bget?map07034"	title="map07034" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

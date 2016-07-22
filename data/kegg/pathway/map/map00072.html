@@ -1,0 +1,171 @@
+<html>
+<!---
+ENTRY       map00072
+DEFINITION  Synthesis and degradation of ketone bodies - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Synthesis and degradation of ketone bodies - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Synthesis and degradation of ketone bodies - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00072&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00072">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00072 map" -->
+</select>
+<input type="hidden" name="mapno" value="00072" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00072" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00072" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00072.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=211,210,4	href="/dbget-bin/www_bget?C00332"	title="C00332 (Acetoacetyl-CoA)" />
+<area shape=circle	coords=211,320,4	href="/dbget-bin/www_bget?C00356"	title="C00356 ((S)-3-Hydroxy-3-methylglutaryl-CoA)" />
+<area shape=circle	coords=211,510,4	href="/dbget-bin/www_bget?C00207"	title="C00207 (Acetone)" />
+<area shape=circle	coords=211,429,4	href="/dbget-bin/www_bget?C00164"	title="C00164 (Acetoacetate)" />
+<area shape=circle	coords=289,510,4	href="/dbget-bin/www_bget?C01089"	title="C01089 ((R)-3-Hydroxybutanoate)" />
+<area shape=circle	coords=333,259,4	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=rect	coords=188,267,234,284	href="/dbget-bin/www_bget?K01641+2.3.3.10+R01978"	title="K01641 (E2.3.3.10, pksG), 2.3.3.10, R01978" />
+<area shape=rect	coords=188,345,234,362	href="/dbget-bin/www_bget?K01640+4.1.3.4+R01360"	title="K01640 (E4.1.3.4, HMGCL, hmgL), 4.1.3.4, R01360" />
+<area shape=rect	coords=189,454,235,471	href="/dbget-bin/www_bget?K01574+4.1.1.4+R01366"	title="K01574 (E4.1.1.4, adc), 4.1.1.4, R01366" />
+<area shape=rect	coords=254,201,300,218	href="/dbget-bin/www_bget?K00626+2.3.1.9+R00238"	title="K00626 (E2.3.1.9, atoB), 2.3.1.9, R00238" />
+<area shape=rect	coords=267,454,313,471	href="/dbget-bin/www_bget?K00019+1.1.1.30+R01361"	title="K00019 (E1.1.1.30, bdh), 1.1.1.30, R01361" />
+<area shape=rect	coords=50,307,96,324	href="/dbget-bin/www_bget?K01028+K01029+2.8.3.5+R00410"	title="K01028 (E2.8.3.5A, scoA), K01029 (E2.8.3.5B, scoB), 2.8.3.5, R00410" />
+<area shape=rect	coords=117,45,375,80	href="/dbget-bin/www_bget?map00072"	title="map00072" />
+<area shape=rect	coords=150,129,277,155	href="/kegg-bin/show_pathway?map00071"	title="map00071" />
+<area shape=rect	coords=335,169,458,195	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=375,247,449,273	href="/kegg-bin/show_pathway?map00010"	title="map00010" />
+<area shape=rect	coords=50,483,122,518	href="/kegg-bin/show_pathway?map00650"	title="map00650" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,206 @@
+<html>
+<!---
+ENTRY       map00513
+DEFINITION  High-mannose type N-glycan biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: High-mannose type N-glycan biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>High-mannose type N-glycan biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00513&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00513">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00513 map" -->
+</select>
+<input type="hidden" name="mapno" value="00513" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00513" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00513" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00513.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=592,137,4	href="/dbget-bin/www_bget?G11040"	title="G11040" />
+<area shape=circle	coords=501,137,4	href="/dbget-bin/www_bget?G10841"	title="G10841" />
+<area shape=circle	coords=410,137,4	href="/dbget-bin/www_bget?G01813"	title="G01813" />
+<area shape=circle	coords=410,208,4	href="/dbget-bin/www_bget?G12625"	title="G12625" />
+<area shape=circle	coords=410,279,4	href="/dbget-bin/www_bget?G12626"	title="G12626" />
+<area shape=circle	coords=320,137,4	href="/dbget-bin/www_bget?G10694"	title="G10694" />
+<area shape=circle	coords=230,137,4	href="/dbget-bin/www_bget?G00011"	title="G00011" />
+<area shape=circle	coords=501,279,4	href="/dbget-bin/www_bget?G13047"	title="G13047" />
+<area shape=circle	coords=592,279,4	href="/dbget-bin/www_bget?G13048"	title="G13048" />
+<area shape=circle	coords=684,279,4	href="/dbget-bin/www_bget?G13049"	title="G13049" />
+<area shape=circle	coords=775,279,4	href="/dbget-bin/www_bget?G13050"	title="G13050" />
+<area shape=rect	coords=702,271,748,288	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=rect	coords=365,166,411,183	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=rect	coords=387,237,433,254	href="/dbget-bin/www_bget?K05533+2.4.1.-"	title="K05533 (ANP1), 2.4.1.-" />
+<area shape=rect	coords=433,270,479,287	href="/dbget-bin/www_bget?K05535+2.4.1.-"	title="K05535 (MNN2), 2.4.1.-" />
+<area shape=rect	coords=517,129,563,146	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=rect	coords=610,271,656,288	href="/dbget-bin/www_bget?K05537+2.7.8.-"	title="K05537 (KTR6), 2.7.8.-" />
+<area shape=rect	coords=433,220,479,237	href="/dbget-bin/www_bget?K05532+2.4.1.-"	title="K05532 (MNN11), 2.4.1.-" />
+<area shape=rect	coords=410,166,456,183	href="/dbget-bin/www_bget?K05530+2.4.1.-"	title="K05530 (VAN1), 2.4.1.-" />
+<area shape=rect	coords=253,128,299,145	href="/dbget-bin/www_bget?K01230+3.2.1.113+R06722"	title="K01230 (E3.2.1.113, MAN1A), 3.2.1.113, R06722" />
+<area shape=rect	coords=341,229,387,246	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=rect	coords=426,129,472,146	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-, 2.4.1.-" />
+<area shape=rect	coords=336,128,382,145	href="/dbget-bin/www_bget?K05528+2.4.1.232+R08599"	title="K05528 (OCH1), 2.4.1.232, R08599" />
+<area shape=rect	coords=519,271,565,288	href="/dbget-bin/www_bget?K05536+2.4.1.-"	title="K05536 (MNN5), 2.4.1.-" />
+<area shape=rect	coords=433,237,479,254	href="/dbget-bin/www_bget?K05534+2.4.1.-"	title="K05534 (HOC1), 2.4.1.-" />
+<area shape=rect	coords=387,220,433,237	href="/dbget-bin/www_bget?K05531+2.4.1.-"	title="K05531 (MNN10), 2.4.1.-" />
+<area shape=poly	coords=135,306,155,306,155,310,135,310	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=poly	coords=198,309,208,319,212,319,202,309	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=poly	coords=362,371,385,394,389,394,366,371	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=poly	coords=362,438,385,415,389,415,366,438	href="/dbget-bin/www_bget?K05535+2.4.1.-"	title="K05535 (MNN2), 2.4.1.-" />
+<area shape=poly	coords=431,403,451,403,451,407,431,407	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=poly	coords=197,340,207,330,211,330,201,340	href="/dbget-bin/www_bget?K05535+2.4.1.-"	title="K05535 (MNN2), 2.4.1.-" />
+<area shape=poly	coords=71,339,91,339,91,343,71,343	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=poly	coords=136,339,156,339,156,343,136,343	href="/dbget-bin/www_bget?K05536+2.4.1.-"	title="K05536 (MNN5), 2.4.1.-" />
+<area shape=poly	coords=220,424,240,424,240,428,220,428	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=poly	coords=280,424,300,424,300,428,280,428	href="/dbget-bin/www_bget?K05537+2.7.8.-"	title="K05537 (KTR6), 2.7.8.-" />
+<area shape=poly	coords=311,426,321,431,321,435,311,430	href="/dbget-bin/www_bget?K05537+2.7.8.-"	title="K05537 (KTR6), 2.7.8.-" />
+<area shape=poly	coords=311,449,321,444,321,448,311,453	href="/dbget-bin/www_bget?K05536+2.4.1.-"	title="K05536 (MNN5), 2.4.1.-" />
+<area shape=poly	coords=245,451,265,451,265,455,245,455	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=poly	coords=252,326,262,336,266,336,256,326	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=poly	coords=251,366,261,356,265,356,255,366	href="/dbget-bin/www_bget?K05535+2.4.1.-"	title="K05535 (MNN2), 2.4.1.-" />
+<area shape=poly	coords=124,366,144,366,144,370,124,370	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=poly	coords=189,366,209,366,209,370,189,370	href="/dbget-bin/www_bget?K05536+2.4.1.-"	title="K05536 (MNN5), 2.4.1.-" />
+<area shape=poly	coords=305,391,317,379,321,379,309,391	href="/dbget-bin/www_bget?K05535+2.4.1.-"	title="K05535 (MNN2), 2.4.1.-" />
+<area shape=poly	coords=178,393,198,393,198,397,178,397	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=poly	coords=243,393,263,393,263,397,243,397	href="/dbget-bin/www_bget?K05536+2.4.1.-"	title="K05536 (MNN5), 2.4.1.-" />
+<area shape=poly	coords=306,346,318,358,322,358,310,346	href="/dbget-bin/www_bget?K05529+2.4.1.-"	title="K05529 (MNN9), 2.4.1.-" />
+<area shape=poly	coords=374,462,394,462,394,466,374,466	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=poly	coords=495,405,513,423,517,423,499,405	href="/dbget-bin/www_bget?K05528+2.4.1.232+R08599"	title="K05528 (OCH1), 2.4.1.232, R08599" />
+<area shape=poly	coords=375,343,395,343,395,347,375,347	href="/dbget-bin/www_bget?K05538+2.4.1.-"	title="K05538 (MNN1), 2.4.1.-" />
+<area shape=rect	coords=54,124,184,150	href="/kegg-bin/show_pathway?map00510"	title="map00510" />
+<area shape=rect	coords=40,45,396,71	href="/dbget-bin/www_bget?map00513"	title="map00513" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

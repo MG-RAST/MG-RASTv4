@@ -1,0 +1,182 @@
+<html>
+<!---
+ENTRY       map07011
+DEFINITION  Penicillins - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Penicillins - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Penicillins - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07011&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07011">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07011" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07011" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07011.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=989,307,1103,381	href="/dbget-bin/www_bget?D00660+D03707"	title="D00660 (Tazobactam (JAN/USAN/INN)), D03707 (Tazobactam sodium (USAN))" />
+<area shape=rect	coords=1340,849,1514,952	href="/dbget-bin/www_bget?D02339"	title="D02339 (Azlocillin (USAN/INN))" />
+<area shape=rect	coords=1130,811,1304,919	href="/dbget-bin/www_bget?D02199"	title="D02199 (Carfecillin sodium (JAN))" />
+<area shape=rect	coords=1128,684,1309,788	href="/dbget-bin/www_bget?D07621+D01283"	title="D07621 (Carindacillin (INN)), D01283 (Carindacillin sodium (JAN))" />
+<area shape=rect	coords=728,848,910,949	href="/dbget-bin/www_bget?D08110+D01696"	title="D08110 (Lenampicillin (INN)), D01696 (Lenampicillin hydrochloride (JP15))" />
+<area shape=rect	coords=518,860,707,948	href="/dbget-bin/www_bget?D02889+D01499"	title="D02889 (Amdinocillin pivoxil (USAN)), D01499 (Pivmecillinam hydrochloride (JP15))" />
+<area shape=rect	coords=518,734,690,816	href="/dbget-bin/www_bget?D07452+D00229+D02925"	title="D07452 (Amoxicillin (INN)), D00229 (Amoxicillin hydrate (JP15)), D02925 (Amoxicillin sodium (USAN))" />
+<area shape=rect	coords=542,628,679,705	href="/dbget-bin/www_bget?D01334"	title="D01334 (Ciclacillin (JP15/INN))" />
+<area shape=rect	coords=1328,721,1530,838	href="/dbget-bin/www_bget?D07469+D02504"	title="D07469 (Aspoxicillin (INN)), D02504 (Aspoxicillin hydrate (JP15))" />
+<area shape=rect	coords=1327,615,1530,715	href="/dbget-bin/www_bget?D05021+D02221+D05022"	title="D05021 (Mezlocillin (USAN/INN)), D02221 (Mezlocillin sodium (JAN)), D05022 (Mezlocillin sodium (USP))" />
+<area shape=rect	coords=970,814,1111,915	href="/dbget-bin/www_bget?D08534+D01489"	title="D08534 (Sulbenicillin (INN)), D01489 (Sulbenicillin sodium (JP15))" />
+<area shape=rect	coords=970,686,1111,789	href="/dbget-bin/www_bget?D08593+D02241+D06137+D06138"	title="D08593 (Ticarcillin (INN)), D02241 (Ticarcillin sodium (JAN)), D06137 (Ticarcillin cresyl sodium (USAN)), D06138 (Ticarcillin monosodium (USP))" />
+<area shape=rect	coords=968,490,1112,591	href="/dbget-bin/www_bget?D07614+D02190+D03387"	title="D07614 (Carbenicillin (INN)), D02190 (Carbenicillin sodium (JAN)), D03387 (Carbenicillin potassium (USAN))" />
+<area shape=rect	coords=720,740,920,830	href="/dbget-bin/www_bget?D07487+D00927"	title="D07487 (Bacampicillin (INN)), D00927 (Bacampicillin hydrochloride (JP15/USP))" />
+<area shape=rect	coords=722,524,917,607	href="/dbget-bin/www_bget?D08396+D02508+D05220+D05221"	title="D08396 (Pivampicillin (INN)), D02508 (Pivampicillin hydrochloride (USAN)), D05220 (Octanoic acid (USAN/INN)), D05221 (Octazamide (USAN/INN))" />
+<area shape=rect	coords=1200,279,1501,379	href="/dbget-bin/www_bget?D02505"	title="D02505 (Piperacillin-tazobactam combination)" />
+<area shape=rect	coords=75,576,228,658	href="/dbget-bin/www_bget?D05411+D00497+D08360"	title="D05411 (Penicillin V (USP)), D00497 (Phenoxymethylpenicillin potassium (JAN)), D08360 (Phenoxymethylpenicillin calcium)" />
+<area shape=rect	coords=75,726,228,806	href="/dbget-bin/www_bget?D08350+D01178"	title="D08350 (Pheneticillin (INN)), D01178 (Phenethicillin potassium (JP15))" />
+<area shape=rect	coords=300,858,445,941	href="/dbget-bin/www_bget?D04196+D01249+D07965"	title="D04196 (Floxacillin (USAN)), D01249 (Flucloxacillin sodium (JAN)), D07965 (Flucloxacillin sodium salt)" />
+<area shape=rect	coords=294,368,447,464	href="/dbget-bin/www_bget?D02196"	title="D02196 (Meticillin sodium (JAN))" />
+<area shape=rect	coords=1233,69,1500,149	href="/dbget-bin/www_bget?D00230"	title="D00230 (Amoxicillin - potassium clavulanate combination)" />
+<area shape=rect	coords=529,521,684,610	href="/dbget-bin/www_bget?D01074+D02203"	title="D01074 (Hetacillin (USAN/INN)), D02203 (Hetacillin potassium (JAN/USAN))" />
+<area shape=rect	coords=995,78,1097,149	href="/dbget-bin/www_bget?C06662+D07711+D02370"	title="C06662 (Clavulanic acid), D07711 (Clavulanic acid (INN)), D02370 (Clavulanate potassium (JP15/USP))" />
+<area shape=rect	coords=75,861,228,941	href="/dbget-bin/www_bget?D08438+D01649"	title="D08438 (Propicillin (BAN)), D01649 (Propicillin potassium (JAN))" />
+<area shape=rect	coords=300,525,445,609	href="/dbget-bin/www_bget?D08307+D00929"	title="D08307 (Oxacillin (INN)), D00929 (Oxacillin sodium (JAN/USP))" />
+<area shape=rect	coords=461,184,560,257	href="/dbget-bin/www_bget?C02954"	title="C02954 (6-Aminopenicillanate)" />
+<area shape=rect	coords=82,382,227,459	href="/dbget-bin/www_bget?D02336+D01053+D05408"	title="D02336 (Benzylpenicillin (INN)), D01053 (Benzylpenicillin potassium (JP15)), D05408 (Penicillin G sodium (USP))" />
+<area shape=rect	coords=300,750,445,834	href="/dbget-bin/www_bget?D02348+D02137"	title="D02348 (Dicloxacillin (USAN/INN)), D02137 (Dicloxacillin sodium hydrate (JP15))" />
+<area shape=rect	coords=300,631,445,718	href="/dbget-bin/www_bget?D07733+D02231"	title="D07733 (Cloxacillin (INN)), D02231 (Cloxacillin sodium hydrate (JP15))" />
+<area shape=rect	coords=531,378,676,457	href="/dbget-bin/www_bget?D01251+D00204+D02119"	title="D01251 (Ampicillin hydrate (JP15)), D00204 (Anhydrous ampicillin (JP15)), D02119 (Ampicillin sodium (JP15/USP))" />
+<area shape=rect	coords=1251,174,1480,252	href="/dbget-bin/www_bget?D05972+D01668"	title="D05972 (Sultamicillin (USAN/INN)), D01668 (Sultamicillin tosilate (JP15))" />
+<area shape=rect	coords=722,627,900,737	href="/dbget-bin/www_bget?D08557+D02201"	title="D08557 (Talampicillin (INN)), D02201 (Talampicillin hydrochloride (JP15/USAN))" />
+<area shape=rect	coords=989,179,1092,252	href="/dbget-bin/www_bget?D08533+D02223"	title="D08533 (Sulbactam (INN)), D02223 (Sulbactam sodium (JP15/USP))" />
+<area shape=rect	coords=1328,511,1529,611	href="/dbget-bin/www_bget?D08380+D00466+D02251"	title="D08380 (Piperacillin (INN)), D00466 (Piperacillin sodium (JP15/USP)), D02251 (Piperacillin hydrate (JAN))" />
+<area shape=rect	coords=40,45,164,71	href="/dbget-bin/www_bget?map07011"	title="map07011" />
+<area shape=rect	coords=397,102,613,129	href="/kegg-bin/show_pathway?map00311"	title="map00311" />
+<area shape=rect	coords=1168,538,1277,572	href="/kegg-bin/show_pathway?map07012"	title="map07012" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,179 @@
+<html>
+<!---
+ENTRY       map00625
+DEFINITION  Tetrachloroethene degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Tetrachloroethene degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Tetrachloroethene degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00625&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00625">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00625 map" -->
+</select>
+<input type="hidden" name="mapno" value="00625" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00625" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00625" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00625.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=598,225,4	href="/dbget-bin/www_bget?C01380"	title="C01380 (Ethylene glycol)" />
+<area shape=circle	coords=577,159,4	href="/dbget-bin/www_bget?C06548"	title="C06548 (Ethylene oxide)" />
+<area shape=circle	coords=478,159,4	href="/dbget-bin/www_bget?C06547"	title="C06547 (Ethylene)" />
+<area shape=circle	coords=377,159,4	href="/dbget-bin/www_bget?C06793"	title="C06793 (Vinyl chloride)" />
+<area shape=circle	coords=278,159,4	href="/dbget-bin/www_bget?C06791"	title="C06791 (trans-1,2-Dichloroethene)" />
+<area shape=circle	coords=647,99,4	href="/dbget-bin/www_bget?C00084"	title="C00084 (Acetaldehyde)" />
+<area shape=circle	coords=178,159,4	href="/dbget-bin/www_bget?C06790"	title="C06790 (Trichloroethene)" />
+<area shape=circle	coords=78,159,4	href="/dbget-bin/www_bget?C06789"	title="C06789 (Tetrachloroethene)" />
+<area shape=circle	coords=478,99,4	href="/dbget-bin/www_bget?C01548"	title="C01548 (Acetylene)" />
+<area shape=circle	coords=278,206,4	href="/dbget-bin/www_bget?C06792"	title="C06792 (cis-1,2-Dichloroethene)" />
+<area shape=circle	coords=679,159,4	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=rect	coords=399,151,445,168	href="/dbget-bin/www_bget?K00539+1.97.1.-+R05498"	title="K00539 (E1.97.1.-), 1.97.1.-, R05498" />
+<area shape=rect	coords=300,151,346,168	href="/dbget-bin/www_bget?K00539+1.97.1.-+R05502"	title="K00539 (E1.97.1.-), 1.97.1.-, R05502" />
+<area shape=rect	coords=300,198,346,215	href="/dbget-bin/www_bget?K00539+1.97.1.-+R05503"	title="K00539 (E1.97.1.-), 1.97.1.-, R05503" />
+<area shape=rect	coords=202,198,248,215	href="/dbget-bin/www_bget?1.97.1.8+R05501"	title="1.97.1.8, 1.97.1.8, R05501" />
+<area shape=rect	coords=202,151,248,168	href="/dbget-bin/www_bget?1.97.1.8+R05500"	title="1.97.1.8, 1.97.1.8, R05500" />
+<area shape=rect	coords=103,151,149,168	href="/dbget-bin/www_bget?1.97.1.8+R05499"	title="1.97.1.8, 1.97.1.8, R05499" />
+<area shape=rect	coords=456,116,502,133	href="/dbget-bin/www_bget?K00531+K02586+K02591+K02588+1.18.6.1+R05496"	title="K00531 (E1.18.6.1), K02586 (nifD), K02588 (nifH), K02591 (nifK), 1.18.6.1, R05496" />
+<area shape=rect	coords=605,151,651,168	href="/dbget-bin/www_bget?K00100+1.1.1.-+R05351"	title="K00100 (E1.1.1.-), 1.1.1.-, R05351" />
+<area shape=rect	coords=575,179,621,196	href="/dbget-bin/www_bget?K08726+3.3.2.10+R05842"	title="K08726 (EPHX2), 3.3.2.10, R05842" />
+<area shape=rect	coords=501,151,547,168	href="/dbget-bin/www_bget?1.14.13.69+R05444"	title="1.14.13.69, 1.14.13.69, R05444" />
+<area shape=rect	coords=540,91,586,108	href="/dbget-bin/www_bget?4.2.1.112+R05380"	title="4.2.1.112, 4.2.1.112, R05380" />
+<area shape=rect	coords=738,142,814,177	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=40,45,324,71	href="/dbget-bin/www_bget?map00625"	title="map00625" />
+<area shape=rect	coords=518,274,683,309	href="/kegg-bin/show_pathway?map00630"	title="map00630" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -17,7 +17,8 @@
 	       ];
     };
 
-    widget.taxonTitles = [ "domain", "phylum", "className", "order", "family", "genus", "species", "strain" ];
+    widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species", "strain" ];
+    widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
     widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "LSU", "SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
 
 
@@ -32,7 +33,7 @@
     widget.context = "none";
     widget.normalizeData = false;
     widget.standardizeData = false;
-    widget.currentType = "matrix";
+    widget.currentType = "table";
     
     // main display function called at startup
     widget.display = function (params) {
@@ -69,22 +70,25 @@
 	// set the tool area
 	var tools = widget.sidebar;
 	tools.parentNode.style.overflowY = "visible";
-	tools.setAttribute('style', 'padding: 10px;');
+	tools.setAttribute('style', 'padding: 10px; overflow-x: auto;');
 
 	// check the context
-	var toolshtml = "<h4>Data Containers</h4>";
+	var toolshtml = "<h4>Analysis Containers</h4>";
 	toolshtml += "<div id='availableContainers'></div>";
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
 	toolshtml += "<div id='currentContainerParams'></div>";
 	toolshtml += "<h4>View</h4>";
 	toolshtml += "<div id='visualContainerSpace'></div>";
-	toolshtml += "<h4>Export</h4>";
+	toolshtml += "<h4>Plugins</h4>";
+	toolshtml += "<div id='pluginContainerSpace'></div>";
+	toolshtml += "<h4>myData &nbsp; Export</h4>";
 	toolshtml += "<div id='exportContainerSpace'></div>";
 	tools.innerHTML = toolshtml;
 
 	widget.showDataContainers();
 	widget.fillVisualizations();
 	widget.fillExport();
+	widget.fillPlugins();
 
 	widget.loadDataUI();
 
@@ -104,10 +108,25 @@
     	var container = document.getElementById('exportContainerSpace');
 	var html = "";
 
+	html += "<img src='Retina/images/cloud-upload.png' class='tool' style='float: left;' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><div style='float: left; width: 1px; height: 55px; background-color: rgb(204, 204, 204); position: relative; top: 5px; margin-left: 3px;'></div>";
 	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
 	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
 	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
 	html += "<img src='Retina/images/file-css.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"json\");' title='JSON'>";
+
+
+	container.innerHTML = html;
+    };
+
+    widget.fillPlugins = function () {
+	var widget = this;
+
+	var container = document.getElementById('pluginContainerSpace');
+
+	var html = "";
+
+	html += "<img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'>Krona";
+	html += "<img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'>KEGG Mapper";
 
 	container.innerHTML = html;
     };
@@ -170,8 +189,45 @@
 	var settings = jQuery.extend(true, {}, visMap[type].settings);
 	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
 
+	// set the callback
+	settings.callback = widget.graphCallback;
+
 	// set the current controller
     	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": visMap[type].controlGroups });
+    };
+
+    widget.graphCallback = function (event) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	var rend = this.renderer;
+	event = event || window.event;
+
+	var t = event.target;
+	var cat;
+	if (t.nodeName == "text") {
+	    cat = t.innerHTML;
+	} else if (t.previousSibling && t.previousSibling.nodeName == "title") {
+	    cat = t.previousSibling.innerHTML.split(/ - /)[1];
+	} else {
+	    console.log('unhandled click element');
+	    console.log(t);
+	    return;
+	}
+
+	var dls = document.getElementById('displayLevelSelect');
+	
+	// check if we can zoom in
+	if (dls.selectedIndex + 1 < dls.options.length) {
+	    
+	    // remove the filters for the current displayType
+	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	    if (c.parameters.displayType == "taxonomy") {
+		c.parameters.taxFilter = [ { "level": c.parameters.displayLevel, "source": c.parameters.displaySource, "value": cat } ];
+	    } else {
+		c.parameters.ontFilter = [ { "level": c.parameters.displayLevel, "source": c.parameters.displaySource, "value": cat } ];
+	    }
+	    dls.selectedIndex++;
+	    dls.onchange();
+	}
     };
 
     widget.removeDataContainer = function () {
@@ -237,7 +293,6 @@
 	else {
 	    if (param == "displayType") {
 		if (value == "function") {
-		    container.parameters.displaySource = 1;
 		    container.parameters.displayLevel = "level1";
 		} else {
 		    container.parameters.displayLevel = "domain";
@@ -298,11 +353,11 @@
 			glow = " glow";
 			name = "<span style='color: blue;'>"+name+"</span>";
 		    }
-		    html += "<div title='click to select data container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);'><img src='Retina/images/data.png' class='tool"+glow+"'><br>"+name+"</div>";
+		    html += "<div title='click to select analysis container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
 		}
 		
 	    }
-	    html += "<div title='create a new data container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
+	    html += "<div title='create a new analysis container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
 	}
     };
@@ -314,11 +369,11 @@
 	var target = document.getElementById('currentContainerParams');
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	var p = c.parameters;
-	var taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];
-	var ontLevels = { "Subsystems": ["level1","level2","level3","functions"], "KO": ["level1","level2","level3","functions"], "COG": ["level1","level2","functions"], "NOG": ["level1","level2","functions"] };
+	var taxLevels = widget.taxLevels;
+	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete data container' onclick='if(confirm(\"Really delete this data container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();'><i class='icon icon-edit'></i></button></h4>" ];
 
 	// cutoffs
 	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\',this.nextSibling.value);">e-value</button><input id="evalueInput" type="text" value="'+p.evalue+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
@@ -349,9 +404,6 @@
 	    if (i == c.parameters.displaySource) {
 		sel = " selected=selected";
 	    }
-	    if (c.parameters.displayType == "function" && i==0) {
-		    sel = " disabled=disabled";
-	    }
 	    html.push("<option"+sel+">"+c.parameters.sources[i]+"</option>");
 	}
 	html.push("</select></td></tr>");
@@ -360,7 +412,7 @@
 	html.push("<tr><td>type</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
 
 	// level
-	var displayLevelSelect = "<select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
+	var displayLevelSelect = "<select id='displayLevelSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
 	if (c.parameters.displayType == "taxonomy") {
 
 	    for (var i=0; i<taxLevels.length; i++) {
@@ -371,12 +423,14 @@
 		displayLevelSelect += "<option value='"+taxLevels[i]+"'"+sel+">"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
 	    }
 	} else {
-	    for (var i=0; i<ontLevels[c.parameters.sources[1]].length; i++) {
-		var sel = "";
-		if (ontLevels[c.parameters.sources[1]][i] == c.parameters.displayLevel) {
-		    sel = " selected=selected";
+	    if (ontLevels.hasOwnProperty(c.parameters.sources[c.parameters.displaySource])) {
+		for (var i=0; i<ontLevels[c.parameters.sources[c.parameters.displaySource]].length; i++) {
+		    var sel = "";
+		    if (ontLevels[c.parameters.sources[c.parameters.displaySource]][i] == c.parameters.displayLevel) {
+			sel = " selected=selected";
+		    }
+		    displayLevelSelect += '<option'+sel+'>'+ontLevels[c.parameters.sources[c.parameters.displaySource]][i]+'</option>';
 		}
-		displayLevelSelect += '<option'+sel+'>'+ontLevels[c.parameters.sources[1]][i]+'</option>';
 	    }
 	}
 	displayLevelSelect += "</select>";
@@ -529,11 +583,11 @@
       DATA CONTAINER CONVERSION METHODS
      */
 
-    widget.container2matrix = function () {
+    widget.container2matrix = function (container) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	// get the current container
-	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var c = container || stm.DataStore.dataContainer[widget.selectedContainer];
 
 	/*
 	  perform filter
@@ -552,8 +606,8 @@
 	}
 	
 	// create array index lookups for taxonomy and ontology levels
-	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6 };
-	var flevelIndex = { "Subsystems-level1": 0, "Subsystems-level2": 1, "Subsystems-level3": 2, "Subsystems-functions": 3, "KO-level1": 0, "KO-level2": 1, "KO-level3": 2, "KO-functions": 0, "COG-level1": 0, "COG-level2": 1, "COG-functions": 2, "NOG-level1": 0, "NOG-level2": 1, "NOG-functions": 3 };
+	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6, "strain": 7 };
+	var flevelIndex = { "Subsystems-level1": 0, "Subsystems-level2": 1, "Subsystems-level3": 2, "Subsystems-function": 3, "KO-level1": 0, "KO-level2": 1, "KO-level3": 2, "KO-function": 3, "COG-level1": 0, "COG-level2": 1, "COG-function": 2, "NOG-level1": 0, "NOG-level2": 1, "NOG-function": 3 };
 
 	// initialize the output row hash
     	var rows = {};
@@ -672,6 +726,10 @@
 			
 			var source = c.parameters.sources[c.parameters.ontFilter[j].source];
 			var level = c.parameters.ontFilter[j].level;
+			if (! stm.DataStore.ontology.hasOwnProperty(source)) {
+			    stay = false;
+			    break;
+			}
 
 			// iterate over the function array
 			var single = true;
@@ -690,7 +748,7 @@
 				    break;
 				}
 			    } else {
-				console.log("func not found: "+func)
+				console.log("func not found: "+funcs[k])
 			    }
 			}
 
@@ -716,6 +774,7 @@
 	var matrix = { data: [],
 		       rows: [],
 		       cols: [],
+		       evalues: [],
 		       abundances: [] };
 
 	var id = c.parameters.metadatum;
@@ -725,6 +784,8 @@
 	var displayType = c.parameters.displayType;
 
 	var d = {};
+	var e = {};
+	var hier = {};
 	var dataRow = 1;
 	for (var i=0; i<c.items.length; i++) {
 	    matrix.abundances.push(0);
@@ -741,7 +802,7 @@
 
 		// get the display indices
 		var datums = p.data[row + 5 + (displaySource * 2) + (displayType == "taxonomy" ? 0 : 1)];
-		    
+
 		// if there is no index, skip this row
 		if (datums == null) {
 		    continue;
@@ -759,29 +820,51 @@
 			continue;
 		    }
 		    key = stm.DataStore.taxonomy[displayLevel][stm.DataStore.taxonomy["organism"][datums[0]][levelIndex[displayLevel]]];
+		    hier[key] = [];
+		    for (var j=0; j<=levelIndex[displayLevel]; j++) {
+			hier[key].push(stm.DataStore.taxonomy[widget.taxLevels[j]][stm.DataStore.taxonomy["organism"][datums[0]][j]]);
+		    }
 		} else {
+		    if (! stm.DataStore.ontology.hasOwnProperty(source)) {
+			continue;
+		    }
 		    if (! stm.DataStore.ontology[source]['id'][datums[0]]) {
 			console.log("function not found: "+datums[0]);
 			continue;
 		    }
 		    key = stm.DataStore.ontology[source][displayLevel][stm.DataStore.ontology[source]['id'][datums[0]][flevelIndex[source+"-"+displayLevel]]];
+		    hier[key] = [];
+		    for (var j=0; j<=flevelIndex[source+"-"+displayLevel]; j++) {
+			hier[key].push(stm.DataStore.ontology[source][widget.ontLevels[source][j]][stm.DataStore.ontology[source]['id'][datums[0]][j]]);
+		    }
 		}
 		if (! d.hasOwnProperty(key)) {
 		    d[key] = [];
+		    e[key] = [];
 		    for (var j=0;j<c.items.length;j++) {
 			d[key][j] = 0;
+			e[key][j] = 0;
 		    }
 		}
 		d[key][i] += val;
+		e[key][i] += val * p.data[row + dataRow + 1];
 		matrix.abundances[i] += val;
 	    }
 	}
 	matrix.rows = Retina.keys(d).sort();
 	for (var i=0; i<matrix.rows.length; i++) {
 	    matrix.data.push(d[matrix.rows[i]]);
+	    for (var h=0; h<e[matrix.rows[i]].length; h++) {
+		e[matrix.rows[i]][h] = e[matrix.rows[i]][h] / d[matrix.rows[i]][h];
+	    }
+	    matrix.evalues.push(e[matrix.rows[i]]);
 	}
-	
+
+	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[source+"-"+displayLevel]) + 1;
 	c.matrix = matrix;
+	c.matrix.itemsX = matrix.cols.length;
+	c.matrix.itemsY = matrix.rows.length;
+	c.hierarchy = hier;
 
 	return c;
     };
@@ -852,7 +935,7 @@
 			     },
 		 'table': { title: 'table',
 			    renderer: 'table',
-			    settings: {},
+			    settings: { 'sort_autodetect': true },
 			    dataConversion: "container2table",
 			    controlGroups:
 			    [
@@ -892,7 +975,7 @@
 	if (! widget.hasOwnProperty('mgselect')) {
 
 	    // border and title
-	    var html = [ "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Data Loader <span style='cursor: pointer;'><sup>[?]</sup></span></h3><div>" ];
+	    var html = [ "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis Container <span style='cursor: pointer;' title='click to see a short tutorial video'><sup>[?]</sup></span></h3><p>An analysis container holds all the <span class='tt' data-title='Analysis Container Settings' data-content='<p>The settings include the list of referenced profiles, the selected data-sources, the current cutoffs like e-value or alignment length, taxonomic or hierarchical filters and the current visualization.</p><p>Once the container is ready, you can adjust the settings in the righthand menu.</p>'>settings</span> for your analysis, as well as the current analysis result. It is based on metagenomic profiles, which contain all the raw data.</p><p>Select the databases and the profiles for your analysis container. You can name the container in the text-field <i>analysis container name</i>. Click the <i class='icon-ok'></i></a>-button below to begin.</p><p><span class='tt' data-title='Metagenomic Profiles' data-content='<p>Profiles are generated on our server on demand. The initial calculation may take some time, depending on the profile size. Once computed, they will be cached and subsequent requests will download immediately.</p><p>You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p>'>Profiles</span> which are not yet on your machine will be downloaded. Once all required profiles are available, the analysis container is ready for exploration!</p><div style='overflow-x: auto;'>" ];
 
 
 	    // params container
@@ -928,6 +1011,9 @@
 	    // fill the content
 	    target.innerHTML = html.join("");
 
+	    // add the tooltips
+	    jQuery('.tt').popover({"trigger": "hover", "html": true, "placement": "bottom"});
+
 	    // show the databases
 	    widget.showDatabases("protein");
 
@@ -943,7 +1029,7 @@
 		data: [],
 		filter: result_columns,
 		result_field: true,
-		result_field_placeholder: "data container name",
+		result_field_placeholder: "analysis container name",
 		result_field_default: widget.result_field_default || "",
 		multiple: true,
 		extra_wide: true,
@@ -972,7 +1058,6 @@
 	html.push('</ul></li></ul>');
 
 	document.getElementById('databaseSelect').innerHTML = html.join("");
-	widget.dataLoadParams.source = widget.sources[which][0];
     };
     
     widget.loadDone = function (container) {
@@ -980,8 +1065,9 @@
 
 	if (container.status == "ready") {
 	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
-	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
+	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/bar-chart.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
 	    widget.selectedContainer = container.id;
+	    stm.DataStore.dataContainer[widget.selectedContainer].parameters.sources = stm.DataStore.profile[stm.DataStore.dataContainer[widget.selectedContainer].items[0].id].sources;
 	    document.getElementById('dataprogress').innerHTML = html;
 	    widget.container2matrix();
 	    widget.showDataContainers();
@@ -1029,17 +1115,24 @@
 	    stm.DataStore.dataContainer = {};
 	}	
 
-	var name = collectionName || widget.dataLoadParams.name || "data"+Retina.keys(stm.DataStore.dataContainer).length;
+	var name = collectionName || widget.dataLoadParams.name || "analysis"+Retina.keys(stm.DataStore.dataContainer).length;
 
 	if (ids.length) {
-	    if (! name) {
-		var i = Retina.keys(stm.DataStore.dataContainer).length;
-		while (stm.DataStore.dataContainer.hasOwnProperty('data_'+i)) {
-		    i++;
+
+	    // sanity check if there is a sequence type mix
+	    var seqTypes = {};
+	    for (var i=0; i<ids.length; i++) {
+		if (! seqTypes.hasOwnProperty(ids[i].sequence_type)) {
+		    seqTypes[ids[i].sequence_type] = 0;
 		}
-		name = 'data_'+i;
-		document.getElementById('dataContainerName').value = name;
+		seqTypes[ids[i].sequence_type]++;
 	    }
+	    if (Retina.keys(seqTypes).length > 1) {
+		if (! confirm("Your selection is composed of multiple sequence types ("+Retina.keys(seqTypes).join(", ")+").\n\nYou can check the sequence type by selecting it in the filter type. Are you sure you want to load these data?")) {
+		    return;
+		}
+	    }
+	    
 	    if (stm.DataStore.dataContainer.hasOwnProperty(name) && ! params) {
 		if (! confirm("The name '"+name+"' already exists. Do you want \nto replace it with the current selection?")) {
 		    return;
@@ -1066,6 +1159,8 @@
 	    if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
 		stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
 	    }
+	} else {
+	    alert('You did not select any metagenomes');
 	}
 	if (! stm.DataStore.hasOwnProperty('profile') ) {
 	    stm.DataStore.profile = {};
@@ -1364,6 +1459,12 @@
 	    }
 	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".tsv");
 	    return;
+	} else if (type == 'shock') {
+	    if (stm.user) {
+		widget.createAnalysisObject();
+	    } else {
+		alert('you must be logged in to use this function');
+	    }
 	}
     };
 
@@ -1382,6 +1483,60 @@
 	// remove the elements
 	document.body.removeChild(href);
 	document.body.removeChild(document.getElementById('canvasResult'));
+    };
+
+    widget.createAnalysisObject = function () {
+	var widget = this;
+
+	// disable the upload button
+	document.getElementById('uploadButton').removeAttribute('onclick');
+	document.getElementById('uploadButton').setAttribute('src', 'Retina/images/waiting.gif');
+	
+	// set up the url
+	var url = RetinaConfig.shock_url+'/node';
+	
+	// set up the node
+	var c = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer]);
+	delete c.callbacks;
+	delete c.promises;
+	delete c.status;
+	delete c.user;
+	var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id, "container": c }) ], { "type" : "text\/json" });
+	var form = new FormData();
+	var filename = widget.selectedContainer;
+	form.append('attributes', attributes);
+	form.append('file_name', filename);
+	var image = new Blob([ document.getElementById('SVGdiv1').innerHTML ], { "type" : "image\/svg+xml" });
+	form.append('upload', image);
+	
+	jQuery.ajax(url, {
+	    contentType: false,
+	    processData: false,
+	    data: form,
+	    success: function(data) {
+		jQuery.ajax({ url: RetinaConfig.shock_url+'/node/'+data.data.id+'/acl/public_read',
+			      success: function(data) {
+				  document.getElementById('uploadButton').setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].exportData("shock");');
+				  document.getElementById('uploadButton').setAttribute('src', 'Retina/images/cloud-upload.png');
+				  alert('image uploaded');
+			      },
+			      error: function(jqXHR, error) {
+				  document.getElementById('uploadButton').setAttribute('src', 'Retina/images/cloud-upload.png');
+				  document.getElementById('uploadButton').setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].exportData("shock");');
+				  alert('image upload failed');
+			      },
+			      crossDomain: true,
+			      headers: stm.authHeader,
+			      type: "PUT"
+			    });
+	    },
+	    error: function(jqXHR, error){
+		alert('image upload caused an error');
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "POST"
+	});
     };
 
     // LOAD BACKGROUND DATA
@@ -1504,7 +1659,7 @@
 
 	// get the profile
 	var profile = stm.DataStore.profile[id];
-
+	
 	// check if this profile is already purged
 	if (profile.purged) {
 	    console.log(profile.id + ' already purged');
@@ -1552,6 +1707,96 @@
 			  }
 			});
 	}
+    };
+
+    /*
+      PLUGINS
+    */
+
+    // open a window for the plugin, pass the data and initialize it
+    widget.plugin = function (which) {
+	var widget = this;
+
+	var info = { "krona": { "authors": "Ondov BD, Bergman NH, and Phillippy AM", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/21961884" },
+		     "kegg": { "authors": "Tobias Paczian" } };
+
+	var d = widget["container2"+which]();
+	if (! d) {
+	    return;
+	}
+	
+	var data = { "plugin": which,
+		     "info": info[which],
+		     "transfer": d };
+
+	var w = window.open('plugin.html');
+	w.onload = function () {
+	    w.initWebApp(data);
+	};
+    };
+
+    widget.container2kegg = function () {
+	var widget = this;
+
+	var container = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer]);
+	var hasKO = false;
+	var koSource = 0;
+	for (var i=0; i<container.parameters.sources.length; i++) {
+	    if (container.parameters.sources[i] == "KO") {
+		hasKO = true;
+		koSource = i;
+		break;
+	    }
+	}
+	if (! hasKO) {
+	    alert("Your container must include the KO source to use the KEGG Mapper");
+	    return false;
+	}
+
+	// set the correct parameters
+	container.parameters.displayType = "function";
+	container.parameters.displayLevel = "function";
+	container.parameters.displaySource = koSource;
+
+	// get the functions
+	var funcs = jQuery.extend(true, {}, widget.container2matrix(container).matrix);
+
+	container.parameters.displayLevel = "level3";
+	
+	// get the maps
+	var maps = jQuery.extend(true, {}, widget.container2matrix(container).matrix);
+	
+	var data = { "functions": funcs, "maps": maps };
+	
+	return data;
+    };
+
+    widget.container2krona = function () {
+	var widget = this;
+
+	var container = stm.DataStore.dataContainer[widget.selectedContainer];
+	var ranks = container.parameters.displayType == "taxonomy" ? widget.taxLevels.slice(0, container.parameters.depth) : widget.ontLevels[container.parameters.sources[container.parameters.displaySource]].slice(0, container.parameters.depth);
+	var matrixdata = [];
+	for (var i=0; i<container.matrix.cols.length; i++) {
+	    matrixdata.push([]);
+	    for (var h=0; h<container.matrix.data.length; h++) {
+		var row = [];
+		for (var j=0;j<ranks.length; j++) {
+		    row.push(container.hierarchy[container.matrix.rows[h]][j]);
+		}
+		row.push(container.matrix.data[h][i]);
+		row.push(container.matrix.evalues[h][i]);
+		matrixdata[i].push(row);
+	    }
+	}
+
+	if (ranks[2] == "className") { ranks[2] = "class"; }
+	
+	var data = { "ranks": ranks,
+		     "names": container.matrix.cols,
+		     "data": matrixdata,
+		     "containerName": container.id };
+	return data;
     };
     
 })();

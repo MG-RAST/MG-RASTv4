@@ -1,0 +1,171 @@
+<html>
+<!---
+ENTRY       map07110
+DEFINITION  Benzoic acid family - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Benzoic acid family - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Benzoic acid family - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07110&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07110">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07110" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07110" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07110.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=734,516,775,529	href="/dbget-bin/www_bget?D00110+D02182"	title="D00110 (Cocaine (USP)), D02182 (Cocaine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=475,776,547,789	href="/dbget-bin/www_bget?D02457"	title="D02457 (Acetrizoic acid)" />
+<area shape=rect	coords=121,484,203,498	href="/dbget-bin/www_bget?D01087"	title="D01087 (Methyl salicylate (JP15/NF))" />
+<area shape=rect	coords=798,829,853,842	href="/dbget-bin/www_bget?D01774+D01916"	title="D01774 (Adipiodone (JAN/INN)), D01916 (Iodipamide meglumine (USP))" />
+<area shape=rect	coords=873,684,921,698	href="/dbget-bin/www_bget?D01376+D01979+D02036"	title="D01376 (Iodamide (JP15/USAN/INN)), D01979 (Iodamide meglumine (USAN)), D02036 (Meglumine sodium iodamide injection (JP15))" />
+<area shape=rect	coords=709,685,777,698	href="/dbget-bin/www_bget?D01258"	title="D01258 (Iotalamic acid (JP15/INN))" />
+<area shape=rect	coords=562,684,650,698	href="/dbget-bin/www_bget?D02240"	title="D02240 (Amidotrizoic acid (JP15))" />
+<area shape=rect	coords=867,395,912,408	href="/dbget-bin/www_bget?D00740+D02461"	title="D00740 (Procaine hydrochloride (JP15/USP)), D02461 (Penicillin G procaine (USP))" />
+<area shape=rect	coords=864,296,921,309	href="/dbget-bin/www_bget?D00552"	title="D00552 (Ethyl aminobenzoate (JP15))" />
+<area shape=rect	coords=708,343,800,356	href="/dbget-bin/www_bget?D02456"	title="D02456 (Aminobenzoic acid (USP))" />
+<area shape=rect	coords=855,158,932,172	href="/dbget-bin/www_bget?D01183"	title="D01183 (Tolfenamic acid (JAN/INN))" />
+<area shape=rect	coords=730,159,807,172	href="/dbget-bin/www_bget?D01581"	title="D01581 (Flufenamic acid (JAN/USAN/INN))" />
+<area shape=rect	coords=614,159,690,172	href="/dbget-bin/www_bget?D00151"	title="D00151 (Mefenamic acid (JP15/USP/INN))" />
+<area shape=rect	coords=470,158,547,172	href="/dbget-bin/www_bget?C00108"	title="C00108 (Anthranilate)" />
+<area shape=rect	coords=472,409,534,422	href="/dbget-bin/www_bget?D00038"	title="D00038 (Benzoic acid (JP15/USP))" />
+<area shape=rect	coords=139,399,188,412	href="/dbget-bin/www_bget?D00130"	title="D00130 (Diflunisal (JAN/USP/INN))" />
+<area shape=rect	coords=146,283,188,297	href="/dbget-bin/www_bget?D00109"	title="D00109 (Aspirin (JP15/USP))" />
+<area shape=rect	coords=72,770,138,783	href="/dbget-bin/www_bget?D01420"	title="D01420 (Butyl parahydroxybenzoate (JP15))" />
+<area shape=rect	coords=176,770,248,783	href="/dbget-bin/www_bget?D01422+D02459"	title="D01422 (Propyl parahydroxybenzoate (JP15)), D02459 (Propylparaben sodium (NF))" />
+<area shape=rect	coords=271,716,375,729	href="/dbget-bin/www_bget?C00156"	title="C00156 (4-Hydroxybenzoate)" />
+<area shape=rect	coords=175,658,248,671	href="/dbget-bin/www_bget?D01400+D02458"	title="D01400 (Methyl parahydroxybenzoate (JP15)), D02458 (Methylparaben sodium (NF))" />
+<area shape=rect	coords=71,658,137,671	href="/dbget-bin/www_bget?D01647"	title="D01647 (Ethyl parahydroxybenzoate (JP15))" />
+<area shape=rect	coords=235,399,301,412	href="/dbget-bin/www_bget?D00097"	title="D00097 (Salicylic acid (JP15/USP))" />
+<area shape=rect	coords=625,829,696,842	href="/dbget-bin/www_bget?D01880"	title="D01880 (Sodium metrizoate (JAN/INN))" />
+<area shape=rect	coords=700,534,809,560	href="/kegg-bin/show_pathway?map07015"	title="map07015" />
+<area shape=rect	coords=40,45,219,71	href="/dbget-bin/www_bget?map07110"	title="map07110" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

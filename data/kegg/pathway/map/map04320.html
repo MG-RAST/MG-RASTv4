@@ -1,0 +1,182 @@
+<html>
+<!---
+ENTRY       map04320
+DEFINITION  Dorso-ventral axis formation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Dorso-ventral axis formation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Dorso-ventral axis formation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04320&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04320">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04320 map" -->
+</select>
+<input type="hidden" name="mapno" value="04320" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04320" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04320" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04320.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=226,412,272,429	href="/dbget-bin/www_bget?K03102"	title="K03102 (SQD)" />
+<area shape=rect	coords=392,414,438,431	href="/dbget-bin/www_bget?K03102"	title="K03102 (SQD)" />
+<area shape=rect	coords=492,402,538,419	href="/dbget-bin/www_bget?K02098"	title="K02098 (SPIR)" />
+<area shape=rect	coords=492,385,538,402	href="/dbget-bin/www_bget?K02184"	title="K02184 (FMN2)" />
+<area shape=rect	coords=418,393,464,410	href="/dbget-bin/www_bget?K02524"	title="K02524 (K10)" />
+<area shape=rect	coords=193,518,239,535	href="/dbget-bin/www_bget?K02156"	title="K02156 (AUB, PIWI)" />
+<area shape=rect	coords=193,499,239,516	href="/dbget-bin/www_bget?K02602"	title="K02602 (ORB)" />
+<area shape=rect	coords=193,480,239,497	href="/dbget-bin/www_bget?K02360"	title="K02360 (ENC)" />
+<area shape=rect	coords=274,412,320,429	href="/dbget-bin/www_bget?K02177"	title="K02177 (BRU)" />
+<area shape=rect	coords=102,453,148,470	href="/dbget-bin/www_bget?K02447"	title="K02447 (GRK)" />
+<area shape=rect	coords=98,416,144,433	href="/dbget-bin/www_bget?K02175"	title="K02175 (BRN)" />
+<area shape=rect	coords=141,392,187,409	href="/dbget-bin/www_bget?K02359"	title="K02359 (EGH)" />
+<area shape=rect	coords=141,282,187,299	href="/dbget-bin/www_bget?K02599"	title="K02599 (NOTCH)" />
+<area shape=rect	coords=141,242,187,259	href="/dbget-bin/www_bget?dme:Dmel_CG1004"	title="Dmel_CG1004" />
+<area shape=rect	coords=671,131,717,148	href="/dbget-bin/www_bget?K02174"	title="K02174 (BR-C)" />
+<area shape=rect	coords=560,211,606,228	href="/dbget-bin/www_bget?K02215"	title="K02215 (CF2)" />
+<area shape=rect	coords=559,183,605,200	href="/dbget-bin/www_bget?K03211"	title="K03211 (ETV6_7, yan)" />
+<area shape=rect	coords=559,157,605,174	href="/dbget-bin/www_bget?K02678"	title="K02678 (ETS, pnt)" />
+<area shape=rect	coords=469,194,515,211	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=395,194,441,211	href="/dbget-bin/www_bget?K04368"	title="K04368 (MAP2K1, MEK1)" />
+<area shape=rect	coords=322,194,368,211	href="/dbget-bin/www_bget?K02644"	title="K02644 (PHL)" />
+<area shape=rect	coords=247,194,293,211	href="/dbget-bin/www_bget?K07827"	title="K07827 (KRAS, KRAS2)" />
+<area shape=rect	coords=231,169,277,186	href="/dbget-bin/www_bget?K03099"	title="K03099 (SOS)" />
+<area shape=rect	coords=215,145,261,162	href="/dbget-bin/www_bget?K04364"	title="K04364 (GRB2)" />
+<area shape=rect	coords=44,145,90,162	href="/dbget-bin/www_bget?K02447"	title="K02447 (GRK)" />
+<area shape=rect	coords=141,145,187,162	href="/dbget-bin/www_bget?K04361"	title="K04361 (EGFR, ERBB1)" />
+<area shape=rect	coords=70,106,116,123	href="/dbget-bin/www_bget?K02104"	title="K02104 (ARGOS)" />
+<area shape=rect	coords=40,45,375,71	href="/dbget-bin/www_bget?map04320"	title="map04320" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

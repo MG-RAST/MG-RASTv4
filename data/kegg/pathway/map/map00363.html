@@ -1,0 +1,201 @@
+<html>
+<!---
+ENTRY       map00363
+DEFINITION  Bisphenol A degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Bisphenol A degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Bisphenol A degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00363&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00363">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00363 map" -->
+</select>
+<input type="hidden" name="mapno" value="00363" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00363" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00363" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00363.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=374,78,4	href="/dbget-bin/www_bget?C13620"	title="C13620 (Tetrabromobisphenol A)" />
+<area shape=circle	coords=300,563,4	href="/dbget-bin/www_bget?C13632"	title="C13632 (4,4'-Dihydroxy-alpha-methylstilbene)" />
+<area shape=circle	coords=300,836,4	href="/dbget-bin/www_bget?C00530"	title="C00530 (p-Benzenediol)" />
+<area shape=circle	coords=374,157,4	href="/dbget-bin/www_bget?C13621"	title="C13621 (Tribromobisphenol A)" />
+<area shape=circle	coords=522,678,4	href="/dbget-bin/www_bget?C00156"	title="C00156 (4-Hydroxybenzoate)" />
+<area shape=circle	coords=522,563,4	href="/dbget-bin/www_bget?C13634"	title="C13634 (2,3-Bis(4-hydroxyphenyl)-1,2-propanediol)" />
+<area shape=circle	coords=447,483,4	href="/dbget-bin/www_bget?C13631"	title="C13631 (2,2-Bis(4-hydroxyphenyl)-1-propanol)" />
+<area shape=circle	coords=300,483,4	href="/dbget-bin/www_bget?C13629"	title="C13629 (1,2-Bis(4-hydroxyphenyl)-2-propanol)" />
+<area shape=circle	coords=217,617,4	href="/dbget-bin/www_bget?C00633"	title="C00633 (4-Hydroxybenzaldehyde)" />
+<area shape=circle	coords=97,678,4	href="/dbget-bin/www_bget?C13637"	title="C13637 (4-Ethylphenol)" />
+<area shape=circle	coords=198,678,4	href="/dbget-bin/www_bget?C13638"	title="C13638 (1-(4'-Hydroxyphenyl)ethanol)" />
+<area shape=circle	coords=210,391,4	href="/dbget-bin/www_bget?C13625"	title="C13625 (4-Methyl-2,4-bis-(p-hydroxyphenyl)pent-1-ene)" />
+<area shape=circle	coords=374,236,4	href="/dbget-bin/www_bget?C13622"	title="C13622 (Dibromobisphenol A)" />
+<area shape=circle	coords=374,315,4	href="/dbget-bin/www_bget?C13623"	title="C13623 (Monobromobisphenol A)" />
+<area shape=circle	coords=374,394,4	href="/dbget-bin/www_bget?C13624"	title="C13624 (Bisphenol A)" />
+<area shape=circle	coords=512,391,4	href="/dbget-bin/www_bget?C13626"	title="C13626 (5-Hydroxybisphenol A)" />
+<area shape=circle	coords=402,563,4	href="/dbget-bin/www_bget?C13633"	title="C13633 (2,2-Bis(4-hydroxyphenyl)-propanoic acid)" />
+<area shape=circle	coords=300,678,4	href="/dbget-bin/www_bget?C10700"	title="C10700 (4'-Hydroxyacetophenone)" />
+<area shape=circle	coords=300,757,4	href="/dbget-bin/www_bget?C13636"	title="C13636 (4-Hydroxyphenyl acetate)" />
+<area shape=circle	coords=623,391,4	href="/dbget-bin/www_bget?C13628"	title="C13628 (4,5-Bisphenol-o-quinone)" />
+<area shape=circle	coords=608,616,4	href="/dbget-bin/www_bget?C13635"	title="C13635 (4-Hydroxyphenacyl alcohol)" />
+<area shape=poly	coords=381,389,506,389,506,393,381,393	href="/dbget-bin/www_bget?R06881"	title="R06881" />
+<area shape=poly	coords=506,391,498,395,498,387	href="/dbget-bin/www_bget?R06881"	title="R06881" />
+<area shape=poly	coords=515,389,617,389,617,393,515,393	href="/dbget-bin/www_bget?R06882"	title="R06882" />
+<area shape=poly	coords=617,391,609,395,609,387	href="/dbget-bin/www_bget?R06882"	title="R06882" />
+<area shape=rect	coords=585,636,631,653	href="/dbget-bin/www_bget?K05913+1.13.11.41+R01305"	title="K05913 (E1.13.11.41), 1.13.11.41, R01305" />
+<area shape=rect	coords=499,581,545,598	href="/dbget-bin/www_bget?K05915+1.13.-.-+R06889"	title="K05915 (E1.13.-.-), 1.13.-.-, R06889" />
+<area shape=rect	coords=278,704,324,721	href="/dbget-bin/www_bget?1.14.13.84+R06892"	title="1.14.13.84, 1.14.13.84, R06892" />
+<area shape=rect	coords=277,581,323,598	href="/dbget-bin/www_bget?K05915+1.13.-.-+R06886"	title="K05915 (E1.13.-.-), 1.13.-.-, R06886" />
+<area shape=rect	coords=380,510,426,527	href="/dbget-bin/www_bget?1.1.3.-+R06887"	title="1.1.3.-, 1.1.3.-, R06887" />
+<area shape=rect	coords=425,429,471,446	href="/dbget-bin/www_bget?K00492+1.14.13.-+R06884"	title="K00492 (E1.14.13.-), 1.14.13.-, R06884" />
+<area shape=rect	coords=352,183,398,200	href="/dbget-bin/www_bget?K00539+1.97.1.-+R06877"	title="K00539 (E1.97.1.-), 1.97.1.-, R06877" />
+<area shape=rect	coords=278,783,324,800	href="/dbget-bin/www_bget?K01045+3.1.1.2+R06893"	title="K01045 (E3.1.1.2), 3.1.1.2, R06893" />
+<area shape=rect	coords=121,670,167,687	href="/dbget-bin/www_bget?K00492+1.14.13.-+R06890"	title="K00492 (E1.14.13.-), 1.14.13.-, R06890" />
+<area shape=rect	coords=223,671,269,688	href="/dbget-bin/www_bget?K00100+1.1.1.-+R06891"	title="K00100 (E1.1.1.-), 1.1.1.-, R06891" />
+<area shape=rect	coords=278,509,324,526	href="/dbget-bin/www_bget?K00120+1.1.-.-+R06885"	title="K00120 (E1.1.-.-), 1.1.-.-, R06885" />
+<area shape=rect	coords=278,432,324,449	href="/dbget-bin/www_bget?K00492+1.14.13.-+R06883"	title="K00492 (E1.14.13.-), 1.14.13.-, R06883" />
+<area shape=rect	coords=352,340,398,357	href="/dbget-bin/www_bget?K00539+1.97.1.-+R06879"	title="K00539 (E1.97.1.-), 1.97.1.-, R06879" />
+<area shape=rect	coords=500,511,546,528	href="/dbget-bin/www_bget?K00492+1.14.13.-+R06888"	title="K00492 (E1.14.13.-), 1.14.13.-, R06888" />
+<area shape=rect	coords=352,104,398,121	href="/dbget-bin/www_bget?K00539+1.97.1.-+R06876"	title="K00539 (E1.97.1.-), 1.97.1.-, R06876" />
+<area shape=rect	coords=352,262,398,279	href="/dbget-bin/www_bget?K00539+1.97.1.-+R06878"	title="K00539 (E1.97.1.-), 1.97.1.-, R06878" />
+<area shape=poly	coords=366,389,216,389,216,393,366,393	href="/dbget-bin/www_bget?R06880"	title="R06880" />
+<area shape=poly	coords=216,391,224,387,224,395	href="/dbget-bin/www_bget?R06880"	title="R06880" />
+<area shape=rect	coords=449,732,631,758	href="/kegg-bin/show_pathway?map00623"	title="map00623" />
+<area shape=rect	coords=202,891,407,917	href="/kegg-bin/show_pathway?map00361"	title="map00361" />
+<area shape=rect	coords=40,45,265,71	href="/dbget-bin/www_bget?map00363"	title="map00363" />
+<area shape=rect	coords=32,600,151,635	href="/kegg-bin/show_pathway?map00362"	title="map00362" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

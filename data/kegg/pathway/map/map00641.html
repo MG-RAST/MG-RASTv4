@@ -1,0 +1,175 @@
+<html>
+<!---
+ENTRY       map00641
+DEFINITION  3-Chloroacrylic acid degradation - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: 3-Chloroacrylic acid degradation - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>3-Chloroacrylic acid degradation - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00641&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00641">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00641 map" -->
+</select>
+<input type="hidden" name="mapno" value="00641" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00641" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00641" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00641.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=312,263,4	href="/dbget-bin/www_bget?C16348"	title="C16348 (cis-3-Chloroallyl aldehyde)" />
+<area shape=circle	coords=178,263,4	href="/dbget-bin/www_bget?C06613"	title="C06613 (trans-3-Chloroallyl aldehyde)" />
+<area shape=circle	coords=312,139,4	href="/dbget-bin/www_bget?C06610"	title="C06610 (cis-1,3-Dichloropropene)" />
+<area shape=circle	coords=178,195,4	href="/dbget-bin/www_bget?C06611"	title="C06611 (trans-3-Chloro-2-propene-1-ol)" />
+<area shape=circle	coords=178,331,4	href="/dbget-bin/www_bget?C06614"	title="C06614 (trans-3-Chloroacrylic acid)" />
+<area shape=circle	coords=245,459,4	href="/dbget-bin/www_bget?C00084"	title="C00084 (Acetaldehyde)" />
+<area shape=circle	coords=245,387,4	href="/dbget-bin/www_bget?C00222"	title="C00222 (3-Oxopropanoate)" />
+<area shape=circle	coords=312,195,4	href="/dbget-bin/www_bget?C06612"	title="C06612 (cis-3-Chloro-2-propene-1-ol)" />
+<area shape=circle	coords=178,139,4	href="/dbget-bin/www_bget?C06609"	title="C06609 (trans-1,3-Dichloropropene)" />
+<area shape=circle	coords=312,331,4	href="/dbget-bin/www_bget?C06615"	title="C06615 (cis-3-Chloroacrylic acid)" />
+<area shape=rect	coords=290,214,336,231	href="/dbget-bin/www_bget?K00001+1.1.1.1+R05234"	title="K00001 (E1.1.1.1, adh), 1.1.1.1, R05234" />
+<area shape=rect	coords=155,214,201,231	href="/dbget-bin/www_bget?K00001+1.1.1.1+R05233"	title="K00001 (E1.1.1.1, adh), 1.1.1.1, R05233" />
+<area shape=rect	coords=290,355,336,372	href="/dbget-bin/www_bget?up:Q6VPE5_9CORY+R05372"	title="Q6VPE5_9CORY, R05372" />
+<area shape=rect	coords=223,412,269,429	href="/dbget-bin/www_bget?K01618+4.1.1.-+R06973"	title="K01618 (E4.1.1.-), 4.1.1.-, R06973" />
+<area shape=rect	coords=290,285,336,302	href="/dbget-bin/www_bget?K00128+1.2.1.3+R05238"	title="K00128 (E1.2.1.3), 1.2.1.3, R05238" />
+<area shape=rect	coords=290,153,336,170	href="/dbget-bin/www_bget?K01563+3.8.1.5+R05368"	title="K01563 (E3.8.1.5, dhaA), 3.8.1.5, R05368" />
+<area shape=rect	coords=155,285,201,302	href="/dbget-bin/www_bget?K00128+1.2.1.3+R05237"	title="K00128 (E1.2.1.3), 1.2.1.3, R05237" />
+<area shape=rect	coords=155,355,201,372	href="/dbget-bin/www_bget?up:Q9EV84_PSEPV+up:Q9EV85_PSEPV+R05371"	title="Q9EV84_PSEPV, Q9EV85_PSEPV, R05371" />
+<area shape=rect	coords=155,153,201,170	href="/dbget-bin/www_bget?K01563+3.8.1.5+R05367"	title="K01563 (E3.8.1.5, dhaA), 3.8.1.5, R05367" />
+<area shape=rect	coords=186,518,305,544	href="/kegg-bin/show_pathway?map00620"	title="map00620" />
+<area shape=rect	coords=40,45,335,70	href="/dbget-bin/www_bget?map00641"	title="map00641" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

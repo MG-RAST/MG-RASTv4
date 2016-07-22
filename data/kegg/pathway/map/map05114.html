@@ -1,0 +1,61 @@
+<html>
+<!---
+ENTRY       map05114
+DEFINITION   - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY:  - Reference pathway
+</title>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css">
+<script language="JavaScript">
+<!---
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+
+<body>
+<form name="selmenu" method="GET" action="/dbget-bin/get_pathway">
+
+<table cellpadding="0" width="100%" cellspacing="0" border="0"><tr><td>
+<a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif"></a>
+&nbsp;&nbsp;&nbsp;<font class="title3"><b> - Reference pathway</b></font></td>
+<td valign="bottom" align="right"><a target="_blank" href="/kegg/document/help_pathway.html">
+<img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')"></a>
+</td></tr></table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+]
+<br>
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05114 map" -->
+</select>
+
+<input type="submit" value="Go">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_pathway_objects btn_deforg 05114" -->
+<input type="hidden" name="mapno" value="05114">
+<br>
+<img src="/kegg/pathway/map/map05114.gif" usemap="#mapdata" border=0>
+<map name="mapdata">
+
+<area shape=circle	coords=406,684,4	href="/dbget-bin/www_bget?compound+C01558">
+<area shape=circle	coords=725,72,4	href="/dbget-bin/www_bget?compound+C00461">
+<area shape=circle	coords=790,103,4	href="/dbget-bin/www_bget?compound+C01674">
+<area shape=rect	coords=47,22,221,45	href="http://www.genome.jp/dbget-bin/get_linkdb?pathway+map05114">
+<area shape=rect	coords=530,160,625,196	href="/kegg/pathway/vch/vch03090.html">
+<area shape=rect	coords=531,160,624,196	href="/kegg/pathway/vch/vch03090.html">
+<area shape=rect	coords=747,134,845,160	href="/kegg/pathway/vch/vch02010.html">
+<area shape=rect	coords=759,389,880,416	href="/kegg/pathway/vch/vch02040.html">
+<area shape=rect	coords=763,447,857,482	href="/kegg/pathway/vch/vch03090.html">
+<area shape=rect	coords=773,208,869,244	href="/kegg/pathway/vch/vch03090.html">
+<area shape=rect	coords=776,269,872,305	href="/kegg/pathway/vch/vch03090.html">
+<area shape=rect	coords=780,597,874,634	href="/kegg/pathway/vch/vch03090.html">
+
+</map>
+
+</form>
+</body>
+<!---
+///
+--->
+</html>

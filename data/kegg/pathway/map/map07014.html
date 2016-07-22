@@ -1,0 +1,172 @@
+<html>
+<!---
+ENTRY       map07014
+DEFINITION  Quinolones - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Quinolones - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Quinolones - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07014&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07014">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07014" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07014" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07014.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1247,156,1404,247	href="/dbget-bin/www_bget?D02540"	title="D02540 (Garenoxacin mesilate hydrate (JAN))" />
+<area shape=rect	coords=1050,186,1186,278	href="/dbget-bin/www_bget?D02539"	title="D02539 (Clinafloxacin hydrochloride (USAN))" />
+<area shape=rect	coords=911,186,1045,278	href="/dbget-bin/www_bget?D00589"	title="D00589 (Gatifloxacin hydrate (JAN))" />
+<area shape=rect	coords=403,641,551,734	href="/dbget-bin/www_bget?D00590"	title="D00590 (Sparfloxacin (JAN/USAN/INN))" />
+<area shape=rect	coords=934,639,1113,730	href="/dbget-bin/www_bget?D02471"	title="D02471 (Gemifloxacin mesylate (USAN))" />
+<area shape=rect	coords=950,460,1112,570	href="/dbget-bin/www_bget?D02123"	title="D02123 (Trovafloxacin mesylate (USAN))" />
+<area shape=rect	coords=1053,300,1188,392	href="/dbget-bin/www_bget?D02475"	title="D02475 (Sitafloxacin hydrate (JAN))" />
+<area shape=rect	coords=904,300,1049,386	href="/dbget-bin/www_bget?D00874"	title="D00874 (Moxifloxacin hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=706,641,839,749	href="/dbget-bin/www_bget?D02317+D01996"	title="D02317 (Tosufloxacin (USAN)), D01996 (Tosufloxacin tosylate hydrate (JAN))" />
+<area shape=rect	coords=706,465,839,544	href="/dbget-bin/www_bget?D00310"	title="D00310 (Enoxacin (USAN/INN))" />
+<area shape=rect	coords=222,666,336,746	href="/dbget-bin/www_bget?D02467"	title="D02467 (Droxacin sodium (USAN))" />
+<area shape=rect	coords=230,259,343,336	href="/dbget-bin/www_bget?D02301"	title="D02301 (Oxolinic acid (USAN/INN))" />
+<area shape=rect	coords=222,547,336,628	href="/dbget-bin/www_bget?D02303"	title="D02303 (Miloxacin (INN))" />
+<area shape=rect	coords=685,186,840,264	href="/dbget-bin/www_bget?D00453"	title="D00453 (Ofloxacin (JP15/USP/INN))" />
+<area shape=rect	coords=410,186,544,264	href="/dbget-bin/www_bget?D00210"	title="D00210 (Norfloxacin (JP15/USP/INN))" />
+<area shape=rect	coords=553,641,686,734	href="/dbget-bin/www_bget?D02178"	title="D02178 (Grepafloxacin hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=59,666,184,746	href="/dbget-bin/www_bget?D02305"	title="D02305 (Rosoxacin (USAN/INN))" />
+<area shape=rect	coords=229,403,343,481	href="/dbget-bin/www_bget?D00872"	title="D00872 (Cinoxacin (JAN/USP/INN))" />
+<area shape=rect	coords=49,402,183,482	href="/dbget-bin/www_bget?D01531"	title="D01531 (Pipemidic acid trihydrate (JP15))" />
+<area shape=rect	coords=56,259,182,336	href="/dbget-bin/www_bget?D01431"	title="D01431 (Piromidic acid (JAN/INN))" />
+<area shape=rect	coords=547,186,680,264	href="/dbget-bin/www_bget?D00186+D02216"	title="D00186 (Ciprofloxacin (JAN/USP/INN)), D02216 (Ciprofloxacin hydrochloride (JAN/USP))" />
+<area shape=rect	coords=410,300,544,387	href="/dbget-bin/www_bget?C14492"	title="C14492 (Ulifloxacin)" />
+<area shape=rect	coords=78,547,184,628	href="/dbget-bin/www_bget?D02302"	title="D02302 (Flumequine (USAN/INN))" />
+<area shape=rect	coords=657,300,839,390	href="/dbget-bin/www_bget?D01144"	title="D01144 (Prulifloxacin (JAN/INN))" />
+<area shape=rect	coords=139,135,259,212	href="/dbget-bin/www_bget?D00183"	title="D00183 (Nalidixic acid (JP15/USP/INN))" />
+<area shape=rect	coords=243,67,316,93	href="/kegg-bin/show_pathway?map07025"	title="map07025" />
+<area shape=rect	coords=40,45,165,71	href="/dbget-bin/www_bget?map07014"	title="map07014" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

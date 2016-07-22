@@ -1,0 +1,215 @@
+<html>
+<!---
+ENTRY       map05131
+DEFINITION  Pathogenic Escherichia coli infection - EPEC - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Pathogenic Escherichia coli infection - EPEC - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+var map_value = new Array('05130','05131');
+var map_text = new Array('EHEC','EPEC');
+var map_list = new Array();
+map_list['map'] = new Array( 0, 1 );
+map_list['ko'] = new Array( 0, 1 );
+map_list['ec'] = new Array(); map_list['ec'][0] = 1;
+map_list['rn'] = new Array(); map_list['rn'][0] = 1;
+map_list['hsa'] = new Array( 0, 1 );
+
+function reset_maplist(){
+  var obj_org = document.selmenu.org_name;
+  var obj_map = document.selmenu.mapno;
+  var orgv = obj_org.options[obj_org.selectedIndex].value;
+  var mapv = obj_map.options[obj_map.selectedIndex].value;
+
+  if(!map_list[orgv]) return;
+
+  var nitem = map_list[orgv].length;
+  var sel = 0;
+  try { var nitem = map_list[orgv].length; }
+  catch(e) { return; }
+
+  obj_map.options.length = nitem;
+  for( var i = 0; i < nitem; i++ ) {
+    var n = map_list[orgv][i];
+    obj_map.options[i].value = map_value[n];
+    obj_map.options[i].text = map_text[n];
+    if (map_value[n] == mapv) { sel = i; }
+  }
+  if (navigator.appName == "Netscape") obj_map.options[0].selected = false;
+  obj_map.selectedIndex = sel;
+}
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body onload="reset_maplist()">
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Pathogenic Escherichia coli infection - EPEC - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg/pathway.html">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05131">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name" onchange="reset_maplist()">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05131 map" -->
+</select>
+<select name="mapno">
+<option value="05130">EHEC</option>
+<option value="05131" selected="selected">EPEC</option>
+</select>
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05131" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05131" />
+<input type="hidden" name="scale" value="1.0" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05131.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=414,219,4	href="/dbget-bin/www_bget?C00350"	title="C00350 (Phosphatidylethanolamine)" />
+<area shape=rect	coords=391,306,437,323	href="/dbget-bin/www_bget?K04391"	title="K04391 (CD14)" />
+<area shape=rect	coords=345,277,391,294	href="/dbget-bin/www_bget?K05400"	title="K05400 (LY96, MD-2)" />
+<area shape=rect	coords=111,158,157,175	href="/dbget-bin/www_bget?ece:Z1465+ece:Z1464+ecs:ECs1205+ecs:ECs1206"	title="Z1465, Z1464, ECs1205, ECs1206" />
+<area shape=rect	coords=391,268,437,285	href="/dbget-bin/www_bget?hsa:7099+bta:281536+rno:29260+mmu:21898+cfa:403417+gga:417241"	title="7099, 281536, 29260, 21898, 403417, 417241" />
+<area shape=rect	coords=391,244,437,261	href="/dbget-bin/www_bget?hsa:7100+bta:444870+mmu:53791+rno:289337+cfa:488605+gga:554217"	title="7100, 444870, 53791, 289337, 488605, 554217" />
+<area shape=rect	coords=111,404,157,421	href="/dbget-bin/www_bget?ece:Z5113+ecs:ECs4562"	title="Z5113, ECs4562" />
+<area shape=rect	coords=337,514,383,531	href="/dbget-bin/www_bget?ece:Z5112+ecs:ECs4561"	title="Z5112, ECs4561" />
+<area shape=rect	coords=199,552,245,569	href="/dbget-bin/www_bget?ece:Z5110+ecs:ECs4559"	title="Z5110, ECs4559" />
+<area shape=rect	coords=425,342,471,359	href="/dbget-bin/www_bget?ece:Z5142+ecs:ECs4590"	title="Z5142, ECs4590" />
+<area shape=rect	coords=513,342,559,359	href="/dbget-bin/www_bget?K07374"	title="K07374 (TUBA)" />
+<area shape=rect	coords=426,870,472,887	href="/dbget-bin/www_bget?ece:Z3072+ecs:ECs2715"	title="Z3072, ECs2715" />
+<area shape=rect	coords=526,926,572,943	href="/dbget-bin/www_bget?K05689"	title="K05689 (CDHE, CDH1)" />
+<area shape=rect	coords=519,733,565,750	href="/dbget-bin/www_bget?hsa:10971+mmu:22630+rno:25577+gga:421932"	title="10971, 22630, 25577, 421932" />
+<area shape=rect	coords=111,364,157,381	href="/dbget-bin/www_bget?ece:Z5142+ecs:ECs4590"	title="Z5142, ECs4590" />
+<area shape=rect	coords=519,778,565,795	href="/dbget-bin/www_bget?hsa:7534+cfa:475864+bta:287022+rno:25578+mmu:22631"	title="7534, 475864, 287022, 25578, 22631" />
+<area shape=rect	coords=425,744,471,761	href="/dbget-bin/www_bget?ece:Z5113+ecs:ECs4562"	title="Z5113, ECs4562" />
+<area shape=rect	coords=519,756,565,773	href="/dbget-bin/www_bget?hsa:3875+bta:506480+cfa:477601+mmu:16668+rno:294853"	title="3875, 506480, 477601, 16668, 294853" />
+<area shape=rect	coords=615,926,661,943	href="/dbget-bin/www_bget?K02105"	title="K02105 (CTNNB1)" />
+<area shape=rect	coords=603,554,649,571	href="/dbget-bin/www_bget?K06106"	title="K06106 (CTTN, EMS1)" />
+<area shape=rect	coords=778,387,824,404	href="/dbget-bin/www_bget?K04514"	title="K04514 (ROCK)" />
+<area shape=rect	coords=471,613,517,630	href="/dbget-bin/www_bget?ece:Z5115+ecs:ECs4564"	title="Z5115, ECs4564" />
+<area shape=rect	coords=526,861,572,878	href="/dbget-bin/www_bget?K06088"	title="K06088 (OCLN)" />
+<area shape=rect	coords=526,881,572,898	href="/dbget-bin/www_bget?K08007"	title="K08007 (VIL2)" />
+<area shape=rect	coords=520,683,566,700	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=425,767,471,784	href="/dbget-bin/www_bget?ece:Z5100+ecs:ECs4550"	title="Z5100, ECs4550" />
+<area shape=rect	coords=111,384,157,401	href="/dbget-bin/www_bget?ece:Z5100+ecs:ECs4550"	title="Z5100, ECs4550" />
+<area shape=rect	coords=425,552,471,569	href="/dbget-bin/www_bget?K05703+K06619"	title="K05703 (FYN), K06619 (ABL1)" />
+<area shape=rect	coords=426,926,472,943	href="/dbget-bin/www_bget?hsa:5578+mmu:18750+bta:282001+gga:417430+rno:24680"	title="5578, 18750, 282001, 417430, 24680" />
+<area shape=rect	coords=602,514,648,531	href="/dbget-bin/www_bget?K05747"	title="K05747 (WAS)" />
+<area shape=rect	coords=513,445,559,462	href="/dbget-bin/www_bget?ece:Z3072+ecs:ECs2715"	title="Z3072, ECs2715" />
+<area shape=rect	coords=526,901,572,918	href="/dbget-bin/www_bget?hsa:9076+bta:414922+rno:65129+mmu:12737"	title="9076, 414922, 65129, 12737" />
+<area shape=rect	coords=337,595,383,612	href="/dbget-bin/www_bget?K05719"	title="K05719 (ITGB1)" />
+<area shape=rect	coords=513,547,559,564	href="/dbget-bin/www_bget?K07365"	title="K07365 (NCK)" />
+<area shape=rect	coords=602,387,648,404	href="/dbget-bin/www_bget?hsa:9181+bta:505940+ptr:457378+cfa:403498+rno:310635+mmu:16800"	title="9181, 505940, 457378, 403498, 310635, 16800" />
+<area shape=rect	coords=111,501,157,518	href="/dbget-bin/www_bget?ece:Z3072+ecs:ECs2715"	title="Z3072, ECs2715" />
+<area shape=rect	coords=690,387,736,404	href="/dbget-bin/www_bget?K04513"	title="K04513 (RHOA)" />
+<area shape=rect	coords=337,562,383,579	href="/dbget-bin/www_bget?hsa:4691+cfa:608445+rno:64556+bta:497013+rno:25135+mmu:17975+gga:396201"	title="4691, 608445, 64556, 497013, 25135, 17975, 396201" />
+<area shape=rect	coords=111,344,157,361	href="/dbget-bin/www_bget?ece:Z5112+ecs:ECs4561"	title="Z5112, ECs4561" />
+<area shape=rect	coords=513,362,559,379	href="/dbget-bin/www_bget?K07375"	title="K07375 (TUBB)" />
+<area shape=rect	coords=111,424,157,441	href="/dbget-bin/www_bget?ece:Z5115+ecs:ECs4564"	title="Z5115, ECs4564" />
+<area shape=rect	coords=111,137,157,154	href="/dbget-bin/www_bget?ece:Z3344+ece:Z3343+ecs:ECs2974+ecs:ECs2973"	title="Z3344, Z3343, ECs2974, ECs2973" />
+<area shape=rect	coords=690,515,736,532	href="/dbget-bin/www_bget?K05754"	title="K05754 (ARPC5)" />
+<area shape=rect	coords=778,515,824,532	href="/dbget-bin/www_bget?K05692"	title="K05692 (ACTB_G1)" />
+<area shape=rect	coords=745,443,865,478	href="/kegg/pathway/map/map04810.html"	title="map04810" />
+<area shape=rect	coords=69,240,183,266	href="/kegg/pathway/map/map02040.html"	title="map02040" />
+<area shape=rect	coords=701,962,822,988	href="/kegg/pathway/map/map04520.html"	title="map04520" />
+<area shape=rect	coords=582,962,681,988	href="/kegg/pathway/map/map04530.html"	title="map04530" />
+<area shape=rect	coords=518,247,651,282	href="/kegg/pathway/map/map04620.html"	title="map04620" />
+<area shape=rect	coords=178,344,364,379	href="/kegg/pathway/map/map03070.html"	title="map03070" />
+<area shape=rect	coords=736,801,810,827	href="/kegg/pathway/map/map04210.html"	title="map04210" />
+<area shape=rect	coords=611,672,731,707	href="/kegg/pathway/map/map04810.html"	title="map04810" />
+<area shape=rect	coords=40,45,379,71	href="/kegg/pathway/map/map05130.html"	title="map05130" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

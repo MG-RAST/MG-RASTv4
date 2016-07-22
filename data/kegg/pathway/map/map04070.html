@@ -1,0 +1,220 @@
+<html>
+<!---
+ENTRY       map04070
+DEFINITION  Phosphatidylinositol signaling system - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Phosphatidylinositol signaling system - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Phosphatidylinositol signaling system - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04070&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04070">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04070 map" -->
+</select>
+<input type="hidden" name="mapno" value="04070" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04070" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04070" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04070.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=467,646,4	href="/dbget-bin/www_bget?C11554"	title="C11554 (1-Phosphatidyl-1D-myo-inositol 3,4-bisphosphate)" />
+<area shape=circle	coords=467,349,4	href="/dbget-bin/www_bget?C11556"	title="C11556 (1-Phosphatidyl-1D-myo-inositol 3,5-bisphosphate)" />
+<area shape=circle	coords=239,144,4	href="/dbget-bin/www_bget?C11557"	title="C11557 (1-Phosphatidyl-1D-myo-inositol 5-phosphate)" />
+<area shape=circle	coords=1183,361,4	href="/dbget-bin/www_bget?C11174"	title="C11174 (1-Diphosinositol pentakisphosphate)" />
+<area shape=circle	coords=871,783,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=786,459,4	href="/dbget-bin/www_bget?C01243"	title="C01243 (1D-myo-Inositol 1,3,4-trisphosphate)" />
+<area shape=circle	coords=680,459,4	href="/dbget-bin/www_bget?C01272"	title="C01272 (1D-myo-Inositol 1,3,4,5-tetrakisphosphate)" />
+<area shape=circle	coords=1004,539,4	href="/dbget-bin/www_bget?C03546"	title="C03546 (myo-Inositol 4-phosphate)" />
+<area shape=circle	coords=1004,489,4	href="/dbget-bin/www_bget?C04006"	title="C04006 (1D-myo-Inositol 3-phosphate)" />
+<area shape=circle	coords=1004,430,4	href="/dbget-bin/www_bget?C01177"	title="C01177 (Inositol 1-phosphate)" />
+<area shape=circle	coords=1004,361,4	href="/dbget-bin/www_bget?C01284"	title="C01284 (1D-myo-Inositol 1,3,4,5,6-pentakisphosphate)" />
+<area shape=circle	coords=785,539,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=900,539,4	href="/dbget-bin/www_bget?C01220"	title="C01220 (1D-myo-Inositol 1,4-bisphosphate)" />
+<area shape=circle	coords=900,489,4	href="/dbget-bin/www_bget?C04063"	title="C04063 (D-myo-Inositol 3,4-bisphosphate)" />
+<area shape=circle	coords=900,430,4	href="/dbget-bin/www_bget?C04062"	title="C04062 (D-myo-Inositol 1,3-bisphosphate)" />
+<area shape=circle	coords=900,361,4	href="/dbget-bin/www_bget?C04477"	title="C04477 (1D-myo-Inositol 1,3,4,6-tetrakisphosphate)" />
+<area shape=circle	coords=467,144,4	href="/dbget-bin/www_bget?C04637"	title="C04637 (1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate)" />
+<area shape=circle	coords=1096,489,4	href="/dbget-bin/www_bget?C00137"	title="C00137 (myo-Inositol)" />
+<area shape=circle	coords=1096,361,4	href="/dbget-bin/www_bget?C01204"	title="C01204 (myo-Inositol hexakisphosphate)" />
+<area shape=circle	coords=1080,659,4	href="/dbget-bin/www_bget?C00269"	title="C00269 (CDP-diacylglycerol)" />
+<area shape=circle	coords=975,659,4	href="/dbget-bin/www_bget?C00416"	title="C00416 (Phosphatidate)" />
+<area shape=circle	coords=785,659,4	href="/dbget-bin/www_bget?C00165+C00641"	title="C00165 (Diacylglycerol), C00641 (1,2-Diacyl-sn-glycerol)" />
+<area shape=circle	coords=240,647,4	href="/dbget-bin/www_bget?C04549"	title="C04549 (1-Phosphatidyl-1D-myo-inositol 3-phosphate)" />
+<area shape=circle	coords=591,349,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=240,349,4	href="/dbget-bin/www_bget?C01277"	title="C01277 (1-Phosphatidyl-1D-myo-inositol 4-phosphate)" />
+<area shape=circle	coords=138,349,4	href="/dbget-bin/www_bget?C01194"	title="C01194 (1-Phosphatidyl-D-myo-inositol)" />
+<area shape=rect	coords=157,639,203,656	href="/dbget-bin/www_bget?K01110+3.1.3.67"	title="K01110 (E3.1.3.67, PTEN), 3.1.3.67" />
+<area shape=rect	coords=288,469,334,486	href="/dbget-bin/www_bget?K01110+3.1.3.67"	title="K01110 (E3.1.3.67, PTEN), 3.1.3.67" />
+<area shape=rect	coords=1023,352,1069,369	href="/dbget-bin/www_bget?K10572+2.7.1.158+R05202"	title="K10572 (IPPK), 2.7.1.158, R05202" />
+<area shape=rect	coords=807,275,853,292	href="/dbget-bin/www_bget?K01116+K05857+K05858+K05859+K05860+K05861+3.1.4.11"	title="K01116 (E3.1.4.11), K05857 (PLCD), K05858 (PLCB), K05859 (PLCG), K05860 (PLCE), K05861 (PLCZ), 3.1.4.11" />
+<area shape=rect	coords=657,275,703,292	href="/dbget-bin/www_bget?K01116+K05857+K05858+K05859+K05860+K05861+3.1.4.11+R03435"	title="K01116 (E3.1.4.11), K05857 (PLCD), K05858 (PLCB), K05859 (PLCG), K05860 (PLCE), K05861 (PLCZ), 3.1.4.11, R03435" />
+<area shape=rect	coords=849,811,895,828	href="/dbget-bin/www_bget?K02183"	title="K02183 (CALM)" />
+<area shape=rect	coords=928,775,974,792	href="/dbget-bin/www_bget?K02677+2.7.11.13"	title="K02677 (CPKC), 2.7.11.13" />
+<area shape=rect	coords=781,775,827,792	href="/dbget-bin/www_bget?K02522+K04958+K04959+K04960"	title="K02522 (ITPRN), K04958 (ITPR1), K04959 (ITPR2), K04960 (ITPR3)" />
+<area shape=rect	coords=399,845,445,862	href="/dbget-bin/www_bget?K00999+2.7.8.11+R01802"	title="K00999 (E2.7.8.11), 2.7.8.11, R01802" />
+<area shape=rect	coords=591,183,637,200	href="/dbget-bin/www_bget?K00922+K02649+2.7.1.153+R04545"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R), 2.7.1.153, R04545" />
+<area shape=rect	coords=376,174,422,191	href="/dbget-bin/www_bget?K00889+2.7.1.68+R03469"	title="K00889 (E2.7.1.68, PIP5K), 2.7.1.68, R03469" />
+<area shape=rect	coords=162,135,208,152	href="/dbget-bin/www_bget?K02648"	title="K02648 (PI5K)" />
+<area shape=rect	coords=162,340,208,357	href="/dbget-bin/www_bget?K00888+2.7.1.67+R03361"	title="K00888 (E2.7.1.67), 2.7.1.67, R03361" />
+<area shape=rect	coords=157,611,203,628	href="/dbget-bin/www_bget?K00914+K02649+2.7.1.137+R03362"	title="K00914 (E2.7.1.137, PIK3C3, VPS34), K02649 (PIK3R), 2.7.1.137, R03362" />
+<area shape=rect	coords=1002,650,1048,667	href="/dbget-bin/www_bget?K00981+2.7.7.41+R01799"	title="K00981 (E2.7.7.41, CDS1, cdsA), 2.7.7.41, R01799" />
+<area shape=rect	coords=893,650,939,667	href="/dbget-bin/www_bget?K00901+2.7.1.107+R02240"	title="K00901 (E2.7.1.107, DGK, dgkA), 2.7.1.107, R02240" />
+<area shape=rect	coords=288,630,334,647	href="/dbget-bin/www_bget?K01109+3.1.3.66+R04372"	title="K01109 (INPP4), 3.1.3.66, R04372" />
+<area shape=rect	coords=376,510,422,527	href="/dbget-bin/www_bget?K00923+K02649+2.7.1.154+R05795"	title="K00923 (E2.7.1.154, PIK3C2), K02649 (PIK3R), 2.7.1.154, R05795" />
+<area shape=rect	coords=376,432,422,449	href="/dbget-bin/www_bget?K00921+2.7.1.150+R05802"	title="K00921 (E2.7.1.150, FAB1), 2.7.1.150, R05802" />
+<area shape=rect	coords=288,303,334,320	href="/dbget-bin/www_bget?K01099+3.1.3.36+R04404"	title="K01099 (E3.1.3.36), 3.1.3.36, R04404" />
+<area shape=rect	coords=376,126,422,143	href="/dbget-bin/www_bget?K00920+2.7.1.149+R05803"	title="K00920 (E2.7.1.149, PIP4K), 2.7.1.149, R05803" />
+<area shape=rect	coords=926,352,972,369	href="/dbget-bin/www_bget?K00915+2.7.1.140+R03478"	title="K00915 (E2.7.1.140), 2.7.1.140, R03478" />
+<area shape=rect	coords=926,421,972,438	href="/dbget-bin/www_bget?K01108+3.1.3.64+R03330"	title="K01108 (E3.1.3.64), 3.1.3.64, R03330" />
+<area shape=rect	coords=1019,529,1065,546	href="/dbget-bin/www_bget?K01092+3.1.3.25+R01186"	title="K01092 (E3.1.3.25, IMPA, suhB), 3.1.3.25, R01186" />
+<area shape=rect	coords=1019,421,1065,438	href="/dbget-bin/www_bget?K01092+3.1.3.25+R01185"	title="K01092 (E3.1.3.25, IMPA, suhB), 3.1.3.25, R01185" />
+<area shape=rect	coords=1019,479,1065,496	href="/dbget-bin/www_bget?K01092+3.1.3.25+R01187"	title="K01092 (E3.1.3.25, IMPA, suhB), 3.1.3.25, R01187" />
+<area shape=rect	coords=926,479,972,496	href="/dbget-bin/www_bget?K01109+3.1.3.66+R04372"	title="K01109 (INPP4), 3.1.3.66, R04372" />
+<area shape=rect	coords=926,529,972,546	href="/dbget-bin/www_bget?K01107+3.1.3.57+R03427"	title="K01107 (INPP1), 3.1.3.57, R03427" />
+<area shape=rect	coords=817,529,863,546	href="/dbget-bin/www_bget?K01106+3.1.3.56+R03394"	title="K01106 (E3.1.3.56), 3.1.3.56, R03394" />
+<area shape=rect	coords=817,479,863,496	href="/dbget-bin/www_bget?K01107+3.1.3.57+R03393"	title="K01107 (INPP1), 3.1.3.57, R03393" />
+<area shape=rect	coords=711,451,757,468	href="/dbget-bin/www_bget?K01106+3.1.3.56+R03430"	title="K01106 (E3.1.3.56), 3.1.3.56, R03430" />
+<area shape=rect	coords=817,352,863,369	href="/dbget-bin/www_bget?K00913+2.7.1.134+R03429"	title="K00913 (ITPK1), 2.7.1.134, R03429" />
+<area shape=rect	coords=719,492,765,509	href="/dbget-bin/www_bget?K00911+2.7.1.127+R03433"	title="K00911 (E2.7.1.127, ITPK), 2.7.1.127, R03433" />
+<area shape=rect	coords=675,562,721,579	href="/dbget-bin/www_bget?K01116+K05857+K05858+K05859+K05860+K05861+3.1.4.11"	title="K01116 (E3.1.4.11), K05857 (PLCD), K05858 (PLCB), K05859 (PLCG), K05860 (PLCE), K05861 (PLCZ), 3.1.4.11" />
+<area shape=rect	coords=570,588,616,605	href="/dbget-bin/www_bget?K03084"	title="K03084 (SHIP, INPP5D)" />
+<area shape=rect	coords=157,658,203,675	href="/dbget-bin/www_bget?K01108+3.1.3.64+R03363"	title="K01108 (E3.1.3.64), 3.1.3.64, R03363" />
+<area shape=rect	coords=288,488,334,505	href="/dbget-bin/www_bget?K01108+3.1.3.64+R06875"	title="K01108 (E3.1.3.64), 3.1.3.64, R06875" />
+<area shape=rect	coords=543,183,589,200	href="/dbget-bin/www_bget?K01110+3.1.3.67+R04513"	title="K01110 (E3.1.3.67, PTEN), 3.1.3.67, R04513" />
+<area shape=rect	coords=623,100,726,126	href="/dbget-bin/www_bget?map04510hsa"	title="map04510hsa" />
+<area shape=rect	coords=40,45,387,71	href="/dbget-bin/www_bget?map04070"	title="map04070" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

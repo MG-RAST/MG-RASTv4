@@ -1,0 +1,216 @@
+<html>
+<!---
+ENTRY       map05210
+DEFINITION  Colorectal cancer - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Colorectal cancer - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Colorectal cancer - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=05210&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map05210">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Classically, colorectal cancer (CRC)  has been believed to develop from normal mucosa through the premalignant adenoma by the step-wise accumulation of mutations. All CRC display either microsatellite instability (MSI) or chromosome instability (CIN). MSI occurs in 15% of colon cancers and results from inactivation of the DNA mismatch repair (MMR) system by either MMR gene mutations or hypermethylation of the MLH1 promoter. MSI promotes tumorigenesis through generating mutations in target genes that possess coding microsatellite repeats, such as beta-catenin, TGFBR2 and BAX. CIN is found in the majority of colon cancers and leads to a different pattern of gene alterations that contribute to tumor formation. Genes involved in CIN are those coding for APC, K-ras, SMAD4 and p53.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 05210 map" -->
+</select>
+<input type="hidden" name="mapno" value="05210" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map05210" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map05210" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map05210.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=254,200,300,217	href="/dbget-bin/www_bget?K02235+K02329+K02354+K02375+K02376+K02378+K02432+K02534+K02645+K02842"	title="K02235 (FZD2), K02329 (FZD3), K02354 (FZD4), K02375 (FZD5), K02376 (FZD6), K02378 (FZD7), K02432 (FZD1), K02534 (FZD8), K02645 (FZD9), K02842 (FZD10)" />
+<area shape=rect	coords=253,355,299,372	href="/dbget-bin/www_bget?K04361+K04363+K05087+K05089+K05099"	title="K04361 (EGFR, ERBB1), K04363 (PDGFRA), K05087 (IGF1R), K05089 (PDGFRB), K05099 (MET, HGFR)" />
+<area shape=rect	coords=325,355,371,372	href="/dbget-bin/www_bget?K04364"	title="K04364 (GRB2)" />
+<area shape=rect	coords=397,355,443,372	href="/dbget-bin/www_bget?K03099"	title="K03099 (SOS)" />
+<area shape=rect	coords=253,511,299,528	href="/dbget-bin/www_bget?K06765"	title="K06765 (DCC)" />
+<area shape=rect	coords=334,471,380,488	href="/dbget-bin/www_bget?K02187"	title="K02187 (CASP3)" />
+<area shape=rect	coords=173,587,219,604	href="/dbget-bin/www_bget?K04384"	title="K04384 (TGFB)" />
+<area shape=rect	coords=351,200,397,217	href="/dbget-bin/www_bget?K02353"	title="K02353 (DVL)" />
+<area shape=rect	coords=476,348,522,365	href="/dbget-bin/www_bget?K00922+K02649"	title="K00922 (E2.7.1.153, PIK3C), K02649 (PIK3R)" />
+<area shape=rect	coords=400,503,446,520	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=400,520,446,537	href="/dbget-bin/www_bget?K08733"	title="K08733 (APPL, DIP13A)" />
+<area shape=rect	coords=535,511,581,528	href="/dbget-bin/www_bget?K02187"	title="K02187 (CASP3)" />
+<area shape=rect	coords=661,142,707,159	href="/dbget-bin/www_bget?K02085"	title="K02085 (APC)" />
+<area shape=rect	coords=405,589,451,606	href="/dbget-bin/www_bget?K04500"	title="K04500 (SMAD2_3)" />
+<area shape=rect	coords=254,580,300,597	href="/dbget-bin/www_bget?K04674"	title="K04674 (TGFBR1)" />
+<area shape=rect	coords=405,621,451,638	href="/dbget-bin/www_bget?K04501"	title="K04501 (SMAD4)" />
+<area shape=rect	coords=859,517,905,534	href="/dbget-bin/www_bget?K08734"	title="K08734 (MLH1)" />
+<area shape=rect	coords=859,538,905,555	href="/dbget-bin/www_bget?K08735"	title="K08735 (MSH2)" />
+<area shape=rect	coords=421,394,467,411	href="/dbget-bin/www_bget?K07827"	title="K07827 (KRAS, KRAS2)" />
+<area shape=rect	coords=502,394,548,411	href="/dbget-bin/www_bget?K04365+K04366+K08845"	title="K04365 (BRAF), K04366 (RAF1), K08845 (ARAF, ARAF1)" />
+<area shape=rect	coords=659,461,705,478	href="/dbget-bin/www_bget?K04440"	title="K04440 (JNK)" />
+<area shape=rect	coords=609,160,655,177	href="/dbget-bin/www_bget?K02157+K04385"	title="K02157 (AXIN1), K04385 (AXIN2)" />
+<area shape=rect	coords=611,241,657,258	href="/dbget-bin/www_bget?K02157+K04385"	title="K02157 (AXIN1), K04385 (AXIN2)" />
+<area shape=rect	coords=502,461,548,478	href="/dbget-bin/www_bget?K08732"	title="K08732 (RALGDS)" />
+<area shape=rect	coords=581,461,627,478	href="/dbget-bin/www_bget?K04392+K07860+K07861"	title="K04392 (RAC1), K07860 (RAC2), K07861 (RAC3)" />
+<area shape=rect	coords=999,201,1045,218	href="/dbget-bin/www_bget?K08731"	title="K08731 (BIRC5)" />
+<area shape=rect	coords=999,236,1045,253	href="/dbget-bin/www_bget?K04377"	title="K04377 (MYC)" />
+<area shape=rect	coords=999,259,1045,276	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=657,241,703,258	href="/dbget-bin/www_bget?K02085"	title="K02085 (APC)" />
+<area shape=rect	coords=581,394,627,411	href="/dbget-bin/www_bget?K04368"	title="K04368 (MAP2K1, MEK1)" />
+<area shape=rect	coords=741,394,787,411	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=883,369,929,386	href="/dbget-bin/www_bget?K04448"	title="K04448 (JUN)" />
+<area shape=rect	coords=883,394,929,411	href="/dbget-bin/www_bget?K04379"	title="K04379 (FOS)" />
+<area shape=rect	coords=883,419,929,436	href="/dbget-bin/www_bget?K04377"	title="K04377 (MYC)" />
+<area shape=rect	coords=532,775,578,792	href="/dbget-bin/www_bget?K08738"	title="K08738 (CYC)" />
+<area shape=rect	coords=612,736,658,753	href="/dbget-bin/www_bget?K02161"	title="K02161 (BCL2)" />
+<area shape=rect	coords=880,761,926,778	href="/dbget-bin/www_bget?K04451"	title="K04451 (TP53, P53)" />
+<area shape=rect	coords=883,220,929,237	href="/dbget-bin/www_bget?K02620+K04490+K04491+K04492"	title="K02620 (TCF7), K04490 (TCF7L1), K04491 (TCF7L2), K04492 (LEF1)" />
+<area shape=rect	coords=568,177,614,194	href="/dbget-bin/www_bget?K03083"	title="K03083 (GSK3B)" />
+<area shape=rect	coords=569,258,615,275	href="/dbget-bin/www_bget?K03083"	title="K03083 (GSK3B)" />
+<area shape=rect	coords=650,177,696,194	href="/dbget-bin/www_bget?K02105"	title="K02105 (CTNNB1)" />
+<area shape=rect	coords=653,258,699,275	href="/dbget-bin/www_bget?K02105"	title="K02105 (CTNNB1)" />
+<area shape=rect	coords=502,305,548,322	href="/dbget-bin/www_bget?K04456"	title="K04456 (AKT)" />
+<area shape=rect	coords=591,331,637,348	href="/dbget-bin/www_bget?K02158"	title="K02158 (BAD)" />
+<area shape=rect	coords=591,357,637,374	href="/dbget-bin/www_bget?K04399"	title="K04399 (CASP9)" />
+<area shape=rect	coords=1058,670,1104,687	href="/dbget-bin/www_bget?K08737"	title="K08737 (MSH6)" />
+<area shape=rect	coords=1002,697,1048,714	href="/dbget-bin/www_bget?K02159"	title="K02159 (BAX)" />
+<area shape=rect	coords=1002,670,1048,687	href="/dbget-bin/www_bget?K08736"	title="K08736 (MSH3)" />
+<area shape=rect	coords=254,597,300,614	href="/dbget-bin/www_bget?K04388"	title="K04388 (TGFBR2)" />
+<area shape=rect	coords=1002,644,1048,661	href="/dbget-bin/www_bget?K04388"	title="K04388 (TGFBR2)" />
+<area shape=rect	coords=1000,395,1046,412	href="/dbget-bin/www_bget?K04503"	title="K04503 (CCND1)" />
+<area shape=rect	coords=429,192,541,227	href="/kegg-bin/show_pathway?map04310"	title="map04310" />
+<area shape=rect	coords=968,321,1080,347	href="/kegg-bin/show_pathway?map04110"	title="map04110" />
+<area shape=rect	coords=657,304,769,330	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=628,416,740,451	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+<area shape=rect	coords=553,553,665,588	href="/kegg-bin/show_pathway?map04350"	title="map04350" />
+<area shape=rect	coords=355,755,467,781	href="/kegg-bin/show_pathway?map04210"	title="map04210" />
+<area shape=rect	coords=686,751,798,786	href="/kegg-bin/show_pathway?map04115"	title="map04115" />
+<area shape=rect	coords=52,30,229,56	href="/dbget-bin/www_bget?map05210"	title="map05210" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,162 @@
+<html>
+<!---
+ENTRY       map07218
+DEFINITION  HIV protease inhibitors - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: HIV protease inhibitors - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>HIV protease inhibitors - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07218&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07218">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07218" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07218" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07218.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=782,172,998,280	href="/dbget-bin/www_bget?D03843"	title="D03843 (Tipranavir disodium (USAN))" />
+<area shape=rect	coords=784,558,995,668	href="/dbget-bin/www_bget?D03253"	title="D03253 (Brecanavir (USAN))" />
+<area shape=rect	coords=784,445,984,541	href="/dbget-bin/www_bget?D03656+D06478"	title="D03656 (Darunavir (USAN/INN)), D06478 (Darunavir ethanolate (JAN))" />
+<area shape=rect	coords=785,302,999,395	href="/dbget-bin/www_bget?C15659"	title="C15659 (TMC 126)" />
+<area shape=rect	coords=59,405,263,495	href="/dbget-bin/www_bget?D03833+D00897+D02861"	title="D03833 (Indinavir (USAN)), D00897 (Indinavir sulfate (USAN)), D02861 (Indinavir sulfate ethanolate (JAN))" />
+<area shape=rect	coords=66,535,253,651	href="/dbget-bin/www_bget?D00899"	title="D00899 (Nelfinavir mesilate (JAN))" />
+<area shape=rect	coords=307,507,513,612	href="/dbget-bin/www_bget?D01425+D02498"	title="D01425 (Lopinavir (JAN/USAN/INN)), D02498 (Lopinavir mixture with ritonavir)" />
+<area shape=rect	coords=271,132,553,236	href="/dbget-bin/www_bget?C15660"	title="C15660 (A 77003)" />
+<area shape=rect	coords=1017,147,1254,267	href="/dbget-bin/www_bget?D01276"	title="D01276 (Atazanavir sulfate (JAN/USAN))" />
+<area shape=rect	coords=1047,576,1230,659	href="/dbget-bin/www_bget?D05538"	title="D05538 (Mozenavir (INN))" />
+<area shape=rect	coords=1043,393,1235,479	href="/dbget-bin/www_bget?C15662"	title="C15662 (Dmp 323)" />
+<area shape=rect	coords=590,342,775,440	href="/dbget-bin/www_bget?D02497+D02867+D03835+D03837"	title="D02497 (Fosamprenavir (INN)), D02867 (Fosamprenavir calcium hydrate (JAN)), D03835 (Fosamprenavir calcium (USAN)), D03837 (Fosamprenavir sodium (USAN))" />
+<area shape=rect	coords=597,192,772,283	href="/dbget-bin/www_bget?D00894"	title="D00894 (Amprenavir (JAN/USAN/INN))" />
+<area shape=rect	coords=27,193,251,296	href="/dbget-bin/www_bget?D00429+D01160"	title="D00429 (Saquinavir (JAN/USP/INN)), D01160 (Saquinavir mesilate (JAN))" />
+<area shape=rect	coords=312,365,567,457	href="/dbget-bin/www_bget?D00427"	title="D00427 (Ritonavir (JAN/USAN/INN))" />
+<area shape=rect	coords=386,309,432,323	href="/dbget-bin/www_bget?C15661"	title="C15661 (A 80987)" />
+<area shape=rect	coords=40,45,251,71	href="/dbget-bin/www_bget?map07218"	title="map07218" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

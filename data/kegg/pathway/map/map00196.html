@@ -1,0 +1,193 @@
+<html>
+<!---
+ENTRY       map00196
+DEFINITION  Photosynthesis - antenna proteins - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Photosynthesis - antenna proteins - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Photosynthesis - antenna proteins - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00196&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00196">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The chlorophyll-binding subunits of photosystems I and II are internal antenna light-harvesting proteins of oxygenic photosynthesis. The antenna proteins that exist in phycobilisomes in cyanobacteria and light-harvesting chlorophyll protein complexes in green plants act as peripheral antenna systems, enabling more efficient absorption of light energy.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00196 map" -->
+</select>
+<input type="hidden" name="mapno" value="00196" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00196" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00196" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00196.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1024,505,1070,522	href="/dbget-bin/www_bget?K08910"	title="K08910 (LHCA4)" />
+<area shape=rect	coords=978,505,1024,522	href="/dbget-bin/www_bget?K08909"	title="K08909 (LHCA3)" />
+<area shape=rect	coords=932,505,978,522	href="/dbget-bin/www_bget?K08908"	title="K08908 (LHCA2)" />
+<area shape=rect	coords=886,505,932,522	href="/dbget-bin/www_bget?K08907"	title="K08907 (LHCA1)" />
+<area shape=rect	coords=807,505,853,522	href="/dbget-bin/www_bget?K08917"	title="K08917 (LHCB6)" />
+<area shape=rect	coords=761,505,807,522	href="/dbget-bin/www_bget?K08916"	title="K08916 (LHCB5)" />
+<area shape=rect	coords=715,505,761,522	href="/dbget-bin/www_bget?K08915"	title="K08915 (LHCB4)" />
+<area shape=rect	coords=669,505,715,522	href="/dbget-bin/www_bget?K08914"	title="K08914 (LHCB3)" />
+<area shape=rect	coords=623,505,669,522	href="/dbget-bin/www_bget?K08913"	title="K08913 (LHCB2)" />
+<area shape=rect	coords=577,505,623,522	href="/dbget-bin/www_bget?K08912"	title="K08912 (LHCB1)" />
+<area shape=rect	coords=488,552,534,569	href="/dbget-bin/www_bget?K05386"	title="K05386 (cpeZ)" />
+<area shape=rect	coords=442,552,488,569	href="/dbget-bin/www_bget?K05385"	title="K05385 (cpeY)" />
+<area shape=rect	coords=396,552,442,569	href="/dbget-bin/www_bget?K05384"	title="K05384 (cpeU, mpeU)" />
+<area shape=rect	coords=350,552,396,569	href="/dbget-bin/www_bget?K05383"	title="K05383 (cpeT)" />
+<area shape=rect	coords=304,552,350,569	href="/dbget-bin/www_bget?K05382"	title="K05382 (cpeS)" />
+<area shape=rect	coords=258,552,304,569	href="/dbget-bin/www_bget?K05381"	title="K05381 (cpeR)" />
+<area shape=rect	coords=212,552,258,569	href="/dbget-bin/www_bget?K05380"	title="K05380 (cpeE)" />
+<area shape=rect	coords=166,552,212,569	href="/dbget-bin/www_bget?K05378"	title="K05378 (cpeC, mpeC)" />
+<area shape=rect	coords=120,552,166,569	href="/dbget-bin/www_bget?K05377"	title="K05377 (cpeB, mpeB)" />
+<area shape=rect	coords=74,552,120,569	href="/dbget-bin/www_bget?K05376"	title="K05376 (cpeA, mpeA)" />
+<area shape=rect	coords=350,507,396,524	href="/dbget-bin/www_bget?K02290"	title="K02290 (cpcG)" />
+<area shape=rect	coords=304,507,350,524	href="/dbget-bin/www_bget?K02289+K02632"	title="K02289 (cpcF), K02632 (pecF)" />
+<area shape=rect	coords=258,507,304,524	href="/dbget-bin/www_bget?K02288+K02631+4.-.-.-"	title="K02288 (cpcE), K02631 (pecE), 4.-.-.-" />
+<area shape=rect	coords=212,507,258,524	href="/dbget-bin/www_bget?K02287"	title="K02287 (cpcD)" />
+<area shape=rect	coords=166,507,212,524	href="/dbget-bin/www_bget?K02286+K02630"	title="K02286 (cpcC), K02630 (pecC)" />
+<area shape=rect	coords=120,507,166,524	href="/dbget-bin/www_bget?K02285+K02629"	title="K02285 (cpcB), K02629 (pecB)" />
+<area shape=rect	coords=74,507,120,524	href="/dbget-bin/www_bget?K02284+K02628"	title="K02284 (cpcA), K02628 (pecA)" />
+<area shape=rect	coords=304,462,350,479	href="/dbget-bin/www_bget?K02097"	title="K02097 (apcF)" />
+<area shape=rect	coords=258,462,304,479	href="/dbget-bin/www_bget?K02096"	title="K02096 (apcE)" />
+<area shape=rect	coords=212,462,258,479	href="/dbget-bin/www_bget?K02095"	title="K02095 (apcD)" />
+<area shape=rect	coords=166,462,212,479	href="/dbget-bin/www_bget?K02094"	title="K02094 (apcC)" />
+<area shape=rect	coords=120,462,166,479	href="/dbget-bin/www_bget?K02093"	title="K02093 (apcB)" />
+<area shape=rect	coords=74,462,120,479	href="/dbget-bin/www_bget?K02092"	title="K02092 (apcA)" />
+<area shape=rect	coords=772,399,868,425	href="/kegg-bin/show_pathway?map00195"	title="map00195" />
+<area shape=rect	coords=328,400,424,426	href="/kegg-bin/show_pathway?map00195"	title="map00195" />
+<area shape=rect	coords=383,45,682,71	href="/dbget-bin/www_bget?map00196"	title="map00196" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

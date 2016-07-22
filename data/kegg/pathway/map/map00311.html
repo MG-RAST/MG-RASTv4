@@ -1,0 +1,201 @@
+<html>
+<!---
+ENTRY       map00311
+DEFINITION  Penicillin and cephalosporin biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Penicillin and cephalosporin biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Penicillin and cephalosporin biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00311&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00311">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00311 map" -->
+</select>
+<input type="hidden" name="mapno" value="00311" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00311" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00311" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00311.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=1020,189,4	href="/dbget-bin/www_bget?C07756"	title="C07756 (7-Aminocephalosporanic acid)" />
+<area shape=circle	coords=924,189,4	href="/dbget-bin/www_bget?C15666"	title="C15666 ((7R)-7-(4-Carboxybutanamido)cephalosporanate)" />
+<area shape=circle	coords=856,189,4	href="/dbget-bin/www_bget?C04712"	title="C04712 ((7R)-7-(5-Carboxy-5-oxopentanoyl)aminocephalosporinate)" />
+<area shape=circle	coords=251,287,4	href="/dbget-bin/www_bget?C02954"	title="C02954 (6-Aminopenicillanate)" />
+<area shape=circle	coords=251,259,4	href="/dbget-bin/www_bget?C06567"	title="C06567 (Penicilloic acid)" />
+<area shape=circle	coords=750,189,4	href="/dbget-bin/www_bget?C00916"	title="C00916 (Cephalosporin C)" />
+<area shape=circle	coords=824,294,4	href="/dbget-bin/www_bget?C06566"	title="C06566 (Cephamycin C)" />
+<area shape=circle	coords=708,294,4	href="/dbget-bin/www_bget?C06569"	title="C06569 (7a-Hydroxy-O-carbamoyl-deacetylcephalosporin C)" />
+<area shape=circle	coords=635,294,4	href="/dbget-bin/www_bget?C06568"	title="C06568 (O-Carbamoyl-deacetylcephalosporin C)" />
+<area shape=circle	coords=635,189,4	href="/dbget-bin/www_bget?C03112"	title="C03112 (Deacetylcephalosporin C)" />
+<area shape=circle	coords=539,189,4	href="/dbget-bin/www_bget?C06565"	title="C06565 (Deacetoxycephalosporin C)" />
+<area shape=circle	coords=443,189,4	href="/dbget-bin/www_bget?C06564"	title="C06564 (Penicillin N)" />
+<area shape=circle	coords=348,259,4	href="/dbget-bin/www_bget?C00395"	title="C00395 (Penicillin)" />
+<area shape=circle	coords=348,189,4	href="/dbget-bin/www_bget?C05557"	title="C05557 (Isopenicillin N)" />
+<area shape=circle	coords=251,189,4	href="/dbget-bin/www_bget?C05556"	title="C05556 (delta-(L-2-Aminoadipyl)-L-cysteinyl-D-valine)" />
+<area shape=circle	coords=83,189,4	href="/dbget-bin/www_bget?C00956"	title="C00956 (L-2-Aminoadipate)" />
+<area shape=circle	coords=150,210,4	href="/dbget-bin/www_bget?C00183"	title="C00183 (L-Valine)" />
+<area shape=circle	coords=150,168,4	href="/dbget-bin/www_bget?C00097"	title="C00097 (L-Cysteine)" />
+<area shape=rect	coords=943,181,989,198	href="/dbget-bin/www_bget?K12748+3.5.1.93+R07402"	title="K12748 (gca), 3.5.1.93, R07402" />
+<area shape=rect	coords=775,191,821,208	href="/dbget-bin/www_bget?2.6.1.74+R03063"	title="2.6.1.74, 2.6.1.74, R03063" />
+<area shape=rect	coords=775,170,821,187	href="/dbget-bin/www_bget?K00273+1.4.3.3+R07400"	title="K00273 (E1.4.3.3, DAO), 1.4.3.3, R07400" />
+<area shape=rect	coords=281,278,327,295	href="/dbget-bin/www_bget?K01434+3.5.1.11+R02170"	title="K01434 (E3.5.1.11), 3.5.1.11, R02170" />
+<area shape=rect	coords=281,250,327,267	href="/dbget-bin/www_bget?K01467+3.5.2.6+R06363"	title="K01467 (E3.5.2.6, ampC, penP), 3.5.2.6, R06363" />
+<area shape=rect	coords=669,222,715,239	href="/dbget-bin/www_bget?K01060+3.1.1.41+R03062"	title="K01060 (E3.1.1.41), 3.1.1.41, R03062" />
+<area shape=rect	coords=515,222,561,239	href="/dbget-bin/www_bget?K12746+R05228"	title="K12746 (CEFEF), R05228" />
+<area shape=rect	coords=736,269,782,286	href="/dbget-bin/www_bget?prf:1717383A+R05303"	title="1717383A, R05303" />
+<area shape=rect	coords=613,240,659,257	href="/dbget-bin/www_bget?K04128+2.1.3.-+R05230"	title="K04128 (cmcH), 2.1.3.-, R05230" />
+<area shape=rect	coords=562,181,608,198	href="/dbget-bin/www_bget?K12745+1.14.11.26+R05229"	title="K12745 (cefF), 1.14.11.26, R05229" />
+<area shape=rect	coords=462,181,508,198	href="/dbget-bin/www_bget?K12744+1.14.20.1+R05301"	title="K12744 (cefE), 1.14.20.1, R05301" />
+<area shape=rect	coords=325,210,371,227	href="/dbget-bin/www_bget?K10852+2.3.1.164+R06361"	title="K10852 (E2.3.1.164), 2.3.1.164, R06361" />
+<area shape=rect	coords=367,181,413,198	href="/dbget-bin/www_bget?K04127+5.1.1.17+R04147"	title="K04127 (cefD), 5.1.1.17, R04147" />
+<area shape=rect	coords=271,181,317,198	href="/dbget-bin/www_bget?K04126+1.21.3.1+R04872"	title="K04126 (E1.21.3.1), 1.21.3.1, R04872" />
+<area shape=rect	coords=176,181,222,198	href="/dbget-bin/www_bget?K12743+6.3.2.26+R04870"	title="K12743 (PCBAB), 6.3.2.26, R04870" />
+<area shape=rect	coords=736,286,782,303	href="/dbget-bin/www_bget?prf:1717383B+R05303"	title="1717383B, R05303" />
+<area shape=rect	coords=736,303,782,320	href="/dbget-bin/www_bget?prf:1717383C+R05303"	title="1717383C, R05303" />
+<area shape=poly	coords=861,187,918,187,918,191,861,191	href="/dbget-bin/www_bget?R07401"	title="R07401" />
+<area shape=poly	coords=918,189,910,193,910,186	href="/dbget-bin/www_bget?R07401"	title="R07401" />
+<area shape=poly	coords=640,292,702,292,702,296,640,296	href="/dbget-bin/www_bget?R05302"	title="R05302" />
+<area shape=poly	coords=702,294,694,298,694,291	href="/dbget-bin/www_bget?R05302"	title="R05302" />
+<area shape=rect	coords=669,181,715,198	href="/dbget-bin/www_bget?K12747+2.3.1.175+R03064"	title="K12747 (CEFG), 2.3.1.175, R03064" />
+<area shape=rect	coords=291,327,414,353	href="/kegg-bin/show_pathway?map00312"	title="map00312" />
+<area shape=rect	coords=690,109,813,135	href="/kegg-bin/show_pathway?map00312"	title="map00312" />
+<area shape=rect	coords=216,326,288,352	href="/kegg-bin/show_pathway?map07011"	title="map07011" />
+<area shape=rect	coords=786,218,888,254	href="/kegg-bin/show_pathway?map07012"	title="map07012" />
+<area shape=rect	coords=903,282,1026,308	href="/kegg-bin/show_pathway?map00312"	title="map00312" />
+<area shape=rect	coords=40,45,405,71	href="/dbget-bin/www_bget?map00311"	title="map00311" />
+<area shape=rect	coords=28,108,141,134	href="/kegg-bin/show_pathway?map00310"	title="map00310" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

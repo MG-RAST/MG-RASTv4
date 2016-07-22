@@ -1,0 +1,210 @@
+<html>
+<!---
+ENTRY       map00512
+DEFINITION  O-Glycan biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: O-Glycan biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>O-Glycan biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00512&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00512">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+O-glycans are a class of glycans that modify serine or threonine residues of proteins. Biosynthesis of O-glycans starts from the transfer of N-acetylgalactosamine (GalNAc) to serine or threonine. The first GalNAc may be extended with sugars including galactose, N-acetylglucosamine, fucose, or sialic acid, but not mannose, glucose, or xylose. Depending on the sugars added, there are four common O-glycan core structures, cores 1 through 4, and an additional four, cores 5 though 8. Mucins are highly O-glycosylated glycoproteins ubiquitous in mucous secretions on cell surfaces and in body fluids. Mucin O-glycans can be branched, and many sugars or groups of sugars are antigenic. Important modifications of mucin O-glycans include O-acetylation of sialic acid and O-sulfation of galactose and N-acetylglucosamine.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00512 map" -->
+</select>
+<input type="hidden" name="mapno" value="00512" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00512" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00512" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00512.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=340,497,4	href="/dbget-bin/www_bget?G00034"	title="G00034" />
+<area shape=circle	coords=340,433,4	href="/dbget-bin/www_bget?G00033"	title="G00033" />
+<area shape=circle	coords=471,370,4	href="/dbget-bin/www_bget?G00032"	title="G00032" />
+<area shape=circle	coords=340,370,4	href="/dbget-bin/www_bget?G00031"	title="G00031" />
+<area shape=circle	coords=340,306,4	href="/dbget-bin/www_bget?G00030"	title="G00030" />
+<area shape=circle	coords=471,242,4	href="/dbget-bin/www_bget?G00029"	title="G00029" />
+<area shape=circle	coords=340,242,4	href="/dbget-bin/www_bget?G00028"	title="G00028" />
+<area shape=circle	coords=601,116,4	href="/dbget-bin/www_bget?G00027"	title="G00027" />
+<area shape=circle	coords=471,116,4	href="/dbget-bin/www_bget?G00026"	title="G00026" />
+<area shape=circle	coords=471,179,4	href="/dbget-bin/www_bget?G00025"	title="G00025" />
+<area shape=circle	coords=206,242,4	href="/dbget-bin/www_bget?G00023"	title="G00023 (Tn antigen)" />
+<area shape=circle	coords=204,116,4	href="/dbget-bin/www_bget?G00035"	title="G00035 (Sialyl-Tn antigen)" />
+<area shape=circle	coords=75,242,4	href="/dbget-bin/www_bget?C02189"	title="C02189 (Protein serine)" />
+<area shape=circle	coords=96,207,4	href="/dbget-bin/www_bget?G10611"	title="G10611 (UDP-N-acetyl-D-galactosamine)" />
+<area shape=circle	coords=340,179,4	href="/dbget-bin/www_bget?G00024"	title="G00024 (T antigen)" />
+<area shape=rect	coords=244,371,290,388	href="/dbget-bin/www_bget?K00740+2.4.1.148+R05910"	title="K00740 (E2.4.1.148), 2.4.1.148, R05910" />
+<area shape=rect	coords=379,231,425,248	href="/dbget-bin/www_bget?K00740+K09662+2.4.1.148+R05915"	title="K00740 (E2.4.1.148), K09662 (GCNT3), 2.4.1.148, R05915" />
+<area shape=rect	coords=244,350,290,367	href="/dbget-bin/www_bget?K00727+2.4.1.102+R05910"	title="K00727 (GCNT1), 2.4.1.102, R05910" />
+<area shape=rect	coords=244,487,290,504	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-, 2.4.1.-" />
+<area shape=rect	coords=244,423,290,440	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-, 2.4.1.-" />
+<area shape=rect	coords=379,362,425,379	href="/dbget-bin/www_bget?K09905+2.4.1.-+R07628"	title="K09905 (B4GALT5), 2.4.1.-, R07628" />
+<area shape=rect	coords=512,106,558,123	href="/dbget-bin/www_bget?K03479+2.4.99.3+R05914"	title="K03479 (SIAT7A, ST6GalNAc I), 2.4.99.3, R05914" />
+<area shape=rect	coords=181,144,227,161	href="/dbget-bin/www_bget?K03479+2.4.99.3+R05911"	title="K03479 (SIAT7A, ST6GalNAc I), 2.4.99.3, R05911" />
+<area shape=rect	coords=379,107,425,124	href="/dbget-bin/www_bget?K00780+K03368+2.4.99.4+R05913"	title="K00780 (SIAT4A), K03368 (SIAT4B), 2.4.99.4, R05913" />
+<area shape=rect	coords=244,297,290,314	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-, 2.4.1.-" />
+<area shape=rect	coords=244,231,290,248	href="/dbget-bin/www_bget?K00739+2.4.1.147+R05909"	title="K00739 (B3GNT6), 2.4.1.147, R05909" />
+<area shape=rect	coords=126,234,172,251	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=rect	coords=244,171,290,188	href="/dbget-bin/www_bget?K00731+K09653+2.4.1.122+R05908"	title="K00731 (C1GALT1), K09653 (C1GALT2, C1GALT1C1), 2.4.1.122, R05908" />
+<area shape=rect	coords=379,171,425,188	href="/dbget-bin/www_bget?K00727+K09662+K09663+2.4.1.102+R05912"	title="K00727 (GCNT1), K09662 (GCNT3), K09663 (GCNT4), 2.4.1.102, R05912" />
+<area shape=poly	coords=419,985,439,985,439,989,419,989	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-" />
+<area shape=poly	coords=417,858,437,858,437,862,417,862	href="/dbget-bin/www_bget?K09905+2.4.1.-+R07628"	title="K09905 (B4GALT5), 2.4.1.-, R07628" />
+<area shape=poly	coords=133,676,153,676,153,680,133,680	href="/dbget-bin/www_bget?K03479+2.4.99.3+R05911"	title="K03479 (SIAT7A, ST6GalNAc I), 2.4.99.3, R05911" />
+<area shape=poly	coords=134,790,154,790,154,794,134,794	href="/dbget-bin/www_bget?K00780+K03368+2.4.99.4+R05913"	title="K00780 (SIAT4A), K03368 (SIAT4B), 2.4.99.4, R05913" />
+<area shape=poly	coords=435,744,445,734,449,734,439,744	href="/dbget-bin/www_bget?K00739+2.4.1.147+R05909"	title="K00739 (B3GNT6), 2.4.1.147, R05909" />
+<area shape=poly	coords=500,985,520,985,520,989,500,989	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=437,928,457,928,457,932,437,932	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-" />
+<area shape=poly	coords=518,928,538,928,538,932,518,932	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=498,858,518,858,518,862,498,862	href="/dbget-bin/www_bget?K00727+2.4.1.102+R05910"	title="K00727 (GCNT1), 2.4.1.102, R05910" />
+<area shape=poly	coords=579,858,599,858,599,862,579,862	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=438,799,458,799,458,803,438,803	href="/dbget-bin/www_bget?2.4.1.-"	title="2.4.1.-" />
+<area shape=poly	coords=519,799,539,799,539,803,519,803	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=436,711,446,721,450,721,440,711	href="/dbget-bin/www_bget?K00740+K09662+2.4.1.148+R05915"	title="K00740 (E2.4.1.148), K09662 (GCNT3), 2.4.1.148, R05915" />
+<area shape=poly	coords=508,724,528,724,528,728,508,728	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=434,641,444,631,448,631,438,641	href="/dbget-bin/www_bget?K00731+K09653+2.4.1.122+R05908"	title="K00731 (C1GALT1), K09653 (C1GALT2, C1GALT1C1), 2.4.1.122, R05908" />
+<area shape=poly	coords=435,608,445,618,449,618,439,608	href="/dbget-bin/www_bget?K00727+K09662+K09663+2.4.1.102+R05912"	title="K00727 (GCNT1), K09662 (GCNT3), K09663 (GCNT4), 2.4.1.102, R05912" />
+<area shape=poly	coords=507,621,527,621,527,625,507,625	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=192,791,202,781,206,781,196,791	href="/dbget-bin/www_bget?K00731+K09653+2.4.1.122+R05908"	title="K00731 (C1GALT1), K09653 (C1GALT2, C1GALT1C1), 2.4.1.122, R05908" />
+<area shape=poly	coords=193,758,203,768,207,768,197,758	href="/dbget-bin/www_bget?K03479+2.4.99.3+R05914"	title="K03479 (SIAT7A, ST6GalNAc I), 2.4.99.3, R05914" />
+<area shape=poly	coords=265,771,285,771,285,775,265,775	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=215,676,235,676,235,680,215,680	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=poly	coords=131,602,151,602,151,606,131,606	href="/dbget-bin/www_bget?K00710+K09667+2.4.1.41+R05907"	title="K00710 (GALNT), K09667 (OGT), 2.4.1.41, R05907" />
+<area shape=rect	coords=558,163,651,198	href="/kegg-bin/show_pathway?map00533"	title="map00533" />
+<area shape=rect	coords=40,45,236,71	href="/dbget-bin/www_bget?map00512"	title="map00512" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

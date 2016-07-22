@@ -1,0 +1,172 @@
+<html>
+<!---
+ENTRY       map07029
+DEFINITION  Phenothiazines - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Phenothiazines - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Phenothiazines - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07029&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07029">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07029" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07029" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07029.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=201,92,361,147	href="/dbget-bin/www_bget?D02312"	title="D02312 (Methylene blue (USP))" />
+<area shape=rect	coords=52,126,145,178	href="/dbget-bin/www_bget?D02601"	title="D02601 (Phenothiazine (INN))" />
+<area shape=rect	coords=805,811,931,915	href="/dbget-bin/www_bget?D01447+D08585"	title="D01447 (Thioproperazine mesilate (JAN)), D08585 (Thioproperazine (INN))" />
+<area shape=rect	coords=804,688,924,791	href="/dbget-bin/www_bget?D00799+D01448+D08636"	title="D00799 (Trifluoperazine hydrochloride (JAN/USP)), D01448 (Trifluoperazine maleate (JAN)), D08636 (Trifluoperazine (INN))" />
+<area shape=rect	coords=804,424,933,527	href="/dbget-bin/www_bget?D02354+D01130+D02610"	title="D02354 (Thiethylperazine (USAN/INN)), D01130 (Thietylperazine maleate (JAN)), D02610 (Thietylperazine malate (JAN))" />
+<area shape=rect	coords=956,553,1092,657	href="/dbget-bin/www_bget?D00791+D02163+D07977"	title="D00791 (Fluphenazine hydrochloride (JAN/USP)), D02163 (Fluphenazine maleate (JAN)), D07977 (Fluphenazine (INN))" />
+<area shape=rect	coords=599,810,721,908	href="/dbget-bin/www_bget?D00373+D00798"	title="D00373 (Thioridazine (USP/INN)), D00798 (Thioridazine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=958,424,1094,527	href="/dbget-bin/www_bget?D00503+D02037+D04038+D04965"	title="D00503 (Perphenazine (JP15/USP/INN)), D02037 (Perphenazine maleate (JP15)), D04038 (Perphenazine fendizoate (JAN)), D04965 (Perphenazine hydrochloride)" />
+<area shape=rect	coords=804,553,925,657	href="/dbget-bin/www_bget?D00493+D00479+D02022+D02609"	title="D00493 (Prochlorperazine (JAN/USP/INN)), D00479 (Prochlorperazine maleate (JP15/USP)), D02022 (Prochlorperazine mesilate (JAN)), D02609 (Prochlorperazine edisylate (USP))" />
+<area shape=rect	coords=807,262,927,365	href="/dbget-bin/www_bget?D01412+D01860+D02608"	title="D01412 (Perazine maleate (JAN)), D01860 (Perazine dimalonate (JAN)), D02608 (Perazine fendizoate (JAN))" />
+<area shape=rect	coords=271,808,391,903	href="/dbget-bin/www_bget?D00403+D01520+D02248"	title="D00403 (Levomepromazine (USAN/INN)), D01520 (Levomepromazine hydrochloride (JAN/USAN)), D02248 (Levomepromazine maleate (JP15/USAN))" />
+<area shape=rect	coords=131,808,251,903	href="/dbget-bin/www_bget?D02605"	title="D02605 (Methoxypromazine maleate)" />
+<area shape=rect	coords=266,655,372,750	href="/dbget-bin/www_bget?D00390+D00800"	title="D00390 (Triflupromazine (USP/INN)), D00800 (Triflupromazine hydrochloride (JAN/USP))" />
+<area shape=rect	coords=400,808,518,903	href="/dbget-bin/www_bget?D02604+D07065"	title="D02604 (Acepromazine maleate (USP)), D07065 (Acepromazine (INN))" />
+<area shape=rect	coords=116,655,212,750	href="/dbget-bin/www_bget?D00270+D00789+D03274+D04034"	title="D00270 (Chlorpromazine (USP/INN)), D00789 (Chlorpromazine hydrochloride (JP15/USP)), D03274 (Chlorpromazine hibenzate (JAN)), D04034 (Chlorpromazine phenolphthalinate (JAN))" />
+<area shape=rect	coords=323,318,406,399	href="/dbget-bin/www_bget?D01143+D08091"	title="D01143 (Isothipendyl hydrochloride (JAN)), D08091 (Isothipendyl (INN))" />
+<area shape=rect	coords=108,493,199,569	href="/dbget-bin/www_bget?D02603"	title="D02603 (Diethazine hydrochloride)" />
+<area shape=rect	coords=427,653,524,750	href="/dbget-bin/www_bget?D00797"	title="D00797 (Promazine hydrochloride (USP))" />
+<area shape=rect	coords=325,493,418,572	href="/dbget-bin/www_bget?D01118+D03276+D08426"	title="D01118 (Profenamine hydrochloride (JAN)), D03276 (Profenamine hibenzate (JAN)), D08426 (Profenamine (INN))" />
+<area shape=rect	coords=208,306,301,399	href="/dbget-bin/www_bget?D02245+D07125"	title="D02245 (Alimemazine tartrate (JP15)), D07125 (Alimemazine (INN))" />
+<area shape=rect	coords=599,669,721,749	href="/dbget-bin/www_bget?D02607"	title="D02607 (Mepazine acetate)" />
+<area shape=rect	coords=429,318,511,399	href="/dbget-bin/www_bget?D02602"	title="D02602 (Fenethazine (INN))" />
+<area shape=rect	coords=590,313,720,429	href="/dbget-bin/www_bget?D02606"	title="D02606 (Pipamazine (INN))" />
+<area shape=rect	coords=108,318,189,399	href="/dbget-bin/www_bget?D00494+D00480+D01242+D03290+D08432+D08768"	title="D00494 (Promethazine (JAN/INN)), D00480 (Promethazine hydrochloride (JP15/USP)), D01242 (Promethazine teoclate (JAN/INN)), D03290 (Promethazine methylenedisalicylate (JAN)), D08432 (Promethazine maleate), D08768 (Promethazine hibenzate)" />
+<area shape=rect	coords=96,267,276,293	href="/kegg-bin/show_pathway?map07212"	title="map07212" />
+<area shape=rect	coords=206,508,305,534	href="/kegg-bin/show_pathway?map07028"	title="map07028" />
+<area shape=rect	coords=40,45,196,71	href="/dbget-bin/www_bget?map07029"	title="map07029" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,221 @@
+<html>
+<!---
+ENTRY       map00020
+DEFINITION  Citrate cycle (TCA cycle) - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Citrate cycle (TCA cycle) - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Citrate cycle (TCA cycle) - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00020&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00020">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+The citrate cycle (TCA cycle, Krebs cycle) is an important aerobic pathway for the final steps of the oxidation of carbohydrates and fatty acids. The cycle starts with acetyl-CoA, the activated form of acetate, derived from glycolysis and pyruvate oxidation for carbohydrates and from beta oxidation of fatty acids. The two-carbon acetyl group in acetyl-CoA is transferred to the four-carbon compound of oxaloacetate to form the six-carbon compound of citrate. In a series of reactions two carbons in citrate are oxidized to CO2 and the reaction pathway supplies NADH for use in the oxidative phosphorylation and other metabolic processes. The pathway also supplies important precursor metabolites including 2-oxoglutarate. At the end of the cycle the remaining four-carbon part is transformed back to oxaloacetate. According to the genome sequence data, many organisms seem to lack genes for the full cycle [MD:<a href="/dbget-bin/www_bget?M00009">M00009</a>], but contain genes for specific segments [MD:<a href="/dbget-bin/www_bget?M00010">M00010</a> <a href="/dbget-bin/www_bget?M00011">M00011</a>].</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00020 map" -->
+</select>
+<input type="hidden" name="mapno" value="00020" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00020" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00020" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00020.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=716,241,4	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=circle	coords=169,481,4	href="/dbget-bin/www_bget?C00122"	title="C00122 (Fumarate)" />
+<area shape=circle	coords=299,344,4	href="/dbget-bin/www_bget?C00036"	title="C00036 (Oxaloacetate)" />
+<area shape=circle	coords=697,453,4	href="/dbget-bin/www_bget?C05379"	title="C05379 (Oxalosuccinate)" />
+<area shape=circle	coords=379,241,4	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=circle	coords=169,393,4	href="/dbget-bin/www_bget?C00149"	title="C00149 ((S)-Malate)" />
+<area shape=circle	coords=697,344,4	href="/dbget-bin/www_bget?C00311"	title="C00311 (Isocitrate)" />
+<area shape=circle	coords=600,344,4	href="/dbget-bin/www_bget?C00417"	title="C00417 (cis-Aconitate)" />
+<area shape=circle	coords=169,574,4	href="/dbget-bin/www_bget?C00042"	title="C00042 (Succinate)" />
+<area shape=circle	coords=501,344,4	href="/dbget-bin/www_bget?C00158"	title="C00158 (Citrate)" />
+<area shape=circle	coords=501,617,4	href="/dbget-bin/www_bget?C15972"	title="C15972 (Enzyme N6-(lipoyl)lysine)" />
+<area shape=circle	coords=568,530,4	href="/dbget-bin/www_bget?C00068"	title="C00068 (Thiamin diphosphate)" />
+<area shape=circle	coords=441,573,4	href="/dbget-bin/www_bget?C16254"	title="C16254 ([Dihydrolipoyllysine-residue succinyltransferase] S-succinyldihydrolipoyllysine)" />
+<area shape=circle	coords=387,617,4	href="/dbget-bin/www_bget?C15973"	title="C15973 (Enzyme N6-(dihydrolipoyl)lysine)" />
+<area shape=circle	coords=313,574,4	href="/dbget-bin/www_bget?C00091"	title="C00091 (Succinyl-CoA)" />
+<area shape=circle	coords=697,573,4	href="/dbget-bin/www_bget?C00026"	title="C00026 (2-Oxoglutarate)" />
+<area shape=circle	coords=572,573,4	href="/dbget-bin/www_bget?C05381"	title="C05381 (3-Carboxy-1-hydroxypropyl-ThPP)" />
+<area shape=circle	coords=610,241,4	href="/dbget-bin/www_bget?C05125"	title="C05125 (2-(alpha-Hydroxyethyl)thiamine diphosphate)" />
+<area shape=circle	coords=610,198,4	href="/dbget-bin/www_bget?C00068"	title="C00068 (Thiamin diphosphate)" />
+<area shape=circle	coords=559,284,4	href="/dbget-bin/www_bget?C15972"	title="C15972 (Enzyme N6-(lipoyl)lysine)" />
+<area shape=circle	coords=496,241,4	href="/dbget-bin/www_bget?C16255"	title="C16255 ([Dihydrolipoyllysine-residue acetyltransferase] S-acetyldihydrolipoyllysine)" />
+<area shape=circle	coords=457,284,4	href="/dbget-bin/www_bget?C15973"	title="C15973 (Enzyme N6-(dihydrolipoyl)lysine)" />
+<area shape=circle	coords=450,127,4	href="/dbget-bin/www_bget?C00074"	title="C00074 (Phosphoenolpyruvate)" />
+<area shape=rect	coords=121,521,167,538	href="/dbget-bin/www_bget?K00239+K00240+K00241+K00242+K00244+K00245+K00246+K00247+1.3.99.1+R00412"	title="K00239 (sdhA), K00240 (sdhB), K00241 (sdhC), K00242 (sdhD), K00244 (frdA), K00245 (frdB), K00246 (frdC), K00247 (frdD), 1.3.99.1, R00412" />
+<area shape=rect	coords=482,640,528,657	href="/dbget-bin/www_bget?K00174+K00175+K00177+K00176+1.2.7.3+R01197"	title="K00174 (korA), K00175 (korB), K00176 (korD), K00177 (korG), 1.2.7.3, R01197" />
+<area shape=rect	coords=423,609,469,626	href="/dbget-bin/www_bget?K00382+1.8.1.4+R07618"	title="K00382 (DLD, lpd, pdhD), 1.8.1.4, R07618" />
+<area shape=rect	coords=617,565,663,582	href="/dbget-bin/www_bget?K00164+1.2.4.2+R00621"	title="K00164 (OGDH, sucA), 1.2.4.2, R00621" />
+<area shape=rect	coords=486,566,532,583	href="/dbget-bin/www_bget?K00164+1.2.4.2+R03316"	title="K00164 (OGDH, sucA), 1.2.4.2, R03316" />
+<area shape=rect	coords=359,565,405,582	href="/dbget-bin/www_bget?K00658+2.3.1.61+R02570"	title="K00658 (DLST, sucB), 2.3.1.61, R02570" />
+<area shape=rect	coords=216,576,262,593	href="/dbget-bin/www_bget?K01902+K01903+K01899+K01900+6.2.1.5+R00405"	title="K01899 (LSC1), K01900 (LSC2), K01902 (sucD), K01903 (sucC), 6.2.1.5, R00405" />
+<area shape=rect	coords=216,555,262,572	href="/dbget-bin/www_bget?K01899+K01900+6.2.1.4+R00432+R00727"	title="K01899 (LSC1), K01900 (LSC2), 6.2.1.4, R00432, R00727" />
+<area shape=rect	coords=674,496,720,513	href="/dbget-bin/www_bget?K00031+1.1.1.42+R00268"	title="K00031 (IDH1, IDH2, icd), 1.1.1.42, R00268" />
+<area shape=rect	coords=732,449,778,466	href="/dbget-bin/www_bget?K00030+1.1.1.41+R00709"	title="K00030 (IDH3), 1.1.1.41, R00709" />
+<area shape=rect	coords=674,391,720,408	href="/dbget-bin/www_bget?K00031+1.1.1.42+R01899"	title="K00031 (IDH1, IDH2, icd), 1.1.1.42, R01899" />
+<area shape=rect	coords=390,346,436,363	href="/dbget-bin/www_bget?K01648+2.3.3.8+R00352"	title="K01648 (ACLY), 2.3.3.8, R00352" />
+<area shape=rect	coords=171,521,217,538	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R02164"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R02164" />
+<area shape=rect	coords=145,427,191,444	href="/dbget-bin/www_bget?K01676+K01677+K01678+K01679+4.2.1.2+R01082"	title="K01676 (E4.2.1.2A, fumA, fumB), K01677 (E4.2.1.2AA, fumA), K01678 (E4.2.1.2AB, fumB), K01679 (E4.2.1.2B, fumC), 4.2.1.2, R01082" />
+<area shape=rect	coords=626,336,672,353	href="/dbget-bin/www_bget?K01681+K01682+4.2.1.3+R01900"	title="K01681 (ACO, acnA), K01682 (acnB), 4.2.1.3, R01900" />
+<area shape=rect	coords=527,336,573,353	href="/dbget-bin/www_bget?K01681+K01682+4.2.1.3+R01325"	title="K01681 (ACO, acnA), K01682 (acnB), 4.2.1.3, R01325" />
+<area shape=rect	coords=390,325,436,342	href="/dbget-bin/www_bget?K01647+2.3.3.1+R00351"	title="K01647 (CS, gltA), 2.3.3.1, R00351" />
+<area shape=rect	coords=209,336,255,353	href="/dbget-bin/www_bget?K00025+K00026+1.1.1.37+R00342"	title="K00025 (E1.1.1.37A), K00026 (E1.1.1.37B, mdh), 1.1.1.37, R00342" />
+<area shape=rect	coords=692,269,738,286	href="/dbget-bin/www_bget?K01959+K01960+6.4.1.1+R00344"	title="K01959 (E6.4.1.1A, pycA), K01960 (E6.4.1.1B, pycB), 6.4.1.1, R00344" />
+<area shape=rect	coords=642,232,688,249	href="/dbget-bin/www_bget?K00163+K00161+K00162+1.2.4.1+R00014"	title="K00161 (PDHA), K00162 (PDHB), K00163 (aceE), 1.2.4.1, R00014" />
+<area shape=rect	coords=538,232,584,249	href="/dbget-bin/www_bget?K00163+K00161+K00162+1.2.4.1+R03270"	title="K00161 (PDHA), K00162 (PDHB), K00163 (aceE), 1.2.4.1, R03270" />
+<area shape=rect	coords=485,276,531,293	href="/dbget-bin/www_bget?K00382+1.8.1.4+R07618"	title="K00382 (DLD, lpd, pdhD), 1.8.1.4, R07618" />
+<area shape=rect	coords=420,233,466,250	href="/dbget-bin/www_bget?K00627+2.3.1.12+R02569"	title="K00627 (DLAT, aceF, pdhC), 2.3.1.12, R02569" />
+<area shape=rect	coords=496,170,542,187	href="/dbget-bin/www_bget?K00169+K00170+K00172+K00171+1.2.7.1+R01196"	title="K00169 (porA), K00170 (porB), K00171 (porD), K00172 (porG), 1.2.7.1, R01196" />
+<area shape=rect	coords=390,371,436,388	href="/dbget-bin/www_bget?K01643+K01644+K01646+4.1.3.6+R00362"	title="K01643 (citF), K01644 (citE), K01646 (citD), 4.1.3.6, R00362" />
+<area shape=rect	coords=327,129,373,146	href="/dbget-bin/www_bget?K01610+4.1.1.49+R00341"	title="K01610 (E4.1.1.49, pckA), 4.1.1.49, R00341" />
+<area shape=rect	coords=327,108,373,125	href="/dbget-bin/www_bget?K01596+4.1.1.32+R00431+R00726"	title="K01596 (E4.1.1.32, pckA, PEPCK), 4.1.1.32, R00431, R00726" />
+<area shape=rect	coords=49,295,208,330	href="/kegg-bin/show_pathway?map00630"	title="map00630" />
+<area shape=rect	coords=563,104,780,151	href="/kegg-bin/show_pathway?map00010"	title="map00010" />
+<area shape=rect	coords=79,140,206,166	href="/kegg-bin/show_pathway?map00061"	title="map00061" />
+<area shape=rect	coords=11,168,206,194	href="/kegg-bin/show_pathway?map00062"	title="map00062" />
+<area shape=rect	coords=84,226,206,252	href="/kegg-bin/show_pathway?map00071"	title="map00071" />
+<area shape=rect	coords=772,585,899,620	href="/kegg-bin/show_pathway?map00053"	title="map00053" />
+<area shape=rect	coords=774,622,896,657	href="/kegg-bin/show_pathway?map00250"	title="map00250" />
+<area shape=rect	coords=40,45,270,71	href="/dbget-bin/www_bget?map00020"	title="map00020" />
+<area shape=rect	coords=43,426,120,461	href="/kegg-bin/show_pathway?map00350"	title="map00350" />
+<area shape=rect	coords=202,610,288,645	href="/kegg-bin/show_pathway?map00280"	title="map00280" />
+<area shape=rect	coords=85,258,207,293	href="/kegg-bin/show_pathway?map00250"	title="map00250" />
+<area shape=rect	coords=10,463,123,498	href="/kegg-bin/show_pathway?map00330"	title="map00330" />
+<area shape=rect	coords=774,659,927,685	href="/kegg-bin/show_pathway?map00471"	title="map00471" />
+<area shape=rect	coords=61,198,206,224	href="/kegg-bin/show_pathway?map00280"	title="map00280" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

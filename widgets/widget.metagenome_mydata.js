@@ -18,7 +18,8 @@
 	'jobs': { 'name': 'jobs', 'icon': 'settings3', 'active': true, "html": null, "order": 2 },
 	'studys': { 'name': 'studys', 'icon': 'dna', 'active': true, "html": null, "order": 1 },
 	'collections': { 'name': 'collections', 'icon': 'cart', 'active': false, "html": null, "order": 4 },
-	'profile': { 'name': 'profile', 'icon': 'user', 'active': false, "html": null, "order": 5 }
+	'profile': { 'name': 'profile', 'icon': 'user', 'active': false, "html": null, "order": 5 },
+	'analyses': { 'name': 'analyses', 'icon': 'bar-chart', 'active': false, "html": null, "order": 6 },
     };
     
     widget.display = function (wparams) {
@@ -40,12 +41,13 @@
 	    html.push(widget.tipSection());
 
 	    // create the section html
-	    widget.sections["tasks"].html = widget.tasksSection()
-	    widget.sections["news"].html = widget.newsSection()
-	    widget.sections["jobs"].html = widget.jobsSection()
-	    widget.sections["studys"].html = widget.studysSection()
-	    widget.sections["collections"].html = widget.collectionsSection()
-	    widget.sections["profile"].html = widget.profileSection()
+	    widget.sections["tasks"].html = widget.tasksSection();
+	    widget.sections["news"].html = widget.newsSection();
+	    widget.sections["jobs"].html = widget.jobsSection();
+	    widget.sections["studys"].html = widget.studysSection();
+	    widget.sections["collections"].html = widget.collectionsSection();
+	    widget.sections["profile"].html = widget.profileSection();
+	    widget.sections["analyses"].html = widget.analysesSection();
 
 	    var order = [];
 	    for (var i in widget.sections) {
@@ -88,6 +90,7 @@
 	    widget.getProfile();
 	    widget.getProjects();
 	    widget.getPriorities();
+	    widget.getAnalyses();
 	    
 	    widget.getServerStatus();
 	    widget.getTip();
@@ -185,6 +188,12 @@
     widget.newsSection = function () {
 	var html = '<div id="newsSection"><h4 style="margin-top: 0px;"><img src="Retina/images/bubbles.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">MG-RAST News</h4><div id="newsfeed"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
 	
+	return html;
+    };
+
+    widget.analysesSection = function () {
+	var html = '<div id="analysesSection"><h4 style="margin-top: 0px;"><img src="Retina/images/bar-chart.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my analyses</h4><div id="analyses"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>';
+
 	return html;
     };
 
@@ -397,7 +406,68 @@
 	jQuery("#masonry").masonry({ itemSelector : '.box' });
 	widget.job_table.update({},1).then(function(){ jQuery("#masonry").masonry({ itemSelector : '.box' }); });
     };
-    
+
+    widget.deleteAnalysis = function (nodeid) {
+	var url = RetinaConfig.shock_url + "/node/"+nodeid;
+	jQuery.ajax({ url: url,
+		      method: 'DELETE',
+		      success: function(data) {
+			  alert('analysis deleted');
+			  Retina.WidgetInstances.metagenome_mydata[1].getAnalyses();
+		      },
+		      error: function(jqXHR, error) {
+			  alert('deletion failed');
+		      },
+		      crossDomain: true,
+		      headers: stm.authHeader
+		    });
+    };
+
+    widget.getAnalyses = function () {
+	var widget = this;
+
+	var url = RetinaConfig.shock_url + "/node?querynode&attributes.type=analysisObject&attributes.hasVisualization=1&owner=" + stm.user.login;
+	jQuery.ajax({ url: url,
+		      dataType: "json",
+		      success: function(data) {
+			  if (data != null) {
+			      if (data.error != null) {
+				  document.getElementById('analyses').innerHTML = '<div class="alert alert-error">could not access your myData space</div>';
+			      } else {
+				  if (data.data.length) {
+				      var html = ['<table>'];
+				      for (var i=0; i<data.data.length; i++) {
+					  html.push('<tr><td style="padding-right: 20px;vertical-align: top;">'+data.data[i].file.name+'<br><button class="btn btn-mini btn-danger" onclick="if(confirm(\'Really delete this analysis?\')){Retina.WidgetInstances.metagenome_mydata[1].deleteAnalysis(\''+data.data[i].id+'\');}">delete</button></td><td id="analysis'+i+'"><img src="Retina/images/waiting.gif" style="width: 24px;"></td></tr>');
+				      }
+				      html.push('</table>');
+				      document.getElementById('analyses').innerHTML = html.join("");
+				      for (var i=0; i<data.data.length; i++) {
+					  jQuery.ajax({ url: RetinaConfig.shock_url+'/node/'+data.data[i].id+'?download',
+							tid: i,
+							success: function(data) {
+							    document.getElementById('analysis'+this.tid).innerHTML = '<div style="width: 400px;">'+data+'</div>';
+							    var svg = document.getElementById('analysis'+this.tid).firstChild.firstChild;
+							    svg.setAttribute('viewBox', '0 0 '+parseInt(svg.getAttribute('width'))+' '+parseInt(svg.getAttribute('height')));
+							    svg.removeAttribute('width');
+							    svg.removeAttribute('height');
+							}
+					  });
+				      }
+				  } else {
+				      document.getElementById('analyses').innerHTML = '<div class="alert alert-info">you currently have no images in your myData space</div>';
+				  }
+			      }
+			  } else {
+			      document.getElementById('analyses').innerHTML = '<div class="alert alert-error">there was an error connecting to your myData space</div>';
+			  }
+		      },
+		      error: function(jqXHR, error) {
+			  document.getElementById('analyses').innerHTML = '<div class="alert alert-error">could not access your myData space</div>';
+		      },
+		      crossDomain: true,
+		      headers: stm.authHeader
+		    });
+    };
     
     /*
       DATA RENDERING
@@ -550,7 +620,7 @@
 		}
 		task.title = "metagenome publication";
 		task.status = task.overdue ? "error": "info";
-		task.link = "?mgpage=overview&metagenome="+Retina.idmap(task.metagenome_id);
+		task.link = "?mgpage=share&project=mgp"+task.project_id;
 		task.message = task.metagenome_name + " publication "+(task.overdue ? "was" : "is")+" due "+task.duedate+"."+(task.overdue ? "<br>"+task.overdue : "");
 
 		if (! project_prios.hasOwnProperty(task.project_id)) {
@@ -563,7 +633,7 @@
 		if (project_prios[k[i]].length > 1) {
 		    var task = project_prios[k[i]].sort(Retina.propSort('duedate'))[0];
 		    task.title = "project publication";
-		    task.link = "?mgpage=share&project="+task.project_id;
+		    task.link = "?mgpage=share&project=mgp"+task.project_id;
 		    task.message = "The project "+task.project+" has "+project_prios[k[i]].length+" metagenomes "+(task.overdue ? "over" : "")+"due for publication."+(task.overdue ? "<br>"+task.overdue : "");
 		    tasks.push(task);
 		} else {

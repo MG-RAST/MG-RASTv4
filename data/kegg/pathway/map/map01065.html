@@ -1,0 +1,319 @@
+<html>
+<!---
+ENTRY       map01065
+DEFINITION  Biosynthesis of alkaloids derived from histidine and purine - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Biosynthesis of alkaloids derived from histidine and purine - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Biosynthesis of alkaloids derived from histidine and purine - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=01065&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map01065">Pathway entry</a>
+]
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 01065 map" -->
+</select>
+<input type="hidden" name="mapno" value="01065" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map01065" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map01065" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map01065.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1050,75,1102,84	href="/dbget-bin/www_bget?C00267"	title="C00267 (alpha-D-Glucose)" />
+<area shape=rect	coords=1027,122,1111,183	href="/dbget-bin/www_bget?C00668"	title="C00668 (alpha-D-Glucose 6-phosphate)" />
+<area shape=rect	coords=1049,243,1108,252	href="/dbget-bin/www_bget?C05345"	title="C05345 (beta-D-Fructose 6-phosphate)" />
+<area shape=rect	coords=1035,316,1126,325	href="/dbget-bin/www_bget?C00118"	title="C00118 (D-Glyceraldehyde 3-phosphate)" />
+<area shape=rect	coords=1035,381,1108,431	href="/dbget-bin/www_bget?C00197"	title="C00197 (3-Phospho-D-glycerate)" />
+<area shape=rect	coords=1040,503,1088,555	href="/dbget-bin/www_bget?C00022"	title="C00022 (Pyruvate)" />
+<area shape=rect	coords=1110,721,1141,730	href="/dbget-bin/www_bget?C00158"	title="C00158 (Citrate)" />
+<area shape=rect	coords=1136,812,1180,821	href="/dbget-bin/www_bget?C00311"	title="C00311 (Isocitrate)" />
+<area shape=rect	coords=1115,855,1185,864	href="/dbget-bin/www_bget?C00026"	title="C00026 (2-Oxoglutarate)" />
+<area shape=rect	coords=1001,869,1070,878	href="/dbget-bin/www_bget?C00091"	title="C00091 (Succinyl-CoA)" />
+<area shape=rect	coords=954,796,998,805	href="/dbget-bin/www_bget?C00122"	title="C00122 (Fumarate)" />
+<area shape=rect	coords=985,725,1047,734	href="/dbget-bin/www_bget?C00036"	title="C00036 (Oxaloacetate)" />
+<area shape=rect	coords=1040,615,1103,653	href="/dbget-bin/www_bget?C00024"	title="C00024 (Acetyl-CoA)" />
+<area shape=rect	coords=1133,764,1195,773	href="/dbget-bin/www_bget?C00417"	title="C00417 (cis-Aconitate)" />
+<area shape=rect	coords=966,833,1012,844	href="/dbget-bin/www_bget?C00042"	title="C00042 (Succinate)" />
+<area shape=rect	coords=900,722,978,775	href="/dbget-bin/www_bget?C00149"	title="C00149 ((S)-Malate)" />
+<area shape=rect	coords=735,384,828,433	href="/dbget-bin/www_bget?C00119"	title="C00119 (5-Phospho-alpha-D-ribose 1-diphosphate)" />
+<area shape=rect	coords=745,124,821,223	href="/dbget-bin/www_bget?C04677"	title="C04677 (1-(5'-Phosphoribosyl)-5-amino-4-imidazolecarboxamide)" />
+<area shape=rect	coords=609,121,686,222	href="/dbget-bin/www_bget?C04734"	title="C04734 (1-(5'-Phosphoribosyl)-5-formamido-4-imidazolecarboxamide)" />
+<area shape=rect	coords=644,463,672,472	href="/dbget-bin/www_bget?C00020"	title="C00020 (AMP)" />
+<area shape=rect	coords=616,303,691,402	href="/dbget-bin/www_bget?C00130"	title="C00130 (IMP)" />
+<area shape=rect	coords=470,303,546,402	href="/dbget-bin/www_bget?C00655"	title="C00655 (Xanthosine 5'-phosphate)" />
+<area shape=rect	coords=499,463,525,472	href="/dbget-bin/www_bget?C00144"	title="C00144 (GMP)" />
+<area shape=rect	coords=332,308,407,407	href="/dbget-bin/www_bget?C01762"	title="C01762 (Xanthosine)" />
+<area shape=rect	coords=330,156,400,218	href="/dbget-bin/www_bget?C00385"	title="C00385 (Xanthine)" />
+<area shape=rect	coords=182,148,255,220	href="/dbget-bin/www_bget?C07130"	title="C07130 (Theophylline)" />
+<area shape=rect	coords=189,333,259,405	href="/dbget-bin/www_bget?C07480"	title="C07480 (Theobromine)" />
+<area shape=rect	coords=47,333,121,404	href="/dbget-bin/www_bget?C07481"	title="C07481 (Caffeine)" />
+<area shape=rect	coords=458,632,543,689	href="/dbget-bin/www_bget?C00135"	title="C00135 (L-Histidine)" />
+<area shape=rect	coords=726,629,819,683	href="/dbget-bin/www_bget?C04666"	title="C04666 (D-erythro-1-(Imidazol-4-yl)glycerol 3-phosphate)" />
+<area shape=rect	coords=619,744,680,781	href="/dbget-bin/www_bget?C08262"	title="C08262 (3-Methylbutanoic acid)" />
+<area shape=rect	coords=789,539,863,590	href="/dbget-bin/www_bget?C00123"	title="C00123 (L-Leucine)" />
+<area shape=rect	coords=123,551,221,600	href="/dbget-bin/www_bget?C07474"	title="C07474 (Pilocarpine)" />
+<area shape=rect	coords=137,642,199,684	href="/dbget-bin/www_bget?C00388"	title="C00388 (1H-Imidazole-4-ethanamine)" />
+<area shape=rect	coords=109,753,224,796	href="/dbget-bin/www_bget?C16696"	title="C16696 (Dolichotheline)" />
+<area shape=poly	coords=829,416,922,416,922,420,829,420	href="/dbget-bin/www_bget?K01810+K00036+K01057+K00033+K01807+K00948+5.3.1.9+1.1.1.49+3.1.1.31+1.1.1.44+5.3.1.6+2.7.6.1+R02739+R02736+R02035+R01528+R01056+R01049"	title="K00033 (E1.1.1.44, PGD, gnd), K00036 (G6PD, zwf), K00948 (E2.7.6.1, prsA), K01057 (PGLS, pgl, devB), K01807 (E5.3.1.6A, rpiA), K01810 (GPI, pgi), 5.3.1.9, 1.1.1.49, 3.1.1.31, 1.1.1.44, 5.3.1.6, 2.7.6.1, R02739, R02736, R02035, R01528, R01056, R01049" />
+<area shape=poly	coords=922,416,923,416,924,415,925,415,926,414,927,413,928,412,928,411,929,410,929,409,933,409,933,411,932,413,931,415,930,416,929,418,928,419,926,419,924,420,922,420	href="/dbget-bin/www_bget?K01810+K00036+K01057+K00033+K01807+K00948+5.3.1.9+1.1.1.49+3.1.1.31+1.1.1.44+5.3.1.6+2.7.6.1+R02739+R02736+R02035+R01528+R01056+R01049"	title="K00033 (E1.1.1.44, PGD, gnd), K00036 (G6PD, zwf), K00948 (E2.7.6.1, prsA), K01057 (PGLS, pgl, devB), K01807 (E5.3.1.6A, rpiA), K01810 (GPI, pgi), 5.3.1.9, 1.1.1.49, 3.1.1.31, 1.1.1.44, 5.3.1.6, 2.7.6.1, R02739, R02736, R02035, R01528, R01056, R01049" />
+<area shape=poly	coords=929,409,929,172,933,172,933,409	href="/dbget-bin/www_bget?K01810+K00036+K01057+K00033+K01807+K00948+5.3.1.9+1.1.1.49+3.1.1.31+1.1.1.44+5.3.1.6+2.7.6.1+R02739+R02736+R02035+R01528+R01056+R01049"	title="K00033 (E1.1.1.44, PGD, gnd), K00036 (G6PD, zwf), K00948 (E2.7.6.1, prsA), K01057 (PGLS, pgl, devB), K01807 (E5.3.1.6A, rpiA), K01810 (GPI, pgi), 5.3.1.9, 1.1.1.49, 3.1.1.31, 1.1.1.44, 5.3.1.6, 2.7.6.1, R02739, R02736, R02035, R01528, R01056, R01049" />
+<area shape=poly	coords=929,172,929,170,930,168,931,166,932,165,933,164,934,163,936,162,938,161,940,161,940,165,939,165,938,166,937,166,936,167,935,168,934,169,934,170,933,171,933,172	href="/dbget-bin/www_bget?K01810+K00036+K01057+K00033+K01807+K00948+5.3.1.9+1.1.1.49+3.1.1.31+1.1.1.44+5.3.1.6+2.7.6.1+R02739+R02736+R02035+R01528+R01056+R01049"	title="K00033 (E1.1.1.44, PGD, gnd), K00036 (G6PD, zwf), K00948 (E2.7.6.1, prsA), K01057 (PGLS, pgl, devB), K01807 (E5.3.1.6A, rpiA), K01810 (GPI, pgi), 5.3.1.9, 1.1.1.49, 3.1.1.31, 1.1.1.44, 5.3.1.6, 2.7.6.1, R02739, R02736, R02035, R01528, R01056, R01049" />
+<area shape=poly	coords=940,161,1030,161,1030,165,940,165	href="/dbget-bin/www_bget?K01810+K00036+K01057+K00033+K01807+K00948+5.3.1.9+1.1.1.49+3.1.1.31+1.1.1.44+5.3.1.6+2.7.6.1+R02739+R02736+R02035+R01528+R01056+R01049"	title="K00033 (E1.1.1.44, PGD, gnd), K00036 (G6PD, zwf), K00948 (E2.7.6.1, prsA), K01057 (PGLS, pgl, devB), K01807 (E5.3.1.6A, rpiA), K01810 (GPI, pgi), 5.3.1.9, 1.1.1.49, 3.1.1.31, 1.1.1.44, 5.3.1.6, 2.7.6.1, R02739, R02736, R02035, R01528, R01056, R01049" />
+<area shape=poly	coords=829,418,837,414,837,422	href="/dbget-bin/www_bget?K01810+K00036+K01057+K00033+K01807+K00948+5.3.1.9+1.1.1.49+3.1.1.31+1.1.1.44+5.3.1.6+2.7.6.1+R02739+R02736+R02035+R01528+R01056+R01049"	title="K00033 (E1.1.1.44, PGD, gnd), K00036 (G6PD, zwf), K00948 (E2.7.6.1, prsA), K01057 (PGLS, pgl, devB), K01807 (E5.3.1.6A, rpiA), K01810 (GPI, pgi), 5.3.1.9, 1.1.1.49, 3.1.1.31, 1.1.1.44, 5.3.1.6, 2.7.6.1, R02739, R02736, R02035, R01528, R01056, R01049" />
+<area shape=poly	coords=1072,91,1072,121,1076,121,1076,91	href="/dbget-bin/www_bget?K00844+K00845+2.7.1.1+2.7.1.2+R01786"	title="K00844 (HK), K00845 (glk), 2.7.1.1, 2.7.1.2, R01786" />
+<area shape=poly	coords=1074,121,1070,113,1078,113	href="/dbget-bin/www_bget?K00844+K00845+2.7.1.1+2.7.1.2+R01786"	title="K00844 (HK), K00845 (glk), 2.7.1.1, 2.7.1.2, R01786" />
+<area shape=poly	coords=1071,204,1071,235,1075,235,1075,204	href="/dbget-bin/www_bget?K01810+5.3.1.9+R02740"	title="K01810 (GPI, pgi), 5.3.1.9, R02740" />
+<area shape=poly	coords=1073,204,1077,212,1069,212	href="/dbget-bin/www_bget?K01810+5.3.1.9+R02740"	title="K01810 (GPI, pgi), 5.3.1.9, R02740" />
+<area shape=poly	coords=1073,235,1069,227,1077,227	href="/dbget-bin/www_bget?K01810+5.3.1.9+R02740"	title="K01810 (GPI, pgi), 5.3.1.9, R02740" />
+<area shape=poly	coords=1071,267,1071,299,1075,299,1075,267	href="/dbget-bin/www_bget?K00850+K01623+2.7.1.11+4.1.2.13+R04779+R01070"	title="K00850 (PFK), K01623 (ALDO, fbaB), 2.7.1.11, 4.1.2.13, R04779, R01070" />
+<area shape=poly	coords=1073,267,1077,275,1069,275	href="/dbget-bin/www_bget?K00850+K01623+2.7.1.11+4.1.2.13+R04779+R01070"	title="K00850 (PFK), K01623 (ALDO, fbaB), 2.7.1.11, 4.1.2.13, R04779, R01070" />
+<area shape=poly	coords=1073,299,1069,291,1077,291	href="/dbget-bin/www_bget?K00850+K01623+2.7.1.11+4.1.2.13+R04779+R01070"	title="K00850 (PFK), K01623 (ALDO, fbaB), 2.7.1.11, 4.1.2.13, R04779, R01070" />
+<area shape=poly	coords=1070,342,1070,373,1074,373,1074,342	href="/dbget-bin/www_bget?K00134+K05298+K00927+1.2.1.12+1.2.1.13+2.7.2.3+R01061+R01063+R01512"	title="K00134 (GAPDH, gapA), K00927 (PGK), K05298 (E1.2.1.13, gap2), 1.2.1.12, 1.2.1.13, 2.7.2.3, R01061, R01063, R01512" />
+<area shape=poly	coords=1072,342,1076,350,1068,350	href="/dbget-bin/www_bget?K00134+K05298+K00927+1.2.1.12+1.2.1.13+2.7.2.3+R01061+R01063+R01512"	title="K00134 (GAPDH, gapA), K00927 (PGK), K05298 (E1.2.1.13, gap2), 1.2.1.12, 1.2.1.13, 2.7.2.3, R01061, R01063, R01512" />
+<area shape=poly	coords=1072,373,1068,365,1076,365	href="/dbget-bin/www_bget?K00134+K05298+K00927+1.2.1.12+1.2.1.13+2.7.2.3+R01061+R01063+R01512"	title="K00134 (GAPDH, gapA), K00927 (PGK), K05298 (E1.2.1.13, gap2), 1.2.1.12, 1.2.1.13, 2.7.2.3, R01061, R01063, R01512" />
+<area shape=poly	coords=1064,459,1064,488,1068,488,1068,459	href="/dbget-bin/www_bget?K01834+K01689+K00873+5.4.2.1+4.2.1.11+2.7.1.40+R01518+R00658+R00200"	title="K00873 (PK, pyk), K01689 (ENO), K01834 (PGAM, gpm), 5.4.2.1, 4.2.1.11, 2.7.1.40, R01518, R00658, R00200" />
+<area shape=poly	coords=1066,488,1062,480,1070,480	href="/dbget-bin/www_bget?K01834+K01689+K00873+5.4.2.1+4.2.1.11+2.7.1.40+R01518+R00658+R00200"	title="K00873 (PK, pyk), K01689 (ENO), K01834 (PGAM, gpm), 5.4.2.1, 4.2.1.11, 2.7.1.40, R01518, R00658, R00200" />
+<area shape=poly	coords=1064,576,1064,608,1068,608,1068,576	href="/dbget-bin/www_bget?K00161+K00162+K00627+1.2.4.1+2.3.1.12+R00014+R03270+R02569"	title="K00161 (PDHA), K00162 (PDHB), K00627 (DLAT, aceF, pdhC), 1.2.4.1, 2.3.1.12, R00014, R03270, R02569" />
+<area shape=poly	coords=1066,576,1070,585,1062,585	href="/dbget-bin/www_bget?K00161+K00162+K00627+1.2.4.1+2.3.1.12+R00014+R03270+R02569"	title="K00161 (PDHA), K00162 (PDHB), K00627 (DLAT, aceF, pdhC), 1.2.4.1, 2.3.1.12, R00014, R03270, R02569" />
+<area shape=poly	coords=1066,608,1062,599,1070,599	href="/dbget-bin/www_bget?K00161+K00162+K00627+1.2.4.1+2.3.1.12+R00014+R03270+R02569"	title="K00161 (PDHA), K00162 (PDHB), K00627 (DLAT, aceF, pdhC), 1.2.4.1, 2.3.1.12, R00014, R03270, R02569" />
+<area shape=poly	coords=1072,674,1072,696,1076,696,1076,674	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1076,696,1076,697,1077,698,1077,699,1078,700,1079,701,1079,703,1080,704,1081,705,1081,706,1085,706,1082,706,1080,706,1078,705,1076,704,1074,703,1073,701,1073,700,1072,698,1072,696	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1081,706,1081,706,1085,706,1085,706	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1085,706,1087,706,1089,706,1091,706,1093,706,1095,706,1097,706,1098,707,1100,707,1101,708,1101,712,1099,711,1096,711,1094,710,1091,710,1089,709,1087,708,1085,708,1083,707,1081,706	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1101,708,1096,706,1096,710,1101,712	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1096,710,1098,710,1100,709,1103,709,1105,710,1107,710,1109,711,1111,712,1112,712,1113,713,1113,717,1111,716,1109,715,1106,715,1104,714,1102,712,1100,711,1098,710,1097,708,1096,706	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1113,713,1116,714,1116,718,1113,717	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1016,720,1027,714,1027,718,1016,724	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1027,714,1028,713,1029,713,1031,712,1033,711,1035,710,1037,709,1039,708,1042,708,1044,707,1044,711,1043,712,1041,712,1040,713,1038,714,1036,715,1033,716,1031,717,1029,717,1027,718	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1044,707,1046,706,1046,710,1044,711	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1046,706,1047,706,1048,705,1050,705,1052,704,1054,704,1056,704,1059,703,1061,703,1063,703,1063,707,1062,707,1061,707,1059,708,1057,708,1055,708,1053,709,1050,709,1048,710,1046,710	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1063,703,1071,703,1071,707,1063,707	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1071,707,1073,706,1076,705,1078,704,1080,704,1083,704,1085,704,1086,704,1088,705,1089,705,1089,709,1087,709,1084,708,1082,708,1080,707,1077,707,1075,706,1074,705,1072,704,1071,703	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1089,705,1096,707,1096,711,1089,709	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1096,711,1098,710,1100,710,1103,710,1105,710,1107,710,1109,711,1111,712,1112,712,1113,713,1113,717,1111,716,1109,716,1106,715,1104,714,1102,713,1100,711,1098,710,1097,709,1096,707	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1113,713,1121,717,1121,721,1113,717	href="/dbget-bin/www_bget?K01647+K01648+2.3.3.1+2.3.3.8+R00351+R00352"	title="K01647 (CS, gltA), K01648 (ACLY), 2.3.3.1, 2.3.3.8, R00351, R00352" />
+<area shape=poly	coords=1132,730,1134,732,1138,732,1136,730	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01325"	title="K01681 (ACO, acnA), 4.2.1.3, R01325" />
+<area shape=poly	coords=1138,732,1139,733,1140,733,1142,735,1143,736,1144,738,1145,740,1145,742,1145,744,1145,746,1149,746,1147,745,1145,744,1143,743,1141,741,1140,739,1138,737,1136,736,1135,734,1134,732	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01325"	title="K01681 (ACO, acnA), 4.2.1.3, R01325" />
+<area shape=poly	coords=1145,746,1143,742,1147,742,1149,746	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01325"	title="K01681 (ACO, acnA), 4.2.1.3, R01325" />
+<area shape=poly	coords=1147,742,1148,743,1149,744,1150,746,1151,748,1151,750,1152,752,1152,754,1152,756,1152,758,1156,758,1154,757,1152,756,1150,754,1149,752,1147,750,1146,748,1145,746,1144,744,1143,742	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01325"	title="K01681 (ACO, acnA), 4.2.1.3, R01325" />
+<area shape=poly	coords=1152,758,1154,760,1158,760,1156,758	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01325"	title="K01681 (ACO, acnA), 4.2.1.3, R01325" />
+<area shape=poly	coords=1158,774,1158,777,1162,777,1162,774	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01900"	title="K01681 (ACO, acnA), 4.2.1.3, R01900" />
+<area shape=poly	coords=1162,777,1162,778,1163,780,1163,781,1163,783,1163,786,1163,788,1162,790,1161,793,1160,795,1164,795,1163,794,1162,792,1161,791,1160,789,1160,786,1159,784,1159,782,1158,779,1158,777	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01900"	title="K01681 (ACO, acnA), 4.2.1.3, R01900" />
+<area shape=poly	coords=1160,795,1160,790,1164,790,1164,795	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01900"	title="K01681 (ACO, acnA), 4.2.1.3, R01900" />
+<area shape=poly	coords=1160,790,1160,791,1160,793,1160,794,1160,796,1160,799,1160,801,1160,803,1159,806,1159,808,1163,808,1163,807,1164,805,1164,804,1164,802,1164,799,1164,797,1164,795,1164,792,1164,790	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01900"	title="K01681 (ACO, acnA), 4.2.1.3, R01900" />
+<area shape=poly	coords=1159,808,1158,811,1162,811,1163,808	href="/dbget-bin/www_bget?K01681+4.2.1.3+R01900"	title="K01681 (ACO, acnA), 4.2.1.3, R01900" />
+<area shape=poly	coords=1154,822,1153,826,1157,826,1158,822	href="/dbget-bin/www_bget?K00031+K00030+1.1.1.42+1.1.1.41+R01899+R00268+R00709"	title="K00030 (IDH3), K00031 (IDH1, IDH2, icd), 1.1.1.42, 1.1.1.41, R01899, R00268, R00709" />
+<area shape=poly	coords=1153,826,1153,827,1152,828,1151,830,1150,832,1149,834,1148,836,1148,838,1147,840,1146,842,1150,842,1151,841,1152,840,1152,838,1153,836,1154,834,1155,832,1156,830,1157,828,1157,826	href="/dbget-bin/www_bget?K00031+K00030+1.1.1.42+1.1.1.41+R01899+R00268+R00709"	title="K00030 (IDH3), K00031 (IDH1, IDH2, icd), 1.1.1.42, 1.1.1.41, R01899, R00268, R00709" />
+<area shape=poly	coords=1146,842,1149,837,1153,837,1150,842	href="/dbget-bin/www_bget?K00031+K00030+1.1.1.42+1.1.1.41+R01899+R00268+R00709"	title="K00030 (IDH3), K00031 (IDH1, IDH2, icd), 1.1.1.42, 1.1.1.41, R01899, R00268, R00709" />
+<area shape=poly	coords=1149,837,1148,838,1147,839,1145,840,1144,842,1143,844,1142,846,1140,847,1139,849,1138,851,1142,851,1143,850,1144,850,1146,848,1147,847,1148,845,1149,843,1151,841,1152,839,1153,837	href="/dbget-bin/www_bget?K00031+K00030+1.1.1.42+1.1.1.41+R01899+R00268+R00709"	title="K00030 (IDH3), K00031 (IDH1, IDH2, icd), 1.1.1.42, 1.1.1.41, R01899, R00268, R00709" />
+<area shape=poly	coords=1138,851,1136,854,1140,854,1142,851	href="/dbget-bin/www_bget?K00031+K00030+1.1.1.42+1.1.1.41+R01899+R00268+R00709"	title="K00030 (IDH3), K00031 (IDH1, IDH2, icd), 1.1.1.42, 1.1.1.41, R01899, R00268, R00709" />
+<area shape=poly	coords=1046,877,1060,879,1060,883,1046,881	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=1060,883,1062,882,1064,881,1067,880,1069,880,1071,880,1073,880,1075,880,1076,880,1077,880,1077,884,1075,884,1073,884,1070,884,1068,883,1066,883,1064,882,1062,881,1061,880,1060,879	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=1077,880,1080,879,1080,883,1077,884	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=1080,879,1081,879,1083,879,1084,879,1086,878,1089,878,1091,878,1093,877,1096,877,1098,876,1098,880,1097,881,1095,881,1094,882,1092,882,1089,882,1087,883,1085,883,1082,883,1080,883	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=1098,876,1103,874,1103,878,1098,880	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=1103,874,1104,874,1106,873,1107,872,1109,871,1111,870,1114,869,1116,869,1118,868,1120,867,1120,871,1119,872,1118,873,1116,873,1114,874,1112,875,1110,876,1108,877,1105,878,1103,878	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=1120,867,1126,863,1126,867,1120,871	href="/dbget-bin/www_bget?K00164+K00658+K00382+1.2.4.2+2.3.1.61+1.8.1.4+R00621+R03316+R02570+R07618"	title="K00164 (OGDH, sucA), K00382 (DLD, lpd, pdhD), K00658 (DLST, sucB), 1.2.4.2, 2.3.1.61, 1.8.1.4, R00621, R03316, R02570, R07618" />
+<area shape=poly	coords=996,845,1004,855,1008,855,1000,845	href="/dbget-bin/www_bget?K01899+K01900+6.2.1.4+6.2.1.5+R00432+R00727+R00405"	title="K01899 (LSC1), K01900 (LSC2), 6.2.1.4, 6.2.1.5, R00432, R00727, R00405" />
+<area shape=poly	coords=1008,855,1009,856,1010,856,1012,857,1014,859,1015,860,1017,861,1018,862,1019,863,1020,864,1020,868,1018,867,1016,866,1014,865,1012,863,1010,862,1008,860,1007,858,1005,857,1004,855	href="/dbget-bin/www_bget?K01899+K01900+6.2.1.4+6.2.1.5+R00432+R00727+R00405"	title="K01899 (LSC1), K01900 (LSC2), 6.2.1.4, 6.2.1.5, R00432, R00727, R00405" />
+<area shape=poly	coords=1020,864,1022,865,1022,869,1020,868	href="/dbget-bin/www_bget?K01899+K01900+6.2.1.4+6.2.1.5+R00432+R00727+R00405"	title="K01899 (LSC1), K01900 (LSC2), 6.2.1.4, 6.2.1.5, R00432, R00727, R00405" />
+<area shape=poly	coords=980,808,980,811,984,811,984,808	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R02164"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R02164" />
+<area shape=poly	coords=984,811,984,812,985,813,985,815,986,817,986,819,987,821,987,824,986,826,986,828,990,828,988,827,986,826,985,824,984,822,983,820,982,818,981,815,980,813,980,811	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R02164"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R02164" />
+<area shape=poly	coords=986,828,987,831,991,831,990,828	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R02164"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R02164" />
+<area shape=poly	coords=981,773,981,775,985,775,985,773	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R01082"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R01082" />
+<area shape=poly	coords=981,775,981,776,980,778,980,779,980,781,980,784,979,786,979,788,979,791,979,793,983,793,983,792,983,790,983,789,984,787,984,784,984,782,984,780,985,777,985,775	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R01082"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R01082" />
+<area shape=poly	coords=979,793,978,795,982,795,983,793	href="/dbget-bin/www_bget?K00234+K00235+K00236+K00237+1.3.5.1+R01082"	title="K00234 (SDHA, SDH1), K00235 (SDHB, SDH2), K00236 (SDHC, SDH3), K00237 (SDHD, SDH4), 1.3.5.1, R01082" />
+<area shape=poly	coords=1002,735,1000,737,1004,737,1006,735	href="/dbget-bin/www_bget?K00025+K00026+1.1.1.37+R00342"	title="K00025 (E1.1.1.37A), K00026 (E1.1.1.37B, mdh), 1.1.1.37, R00342" />
+<area shape=poly	coords=1000,737,999,738,998,738,997,740,995,741,994,743,993,745,992,747,991,749,990,751,994,751,995,750,996,749,997,748,998,746,999,744,1001,742,1002,741,1003,739,1004,737	href="/dbget-bin/www_bget?K00025+K00026+1.1.1.37+R00342"	title="K00025 (E1.1.1.37A), K00026 (E1.1.1.37B, mdh), 1.1.1.37, R00342" />
+<area shape=poly	coords=990,751,986,758,990,758,994,751	href="/dbget-bin/www_bget?K00025+K00026+1.1.1.37+R00342"	title="K00025 (E1.1.1.37A), K00026 (E1.1.1.37B, mdh), 1.1.1.37, R00342" />
+<area shape=poly	coords=864,555,1037,555,1037,559,864,559	href="/dbget-bin/www_bget?K00161+K00162+K01652+K01653+K00053+K01687+K01649+K01703+K01704+K00052+K00826+1.2.4.1+2.2.1.6+1.1.1.86+4.2.1.9+2.3.3.13+4.2.1.33+1.1.1.85+2.6.1.42+R00014+R04672+R05071+R04440+R04441+R01213+R03968+R04001+R04426+R01652+R01090"	title="K00052 (E1.1.1.85, leuB), K00053 (E1.1.1.86, ilvC), K00161 (PDHA), K00162 (PDHB), K00826 (E2.6.1.42, ilvE), K01649 (E2.3.3.13, leuA), K01652 (E2.2.1.6L, ilvB, ilvG, ilvI), K01653 (E2.2.1.6S, ilvH, ilvN), K01687 (E4.2.1.9, ilvD), K01703 (leuC), K01704 (leuD), 1.2.4.1, 2.2.1.6, 1.1.1.86, 4.2.1.9, 2.3.3.13, 4.2.1.33, 1.1.1.85, 2.6.1.42, R00014, R04672, R05071, R04440, R04441, R01213, R03968, R04001, R04426, R01652, R01090" />
+<area shape=poly	coords=864,557,873,553,873,561	href="/dbget-bin/www_bget?K00161+K00162+K01652+K01653+K00053+K01687+K01649+K01703+K01704+K00052+K00826+1.2.4.1+2.2.1.6+1.1.1.86+4.2.1.9+2.3.3.13+4.2.1.33+1.1.1.85+2.6.1.42+R00014+R04672+R05071+R04440+R04441+R01213+R03968+R04001+R04426+R01652+R01090"	title="K00052 (E1.1.1.85, leuB), K00053 (E1.1.1.86, ilvC), K00161 (PDHA), K00162 (PDHB), K00826 (E2.6.1.42, ilvE), K01649 (E2.3.3.13, leuA), K01652 (E2.2.1.6L, ilvB, ilvG, ilvI), K01653 (E2.2.1.6S, ilvH, ilvN), K01687 (E4.2.1.9, ilvD), K01703 (leuC), K01704 (leuD), 1.2.4.1, 2.2.1.6, 1.1.1.86, 4.2.1.9, 2.3.3.13, 4.2.1.33, 1.1.1.85, 2.6.1.42, R00014, R04672, R05071, R04440, R04441, R01213, R03968, R04001, R04426, R01652, R01090" />
+<area shape=poly	coords=944,720,944,576,948,576,948,720	href="/dbget-bin/www_bget?K00028+K00029+1.1.1.39+1.1.1.40+R00214+R00216"	title="K00028 (E1.1.1.39), K00029 (E1.1.1.40, maeB), 1.1.1.39, 1.1.1.40, R00214, R00216" />
+<area shape=poly	coords=944,576,944,574,945,572,945,570,946,568,948,567,949,566,951,565,953,564,955,564,955,568,954,568,953,569,952,569,951,570,950,571,949,573,949,574,948,575,948,576	href="/dbget-bin/www_bget?K00028+K00029+1.1.1.39+1.1.1.40+R00214+R00216"	title="K00028 (E1.1.1.39), K00029 (E1.1.1.40, maeB), 1.1.1.39, 1.1.1.40, R00214, R00216" />
+<area shape=poly	coords=955,564,1039,564,1039,568,955,568	href="/dbget-bin/www_bget?K00028+K00029+1.1.1.39+1.1.1.40+R00214+R00216"	title="K00028 (E1.1.1.39), K00029 (E1.1.1.40, maeB), 1.1.1.39, 1.1.1.40, R00214, R00216" />
+<area shape=poly	coords=1039,566,1031,570,1031,563	href="/dbget-bin/www_bget?K00028+K00029+1.1.1.39+1.1.1.40+R00214+R00216"	title="K00028 (E1.1.1.39), K00029 (E1.1.1.40, maeB), 1.1.1.39, 1.1.1.40, R00214, R00216" />
+<area shape=poly	coords=775,362,775,247,779,247,779,362	href="/dbget-bin/www_bget?K00765+K01523+K01496+K01814+K02500+K02501+2.4.2.17+3.6.1.31+3.5.4.19+5.3.1.16+4.1.3.-+2.4.2.-+R01071+R04035+R04037+R04640+R04558"	title="K00765 (E2.4.2.17, hisG), K01496 (hisI), K01523 (hisE), K01814 (E5.3.1.16, hisA), K02500 (hisF), K02501 (hisH), 2.4.2.17, 3.6.1.31, 3.5.4.19, 5.3.1.16, 4.1.3.-, 2.4.2.-, R01071, R04035, R04037, R04640, R04558" />
+<area shape=poly	coords=777,247,781,255,773,255	href="/dbget-bin/www_bget?K00765+K01523+K01496+K01814+K02500+K02501+2.4.2.17+3.6.1.31+3.5.4.19+5.3.1.16+4.1.3.-+2.4.2.-+R01071+R04035+R04037+R04640+R04558"	title="K00765 (E2.4.2.17, hisG), K01496 (hisI), K01523 (hisE), K01814 (E5.3.1.16, hisA), K02500 (hisF), K02501 (hisH), 2.4.2.17, 3.6.1.31, 3.5.4.19, 5.3.1.16, 4.1.3.-, 2.4.2.-, R01071, R04035, R04037, R04640, R04558" />
+<area shape=poly	coords=773,470,773,620,777,620,777,470	href="/dbget-bin/www_bget?K00765+K01523+K01496+K01814+K02500+K02501+2.4.2.17+3.6.1.31+3.5.4.19+5.3.1.16+4.1.3.-+2.4.2.-+R01071+R04035+R04037+R04640+R04558"	title="K00765 (E2.4.2.17, hisG), K01496 (hisI), K01523 (hisE), K01814 (E5.3.1.16, hisA), K02500 (hisF), K02501 (hisH), 2.4.2.17, 3.6.1.31, 3.5.4.19, 5.3.1.16, 4.1.3.-, 2.4.2.-, R01071, R04035, R04037, R04640, R04558" />
+<area shape=poly	coords=775,620,771,612,779,612	href="/dbget-bin/www_bget?K00765+K01523+K01496+K01814+K02500+K02501+2.4.2.17+3.6.1.31+3.5.4.19+5.3.1.16+4.1.3.-+2.4.2.-+R01071+R04035+R04037+R04640+R04558"	title="K00765 (E2.4.2.17, hisG), K01496 (hisI), K01523 (hisE), K01814 (E5.3.1.16, hisA), K02500 (hisF), K02501 (hisH), 2.4.2.17, 3.6.1.31, 3.5.4.19, 5.3.1.16, 4.1.3.-, 2.4.2.-, R01071, R04035, R04037, R04640, R04558" />
+<area shape=poly	coords=733,185,693,185,693,189,733,189	href="/dbget-bin/www_bget?K00602+K01492+2.1.2.3+3.5.4.10+R04560"	title="K00602 (purH), K01492 (E2.1.2.3), 2.1.2.3, 3.5.4.10, R04560" />
+<area shape=poly	coords=693,187,701,183,701,191	href="/dbget-bin/www_bget?K00602+K01492+2.1.2.3+3.5.4.10+R04560"	title="K00602 (purH), K01492 (E2.1.2.3), 2.1.2.3, 3.5.4.10, R04560" />
+<area shape=poly	coords=657,253,657,293,661,293,661,253	href="/dbget-bin/www_bget?K00602+K01492+2.1.2.3+3.5.4.10+R01127"	title="K00602 (purH), K01492 (E2.1.2.3), 2.1.2.3, 3.5.4.10, R01127" />
+<area shape=poly	coords=659,293,655,285,663,285	href="/dbget-bin/www_bget?K00602+K01492+2.1.2.3+3.5.4.10+R01127"	title="K00602 (purH), K01492 (E2.1.2.3), 2.1.2.3, 3.5.4.10, R01127" />
+<area shape=poly	coords=657,423,657,451,661,451,661,423	href="/dbget-bin/www_bget?K01939+K01756+6.3.4.4+4.3.2.2+R01135+R01083"	title="K01756 (E4.3.2.2, purB), K01939 (E6.3.4.4, purA), 6.3.4.4, 4.3.2.2, R01135, R01083" />
+<area shape=poly	coords=659,451,655,443,663,443	href="/dbget-bin/www_bget?K01939+K01756+6.3.4.4+4.3.2.2+R01135+R01083"	title="K01756 (E4.3.2.2, purB), K01939 (E6.3.4.4, purA), 6.3.4.4, 4.3.2.2, R01135, R01083" />
+<area shape=poly	coords=599,366,559,366,559,370,599,370	href="/dbget-bin/www_bget?K00088+1.1.1.205+R01130"	title="K00088 (E1.1.1.205, guaB), 1.1.1.205, R01130" />
+<area shape=poly	coords=559,368,567,364,567,372	href="/dbget-bin/www_bget?K00088+1.1.1.205+R01130"	title="K00088 (E1.1.1.205, guaB), 1.1.1.205, R01130" />
+<area shape=poly	coords=512,423,512,451,516,451,516,423	href="/dbget-bin/www_bget?K01951+6.3.5.2+R01230+R01231"	title="K01951 (E6.3.5.2, guaA), 6.3.5.2, R01230, R01231" />
+<area shape=poly	coords=514,451,510,443,518,443	href="/dbget-bin/www_bget?K01951+6.3.5.2+R01230+R01231"	title="K01951 (E6.3.5.2, guaA), 6.3.5.2, R01230, R01231" />
+<area shape=poly	coords=454,366,414,366,414,370,454,370	href="/dbget-bin/www_bget?K01081+K03787+3.1.3.5+R02719"	title="K01081 (E3.1.3.5), K03787 (surE), 3.1.3.5, R02719" />
+<area shape=poly	coords=414,368,422,364,422,372	href="/dbget-bin/www_bget?K01081+K03787+3.1.3.5+R02719"	title="K01081 (E3.1.3.5), K03787 (surE), 3.1.3.5, R02719" />
+<area shape=poly	coords=368,293,368,253,372,253,372,293	href="/dbget-bin/www_bget?K03783+2.4.2.1+R02297"	title="K03783 (punA), 2.4.2.1, R02297" />
+<area shape=poly	coords=370,253,374,261,366,261	href="/dbget-bin/www_bget?K03783+2.4.2.1+R02297"	title="K03783 (punA), 2.4.2.1, R02297" />
+<area shape=poly	coords=309,366,269,366,269,370,309,370	href="/dbget-bin/www_bget?2.1.1.158+3.2.2.25+2.1.1.159+2.1.1.160+R07917+R07918+R07919"	title="2.1.1.158, 3.2.2.25, 2.1.1.159, 2.1.1.160, 2.1.1.158, 3.2.2.25, 2.1.1.159, 2.1.1.160, R07917, R07918, R07919" />
+<area shape=poly	coords=269,368,277,364,277,372	href="/dbget-bin/www_bget?2.1.1.158+3.2.2.25+2.1.1.159+2.1.1.160+R07917+R07918+R07919"	title="2.1.1.158, 3.2.2.25, 2.1.1.159, 2.1.1.160, 2.1.1.158, 3.2.2.25, 2.1.1.159, 2.1.1.160, R07917, R07918, R07919" />
+<area shape=poly	coords=174,366,134,366,134,370,174,370	href="/dbget-bin/www_bget?2.1.1.160+R07920"	title="2.1.1.160, 2.1.1.160, R07920" />
+<area shape=poly	coords=134,368,142,364,142,372	href="/dbget-bin/www_bget?2.1.1.160+R07920"	title="2.1.1.160, 2.1.1.160, R07920" />
+<area shape=poly	coords=315,186,275,186,275,190,315,190	href="/dbget-bin/www_bget?R08410"	title="R08410" />
+<area shape=poly	coords=275,188,283,184,283,192	href="/dbget-bin/www_bget?R08410"	title="R08410" />
+<area shape=poly	coords=838,610,838,776,842,776,842,610	href="/dbget-bin/www_bget?R08411"	title="R08411" />
+<area shape=poly	coords=838,776,838,777,837,778,837,779,836,780,835,781,834,782,833,782,832,783,831,783,831,787,833,787,835,786,837,785,838,784,840,783,841,782,841,780,842,778,842,776	href="/dbget-bin/www_bget?R08411"	title="R08411" />
+<area shape=poly	coords=831,783,695,783,695,787,831,787	href="/dbget-bin/www_bget?R08411"	title="R08411" />
+<area shape=poly	coords=695,785,703,781,703,789	href="/dbget-bin/www_bget?R08411"	title="R08411" />
+<area shape=poly	coords=715,663,550,663,550,667,715,667	href="/dbget-bin/www_bget?K01693+K00817+K00013+4.2.1.19+2.6.1.9+3.1.3.15+1.1.1.23+R03457+R03243+R03013+R03012+R01163"	title="K00013 (E1.1.1.23, hisD), K00817 (hisC), K01693 (E4.2.1.19, hisB), 4.2.1.19, 2.6.1.9, 3.1.3.15, 1.1.1.23, R03457, R03243, R03013, R03012, R01163" />
+<area shape=poly	coords=550,665,558,661,558,669	href="/dbget-bin/www_bget?K01693+K00817+K00013+4.2.1.19+2.6.1.9+3.1.3.15+1.1.1.23+R03457+R03243+R03013+R03012+R01163"	title="K00013 (E1.1.1.23, hisD), K00817 (hisC), K01693 (E4.2.1.19, hisB), 4.2.1.19, 2.6.1.9, 3.1.3.15, 1.1.1.23, R03457, R03243, R03013, R03012, R01163" />
+<area shape=poly	coords=488,635,488,589,492,589,492,635	href="/dbget-bin/www_bget?R08413"	title="R08413" />
+<area shape=poly	coords=492,589,492,587,491,585,491,583,490,582,488,580,487,579,485,579,483,578,481,578,481,582,482,582,483,583,484,583,485,584,486,585,487,586,487,587,488,588,488,589	href="/dbget-bin/www_bget?R08413"	title="R08413" />
+<area shape=poly	coords=481,578,235,578,235,582,481,582	href="/dbget-bin/www_bget?R08413"	title="R08413" />
+<area shape=poly	coords=235,580,243,576,243,584	href="/dbget-bin/www_bget?R08413"	title="R08413" />
+<area shape=poly	coords=450,663,235,663,235,667,450,667	href="/dbget-bin/www_bget?K01590+4.1.1.22+R01167"	title="K01590 (E4.1.1.22, HDC), 4.1.1.22, R01167" />
+<area shape=poly	coords=235,665,243,661,243,669	href="/dbget-bin/www_bget?K01590+4.1.1.22+R01167"	title="K01590 (E4.1.1.22, HDC), 4.1.1.22, R01167" />
+<area shape=poly	coords=600,783,235,783,235,787,600,787	href="/dbget-bin/www_bget?R08412"	title="R08412" />
+<area shape=poly	coords=235,785,243,781,243,789	href="/dbget-bin/www_bget?R08412"	title="R08412" />
+<area shape=poly	coords=235,783,486,783,486,787,235,787	href="/dbget-bin/www_bget?R08412"	title="R08412" />
+<area shape=poly	coords=486,783,487,783,488,782,489,782,490,781,491,780,492,779,492,778,493,777,493,776,497,776,497,778,496,780,495,782,494,783,493,784,492,785,490,786,488,787,486,787	href="/dbget-bin/www_bget?R08412"	title="R08412" />
+<area shape=poly	coords=493,776,493,710,497,710,497,776	href="/dbget-bin/www_bget?R08412"	title="R08412" />
+<area shape=poly	coords=235,785,243,781,243,789	href="/dbget-bin/www_bget?R08412"	title="R08412" />
+<area shape=rect	coords=135,263,295,312	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08003&search_string=%22Purine alkaloids%22&option=-n"	title="BR:br08003(Purine alkaloids)" />
+<area shape=rect	coords=32,85,209,96	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08003&search_string=%22Purine alkaloids%22&option=-n"	title="BR:br08003(Purine alkaloids)" />
+<area shape=rect	coords=29,509,215,520	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08003&search_string=%22from histidine%22&option=-n"	title="BR:br08003(from histidine)" />
+<area shape=rect	coords=288,712,431,761	href="http://www.kegg.jp/kegg-bin/search_htext?htext=br08003&search_string=%22Imidazole alkaloids%22&option=-n"	title="BR:br08003(Imidazole alkaloids)" />
+<area shape=rect	coords=902,254,1011,289	href="/kegg-bin/show_pathway?map00030"	title="map00030" />
+<area shape=rect	coords=40,45,566,71	href="/dbget-bin/www_bget?map01065"	title="map01065" />
+<area shape=rect	coords=943,62,1016,88	href="/kegg-bin/show_pathway?@map00010/C00267/C00668/C05345/C05378/C00118/C00111/C00236/C00197/C01159/C00631/C00074/C00022"	title="PATH:map00010(C00267, C00668 (alpha-D-Glucose 6-phosphate), C05345 (beta-D-Fructose 6-phosphate), C05378 (beta-D-Fructose 1,6-bisphosphate), C00118 (D-Glyceraldehyde 3-phosphate), C00111 (Glycerone phosphate), C00236 (3-Phospho-D-glyceroyl phosphate), C00197 (3-Phospho-D-glycerate), C01159 (2,3-Bisphospho-D-glycerate), C00631 (2-Phospho-D-glycerate), C00074 (Phosphoenolpyruvate), C00022)" />
+<area shape=rect	coords=1029,784,1111,810	href="/kegg-bin/show_pathway?@map00020/C00024/C00036/C00158/C00417/C00311/C00026/C00091/C00042/C00122/C00149"	title="PATH:map00020(C00024, C00036 (Oxaloacetate), C00158 (Citrate), C00417 (cis-Aconitate), C00311 (Isocitrate), C00026 (2-Oxoglutarate), C00091 (Succinyl-CoA), C00042 (Succinate), C00122 (Fumarate), C00149)" />
+<area shape=rect	coords=481,234,594,260	href="/kegg-bin/show_pathway?map00230"	title="map00230" />
+<area shape=rect	coords=220,450,338,476	href="/kegg-bin/show_pathway?@map00232/C01762/C16352/C16353/C07480/C07481"	title="PATH:map00232(C01762, C16352 (7-Methylxanthosine), C16353 (7-Methylxanthine), C07480 (Theobromine), C07481)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

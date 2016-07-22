@@ -1,0 +1,158 @@
+<html>
+<!---
+ENTRY       map07025
+DEFINITION  Quinolines - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Quinolines - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Quinolines - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07025&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07025">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07025" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07025" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07025.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=696,144,780,253	href="/dbget-bin/www_bget?D04895+D00831"	title="D04895 (Mefloquine (USAN/INN)), D00831 (Mefloquine hydrochloride (JP15/USP))" />
+<area shape=rect	coords=687,289,866,392	href="/dbget-bin/www_bget?D02485+D08033"	title="D02485 (Halofantrine hydrochloride (USAN)), D08033 (Halofantrine (INN))" />
+<area shape=rect	coords=359,281,456,395	href="/dbget-bin/www_bget?D01663"	title="D01663 (Quinine ethylcarbonate (JP15))" />
+<area shape=rect	coords=515,172,668,253	href="/dbget-bin/www_bget?D02125+D02366+D03469+D07680"	title="D02125 (Chloroquine phosphate (USP)), D02366 (Chloroquine (USP/INN)), D03469 (Chloroquine hydrochloride (USP)), D07680 (Chloroquine sulfate)" />
+<area shape=rect	coords=362,172,511,253	href="/dbget-bin/www_bget?D02548+D08179"	title="D02548 (Mepacrine dihydrochloride), D08179 (Mepacrine (INN))" />
+<area shape=rect	coords=514,63,621,160	href="/dbget-bin/www_bget?D02126+D08420"	title="D02126 (Primaquine phosphate (USP)), D08420 (Primaquine (INN))" />
+<area shape=rect	coords=362,63,491,160	href="/dbget-bin/www_bget?D02547"	title="D02547 (Pamaquine)" />
+<area shape=rect	coords=206,142,302,256	href="/dbget-bin/www_bget?D02261+D02262+D05681+D08460+D08461"	title="D02261 (Quinine hydrochloride (JP15)), D02262 (Quinine sulfate (JP15/USP)), D05681 (Quinine ascorbate (USAN)), D08460 (Quinine (BAN)), D08461 (Quinine dihydrochloride)" />
+<area shape=rect	coords=53,142,151,256	href="/dbget-bin/www_bget?D00642+D00643+D02272+D08458"	title="D00642 (Quinidine gluconate (USP)), D00643 (Quinidine polygalacturonate), D02272 (Quinidine sulfate (JP15/USP)), D08458 (Quinidine (BAN))" />
+<area shape=rect	coords=41,103,164,129	href="/kegg-bin/show_pathway?map07037"	title="map07037" />
+<area shape=rect	coords=528,454,610,480	href="/kegg-bin/show_pathway?map07014"	title="map07014" />
+<area shape=rect	coords=176,454,329,480	href="/kegg-bin/show_pathway?map07115"	title="map07115" />
+<area shape=rect	coords=40,45,161,71	href="/dbget-bin/www_bget?map07025"	title="map07025" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

@@ -1,0 +1,164 @@
+<html>
+<!---
+ENTRY       map07021
+DEFINITION  Aminoglycosides - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Aminoglycosides - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Aminoglycosides - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07021&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07021">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07021" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07021" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07021.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=952,186,1101,268	href="/dbget-bin/www_bget?D00869+D08526"	title="D00869 (Spectinomycin hydrochloride (JP15/USP)), D08526 (Spectinomycin (INN))" />
+<area shape=rect	coords=913,860,1082,939	href="/dbget-bin/www_bget?D01881+D07470"	title="D01881 (Astromicin sulfate (JP15/USAN)), D07470 (Astromicin (INN))" />
+<area shape=rect	coords=691,1031,851,1176	href="/dbget-bin/www_bget?D02545+D01826"	title="D02545 (Isepamicin (USAN/INN)), D01826 (Isepamicin sulfate (JP15))" />
+<area shape=rect	coords=694,870,851,1001	href="/dbget-bin/www_bget?D00867+D08268"	title="D00867 (Netilmicin sulfate (JP15/USP)), D08268 (Netilmicin (INN))" />
+<area shape=rect	coords=366,1044,536,1172	href="/dbget-bin/www_bget?D01821+D08219"	title="D01821 (Micronomicin sulfate (JP15)), D08219 (Micronomicin (DCF))" />
+<area shape=rect	coords=369,875,527,1004	href="/dbget-bin/www_bget?D02544+D02181"	title="D02544 (Sisomicin (USAN/INN)), D02181 (Sisomicin sulfate (JP15/USP))" />
+<area shape=rect	coords=61,865,225,1004	href="/dbget-bin/www_bget?D01063"	title="D01063 (Gentamicin sulfate (JP15/USP))" />
+<area shape=rect	coords=903,413,1077,547	href="/dbget-bin/www_bget?D02543+D00865"	title="D02543 (Amikacin (USP/INN)), D00865 (Amikacin sulfate (JP15/USP))" />
+<area shape=rect	coords=610,594,771,715	href="/dbget-bin/www_bget?D01753+D07811"	title="D01753 (Dibekacin sulfate (JP15)), D07811 (Dibekacin (INN))" />
+<area shape=rect	coords=43,137,247,265	href="/dbget-bin/www_bget?D01618+D05140"	title="D01618 (Fradiomycin sulfate (JP15)), D05140 (Framycetin (INN))" />
+<area shape=rect	coords=792,137,932,268	href="/dbget-bin/www_bget?D01350+D08531"	title="D01350 (Streptomycin sulfate (JP15/USP)), D08531 (Streptomycin (INN))" />
+<area shape=rect	coords=903,596,1078,716	href="/dbget-bin/www_bget?D01523+D07462"	title="D01523 (Arbekacin sulfate (JP15)), D07462 (Arbekacin (INN/USAN))" />
+<area shape=rect	coords=607,430,766,551	href="/dbget-bin/www_bget?D00063+D02542"	title="D00063 (Tobramycin (JP15/USP)), D02542 (Tobramycin sulfate (USP))" />
+<area shape=rect	coords=317,417,482,552	href="/dbget-bin/www_bget?D01868+D07497"	title="D01868 (Bekanamycin sulfate (JP15)), D07497 (Bekanamycin (INN))" />
+<area shape=rect	coords=296,135,499,264	href="/dbget-bin/www_bget?D00868+D07467"	title="D00868 (Paromomycin sulfate (JAN/USP)), D07467 (Paromomycin (INN))" />
+<area shape=rect	coords=64,415,227,554	href="/dbget-bin/www_bget?D00866+D03262"	title="D00866 (Kanamycin monosulfate (JP15)), D03262 (Kanamycin sulfate (JP15))" />
+<area shape=rect	coords=511,159,668,264	href="/dbget-bin/www_bget?D02209+D08478"	title="D02209 (Ribostamycin sulfate (JP15)), D08478 (Ribostamycin (INN))" />
+<area shape=rect	coords=697,157,788,192	href="/kegg-bin/show_pathway?map00521"	title="map00521" />
+<area shape=rect	coords=38,38,197,64	href="/dbget-bin/www_bget?map07021"	title="map07021" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

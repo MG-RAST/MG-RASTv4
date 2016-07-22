@@ -1,0 +1,204 @@
+<html>
+<!---
+ENTRY       map03030
+DEFINITION  DNA replication - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: DNA replication - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>DNA replication - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=03030&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map03030">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+A complex network of interacting proteins and enzymes is required for DNA replication. Generally, DNA replication follows a multistep enzymatic pathway. At the DNA replication fork, a DNA helicase (DnaB or MCM complex) precedes the DNA synthetic machinery and unwinds the duplex parental DNA in cooperation with the SSB or RPA. On the leading strand, replication occurs continuously in a 5 to 3 direction, whereas on the lagging strand, DNA replication occurs discontinuously by synthesis and joining of short Okazaki fragments. In prokaryotes, the leading strand replication apparatus consists of a DNA polymerase (pol III core), a sliding clamp (beta), and a clamp loader (gamma delta complex). The DNA primase (DnaG) is needed to form RNA primers. Normally, during replication of the lagging-strand DNA template, an RNA primer is removed either by an RNase H or by the 5 to 3 exonuclease activity of DNA pol I, and the DNA ligase joins the Okazaki fragments. In eukaryotes, three DNA polymerases (alpha, delta, and epsilon) have been identified. DNA primase forms a permanent complex with DNA polymerase alpha. PCNA and RFC function as a clamp and a clamp loader. FEN 1 and RNase H1 remove the RNA from the Okazaki fragments and DNA ligase I joins the DNA.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 03030 map" -->
+</select>
+<input type="hidden" name="mapno" value="03030" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map03030" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map03030" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map03030.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=1135,867,1181,884	href="/dbget-bin/www_bget?K10747"	title="K10747 (LIG1)" />
+<area shape=rect	coords=1058,867,1104,884	href="/dbget-bin/www_bget?K04799"	title="K04799 (FEN1, RAD2)" />
+<area shape=rect	coords=980,810,1026,827	href="/dbget-bin/www_bget?K10742"	title="K10742 (DNA2)" />
+<area shape=rect	coords=1044,810,1090,827	href="/dbget-bin/www_bget?K10743"	title="K10743 (RNASEH2A)" />
+<area shape=rect	coords=1090,810,1136,827	href="/dbget-bin/www_bget?K10744"	title="K10744 (RNASEH2B)" />
+<area shape=rect	coords=1090,752,1136,769	href="/dbget-bin/www_bget?K10755"	title="K10755 (RFC2_4)" />
+<area shape=rect	coords=1136,810,1182,827	href="/dbget-bin/www_bget?K10745"	title="K10745 (RNASEH2C)" />
+<area shape=rect	coords=1136,752,1182,769	href="/dbget-bin/www_bget?K10756"	title="K10756 (RFC3_5)" />
+<area shape=rect	coords=980,752,1026,769	href="/dbget-bin/www_bget?K04802"	title="K04802 (PCNA)" />
+<area shape=rect	coords=1136,701,1182,718	href="/dbget-bin/www_bget?K10740"	title="K10740 (RPA3)" />
+<area shape=rect	coords=1045,684,1091,701	href="/dbget-bin/www_bget?K02209"	title="K02209 (MCM5, CDC46)" />
+<area shape=rect	coords=1136,554,1182,571	href="/dbget-bin/www_bget?K03505"	title="K03505 (POLD4)" />
+<area shape=rect	coords=1090,554,1136,571	href="/dbget-bin/www_bget?K03504"	title="K03504 (POLD3)" />
+<area shape=rect	coords=1136,612,1182,629	href="/dbget-bin/www_bget?K03506"	title="K03506 (POLE4)" />
+<area shape=rect	coords=1090,612,1136,629	href="/dbget-bin/www_bget?K02326"	title="K02326 (POLE3)" />
+<area shape=rect	coords=1135,328,1181,345	href="/dbget-bin/www_bget?K03111"	title="K03111 (ssb)" />
+<area shape=rect	coords=1059,328,1105,345	href="/dbget-bin/www_bget?K02316"	title="K02316 (dnaG)" />
+<area shape=rect	coords=1072,220,1118,237	href="/dbget-bin/www_bget?K02337+K03763"	title="K02337 (DPO3A1, dnaE), K03763 (DPO3A2, polC)" />
+<area shape=rect	coords=1072,203,1118,220	href="/dbget-bin/www_bget?K02342"	title="K02342 (DPO3E, dnaQ)" />
+<area shape=rect	coords=1072,186,1118,203	href="/dbget-bin/www_bget?K02345"	title="K02345 (DPO3T, holE)" />
+<area shape=rect	coords=1072,237,1118,254	href="/dbget-bin/www_bget?K02343"	title="K02343 (DPO3G, dnaX)" />
+<area shape=rect	coords=1072,254,1118,271	href="/dbget-bin/www_bget?K02341"	title="K02341 (DPO3D2, holB)" />
+<area shape=rect	coords=1072,271,1118,288	href="/dbget-bin/www_bget?K02340"	title="K02340 (DPO3D1, holA)" />
+<area shape=rect	coords=1026,271,1072,288	href="/dbget-bin/www_bget?K02339"	title="K02339 (DPO3C, holC)" />
+<area shape=rect	coords=1026,254,1072,271	href="/dbget-bin/www_bget?K02344"	title="K02344 (DPO3P, holD)" />
+<area shape=rect	coords=980,271,1026,288	href="/dbget-bin/www_bget?K02338"	title="K02338 (DPO3B, dnaN)" />
+<area shape=rect	coords=980,385,1026,402	href="/dbget-bin/www_bget?K03469+K03470+K03471"	title="K03469 (E3.1.26.4A, RNASEH1, rnhA), K03470 (E3.1.26.4B, rnhB), K03471 (E3.1.26.4C, rnhC)" />
+<area shape=rect	coords=1135,385,1181,402	href="/dbget-bin/www_bget?K01972"	title="K01972 (E6.5.1.2, ligA, ligB)" />
+<area shape=rect	coords=999,667,1045,684	href="/dbget-bin/www_bget?K02540"	title="K02540 (MCM2)" />
+<area shape=rect	coords=1045,667,1091,684	href="/dbget-bin/www_bget?K02541"	title="K02541 (MCM3)" />
+<area shape=rect	coords=999,684,1045,701	href="/dbget-bin/www_bget?K02212"	title="K02212 (MCM4, CDC54)" />
+<area shape=rect	coords=998,498,1044,515	href="/dbget-bin/www_bget?K02320"	title="K02320 (POLA1)" />
+<area shape=rect	coords=1044,498,1090,515	href="/dbget-bin/www_bget?K02321"	title="K02321 (POLA2)" />
+<area shape=rect	coords=1090,498,1136,515	href="/dbget-bin/www_bget?K02684"	title="K02684 (PRI1)" />
+<area shape=rect	coords=1136,498,1182,515	href="/dbget-bin/www_bget?K02685"	title="K02685 (PRI2)" />
+<area shape=rect	coords=998,554,1044,571	href="/dbget-bin/www_bget?K02327"	title="K02327 (POLD1)" />
+<area shape=rect	coords=1044,554,1090,571	href="/dbget-bin/www_bget?K02328"	title="K02328 (POLD2)" />
+<area shape=rect	coords=998,612,1044,629	href="/dbget-bin/www_bget?K02324"	title="K02324 (POLE1)" />
+<area shape=rect	coords=1044,612,1090,629	href="/dbget-bin/www_bget?K02325"	title="K02325 (POLE2)" />
+<area shape=rect	coords=999,701,1045,718	href="/dbget-bin/www_bget?K02542"	title="K02542 (MCM6)" />
+<area shape=rect	coords=1045,701,1091,718	href="/dbget-bin/www_bget?K02210"	title="K02210 (MCM7, CDC47)" />
+<area shape=rect	coords=1136,667,1182,684	href="/dbget-bin/www_bget?K07466"	title="K07466 (RFA1, RPA1, rpa)" />
+<area shape=rect	coords=1136,684,1182,701	href="/dbget-bin/www_bget?K10739+K10741"	title="K10739 (RFA2, RPA2), K10741 (RPA4)" />
+<area shape=rect	coords=1044,752,1090,769	href="/dbget-bin/www_bget?K10754"	title="K10754 (RFC1)" />
+<area shape=rect	coords=1058,385,1104,402	href="/dbget-bin/www_bget?K02335"	title="K02335 (DPO1, polA)" />
+<area shape=rect	coords=980,328,1026,345	href="/dbget-bin/www_bget?K02314"	title="K02314 (dnaB)" />
+<area shape=rect	coords=40,45,192,71	href="/dbget-bin/www_bget?map03030"	title="map03030" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

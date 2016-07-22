@@ -1,0 +1,251 @@
+<html>
+<!---
+ENTRY       map04144
+DEFINITION  Endocytosis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Endocytosis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Endocytosis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04144&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04144">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Endocytosis is a mechanism for cells to remove ligands, nutrients, and plasma membrane (PM) proteins, and lipids from the cell surface, bringing them into the cell interior. Transmembrane proteins entering through clathrin-dependent endocytosis (CDE) have sequences in their cytoplasmic domains that bind to the APs (adaptor-related protein complexes) and enable their rapid removal from the PM. In addition to APs and clathrin, there are numerous accessory proteins including dynamin. Depending on the various proteins that enter the endosome membrane, these cargoes are sorted to distinct destinations. Some cargoes, such as nutrient receptors, are recycled back to the PM. Ubiquitylated membrane proteins, such as activated growth-factor receptors, are sorted into intraluminal vesicles and eventually end up in the lysosome lumen via multivesicular endosomes (MVEs). There are distinct mechanisms of clathrin-independent endocytosis (CIE) depending upon the cargo and the cell type.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04144 map" -->
+</select>
+<input type="hidden" name="mapno" value="04144" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04144" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04144" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04144.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=589,748,4	href="/dbget-bin/www_bget?C04549"	title="C04549 (1-Phosphatidyl-1D-myo-inositol 3-phosphate)" />
+<area shape=circle	coords=364,745,4	href="/dbget-bin/www_bget?C04549"	title="C04549 (1-Phosphatidyl-1D-myo-inositol 3-phosphate)" />
+<area shape=circle	coords=794,748,4	href="/dbget-bin/www_bget?C04637"	title="C04637 (1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate)" />
+<area shape=circle	coords=868,772,4	href="/dbget-bin/www_bget?C00002"	title="C00002 (ATP)" />
+<area shape=circle	coords=920,823,4	href="/dbget-bin/www_bget?C00008"	title="C00008 (ADP)" />
+<area shape=circle	coords=831,150,4	href="/dbget-bin/www_bget?C04637"	title="C04637 (1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate)" />
+<area shape=circle	coords=952,150,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=917,289,4	href="/dbget-bin/www_bget?C04637"	title="C04637 (1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate)" />
+<area shape=circle	coords=917,313,4	href="/dbget-bin/www_bget?C05981"	title="C05981 (Phosphatidylinositol-3,4,5-trisphosphate)" />
+<area shape=circle	coords=409,152,4	href="/dbget-bin/www_bget?C04637"	title="C04637 (1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate)" />
+<area shape=circle	coords=429,605,4	href="/dbget-bin/www_bget?C04549"	title="C04549 (1-Phosphatidyl-1D-myo-inositol 3-phosphate)" />
+<area shape=circle	coords=795,604,4	href="/dbget-bin/www_bget?C04549"	title="C04549 (1-Phosphatidyl-1D-myo-inositol 3-phosphate)" />
+<area shape=rect	coords=374,765,420,782	href="/dbget-bin/www_bget?K04705"	title="K04705 (STAM)" />
+<area shape=rect	coords=374,748,420,765	href="/dbget-bin/www_bget?K12182"	title="K12182 (HGS, HRS, VPS27)" />
+<area shape=rect	coords=936,739,982,756	href="/dbget-bin/www_bget?K11866"	title="K11866 (STAMBP, AMSH)" />
+<area shape=rect	coords=936,717,982,734	href="/dbget-bin/www_bget?K11839"	title="K11839 (USP8, UBP5)" />
+<area shape=rect	coords=230,76,276,93	href="/dbget-bin/www_bget?K04357"	title="K04357 (EGF)" />
+<area shape=rect	coords=226,127,272,144	href="/dbget-bin/www_bget?K01528"	title="K01528 (E3.6.5.5)" />
+<area shape=rect	coords=195,252,241,269	href="/dbget-bin/www_bget?K04707+K10591+K13305+K06643+K03175+K11981+K05632+K04678+K05633"	title="K03175 (TRAF6), K04678 (SMURF), K04707 (CBL), K05632 (AIP4, ITCH), K05633 (AIP5, WWP1), K06643 (MDM2), K10591 (NEDD4, RSP5), K11981 (RNF41, NRDP1), K13305 (NEDD4L)" />
+<area shape=rect	coords=435,127,481,144	href="/dbget-bin/www_bget?K12473"	title="K12473 (LDLR)" />
+<area shape=rect	coords=194,160,240,177	href="/dbget-bin/www_bget?K04644+K04645+K04646"	title="K04644 (CLTA, LCA), K04645 (CLTB, LCB), K04646 (CLTC)" />
+<area shape=rect	coords=194,177,240,194	href="/dbget-bin/www_bget?K11824+K11825+K11826+K11827"	title="K11824 (AP2A), K11825 (AP2B1), K11826 (AP2M1), K11827 (AP2S1)" />
+<area shape=rect	coords=478,767,524,784	href="/dbget-bin/www_bget?K12186"	title="K12186 (FAM125)" />
+<area shape=rect	coords=524,750,570,767	href="/dbget-bin/www_bget?K12185"	title="K12185 (VPS37)" />
+<area shape=rect	coords=524,767,570,784	href="/dbget-bin/www_bget?K12184"	title="K12184 (VPS28)" />
+<area shape=rect	coords=268,453,314,470	href="/dbget-bin/www_bget?K03283"	title="K03283 (HSPA1_8)" />
+<area shape=rect	coords=268,470,314,487	href="/dbget-bin/www_bget?K09526"	title="K09526 (DNAJC6)" />
+<area shape=rect	coords=596,767,642,784	href="/dbget-bin/www_bget?K12190"	title="K12190 (VPS36, EAP45)" />
+<area shape=rect	coords=478,750,524,767	href="/dbget-bin/www_bget?K12183"	title="K12183 (TSG101, STP22, VPS23)" />
+<area shape=rect	coords=643,759,689,776	href="/dbget-bin/www_bget?K12189"	title="K12189 (VPS25, EAP20)" />
+<area shape=rect	coords=596,750,642,767	href="/dbget-bin/www_bget?K12188"	title="K12188 (SNF8, EAP30)" />
+<area shape=rect	coords=689,751,735,768	href="/dbget-bin/www_bget?K12195"	title="K12195 (CHMP6, VPS20)" />
+<area shape=rect	coords=781,751,827,768	href="/dbget-bin/www_bget?K12193"	title="K12193 (VPS24, CHMP3)" />
+<area shape=rect	coords=735,751,781,768	href="/dbget-bin/www_bget?K12194"	title="K12194 (CHMP4, SNF7, VPS32)" />
+<area shape=rect	coords=782,808,828,825	href="/dbget-bin/www_bget?K12197"	title="K12197 (CHMP1, VPS46, DID2)" />
+<area shape=rect	coords=781,768,827,785	href="/dbget-bin/www_bget?K12191+K12192"	title="K12191 (CHMP2A), K12192 (CHMP2B)" />
+<area shape=rect	coords=527,807,573,824	href="/dbget-bin/www_bget?K12200"	title="K12200 (PDCD6IP, ALIX, RIM20)" />
+<area shape=rect	coords=852,800,898,817	href="/dbget-bin/www_bget?K12196"	title="K12196 (VPS4)" />
+<area shape=rect	coords=852,817,898,834	href="/dbget-bin/www_bget?K12199"	title="K12199 (VTA1, LIP5)" />
+<area shape=rect	coords=724,797,770,814	href="/dbget-bin/www_bget?K12198"	title="K12198 (CHMP5, VPS60)" />
+<area shape=rect	coords=724,217,770,234	href="/dbget-bin/www_bget?K04393"	title="K04393 (CDC42)" />
+<area shape=rect	coords=724,200,770,217	href="/dbget-bin/www_bget?K06069"	title="K06069 (APKC)" />
+<area shape=rect	coords=679,217,725,234	href="/dbget-bin/www_bget?K06093"	title="K06093 (PARD6)" />
+<area shape=rect	coords=679,200,725,217	href="/dbget-bin/www_bget?K04237"	title="K04237 (PARD3)" />
+<area shape=rect	coords=952,47,998,64	href="/dbget-bin/www_bget?K07941"	title="K07941 (ARF6)" />
+<area shape=rect	coords=1005,69,1051,86	href="/dbget-bin/www_bget?K02833"	title="K02833 (HRAS)" />
+<area shape=rect	coords=1005,47,1051,64	href="/dbget-bin/www_bget?K05704"	title="K05704 (SRC)" />
+<area shape=rect	coords=435,550,481,567	href="/dbget-bin/www_bget?K07887+K07888+K07889"	title="K07887 (RAB5A), K07888 (RAB5B), K07889 (RAB5C)" />
+<area shape=rect	coords=566,378,612,395	href="/dbget-bin/www_bget?K07904+K07905"	title="K07904 (RAB11A), K07905 (RAB11B)" />
+<area shape=rect	coords=680,393,726,410	href="/dbget-bin/www_bget?K07891+K07892"	title="K07891 (RAB22A), K07892 (RAB31, RAB22B)" />
+<area shape=rect	coords=68,127,114,144	href="/dbget-bin/www_bget?K06503"	title="K06503 (TFRC, CD71)" />
+<area shape=rect	coords=142,192,188,209	href="/dbget-bin/www_bget?K12471"	title="K12471 (EPN)" />
+<area shape=rect	coords=142,209,188,226	href="/dbget-bin/www_bget?K12472"	title="K12472 (EPS15)" />
+<area shape=rect	coords=203,696,249,713	href="/dbget-bin/www_bget?K11839"	title="K11839 (USP8, UBP5)" />
+<area shape=rect	coords=801,531,847,548	href="/dbget-bin/www_bget?K07887+K07888+K07889"	title="K07887 (RAB5A), K07888 (RAB5B), K07889 (RAB5C)" />
+<area shape=rect	coords=627,393,673,410	href="/dbget-bin/www_bget?K07941"	title="K07941 (ARF6)" />
+<area shape=rect	coords=203,718,249,735	href="/dbget-bin/www_bget?K11866"	title="K11866 (STAMBP, AMSH)" />
+<area shape=rect	coords=434,193,480,210	href="/dbget-bin/www_bget?K12474"	title="K12474 (LDLRAP1, ARH)" />
+<area shape=rect	coords=434,210,480,227	href="/dbget-bin/www_bget?K12475"	title="K12475 (DAB2)" />
+<area shape=rect	coords=491,127,537,144	href="/dbget-bin/www_bget?K04180+K04175+K05050+K04189+K03914+K04141+K04142+K04143"	title="K03914 (F2R, PAR1), K04141 (ADRB1), K04142 (ADRB2), K04143 (ADRB3), K04175 (IL8RA, CXCR1), K04180 (CCR5), K04189 (CXCR4), K05050 (IL8RB, CXCR2)" />
+<area shape=rect	coords=123,127,169,144	href="/dbget-bin/www_bget?K04361+K05096+K05098+K04363+K05093+K05094+K05095+K05087+K05099+K03176+K05084+K05085+K05091+K04674+K04388+K05126+K05090"	title="K03176 (NTRK1, TRKA), K04361 (EGFR, ERBB1), K04363 (PDGFRA), K04388 (TGFBR2), K04674 (TGFBR1), K05084 (ERBB3, HER3), K05085 (ERBB4, HER4), K05087 (IGF1R), K05090 (CSF1R, FMS), K05091 (KIT, SCFR), K05093 (FGFR2), K05094 (FGFR3), K05095 (FGFR4), K05096 (FLT1, VEGFR1), K05098 (KDR, VEGFR2), K05099 (MET, HGFR), K05126 (RET)" />
+<area shape=rect	coords=683,127,729,144	href="/dbget-bin/www_bget?K06751"	title="K06751 (MHC1)" />
+<area shape=rect	coords=735,127,781,144	href="/dbget-bin/www_bget?K05068+K05069+K05070"	title="K05068 (IL2RA, CD25), K05069 (IL2RB), K05070 (IL2RG)" />
+<area shape=rect	coords=92,192,138,209	href="/dbget-bin/www_bget?K12470"	title="K12470 (SH3KBP1, CIN85)" />
+<area shape=rect	coords=92,209,138,226	href="/dbget-bin/www_bget?K11247+K11248"	title="K11247 (SH3GL), K11248 (SH3GLB)" />
+<area shape=rect	coords=492,193,538,210	href="/dbget-bin/www_bget?K00909+K00910+K08291"	title="K00909 (E2.7.11.14, GRK1, GRK7), K00910 (E2.7.11.15, ADRBK), K08291 (E2.7.11.16)" />
+<area shape=rect	coords=492,210,538,227	href="/dbget-bin/www_bget?K04439"	title="K04439 (ARRB)" />
+<area shape=rect	coords=368,47,414,64	href="/dbget-bin/www_bget?K07941"	title="K07941 (ARF6)" />
+<area shape=rect	coords=594,217,640,234	href="/dbget-bin/www_bget?K07941"	title="K07941 (ARF6)" />
+<area shape=rect	coords=435,595,481,612	href="/dbget-bin/www_bget?K12478"	title="K12478 (EEA1)" />
+<area shape=rect	coords=566,395,612,412	href="/dbget-bin/www_bget?K12484+K12485"	title="K12484 (RAB11FIP1_2_5), K12485 (RAB11FIP3_4)" />
+<area shape=rect	coords=594,242,640,259	href="/dbget-bin/www_bget?K01115"	title="K01115 (E3.1.4.4, PLD)" />
+<area shape=rect	coords=369,91,415,108	href="/dbget-bin/www_bget?K01115"	title="K01115 (E3.1.4.4, PLD)" />
+<area shape=rect	coords=952,91,998,108	href="/dbget-bin/www_bget?K01115"	title="K01115 (E3.1.4.4, PLD)" />
+<area shape=rect	coords=952,69,998,86	href="/dbget-bin/www_bget?K00889"	title="K00889 (E2.7.1.68, PIP5K)" />
+<area shape=rect	coords=369,69,415,86	href="/dbget-bin/www_bget?K00889"	title="K00889 (E2.7.1.68, PIP5K)" />
+<area shape=rect	coords=408,499,454,516	href="/dbget-bin/www_bget?K12480"	title="K12480 (RABEP1)" />
+<area shape=rect	coords=803,590,849,607	href="/dbget-bin/www_bget?K12478"	title="K12478 (EEA1)" />
+<area shape=rect	coords=801,514,847,531	href="/dbget-bin/www_bget?K12480"	title="K12480 (RABEP1)" />
+<area shape=rect	coords=132,500,178,517	href="/dbget-bin/www_bget?K12494+K12495"	title="K12494 (PSD), K12495 (IQSEC)" />
+<area shape=rect	coords=28,500,74,517	href="/dbget-bin/www_bget?K12486+K05737+K12487+K12488+K12489+K12490+K12491+K12492+K12493"	title="K05737 (GIT1), K12486 (SMAP), K12487 (GIT2), K12488 (ASAP), K12489 (ACAP), K12490 (ARAP), K12491 (AGAP1_2_3), K12492 (ARFGAP1), K12493 (ARFGAP2_3)" />
+<area shape=rect	coords=505,595,551,612	href="/dbget-bin/www_bget?K12476"	title="K12476 (EHD3)" />
+<area shape=rect	coords=754,293,800,310	href="/dbget-bin/www_bget?K12483"	title="K12483 (EHD1)" />
+<area shape=rect	coords=434,436,480,453	href="/dbget-bin/www_bget?K07879"	title="K07879 (RAB4A, RAB4)" />
+<area shape=rect	coords=562,595,608,612	href="/dbget-bin/www_bget?K12477"	title="K12477 (EHD4)" />
+<area shape=rect	coords=195,209,241,226	href="/dbget-bin/www_bget?K12469"	title="K12469 (EHD2)" />
+<area shape=rect	coords=461,499,507,516	href="/dbget-bin/www_bget?K12481"	title="K12481 (ZFYVE20)" />
+<area shape=rect	coords=463,396,509,413	href="/dbget-bin/www_bget?K12483"	title="K12483 (EHD1)" />
+<area shape=rect	coords=434,419,480,436	href="/dbget-bin/www_bget?K12482"	title="K12482 (RUFY1, RABIP4)" />
+<area shape=rect	coords=519,550,565,567	href="/dbget-bin/www_bget?K12479"	title="K12479 (VPS45)" />
+<area shape=rect	coords=40,45,161,71	href="/dbget-bin/www_bget?map04144"	title="map04144" />
+<area shape=rect	coords=582,855,687,882	href="/kegg-bin/show_pathway?map04142"	title="map04142" />
+<area shape=rect	coords=481,52,634,91	href="/kegg-bin/show_pathway?map04060"	title="map04060" />
+<area shape=rect	coords=909,347,1023,386	href="/kegg-bin/show_pathway?map04070"	title="map04070" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

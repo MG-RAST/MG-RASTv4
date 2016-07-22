@@ -1,0 +1,237 @@
+<html>
+<!---
+ENTRY       map04114
+DEFINITION  Oocyte meiosis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Oocyte meiosis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Oocyte meiosis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04114&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04114">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+During meiosis, a single round of DNA replication is followed by two rounds of chromosome segregation, called meiosis I and meiosis II. At meiosis I, homologous chromosomes recombine and then segregate to opposite poles, while the sister chromatids segregate from each other at meoisis II. In vertebrates, immature oocytes are arrested at the PI (prophase of meiosis I). The resumption of meiosis is stimulated by progesterone, which carries the oocyte through two consecutive M-phases (MI and MII) to a second arrest at MII. The key activity driving meiotic progression is the MPF (maturation-promoting factor), a heterodimer of CDC2 (cell division cycle 2 kinase) and cyclin B. In PI-arrested oocytes, MPF is initially inactive and is activated by the dual-specificity CDC25C phosphatase as the result of new synthesis of Mos induced by progesterone. MPF activation mediates the transition from the PI arrest to MI. The subsequent decrease in MPF levels, required to exit from MI into interkinesis, is induced by a negative feedback loop, where CDC2 brings about the activation of the APC (anaphase-promoting complex), which mediates destruction of cyclin B. Re-activation of MPF for MII requires re-accumulation of high levels of cyclin B as well as the inactivation of the APC by newly synthesized Emi2 and other components of the CSF (cytostatic factor), such as cyclin E or high levels of Mos. CSF antagonizes the ubiquitin ligase activity of the APC, preventing cyclin B destruction and meiotic exit until fertilization occurs. Fertilization triggers a transient increase in cytosolic free Ca2+, which leads to CSF inactivation and cyclin B destruction through the APC. Then eggs are released from MII into the first embryonic cell cycle.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04114 map" -->
+</select>
+<input type="hidden" name="mapno" value="04114" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04114" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04114" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04114.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=206,102,4	href="/dbget-bin/www_bget?C00410"	title="C00410 (Progesterone)" />
+<area shape=circle	coords=1129,302,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=1129,379,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=157,225,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=rect	coords=235,310,281,327	href="/dbget-bin/www_bget?K04367"	title="K04367 (MOS)" />
+<area shape=rect	coords=414,704,460,721	href="/dbget-bin/www_bget?K02087"	title="K02087 (CDK1, CDC2)" />
+<area shape=rect	coords=902,535,948,552	href="/dbget-bin/www_bget?K02537+K06679"	title="K02537 (MAD2), K06679 (MAD1)" />
+<area shape=rect	coords=414,688,460,705	href="/dbget-bin/www_bget?hsa:9133+ptr:453478+mmu:12442+rno:363088+cfa:478324+bta:281668+ssc:100135668+ecb:100054413+mdo:100019727+oaa:100091100+gga:415400+tgu:100225413+xla:397743+xla:398162+xla:398888+xtr:100270772+dre:368316"	title="9133, 453478, 12442, 363088, 478324, 281668, 100135668, 100054413, 100019727, 100091100, 415400, 100225413, 397743, 398162, 398888, 100270772, 368316" />
+<area shape=rect	coords=369,548,415,565	href="/dbget-bin/www_bget?K06633"	title="K06633 (PKMYT)" />
+<area shape=rect	coords=369,353,415,370	href="/dbget-bin/www_bget?K04373"	title="K04373 (RPS6KA, RSK2)" />
+<area shape=rect	coords=369,310,415,327	href="/dbget-bin/www_bget?K04371"	title="K04371 (ERK1_2)" />
+<area shape=rect	coords=302,310,348,327	href="/dbget-bin/www_bget?K04368"	title="K04368 (MAP2K1, MEK1)" />
+<area shape=rect	coords=630,590,676,618	href="/dbget-bin/www_bget?K03348+K03349+K03350+K03351+K03352+K03353+K03354+K03355+K03356+K03357+K03358+K03359+K12456"	title="K03348 (APC1), K03349 (APC2), K03350 (APC3, CDC27), K03351 (APC4), K03352 (APC5), K03353 (APC6, CDC16), K03354 (APC7), K03355 (APC8, CDC23), K03356 (APC9), K03357 (APC10, DOC1), K03358 (APC11), K03359 (APC12, CDC26), K12456 (APC13)" />
+<area shape=rect	coords=630,618,676,635	href="/dbget-bin/www_bget?K03363"	title="K03363 (CDC20)" />
+<area shape=rect	coords=630,674,676,691	href="/dbget-bin/www_bget?K06635"	title="K06635 (PTTG)" />
+<area shape=rect	coords=763,686,809,703	href="/dbget-bin/www_bget?hsa:891+ptr:461835+mcc:699504+mmu:268697+rno:25203+cfa:485338+bta:327679+ecb:100050093+mdo:100019387+oaa:100083344+xla:397742+xla:398163+xtr:100101736+xtr:394726+dre:58025"	title="891, 461835, 699504, 268697, 25203, 485338, 327679, 100050093, 100019387, 100083344, 397742, 398163, 100101736, 394726, 58025" />
+<area shape=rect	coords=763,703,809,720	href="/dbget-bin/www_bget?K02087"	title="K02087 (CDK1, CDC2)" />
+<area shape=rect	coords=187,546,233,563	href="/dbget-bin/www_bget?K10292"	title="K10292 (FBXO5, EMI1)" />
+<area shape=rect	coords=1184,476,1230,504	href="/dbget-bin/www_bget?K03868+K03347+K03094"	title="K03094 (SKP1, CBF3D), K03347 (CUL1, CDC53), K03868 (RBX1, ROC1)" />
+<area shape=rect	coords=984,531,1030,548	href="/dbget-bin/www_bget?K06626"	title="K06626 (CCNE)" />
+<area shape=rect	coords=1106,546,1152,563	href="/dbget-bin/www_bget?K10318"	title="K10318 (FBXO43, EMI2)" />
+<area shape=rect	coords=984,593,1030,621	href="/dbget-bin/www_bget?K03348+K03349+K03350+K03351+K03352+K03353+K03354+K03355+K03356+K03357+K03358+K03359+K12456"	title="K03348 (APC1), K03349 (APC2), K03350 (APC3, CDC27), K03351 (APC4), K03352 (APC5), K03353 (APC6, CDC16), K03354 (APC7), K03355 (APC8, CDC23), K03356 (APC9), K03357 (APC10, DOC1), K03358 (APC11), K03359 (APC12, CDC26), K12456 (APC13)" />
+<area shape=rect	coords=984,621,1030,638	href="/dbget-bin/www_bget?K03363"	title="K03363 (CDC20)" />
+<area shape=rect	coords=984,674,1030,691	href="/dbget-bin/www_bget?K06635"	title="K06635 (PTTG)" />
+<area shape=rect	coords=187,468,233,496	href="/dbget-bin/www_bget?K03868+K03347+K03094"	title="K03094 (SKP1, CBF3D), K03347 (CUL1, CDC53), K03868 (RBX1, ROC1)" />
+<area shape=rect	coords=236,394,282,411	href="/dbget-bin/www_bget?K13056"	title="K13056 (C3H-4)" />
+<area shape=rect	coords=471,546,517,563	href="/dbget-bin/www_bget?K05867"	title="K05867 (CDC25C)" />
+<area shape=rect	coords=680,546,726,563	href="/dbget-bin/www_bget?K10318"	title="K10318 (FBXO43, EMI2)" />
+<area shape=rect	coords=984,548,1030,565	href="/dbget-bin/www_bget?K02206"	title="K02206 (CDK2)" />
+<area shape=rect	coords=187,496,233,513	href="/dbget-bin/www_bget?K03362"	title="K03362 (FBXW1_11, BTRC, beta-TRCP)" />
+<area shape=rect	coords=1184,504,1230,521	href="/dbget-bin/www_bget?K03362"	title="K03362 (FBXW1_11, BTRC, beta-TRCP)" />
+<area shape=rect	coords=1106,457,1152,474	href="/dbget-bin/www_bget?K04515"	title="K04515 (CAMK2)" />
+<area shape=rect	coords=1155,457,1201,474	href="/dbget-bin/www_bget?K06631"	title="K06631 (PLK1)" />
+<area shape=rect	coords=301,174,347,191	href="/dbget-bin/www_bget?K11481"	title="K11481 (AURKA)" />
+<area shape=rect	coords=232,590,278,618	href="/dbget-bin/www_bget?K03348+K03349+K03350+K03351+K03352+K03353+K03354+K03355+K03356+K03357+K03358+K03359+K12456"	title="K03348 (APC1), K03349 (APC2), K03350 (APC3, CDC27), K03351 (APC4), K03352 (APC5), K03353 (APC6, CDC16), K03354 (APC7), K03355 (APC8, CDC23), K03356 (APC9), K03357 (APC10, DOC1), K03358 (APC11), K03359 (APC12, CDC26), K12456 (APC13)" />
+<area shape=rect	coords=232,618,278,635	href="/dbget-bin/www_bget?K03363"	title="K03363 (CDC20)" />
+<area shape=rect	coords=1106,254,1152,271	href="/dbget-bin/www_bget?K05861"	title="K05861 (PLCZ)" />
+<area shape=rect	coords=1107,332,1153,349	href="/dbget-bin/www_bget?K04958+K04959+K04960"	title="K04958 (ITPR1), K04959 (ITPR2), K04960 (ITPR3)" />
+<area shape=rect	coords=1106,409,1152,426	href="/dbget-bin/www_bget?K02183"	title="K02183 (CALM)" />
+<area shape=rect	coords=1043,457,1089,474	href="/dbget-bin/www_bget?K04348+K06268"	title="K04348 (PPP3C, CNA), K06268 (PPP3R, CNB)" />
+<area shape=rect	coords=255,228,301,245	href="/dbget-bin/www_bget?K02602"	title="K02602 (ORB)" />
+<area shape=rect	coords=763,286,809,303	href="/dbget-bin/www_bget?K02602"	title="K02602 (ORB)" />
+<area shape=rect	coords=819,240,865,257	href="/dbget-bin/www_bget?K06631"	title="K06631 (PLK1)" />
+<area shape=rect	coords=680,468,726,496	href="/dbget-bin/www_bget?K03868+K03347+K03094"	title="K03094 (SKP1, CBF3D), K03347 (CUL1, CDC53), K03868 (RBX1, ROC1)" />
+<area shape=rect	coords=680,496,726,513	href="/dbget-bin/www_bget?K03362"	title="K03362 (FBXW1_11, BTRC, beta-TRCP)" />
+<area shape=rect	coords=134,248,180,265	href="/dbget-bin/www_bget?K04345"	title="K04345 (PKA)" />
+<area shape=rect	coords=134,182,180,199	href="/dbget-bin/www_bget?K08041+K08042+K08043+K08044+K08045+K08046+K08047+K08048+K08049"	title="K08041 (ADCY1), K08042 (ADCY2), K08043 (ADCY3), K08044 (ADCY4), K08045 (ADCY5), K08046 (ADCY6), K08047 (ADCY7), K08048 (ADCY8), K08049 (ADCY9)" />
+<area shape=rect	coords=411,569,457,586	href="/dbget-bin/www_bget?K06630"	title="K06630 (YWHA)" />
+<area shape=rect	coords=538,474,584,491	href="/dbget-bin/www_bget?K06269"	title="K06269 (PPP1C)" />
+<area shape=rect	coords=503,450,549,467	href="/dbget-bin/www_bget?hsa:6300+mcc:715745+mmu:29857+rno:60352+bta:512943+ssc:574062+mdo:100010279+gga:769763+tgu:100227993+xla:398592+xtr:549834+dre:557810"	title="6300, 715745, 29857, 60352, 512943, 574062, 100010279, 769763, 100227993, 398592, 549834, 557810" />
+<area shape=rect	coords=555,507,601,524	href="/dbget-bin/www_bget?K06631"	title="K06631 (PLK1)" />
+<area shape=rect	coords=630,713,676,730	href="/dbget-bin/www_bget?K02365"	title="K02365 (ESP1)" />
+<area shape=rect	coords=984,713,1030,730	href="/dbget-bin/www_bget?K02365"	title="K02365 (ESP1)" />
+<area shape=rect	coords=607,794,653,811	href="/dbget-bin/www_bget?K06636"	title="K06636 (SMC1)" />
+<area shape=rect	coords=630,760,676,777	href="/dbget-bin/www_bget?K13054"	title="K13054 (REC8L)" />
+<area shape=rect	coords=630,777,676,794	href="/dbget-bin/www_bget?K13055"	title="K13055 (STAG3)" />
+<area shape=rect	coords=961,794,1007,811	href="/dbget-bin/www_bget?K06636"	title="K06636 (SMC1)" />
+<area shape=rect	coords=984,760,1030,777	href="/dbget-bin/www_bget?K13054"	title="K13054 (REC8L)" />
+<area shape=rect	coords=984,777,1030,794	href="/dbget-bin/www_bget?K13055"	title="K13055 (STAG3)" />
+<area shape=rect	coords=927,674,973,691	href="/dbget-bin/www_bget?K11580"	title="K11580 (SGOL1)" />
+<area shape=rect	coords=927,713,973,730	href="/dbget-bin/www_bget?K11584"	title="K11584 (PPP2R5)" />
+<area shape=rect	coords=927,730,973,747	href="/dbget-bin/www_bget?K03456+K04382"	title="K03456 (PPP2R1), K04382 (PPP2C)" />
+<area shape=rect	coords=653,794,699,811	href="/dbget-bin/www_bget?K06669"	title="K06669 (SMC3, CSPG6)" />
+<area shape=rect	coords=1071,481,1117,498	href="/dbget-bin/www_bget?K03456+K04382"	title="K03456 (PPP2R1), K04382 (PPP2C)" />
+<area shape=rect	coords=183,145,229,162	href="/dbget-bin/www_bget?K08556"	title="K08556 (NR3C3, PGR)" />
+<area shape=rect	coords=232,145,278,162	href="/dbget-bin/www_bget?K08557"	title="K08557 (NR3C4, AR)" />
+<area shape=rect	coords=75,145,121,162	href="/dbget-bin/www_bget?K05087"	title="K05087 (IGF1R)" />
+<area shape=rect	coords=50,94,96,111	href="/dbget-bin/www_bget?K04526"	title="K04526 (INS)" />
+<area shape=rect	coords=100,94,146,111	href="/dbget-bin/www_bget?K05459"	title="K05459 (IGF1)" />
+<area shape=rect	coords=408,424,454,441	href="/dbget-bin/www_bget?K08694"	title="K08694 (SPDY, RINGO)" />
+<area shape=rect	coords=408,441,454,458	href="/dbget-bin/www_bget?K02087"	title="K02087 (CDK1, CDC2)" />
+<area shape=rect	coords=464,427,510,444	href="/dbget-bin/www_bget?K02206"	title="K02206 (CDK2)" />
+<area shape=rect	coords=555,547,601,564	href="/dbget-bin/www_bget?K08836"	title="K08836 (SLK)" />
+<area shape=rect	coords=837,491,883,508	href="/dbget-bin/www_bget?K02178"	title="K02178 (BUB1)" />
+<area shape=rect	coords=1181,627,1227,644	href="/dbget-bin/www_bget?K05867"	title="K05867 (CDC25C)" />
+<area shape=rect	coords=1007,794,1053,811	href="/dbget-bin/www_bget?K06669"	title="K06669 (SMC3, CSPG6)" />
+<area shape=rect	coords=40,45,188,71	href="/dbget-bin/www_bget?map04114"	title="map04114" />
+<area shape=rect	coords=353,97,493,132	href="/kegg-bin/show_pathway?map04914"	title="map04914" />
+<area shape=rect	coords=79,603,199,638	href="/kegg-bin/show_pathway?map04120"	title="map04120" />
+<area shape=rect	coords=301,261,413,296	href="/kegg-bin/show_pathway?map04010"	title="map04010" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

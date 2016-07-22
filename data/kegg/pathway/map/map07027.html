@@ -1,0 +1,185 @@
+<html>
+<!---
+ENTRY       map07027
+DEFINITION  Antidepressants - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Antidepressants - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Antidepressants - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07027&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07027">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07027" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07027" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07027.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=58,599,197,652	href="/dbget-bin/www_bget?D02560"	title="D02560 (Brofaromine (INN))" />
+<area shape=rect	coords=81,509,185,575	href="/dbget-bin/www_bget?D02559"	title="D02559 (Toloxatone (INN))" />
+<area shape=rect	coords=1054,825,1153,917	href="/dbget-bin/www_bget?D02573+D08472"	title="D02573 (Reboxetine mesylate (USAN)), D08472 (Reboxetine (INN))" />
+<area shape=rect	coords=1203,692,1430,760	href="/dbget-bin/www_bget?D00819+D08257"	title="D00819 (Nefazodone hydrochloride (USAN)), D08257 (Nefazodone (INN))" />
+<area shape=rect	coords=1250,601,1428,671	href="/dbget-bin/www_bget?D00820+D08626"	title="D00820 (Trazodone hydrochloride (JAN/USP)), D08626 (Trazodone (INN))" />
+<area shape=rect	coords=1318,405,1435,480	href="/dbget-bin/www_bget?D02570+D07793"	title="D02570 (Desvenlafaxine succinate (USAN)), D07793 (Desvenlafaxine (INN))" />
+<area shape=rect	coords=1312,295,1431,353	href="/dbget-bin/www_bget?D02571+D08513"	title="D02571 (Sibutramine hydrochloride (USAN)), D08513 (Sibutramine (INN))" />
+<area shape=rect	coords=1166,281,1270,368	href="/dbget-bin/www_bget?D01179+D07880"	title="D01179 (Duloxetine hydrochloride (JAN/USAN)), D07880 (Duloxetine (INN))" />
+<area shape=rect	coords=1327,179,1418,245	href="/dbget-bin/www_bget?D02572+D08673"	title="D02572 (Viloxazine hydrochloride (USAN)), D08673 (Viloxazine (INN))" />
+<area shape=rect	coords=1170,177,1266,242	href="/dbget-bin/www_bget?D01107+D08222"	title="D01107 (Milnacipran hydrochloride (JAN)), D08222 (Milnacipran (INN))" />
+<area shape=rect	coords=987,600,1128,699	href="/dbget-bin/www_bget?D00822+D07704+D07705"	title="D00822 (Citalopram hydrobromide (USAN)), D07704 (Citalopram (USP/INN)), D07705 (Citalopram hydrochloride)" />
+<area shape=rect	coords=987,479,1095,581	href="/dbget-bin/www_bget?D02362+D02260+D05374+D05375"	title="D02362 (Paroxetine (USP/INN)), D02260 (Paroxetine hydrochloride hydrate (JAN)), D05374 (Paroxetine hydrochloride (USP)), D05375 (Paroxetine mesylate (USAN))" />
+<area shape=rect	coords=1036,355,1091,474	href="/dbget-bin/www_bget?D02360+D00825"	title="D02360 (Sertraline (INN)), D00825 (Sertraline hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=970,260,1128,333	href="/dbget-bin/www_bget?D00824+D07984"	title="D00824 (Fluvoxamine maleate (JAN/USAN)), D07984 (Fluvoxamine (INN))" />
+<area shape=rect	coords=970,175,1114,240	href="/dbget-bin/www_bget?D00326+D00823"	title="D00326 (Fluoxetine (USAN/INN)), D00823 (Fluoxetine hydrochloride (JAN/USP))" />
+<area shape=rect	coords=782,820,865,896	href="/dbget-bin/www_bget?D02034+D08511"	title="D02034 (Setiptiline maleate (JAN)), D08511 (Setiptiline (INN))" />
+<area shape=rect	coords=782,694,865,773	href="/dbget-bin/www_bget?D01358+D08216"	title="D01358 (Mianserin hydrochloride (JAN/USAN)), D08216 (Mianserin (INN))" />
+<area shape=rect	coords=782,595,891,661	href="/dbget-bin/www_bget?D02566+D00818"	title="D02566 (Maprotiline (USAN)), D00818 (Maprotiline hydrochloride (JP15/USP))" />
+<area shape=rect	coords=762,410,876,494	href="/dbget-bin/www_bget?D00228"	title="D00228 (Amoxapine (JP15/USP/INN))" />
+<area shape=rect	coords=772,312,885,391	href="/dbget-bin/www_bget?D01546+D07872"	title="D01546 (Dosulepin hydrochloride (JAN)), D07872 (Dosulepin (INN))" />
+<area shape=rect	coords=754,208,913,285	href="/dbget-bin/www_bget?D01285+D08140"	title="D01285 (Lofepramine hydrochloride (JAN/USAN)), D08140 (Lofepramine (INN))" />
+<area shape=rect	coords=580,800,686,884	href="/dbget-bin/www_bget?D01110+D08171"	title="D01110 (Melitracen hydrochloride (JAN/USAN)), D08171 (Melitracen (INN))" />
+<area shape=rect	coords=461,814,567,884	href="/dbget-bin/www_bget?D00816+D08288"	title="D00816 (Nortriptyline hydrochloride (JP15/USP/INN)), D08288 (Nortriptyline (INN))" />
+<area shape=rect	coords=460,665,568,739	href="/dbget-bin/www_bget?D00809+D07448"	title="D00809 (Amitriptyline hydrochloride (JP15/USP)), D07448 (Amitriptyline (INN))" />
+<area shape=rect	coords=524,468,631,553	href="/dbget-bin/www_bget?D02565"	title="D02565 (Dimetacrine (INN))" />
+<area shape=rect	coords=458,361,565,436	href="/dbget-bin/www_bget?D00394+D02408"	title="D00394 (Trimipramine (USAN/INN)), D02408 (Trimipramine maleate (JAN/USAN))" />
+<area shape=rect	coords=454,208,569,282	href="/dbget-bin/www_bget?D00811+D07727"	title="D00811 (Clomipramine hydrochloride (JP15/USP)), D07727 (Clomipramine (INN))" />
+<area shape=rect	coords=576,368,685,436	href="/dbget-bin/www_bget?D00812+D07791"	title="D00812 (Desipramine hydrochloride (JAN/USP)), D07791 (Desipramine (INN))" />
+<area shape=rect	coords=147,243,288,291	href="/dbget-bin/www_bget?D02580"	title="D02580 (Isocarboxazid (INN))" />
+<area shape=rect	coords=134,854,217,933	href="/dbget-bin/www_bget?D00563"	title="D00563 (Mirtazapine (JAN/USAN/INN))" />
+<area shape=rect	coords=233,178,339,228	href="/dbget-bin/www_bget?D02579+D08085"	title="D02579 (Iproniazid (INN)), D08085 (Iproniazid phosphate)" />
+<area shape=rect	coords=62,682,192,739	href="/dbget-bin/www_bget?D02561"	title="D02561 (Moclobemide (USAN/INN))" />
+<area shape=rect	coords=75,178,168,220	href="/dbget-bin/www_bget?D00505+D08349"	title="D00505 (Phenelzine sulfate (USP)), D08349 (Phenelzine (BAN))" />
+<area shape=rect	coords=576,208,685,282	href="/dbget-bin/www_bget?D00815+D08070"	title="D00815 (Imipramine hydrochloride (JP15/USP)), D08070 (Imipramine (INN))" />
+<area shape=rect	coords=240,548,352,599	href="/dbget-bin/www_bget?D03731+D00785"	title="D03731 (Selegiline (USAN/INN)), D00785 (Selegiline hydrochloride (JAN/USP))" />
+<area shape=rect	coords=123,353,205,399	href="/dbget-bin/www_bget?D00826+D08625"	title="D00826 (Tranylcypromine sulfate), D08625 (Tranylcypromine (INN))" />
+<area shape=rect	coords=1159,405,1289,480	href="/dbget-bin/www_bget?D00821+D08670"	title="D00821 (Venlafaxine hydrochloride (JAN/USAN)), D08670 (Venlafaxine (INN))" />
+<area shape=rect	coords=250,666,339,716	href="/dbget-bin/www_bget?D02562+D08469"	title="D02562 (Rasagiline mesylate (USAN)), D08469 (Rasagiline (INN))" />
+<area shape=rect	coords=40,45,207,71	href="/dbget-bin/www_bget?map07027"	title="map07027" />
+<area shape=rect	coords=785,508,886,535	href="/kegg-bin/show_pathway?@map07028/D00228"	title="PATH:map07028(D00228)" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

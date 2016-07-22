@@ -1,0 +1,203 @@
+<html>
+<!---
+ENTRY       map04742
+DEFINITION  Taste transduction - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Taste transduction - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Taste transduction - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=04742&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map04742">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+All taste pathways are proposed to converge on common elements that mediate a rise in intracellular Ca2+  followed by neurotransmitter release. Na+ salt depolarizes taste cells by passive influx of Na+ through the amiloride-sensitive Na+ channel (ENaC). Acids depolarize taste cells by a variety of mechanisms, including influx of protons (H+) through ENaC and a proton-gated cation channel (MDEG). Two putative umami receptors have been identified: a truncated variant of the metabotropic glutamate receptor mGluR4 and the heterodimer, T1R1 + T1R3. Umami receptors are coupled to a signaling pathway involving activation of PLCbeta2, production of IP3 and diacylglycerol, release of Ca2+ from intracellular stores and activation of a transient receptor potential channel, TRPM5. Bitter compounds, such as denatonium and PROP, activate particular T2R/TRB isoforms, which activate gustducin heterotrimers. Activated alpha-gustducin stimulates PDE to hydrolyze cAMP, whereas betagamma subunits activate PLCbeta2 to generate IP3, which leads to release of Ca2+ from internal stores. Artificial sweeteners activate GPCRs (T1R heterodimers) apparently linked via PLC to IP3 production and release of Ca2+  from intracellular stores. Sugars apparently activate GPCRs linked via AC to cAMP production which, in turn, may inhibit basolateral K+ channels through phosphorylation by cAMP-activated protein kinase A (PKA).</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 04742 map" -->
+</select>
+<input type="hidden" name="mapno" value="04742" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map04742" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map04742" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map04742.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=132,648,4	href="/dbget-bin/www_bget?C00089"	title="C00089 (Sucrose)" />
+<area shape=circle	coords=798,509,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=797,575,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=132,268,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=133,252,4	href="/dbget-bin/www_bget?C00080"	title="C00080 (H+)" />
+<area shape=circle	coords=797,645,4	href="/dbget-bin/www_bget?C00238"	title="C00238 (Potassium)" />
+<area shape=circle	coords=797,329,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=348,709,4	href="/dbget-bin/www_bget?C00575"	title="C00575 (3',5'-Cyclic AMP)" />
+<area shape=circle	coords=571,554,4	href="/dbget-bin/www_bget?C00076"	title="C00076 (Calcium)" />
+<area shape=circle	coords=430,377,4	href="/dbget-bin/www_bget?C00942+C00575"	title="C00942 (3',5'-Cyclic GMP), C00575 (3',5'-Cyclic AMP)" />
+<area shape=circle	coords=132,581,4	href="/dbget-bin/www_bget?C12284"	title="C12284 (Saccharin sodium anhydrous)" />
+<area shape=circle	coords=133,159,4	href="/dbget-bin/www_bget?C01330"	title="C01330 (Sodium)" />
+<area shape=circle	coords=133,228,4	href="/dbget-bin/www_bget?C00080"	title="C00080 (H+)" />
+<area shape=circle	coords=130,356,4	href="/dbget-bin/www_bget?C00025+C00144+C00130"	title="C00025 (L-Glutamate), C00144 (GMP), C00130 (IMP)" />
+<area shape=circle	coords=430,516,4	href="/dbget-bin/www_bget?C01245"	title="C01245 (D-myo-Inositol 1,4,5-trisphosphate)" />
+<area shape=circle	coords=132,481,4	href="/dbget-bin/www_bget?C07569"	title="C07569 (Propylthiouracil)" />
+<area shape=rect	coords=161,631,207,648	href="/dbget-bin/www_bget?K04625"	title="K04625 (TAS1R2)" />
+<area shape=rect	coords=723,566,769,583	href="/dbget-bin/www_bget?K04344+K04849"	title="K04344 (CACNA1A), K04849 (CACNA1B)" />
+<area shape=rect	coords=244,658,290,675	href="/dbget-bin/www_bget?K04536+K04540+K04547+K07825"	title="K04536 (GNB1), K04540 (GNG3), K04547 (GNG13), K07825 (GNB3)" />
+<area shape=rect	coords=244,591,290,608	href="/dbget-bin/www_bget?K04536+K04540+K04547+K07825"	title="K04536 (GNB1), K04540 (GNG3), K04547 (GNG13), K07825 (GNB3)" />
+<area shape=rect	coords=244,489,290,506	href="/dbget-bin/www_bget?K04536+K04540+K04547+K07825"	title="K04536 (GNB1), K04540 (GNG3), K04547 (GNG13), K07825 (GNB3)" />
+<area shape=rect	coords=244,574,290,591	href="/dbget-bin/www_bget?hsa:346562+mmu:242851+rno:286924"	title="346562, 242851, 286924" />
+<area shape=rect	coords=244,472,290,489	href="/dbget-bin/www_bget?hsa:346562+mmu:242851+rno:286924"	title="346562, 242851, 286924" />
+<area shape=rect	coords=161,648,207,665	href="/dbget-bin/www_bget?K04626"	title="K04626 (TAS1R3)" />
+<area shape=rect	coords=161,581,207,598	href="/dbget-bin/www_bget?K04626"	title="K04626 (TAS1R3)" />
+<area shape=rect	coords=161,220,207,237	href="/dbget-bin/www_bget?K04824+K04825+K04827"	title="K04824 (SCNN1A), K04825 (SCNN1B), K04827 (SCNN1G)" />
+<area shape=rect	coords=723,636,769,653	href="/dbget-bin/www_bget?K04885"	title="K04885 (KCNB1)" />
+<area shape=rect	coords=723,499,769,516	href="/dbget-bin/www_bget?K04980"	title="K04980 (TRPM5)" />
+<area shape=rect	coords=723,320,769,337	href="/dbget-bin/www_bget?K04344+K04849"	title="K04344 (CACNA1A), K04849 (CACNA1B)" />
+<area shape=rect	coords=418,702,464,719	href="/dbget-bin/www_bget?K04345"	title="K04345 (PKA)" />
+<area shape=rect	coords=161,377,207,394	href="/dbget-bin/www_bget?K04626"	title="K04626 (TAS1R3)" />
+<area shape=rect	coords=161,324,207,341	href="/dbget-bin/www_bget?K04607"	title="K04607 (GRM4)" />
+<area shape=rect	coords=244,386,290,403	href="/dbget-bin/www_bget?K04536+K04540+K04547+K07825"	title="K04536 (GNB1), K04540 (GNG3), K04547 (GNG13), K07825 (GNB3)" />
+<area shape=rect	coords=244,369,290,386	href="/dbget-bin/www_bget?hsa:346562+mmu:242851+rno:286924"	title="346562, 242851, 286924" />
+<area shape=rect	coords=343,507,389,524	href="/dbget-bin/www_bget?hsa:5330+mmu:18796+rno:85240"	title="5330, 18796, 85240" />
+<area shape=rect	coords=161,360,207,377	href="/dbget-bin/www_bget?K04624"	title="K04624 (TAS1R1)" />
+<area shape=rect	coords=338,369,384,386	href="/dbget-bin/www_bget?hsa:5136+mmu:18573+rno:81529"	title="5136, 18573, 81529" />
+<area shape=rect	coords=162,259,208,276	href="/dbget-bin/www_bget?K04828"	title="K04828 (ACCN1, BNAC1)" />
+<area shape=rect	coords=161,150,207,167	href="/dbget-bin/www_bget?K04824+K04825+K04827"	title="K04824 (SCNN1A), K04825 (SCNN1B), K04827 (SCNN1G)" />
+<area shape=rect	coords=161,564,207,581	href="/dbget-bin/www_bget?K04625"	title="K04625 (TAS1R2)" />
+<area shape=rect	coords=161,701,207,718	href="/dbget-bin/www_bget?K08044+K08046+K08048"	title="K08044 (ADCY4), K08046 (ADCY6), K08048 (ADCY8)" />
+<area shape=rect	coords=244,641,290,658	href="/dbget-bin/www_bget?K04632"	title="K04632 (GNAS)" />
+<area shape=rect	coords=161,472,207,489	href="/dbget-bin/www_bget?K08474"	title="K08474 (TAS2R)" />
+<area shape=rect	coords=500,545,546,562	href="/dbget-bin/www_bget?K04960"	title="K04960 (ITPR3)" />
+<area shape=rect	coords=444,471,557,506	href="/kegg-bin/show_pathway?map04020"	title="map04020" />
+<area shape=rect	coords=40,45,227,71	href="/dbget-bin/www_bget?map04742"	title="map04742" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

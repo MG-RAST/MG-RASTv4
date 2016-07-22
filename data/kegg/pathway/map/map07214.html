@@ -1,0 +1,165 @@
+<html>
+<!---
+ENTRY       map07214
+DEFINITION  beta-Adrenergic receptor agonists/antagonists - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: beta-Adrenergic receptor agonists/antagonists - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>beta-Adrenergic receptor agonists/antagonists - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+<table><tr><td>
+[ <a href="/kegg-bin/get_htext?query=07214&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map07214">Pathway entry</a>
+]
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map07214" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map07214" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></table>
+<img src="/kegg/pathway/map/map07214.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=rect	coords=649,477,855,523	href="/dbget-bin/www_bget?D01830+D07465"	title="D01830 (Arotinolol hydrochloride (JP15)), D07465 (Arotinolol (INN))" />
+<area shape=rect	coords=664,627,836,711	href="/dbget-bin/www_bget?D01469+D07451"	title="D01469 (Amosulalol hydrochloride (JAN)), D07451 (Amosulalol (INN))" />
+<area shape=rect	coords=644,546,857,599	href="/dbget-bin/www_bget?D01369"	title="D01369 (Bevantolol hydrochloride (JAN/USAN))" />
+<area shape=rect	coords=675,375,836,453	href="/dbget-bin/www_bget?D00600+D08106"	title="D00600 (Labetalol hydrochloride (JAN/USP)), D08106 (Labetalol (INN))" />
+<area shape=rect	coords=481,619,602,715	href="/dbget-bin/www_bget?D00644+D07916"	title="D00644 (Esmolol hydrochloride (JAN/USAN)), D07916 (Esmolol (INN))" />
+<area shape=rect	coords=207,619,295,711	href="/dbget-bin/www_bget?D02358+D00601+D00635+D05011"	title="D02358 (Metoprolol (USAN/INN)), D00601 (Metoprolol tartrate (JP15/USP)), D00635 (Metoprolol succinate (USP)), D05011 (Metoprolol fumarate (USP))" />
+<area shape=rect	coords=346,630,442,715	href="/dbget-bin/www_bget?D02342+D00634"	title="D02342 (Bisoprolol (USAN/INN)), D00634 (Bisoprolol fumarate (JAN/USP))" />
+<area shape=rect	coords=317,474,450,545	href="/dbget-bin/www_bget?D01182+D07156"	title="D01182 (Alprenolol hydrochloride (JP15/USAN)), D07156 (Alprenolol (INN))" />
+<area shape=rect	coords=141,492,269,547	href="/dbget-bin/www_bget?D00513"	title="D00513 (Pindolol (JP15/USP/INN))" />
+<area shape=rect	coords=354,381,473,433	href="/dbget-bin/www_bget?C11772"	title="C11772 (DCI)" />
+<area shape=rect	coords=87,619,177,698	href="/dbget-bin/www_bget?D00235"	title="D00235 (Atenolol (JP15/USP/INN))" />
+<area shape=rect	coords=139,371,266,439	href="/dbget-bin/www_bget?D00483+D08443"	title="D00483 (Propranolol hydrochloride (JP15/USP)), D08443 (Propranolol (INN))" />
+<area shape=rect	coords=723,188,853,249	href="/dbget-bin/www_bget?D02404+D05366+D08424"	title="D02404 (Procaterol hydrochloride (USAN)), D05366 (Procaterol hydrochloride hydrate (JP15)), D08424 (Procaterol (INN))" />
+<area shape=rect	coords=580,182,704,248	href="/dbget-bin/www_bget?D00685+D08300"	title="D00685 (Orciprenaline sulfate (JP15)), D08300 (Orciprenaline (INN))" />
+<area shape=rect	coords=252,193,420,249	href="/dbget-bin/www_bget?D02614"	title="D02614 (Denopamine (JAN/INN))" />
+<area shape=rect	coords=440,183,562,249	href="/dbget-bin/www_bget?D01390+D02150+D02066+D08090"	title="D01390 (dl-Isoprenaline hydrochloride (JAN)), D02150 (l-Isoprenaline hydrochloride (JP15)), D02066 (Isoprenaline sulfate (JAN)), D08090 (Isoprenaline (INN))" />
+<area shape=rect	coords=69,189,233,251	href="/dbget-bin/www_bget?D03879+D00632+D03880+D03881"	title="D03879 (Dobutamine (USP/INN)), D00632 (Dobutamine hydrochloride (JP15/USP)), D03880 (Dobutamine lactobionate (USAN)), D03881 (Dobutamine tartrate (USP))" />
+<area shape=rect	coords=518,59,637,114	href="/dbget-bin/www_bget?D00095+D00996+D02149"	title="D00095 (Adrenaline (JP15)), D00996 (Epinephrine hydrochloride (JAN)), D02149 (Epinephrine bitartrate (JAN/USP))" />
+<area shape=rect	coords=679,762,808,798	href="/kegg-bin/show_pathway?map07215"	title="map07215" />
+<area shape=rect	coords=40,45,429,71	href="/dbget-bin/www_bget?map07214"	title="map07214" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>

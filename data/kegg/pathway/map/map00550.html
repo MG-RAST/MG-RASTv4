@@ -1,0 +1,234 @@
+<html>
+<!---
+ENTRY       map00550
+DEFINITION  Peptidoglycan biosynthesis - Reference pathway
+--->
+<head>
+<title>
+KEGG PATHWAY: Peptidoglycan biosynthesis - Reference pathway
+</title>
+<style>
+<!--
+div.poplay {
+  position: absolute;
+  padding: 2px;
+  background-color: #ffff99;
+  border-top: solid 1px #c0c0c0;
+  border-left: solid 1px #c0c0c0;
+  border-bottom: solid 1px #808080;
+  border-right: solid 1px #808080;
+  visibility: hidden;
+}
+
+form {
+  margin: 0px;
+}
+-->
+</style>
+<link rel="stylesheet" href="/css/kegg.css" type="text/css" />
+<script language="JavaScript" src="/js/dhtml.js"></script>
+<script language="JavaScript">
+<!---
+
+
+function resize_map(scale){
+  var form = document.forms["form2"];
+  form.scale.value = scale;
+  form.submit();
+}
+
+function select_menu(){
+  var form = document.forms["selmenu"];
+  if(form.org_name.value == 'set_cookie' || form.org_name.value == 'reset_cookie'){
+    window.open('/kegg/misc/kegg2_select.html','sel_org','toolbar=no,location=no,directories=no,width=500,height=320,resizable=yes');
+  }else{
+    form.action='/kegg-bin/show_pathway';
+    form.submit();
+  }
+}
+
+var timer = 0;
+function showMapTnTimer(map,org,bgcolor){
+  if(timer == 0){
+    var func = "showMapTn('" + map + "','" + org + "','" + bgcolor + "')";
+    timer = setTimeout(func, 1200);
+  }
+}
+
+function showMapTn(map,org,bgcolor){
+  var html = "";
+  html += "<span style=\"font-weight:bold;color:#ffffff;\">" + org + map + "</span><br />";
+  html += "<img src=\"/kegg/misc/thumbnail/map" + map + ".gif\" alt=\"Loading...\">";
+
+  var x = getCurrentMouseX();
+  var y = getCurrentMouseY();
+
+  var layer = new Component("poplay");
+  layer.backgroundColor(bgcolor);
+  layer.HTML(html);
+  layer.move(x+20, y-50);
+  layer.visible(true);
+
+  timer = 0;
+}
+
+
+function hideMapTn(){
+  var layer = new Component("poplay");
+  layer.visible(false);
+
+  if(timer != 0){
+    clearTimeout(timer);
+    timer = 0;
+  }
+}
+
+function switchDescription(){
+  var form = document.forms[0];
+  var status = form.show_description.value;
+
+  if(status == "hide"){
+    document.getElementById("description").style.display = "";
+    document.getElementById("descLink").innerHTML = "Hide description";
+    form.show_description.value='show';
+
+    if(document.forms[1]){
+    	document.forms[1].show_description.value='show';
+    }
+  }
+  else
+  {
+    document.getElementById("description").style.display = 'none';
+    document.getElementById("descLink").innerHTML = "Show description";
+    form.show_description.value='hide';
+
+    if(document.forms[1]){
+      document.forms[1].show_description.value='hide';
+    }
+  }
+}
+
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+//--->
+</script>
+</head>
+<body>
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+ <tr>
+  <td>
+   <a href="/kegg/kegg2.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+   &nbsp;&nbsp;&nbsp;<font class="title3"><b>Peptidoglycan biosynthesis - Reference pathway</b></font>
+  </td>
+  <td valign="bottom" align="right">
+   <a href="javascript:void(window.open('/kegg/document/help_pathway.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))"><img name="help" src="/Fig/bget/button_Hb.gif" border="0" align="middle" alt="Help" onmouseout="btn(this,'Hb')" onmousedown="btn(this,'Hbd')" onmouseover="btn(this,'Hbh')" onmouseup="btn(this,'Hb')" /></a>
+  </td>
+ </tr>
+</table>
+[ <a href="/kegg-bin/get_htext?query=00550&htext=br08901.keg">Pathway menu</a>
+| <a href="/dbget-bin/www_bget?pathway+map00550">Pathway entry</a>
+| <a id="descLink" href="javascript:switchDescription()">Hide description</a>
+]
+<table id="description" cellpadding="10" width="800"><tr><td>
+Peptidoglycan is a macromolecule made of long aminosugar strands cross-linked by short peptides. It forms the cell wall in bacteria surrounding the cytoplasmic membrane. The glycan strands are typically comprised of repeating N-acetylglucosamine (GlcNAc) and N-acetylmuramic acid (MurNAc) disaccharides. Each MurNAc is linked to a peptide of three to five amino acid residues. Disaccharide subunits are first assembled on the cytoplasmic side of the bacterial membrane on a polyisoprenoid anchor (lipid I and II). Polymerization of disaccharide subunits by transglycosylases and cross-linking of glycan strands by transpeptidases occur on the other side of the membrane. Bacterial cell wall biosynthesis inhibitors form a major class of antibiotics.</td></tr></table>
+<table><tr><td>
+<form name="selmenu" method="get">
+<select name="org_name">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_org_options 00550 map" -->
+</select>
+<input type="hidden" name="mapno" value="00550" />
+<input type="hidden" name="mapscale" value="1.0" />
+<input type="button" value="Go" onclick="select_menu(this.form)" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td><td>
+<form name="form2" method="get" action="/kegg-bin/show_pathway">
+<!--#exec cmd="/iKeg/WWW/cgi/kegg/bin/put_resize_btn map00550" -->
+&nbsp;&nbsp;<input type="text" name="query" size=20 />
+<input type="hidden" name="map" value="map00550" />
+<input type="hidden" name="scale" value="1.0" />
+<input type="hidden" name="show_description" value="show" />
+</form>
+</td></tr></table>
+<img src="/kegg/pathway/map/map00550.png" usemap="#mapdata" border="0" />
+<map name="mapdata">
+<area shape=circle	coords=607,508,4	href="/dbget-bin/www_bget?C00043"	title="C00043 (UDP-N-acetyl-D-glucosamine)" />
+<area shape=circle	coords=416,205,4	href="/dbget-bin/www_bget?C01050"	title="C01050 (UDP-N-acetylmuramate)" />
+<area shape=circle	coords=416,256,4	href="/dbget-bin/www_bget?C01212"	title="C01212 (UDP-N-acetylmuramoyl-L-alanine)" />
+<area shape=circle	coords=416,312,4	href="/dbget-bin/www_bget?C00692"	title="C00692 (UDP-N-acetylmuramoyl-L-alanyl-D-glutamate)" />
+<area shape=circle	coords=176,432,4	href="/dbget-bin/www_bget?C04702"	title="C04702 (UDPMurAc(oyl-L-Ala-D-gamma-Glu-L-Lys-D-Ala-D-Ala))" />
+<area shape=circle	coords=224,508,4	href="/dbget-bin/www_bget?C00043"	title="C00043 (UDP-N-acetyl-D-glucosamine)" />
+<area shape=circle	coords=176,498,4	href="/dbget-bin/www_bget?C04851"	title="C04851 (MurAc(oyl-L-Ala-D-gamma-Glu-L-Lys-D-Ala-D-Ala)-diphospho-undecaprenol)" />
+<area shape=circle	coords=500,508,4	href="/dbget-bin/www_bget?C04574"	title="C04574 (di-trans,poly-cis-Undecaprenyl diphosphate)" />
+<area shape=circle	coords=473,468,4	href="/dbget-bin/www_bget?C00009"	title="C00009 (Orthophosphate)" />
+<area shape=circle	coords=500,449,4	href="/dbget-bin/www_bget?C17556"	title="C17556 (di-trans,poly-cis-Undecaprenyl phosphate)" />
+<area shape=circle	coords=500,381,4	href="/dbget-bin/www_bget?C00993"	title="C00993 (D-Alanyl-D-alanine)" />
+<area shape=circle	coords=500,330,4	href="/dbget-bin/www_bget?C00133"	title="C00133 (D-Alanine)" />
+<area shape=circle	coords=655,367,4	href="/dbget-bin/www_bget?C04877"	title="C04877 (UDP-N-acetylmuramoyl-L-alanyl-D-gamma-glutamyl-meso-2,6-diaminopimelate)" />
+<area shape=circle	coords=655,432,4	href="/dbget-bin/www_bget?C04882"	title="C04882 (UDP-N-acetylmuramoyl-L-alanyl-D-glutamyl-6-carboxy-L-lysyl-D-alanyl-D-alanine)" />
+<area shape=circle	coords=607,480,4	href="/dbget-bin/www_bget?C00105"	title="C00105 (UMP)" />
+<area shape=circle	coords=176,694,4	href="/dbget-bin/www_bget?C17541"	title="C17541 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-isoglutaminyl-L-lysyl-(glycyl)-D-alanyl-D-alanine)" />
+<area shape=circle	coords=176,628,4	href="/dbget-bin/www_bget?C05894"	title="C05894 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-isoglutaminyl-L-lysyl-D-alanyl-D-alanine)" />
+<area shape=circle	coords=176,563,4	href="/dbget-bin/www_bget?C05893"	title="C05893 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-gamma-D-glutamyl-L-lysyl-D-alanyl-D-alanine)" />
+<area shape=circle	coords=176,366,4	href="/dbget-bin/www_bget?C05892"	title="C05892 (UDP-N-acetylmuramoyl-L-alanyl-gamma-D-glutamyl-L-lysine)" />
+<area shape=circle	coords=655,498,4	href="/dbget-bin/www_bget?C05897"	title="C05897 (Undecaprenyl-diphospho-N-acetylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine)" />
+<area shape=circle	coords=655,563,4	href="/dbget-bin/www_bget?C05898"	title="C05898 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine)" />
+<area shape=circle	coords=500,398,4	href="/dbget-bin/www_bget?C17558"	title="C17558 (di-trans,poly-cis-Undecaprenol)" />
+<area shape=circle	coords=176,755,4	href="/dbget-bin/www_bget?C17542"	title="C17542 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-isoglutaminyl-L-lysyl-(glycyl)3-D-alanyl-D-alanine)" />
+<area shape=circle	coords=176,816,4	href="/dbget-bin/www_bget?C05895"	title="C05895 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-isoglutaminyl-L-lysyl-(glycyl)5-D-alanyl-D-alanine)" />
+<area shape=circle	coords=416,694,4	href="/dbget-bin/www_bget?C17550"	title="C17550 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-gamma-D-glutamyl-L-lysyl-(L-alanyl)-D-alanyl-D-alanine)" />
+<area shape=circle	coords=416,103,4	href="/dbget-bin/www_bget?C00043"	title="C00043 (UDP-N-acetyl-D-glucosamine)" />
+<area shape=circle	coords=416,154,4	href="/dbget-bin/www_bget?C04631"	title="C04631 (UDP-N-acetyl-3-(1-carboxyvinyl)-D-glucosamine)" />
+<area shape=circle	coords=416,755,4	href="/dbget-bin/www_bget?C17549"	title="C17549 (Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-gamma-D-glutamyl-L-lysyl-(L-alanyl-L-alanyl)-D-alanyl-D-alanine)" />
+<area shape=circle	coords=382,921,4	href="/dbget-bin/www_bget?C00133"	title="C00133 (D-Alanine)" />
+<area shape=circle	coords=417,937,4	href="/dbget-bin/www_bget?C05896"	title="C05896 (Crosslinked peptideglycan)" />
+<area shape=circle	coords=176,937,4	href="/dbget-bin/www_bget?C05896"	title="C05896 (Crosslinked peptideglycan)" />
+<area shape=circle	coords=141,921,4	href="/dbget-bin/www_bget?C00133"	title="C00133 (D-Alanine)" />
+<area shape=circle	coords=655,937,4	href="/dbget-bin/www_bget?C05896"	title="C05896 (Crosslinked peptideglycan)" />
+<area shape=circle	coords=224,480,4	href="/dbget-bin/www_bget?C00105"	title="C00105 (UMP)" />
+<area shape=circle	coords=689,921,4	href="/dbget-bin/www_bget?C00133"	title="C00133 (D-Alanine)" />
+<area shape=poly	coords=174,568,174,623,178,623,178,568	href="/dbget-bin/www_bget?R05030"	title="R05030" />
+<area shape=poly	coords=176,623,172,615,180,615	href="/dbget-bin/www_bget?R05030"	title="R05030" />
+<area shape=rect	coords=632,391,678,408	href="/dbget-bin/www_bget?K01929+6.3.2.10+R04617"	title="K01929 (murF), 6.3.2.10, R04617" />
+<area shape=rect	coords=478,478,524,495	href="/dbget-bin/www_bget?K06153+3.6.1.27+R05627"	title="K06153 (E3.6.1.27, bacA), 3.6.1.27, R05627" />
+<area shape=rect	coords=154,518,200,535	href="/dbget-bin/www_bget?K02563+2.4.1.227+R05662"	title="K02563 (murG), 2.4.1.227, R05662" />
+<area shape=rect	coords=154,456,200,473	href="/dbget-bin/www_bget?K01000+2.7.8.13+R05629"	title="K01000 (mraY), 2.7.8.13, R05629" />
+<area shape=rect	coords=154,392,200,409	href="/dbget-bin/www_bget?K01929+6.3.2.10+R04573"	title="K01929 (murF), 6.3.2.10, R04573" />
+<area shape=rect	coords=478,344,524,361	href="/dbget-bin/www_bget?K01921+6.3.2.4+R01150"	title="K01921 (E6.3.2.4, ddlA, ddlB, ddl), 6.3.2.4, R01150" />
+<area shape=rect	coords=154,329,200,346	href="/dbget-bin/www_bget?K05362+6.3.2.7+R02786"	title="K05362 (E6.3.2.7, murE), 6.3.2.7, R02786" />
+<area shape=rect	coords=394,270,440,287	href="/dbget-bin/www_bget?K01925+6.3.2.9+R02783"	title="K01925 (murD), 6.3.2.9, R02783" />
+<area shape=rect	coords=394,217,440,234	href="/dbget-bin/www_bget?K01924+6.3.2.8+R03193"	title="K01924 (murC), 6.3.2.8, R03193" />
+<area shape=rect	coords=632,329,678,346	href="/dbget-bin/www_bget?K01928+6.3.2.13+R02788"	title="K01928 (E6.3.2.13, murE), 6.3.2.13, R02788" />
+<area shape=rect	coords=632,456,678,473	href="/dbget-bin/www_bget?K01000+2.7.8.13+R05630"	title="K01000 (mraY), 2.7.8.13, R05630" />
+<area shape=rect	coords=632,518,678,535	href="/dbget-bin/www_bget?K02563+2.4.1.227+R05032"	title="K02563 (murG), 2.4.1.227, R05032" />
+<area shape=rect	coords=478,412,524,429	href="/dbget-bin/www_bget?K00887+2.7.1.66+R05626"	title="K00887 (E2.7.1.66), 2.7.1.66, R05626" />
+<area shape=rect	coords=154,647,200,664	href="/dbget-bin/www_bget?K11693+2.3.2.-+R08776"	title="K11693 (femX, fmhB), 2.3.2.-, R08776" />
+<area shape=rect	coords=154,713,200,730	href="/dbget-bin/www_bget?K11694+2.3.2.-+R08777"	title="K11694 (femA), 2.3.2.-, R08777" />
+<area shape=rect	coords=154,773,200,790	href="/dbget-bin/www_bget?K11695+2.3.2.-+R08778"	title="K11695 (femB), 2.3.2.-, R08778" />
+<area shape=rect	coords=394,714,440,731	href="/dbget-bin/www_bget?K12554+2.3.2.-+R08780"	title="K12554 (murN), 2.3.2.-, R08780" />
+<area shape=rect	coords=394,116,440,133	href="/dbget-bin/www_bget?K00790+2.5.1.7+R00660"	title="K00790 (murA), 2.5.1.7, R00660" />
+<area shape=rect	coords=394,167,440,184	href="/dbget-bin/www_bget?K00075+1.1.1.158+R03191+R03192"	title="K00075 (murB), 1.1.1.158, R03191, R03192" />
+<area shape=rect	coords=154,893,200,910	href="/dbget-bin/www_bget?K07258+3.4.16.4"	title="K07258 (dacC, dacA, dacD), 3.4.16.4" />
+<area shape=rect	coords=394,648,440,665	href="/dbget-bin/www_bget?K05363+2.3.2.10+R08779"	title="K05363 (murM), 2.3.2.10, R08779" />
+<area shape=rect	coords=178,836,224,853	href="/dbget-bin/www_bget?K04478+2.4.1.-"	title="K04478 (sgtB), 2.4.1.-" />
+<area shape=rect	coords=394,874,440,891	href="/dbget-bin/www_bget?K00687+K12556+2.3.2.-"	title="K00687 (pbp2B, penA), K12556 (pbp2X), 2.3.2.-" />
+<area shape=rect	coords=686,793,732,810	href="/dbget-bin/www_bget?K03980"	title="K03980 (mviN)" />
+<area shape=rect	coords=679,836,725,853	href="/dbget-bin/www_bget?K05364+2.4.1.129+R04519"	title="K05364 (E2.4.1.129), 2.4.1.129, R04519" />
+<area shape=rect	coords=631,855,677,872	href="/dbget-bin/www_bget?K05366+K05365+2.4.1.-+3.4.-.-"	title="K05365 (mrcB), K05366 (mrcA), 2.4.1.-, 3.4.-.-" />
+<area shape=rect	coords=632,893,678,910	href="/dbget-bin/www_bget?K07258+K07259+K07260+3.4.16.4"	title="K07258 (dacC, dacA, dacD), K07259 (dacB), K07260 (vanY), 3.4.16.4" />
+<area shape=rect	coords=394,893,440,910	href="/dbget-bin/www_bget?K07258+K07260+3.4.16.4"	title="K07258 (dacC, dacA, dacD), K07260 (vanY), 3.4.16.4" />
+<area shape=rect	coords=128,836,174,853	href="/dbget-bin/www_bget?K12551+2.4.1.-"	title="K12551 (sgtA), 2.4.1.-" />
+<area shape=rect	coords=154,855,200,872	href="/dbget-bin/www_bget?K05366+2.4.1.-+3.4.-.-"	title="K05366 (mrcA), 2.4.1.-, 3.4.-.-" />
+<area shape=rect	coords=128,874,174,891	href="/dbget-bin/www_bget?K12552+3.4.-.-"	title="K12552 (pbpA), 3.4.-.-" />
+<area shape=rect	coords=178,874,224,891	href="/dbget-bin/www_bget?K12553+3.4.-.-"	title="K12553 (pbp3), 3.4.-.-" />
+<area shape=rect	coords=394,855,440,872	href="/dbget-bin/www_bget?K05366+K03693+K12555+2.4.1.-+3.4.-.-"	title="K03693 (pbp), K05366 (mrcA), K12555 (pbp2A), 2.4.1.-, 3.4.-.-" />
+<area shape=rect	coords=583,836,629,853	href="/dbget-bin/www_bget?K03814+2.4.1.-"	title="K03814 (mtgA), 2.4.1.-" />
+<area shape=rect	coords=631,836,677,853	href="/dbget-bin/www_bget?K05367+2.4.1.-"	title="K05367 (pbpC), 2.4.1.-" />
+<area shape=rect	coords=607,874,653,891	href="/dbget-bin/www_bget?K05515"	title="K05515 (mrdA)" />
+<area shape=rect	coords=657,874,703,891	href="/dbget-bin/www_bget?K03587+K08724+2.4.1.129"	title="K03587 (ftsI), K08724 (pbpB), 2.4.1.129" />
+<area shape=rect	coords=40,45,283,71	href="/dbget-bin/www_bget?map00550"	title="map00550" />
+<area shape=rect	coords=209,91,343,117	href="/kegg-bin/show_pathway?map00530"	title="map00530" />
+<area shape=rect	coords=308,326,384,361	href="/kegg-bin/show_pathway?map00473"	title="map00473" />
+</map>
+<div id="poplay" class="poplay" />
+</body>
+</html>
