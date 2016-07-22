@@ -13,7 +13,9 @@
 	  [
 	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
 	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" },
-	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the row titles", "title": "category width" },
+	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the row titles", "title": "row title width" },
+	      { "name": "items[2].parameters.base", "type": "int", "description": "height of the column titles", "title": "column title height" },
+	      { "name": "items[2].parameters.labelRotation", "type": "int", "description": "rotation of the row titles in degrees", "title": "row title rotation" },
 	      { "name": "items[1].parameters.boxwidth", "type": "int", "description": "width of a single box", "title": "boxwidth" },
 	      { "name": "items[1].parameters.boxheight", "type": "int", "description": "height of a single box", "title": "boxheight" }
 	  ]
@@ -36,10 +38,12 @@
     "connections": { "0": { "base": [ { "type": "pinned",
 					"items": [ { "index": 1,
 						     "attribute": "shiftX" },
+						   { "index": 2,
+						     "attribute": "shift" },
 						   { "index": 3,
 						     "attribute": "shiftX" },
-						   { "index": 2,
-						     "attribute": "shift" } ] } ] },
+						   { "index": 4,
+						     "attribute": "shiftX" } ] } ] },
 		     "1": { "colorscale": [ { "type": "equal",
 					      "items": [ { "index": 5,
 							   "attribute": "colorscale" } ] } ],
@@ -53,6 +57,15 @@
 							  "attribute": "spaceMajor" },
 							{ "index": 3,
 							  "attribute": "width" } ] } ] },
+		     "2": { "base": [ { "type": "pinned",
+					"items": [ { "index": 1,
+						     "attribute": "shiftY" },
+						   { "index": 0,
+						     "attribute": "shift" },
+						   { "index": 3,
+						     "attribute": "shiftY" },
+						   { "index": 4,
+						     "attribute": "shiftY" } ] } ] },
 		     "5": { "colorscale": [ { "type": "equal",
 					      "items": [ { "index": 1,
 							   "attribute": "colorscale" } ] } ] }
@@ -94,6 +107,7 @@
 		"id": "item0",
 		"groupSettings": {},
 		"labels": [],
+		"click": true,
 		"data": []
 	    },
 	    "data": "matrix2heatmaprowaxis"
@@ -126,9 +140,9 @@
 		"direction": "horizontal",
 		"orientation": "top",
 		"labelPosition": "left-bottom",
-		"labelRotation": 90,
-		"shift": 165,
-		"base": 30,
+		"labelRotation": 270,
+		"shift": 160,
+		"base": 130,
 		"length": 400,
 		"min": 0,
 		"max": 10,
@@ -165,7 +179,7 @@
 	    "parameters": {
 		"direction": "ltr",
 		"shiftX": 118,
-		"shiftY": 165,
+		"shiftY": 163,
 		"height": 30,
 		"width": 20,
 		"format": {

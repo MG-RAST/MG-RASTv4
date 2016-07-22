@@ -16,16 +16,16 @@
       "name": "chart",
 	"parameters": {
 	    "inputType": "matrix",
-        "shiftX": 50,
-        "shiftY": 50,
-        "center": 200,
-        "width": 50,
-        "startAngle": 0,
-        "id": "chart",
-        "groupSettings": {},
-        "data": []
-      },
-      "data": "matrix2donut"
+            "shiftX": 50,
+            "shiftY": 50,
+            "center": 200,
+            "width": 50,
+            "startAngle": 0,
+            "id": "chart",
+            "groupSettings": {},
+            "data": []
+	},
+	"data": "matrix2donut"
     },
     {
       "type": "donutchart",

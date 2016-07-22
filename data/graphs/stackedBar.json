@@ -6,7 +6,10 @@
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
-	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" }
+	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" },
+	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the value axis", "title": "value axis width" },
+	      { "name": "items[1].parameters.base", "type": "int", "description": "height of the label axis", "title": "label axis height" },
+	      { "name": "items[1].parameters.labelRotation", "type": "int", "description": "rotation of the labels in degrees", "title": "label rotation" }
 	  ]
 	}
     ],
@@ -18,11 +21,30 @@
 	  "sourceItemAttributes": [ "width", "space" ]
 	}
     ],
-    "connections": { "1": { "length": [ { "type": "pinned",
+    "connections": { "0": { "base": [ { "type": "pinned",
+					"items": [ { "index": 1,
+						     "attribute": "shift" },
+						   { "index": 2,
+						     "attribute": "shift" },
+						   { "index": 3,
+						     "attribute": "left" },
+						   { "index": 4,
+						     "attribute": "shift" } ] } ]
+			  },
+		     "1": { "length": [ { "type": "pinned",
 					  "items": [ { "index": 2,
 						       "attribute": "width" },
 						     { "index": 3,
-						       "attribute": "left" } ] } ] } },
+						       "attribute": "left" } ] } ],
+			    "base": [ { "type": "pinned",
+					"items": [ { "index": 0,
+						     "attribute": "shift" },
+						   { "index": 2,
+						     "attribute": "base" },
+						   { "index": 4,
+						     "attribute": "base" } ] } ]
+			  }
+		   },
     "items": [
 	{
 	    "data": "matrix2stackedvalueaxis",
@@ -192,6 +214,7 @@
 		"direction": "vertical",
 		"data": [],
 		"width": 25,
+		"click": true,
 		"groupSettings": {}
 	    }
 	}
