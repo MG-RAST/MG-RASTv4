@@ -17,7 +17,7 @@ To build the image either download the Docker file into an empty directory of pr
 
 ```bash
 export TAG=`date +"%Y%m%d.%H%M"`
-docker build -t . mgrast/v4-web:${TAG}
+docker build -t mgrast/v4-web:${TAG} .
 ```
 
 Example for manual invocation:
