@@ -70,10 +70,10 @@
 	// set the tool area
 	var tools = widget.sidebar;
 	tools.parentNode.style.overflowY = "visible";
-	tools.setAttribute('style', 'padding: 10px;');
+	tools.setAttribute('style', 'padding: 10px; overflow-x: auto;');
 
 	// check the context
-	var toolshtml = "<h4>Data Containers</h4>";
+	var toolshtml = "<h4>Analysis Containers</h4>";
 	toolshtml += "<div id='availableContainers'></div>";
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
 	toolshtml += "<div id='currentContainerParams'></div>";
@@ -81,7 +81,7 @@
 	toolshtml += "<div id='visualContainerSpace'></div>";
 	toolshtml += "<h4>Plugins</h4>";
 	toolshtml += "<div id='pluginContainerSpace'></div>";
-	toolshtml += "<h4>Export</h4>";
+	toolshtml += "<h4>myData &nbsp; Export</h4>";
 	toolshtml += "<div id='exportContainerSpace'></div>";
 	tools.innerHTML = toolshtml;
 
@@ -108,11 +108,12 @@
     	var container = document.getElementById('exportContainerSpace');
 	var html = "";
 
+	html += "<img src='Retina/images/cloud-upload.png' class='tool' style='float: left;' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><div style='float: left; width: 1px; height: 55px; background-color: rgb(204, 204, 204); position: relative; top: 5px; margin-left: 3px;'></div>";
 	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
 	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
 	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
 	html += "<img src='Retina/images/file-css.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"json\");' title='JSON'>";
-	html += "<img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'>";
+
 
 	container.innerHTML = html;
     };
@@ -188,8 +189,45 @@
 	var settings = jQuery.extend(true, {}, visMap[type].settings);
 	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
 
+	// set the callback
+	settings.callback = widget.graphCallback;
+
 	// set the current controller
     	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": visMap[type].controlGroups });
+    };
+
+    widget.graphCallback = function (event) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	var rend = this.renderer;
+	event = event || window.event;
+
+	var t = event.target;
+	var cat;
+	if (t.nodeName == "text") {
+	    cat = t.innerHTML;
+	} else if (t.previousSibling && t.previousSibling.nodeName == "title") {
+	    cat = t.previousSibling.innerHTML.split(/ - /)[1];
+	} else {
+	    console.log('unhandled click element');
+	    console.log(t);
+	    return;
+	}
+
+	var dls = document.getElementById('displayLevelSelect');
+	
+	// check if we can zoom in
+	if (dls.selectedIndex + 1 < dls.options.length) {
+	    
+	    // remove the filters for the current displayType
+	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	    if (c.parameters.displayType == "taxonomy") {
+		c.parameters.taxFilter = [ { "level": c.parameters.displayLevel, "source": c.parameters.displaySource, "value": cat } ];
+	    } else {
+		c.parameters.ontFilter = [ { "level": c.parameters.displayLevel, "source": c.parameters.displaySource, "value": cat } ];
+	    }
+	    dls.selectedIndex++;
+	    dls.onchange();
+	}
     };
 
     widget.removeDataContainer = function () {
@@ -315,11 +353,11 @@
 			glow = " glow";
 			name = "<span style='color: blue;'>"+name+"</span>";
 		    }
-		    html += "<div title='click to select data container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);'><img src='Retina/images/data.png' class='tool"+glow+"'><br>"+name+"</div>";
+		    html += "<div title='click to select analysis container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
 		}
 		
 	    }
-	    html += "<div title='create a new data container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
+	    html += "<div title='create a new analysis container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
 	}
     };
@@ -335,7 +373,7 @@
 	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete data container' onclick='if(confirm(\"Really delete this data container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();'><i class='icon icon-edit'></i></button></h4>" ];
 
 	// cutoffs
 	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\',this.nextSibling.value);">e-value</button><input id="evalueInput" type="text" value="'+p.evalue+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
@@ -374,7 +412,7 @@
 	html.push("<tr><td>type</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
 
 	// level
-	var displayLevelSelect = "<select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
+	var displayLevelSelect = "<select id='displayLevelSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
 	if (c.parameters.displayType == "taxonomy") {
 
 	    for (var i=0; i<taxLevels.length; i++) {
@@ -710,7 +748,7 @@
 				    break;
 				}
 			    } else {
-				console.log("func not found: "+func)
+				console.log("func not found: "+funcs[k])
 			    }
 			}
 
@@ -937,7 +975,7 @@
 	if (! widget.hasOwnProperty('mgselect')) {
 
 	    // border and title
-	    var html = [ "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Data Loader <span style='cursor: pointer;'><sup>[?]</sup></span></h3><div>" ];
+	    var html = [ "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis Container <span style='cursor: pointer;' title='click to see a short tutorial video'><sup>[?]</sup></span></h3><p>An analysis container holds all the <span class='tt' data-title='Analysis Container Settings' data-content='<p>The settings include the list of referenced profiles, the selected data-sources, the current cutoffs like e-value or alignment length, taxonomic or hierarchical filters and the current visualization.</p><p>Once the container is ready, you can adjust the settings in the righthand menu.</p>'>settings</span> for your analysis, as well as the current analysis result. It is based on metagenomic profiles, which contain all the raw data.</p><p>Select the databases and the profiles for your analysis container. You can name the container in the text-field <i>analysis container name</i>. Click the <i class='icon-ok'></i></a>-button below to begin.</p><p><span class='tt' data-title='Metagenomic Profiles' data-content='<p>Profiles are generated on our server on demand. The initial calculation may take some time, depending on the profile size. Once computed, they will be cached and subsequent requests will download immediately.</p><p>You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p>'>Profiles</span> which are not yet on your machine will be downloaded. Once all required profiles are available, the analysis container is ready for exploration!</p><div style='overflow-x: auto;'>" ];
 
 
 	    // params container
@@ -973,6 +1011,9 @@
 	    // fill the content
 	    target.innerHTML = html.join("");
 
+	    // add the tooltips
+	    jQuery('.tt').popover({"trigger": "hover", "html": true, "placement": "bottom"});
+
 	    // show the databases
 	    widget.showDatabases("protein");
 
@@ -988,7 +1029,7 @@
 		data: [],
 		filter: result_columns,
 		result_field: true,
-		result_field_placeholder: "data container name",
+		result_field_placeholder: "analysis container name",
 		result_field_default: widget.result_field_default || "",
 		multiple: true,
 		extra_wide: true,
@@ -1024,7 +1065,7 @@
 
 	if (container.status == "ready") {
 	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
-	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/data.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
+	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/bar-chart.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
 	    widget.selectedContainer = container.id;
 	    stm.DataStore.dataContainer[widget.selectedContainer].parameters.sources = stm.DataStore.profile[stm.DataStore.dataContainer[widget.selectedContainer].items[0].id].sources;
 	    document.getElementById('dataprogress').innerHTML = html;
@@ -1074,17 +1115,24 @@
 	    stm.DataStore.dataContainer = {};
 	}	
 
-	var name = collectionName || widget.dataLoadParams.name || "data"+Retina.keys(stm.DataStore.dataContainer).length;
+	var name = collectionName || widget.dataLoadParams.name || "analysis"+Retina.keys(stm.DataStore.dataContainer).length;
 
 	if (ids.length) {
-	    if (! name) {
-		var i = Retina.keys(stm.DataStore.dataContainer).length;
-		while (stm.DataStore.dataContainer.hasOwnProperty('data_'+i)) {
-		    i++;
+
+	    // sanity check if there is a sequence type mix
+	    var seqTypes = {};
+	    for (var i=0; i<ids.length; i++) {
+		if (! seqTypes.hasOwnProperty(ids[i].sequence_type)) {
+		    seqTypes[ids[i].sequence_type] = 0;
 		}
-		name = 'data_'+i;
-		document.getElementById('dataContainerName').value = name;
+		seqTypes[ids[i].sequence_type]++;
 	    }
+	    if (Retina.keys(seqTypes).length > 1) {
+		if (! confirm("Your selection is composed of multiple sequence types ("+Retina.keys(seqTypes).join(", ")+").\n\nYou can check the sequence type by selecting it in the filter type. Are you sure you want to load these data?")) {
+		    return;
+		}
+	    }
+	    
 	    if (stm.DataStore.dataContainer.hasOwnProperty(name) && ! params) {
 		if (! confirm("The name '"+name+"' already exists. Do you want \nto replace it with the current selection?")) {
 		    return;
@@ -1111,6 +1159,8 @@
 	    if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
 		stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
 	    }
+	} else {
+	    alert('You did not select any metagenomes');
 	}
 	if (! stm.DataStore.hasOwnProperty('profile') ) {
 	    stm.DataStore.profile = {};
@@ -1410,7 +1460,11 @@
 	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".tsv");
 	    return;
 	} else if (type == 'shock') {
-	    widget.createAnalysisObject();
+	    if (stm.user) {
+		widget.createAnalysisObject();
+	    } else {
+		alert('you must be logged in to use this function');
+	    }
 	}
     };
 
