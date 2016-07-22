@@ -407,3 +407,8 @@ h5 {
     margin-top: 20px;
     margin-bottom: 30px;
 }
+
+.tt {
+    font-weight: bold;
+    cursor: help;
+}
