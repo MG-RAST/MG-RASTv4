@@ -9,6 +9,7 @@ A rich Java script frontend for the v4 version of MG-RAST.
 To build this image:
 
 make sure you have cloned the required repositories (including git submodules)
+
 cd into that directory 
 
 
