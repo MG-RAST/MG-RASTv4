@@ -30,7 +30,11 @@
 	
 	// check if we have a project parameter
 	if (Retina.cgiParam('project')) {
-	    widget.id = Retina.cgiParam('project');
+	    var id = Retina.cgiParam('project');
+	    if (id.length < 15 && ! id.match(/^mgp/)) {
+		id = "mgp"+id;
+	    }
+	    widget.id = id.match(/^mgp/) ? id : Retina.idmap(id);
 	    if (! widget.id.match(/^mgp/)) {
 		widget.id = "mgp"+widget.id;
 	    }
@@ -73,8 +77,9 @@
 	    
 	    
 	    html += "<table>";
-	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+"</td></tr>";
+	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+", "+project.metadata.PI_organization+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
+	    html += "<tr><td><b>static link</b></td><td>"+(project.status == "public" ? "<a href='http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"'>http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"</a>" : "private projects cannot be linked")+"</td></tr>";
 	    html += "</table>";
 	    var custom = "<span id='custom'></span>";
 	    html += "<h4>description</h4>"+custom+"<p>"+project.description+"</p>";
@@ -88,7 +93,7 @@
 	    content.innerHTML = html;
 
 	    // check if this project has a custom image and load it if so
-	    jQuery.get(RetinaConfig.shock_url + "/node?querynode&attributes.inUseInProject="+widget.id+"&owner=" + stm.user.login, function(data){
+	    jQuery.get(RetinaConfig.shock_url + "/node?querynode&attributes.inUseInProject="+widget.id, function(data){
 		if (data && data.data && data.data.length) {
 		    jQuery.get(RetinaConfig.shock_url + "/node/" + data.data[0].id + "?download", function(data) {
 			document.getElementById('custom').innerHTML = data;
