@@ -61,7 +61,7 @@ function initWebApp () {
 	// print server stats
 	var bp = (parseInt(data.basepairs) / 1000000000000).formatString(2);
 	var seq = parseInt(parseInt(data.sequences) / 1000000000).formatString();
-	document.getElementById('load').innerHTML = parseInt(data.metagenomes).formatString()+" metagenomes containing "+seq+" billion sequences and "+bp+" Tbp processed.";
+	document.getElementById('load').innerHTML = parseInt(data.metagenomes).formatString()+" metagenomes containing "+seq+" billion sequences and<br>"+bp+" Tbp processed for "+parseInt(data.usercount).formatString()+" registered users.";
     });
     
     // webapp initialization
@@ -107,7 +107,7 @@ function initWebApp () {
     window.cookiebar = new jQuery.peekABar();
     setTimeout(function () {
 	cookiebar.show({
-	    html: 'This site uses cookies to improve user experience. By continuing to use the site you consent to the use of cookies.<button class="btn btn-mini pull-right" onclick="cookiebar.hide();" style="float: right; margin-right: 50px;">OK</button>'
+	    html: 'This site uses cookies to improve the user experience. By continuing to use the site you consent to the use of cookies.<button class="btn btn-mini pull-right" onclick="cookiebar.hide();" style="float: right; margin-right: 50px;">OK</button>'
 	});
     }, 3000);
 
