@@ -53,7 +53,7 @@
 			 } );
 
 	    jQuery.ajax( { dataType: "json",
-			   url: RetinaConfig['mgrast_api']+"/download/"+mgid,
+			   url: RetinaConfig['mgrast_api']+"/download/"+id,
 			   headers: stm.authHeader,
 			   success: function(data) {
 			       Retina.WidgetInstances.metagenome_download[1].displayMetagenomeDownloads(data);
