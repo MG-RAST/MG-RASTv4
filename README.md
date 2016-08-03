@@ -10,20 +10,20 @@ To build this image:
 
 make sure you have cloned the required repositories (including git submodules)
 
-cd into that directory 
+git clone --recursive <this repo>
 
+cd into that directory 
 
 
 To build the image either download the Docker file into an empty directory of provide the url to Dockerfile as in this example:
 
 ```bash
-export TAG=`date +"%Y%m%d.%H%M"`
-docker build -t mgrast/v4-web:${TAG} .
+docker build -t <some_name> .
 ```
 
 Example for manual invocation:
 ```bash
-docker run -t -i mgrast/v4-web:${TAG} 
+docker run -t -p80:80 -i <some_name>
 ```
 
 ### Other notes ###
