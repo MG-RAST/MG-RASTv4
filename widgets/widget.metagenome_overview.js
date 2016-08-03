@@ -196,6 +196,9 @@
 	    return;
 	}
 
+	// improve human readability of creation date
+	mg.created = mg.created.replace(/^(\d\d\d\d-\d\d-\d\d)(\s)/, '$1 at ' );
+
         var is_rna = (mg.sequence_type == 'Amplicon') ? 1 : 0;
         var raw_seqs    = ('sequence_count_raw' in stats) ? parseFloat(stats.sequence_count_raw) : 0;
         var qc_rna_seqs = ('sequence_count_preprocessed_rna' in stats) ? parseFloat(stats.sequence_count_preprocessed_rna) : 0;
@@ -206,12 +209,15 @@
         var ann_reads   = ('read_count_annotated' in stats) ? parseFloat(stats.read_count_annotated) : 0;
         var aa_reads    = ('read_count_processed_aa' in stats) ? parseFloat(stats.read_count_processed_aa) : 0;
 
+	mg.statistics.sequence_breakdown.predicted_feature = mg.statistics.sequence_breakdown.known_rna + mg.statistics.sequence_breakdown.known_prot + mg.statistics.sequence_breakdown.unknown_prot;
 	mg.statistics.sequence_breakdown.unknown_percent = (mg.statistics.sequence_breakdown.unknown / mg.statistics.sequence_breakdown.total * 100).formatString(2);
-	mg.statistics.sequence_breakdown.unknown_prot_percent = (mg.statistics.sequence_breakdown.unknown_prot / mg.statistics.sequence_breakdown.total * 100).formatString(2);
 	mg.statistics.sequence_breakdown.failed_qc_percent = (mg.statistics.sequence_breakdown.failed_qc / mg.statistics.sequence_breakdown.total * 100).formatString(2);
-	mg.statistics.sequence_breakdown.known_rna_percent = (mg.statistics.sequence_breakdown.known_rna / mg.statistics.sequence_stats.read_count_processed_rna * 100).formatString();
-	mg.statistics.sequence_breakdown.known_prot_percent = (mg.statistics.sequence_breakdown.known_prot / mg.statistics.sequence_breakdown.total * 100).formatString(2);
+	mg.statistics.sequence_breakdown.known_rna_percent = (mg.statistics.sequence_breakdown.known_rna / mg.statistics.sequence_breakdown.predicted_feature * 100).formatString();
+	mg.statistics.sequence_breakdown.known_prot_percent = (mg.statistics.sequence_breakdown.known_prot / mg.statistics.sequence_breakdown.predicted_feature * 100).formatString(2);
+	mg.statistics.sequence_breakdown.unknown_prot_percent = (mg.statistics.sequence_breakdown.unknown_prot / mg.statistics.sequence_breakdown.predicted_feature * 100).formatString(2);
 
+	
+	
 	mg.taxonomy = {};
 	try {
 	    var taxa = [ "domain", "phylum", "class", "order", "family", "genus" ];
@@ -315,14 +321,16 @@
 	}
 	mg.bpprofile = bpprofile;
 	
-	var rankabundance = [];
+	var rankabundance = {};
 	try {
-	    if (mg.statistics.taxonomy.family != undefined) {
-		var t = mg.statistics.taxonomy.family.sort(function(a,b) {
+	    var tax = [ 'domain', 'phylum', 'class', 'order', 'family', 'genus' ];
+	    for (var h=0; h<tax.length; h++) {
+		rankabundance[tax[h]] = [];
+		var t = mg.statistics.taxonomy[tax[h]].sort(function(a,b) {
 		    return b[1] - a[1];
 		}).slice(0,50);
 		for (var i=0; i<t.length; i++) {
-		    rankabundance.push( { label: t[i][0], value: t[i][1], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source=RefSeq&filter_level=family&type=organism&filter='+t[i][0].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
+		    rankabundance[tax[h]].push( { label: t[i][0], value: t[i][1], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source=RefSeq&filter_level='+tax[h]+'&type=organism&filter='+t[i][0].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
 		}
 	    }
 	} catch (error) {
@@ -360,7 +368,7 @@
 	}
 	
 	mg.alphadiversity = { min: parseFloat(mg.project_alpha_diversity.min), max: parseFloat(mg.project_alpha_diversity.max), mean: parseFloat(mg.project_alpha_diversity.avg), stdv: parseFloat(mg.project_alpha_diversity.stdv), val: mg.statistics.sequence_stats.alpha_diversity_shannon };
-	mg.statistics.sequence_stats.alpha_diversity_shannon = mg.statistics.sequence_stats.alpha_diversity_shannon.formatString(3);
+	mg.statistics.sequence_stats.alpha_diversity_shannon = mg.statistics.sequence_stats.alpha_diversity_shannon.formatString();
 	
 	var kmer = [];
 	try {
@@ -427,6 +435,7 @@
 	    mg.staticLink = "<a href='http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"' title='static link'>http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"</a>";
 	} else {
 	    mg.id = Retina.idmap(mg.id);
+	    mg.metadata.project.id = Retina.idmap(mg.metadata.project.id);
 	    mg.staticLink = 'private metagenomes cannot be linked';	    
 	}
     };
