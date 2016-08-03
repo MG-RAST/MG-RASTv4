@@ -516,6 +516,9 @@
 	if (result.hasOwnProperty('data') && result.data.length) {
 	    for (var i=0; i<result.data.length; i++) {
 		var item = result.data[i];
+		if (item.status == "private") {
+		    item.id = Retina.idmap(item.id);
+		}
 		html.push('<a href="mgmain.html?mgpage=project&project='+item.id+'" target=_blank>'+item.name+'</a>');
 		html.push('<p>a '+item.status+' study by '+item.pi+' including '+item.metagenomes.length+' metagenomes</p>');
 		html.push('<p>'+item.description+'</p>');
