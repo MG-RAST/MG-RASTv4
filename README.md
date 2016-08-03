@@ -26,6 +26,8 @@ Example for manual invocation:
 docker run -t -p80:80 -i _some_name_
 ```
 
+Once that is done, connect to localhost on your machine with your favorite browser. (http://127.0.0.1)
+
 ### Other notes ###
 
 
