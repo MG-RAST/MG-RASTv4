@@ -18,12 +18,12 @@ cd into that directory
 To build the image either download the Docker file into an empty directory of provide the url to Dockerfile as in this example:
 
 ```bash
-docker build -t _some_name_ .
+docker build -t mgrast/v4-web .
 ```
 
 Example for manual invocation:
 ```bash
-docker run -t -p80:80 -i _some_name_
+docker run -ti -p80:80 --name mgrast-v4-web mgrast/v4-web
 ```
 
 Once that is done, connect to localhost on your machine with your favorite browser. (http://127.0.0.1)
