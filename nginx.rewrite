@@ -1,0 +1,10 @@
+server {
+    listen 80;
+    listen 443 ssl;
+    rewrite ^linkin.cgi\?project=(.*)$ ?mgpage=project&project=$1 last;
+    rewrite ^linkin.cgi\?metagenome=(.*)$ ?mgpage=overview&metagenome=$1 last;
+    rewrite ^/project/(.*)$ ?mgpage=project&project=$1 last;
+    rewrite ^/metagenome/(.*)$ ?mgpage=overview&metagenome=$1 last;
+    rewrite ^linkin.cgi\?project(\d+)$ ?mgpage=project&project=$1 last;
+    return 301 url;
+}
