@@ -38,11 +38,6 @@
 	}
 
 	if (! widget.excelWorkbook) {
-	    // jQuery.getJSON("DATA/session_metazen.dump", function (data) {
-	    // 	stm.DataStore = data;
-	    // 	Retina.WidgetInstances.metagenome_metazen[1].display();
-	    // });
-	    // return;
 
 	    content.innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 16px; margin-right: 10px; position: relative; bottom: 2px;'> loading controlled vocabularies</div>";
 	    var promise1 = jQuery.Deferred();
@@ -375,33 +370,23 @@
     widget.loadExcelTemplate = function () {
 	var widget = this;
 
-	var prom = jQuery.Deferred();
-	var xhr = new XMLHttpRequest();
-	xhr.p = prom;
-	var method = "GET";
+	widget.excelPromise = jQuery.Deferred();
 	var base_url = "data/MGRAST_MetaData_template_1.7.xlsx";
-	if ("withCredentials" in xhr) {
-	    xhr.open(method, base_url, true);
-	} else if (typeof XDomainRequest != "undefined") {
-	    xhr = new XDomainRequest();
-	    xhr.open(method, base_url);
-	} else {
-	    alert("your browser does not support CORS requests");
-	    console.log("your browser does not support CORS requests");
-	    return undefined;
-	}
 
-	xhr.responseType = 'arraybuffer';
+	JSZipUtils.getBinaryContent(base_url, function(err, data) {
+	    if(err) {
+		throw err;
+	    }
+	    var zip = new JSZip();
+	    zip.loadAsync(data).then(function(zip) {
+		xlsx(zip).then(function (workbook) {
+		    Retina.WidgetInstances.metagenome_metazen[1].excelWorkbook = workbook;
+		    Retina.WidgetInstances.metagenome_metazen[1].excelPromise.resolve();
+		});
+	    });
+	});
 
-	xhr.onload = function() {
-	    // the file is loaded, create a javascript object from it
-	    widget.excelWorkbook = xlsx(xhr.response);
-	    this.p.resolve();
-	}
-
-	xhr.send();
-
-	return prom;
+	return widget.excelPromise;
     };
 
     widget.selectENVO = function (sel) {
@@ -1027,7 +1012,8 @@
 	    }
 	}
 
-	stm.saveAs(xlsx(wb).base64, "metadata.xlsx", true, "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,");
-	
+	xlsx(wb).then(function(data) {
+	    stm.saveAs(data.base64, "metadata.xlsx", true, "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,");
+	});
     };
 })();
