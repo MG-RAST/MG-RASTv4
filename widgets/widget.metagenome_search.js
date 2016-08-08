@@ -446,13 +446,13 @@
 	html.push("<tbody></table>");
 
 	if (num < total_count) {
-	    html.push("<div><table width=100% style='text-align: center;'><tr><td><button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI(true);'>more</button></td></tr></table></div>");
+	    html.push('<div class="pagination pagination-centered"><ul><li><span><a href="javascript:;" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI(true, 20);">+20</a></span></li><li><span><a href="javascript:;" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI(true, 100);">+100</a></span></li><li><span><a href="javascript:;" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI(true, 500);">+500</a></span></li></ul></div>');
 	}
 
 	return html.join("");
     };
 
-    widget.queryAPI = function (more) {
+    widget.queryAPI = function (more, howmany) {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
 
 	var o = document.getElementById('opaq');
@@ -507,6 +507,7 @@
 	    }
 	}
 
+	widget.limit = howmany || widget.limit;
 	var url = api_url + query_str + "&order=" + widget.sort + "&direction=" + widget.sortDir + "&match=" + widget.match + "&limit=" + widget.limit + "&offset=" + widget.offset;
 	
 	jQuery.ajax( { dataType: "json",
