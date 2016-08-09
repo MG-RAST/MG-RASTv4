@@ -268,7 +268,7 @@
 		}
 	    }
 	}
-	mg.allmetadata = allmetadata;
+	mg.allmetadata = allmetadata.length ? allmetadata : null;
 
 	var sourcehits = [];
 	var sourcehitsprotein = [];
@@ -399,11 +399,21 @@
 	var sequenceGCQC = [];
 	var sequenceGCUpload = [];
 	if (mg.hasOwnProperty('statistics') && mg.statistics.hasOwnProperty('gc_histogram')) {
+	    var qc = [];
+	    var up = [];
+	    for (var i=0; i<101; i++) {
+		qc[i] = 0;
+		up[i] = 0;
+	    }
 	    for (var i=0; i<mg.statistics.gc_histogram.post_qc.length; i++) {
-		sequenceGCQC.push({ x: mg.statistics.gc_histogram.post_qc[i][0], y: mg.statistics.gc_histogram.post_qc[i][1] });
+		qc[parseInt(mg.statistics.gc_histogram.post_qc[i][0])] += mg.statistics.gc_histogram.post_qc[i][1];
 	    }
 	    for (var i=0; i<mg.statistics.gc_histogram.upload.length; i++) {
-		sequenceGCUpload.push({ x: mg.statistics.gc_histogram.upload[i][0], y: mg.statistics.gc_histogram.upload[i][1] });
+		up[parseInt(mg.statistics.gc_histogram.upload[i][0])] += mg.statistics.gc_histogram.upload[i][1];
+	    }
+	    for (var i=0; i<101; i++) {
+		sequenceGCQC.push({ x: i, y: qc[i] });
+		sequenceGCUpload.push({ x: i, y: up[i] });
 	    }
 	}
 	mg.sequenceGCQC = sequenceGCQC;
