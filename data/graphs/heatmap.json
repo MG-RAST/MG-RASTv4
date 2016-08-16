@@ -15,7 +15,7 @@
 	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" },
 	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the row titles", "title": "row title width" },
 	      { "name": "items[2].parameters.base", "type": "int", "description": "height of the column titles", "title": "column title height" },
-	      { "name": "items[2].parameters.labelRotation", "type": "int", "description": "rotation of the row titles in degrees", "title": "row title rotation" },
+	      { "name": "items[2].parameters.labelRotation", "type": "int", "description": "rotation of the column titles in degrees", "title": "column title rotation" },
 	      { "name": "items[1].parameters.boxwidth", "type": "int", "description": "width of a single box", "title": "boxwidth" },
 	      { "name": "items[1].parameters.boxheight", "type": "int", "description": "height of a single box", "title": "boxheight" }
 	  ]
