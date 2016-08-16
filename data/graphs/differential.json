@@ -1,0 +1,116 @@
+{
+  "name": "differential",
+  "width": 500,
+    "height": 500,
+    "controls": [
+	{ "layout":
+	  [
+	      { "name": "height", "type": "int", "description": "height of the plot", "title": "height" },
+	      { "name": "width", "type": "int", "description": "width of the plot", "title": "width" }
+	  ]
+	}
+    ],
+  "items": [
+    {
+      "type": "axis",
+      "name": "item0",
+      "parameters": {
+        "direction": "horizontal",
+        "orientation": "bottom",
+        "labelPosition": "left-bottom",
+        "labelRotation": 30,
+	"decimals": 0, 
+        "shift": 50,
+        "base": 50,
+        "length": 400,
+        "min": 0,
+        "max": 1,
+        "spaceMajor": 66.66666666666667,
+        "numMinor": 5,
+        "tickShift": 0,
+        "tickBase": 0,
+        "majorTickLength": 10,
+        "minorTickLength": 5,
+        "lineFormat": {
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "labelFormat": {
+          "fontFamily": "Helvetica",
+          "fontWeight": 100,
+          "fontSize": 12
+        },
+        "showLabels": true,
+        "labelOrigin": true,
+        "isLog": true,
+        "noLine": false,
+        "inputType": "plot",
+        "id": "item0",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2valueX"
+    },
+    {
+      "type": "axis",
+      "name": "item1",
+      "parameters": {
+        "direction": "vertical",
+        "orientation": "bottom",
+        "labelPosition": "left-bottom",
+        "labelRotation": 0,
+	"decimals": 0,
+        "shift": 50,
+        "base": 50,
+        "length": 400,
+        "min": 0,
+        "max": 1,
+        "spaceMajor": 57.142857142857146,
+        "numMinor": 5,
+        "tickShift": 0,
+        "tickBase": 0,
+        "majorTickLength": 10,
+        "minorTickLength": 5,
+        "lineFormat": {
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "labelFormat": {
+          "fontFamily": "Helvetica",
+          "fontWeight": 100,
+          "fontSize": 12
+        },
+        "showLabels": true,
+        "labelOrigin": true,
+        "isLog": true,
+        "noLine": false,
+        "inputType": "plot",
+        "id": "item1",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2valueY"
+    },
+    {
+      "type": "plot",
+      "name": "item2",
+      "parameters": {
+        "height": 400,
+        "width": 400,
+        "radius": 2,
+        "shiftX": 50,
+        "shiftY": 50,
+        "format": {
+          "fill": "white",
+          "stroke": "black",
+          "strokeWidth": 1
+        },
+        "inputType": "plot",
+        "id": "item2",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2plot"
+    }
+  ]
+}

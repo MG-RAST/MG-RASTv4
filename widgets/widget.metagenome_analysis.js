@@ -4,7 +4,7 @@
                 title: "Metagenome Analysis Widget",
                 name: "metagenome_analysis",
                 author: "Tobias Paczian",
-            requires: [ "rgbcolor.js", "html2canvas.js", "jszip.min.js" ]
+            requires: [ "rgbcolor.js", "html2canvas.js", "jszip.min.js", "numeric.min.js" ]
         }
     });
     
@@ -31,8 +31,6 @@
     widget.graphs = {};
 
     widget.context = "none";
-    widget.normalizeData = false;
-    widget.standardizeData = false;
     widget.currentType = "table";
     
     // main display function called at startup
@@ -76,13 +74,13 @@
 	var toolshtml = "<h4>Analysis Containers</h4>";
 	toolshtml += "<div id='availableContainers'></div>";
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
-	toolshtml += "<div id='currentContainerParams'></div>";
+	toolshtml += "<div id='currentContainerParams'></div><div id='containerActive' style='display: none;'>";
 	toolshtml += "<h4>View</h4>";
 	toolshtml += "<div id='visualContainerSpace'></div>";
 	toolshtml += "<h4>Plugins</h4>";
 	toolshtml += "<div id='pluginContainerSpace'></div>";
 	toolshtml += "<h4>myData &nbsp; Export</h4>";
-	toolshtml += "<div id='exportContainerSpace'></div>";
+	toolshtml += "<div id='exportContainerSpace'></div></div>";
 	tools.innerHTML = toolshtml;
 
 	widget.showDataContainers();
@@ -138,13 +136,18 @@
     	var container = document.getElementById('visualContainerSpace');
 
     	var html = "";
+    	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");' title='table'>";
     	html += "<img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");' title='matrix'>";
 
     	html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");' title='piechart'>";
-    	html += "<img src='Retina/images/bars3.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='barchart'>";
-    	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
-    	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");' title='table'>";
-	html += "<img src='Retina/images/stats.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
+    	html += "<img src='Retina/images/barchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart2\");' title='grouped barchart'>";
+    	html += "<img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'>";
+
+	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
+	html += "<img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCA'>";
+	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
+	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
+	
 
     	container.innerHTML = html;
     };
@@ -153,7 +156,8 @@
     widget.visualize = function (type) {
     	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
-    	type = type || "matrix";
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+    	type = type || c.currentRendererType || widget.currentType;
     	widget.currentType = type;
 	
     	document.getElementById("data").style.display = "none";
@@ -185,17 +189,62 @@
     	    Retina.WidgetInstances.RendererController = [ Retina.WidgetInstances.RendererController[0] ];
     	}
 
+	if (! c.currentRendererType || (c.currentRendererType && c.currentRendererType !== type)) {
+	    stm.DataStore.dataContainer[widget.selectedContainer].currentRendererDefaults = {};
+	}
+	
 	// get the data
-	var settings = jQuery.extend(true, {}, visMap[type].settings);
-	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+	var settings = jQuery.extend(true, {}, visMap[type].settings, stm.DataStore.dataContainer[widget.selectedContainer].currentRendererDefaults || {});
+	settings.data = widget.prepareVisData();
 
 	// set the callback
 	settings.callback = widget.graphCallback;
 
 	// set the current controller
-    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": visMap[type].controlGroups });
+    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": visMap[type].controlGroups, "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
+
+	c.currentRendererType = type;
     };
 
+    widget.prepareVisData = function () {
+	var widget = this;
+	var visMap = widget.visualizationMapping()[widget.currentType];
+	var data = visMap.hasOwnProperty('dataConversion') ? widget[visMap.dataConversion](visMap.dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+
+	return data;
+    };
+
+    widget.settingsCallback = function (name, value) {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	stm.DataStore.dataContainer[widget.selectedContainer].currentRendererDefaults[name] = value;
+    };
+
+    widget.dataCallback = function () {
+	var rc = this;
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	// check what kind of data operation is requested
+	var data = widget.prepareVisData();
+
+	// iterate over all data attributes
+	for (var i=0; i<rc.dataUpdaters.length; i++) {
+	    var opt = rc.dataUpdaters[i];
+	    
+	    // data normalization
+	    if (opt.name == "normalize" && rc.renderer.settings[opt.name]) {
+		data.data = Retina.transposeMatrix(Retina.normalizeMatrix(Retina.transposeMatrix(data.data)));
+	    }
+
+	    // turn data to log
+	    else if (opt.name == "log" && rc.renderer.settings[opt.name]) {
+		data.data = Retina.logMatrix(data.data);
+	    }
+	}
+	
+	rc.renderer.settings.data = data;
+    };
+    
     widget.graphCallback = function (event) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	var rend = this.renderer;
@@ -234,8 +283,10 @@
 	var widget = this;
 
 	delete stm.DataStore.dataContainer[widget.selectedContainer];
+	widget.selectedContainer = Retina.keys(stm.DataStore.dataContainer).length ? Retina.keys(stm.DataStore.dataContainer).sort()[0] : null;
 	widget.showDataContainers();
 	document.getElementById('dataprogress').innerHTML = '';
+	document.getElementById('currentContainerParams').innerHTML = "";
 	widget.loadDataUI();
     };
 
@@ -305,7 +356,7 @@
 	
 	document.getElementById('visualize').removeAttribute('disabled');
 	widget.showCurrentContainerParams();
-	widget.visualize(widget.currentType);
+	widget.visualize();
     };
     
     // change the container name
@@ -353,12 +404,18 @@
 			glow = " glow";
 			name = "<span style='color: blue;'>"+name+"</span>";
 		    }
-		    html += "<div title='click to select analysis container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
+		    html += "<div title='click to select analysis container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
 		}
 		
 	    }
 	    html += "<div title='create a new analysis container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
+
+	    if (widget.selectedContainer) {
+		document.getElementById('containerActive').style.display = "";
+	    } else {
+		document.getElementById('containerActive').style.display = "none";
+	    }
 	}
     };
 
@@ -385,7 +442,7 @@
 	html.push('<table style="font-size: 12px;">');
 	
 	// metadatum
-	var mdSelect = [ "<tr><td style='width: 100px;'>metadatum</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"metadatum\",this.options[this.selectedIndex].value);'>" ];
+	var mdSelect = [ "<tr><td style='width: 100px;'>metadatum</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].containerSetIDs(null,this.options[this.selectedIndex].value);'>" ];
 	var mdkeys = Retina.keys(c.items[0]).sort();
 	for (var i=0; i<mdkeys.length; i++) {
 	    var sel = "";
@@ -864,9 +921,30 @@
 	c.matrix = matrix;
 	c.matrix.itemsX = matrix.cols.length;
 	c.matrix.itemsY = matrix.rows.length;
+	c.matrix.itemsProd = matrix.cols.length * matrix.rows.length;
 	c.hierarchy = hier;
 
 	return c;
+    };
+
+    widget.containerSetIDs = function (container, metadatum) {
+	var widget = this;
+
+	var redraw = true;
+	if (container) {
+	    redraw = false;
+	} else {
+	    container = stm.DataStore.dataContainer[widget.selectedContainer];
+	}
+
+	container.parameters.metadatum = metadatum;
+	for (var i=0; i<container.matrix.cols.length; i++) {
+	    container.matrix.cols[i] = container.items[i][metadatum];
+	}
+
+	if (redraw) {
+	    widget.visualize(widget.currentType);
+	}
     };
 
     widget.container2table = function () {
@@ -892,6 +970,38 @@
 	return { data: tableData, header: tableHeaders };
     };
 
+    widget.container2pca = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var matrix = Retina.copyMatrix(c.matrix.data);
+	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix)));
+	var points = [];
+	for (var i=0; i<pca.coordinates.length; i++) {
+	    points.push( { "x": pca.coordinates[i][0], "y": pca.coordinates[i][1], "name": c.matrix.cols[i] } );
+	}
+	
+	return { "data": [ { "points": points } ] };
+    };
+
+    widget.container2differential = function () {
+	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+	
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var matrix = Retina.copyMatrix(c.matrix.data);
+	var points = [];
+	var col = GooglePalette();
+	var colors = {};
+	for (var i=0; i<matrix.length; i++) {
+	    if (! colors.hasOwnProperty(c.hierarchy[c.matrix.rows[i]][0])) {
+		colors[c.hierarchy[c.matrix.rows[i]][0]] = col[Retina.keys(colors).length];
+	    }
+	    points.push( { "x": Retina.log10(matrix[i][0]), "y": Retina.log10(matrix[i][1]), format: { "fill": colors[c.hierarchy[c.matrix.rows[i]][0]]  }, name: c.matrix.rows[i] });
+	}
+	
+	return { "data": [ { "points": points } ] };
+    };
+
     widget.container2plot = function (field) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
@@ -899,7 +1009,7 @@
 	var groups = [];
 
 	for (var i=0; i<c.items.length; i++) {
-	    groups.push({ name: c.items[i][c.parameters.metadatum], points: [] });
+	    groups.push({ name: c.matrix.cols[i], points: [] });
 	    var data = jQuery.extend(true, [], stm.DataStore.profile[c.items[i].id].metagenome.statistics[field]);
 	    for (var h=0; h<data.length; h++) {
 		groups[i].points.push({x: data[h][0], y: data[h][1]});
@@ -933,6 +1043,21 @@
 			       settings: widget.graphs.stackedBar,
 			       controlGroups: widget.graphs.stackedBar.controls,
 			     },
+		 'barchart2': { title: 'barchart',
+				renderer: "svg2",
+				settings: widget.graphs.bar,
+				controlGroups: widget.graphs.bar.controls,
+			     },
+		 'pca': { title: 'pca',
+			  renderer: 'svg2',
+			  settings: widget.graphs.pca,
+			  controlGroups: widget.graphs.pca.controls,
+			  dataConversion: 'container2pca' },
+		 'differential': { title: 'differential coverage',
+				   renderer: 'svg2',
+				   settings: widget.graphs.differential,
+				   controlGroups: widget.graphs.differential.controls,
+				   dataConversion: 'container2differential' },
 		 'table': { title: 'table',
 			    renderer: 'table',
 			    settings: { 'sort_autodetect': true },
@@ -1148,7 +1273,7 @@
 								displayLevel: "domain",
 								displayType: "taxonomy",
 								displaySource: 0,
-								metadatum: "id",
+								metadatum: "name",
 								evalue: widget.cutoffThresholds.evalue,
 								identity: widget.cutoffThresholds.identity,
 								alilength: widget.cutoffThresholds.alilength,
@@ -1695,7 +1820,7 @@
     widget.loadGraphs = function () {
 	var widget = this;
 
-	var graphs = [ "pie", "stackedBar", "heatmap", "rarefaction" ];
+	var graphs = [ "pie", "stackedBar", "bar", "heatmap", "rarefaction", "pca", "differential" ];
 	for (var i=0; i<graphs.length; i++) {
 	    jQuery.ajax({ url: 'data/graphs/'+graphs[i]+'.json',
 			  contentType: 'application/json',

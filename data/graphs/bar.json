@@ -1,0 +1,226 @@
+{
+    "name": "bar",
+    "width": 800,
+    "height": 500,
+    "controls": [
+	{ "data":
+	  [
+	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true },
+	      { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
+	  ]
+	},
+	{ "layout":
+	  [
+	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
+	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" },
+	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the value axis", "title": "value axis width" }
+	  ]
+	}
+    ],
+    "dataAdjustments": [
+	{ "sourceItem": 4,
+	  "targetItem": 1,
+	  "targetItemAttribute": "length",
+	  "dataAttribute": "itemsProd",
+	  "sourceItemAttributes": [ "width", "space" ]
+	}
+    ],
+    "connections": { "0": { "base": [ { "type": "pinned",
+					"items": [ { "index": 1,
+						     "attribute": "shift" },
+						   { "index": 2,
+						     "attribute": "shift" },
+						   { "index": 3,
+						     "attribute": "left" },
+						   { "index": 4,
+						     "attribute": "shift" } ] } ]
+			  },
+		     "1": { "length": [ { "type": "pinned",
+					  "items": [ { "index": 2,
+						       "attribute": "width" },
+						     { "index": 3,
+						       "attribute": "left" } ] } ],
+			    "base": [ { "type": "pinned",
+					"items": [ { "index": 0,
+						     "attribute": "shift" },
+						   { "index": 2,
+						     "attribute": "base" },
+						   { "index": 4,
+						     "attribute": "base" } ] } ]
+			  }
+		   },
+    "items": [
+	{
+	    "data": "matrix2valueaxis",
+	    "name": "value_axis",
+	    "type": "axis",
+	    "parameters": {
+		"inputType": "matrix",
+		"max": 10000,
+		"base": 75,
+		"length": 350,
+		"min": 0,
+		"numMinor": 5,
+		"labels": [],
+		"minorTickLength": 5,
+		"noLine": false,
+		"labelOrigin": true,
+		"isLog": false,
+		"labelPosition": "left-bottom",
+		"lineFormat": {
+		    "stroke": "black",
+		    "strokeWidth": 1
+		},
+		"tickShift": 0,
+		"id": "value_axis",
+		"labelRotation": 0,
+		"shift": 125,
+		"labelFormat": {
+		    "fontFamily": "Helvetica",
+		    "fontWeight": 100,
+		    "fontSize": 12
+		},
+		"spaceMajor": 58.333333333333336,
+		"direction": "vertical",
+		"showLabels": true,
+		"majorTickLength": 10,
+		"groupSettings": {},
+		"data": []
+	    }
+	},
+	{
+	    "type": "axis",
+	    "parameters": {
+		"inputType": "matrix",
+		"max": 20,
+		"base": 125,
+		"length": 600,
+		"min": 0,
+		"numMinor": 0,
+		"labels": [],
+		"minorTickLength": 5,
+		"noLine": false,
+		"labelOrigin": true,
+		"isLog": false,
+		"labelPosition": "left-bottom",
+		"lineFormat": {
+		    "stroke": "black",
+		    "strokeWidth": 1
+		},
+		"tickShift": 22,
+		"id": "item1",
+		"labelRotation": 30,
+		"shift": 75,
+		"spaceMajor": 35,
+		"labelFormat": {
+		    "fontFamily": "Helvetica",
+		    "fontWeight": 100,
+		    "fontSize": 12
+		},
+		"showLabels": false,
+		"direction": "horizontal",
+		"majorTickLength": 0,
+		"groupSettings": {},
+		"data": []
+	    },
+	    "data": "matrix2collabelaxis",
+	    "name": "label_axis"
+	},
+	{
+	    "data": "matrix2valuegrid",
+	    "parameters": {
+		"id": "item3",
+		"inputType": "matrix",
+		"format": {
+		    "stroke-dasharray": "2,2",
+		    "stroke": "gray",
+		    "strokeWidth": 1
+		},
+		"base": 125,
+		"width": 600,
+		"direction": "horizontal",
+		"height": 350,
+		"shift": 75,
+		"space": 50,
+		"groupSettings": {},
+		"data": []
+	    },
+	    "type": "grid",
+	    "name": "grid"
+	},
+	{
+	    "data": "matrix2columnlegend",
+	    "name": "legend",
+	    "type": "legend",
+	    "parameters": {
+		"inputType": "matrix",
+		"colors": [
+		    "#3366cc",
+		    "#dc3912",
+		    "#ff9900",
+		    "#109618",
+		    "#990099",
+		    "#0099c6",
+		    "#dd4477",
+		    "#66aa00",
+		    "#b82e2e",
+		    "#316395",
+		    "#994499",
+		    "#22aa99",
+		    "#aaaa11",
+		    "#6633cc",
+		    "#e67300",
+		    "#8b0707",
+		    "#651067",
+		    "#329262",
+		    "#5574a6",
+		    "#3b3eac",
+		    "#b77322",
+		    "#16d620",
+		    "#b91383",
+		    "#f4359e",
+		    "#9c5935",
+		    "#a9c413",
+		    "#2a778d",
+		    "#668d1c",
+		    "#bea413",
+		    "#0c5922",
+		    "#743411"
+		],
+		"left": 700,
+		"id": "legend",
+		"top": 50,
+		"data": [],
+		"format": {
+		    "fontSize": 12,
+		    "fontFamily": "arial",
+		    "fontWeight": "normal"
+		},
+		"groupSettings": {}
+	    }
+	},
+	{
+	    "name": "chart",
+	    "data": "matrix2barsrow",
+	    "type": "barchart",
+	    "parameters": {
+		"inputType": "matrix",
+		"base": 125,
+		"id": "item5",
+		"format": {
+		    "fill": "white",
+		    "strokeWidth": 1,
+		    "stroke": "black"
+		},
+		"height": 350,
+		"shift": 85,
+		"space": 3,
+		"direction": "vertical",
+		"data": [],
+		"width": 15,
+		"click": true,
+		"groupSettings": {}
+	    }
+	}
+    ]
+}
