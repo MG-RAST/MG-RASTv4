@@ -50,7 +50,7 @@
 		jQuery.ajax({
 		    dataType: "json",
 		    headers: stm.authHeader, 
-		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=summary',
+		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=summary&nocache=1',
 		    success: function (data) {
 			if (! stm.DataStore.hasOwnProperty('project')) {
 			    stm.DataStore.project = {};
@@ -114,6 +114,8 @@
 			    mg.biome,
 			    mg.feature,
 			    mg.material,
+			    "<a href='?mgpage=sample&sample="+mg.sample+"'>"+mg.sample+"</a>",
+			    "<a href='?mgpage=library&library="+mg.library+"'>"+mg.library+"</a>",
 			    mg.location,
 			    mg.country,
 			    mg.coordinates,
@@ -130,9 +132,9 @@
 		sort_autodetect: true,
 		synchronous: true,
 		sort: "name",
-		invisible_columns: { 0: true },
-		minwidths: [125,175,105,110,85,95,95,100,95,120,70,90,110],
-		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "location", "country", "coordinates", "type", "method", "download" ] }
+		invisible_columns: { 0: true, 4: true, 5: true },
+		minwidths: [125,175,105,110,85,95,95,95,95,100,95,120,70,90,110],
+		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "sample", "library", "location", "country", "coordinates", "type", "method", "download" ] }
 	    }).render();
 
 	    // create a google map of the samples

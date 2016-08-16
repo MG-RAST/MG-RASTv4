@@ -74,11 +74,11 @@
 				       
 				       // check public / private status
 				       if (data.status == "private") {
-					   widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share&project='+stm.DataStore.metagenome[data.id].project[0]+'" title="show sharing options"><i class="icon icon-share"></i></a></div>';
+					   widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share&project='+stm.DataStore.metagenome[data.id].project[0]+'" title="show sharing options"><i class="icon icon-share"></i> show sharing options</a></div>';
 				       }
 				       
 				       widget.variableExtractorMetagenome(data.id);
-				       var url = "data/";
+				       var url = "data/flows/";
 				       switch (data.sequence_type) {
 				       case 'Amplicon':
 					   url += "amplicon";
