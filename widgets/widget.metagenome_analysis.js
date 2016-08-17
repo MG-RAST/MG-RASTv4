@@ -195,7 +195,7 @@
 	
 	// get the data
 	var settings = jQuery.extend(true, {}, visMap[type].settings, stm.DataStore.dataContainer[widget.selectedContainer].currentRendererDefaults || {});
-	settings.data = widget.prepareVisData();
+	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
 
 	// set the callback
 	settings.callback = widget.graphCallback;
@@ -204,14 +204,6 @@
     	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": visMap[type].controlGroups, "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
 
 	c.currentRendererType = type;
-    };
-
-    widget.prepareVisData = function () {
-	var widget = this;
-	var visMap = widget.visualizationMapping()[widget.currentType];
-	var data = visMap.hasOwnProperty('dataConversion') ? widget[visMap.dataConversion](visMap.dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
-
-	return data;
     };
 
     widget.settingsCallback = function (name, value) {
@@ -225,7 +217,9 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	// check what kind of data operation is requested
-	var data = widget.prepareVisData();
+	var data = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+
+	var visMap = widget.visualizationMapping()[widget.currentType];
 
 	// iterate over all data attributes
 	for (var i=0; i<rc.dataUpdaters.length; i++) {
@@ -237,9 +231,40 @@
 	    }
 
 	    // turn data to log
-	    else if (opt.name == "log" && rc.renderer.settings[opt.name]) {
-		data.data = Retina.logMatrix(data.data);
+	    else if (opt.name == "log") {
+		if (rc.renderer.settings[opt.name]) {
+		    data.data = Retina.logMatrix(data.data);
+		    if (visMap.hasOwnProperty('logAxes')) {
+			for (var h=0; h<visMap.logAxes.length; h++) {
+			    rc.renderer.settings.items[visMap.logAxes[h]].parameters.isLog = true;
+			    rc.renderer.settings.items[visMap.logAxes[h]].data += "log";
+			}
+		    }
+		} else {
+		    if (visMap.hasOwnProperty('logAxes')) {
+			for (var h=0; h<visMap.logAxes.length; h++) {
+			    rc.renderer.settings.items[visMap.logAxes[h]].parameters.isLog = false;
+			    rc.renderer.settings.items[visMap.logAxes[h]].data = rc.renderer.settings.items[visMap.logAxes[h]].data.replace(/log$/, '');
+			}
+		    }
+		}
 	    }
+
+	    // set pca components
+	    else if (opt.name == "pcaa" || opt.name == "pcab") {
+		isPCA = true;
+		var c = stm.DataStore.dataContainer[widget.selectedContainer];
+		if (opt.name == "pcaa") {
+		    c.parameters.pcaComponentA = rc.renderer.settings[opt.name] || 0;
+		} else {
+		    c.parameters.pcaComponentB = rc.renderer.settings.hasOwnProperty(opt.name) ? rc.renderer.settings[opt.name] : 1;
+		}
+	    }
+	}
+
+	
+	if (visMap.hasOwnProperty('dataConversion')) {
+	    data.data = widget[visMap.dataConversion](data.data).data;
 	}
 	
 	rc.renderer.settings.data = data;
@@ -250,16 +275,23 @@
 	var rend = this.renderer;
 	event = event || window.event;
 
-	var t = event.target;
 	var cat;
-	if (t.nodeName == "text") {
-	    cat = t.innerHTML;
-	} else if (t.previousSibling && t.previousSibling.nodeName == "title") {
-	    cat = t.previousSibling.innerHTML.split(/ - /)[1];
+	
+	if (event.hasOwnProperty('cellValue') && event.colIndex == null) {
+	    cat = event.cellValue;
 	} else {
-	    console.log('unhandled click element');
-	    console.log(t);
-	    return;
+	
+	    var t = event.target;
+	    
+	    if (t.nodeName == "text") {
+		cat = t.innerHTML;
+	    } else if (t.previousSibling && t.previousSibling.nodeName == "title") {
+		cat = t.previousSibling.innerHTML.split(/ - /)[1];
+	    } else {
+		console.log('unhandled click element');
+		console.log(t);
+		return;
+	    }
 	}
 
 	var dls = document.getElementById('displayLevelSelect');
@@ -430,7 +462,7 @@
 	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
 
 	// cutoffs
 	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\',this.nextSibling.value);">e-value</button><input id="evalueInput" type="text" value="'+p.evalue+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
@@ -970,18 +1002,25 @@
 	return { data: tableData, header: tableHeaders };
     };
 
-    widget.container2pca = function () {
+    widget.container2pca = function (data) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-	var matrix = Retina.copyMatrix(c.matrix.data);
+
+	if (c.parameters.pcaComponentA == null) {
+	    c.parameters.pcaComponentA = 0;
+	    c.parameters.pcaComponentB = 1;
+	}
+
+	var matrix = Retina.copyMatrix(data || c.matrix.data);
 	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix)));
 	var points = [];
+	var colors = GooglePalette();
 	for (var i=0; i<pca.coordinates.length; i++) {
-	    points.push( { "x": pca.coordinates[i][0], "y": pca.coordinates[i][1], "name": c.matrix.cols[i] } );
+	    points.push( { "x": pca.coordinates[i][c.parameters.pcaComponentA], "y": pca.coordinates[i][c.parameters.pcaComponentB], "name": c.matrix.cols[i], "format": { "fill": colors[i] } } );
 	}
 	
-	return { "data": [ { "points": points } ] };
+	return { "data": [ { "points": points } ], "cols": c.matrix.cols };
     };
 
     widget.container2differential = function () {
@@ -990,13 +1029,8 @@
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	var matrix = Retina.copyMatrix(c.matrix.data);
 	var points = [];
-	var col = GooglePalette();
-	var colors = {};
 	for (var i=0; i<matrix.length; i++) {
-	    if (! colors.hasOwnProperty(c.hierarchy[c.matrix.rows[i]][0])) {
-		colors[c.hierarchy[c.matrix.rows[i]][0]] = col[Retina.keys(colors).length];
-	    }
-	    points.push( { "x": Retina.log10(matrix[i][0]), "y": Retina.log10(matrix[i][1]), format: { "fill": colors[c.hierarchy[c.matrix.rows[i]][0]]  }, name: c.matrix.rows[i] });
+	    points.push( { "x": Retina.log10(matrix[i][0]), "y": Retina.log10(matrix[i][1]), name: c.matrix.rows[i] });
 	}
 	
 	return { "data": [ { "points": points } ] };
@@ -1026,7 +1060,14 @@
 	return { 'matrix': { title: 'abundance matrix',
 			     renderer: "matrix",
 			     settings: {},
-			     controlGroups: []
+			     controlGroups: [
+				 { "data":
+				   [
+				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true },
+				       { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
+				   ]
+				 }
+			     ]
 			   },
 		 'heatmap': { title: 'heatmap',
 			      renderer: "svg2",
@@ -1041,12 +1082,13 @@
 		 'barchart': { title: 'barchart',
 			       renderer: "svg2",
 			       settings: widget.graphs.stackedBar,
-			       controlGroups: widget.graphs.stackedBar.controls,
+			       controlGroups: widget.graphs.stackedBar.controls
 			     },
 		 'barchart2': { title: 'barchart',
 				renderer: "svg2",
 				settings: widget.graphs.bar,
 				controlGroups: widget.graphs.bar.controls,
+				logAxes: [ 0 ]
 			     },
 		 'pca': { title: 'pca',
 			  renderer: 'svg2',
@@ -1069,6 +1111,11 @@
 				      { "name": 'filter_autodetect', "type": 'bool', "description": "should all columns have an auto detected filter?",
 					"title": "filter autodetection" }
 				  ]
+				},
+				{ "data":
+				   [
+				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
+				   ]
 				},
 				{ "layout":
 				  [
@@ -1610,58 +1657,70 @@
 	document.body.removeChild(document.getElementById('canvasResult'));
     };
 
-    widget.createAnalysisObject = function () {
+    widget.createAnalysisObject = function (download) {
 	var widget = this;
 
-	// disable the upload button
-	document.getElementById('uploadButton').removeAttribute('onclick');
-	document.getElementById('uploadButton').setAttribute('src', 'Retina/images/waiting.gif');
-	
-	// set up the url
-	var url = RetinaConfig.shock_url+'/node';
-	
 	// set up the node
 	var c = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer]);
 	delete c.callbacks;
 	delete c.promises;
 	delete c.status;
 	delete c.user;
-	var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id, "container": c }) ], { "type" : "text\/json" });
-	var form = new FormData();
-	var filename = widget.selectedContainer;
-	form.append('attributes', attributes);
-	form.append('file_name', filename);
-	var image = new Blob([ document.getElementById('SVGdiv1').innerHTML ], { "type" : "image\/svg+xml" });
-	form.append('upload', image);
-	
-	jQuery.ajax(url, {
-	    contentType: false,
-	    processData: false,
-	    data: form,
-	    success: function(data) {
-		jQuery.ajax({ url: RetinaConfig.shock_url+'/node/'+data.data.id+'/acl/public_read',
-			      success: function(data) {
-				  document.getElementById('uploadButton').setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].exportData("shock");');
-				  document.getElementById('uploadButton').setAttribute('src', 'Retina/images/cloud-upload.png');
-				  alert('image uploaded');
-			      },
-			      error: function(jqXHR, error) {
-				  document.getElementById('uploadButton').setAttribute('src', 'Retina/images/cloud-upload.png');
-				  document.getElementById('uploadButton').setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].exportData("shock");');
-				  alert('image upload failed');
-			      },
-			      crossDomain: true,
-			      headers: stm.authHeader,
-			      type: "PUT"
-			    });
-	    },
-	    error: function(jqXHR, error){
-		alert('image upload caused an error');
-	    },
-	    crossDomain: true,
-	    headers: stm.authHeader,
-	    type: "POST"
-	});
+
+	// create download
+	if (download) {
+	    if (document.getElementById('SVGdiv1')) {
+		c.image = document.getElementById('SVGdiv1').innerHTML;
+	    }
+	    stm.saveAs(JSON.stringify(c), c.id + ".ao.json");
+	}
+
+	// upload to SHOCK
+	else {
+	    
+	    // disable the upload button
+	    document.getElementById('uploadButton').removeAttribute('onclick');
+	    document.getElementById('uploadButton').setAttribute('src', 'Retina/images/waiting.gif');
+	    
+	    // set up the url
+	    var url = RetinaConfig.shock_url+'/node';
+	    var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id, "container": c }) ], { "type" : "text\/json" });
+	    var form = new FormData();
+	    var filename = widget.selectedContainer;
+	    form.append('attributes', attributes);
+	    form.append('file_name', filename);
+	    var image = new Blob([ document.getElementById('SVGdiv1').innerHTML ], { "type" : "image\/svg+xml" });
+	    form.append('upload', image);
+	    
+	    jQuery.ajax(url, {
+		contentType: false,
+		processData: false,
+		data: form,
+		success: function(data) {
+		    jQuery.ajax({ url: RetinaConfig.shock_url+'/node/'+data.data.id+'/acl/public_read',
+				  success: function(data) {
+				      document.getElementById('uploadButton').setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].exportData("shock");');
+				      document.getElementById('uploadButton').setAttribute('src', 'Retina/images/cloud-upload.png');
+				      alert('image uploaded');
+				  },
+				  error: function(jqXHR, error) {
+				      document.getElementById('uploadButton').setAttribute('src', 'Retina/images/cloud-upload.png');
+				      document.getElementById('uploadButton').setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].exportData("shock");');
+				      alert('image upload failed');
+				  },
+				  crossDomain: true,
+				  headers: stm.authHeader,
+				  type: "PUT"
+				});
+		},
+		error: function(jqXHR, error){
+		    alert('image upload caused an error');
+		},
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "POST"
+	    });
+	}
     };
 
     // LOAD BACKGROUND DATA
