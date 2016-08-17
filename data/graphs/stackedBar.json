@@ -3,6 +3,11 @@
     "width": 800,
     "height": 500,
     "controls": [
+	{ "data":
+	  [
+	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
+	  ]
+	},
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
