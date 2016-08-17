@@ -59,7 +59,9 @@
 
 	var sample = stm.DataStore.sample[widget.id];
 	
-	html = ['<h3>sample '+widget.id+'<div class="btn-group pull-right"><a href="?mgpage=project&project='+sample.project[0]+'" class="btn">project</a></div></h3>'];
+	html = ['<h3>sample '+widget.id+'<div class="btn-group pull-right"><a href="?mgpage=project&project='+sample.project[0]+'" class="btn">study</a></div></h3>'];
+
+	html.push("<div style='float: right; margin-left: 30px; margin-bottom: 20px;'><div id='myWorld' style='border: 1px solid black; width: 400px; height: 280px;'></div></div>");
 
 	
 	html.push('<table>');
@@ -76,6 +78,32 @@
 	html.push('</table>');
 	
 	content.innerHTML = html.join('');
+
+	var markers = [];
+	if (sample.metadata.hasOwnProperty('latitude')) {
+	    var marker = new google.maps.Marker({
+	    	position: new google.maps.LatLng(parseFloat(sample.metadata.latitude), parseFloat(sample.metadata.longitude)),
+	    	value: 1,
+	    	title: sample.id,
+	    	icon: {
+	    	    path: google.maps.SymbolPath.CIRCLE,
+	    	    scale: 5
+	    	}
+	    });
+	    markers.push(marker);
+	}
+	if (markers.length) {
+	    var map = new google.maps.Map(document.getElementById('myWorld'), {
+	    	center: { lat: 40, lng: 5},
+	    	zoom: 1,
+		mapTypeId: google.maps.MapTypeId.HYBRID,
+		mapTypeControl: false,
+		streetViewControl: false
+	    });
+	    var mc = new MarkerClusterer(map, markers, { "imagePath": "Retina/images/m" });
+	} else {
+	    document.getElementById('myWorld').style.display = "none";
+	}
     };
     
 })();
