@@ -3,10 +3,19 @@
   "width": 700,
     "height": 500,
     "controls": [
+	{ "data":
+	  [
+	      { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
+	  ]
+	},
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
-	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" }
+	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" },
+	      { "name": "items[0].parameters.width", "type": "int", "description": "width of each rim", "title": "rim width" },
+	      { "name": "items[0].parameters.center", "type": "int", "description": "distance from the border to the center", "title": "center point" },
+	      { "name": "items[1].parameters.top", "type": "int", "description": "top margin of the legend", "title": "legend top" },
+	      { "name": "items[1].parameters.left", "type": "int", "description": "left margin of the legend", "title": "legend left" }
 	  ]
 	}
     ],
@@ -19,29 +28,14 @@
             "shiftX": 50,
             "shiftY": 50,
             "center": 200,
-            "width": 50,
+            "width": 20,
             "startAngle": 0,
             "id": "chart",
             "groupSettings": {},
-            "data": []
+            "data": [],
+	    "click": true
 	},
 	"data": "matrix2donut"
-    },
-    {
-      "type": "donutchart",
-      "name": "chart",
-	"parameters": {
-	    "inputType": "matrix",
-        "shiftX": 50,
-        "shiftY": 50,
-        "center": 200,
-        "width": 50,
-        "startAngle": 0,
-        "id": "chart",
-        "groupSettings": {},
-        "data": []
-      },
-      "data": "matrix2donut"
     },
     {
       "type": "legend",

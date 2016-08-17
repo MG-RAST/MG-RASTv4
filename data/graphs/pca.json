@@ -1,8 +1,15 @@
 {
   "name": "pca",
-  "width": 500,
+  "width": 800,
     "height": 500,
     "controls": [
+	{ "data":
+	  [
+	      { "name": "pcaa", "type": "select", "description": "set the PCA x-component", "title": "PCA X", "isDataUpdater": true, "options": [ { "value": 0, "label": "1", "selected": true }, { "value": 1, "label": "2" }, { "value": 2, "label": "3" }, { "value": 3, "label": "4" }, { "value": 4, "label": "5" }, { "value": 5, "label": "6" }, { "value": 6, "label": "7" }, { "value": 7, "label": "8" }, { "value": 8, "label": "9" }, { "value": 9, "label": "10" } ] },
+	      { "name": "pcab", "type": "select", "description": "set the PCA y-component", "title": "PCA Y", "isDataUpdater": true, "options": [ { "value": 0, "label": "1" }, { "value": 1, "label": "2", "selected": true }, { "value": 2, "label": "3" }, { "value": 3, "label": "4" }, { "value": 4, "label": "5" }, { "value": 5, "label": "6" }, { "value": 6, "label": "7" }, { "value": 7, "label": "8" }, { "value": 8, "label": "9" }, { "value": 9, "label": "10" } ] },
+	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
+	  ]
+	},
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the plot", "title": "height" },
@@ -97,7 +104,7 @@
       "parameters": {
         "height": 400,
         "width": 400,
-        "radius": 2,
+        "radius": 4,
         "shiftX": 50,
         "shiftY": 50,
         "format": {
@@ -111,6 +118,57 @@
         "data": []
       },
       "data": "matrix2plot"
+    },
+      {
+      "type": "legend",
+      "name": "legend",
+	"parameters": {
+	    "inputType": "matrix",
+        "top": 50,
+        "left": 500,
+        "colors": [
+          "#3366cc",
+          "#dc3912",
+          "#ff9900",
+          "#109618",
+          "#990099",
+          "#0099c6",
+          "#dd4477",
+          "#66aa00",
+          "#b82e2e",
+          "#316395",
+          "#994499",
+          "#22aa99",
+          "#aaaa11",
+          "#6633cc",
+          "#e67300",
+          "#8b0707",
+          "#651067",
+          "#329262",
+          "#5574a6",
+          "#3b3eac",
+          "#b77322",
+          "#16d620",
+          "#b91383",
+          "#f4359e",
+          "#9c5935",
+          "#a9c413",
+          "#2a778d",
+          "#668d1c",
+          "#bea413",
+          "#0c5922",
+          "#743411"
+        ],
+        "format": {
+          "fontSize": 12,
+          "fontFamily": "arial",
+          "fontWeight": "normal"
+        },
+        "id": "legend",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2columnlegend"
     }
   ]
 }

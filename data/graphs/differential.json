@@ -18,7 +18,7 @@
         "direction": "horizontal",
         "orientation": "bottom",
         "labelPosition": "left-bottom",
-        "labelRotation": 30,
+        "labelRotation": 0,
 	"decimals": 0, 
         "shift": 50,
         "base": 50,
@@ -49,7 +49,7 @@
         "groupSettings": {},
         "data": []
       },
-      "data": "matrix2valueX"
+      "data": "matrix2valueXlog"
     },
     {
       "type": "axis",
@@ -89,7 +89,7 @@
         "groupSettings": {},
         "data": []
       },
-      "data": "matrix2valueY"
+      "data": "matrix2valueYlog"
     },
     {
       "type": "plot",
