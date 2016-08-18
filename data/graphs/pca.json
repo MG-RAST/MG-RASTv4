@@ -5,8 +5,8 @@
     "controls": [
 	{ "data":
 	  [
-	      { "name": "pcaa", "type": "select", "description": "set the PCA x-component", "title": "PCA X", "isDataUpdater": true, "options": [ { "value": 0, "label": "1", "selected": true }, { "value": 1, "label": "2" }, { "value": 2, "label": "3" }, { "value": 3, "label": "4" }, { "value": 4, "label": "5" }, { "value": 5, "label": "6" }, { "value": 6, "label": "7" }, { "value": 7, "label": "8" }, { "value": 8, "label": "9" }, { "value": 9, "label": "10" } ] },
-	      { "name": "pcab", "type": "select", "description": "set the PCA y-component", "title": "PCA Y", "isDataUpdater": true, "options": [ { "value": 0, "label": "1" }, { "value": 1, "label": "2", "selected": true }, { "value": 2, "label": "3" }, { "value": 3, "label": "4" }, { "value": 4, "label": "5" }, { "value": 5, "label": "6" }, { "value": 6, "label": "7" }, { "value": 7, "label": "8" }, { "value": 8, "label": "9" }, { "value": 9, "label": "10" } ] },
+	      { "name": "pcaa", "type": "select", "description": "set the PCA x-component", "title": "PCA X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
+	      { "name": "pcab", "type": "select", "description": "set the PCA y-component", "title": "PCA Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
 	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
 	  ]
 	},

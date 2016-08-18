@@ -110,7 +110,7 @@
 	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
 	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
 	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
-	html += "<img src='Retina/images/file-css.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"json\");' title='JSON'>";
+	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();' title='download annotated reads as FASTA'>";
 
 
 	container.innerHTML = html;
@@ -200,8 +200,35 @@
 	// set the callback
 	settings.callback = widget.graphCallback;
 
+	// check if we need to adjust the control groups
+	var groups = visMap[type].controlGroups;
+	for (var i=0; i<groups.length; i++) {
+	    var k = Retina.keys(groups[i])[0];
+	    for (var h=0; h<groups[i][k].length; h++) {
+		var item = groups[i][k][h];
+		if (item.adaptToData) {
+		    var opts = [];
+		    for (var j=0; j<c.items.length; j++) {
+			var opt = {};
+			if (item.values && item.values == "counter") {
+			    opt.label = j + 1;
+			    opt.value = j;
+			} else { 
+			    opt.value = j;
+			    opt.label = c.items[j].name;
+			}
+			if (item["default"] == j) {
+			    opt.selected = true;
+			}
+			opts.push(opt);
+		    }
+		    item.options = opts;
+		}
+	    }
+	}
+	
 	// set the current controller
-    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": visMap[type].controlGroups, "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
+    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
 
 	c.currentRendererType = type;
     };
@@ -252,12 +279,21 @@
 
 	    // set pca components
 	    else if (opt.name == "pcaa" || opt.name == "pcab") {
-		isPCA = true;
 		var c = stm.DataStore.dataContainer[widget.selectedContainer];
 		if (opt.name == "pcaa") {
 		    c.parameters.pcaComponentA = rc.renderer.settings[opt.name] || 0;
 		} else {
 		    c.parameters.pcaComponentB = rc.renderer.settings.hasOwnProperty(opt.name) ? rc.renderer.settings[opt.name] : 1;
+		}
+	    }
+
+	    // set the differential plot metagenomes
+	    else if (opt.name == "mga" || opt.name == "mgb") {
+		var c = stm.DataStore.dataContainer[widget.selectedContainer];
+		if (opt.name == "mga") {
+		    c.parameters.differentialMetagenomeA = rc.renderer.settings[opt.name] || 0;
+		} else {
+		    c.parameters.differentialMetagenomeB = rc.renderer.settings.hasOwnProperty(opt.name) ? rc.renderer.settings[opt.name] : 1;
 		}
 	    }
 	}
@@ -672,7 +708,7 @@
       DATA CONTAINER CONVERSION METHODS
      */
 
-    widget.container2matrix = function (container) {
+    widget.container2matrix = function (container, md5only) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	// get the current container
@@ -875,8 +911,10 @@
 	var d = {};
 	var e = {};
 	var hier = {};
+	var md5s = {};
 	var dataRow = 1;
 	for (var i=0; i<c.items.length; i++) {
+	    md5s[c.items[i].id] = [];
 	    matrix.abundances.push(0);
 	    var pid = c.items[i].id;
 	    var p = stm.DataStore.profile[pid];
@@ -885,6 +923,12 @@
 
 		// get the row
 		var row = rows[c.items[i].id][h];
+
+		// get the md5s
+		if (md5only) {
+		    md5s[c.items[i].id].push(p.data[row]);
+		    continue;
+		}
 
 		// get the abundance
 		var val = p.data[row + dataRow];
@@ -940,6 +984,11 @@
 		matrix.abundances[i] += val;
 	    }
 	}
+
+	if (md5only) {
+	    return md5s;
+	}
+	
 	matrix.rows = Retina.keys(d).sort();
 	for (var i=0; i<matrix.rows.length; i++) {
 	    matrix.data.push(d[matrix.rows[i]]);
@@ -1027,10 +1076,17 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+
+	if (c.parameters.differentialMetagenomeA == null) {
+	    c.parameters.differentialMetagenomeA = 0;
+	    c.parameters.differentialMetagenomeB = 1;
+	}
+
+	
 	var matrix = Retina.copyMatrix(c.matrix.data);
 	var points = [];
 	for (var i=0; i<matrix.length; i++) {
-	    points.push( { "x": Retina.log10(matrix[i][0]), "y": Retina.log10(matrix[i][1]), name: c.matrix.rows[i] });
+	    points.push( { "x": Retina.log10(matrix[i][c.parameters.differentialMetagenomeA]), "y": Retina.log10(matrix[i][c.parameters.differentialMetagenomeB]), name: c.matrix.rows[i] });
 	}
 	
 	return { "data": [ { "points": points } ] };
@@ -1619,9 +1675,6 @@
 	    } else {
 		alert('this feature is not available for this view');
 	    }
-	} else if (type == 'json') {
-	    stm.saveAs(JSON.stringify(stm.DataStore.dataContainer[widget.selectedContainer].matrix, null, 2), widget.selectedContainer + ".json");
-	    return;
 	} else if (type == 'tsv') {
 	    var exportData = widget.container2table({});
 	    var exportString = [];
@@ -1640,6 +1693,41 @@
 	}
     };
 
+    widget.downloadFASTA = function () {
+	var widget = this;
+
+	var md5s = widget.container2matrix(null, true);
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+
+	for (var i=0; i<c.items.length; i++) {
+	    var doc = document.createElement('form');
+	    doc.setAttribute('method', 'post');
+	    doc.setAttribute('target', '_blank');
+	    doc.setAttribute('action', RetinaConfig.mgrast_api + "/annotation/sequence/"+c.items[i].id);
+	    doc.setAttribute('enctype',"multipart/form-data");
+	    var f = document.createElement('input');
+	    f.setAttribute('type', 'text');
+	    f.setAttribute('name', 'POSTDATA');
+	    f.setAttribute('value', JSON.stringify({"browser":true,"type":"all","format":"fasta","source":c.parameters.sources[c.displaySource],"md5s":md5s[c.items[i].id]}));
+	    doc.appendChild(f);
+	    var b = document.createElement('input');
+	    b.setAttribute('type', 'text');
+	    b.setAttribute('name', 'browser');
+	    b.setAttribute('value', '1');
+	    doc.appendChild(b);
+	    if (c.items[i].status == "private") {
+		var h = document.createElement('input');
+		h.setAttribute('type', 'text');
+		h.setAttribute('name', 'auth');
+		h.setAttribute('value', stm.authHeader.Authorization.replace(/ /, '%20'));
+		doc.appendChild(h);
+	    }
+	    document.body.appendChild(doc);
+	    doc.submit();
+	    document.body.removeChild(doc);
+	}
+    };
+    
     widget.saveCanvas = function () {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
