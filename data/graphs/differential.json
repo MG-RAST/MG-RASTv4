@@ -3,6 +3,12 @@
   "width": 500,
     "height": 500,
     "controls": [
+	{ "data":
+	  [
+	      { "name": "mga", "type": "select", "description": "metagenome a to compare", "title": "metagenome A", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "name" },
+	      { "name": "mgb", "type": "select", "description": "metagenome b to compare", "title": "metagenome B", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "name" }
+	  ]
+	},
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the plot", "title": "height" },
