@@ -523,10 +523,10 @@
 	html.push(mdSelect.join(''));
 
 	// source
-	html.push("<tr><td>source</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displaySource\",this.selectedIndex);'>");
+	html.push("<tr><td>source</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displaySource\",this.options[this.selectedIndex].value);'>");
 	for (var i=0; i<c.parameters.sources.length; i++) {
 	    var sel = "";
-	    if (i == c.parameters.displaySource) {
+	    if (c.parameters.sources[i] == c.parameters.displaySource) {
 		sel = " selected=selected";
 	    }
 	    html.push("<option"+sel+">"+c.parameters.sources[i]+"</option>");
@@ -548,13 +548,13 @@
 		displayLevelSelect += "<option value='"+taxLevels[i]+"'"+sel+">"+(taxLevels[i] == 'className' ? 'class' : taxLevels[i])+"</option>";
 	    }
 	} else {
-	    if (ontLevels.hasOwnProperty(c.parameters.sources[c.parameters.displaySource])) {
-		for (var i=0; i<ontLevels[c.parameters.sources[c.parameters.displaySource]].length; i++) {
+	    if (ontLevels.hasOwnProperty(c.parameters.displaySource)) {
+		for (var i=0; i<ontLevels[c.parameters.displaySource].length; i++) {
 		    var sel = "";
-		    if (ontLevels[c.parameters.sources[c.parameters.displaySource]][i] == c.parameters.displayLevel) {
+		    if (ontLevels[c.parameters.displaySource][i] == c.parameters.displayLevel) {
 			sel = " selected=selected";
 		    }
-		    displayLevelSelect += '<option'+sel+'>'+ontLevels[c.parameters.sources[c.parameters.displaySource]][i]+'</option>';
+		    displayLevelSelect += '<option'+sel+'>'+ontLevels[c.parameters.displaySource][i]+'</option>';
 		}
 	    }
 	}
@@ -714,6 +714,8 @@
 	// get the current container
 	var c = container || stm.DataStore.dataContainer[widget.selectedContainer];
 
+	widget.updateSourceMap(c);
+
 	/*
 	  perform filter
 	*/
@@ -739,6 +741,9 @@
 
 	// iterate over the items in this container
     	for (var i=0; i<c.items.length; i++) {
+
+	    // get the source map for this profile
+	    var sm = c.parameters.sourceMap[c.items[i].id];
 
 	    // initialize the rows for this item
     	    rows[c.items[i].id] = [];
@@ -779,7 +784,7 @@
 		    for (var j=0; j<c.parameters.taxFilter.length; j++) {
 
 			// get the organism array of this row for this source
-			var orgs = p.data[h + 5 + (c.parameters.taxFilter[j].source * 2)];
+			var orgs = p.data[h + 5 + (sm[c.parameters.taxFilter[j].source] * 2)];
 
 			// if there is no organism, it definitely fails
 			if (orgs == null) {
@@ -838,7 +843,7 @@
 		    for (var j=0; j<c.parameters.ontFilter.length; j++) {
 
 			// the the function array for this row for this ontology
-			var funcs = p.data[h + 6 + (c.parameters.ontFilter[j].source * 2)];
+			var funcs = p.data[h + 6 + (sm[c.parameters.ontFilter[j].source] * 2)];
 			
 			// if there is no function, it definitely fails
 			if (funcs == null) {
@@ -849,7 +854,7 @@
 			    funcs = funcs.split(",");
 			}
 			
-			var source = c.parameters.sources[c.parameters.ontFilter[j].source];
+			var source = c.parameters.ontFilter[j].source;
 			var level = c.parameters.ontFilter[j].level;
 			if (! stm.DataStore.ontology.hasOwnProperty(source)) {
 			    stay = false;
@@ -905,7 +910,6 @@
 	var id = c.parameters.metadatum;
 	var displayLevel = c.parameters.displayLevel;
 	var displaySource  = c.parameters.displaySource;
-	var source = c.parameters.sources[displaySource];
 	var displayType = c.parameters.displayType;
 
 	var d = {};
@@ -913,12 +917,22 @@
 	var hier = {};
 	var md5s = {};
 	var dataRow = 1;
+	var profilesMissingSource = [];
 	for (var i=0; i<c.items.length; i++) {
 	    md5s[c.items[i].id] = [];
 	    matrix.abundances.push(0);
+	    matrix.cols.push(c.items[i][id]);
+
+	    var sourceIndex;
+	    if (c.parameters.sourceMap[c.items[i].id].hasOwnProperty(c.parameters.displaySource)) {
+		sourceIndex = c.parameters.sourceMap[c.items[i].id][c.parameters.displaySource];
+	    } else {
+		profilesMissingSource.push(c.items[i].name);
+		continue;
+	    }
+	    
 	    var pid = c.items[i].id;
 	    var p = stm.DataStore.profile[pid];
-	    matrix.cols.push(c.items[i][id]);
 	    for (var h=0; h<rows[c.items[i].id].length; h++) {
 
 		// get the row
@@ -934,7 +948,7 @@
 		var val = p.data[row + dataRow];
 
 		// get the display indices
-		var datums = p.data[row + 5 + (displaySource * 2) + (displayType == "taxonomy" ? 0 : 1)];
+		var datums = p.data[row + 5 + (sourceIndex * 2) + (displayType == "taxonomy" ? 0 : 1)];
 
 		// if there is no index, skip this row
 		if (datums == null) {
@@ -958,17 +972,17 @@
 			hier[key].push(stm.DataStore.taxonomy[widget.taxLevels[j]][stm.DataStore.taxonomy["organism"][datums[0]][j]]);
 		    }
 		} else {
-		    if (! stm.DataStore.ontology.hasOwnProperty(source)) {
+		    if (! stm.DataStore.ontology.hasOwnProperty(displaySource)) {
 			continue;
 		    }
-		    if (! stm.DataStore.ontology[source]['id'][datums[0]]) {
+		    if (! stm.DataStore.ontology[displaySource]['id'][datums[0]]) {
 			console.log("function not found: "+datums[0]);
 			continue;
 		    }
-		    key = stm.DataStore.ontology[source][displayLevel][stm.DataStore.ontology[source]['id'][datums[0]][flevelIndex[source+"-"+displayLevel]]];
+		    key = stm.DataStore.ontology[displaySource][displayLevel][stm.DataStore.ontology[displaySource]['id'][datums[0]][flevelIndex[displaySource+"-"+displayLevel]]];
 		    hier[key] = [];
-		    for (var j=0; j<=flevelIndex[source+"-"+displayLevel]; j++) {
-			hier[key].push(stm.DataStore.ontology[source][widget.ontLevels[source][j]][stm.DataStore.ontology[source]['id'][datums[0]][j]]);
+		    for (var j=0; j<=flevelIndex[displaySource+"-"+displayLevel]; j++) {
+			hier[key].push(stm.DataStore.ontology[displaySource][widget.ontLevels[displaySource][j]][stm.DataStore.ontology[displaySource]['id'][datums[0]][j]]);
 		    }
 		}
 		if (! d.hasOwnProperty(key)) {
@@ -985,6 +999,10 @@
 	    }
 	}
 
+	if (profilesMissingSource.length) {
+//	    alert('The profiles for the datasets "'+profilesMissingSource.join('", "')+'" are missing the selected source and will not appear in the result');
+	}
+
 	if (md5only) {
 	    return md5s;
 	}
@@ -998,7 +1016,7 @@
 	    matrix.evalues.push(e[matrix.rows[i]]);
 	}
 
-	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[source+"-"+displayLevel]) + 1;
+	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[displaySource+"-"+displayLevel]) + 1;
 	c.matrix = matrix;
 	c.matrix.itemsX = matrix.cols.length;
 	c.matrix.itemsY = matrix.rows.length;
@@ -1295,13 +1313,37 @@
 	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
 	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/bar-chart.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
 	    widget.selectedContainer = container.id;
-	    stm.DataStore.dataContainer[widget.selectedContainer].parameters.sources = stm.DataStore.profile[stm.DataStore.dataContainer[widget.selectedContainer].items[0].id].sources;
+	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	    
+	    var sources = widget.updateSourceMap(c);
+	    c.parameters.sources = Retina.keys(sources).sort();
+	    c.parameters.displaySource = c.parameters.sources[0];
+	    
 	    document.getElementById('dataprogress').innerHTML = html;
 	    widget.container2matrix();
 	    widget.showDataContainers();
 	} else {
 	    document.getElementById('dataprogress').innerHTML = "Your data load was aborted";
 	}
+    };
+
+    widget.updateSourceMap = function (c) {
+	// create a profile - source mapping
+	var sourceMap = {};
+	var sources = {};
+	for (var i=0; i<c.items.length; i++) {
+	    sourceMap[c.items[i].id] = {};
+	    for (var h=0; h<c.items.length; h++) {
+		var s = stm.DataStore.profile[c.items[i].id].sources;
+		for (var j=0; j<s.length; j++) {
+		    sourceMap[c.items[i].id][s[j]] = j;
+		    sources[s[j]] = true;
+		}
+	    }
+	}
+	c.parameters.sourceMap = sourceMap;
+	
+	return sources;
     };
 
     // create a progress div
@@ -1375,7 +1417,6 @@
 						  parameters: { sources: widget.dataLoadParams.sources,
 								displayLevel: "domain",
 								displayType: "taxonomy",
-								displaySource: 0,
 								metadatum: "name",
 								evalue: widget.cutoffThresholds.evalue,
 								identity: widget.cutoffThresholds.identity,
@@ -1401,14 +1442,34 @@
 	    
 	    // check if the profile is already loaded
 	    var needsLoad = true;
+	    var missingSources = [];
 	    if (stm.DataStore.profile.hasOwnProperty(id)) {
-		needsLoad = false;
+
+		// there is a profile, check the data sources
+		var p = stm.DataStore.profile[id];
+		for (var h=0; h<widget.dataLoadParams.sources.length; h++) {
+		    var hasSource = false;
+		    for (var j=0; j<p.sources.length; j++) {
+			if (p.sources[j] == widget.dataLoadParams.sources[h]) {
+			    hasSource = true;
+			    break;
+			}
+		    }
+		    if (! hasSource) {
+			missingSources.push(widget.dataLoadParams.sources[h]);
+		    }					  
+		}
+		if (missingSources.length == 0) {
+		    needsLoad = false;
+		}
+	    } else {
+		missingSources = widget.dataLoadParams.sources.slice();
 	    }
 	    if (needsLoad && ! stm.DataStore.inprogress.hasOwnProperty('profile'+id)) {
 		widget.pDiv('profile'+id, false, ids[i].name, name);
 
 		stm.DataStore.inprogress['profile'+id] = 1;
-		var source = widget.dataLoadParams.sources.join(",");
+		var source = missingSources.join(",");
 		stm.DataStore.dataContainer[name].promises.push(
 		    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?format=mgrast&condensed=1&verbosity=minimal&source="+source,
 				  dc: name,
@@ -1557,7 +1618,7 @@
 					 console.log("error: "+data.ERROR);
 				     } else {
 					 data.data.size = data.size;
-					 stm.DataStore.profile[data.data.id] = data.data;
+					 stm.DataStore.profile[data.data.id+"_load"] = data.data;
 					 widget.purgeProfile(data.data.id);
 					 if (stm.DataStore.metagenome.hasOwnProperty(data.data.id)) {
 					     stm.DataStore.profile[data.data.id].metagenome = jQuery.extend(true, {}, stm.DataStore.metagenome[data.data.id]);
@@ -1708,7 +1769,7 @@
 	    var f = document.createElement('input');
 	    f.setAttribute('type', 'text');
 	    f.setAttribute('name', 'POSTDATA');
-	    f.setAttribute('value', JSON.stringify({"browser":true,"type":"all","format":"fasta","source":c.parameters.sources[c.displaySource],"md5s":md5s[c.items[i].id]}));
+	    f.setAttribute('value', JSON.stringify({"browser":true,"type":"all","format":"fasta","source":c.displaySource,"md5s":md5s[c.items[i].id]}));
 	    doc.appendChild(f);
 	    var b = document.createElement('input');
 	    b.setAttribute('type', 'text');
@@ -1930,11 +1991,11 @@
     widget.purgeProfile = function (id) {
 
 	// get the profile
-	var profile = stm.DataStore.profile[id];
+	var profile = stm.DataStore.profile[id+"_load"];
 	
 	// check if this profile is already purged
-	if (profile.purged) {
-	    console.log(profile.id + ' already purged');
+	if (stm.DataStore.profile.hasOwnProperty(id)) {
+	    widget.mergeProfile(id);
 	    return;
 	}
 	
@@ -1961,7 +2022,116 @@
 
 	}
 	profile.data = p;
-	profile.purged = true;
+	stm.DataStore.profile[id] = jQuery.extend(true, {}, profile);
+	delete stm.DataStore.profile[id+"_load"];
+    };
+
+    widget.mergeProfile = function (id) {
+	var widget = this;
+
+	// get the profile
+	var profile = stm.DataStore.profile[id+"_load"];
+	var previous = stm.DataStore.profile[id];
+
+	// check which sources need to be integrated
+	var newSources = [];
+	for (var i=0; i<profile.sources.length; i++) {
+	    var hasSource = false;
+	    for (var h=0; h<previous.sources.length; h++) {
+		if (previous.sources[h] == profile.sources[i]) {
+		    hasSource = true;
+		    break;
+		}
+	    }
+	    if (! hasSource) {
+		newSources.push([ profile.sources[i], i ]);
+	    }
+	}
+	
+	// new target array
+	var p = [];
+
+	// get the previous profile first md5
+	var prevind = 0;
+
+	// get the number of cells per row of previous
+	var prevrow = 5 + (2 * previous.sources.length);
+	
+	// iterate over the new profile data
+	for (var h=0; h<profile.data.length; h++) {
+
+	    // check if the previous profile md5 is smaller than the current profile md5
+	    while (previous.data[prevind] < profile.data[h][0]) {
+		for (var j=0; j<prevrow; j++) {
+		    p.push(previous.data[prevind + j]);
+		}
+		
+		// null values for new sources
+		for (var j=0; j<newSources.length; j++) {
+		    p.push(null);
+		    p.push(null);
+		}
+		
+		prevind += prevrow;
+	    }
+
+	    // merge the row if existent in both
+	    if (previous.data[prevind] == profile.data[h][0]) {
+
+		// push existing
+		for (var j=0; j<prevrow; j++) {
+		    p.push(previous.data[prevind + j]);
+		}
+
+		// push new
+		for (var j=0; j<newSources.length; j++) {
+
+		    // push the taxon
+		    p.push( profile.data[h][5][newSources[j][1]] && profile.data[h][5][newSources[j][1]].length ? (profile.data[h][5][newSources[j][1]].length > 1 ? profile.data[h][5][newSources[j][1]].join(',') : profile.data[h][5][newSources[j][1]][0]) : null );
+		    
+		    // push the function
+		    p.push( profile.data[h][6][newSources[j][1]] && profile.data[h][6][newSources[j][1]].length ? (profile.data[h][6][newSources[j][1]].length > 1 ? profile.data[h][6][newSources[j][1]].join(',') : profile.data[h][6][newSources[j][1]][0]) : null );
+		}
+		
+		prevind += prevrow;
+	    }
+
+	    // if the row is new, push new values
+	    if (previous.data[prevind] < profile.data[h][0]) {
+
+		// store the hit data
+		for (var j=0; j<5; j++) {
+		    p.push(profile.data[h][j]);
+		}
+
+		// push null values for old sources
+		for (var j=0; j<previous.sources.length; j++) {
+		    p.push(null);
+		    p.push(null);
+		}
+		
+		// iterate over the sources annotation data
+		for (var j=0; j<newSources.length; j++) {
+
+		    // push the taxon
+		    p.push( profile.data[h][5][newSources[j][1]] && profile.data[h][5][newSources[j][1]].length ? (profile.data[h][5][newSources[j][1]].length > 1 ? profile.data[h][5][newSources[j][1]].join(',') : profile.data[h][5][newSources[j][1]][0]) : null );
+		    
+		    // push the function
+		    p.push( profile.data[h][6][newSources[j][1]] && profile.data[h][6][newSources[j][1]].length ? (profile.data[h][6][newSources[j][1]].length > 1 ? profile.data[h][6][newSources[j][1]].join(',') : profile.data[h][6][newSources[j][1]][0]) : null );
+		}
+	    }
+	}
+
+	// update the sources list
+	for (var i=0; i<newSources.length; i++) {
+	    previous.sources.push(newSources[i][0]);
+	}
+	
+	// set the data of the merged profile
+	previous.data = p;
+
+	// delete the loaded additional data
+	delete stm.DataStore.profile[id+"_load"];
     };
 
     widget.loadGraphs = function () {
@@ -2028,7 +2198,7 @@
 	// set the correct parameters
 	container.parameters.displayType = "function";
 	container.parameters.displayLevel = "function";
-	container.parameters.displaySource = koSource;
+	container.parameters.displaySource = "KO";
 
 	// get the functions
 	var funcs = jQuery.extend(true, {}, widget.container2matrix(container).matrix);
