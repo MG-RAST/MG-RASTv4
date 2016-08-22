@@ -9,7 +9,7 @@
     });
     
     widget.setup = function () {
-	return [ ];
+	return [ Retina.load_renderer('metadata') ];
     };
 
     widget.offset = 0;
@@ -29,6 +29,8 @@
 	
 	var content = widget.main;
 	var sidebar = widget.sidebar;
+
+	widget.excelExport = Retina.Renderer.create("metadata", {}, true);
 
 	document.getElementById("pageTitle").innerHTML = "study editor";
 	
@@ -926,7 +928,7 @@
 	
 	var html = [];
 	
-	html.push('<h4>export existing metadata</h4><p>Download the full metadata for this project in JSON format.</p><div style="text-align: center;"><button id="exportMetadataButton'+found+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\');">export metadata</button></div><div style="text-align: center;" id="exportMetadataDiv'+found+'"></div>');
+	html.push('<h4>export existing metadata</h4><p>Download the full metadata for this project in JSON or Excel format.</p><div style="text-align: center;"><button id="exportMetadataButton'+found+'" style="margin-right: 20px;" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\');">export metadata as JSON</button><button id="exportMetadataExcelButton'+found+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\', true);">export metadata as Excel</button></div><div style="text-align: center;" id="exportMetadataDiv'+found+'"></div>');
 
 	if (project.status !== 'public') {
 	    html.push('<br><h4>MetaZen</h4><p>MetaZen can assist you in filling out an Excel metadata spreadsheet.</p><div style="text-align: center;"><button class="btn" onclick="window.open(\'mgmain.html?mgpage=metazen\');">open MetaZen</button></div>');
@@ -987,25 +989,35 @@
 	});
     };
 
-    widget.exportMetadata = function (project, div) {
+    widget.exportMetadata = function (project, div, excel) {
 	var widget = this;
 
 	document.getElementById('exportMetadataButton'+div).setAttribute('disabled', 'disabled');
+	document.getElementById('exportMetadataExcelButton'+div).setAttribute('disabled', 'disabled');
 	document.getElementById('exportMetadataDiv'+div).innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px;">';
 	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
 	    divid: div,
+	    isExcel: excel,
 	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/metadata/export/'+project,
 	    success: function (data) {
-		stm.saveAs(JSON.stringify(data, null, 2), project+"_metadata.json");
+		if (this.isExcel) {
+		    var rend = Retina.WidgetInstances.metagenome_share[1].excelExport;
+		    rend.settings.filename = project+"_metadata.xlsx";
+		    rend.settings.data = data;
+		    rend.render();
+		} else {
+		    stm.saveAs(JSON.stringify(data, null, 2), project+"_metadata.json");
+		}
 	    },
 	    error: function (xhr) {
 		alert("could not retrieve metadata for this project");
 	    },
 	    complete: function(xhr) {
 		document.getElementById('exportMetadataButton'+this.divid).removeAttribute('disabled');
+		document.getElementById('exportMetadataExcelButton'+this.divid).removeAttribute('disabled');
 		document.getElementById('exportMetadataDiv'+this.divid).innerHTML = '';
 	    }
 	});
