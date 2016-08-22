@@ -295,6 +295,29 @@
 			    
 			    // sequence contains invalid characters
 			    seq = seq.join("").trim();
+			    if (seq.length > 0) {
+				if (! seq.match(/^[acgtunx]+$/i)) {
+				    if (seq.match(/^[acgtunxrykmswbdhv]+$/i)) {
+					IUPAC = true;
+				    }
+				    invalidSeqs++;
+				    if (firstInvalidSeq == null) {
+					firstInvalidSeq = i;
+				    }
+				}
+				if (seq.length < 75) {
+				    tooShort++;
+				}
+				if (seq.length > (1024 * 1024 * 3)) {
+				    tooLong++;
+				}
+			    }
+			    seq = [];
+			}
+		    }
+		    if (type == "FASTA") {
+			seq = seq.join("").trim();
+			if (seq.length > 0) {
 			    if (! seq.match(/^[acgtunx]+$/i)) {
 				if (seq.match(/^[acgtunxrykmswbdhv]+$/i)) {
 				    IUPAC = true;
@@ -310,25 +333,6 @@
 			    if (seq.length > (1024 * 1024 * 3)) {
 				tooLong++;
 			    }
-			    seq = [];
-			}
-		    }
-		    if (type == "FASTA") {
-			seq = seq.join("").trim();
-			if (! seq.match(/^[acgtunx]+$/i)) {
-			    if (seq.match(/^[acgtunxrykmswbdhv]+$/i)) {
-				IUPAC = true;
-			    }
-			    invalidSeqs++;
-			    if (firstInvalidSeq == null) {
-				firstInvalidSeq = i;
-			    }
-			}
-			if (seq.length < 75) {
-			    tooShort++;
-			}
-			if (seq.length > (1024 * 1024 * 3)) {
-			    tooLong++;
 			}
 		    }
 		    
