@@ -254,6 +254,7 @@
 		    var numSeqs = 1;
 		    var invalidSeqs = 0;
 		    var firstInvalidSeq = null;
+		    var firstInvalidChar = null;
 		    var headers = {};
 		    var numDuplicate = 0;
 		    var invalidHeaders = 0;
@@ -303,6 +304,7 @@
 				    invalidSeqs++;
 				    if (firstInvalidSeq == null) {
 					firstInvalidSeq = i;
+					firstInvalidChar = seq.match(/[^acgtunx]{1}/i)[0];
 				    }
 				}
 				if (seq.length < 75) {
@@ -325,6 +327,7 @@
 				invalidSeqs++;
 				if (firstInvalidSeq == null) {
 				    firstInvalidSeq = i;
+				    firstInvalidChar = seq.match(/[^acgtunx]{1}/i)[0];
 				}
 			    }
 			    if (seq.length < 75) {
@@ -346,7 +349,7 @@
 		    if (invalidSeqs || numDuplicate || invalidHeaders || tooLong) {
 			validInfo = "<p>"+numSeqs.formatString() + " sequence"+(numSeqs > 1 ? "s of this file were" : " of this file was")+" tested. ";
 			if (invalidSeqs) {
-			    validInfo += invalidSeqs.formatString() + " of them contain"+(invalidSeqs > 1 ? "" : "s")+" invalid characters (i.e. line "+(firstInvalidSeq + 1)+"). ";
+			    validInfo += invalidSeqs.formatString() + " of them contain"+(invalidSeqs > 1 ? "" : "s")+" invalid characters (i.e. line "+(firstInvalidSeq + 1)+": <b>'"+firstInvalidChar+"'</b>). ";
 			    if (IUPAC) {
 				validInfo += "It seems the file contains IUPAC ambiguity characters other than N. Allowed characters are GATC UXN only. ";
 			    }
