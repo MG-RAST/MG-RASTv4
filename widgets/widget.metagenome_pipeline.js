@@ -700,6 +700,9 @@
 	var dots = '<span>';
 	if (stages.length > 0) {
 	    for (var i=0;i<stages.length;i++) {
+		if (stages[i] == null) {
+		    continue;
+		}
 		if (stages[i].state == 'completed') {
 		    dots += '<span style="color: green;font-size: 19px; cursor: default;" title="completed: '+stages[i].cmd.description+'">&#9679;</span>';
 		} else if (stages[i].state == 'in-progress') {
