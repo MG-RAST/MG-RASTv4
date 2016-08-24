@@ -375,14 +375,7 @@
 	    if (value == "remove") {
 		container.parameters.taxFilter.splice(value2, 1);
 	    } else {
-		var source;
-		for (var i=0; i<container.parameters.sources.length; i++) {
-		    if (container.parameters.sources[i] == value2) {
-			source = i;
-			break;
-		    }
-		}
-		container.parameters.taxFilter.push({ "source": source, "level": value3, "value": value4 });
+		container.parameters.taxFilter.push({ "source": value2, "level": value3, "value": value4 });
 	    }
 	}
 	// check if this is an ontology filter
@@ -390,14 +383,7 @@
 	    if (value == "remove") {
 		container.parameters.ontFilter.splice(value2, 1);
 	    } else {
-		var source;
-		for (var i=0; i<container.parameters.sources.length; i++) {
-		    if (container.parameters.sources[i] == value2) {
-			source = i;
-			break;
-		    }
-		}
-		container.parameters.ontFilter.push({ "source": source, "level": value3, "value": value4 });
+		container.parameters.ontFilter.push({ "source": value2, "level": value3, "value": value4 });
 	    }
 	}
 	// check if this is a numerical filter
@@ -620,13 +606,13 @@
 	
 	// ontology
 	for (var i=0; i<c.parameters.ontFilter.length; i++) {
-	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"ontFilter\", \"remove\", \""+i+"\");'>"+c.parameters.sources[c.parameters.ontFilter[i].source] + " - " + c.parameters.ontFilter[i].level + " - " + c.parameters.ontFilter[i].value+"</button>");
+	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"ontFilter\", \"remove\", \""+i+"\");'>"+c.parameters.ontFilter[i].source + " - " + c.parameters.ontFilter[i].level + " - " + c.parameters.ontFilter[i].value+"</button>");
 	    hasFilter = true;
 	}
 
 	// taxonomy
 	for (var i=0; i<c.parameters.taxFilter.length; i++) {
-	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"remove\", \""+i+"\");'>"+c.parameters.sources[c.parameters.taxFilter[i].source] + " - " + c.parameters.taxFilter[i].level + " - " + c.parameters.taxFilter[i].value+"</button>");
+	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"taxFilter\", \"remove\", \""+i+"\");'>"+c.parameters.taxFilter[i].source + " - " + c.parameters.taxFilter[i].level + " - " + c.parameters.taxFilter[i].value+"</button>");
 	    hasFilter = true;
 	}
 
