@@ -1105,6 +1105,9 @@
 	for (var i=0; i<c.items.length; i++) {
 	    groups.push({ name: c.matrix.cols[i], points: [] });
 	    var data = jQuery.extend(true, [], stm.DataStore.profile[c.items[i].id].metagenome.statistics[field]);
+	    if (data.length == 0) {
+		groups[i].points.push({x: 0, y: 0 });
+	    }
 	    for (var h=0; h<data.length; h++) {
 		groups[i].points.push({x: data[h][0], y: data[h][1]});
 	    }
