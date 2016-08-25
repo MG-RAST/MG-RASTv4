@@ -144,7 +144,7 @@
     	html += "<img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'>";
 
 	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
-	html += "<img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCA'>";
+	html += "<img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'>";
 	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
 	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
 	
@@ -1153,7 +1153,7 @@
 				controlGroups: widget.graphs.bar.controls,
 				logAxes: [ 0 ]
 			     },
-		 'pca': { title: 'pca',
+		 'pca': { title: 'PCoA',
 			  renderer: 'svg2',
 			  settings: widget.graphs.pca,
 			  controlGroups: widget.graphs.pca.controls,
