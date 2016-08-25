@@ -178,7 +178,7 @@
 	    	    	widget.submission = data;
 			
 			// get the flow
-			jQuery.getJSON("data/submission_receipt"+(widget.metagenome.pipeline_parameters.hasOwnProperty('filter_ambig') ? "_fasta" : "")+".flow.json").complete(function(d) {
+			jQuery.getJSON("data/flows/submission_receipt"+(widget.metagenome.pipeline_parameters.hasOwnProperty('filter_ambig') ? "_fasta" : "")+".flow.json").complete(function(d) {
 			    var widget = Retina.WidgetInstances.metagenome_receipt[1];
 			    widget.flow = JSON.parse(d.responseText);
 	    	    	    widget.display();
