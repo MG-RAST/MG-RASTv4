@@ -1253,7 +1253,14 @@
 	    widget.showDatabases("protein");
 
 	    // create a metagenome selection renderer
-	    var result_columns = widget.header || [ "id", "name", "project_id", "project_name", "PI_lastname", "biome", "feature", "material", "env_package_type", "location", "country", "longitude", "latitude", "collection_date", "sequence_type", "seq_method", "status", "created" ];
+	    var result_columns = [ "name", "ID", "project id", "project name", "PI last name", "biome", "feature", "material", "environmental package", "location", "country", "sequencing method" ];
+	    var result_attributes = { "ID": "id", "project id": "project_id", "project name": "project_name", "PI last name": "PI_lastname","environmental package": "env_package_type", "sequencing method": "seq_method" };
+
+	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "WGS", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "MT", "title": "metatranscriptome", "checked": false } ] } ];
+	    if (stm.user) {
+		specialFilters.push( { "attribute": "status", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "public", "title": "public", "checked": false }, { "value": "private", "title": "private", "checked": false } ] } );
+	    }
+
 	    widget.mgselect = Retina.Renderer.create("listselect", {
 		target: document.getElementById("mgselect"),
 		headers: stm.authHeader,
@@ -1263,6 +1270,7 @@
 		navigation_url: RetinaConfig.mgrast_api+'/metagenome?match=all&verbosity=mixs',
 		data: [],
 		filter: result_columns,
+		keyMapping: result_attributes,
 		result_field: true,
 		result_field_placeholder: "analysis container name",
 		result_field_default: widget.result_field_default || "",
@@ -1270,11 +1278,11 @@
 		extra_wide: true,
 		return_object: true,
 		filter_attribute: 'name',
+		specialFilters: specialFilters,
 		asynch_filter_attribute: 'name',
 		value: "id"
-	    });
-
-	    widget.mgselect.update_data({},1);
+	    }).render();
+	    widget.mgselect.update();
 	}
     }
 
