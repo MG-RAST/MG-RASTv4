@@ -228,7 +228,7 @@
 	}
 	
 	// set the current controller
-    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
+    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "showBreadcrumbs": true, "breadcrumbs": c.breadcrumbs || "", "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
 
 	c.currentRendererType = type;
     };
@@ -366,7 +366,7 @@
 	    document.getElementById('containerParam'+param).value = widget.cutoffThresholds[param];
 	    alert(param+' minimum threshols is '+widget.cutoffThresholds[param]);
 	    return;
-	}
+	} 
 	
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
 	
@@ -403,12 +403,110 @@
 		    container.parameters.displayLevel = "domain";
 		}
 	    }
+
+	    // check breadcrumbs
+	    if (param == "displayLevel") {
+		container.breadcrumbs = "";
+		if (container.parameters.displayType == "function") {
+		    
+		    //widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species", "strain" ];
+		    // widget.ontLevels
+		} else {
+		    var lindex;
+		    for (var i=0; i<widget.taxLevels.length; i++) {
+			if (widget.taxLevels[i] == value) {
+			    lindex = i;
+			    break;
+			}
+		    }
+		    
+		    // determine the tax levels above
+		    for (var i=0; i<container.parameters.taxFilter.length; i++) {
+			var f = container.parameters.taxFilter[i];
+			var findex;
+			for (var h=0; h<widget.taxLevels.length; h++) {
+			    if (widget.taxLevels[h] == f.level) {
+				findex = h;
+				break;
+			    }
+			}
+			
+			if (findex + 1 == lindex) {
+			    container.updateBreadcrumbs = "taxonomy";
+			    break;
+			}
+		    }
+		}
+	    }
+	    
 	    container.parameters[param] = value;
 	}
 	document.getElementById('visualize').setAttribute('disabled', 'disabled');
 	widget.container2matrix();
+
+	// check for breadcrumbs
+	if (container.updateBreadcrumbs) {
+	    if (container.updateBreadcrumbs == "taxonomy") {
+		var bread = "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb(0, null, \"taxonomy\");'>&raquo; all</a> ";
+		var hier = container.hierarchy[Retina.keys(container.hierarchy)[0]];
+		for (var h=0; h<hier.length - 1; h++) {
+		    bread += "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb("+h+", \""+hier[h]+"\", \"taxonomy\");'>&raquo; "+hier[h]+"</a> ";
+		}
+		container.breadcrumbs = bread;
+	    } else {
+
+	    }
+	    delete container.updateBreadcrumbs;
+	}
 	
 	document.getElementById('visualize').removeAttribute('disabled');
+	widget.showCurrentContainerParams();
+	widget.visualize();
+    };
+
+    widget.activateBreadcrumb = function (level, value, type) {
+	var widget = this;
+	
+	var container = stm.DataStore.dataContainer[widget.selectedContainer];	
+	if (type == "taxonomy") {
+
+	    // remove all filters below the selected level
+	    var newfilters = [];
+	    for (var i=0; i<container.parameters.taxFilter.length; i++) {
+		var f = container.parameters.taxFilter[i];
+		var stay = true;
+		for (var h=0; h<widget.taxLevels.length; h++) {
+		    if (widget.taxLevels[h] == f.level) {
+			stay = false;
+			break;
+		    }
+		}
+		if (stay) {
+		    newfilters.push(f);
+		}
+	    }
+
+	    var bread = "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb(0, null, \"taxonomy\");'>&raquo; all</a> ";
+	    
+	    // add the breadcrumb as new filter
+	    if (value != null) {
+		newfilters.push({"level": widget.taxLevels[level], "source": container.parameters.displaySource, "value": value });
+		var hier = container.hierarchy[Retina.keys(container.hierarchy)[0]];
+	    
+		for (var h=0; h<=level; h++) {
+		    bread += "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb("+h+", \""+hier[h]+"\", \"taxonomy\");'>&raquo; "+hier[h]+"</a> ";
+		}
+	    }
+	    
+	    container.parameters.taxFilter = newfilters;
+	    container.breadcrumbs = bread;
+	    container.parameters.displayLevel = widget.taxLevels[value == null ? 0 : level + 1];
+	    
+	} else {
+
+	}
+	
+	widget.container2matrix();
 	widget.showCurrentContainerParams();
 	widget.visualize();
     };
