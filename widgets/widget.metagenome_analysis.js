@@ -40,6 +40,7 @@
 
 	jQuery.extend(widget, params);
 
+	// initialize data storage
 	if (! stm.DataStore.hasOwnProperty('metagenome')) {
 	    stm.DataStore.metagenome = {};
 	}
@@ -47,7 +48,15 @@
 	    stm.DataStore.profile = {};
 	}
 
+	// set page title
 	document.getElementById("pageTitle").innerHTML = "analysis";
+
+	// check for user / collections
+	if (stm.user) {
+	    stm.loadPreferences().then(function(){
+		Retina.WidgetInstances.metagenome_analysis[1].enableCollections();
+	    });
+	}
 	
 	// set the output area
 	if (! stm.DataStore.hasOwnProperty('taxonomy')) {
@@ -96,7 +105,7 @@
     };
 
     /*
-      DATA VISUALISATION
+      PAGE SETUP
      */
 
     // fill the export options
@@ -151,6 +160,10 @@
 
     	container.innerHTML = html;
     };
+
+    /*
+      VISUALIZATION MANAGEMENT
+    */
 
     // draw the selected visualization
     widget.visualize = function (type) {
@@ -233,12 +246,14 @@
 	c.currentRendererType = type;
     };
 
+    // adjust renderer settings
     widget.settingsCallback = function (name, value) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	stm.DataStore.dataContainer[widget.selectedContainer].currentRendererDefaults[name] = value;
     };
 
+    // adjust the data for visualization
     widget.dataCallback = function () {
 	var rc = this;
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
@@ -305,7 +320,8 @@
 	
 	rc.renderer.settings.data = data;
     };
-    
+
+    // a visualization was clicked to navigate
     widget.graphCallback = function (event) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	var rend = this.renderer;
@@ -347,6 +363,55 @@
 	}
     };
 
+    // navigate to a breadcrumb that was clicked
+    widget.activateBreadcrumb = function (level, value) {
+	var widget = this;
+	
+	var container = stm.DataStore.dataContainer[widget.selectedContainer];	
+
+	// remove all filters below the selected level
+	var newfilters = [];
+	var levels = container.parameters.displayType == "function" ? widget.ontLevels.Subsystems : widget.taxLevels;
+	var filter = container.parameters.displayType == "function" ? container.parameters.ontFilter : container.parameters.taxFilter;
+	for (var i=0; i<filter.length; i++) {
+	    var f = filter[i];
+	    var stay = true;
+	    for (var h=0; h<levels.length; h++) {
+		if (levels[h] == f.level) {
+		    stay = false;
+		    break;
+		}
+	    }
+	    if (stay) {
+		newfilters.push(f);
+	    }
+	}
+	
+	var bread = "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb(0);'>&raquo; all</a> ";
+	    
+	// add the breadcrumb as new filter
+	if (value != null) {
+	    newfilters.push({"level": levels[level], "source": container.parameters.displaySource, "value": value });
+	    var hier = container.hierarchy[Retina.keys(container.hierarchy)[0]];
+	    for (var h=0; h<=level; h++) {
+		bread += "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb("+h+", \""+hier[h]+"\");'>&raquo; "+hier[h]+"</a> ";
+	    }
+	}
+	
+	container.parameters[container.parameters.displayType == "function" ? "ontFilter" : "taxFilter" ] = newfilters;
+	container.breadcrumbs = bread;
+	container.parameters.displayLevel = levels[value == null ? 0 : level + 1];
+	
+	widget.container2matrix();
+	widget.showCurrentContainerParams();
+	widget.visualize();
+    };
+
+    /*
+      DATA CONTAINERS
+    */
+
+    // delete a container
     widget.removeDataContainer = function () {
 	var widget = this;
 
@@ -453,49 +518,6 @@
 	}
 	
 	document.getElementById('visualize').removeAttribute('disabled');
-	widget.showCurrentContainerParams();
-	widget.visualize();
-    };
-
-    widget.activateBreadcrumb = function (level, value) {
-	var widget = this;
-	
-	var container = stm.DataStore.dataContainer[widget.selectedContainer];	
-
-	// remove all filters below the selected level
-	var newfilters = [];
-	var levels = container.parameters.displayType == "function" ? widget.ontLevels.Subsystems : widget.taxLevels;
-	var filter = container.parameters.displayType == "function" ? container.parameters.ontFilter : container.parameters.taxFilter;
-	for (var i=0; i<filter.length; i++) {
-	    var f = filter[i];
-	    var stay = true;
-	    for (var h=0; h<levels.length; h++) {
-		if (levels[h] == f.level) {
-		    stay = false;
-		    break;
-		}
-	    }
-	    if (stay) {
-		newfilters.push(f);
-	    }
-	}
-	
-	var bread = "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb(0);'>&raquo; all</a> ";
-	    
-	// add the breadcrumb as new filter
-	if (value != null) {
-	    newfilters.push({"level": levels[level], "source": container.parameters.displaySource, "value": value });
-	    var hier = container.hierarchy[Retina.keys(container.hierarchy)[0]];
-	    for (var h=0; h<=level; h++) {
-		bread += "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb("+h+", \""+hier[h]+"\");'>&raquo; "+hier[h]+"</a> ";
-	    }
-	}
-	
-	container.parameters[container.parameters.displayType == "function" ? "ontFilter" : "taxFilter" ] = newfilters;
-	container.breadcrumbs = bread;
-	container.parameters.displayLevel = levels[value == null ? 0 : level + 1];
-	
-	widget.container2matrix();
 	widget.showCurrentContainerParams();
 	widget.visualize();
     };
@@ -1322,7 +1344,7 @@
 	    html.push('</div><div style="clear: both;"></div>');
 
 	     // metagenome selector
-	    html.push('<h5 style="margin-top: 0px;">metagenomes</h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
+	    html.push('<h5 style="margin-top: 0px;">metagenomes<div style="float: right;" id="collectionSpace"></div></h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
 
 	    // data progress
 	    html.push('<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; width: 90%;"></div><div style="clear: both;">');
@@ -1365,6 +1387,7 @@
 		extra_wide: true,
 		return_object: true,
 		filter_attribute: 'name',
+		filter_type: 'strict',
 		specialFilters: specialFilters,
 		asynch_filter_attribute: 'name',
 		value: "id"
@@ -1386,6 +1409,8 @@
 	}
 	   
 	html.push('</ul></li></ul>');
+
+	widget.dataLoadParams.sources[0] = widget.sources[which][0];
 
 	document.getElementById('databaseSelect').innerHTML = html.join("");
     };
@@ -1418,6 +1443,7 @@
 	for (var i=0; i<c.items.length; i++) {
 	    sourceMap[c.items[i].id] = {};
 	    for (var h=0; h<c.items.length; h++) {
+		console.log(c.items[i].id);
 		var s = stm.DataStore.profile[c.items[i].id].sources;
 		for (var j=0; j<s.length; j++) {
 		    sourceMap[c.items[i].id][s[j]] = j;
@@ -2234,6 +2260,42 @@
 			});
 	}
     };
+
+    /*
+      COLLECTIONS
+     */
+    widget.enableCollections = function () {
+	var widget = this;
+
+	var html = [ '<div class="btn-group" style="position: relative; right: 87px;"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><img style="height: 16px; margin-right: 5px;" src="Retina/images/cart.png">add collection <span class="caret"></span></a><ul class="dropdown-menu">' ];
+
+	var colls = stm.user.preferences.collections;
+	for (var i in colls) {
+	    if (colls.hasOwnProperty(i)) {
+		var c = colls[i];
+		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addCollection(\''+i+'\'); return false;">'+i+'</a></li>');
+	    }
+	}
+
+	html.push('</ul></div>');
+
+	document.getElementById('collectionSpace').innerHTML = html.join("");
+    };
+
+    widget.addCollection = function (name) {
+	var widget = this;
+
+	var c = stm.user.preferences.collections[name];
+	var r = widget.mgselect;
+	var mgs = Retina.keys(c.metagenomes);	
+	for (var i=0; i<mgs.length; i++) {
+	    var obj = { "name": c.metagenomes[mgs[i]], "biome": "", "feature": "", "material": "", "location": "", "country": "", "id": mgs[i], "project_id": "", "project_name": "", "PI_lastname": "", "env_package_type": "", "seq_method": ""};
+	    r.settings.selection_data.push(obj);
+	    r.settings.selection[mgs[i]] = 1;
+	}
+	r.redrawResultlist(r.result_list);
+    };
+    
 
     /*
       PLUGINS
