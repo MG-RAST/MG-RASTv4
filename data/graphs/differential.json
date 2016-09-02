@@ -5,6 +5,7 @@
     "controls": [
 	{ "data":
 	  [
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "mga", "type": "select", "description": "metagenome a to compare", "title": "metagenome A", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "name" },
 	      { "name": "mgb", "type": "select", "description": "metagenome b to compare", "title": "metagenome B", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "name" }
 	  ]

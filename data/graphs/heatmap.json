@@ -3,6 +3,11 @@
     "width": 600,
     "height": 500,
     "controls": [
+	{ "data":
+	  [
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" }
+	  ]
+	},
 	{ "general":
 	  [
 	      { "name": "items[1].parameters.colorscale", "type": "select", "description": "what colors should the heatmap range between?",
