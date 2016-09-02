@@ -3,6 +3,11 @@
   "width": 700,
     "height": 500,
     "controls": [
+	{ "data":
+	  [
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" }
+	  ]
+	},
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the plot", "title": "height" },

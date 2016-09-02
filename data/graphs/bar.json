@@ -5,6 +5,7 @@
     "controls": [
 	{ "data":
 	  [
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true },
 	      { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
 	  ]
