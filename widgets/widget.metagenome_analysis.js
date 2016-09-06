@@ -440,7 +440,7 @@
 	container.breadcrumbs = bread;
 	container.parameters.displayLevel = levels[value == null ? 0 : level + 1];
 	
-	widget.container2matrix();
+	if (! widget.container2matrix()) { return; }
 	widget.showCurrentContainerParams();
 	widget.visualize();
     };
@@ -543,8 +543,8 @@
 	    container.parameters[param] = value;
 	}
 	document.getElementById('visualize').setAttribute('disabled', 'disabled');
-	widget.container2matrix();
-
+	if (! widget.container2matrix()) { return; }
+	
 	// check for breadcrumbs
 	if (container.updateBreadcrumbs) {
 	    var bread = "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb(0);'>&raquo; all</a> ";
@@ -830,11 +830,12 @@
     // all promises for a data container have been fulfilled
     widget.dataContainerReady = function (name, abort) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-
+	
 	var dataContainer = stm.DataStore.dataContainer[name];
 	if (! abort && Retina.keys(stm.DataStore.inprogress).length) {
 	    return;
 	}
+	
 	dataContainer.promises = [];
 	widget.xhr = {};
 	dataContainer.status = abort ? abort : "ready";
@@ -853,6 +854,44 @@
 	// get the current container
 	var c = container || stm.DataStore.dataContainer[widget.selectedContainer];
 
+	// check if all profiles are loaded and have the required sources
+	var missing = [];
+	var missingids = [];
+	for (var i=0; i<c.items.length; i++) {
+	    if (stm.DataStore.profile.hasOwnProperty(c.items[i].id)) {
+		var p = stm.DataStore.profile[c.items[i].id];
+		for (var h=0; h<c.parameters.sources.length; h++) {
+		    var nosource = true;
+		    for (var j=0; j<p.sources.length; j++) {
+			if (p.sources[j] == c.parameters.sources[h]) {
+			    nosource = false;
+			    break;
+			}
+		    }
+		    if (nosource) {
+			missing.push( c.items[i] );
+			missingids.push(c.items[i].name + " (" + c.items[i].id + ")");
+			break;
+		    }
+		}
+	    } else {
+		missing.push( c.items[i] );
+		missingids.push(c.items[i].name + " (" + c.items[i].id + ")");
+	    }
+	}
+	if (missing.length) {
+	    if (confirm("The following profiles required by your analysis are not currently loaded:\n\n"+missingids.join("\n")+"\n\nDo you want to load them now?")) {
+		console.log(document.getElementById('data').getAttribute('style'));
+		document.getElementById('data').setAttribute('style', "");
+		console.log(document.getElementById('data').getAttribute('style'));
+		document.getElementById('visualize').setAttribute('style', "display: none;");
+		document.getElementById('data').innerHTML = '<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; width: 90%;"></div><div style="clear: both;"></div>';
+		widget.loadData(missing, c.id, true);
+		return false;
+	    }
+	}
+
+	// update the source map
 	widget.updateSourceMap(c);
 
 	/*
@@ -1474,7 +1513,7 @@
 	    c.parameters.displaySource = c.parameters.sources[0];
 	    
 	    document.getElementById('dataprogress').innerHTML = html;
-	    widget.container2matrix();
+	    if (! widget.container2matrix()) { return; }
 	    widget.showDataContainers();
 	} else {
 	    document.getElementById('dataprogress').innerHTML = "Your data load was aborted";
@@ -1563,25 +1602,27 @@
 		}
 	    }
 	    document.getElementById('dataprogress').innerHTML = "";
-	    stm.DataStore.dataContainer[name] = { id: name,
-						  items: ids,
-						  status: "loading",
-						  promises: [],
-						  callbacks: [],
-						  parameters: { sources: widget.dataLoadParams.sources,
-								displayLevel: "domain",
-								displayType: "taxonomy",
-								metadatum: "name",
-								evalue: widget.cutoffThresholds.evalue,
-								identity: widget.cutoffThresholds.identity,
-								alilength: widget.cutoffThresholds.alilength,
-								abundance: 1,
-								taxFilter: [],
-								ontFilter: [] },
-						  created: Retina.date_string(new Date().getTime()),
-						  user: stm.user || "anonymous" };
-	    if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
-		stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
+	    if (! params) {
+		stm.DataStore.dataContainer[name] = { id: name,
+						      items: ids,
+						      status: "loading",
+						      promises: [],
+						      callbacks: [],
+						      parameters: { sources: widget.dataLoadParams.sources,
+								    displayLevel: "domain",
+								    displayType: "taxonomy",
+								    metadatum: "name",
+								    evalue: widget.cutoffThresholds.evalue,
+								    identity: widget.cutoffThresholds.identity,
+								    alilength: widget.cutoffThresholds.alilength,
+								    abundance: 1,
+								    taxFilter: [],
+								    ontFilter: [] },
+						      created: Retina.date_string(new Date().getTime()),
+						      user: stm.user || "anonymous" };
+		if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
+		    stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
+		}
 	    }
 	} else {
 	    alert('You did not select any metagenomes');
@@ -1913,6 +1954,7 @@
 	var widget = this;
 
 	var md5s = widget.container2matrix(null, true);
+	if (! md5s) { return; }
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 
 	for (var i=0; i<c.items.length; i++) {
@@ -2392,12 +2434,20 @@
 	container.parameters.displaySource = "KO";
 
 	// get the functions
-	var funcs = jQuery.extend(true, {}, widget.container2matrix(container).matrix);
+	var c = widget.container2matrix(container);
+	if (! c) {
+	    return;
+	}
+	var funcs = jQuery.extend(true, {}, c.matrix);
 
 	container.parameters.displayLevel = "level3";
 	
 	// get the maps
-	var maps = jQuery.extend(true, {}, widget.container2matrix(container).matrix);
+	c = widget.container2matrix(container);
+	if (! c) {
+	    return;
+	}
+	var maps = jQuery.extend(true, {}, c.matrix);
 	
 	var data = { "functions": funcs, "maps": maps };
 	
