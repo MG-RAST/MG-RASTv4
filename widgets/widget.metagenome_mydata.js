@@ -454,10 +454,6 @@
 							tid: i,
 							success: function(data) {
 							    document.getElementById('analysis'+this.tid).innerHTML = '<div style="width: 400px;">'+data+'</div>';
-							    var svg = document.getElementById('analysis'+this.tid).firstChild.firstChild;
-							    svg.setAttribute('viewBox', '0 0 '+parseInt(svg.getAttribute('width'))+' '+parseInt(svg.getAttribute('height')));
-							    svg.removeAttribute('width');
-							    svg.removeAttribute('height');
 							}
 					  });
 				      }
