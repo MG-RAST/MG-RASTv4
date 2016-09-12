@@ -31,13 +31,18 @@
     widget.graphs = {};
 
     widget.context = "none";
-    widget.currentType = "table";
+    widget.currentType = "barchart";
     
     // main display function called at startup
     widget.display = function (params) {
 	widget = this;
         var index = widget.index;
 
+	// set callback for profile manager
+	if (Retina.WidgetInstances.profileManager && Retina.WidgetInstances.profileManager.length == 2) {
+	    Retina.WidgetInstances.profileManager[1].callback = Retina.WidgetInstances.metagenome_analysis[1].enableLoadedProfiles;
+	}
+	
 	jQuery.extend(widget, params);
 
 	// initialize data storage
@@ -1452,7 +1457,7 @@
 	    html.push('</div><div style="clear: both;"></div>');
 
 	     // metagenome selector
-	    html.push('<h5 style="margin-top: 0px;">metagenomes<div style="float: right;" id="collectionSpace"></div></h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
+	    html.push('<h5 style="margin-top: 0px;">metagenomes<div style="float: right;" id="loadedProfileSpace"></div><div style="float: right;" id="collectionSpace"></div></h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
 
 	    // data progress
 	    html.push('<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; width: 90%;"></div><div style="clear: both;">');
@@ -1740,7 +1745,7 @@
 				  }
 				}));
 		stm.DataStore.dataContainer[name].promises.push(
-		    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/metagenome/" + ids[i].id + "?verbosity=stats",
+		    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/metagenome/" + ids[i].id + "?verbosity=full",
 				  dc: name,
 				  contentType: 'application/json',
 				  headers: stm.authHeader,
@@ -2566,6 +2571,48 @@
     };
 
     /*
+      LOADED PROFILES
+     */
+    widget.enableLoadedProfiles = function () {
+	var widget = this;
+
+	var html = [ '<div class="btn-group" style="position: relative; right: 87px;"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><i class="icon icon-folder-open" style=" margin-right: 5px;"></i>add loaded profiles <span class="caret"></span></a><ul class="dropdown-menu">' ];
+
+	html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addLoadedProfile(null, true); return false;"><i>- all -</i></a></li>');
+	
+	var profs = Retina.keys(stm.DataStore.profile).sort();
+	for (var i=0; i<profs.length; i++) {
+	    html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addLoadedProfile(\''+profs[i]+'\'); return false;">'+profs[i]+'</a></li>');
+	}
+
+	html.push('</ul></div>');
+
+	document.getElementById('loadedProfileSpace').innerHTML = html.join("");	
+    };
+
+    widget.addLoadedProfile = function (name, all) {
+	var widget = this;
+
+	var r = widget.mgselect;
+	var mgs = [];
+	if (all) {
+	    mgs = Retina.keys(stm.DataStore.profile).sort();
+	} else {
+	    mgs = [ name ]
+	}
+
+	for (var i=0; i<mgs.length; i++) {
+	    stm.DataStore.profile[mgs[i]].metagenome.mixs.name = stm.DataStore.profile[mgs[i]].metagenome.name;
+	    stm.DataStore.profile[mgs[i]].metagenome.mixs.id = stm.DataStore.profile[mgs[i]].metagenome.id;
+	    var obj = jQuery.extend(true, {}, stm.DataStore.profile[mgs[i]].metagenome.mixs);
+	    r.settings.selection_data.push(obj);
+	    r.settings.selection[name] = 1;
+	}
+	
+	r.redrawResultlist(r.result_list);
+    };
+
+    /*
       COLLECTIONS
      */
     widget.enableCollections = function () {
@@ -2573,17 +2620,14 @@
 
 	var html = [ '<div class="btn-group" style="position: relative; right: 87px;"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><img style="height: 16px; margin-right: 5px;" src="Retina/images/cart.png">add collection <span class="caret"></span></a><ul class="dropdown-menu">' ];
 
-	var colls = stm.user.preferences.collections;
-	for (var i in colls) {
-	    if (colls.hasOwnProperty(i)) {
-		var c = colls[i];
-		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addCollection(\''+i+'\'); return false;">'+i+'</a></li>');
-	    }
+	var colls = Retina.keys(stm.user.preferences.collections).sort();
+	for (var i=0; i<colls.length; i++) {
+	    html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addCollection(\''+colls[i]+'\'); return false;">'+colls[i]+'</a></li>');
 	}
 
 	html.push('</ul></div>');
 
-	document.getElementById('collectionSpace').innerHTML = html.join("");
+	document.getElementById('collectionSpace').innerHTML = html.join("");	
     };
 
     widget.addCollection = function (name) {
@@ -2600,7 +2644,6 @@
 	r.redrawResultlist(r.result_list);
     };
     
-
     /*
       PLUGINS
     */
