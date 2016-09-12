@@ -60,6 +60,9 @@ function initWebApp () {
 	if (page == 'analysis') {
 	    Retina.load_widget({"name": "profileManager", "resource": "Retina/widgets"}).then( function() {
 		Retina.Widget.create('profileManager', { "target": document.getElementById("session_space") });
+		if (Retina.WidgetInstances.metagenome_analysis && Retina.WidgetInstances.metagenome_analysis.length == 2) {
+		    Retina.WidgetInstances.profileManager[1].callback = Retina.WidgetInstances.metagenome_analysis[1].enableLoadedProfiles;
+		}
 	    });
 	}
     });
