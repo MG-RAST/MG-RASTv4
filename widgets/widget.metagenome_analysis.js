@@ -80,10 +80,19 @@
 	tools.setAttribute('style', 'padding: 10px; overflow-x: auto;');
 
 	// check the context
-	var toolshtml = "<h4>Analysis Containers</h4>";
-	toolshtml += "<div id='availableContainers'></div>";
+	var toolshtml = "";
+	if (Retina.cgiParam('recipe')) {
+	    widget.isRecipe = true;
+	    toolshtml += "<div id='recipeDisplay' style='border-radius: 5px;'></div>";
+	    jQuery.getJSON('data/recipes/recipe'+Retina.cgiParam('recipe')+'.recipe.json', function (data) {
+		Retina.WidgetInstances.metagenome_analysis[1].showRecipe(data);
+	    });
+	} else {
+	    toolshtml += "<h4>Analysis Containers</h4>";
+	    toolshtml += "<div id='availableContainers'></div>";
+	}
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
-	toolshtml += "<div id='currentContainerParams'></div><div id='containerActive' style='display: none;'>";
+	toolshtml += "<div id='currentContainerParams'></div><div id='recipeShowMoreOptions' style='display: none; text-align: center;'><button class='btn' onclick='document.getElementById(\"recipeShowMoreOptions\").style.display=\"none\";document.getElementById(\"containerActive\").style.display=\"\";'>show more options</button></div><div id='containerActive' style='display: none;'>";
 	toolshtml += "<h4>View</h4>";
 	toolshtml += "<div id='visualContainerSpace'></div>";
 	toolshtml += "<h4>Plugins</h4>";
@@ -102,6 +111,16 @@
 	widget.loadGraphs();
 
 	widget.graph = Retina.Renderer.create("svg2", {});
+
+	// add recipe editor modal
+	var recipeDiv = document.createElement('div');
+	recipeDiv.setAttribute('class', 'modal hide fade');
+	recipeDiv.setAttribute('aria-hidden', "true");
+	recipeDiv.setAttribute('id', 'recipeModal');
+	recipeDiv.setAttribute('tabindex', "-1");
+	recipeDiv.setAttribute('role', "dialog");
+	recipeDiv.innerHTML = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>Create a new recipe</h3></div><div class="modal-body" id="recipeModalContent" style="max-height: 550px;"></div><div class="modal-footer"><a href="#" class="btn btn-danger pull-left" data-dismiss="modal" aria-hidden="true">cancel</a><a href="#" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].createRecipe(true);"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;"> download recipe</a><a href="#" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].createRecipe(false);"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;"> upload recipe to myData</a></div></div>';
+	document.body.appendChild(recipeDiv);
     };
 
     /*
@@ -346,8 +365,8 @@
 	    // update the metadatum
 	    else if (opt.name == "metadatum" && rc.renderer.settings.hasOwnProperty(opt.name)) {
 		c.parameters.metadatum = rc.renderer.settings[opt.name];
-		for (var i=0; i<data.cols.length; i++) {
-		    data.cols[i] = c.items[i][rc.renderer.settings[opt.name]];
+		for (var h=0; h<data.cols.length; h++) {
+		    data.cols[h] = c.items[h][rc.renderer.settings[opt.name]];
 		}
 	    }
 	}
@@ -632,21 +651,21 @@
 	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
 
 	// cutoffs
 	
 	// e-value
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\',this.nextSibling.value);">e-value</button><input id="evalueInput" type="text" value="'+p.evalue+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<div class="input-prepend" id="evalueField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\',this.nextSibling.value);">e-value</button><input id="evalueInput" type="text" value="'+p.evalue+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
 	// percent identity
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'identity\',this.nextSibling.value);">%-ident</button><input id="identityInput" type="text" value="'+p.identity+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<div class="input-prepend" id="identityField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'identity\',this.nextSibling.value);">%-ident</button><input id="identityInput" type="text" value="'+p.identity+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
 	// alignment length
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'alilength\',this.nextSibling.value);">length</button><input id="alilenInput" type="text" value="'+p.alilength+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<div class="input-prepend" id="alilenField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 50px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'alilength\',this.nextSibling.value);">length</button><input id="alilenInput" type="text" value="'+p.alilength+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
 	// abundance cutoff
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 90px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'abundance\',this.nextSibling.value);">min.abundance</button><input id="abundanceInput" type="text" value="'+p.abundance+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
+	html.push('<div class="input-prepend"  id="abundanceField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 90px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'abundance\',this.nextSibling.value);">min.abundance</button><input id="abundanceInput" type="text" value="'+p.abundance+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
 	// reset to default
 	html.push('<button class="btn btn-mini" title="reset to defaults" style="position: relative; bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'default\')"><i class="icon icon-refresh"></i></button>');
@@ -655,7 +674,7 @@
 	html.push('<table style="font-size: 12px;">');
 
 	// source
-	html.push("<tr><td>source</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displaySource\",this.options[this.selectedIndex].value);'>");
+	html.push("<tr id='sourceField'><td>source</td><td><select id='sourceSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displaySource\",this.options[this.selectedIndex].value);'>");
 	for (var i=0; i<c.parameters.sources.length; i++) {
 	    var sel = "";
 	    if (c.parameters.sources[i] == c.parameters.displaySource) {
@@ -666,7 +685,7 @@
 	html.push("</select></td></tr>");
 
 	// type
-	html.push("<tr><td>type</td><td><select style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
+	html.push("<tr id='typeField'><td>type</td><td><select id='displayTypeSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
 
 	// level
 	var displayLevelSelect = "<select id='displayLevelSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
@@ -691,12 +710,12 @@
 	    }
 	}
 	displayLevelSelect += "</select>";
-	html.push('<tr><td>level</td><td>'+displayLevelSelect+'</td></tr>');
+	html.push('<tr id="levelField"><td>level</td><td>'+displayLevelSelect+'</td></tr>');
 
 	html.push('</table>');
 
 	// filters
-	html.push("<button class='btn btn-mini' style='margin-right: 5px;' title='add filter' onclick='jQuery(\"#addFilterDiv\").toggle();'><i class='icon icon-filter'></i></button><div style='display: none; position: relative; bottom: 10px; left: 65px;' id='addFilterDiv'>");
+	html.push("<button id='filterField' class='btn btn-mini' style='margin-right: 5px;' title='add filter' onclick='jQuery(\"#addFilterDiv\").toggle();'><i class='icon icon-filter'></i></button><div style='display: none; position: relative; bottom: 10px; left: 65px;' id='addFilterDiv'>");
 
 	// filter form
 
@@ -880,10 +899,8 @@
 	    }
 	}
 	if (missing.length) {
-	    if (confirm("The following profiles required by your analysis are not currently loaded:\n\n"+missingids.join("\n")+"\n\nDo you want to load them now?")) {
-		console.log(document.getElementById('data').getAttribute('style'));
+	    if (widget.isRecipe || confirm("The following profiles required by your analysis are not currently loaded:\n\n"+missingids.join("\n")+"\n\nDo you want to load them now?")) {
 		document.getElementById('data').setAttribute('style', "");
-		console.log(document.getElementById('data').getAttribute('style'));
 		document.getElementById('visualize').setAttribute('style', "display: none;");
 		document.getElementById('data').innerHTML = '<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; width: 90%;"></div><div style="clear: both;"></div>';
 		widget.loadData(missing, c.id, true);
@@ -1403,26 +1420,33 @@
 	if (! widget.hasOwnProperty('mgselect')) {
 
 	    // border and title
-	    var html = [ "<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis Container <span style='cursor: pointer;' title='click to see a short tutorial video'><sup>[?]</sup></span></h3><p>An analysis container holds all the <span class='tt' data-title='Analysis Container Settings' data-content='<p>The settings include the list of referenced profiles, the selected data-sources, the current cutoffs like e-value or alignment length, taxonomic or hierarchical filters and the current visualization.</p><p>Once the container is ready, you can adjust the settings in the righthand menu.</p>'>settings</span> for your analysis, as well as the current analysis result. It is based on metagenomic profiles, which contain all the raw data.</p><p>Select the databases and the profiles for your analysis container. You can name the container in the text-field <i>analysis container name</i>. Click the <i class='icon-ok'></i></a>-button below to begin.</p><p><span class='tt' data-title='Metagenomic Profiles' data-content='<p>Profiles are generated on our server on demand. The initial calculation may take some time, depending on the profile size. Once computed, they will be cached and subsequent requests will download immediately.</p><p>You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p>'>Profiles</span> which are not yet on your machine will be downloaded. Once all required profiles are available, the analysis container is ready for exploration!</p><div style='overflow-x: auto;'>" ];
+	    var html = [];
+
+	    if (widget.isRecipe) {
+		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Analysis Recipe: <span id='recipeTitle'></span></h3><p>To start select datasets below and click <a class='btn btn-mini btn-success' style='position: relative; left: 5px; bottom: 1px;'><i class='icon-ok icon-white'></i></a></p><p>The analysis recipe will guide you through the analysis by presetting all parameters. You only need to select the datasets you want to perform the analysis for. Use the <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"mgselect\").className=\"glow\";' onmouseout='document.getElementById(\"mgselect\").className=\"\";'>selection box</span> below to do so.</p><p>Once the data is loaded, you will immediately see the analysis results. The <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"recipeDisplay\").className=\"glow\";' onmouseout='document.getElementById(\"recipeDisplay\").className=\"\";'>recipe description</span> is always visible on the righthand side. It will also inform you about important parameters you can adjust. Hover over the highlighted terms to see where to change those parameters.</p><div>");
+	    } else {
+		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis Container <span style='cursor: pointer;' title='click to see a short tutorial video'><sup>[?]</sup></span></h3><p>An analysis container holds all the <span class='tt' data-title='Analysis Container Settings' data-content='<p>The settings include the list of referenced profiles, the selected data-sources, the current cutoffs like e-value or alignment length, taxonomic or hierarchical filters and the current visualization.</p><p>Once the container is ready, you can adjust the settings in the righthand menu.</p>'>settings</span> for your analysis, as well as the current analysis result. It is based on metagenomic profiles, which contain all the raw data.</p><p>Select the databases and the profiles for your analysis container. You can name the container in the text-field <i>analysis container name</i>. Click the <i class='icon-ok'></i></a>-button below to begin.</p><p><span class='tt' data-title='Metagenomic Profiles' data-content='<p>Profiles are generated on our server on demand. The initial calculation may take some time, depending on the profile size. Once computed, they will be cached and subsequent requests will download immediately.</p><p>You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p>'>Profiles</span> which are not yet on your machine will be downloaded. Once all required profiles are available, the analysis container is ready for exploration!</p><div style='overflow-x: auto;'>");
+	    }
 
 
 	    // params container
 	    html.push("<div>");
-
-	    // protein vs rna
-	    html.push('<div class="span4"><h5>taxonomic / functional database</h5><div><div class="btn-group" data-toggle="buttons-radio" style="float: left;"><button type="button" class="btn active" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'protein\');">protein</button><button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'RNA\');">RNA</button></div><div id="databaseSelect" style="position: relative; bottom: 3px"></div></div></div>');
-	    
-	    // ontology
-	    var ontSources = widget.sources.hierarchical;
-	    html.push('<div class="span4"><h5>hierarchical ontology database</h5><div><ul class="nav nav-pills" style="float: left; position: relative; bottom: 3px;"><li class="dropdown">\
+	    if (! widget.isRecipe) {
+		// protein vs rna
+		html.push('<div class="span4"><h5>taxonomic / functional database</h5><div><div class="btn-group" data-toggle="buttons-radio" style="float: left;"><button type="button" class="btn active" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'protein\');">protein</button><button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'RNA\');">RNA</button></div><div id="databaseSelect" style="position: relative; bottom: 3px"></div></div></div>');
+		
+		// ontology
+		var ontSources = widget.sources.hierarchical;
+		html.push('<div class="span4"><h5>hierarchical ontology database</h5><div><ul class="nav nav-pills" style="float: left; position: relative; bottom: 3px;"><li class="dropdown">\
 <a class="dropdown-toggle" style="border: 1px solid;" data-toggle="dropdown" href="#"><span id="selectedOntSource">'+ontSources[0]+'</span> <b class="caret"></b></a>\
 <ul class="dropdown-menu" role="menu">');
-
-	    for (var i=0; i<ontSources.length; i++) {
-		html.push(' <li><a href="#" onclick="document.getElementById(\'selectedOntSource\').innerHTML=\''+ontSources[i]+'\';Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.sources[1]=\''+ontSources[i]+'\';">'+ontSources[i]+'</a></li>');
+		
+		for (var i=0; i<ontSources.length; i++) {
+		    html.push(' <li><a href="#" onclick="document.getElementById(\'selectedOntSource\').innerHTML=\''+ontSources[i]+'\';Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.sources[1]=\''+ontSources[i]+'\';">'+ontSources[i]+'</a></li>');
+		}
+		
+		html.push('</ul></li></ul></div></div>');
 	    }
-	    
-	    html.push('</ul></li></ul></div></div>');
 
 	    // params container close and divider
 	    html.push('</div><div style="clear: both;"></div>');
@@ -1443,7 +1467,9 @@
 	    jQuery('.tt').popover({"trigger": "hover", "html": true, "placement": "bottom"});
 
 	    // show the databases
-	    widget.showDatabases("protein");
+	    if (! widget.isRecipe) {
+		widget.showDatabases("protein");
+	    }
 
 	    // create a metagenome selection renderer
 	    var result_columns = [ "name", "ID", "project id", "project name", "PI last name", "biome", "feature", "material", "environmental package", "location", "country", "sequencing method" ];
@@ -1464,7 +1490,7 @@
 		data: [],
 		filter: result_columns,
 		keyMapping: result_attributes,
-		result_field: true,
+		result_field: widget.isRecipe ? false : true,
 		result_field_placeholder: "analysis container name",
 		result_field_default: widget.result_field_default || "",
 		multiple: true,
@@ -1574,11 +1600,13 @@
     widget.loadData = function (ids, collectionName, params) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
+	params = params || widget.isRecipe;
+	
 	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
 	    stm.DataStore.dataContainer = {};
 	}	
 
-	var name = collectionName || widget.dataLoadParams.name || "analysis"+Retina.keys(stm.DataStore.dataContainer).length;
+	var name = widget.isRecipe ? widget.recipe.id : collectionName || widget.dataLoadParams.name || "analysis"+Retina.keys(stm.DataStore.dataContainer).length;
 
 	if (ids.length) {
 
@@ -1623,6 +1651,19 @@
 		if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
 		    stm.DataStore.dataContainer[name].callbacks.push(Retina.WidgetInstances.metagenome_analysis[1].loadDone);
 		}
+	    }
+	    if (widget.isRecipe) {
+		var c = stm.DataStore.dataContainer[name];
+		c.items = ids;
+		c.callbacks = [ function(){
+		    var widget = Retina.WidgetInstances.metagenome_analysis[1];
+		    if (! widget.container2matrix()) { return; }
+		    widget.showCurrentContainerParams();
+		    document.getElementById('recipeShowMoreOptions').style.display = "";
+		    widget.visualize();
+		} ];
+		c.promises = [];
+		
 	    }
 	} else {
 	    alert('You did not select any metagenomes');
@@ -2003,6 +2044,172 @@
 	document.body.removeChild(document.getElementById('canvasResult'));
     };
 
+    /* 
+       Recipes
+    */
+
+    // show the editor dialog
+    widget.showRecipeEditor = function () {
+	var widget = this;
+
+	var html = [];
+
+	var image;
+	if (document.getElementById('SVGdiv1')) {
+	    html.push("<div style='width: 200px; height: 200px; margin-left: auto; overflow: hidden; margin-right: auto; border: 1px solid gray; margin-bottom: 10px;'>"+document.getElementById('SVGdiv1').innerHTML+"</div>");
+	} else if (document.getElementById('visualizeTarget')) {
+	    var div = document.getElementById('visualizeTarget').childNodes[1];
+	    html.push("<div style='width: 200px; height: 200px; overflow: hidden; margin-left: auto; margin-right: auto; border: 1px solid gray; margin-bottom: 10px;'><div style='transform-origin: 0px 0px 0px; transform: scale("+(200/parseInt(div.offsetWidth))+"); position: absolute;'>"+div.innerHTML+"</div></div>");
+	}
+
+	html.push("<table>");
+	html.push("<tr><td style='vertical-align: top;'>name</td><td><input type='text' id='recipeName' placeholder='name of the recipe' style='width: 360px;'></td></tr>");
+	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>description</td><td><textarea style='width: 360px; height: 90px;' id='recipeDescription' placeholder='a short description of what this recipe does'></textarea></td></tr>");
+
+	html.push("</table>");
+
+	document.getElementById('recipeModalContent').innerHTML = html.join('');
+	
+	jQuery('#recipeModal').modal('show');
+    };
+
+    // download / upload the recipe
+    widget.createRecipe = function (download) {
+	var widget = this;
+
+	if (! download && ! stm.user) {
+	    alert('you must be logged in to upload to myData');
+	    return;
+	}
+	
+	// get the current container
+	var c = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer]);
+
+	// remove data that has no use in a recipe
+	delete c.callbacks;
+	delete c.promises;
+	delete c.status;
+	delete c.items;
+	delete c.matrix;
+	c.parameters.sourceMap = {};
+
+	// add the current visualization as image
+	if (document.getElementById('SVGdiv1')) {
+	    c.image = document.getElementById('SVGdiv1').innerHTML;
+	} else if (document.getElementById('visualizeTarget')) {
+	    c.image = document.getElementById('visualizeTarget').childNodes[1].innerHTML;
+	}
+
+	// check the parameters from the editor
+	var name = document.getElementById('recipeName').value;
+	var description = document.getElementById('recipeDescription').value;
+
+	if (name.length == 0 || description.length == 0) {
+	    alert('you must enter a name and a description');
+	    return;
+	}
+
+	c.name = name;
+	c.description = description;
+	
+	// check where to store the recipe
+
+	// download as file
+	if (download) {
+	    stm.saveAs(JSON.stringify(c), c.id + ".recipe.json");
+	}
+
+	// upload to SHOCK
+	else {
+	    var w = document.createElement('div');
+	    w.setAttribute('style', 'position: fixed;top: 10%;left: 50%;z-index: 1051;width: 561px; height: 610px;margin-left: -280px; opacity: 0.8; background-color: black;');
+	    w.setAttribute('id', 'waiter');
+	    w.innerHTML ='<div style="width: 32px; margin-left: auto; margin-right: auto; margin-top: 200px;"><img src="Retina/images/loading.gif"></div>';
+	    document.body.appendChild(w);
+	    
+	    var url = RetinaConfig.shock_url+'/node';
+	    var attributes = new Blob([ JSON.stringify({ "type": "analysisRecipe", "hasVisualization": "1", "owner": stm.user.id, "container": c }) ], { "type" : "text\/json" });
+	    var form = new FormData();
+	    form.append('attributes', attributes);
+	    jQuery.ajax(url, {
+		contentType: false,
+		processData: false,
+		data: form,
+		success: function(data) {
+		    jQuery.ajax({ url: RetinaConfig.shock_url+'/node/'+data.data.id+'/acl/public_read',
+				  success: function(data) {
+				      alert('recipe uploaded');
+				      document.body.removeChild(document.getElementById('waiter'));
+				      jQuery('#recipeModal').modal('hide');
+				  },
+				  error: function(jqXHR, error) {
+				      Retina.WidgetInstances.metagenome_analysis[1].recipeUploaded(false);
+				      alert('recipe upload failed');
+				      document.body.removeChild(document.getElementById('waiter'));
+				      jQuery('#recipeModal').modal('hide');
+				  },
+				  crossDomain: true,
+				  headers: stm.authHeader,
+				  type: "PUT"
+				});
+		},
+		error: function(jqXHR, error){
+		    alert('recipe upload caused an error');
+		},
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "POST"
+	    });
+	}
+    };
+
+    // return the recipe container to the original state
+    widget.restartRecipe = function () {
+	var widget = this;
+
+	document.getElementById('dataprogress').innerHTML = "";
+	widget.display();
+    };
+
+    // show the recipe in the sidebar
+    widget.showRecipe = function (data) {
+	var widget = this;
+
+	var description = data.description;
+
+	// parse the keywords
+	var keywords = [ [ /\$e-value/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#evalueField\").toggleClass(\"glow\");' onmouseout='$(\"#evalueField\").toggleClass(\"glow\");'>e-value</span>" ],
+			 [ /\$\%-identity/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#identityField\").toggleClass(\"glow\");' onmouseout='$(\"#identityField\").toggleClass(\"glow\");'>%-identity</span>" ],
+			 [ /alignment length/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#alilenField\").toggleClass(\"glow\");' onmouseout='$(\"#alilenField\").toggleClass(\"glow\");'>alignment length</span>" ],
+			 [ /\$minimum abundance/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#abundanceField\").toggleClass(\"glow\");' onmouseout='$(\"#abundanceField\").toggleClass(\"glow\");'>minimum abundance</span>" ],
+			 [ /\$source/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#sourceField\").toggleClass(\"glow\");' onmouseout='$(\"#sourceField\").toggleClass(\"glow\");'>source</span>" ],
+			 [ /\$type/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#typeField\").toggleClass(\"glow\");' onmouseout='$(\"#typeField\").toggleClass(\"glow\");'>type</span>" ],
+			 [ /\$level/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#levelField\").toggleClass(\"glow\");' onmouseout='$(\"#levelField\").toggleClass(\"glow\");'>level</span>" ],
+		         [ /\$filter/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#filterField\").toggleClass(\"glow\");' onmouseout='$(\"#filterField\").toggleClass(\"glow\");'>filter</span>" ],
+			 [ /\$view/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#visualContainerSpace\").toggleClass(\"glow\");' onmouseout='$(\"#visualContainerSpace\").toggleClass(\"glow\");'>view</span>" ],
+			 [ /\$export/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#exportContainerSpace\").toggleClass(\"glow\");' onmouseout='$(\"#exportContainerSpace\").toggleClass(\"glow\");'>export</span>" ] ];
+
+	for (var i=0; i<keywords.length; i++) {
+	    description = description.replace(keywords[i][0], keywords[i][1]);
+	}
+
+	// fill the html
+	var html = '<h4>'+data.name+'<button class="btn btn-mini pull-right" onclick="Retina.WidgetInstances.metagenome_analysis[1].restartRecipe();" title="restart this recipe"><i class="icon icon-refresh"></i></button></h4><p>'+description+'</p>';
+
+	widget.recipe = data;
+	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
+	    stm.DataStore.dataContainer = {};
+	}
+	stm.DataStore.dataContainer[data.id] = data;
+	widget.currentType = data.currentRendererType;
+	widget.selectedContainer = data.id;
+	
+	document.getElementById('recipeDisplay').innerHTML = html;
+
+	document.getElementById('recipeTitle').innerHTML = data.name;
+    };
+
+    // analysis object export
     widget.createAnalysisObject = function (download) {
 	var widget = this;
 
@@ -2017,6 +2224,8 @@
 	if (download) {
 	    if (document.getElementById('SVGdiv1')) {
 		c.image = document.getElementById('SVGdiv1').innerHTML;
+	    } else if (document.getElementById('visualizeTarget')) {
+		c.image = document.getElementById('visualizeTarget').childNodes[1].innerHTML;
 	    }
 	    stm.saveAs(JSON.stringify(c), c.id + ".ao.json");
 	}
@@ -2035,7 +2244,15 @@
 	    var filename = widget.selectedContainer;
 	    form.append('attributes', attributes);
 	    form.append('file_name', filename);
-	    var image = new Blob([ document.getElementById('SVGdiv1').innerHTML ], { "type" : "image\/svg+xml" });
+	    var image;
+	    if (document.getElementById('SVGdiv1')) {
+		image = new Blob([ document.getElementById('SVGdiv1').innerHTML ], { "type" : "image\/svg+xml" });
+	    } else if (document.getElementById('visualizeTarget')) {
+		image = new Blob([ document.getElementById('visualizeTarget').childNodes[1].innerHTML ], { "type" : "text\/html" });
+	    } else {
+		alert('you have no active image');
+		return;
+	    }
 	    form.append('upload', image);
 	    
 	    jQuery.ajax(url, {

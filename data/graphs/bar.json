@@ -108,23 +108,23 @@
 		    "stroke": "black",
 		    "strokeWidth": 1
 		},
-		"tickShift": 22,
+		"tickShift": 8,
+		"labelShift": true,
 		"id": "item1",
 		"labelRotation": 30,
 		"shift": 75,
-		"spaceMajor": 35,
 		"labelFormat": {
 		    "fontFamily": "Helvetica",
 		    "fontWeight": 100,
 		    "fontSize": 12
 		},
-		"showLabels": false,
+		"showLabels": true,
 		"direction": "horizontal",
-		"majorTickLength": 0,
+		"majorTickLength": 5,
 		"groupSettings": {},
 		"data": []
 	    },
-	    "data": "matrix2collabelaxis",
+	    "data": "matrix2rowlabelaxis",
 	    "name": "label_axis"
 	},
 	{
