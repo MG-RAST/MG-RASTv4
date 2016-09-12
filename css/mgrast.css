@@ -412,3 +412,12 @@ h5 {
     font-weight: bold;
     cursor: help;
 }
+
+.thumbnail:hover {
+    box-shadow: 0px 0px 5px blue;
+    cursor: pointer;
+}
+.thumbnail:active {
+    border: 1px inset;
+    box-shadow: none;
+}
