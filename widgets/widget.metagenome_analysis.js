@@ -31,7 +31,7 @@
     widget.graphs = {};
 
     widget.context = "none";
-    widget.currentType = "table";
+    widget.currentType = "barchart";
     
     // main display function called at startup
     widget.display = function (params) {
