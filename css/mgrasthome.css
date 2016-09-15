@@ -74,8 +74,9 @@ body {
 }
 
 .footer {
-    position: absolute;
-    bottom: 10px;
+//    position: absolute;
+//    bottom: 10px;
+    text-align: center;
     font-size: 11px;
     color: gray;
     width: 100%;
