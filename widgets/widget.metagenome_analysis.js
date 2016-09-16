@@ -1273,17 +1273,12 @@
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 
-	if (c.parameters.pcaComponentA == null) {
-	    c.parameters.pcaComponentA = 0;
-	    c.parameters.pcaComponentB = 1;
-	}
-
 	var matrix = Retina.copyMatrix(data || c.matrix.data);
-	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix)));
+	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.parameters.distance));
 	var points = [];
 	var colors = GooglePalette();
 	for (var i=0; i<pca.coordinates.length; i++) {
-	    points.push( { "x": pca.coordinates[i][c.parameters.pcaComponentA], "y": pca.coordinates[i][c.parameters.pcaComponentB], "name": c.matrix.cols[i], "format": { "fill": colors[i] } } );
+	    points.push( { "x": pca.coordinates[i][c.parameters.pcaa], "y": pca.coordinates[i][c.parameters.pcab], "name": c.matrix.cols[i], "format": { "fill": colors[i] } } );
 	}
 	
 	return { "data": [ { "points": points } ], "cols": c.matrix.cols };
@@ -1293,17 +1288,11 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-
-	if (c.parameters.differentialMetagenomeA == null) {
-	    c.parameters.differentialMetagenomeA = 0;
-	    c.parameters.differentialMetagenomeB = 1;
-	}
-
 	
 	var matrix = Retina.copyMatrix(c.matrix.data);
 	var points = [];
 	for (var i=0; i<matrix.length; i++) {
-	    points.push( { "x": Retina.log10(matrix[i][c.parameters.differentialMetagenomeA]), "y": Retina.log10(matrix[i][c.parameters.differentialMetagenomeB]), name: c.matrix.rows[i] });
+	    points.push( { "x": Retina.log10(matrix[i][c.parameters.mga]), "y": Retina.log10(matrix[i][c.parameters.mgb]), name: c.matrix.rows[i] });
 	}
 	
 	return { "data": [ { "points": points } ] };
@@ -2741,5 +2730,16 @@
 		     "containerName": container.id };
 	return data;
     };
+
+    /* Help texts */
+    widget.help = { "distance metrics":
+		    { "euclidean": "https://en.wikipedia.org/wiki/Euclidean_distance",
+		      "minkowski": "https://en.wikipedia.org/wiki/Minkowski_distance",
+		      "canberra": "https://en.wikipedia.org/wiki/Canberra_distance",
+		      "manhattan": "https://xlinux.nist.gov/dads//HTML/manhattanDistance.html",
+		      "maximum": "",
+		      "braycurtis": "https://en.wikipedia.org/wiki/Qualitative_variation",
+		      "jaccard": "https://en.wikipedia.org/wiki/Qualitative_variation" }
+		  };
     
 })();
