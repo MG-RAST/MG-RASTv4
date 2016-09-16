@@ -765,7 +765,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+projectid+'?verbosity=summary',
+	    url: RetinaConfig.mgrast_api+'/project/'+projectid+'?verbosity=summary&nocache=1',
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_share[1];
 		stm.DataStore.project = [ data ];
