@@ -59,7 +59,7 @@
 			      if (data.ERROR) {
 				  html = '<div class="alert alert-danger" style="width: 400px; margin-left: auto; margin-right: auto;">ERROR: '+data.error+'</div>';
 			      } else if (data.OK) {
-				  html = '<div class="alert alert-success" style="width: 400px; margin-left: auto; margin-right: auto;">You have successfully claimed the token. You can proceed to the shared resource by clicking <a href="mgmain.html?mgpage='+(data.type == 'project' ? 'project&project=' : 'overview&metagenome=')+data.id'">here</a></div>';
+				  html = '<div class="alert alert-success" style="width: 400px; margin-left: auto; margin-right: auto;">You have successfully claimed the token. You can proceed to the shared resource by clicking <a href="mgmain.html?mgpage='+(data.type == 'project' ? 'project&project=' : 'overview&metagenome=')+data.id+'">here</a></div>';
 			      } else {
 				  html = '<div class="alert alert-danger" style="width: 400px; margin-left: auto; margin-right: auto;">An error occurred contacting the server.</div>';
 			      }
