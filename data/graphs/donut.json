@@ -1,5 +1,5 @@
 {
-  "name": "pie",
+  "name": "donut",
   "width": 700,
     "height": 500,
     "extended": { "adjust graph data": true },
@@ -31,14 +31,14 @@
             "shiftX": 50,
             "shiftY": 50,
             "center": 200,
-            "width": 200,
+            "width": 20,
             "startAngle": 0,
             "id": "chart",
             "groupSettings": {},
             "data": [],
 	    "click": true
 	},
-	"data": "matrix2pie"
+	"data": "matrix2donut"
     },
     {
       "type": "legend",
