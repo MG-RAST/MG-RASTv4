@@ -2,8 +2,10 @@
     "name": "heatmap",
     "width": 600,
     "height": 500,
+    "extended": { "adjust graph data": true },
+    "description": "This vertically grouped barchart shows a list of samples showing the abundance by category. You can select which MIxS datum you would like to use to label the samples. The data can be normalized to adjust for different sample sizes. Performing log 10 will apply a base 10 logarithm to each data point. This enhances visibility of low abundance values.",
     "controls": [
-	{ "data":
+	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" }
 	  ]
