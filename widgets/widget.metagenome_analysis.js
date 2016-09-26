@@ -143,7 +143,7 @@
 	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
 	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
 	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
-	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();' title='download annotated reads as FASTA'>";
+	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'>";
 
 
 	container.innerHTML = html;
@@ -173,10 +173,11 @@
     	html += "<img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");' title='matrix'>";
 
     	html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");' title='piechart'>";
+    	html += "<img src='Retina/images/donut.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donutchart\");' title='donutchart'>";
+	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
     	html += "<img src='Retina/images/barchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart2\");' title='grouped barchart'>";
     	html += "<img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'>";
 
-	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
 	html += "<img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'>";
 	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
 	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
@@ -247,7 +248,9 @@
 			var mdkeys = Retina.keys(c.items[0]).sort();
 			for (var j=0; j<mdkeys.length; j++) {
 			    var opt = { "label": mdkeys[j], "value": mdkeys[j] };
-			    if (c.parameters.metadatum == mdkeys[j]) {
+			    if (item.hasOwnProperty('default') && (item["default"] == mdkeys[j])) {
+				opt.selected = true;
+			    } else if (c.parameters.metadatum == mdkeys[j]) {
 				opt.selected = true;
 			    }
 			    opts.push(opt);
@@ -320,6 +323,10 @@
 
 	var visMap = widget.visualizationMapping()[widget.currentType];
 
+	if (visMap.hasOwnProperty('dataField')) {
+	    return;
+	}
+	
 	// iterate over all data attributes
 	for (var i=0; i<rc.dataUpdaters.length; i++) {
 	    var opt = rc.dataUpdaters[i];
@@ -1108,7 +1115,8 @@
 		       rows: [],
 		       cols: [],
 		       evalues: [],
-		       abundances: [] };
+		       abundances: [],
+		       headers: [] };
 
 	var id = c.parameters.metadatum;
 	var displayLevel = c.parameters.displayLevel;
@@ -1125,6 +1133,7 @@
 	    md5s[c.items[i].id] = [];
 	    matrix.abundances.push(0);
 	    matrix.cols.push(c.items[i][id]);
+	    matrix.headers.push(c.items[i]);
 
 	    var sourceIndex;
 	    if (c.parameters.sourceMap[c.items[i].id].hasOwnProperty(c.parameters.displaySource)) {
@@ -1272,16 +1281,16 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-
+	
 	var matrix = Retina.copyMatrix(data || c.matrix.data);
 	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.parameters.distance));
 	var points = [];
-	var colors = GooglePalette();
+	
 	for (var i=0; i<pca.coordinates.length; i++) {
-	    points.push( { "x": pca.coordinates[i][c.parameters.pcaa], "y": pca.coordinates[i][c.parameters.pcab], "name": c.matrix.cols[i], "format": { "fill": colors[i] } } );
+	    points.push( { "x": pca.coordinates[i][c.parameters.pcaa], "y": pca.coordinates[i][c.parameters.pcab], "name": c.matrix.cols[i] } );
 	}
 	
-	return { "data": [ { "points": points } ], "cols": c.matrix.cols };
+	return { "data": [ { "points": points } ], "cols": c.matrix.cols, "headers": c.matrix.headers };
     };
 
     widget.container2differential = function () {
@@ -1300,10 +1309,8 @@
 
     widget.container2plot = function (field) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	var groups = [];
-
 	for (var i=0; i<c.items.length; i++) {
 	    groups.push({ name: c.matrix.cols[i], points: [] });
 	    var data = jQuery.extend(true, [], stm.DataStore.profile[c.items[i].id].metagenome.statistics[field]);
@@ -1344,6 +1351,11 @@
 			       renderer: "svg2",
 			       settings: widget.graphs.pie,
 			       controlGroups: widget.graphs.pie.controls
+			     },
+		 'donutchart': { title: 'donutchart',
+				 renderer: "svg2",
+				 settings: widget.graphs.donut,
+				 controlGroups: widget.graphs.donut.controls
 			     },
 		 'barchart': { title: 'barchart',
 			       renderer: "svg2",
@@ -2545,7 +2557,7 @@
     widget.loadGraphs = function () {
 	var widget = this;
 
-	var graphs = [ "pie", "stackedBar", "bar", "heatmap", "rarefaction", "pca", "differential" ];
+	var graphs = [ "pie", "donut", "stackedBar", "bar", "heatmap", "rarefaction", "pca", "differential" ];
 	for (var i=0; i<graphs.length; i++) {
 	    jQuery.ajax({ url: 'data/graphs/'+graphs[i]+'.json',
 			  contentType: 'application/json',
