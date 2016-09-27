@@ -157,7 +157,7 @@
 .glow{
   animation: shadowThrob 0.9s 4;
   animation-direction: alternate;
-  -webkit-animation: shadowThrob 0.9s ease-out infinite;
+  -webkit-animation: shadowThrob 0.9s ease-out 6;
   -webkit-animation-direction: alternate;
 }
 @keyframes shadowThrob {
@@ -420,4 +420,9 @@ h5 {
 .thumbnail:active {
     border: 1px inset;
     box-shadow: none;
+}
+
+.recipe {
+    width: 100%;
+    height: 280px;
 }

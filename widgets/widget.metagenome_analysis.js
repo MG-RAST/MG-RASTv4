@@ -143,7 +143,7 @@
 	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
 	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
 	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
-	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();' title='download annotated reads as FASTA'>";
+	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'>";
 
 
 	container.innerHTML = html;
@@ -173,10 +173,11 @@
     	html += "<img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");' title='matrix'>";
 
     	html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");' title='piechart'>";
+    	html += "<img src='Retina/images/donut.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donutchart\");' title='donutchart'>";
+	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
     	html += "<img src='Retina/images/barchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart2\");' title='grouped barchart'>";
     	html += "<img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'>";
 
-	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
 	html += "<img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'>";
 	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
 	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
@@ -209,7 +210,7 @@
 
     	var visMap = widget.visualizationMapping();
 	
-    	var html = "<h4>visualize container " + (widget.selectedContainer ? widget.selectedContainer : "Demo") + " - "+visMap[type].title+"</h4><div id='visualizeTarget'></div>";
+    	var html = "<p style='font-size: 20px; font-weight: 500;'>"+visMap[type].title+" of " + (widget.selectedContainer ? widget.selectedContainer : "demonstration analysis") + "</p><div id='visualizeTarget'></div>";
 
     	container.innerHTML = html;
 
@@ -241,13 +242,20 @@
 	    var k = Retina.keys(groups[i])[0];
 	    for (var h=0; h<groups[i][k].length; h++) {
 		var item = groups[i][k][h];
+		if (item.hasOwnProperty('default')) {
+		    settings[item.name] = item['default'];
+		} else if (item.hasOwnProperty('defaultTrue')) {
+		    settings[item.name] = item['defaultTrue'];
+		}
 		if (item.adaptToData) {
 		    var opts = [];
 		    if (item.values && item.values == "metadata") {
 			var mdkeys = Retina.keys(c.items[0]).sort();
 			for (var j=0; j<mdkeys.length; j++) {
 			    var opt = { "label": mdkeys[j], "value": mdkeys[j] };
-			    if (c.parameters.metadatum == mdkeys[j]) {
+			    if (item.hasOwnProperty('default') && (item["default"] == mdkeys[j])) {
+				opt.selected = true;
+			    } else if (c.parameters.metadatum == mdkeys[j]) {
 				opt.selected = true;
 			    }
 			    opts.push(opt);
@@ -320,6 +328,10 @@
 
 	var visMap = widget.visualizationMapping()[widget.currentType];
 
+	if (visMap.hasOwnProperty('dataField')) {
+	    return;
+	}
+	
 	// iterate over all data attributes
 	for (var i=0; i<rc.dataUpdaters.length; i++) {
 	    var opt = rc.dataUpdaters[i];
@@ -368,8 +380,8 @@
 	    }
 
 	    // update the metadatum
-	    else if (opt.name == "metadatum" && rc.renderer.settings.hasOwnProperty(opt.name)) {
-		c.parameters.metadatum = rc.renderer.settings[opt.name];
+	    else if (opt.name == "metadatum" && rc.renderer.settings.hasOwnProperty('metadatum')) {
+		c.parameters.metadatum = rc.renderer.settings.metadatum;
 		for (var h=0; h<data.cols.length; h++) {
 		    data.cols[h] = c.items[h][rc.renderer.settings[opt.name]];
 		}
@@ -922,9 +934,6 @@
 
 	// fill the filters array with the cutoffs
     	var filters = [];
-	if (c.parameters.abundance > 1) {
-	    filters.push([ 1, c.parameters.abundance ]);
-	}
 	if (c.parameters.evalue > widget.cutoffThresholds['evalue']) {
 	    filters.push([ 2, c.parameters.evalue ]);
 	}
@@ -1108,7 +1117,8 @@
 		       rows: [],
 		       cols: [],
 		       evalues: [],
-		       abundances: [] };
+		       abundances: [],
+		       headers: [] };
 
 	var id = c.parameters.metadatum;
 	var displayLevel = c.parameters.displayLevel;
@@ -1125,6 +1135,7 @@
 	    md5s[c.items[i].id] = [];
 	    matrix.abundances.push(0);
 	    matrix.cols.push(c.items[i][id]);
+	    matrix.headers.push(c.items[i]);
 
 	    var sourceIndex;
 	    if (c.parameters.sourceMap[c.items[i].id].hasOwnProperty(c.parameters.displaySource)) {
@@ -1207,14 +1218,32 @@
 	}
 	
 	matrix.rows = Retina.keys(d).sort();
+	var mr = [];
 	for (var i=0; i<matrix.rows.length; i++) {
+	    // test abundance cutoff
+	    if (c.parameters.abundance > 1) {
+		var rowIn = false;
+		for (var h=0; h<d[matrix.rows[i]].length; h++) {
+		    if (d[matrix.rows[i]][h] >= c.parameters.abundance) {
+			rowIn = true;
+		    } else {
+			d[matrix.rows[i]][h] = 0;
+		    }
+		}
+		if (! rowIn) {
+		    continue;
+		}
+	    }
+	    mr.push(matrix.rows[i]);
+	    
 	    matrix.data.push(d[matrix.rows[i]]);
 	    for (var h=0; h<e[matrix.rows[i]].length; h++) {
 		e[matrix.rows[i]][h] = e[matrix.rows[i]][h] / d[matrix.rows[i]][h];
 	    }
 	    matrix.evalues.push(e[matrix.rows[i]]);
 	}
-
+	matrix.rows = mr;
+	
 	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[displaySource+"-"+displayLevel]) + 1;
 	c.matrix = matrix;
 	c.matrix.itemsX = matrix.cols.length;
@@ -1258,7 +1287,7 @@
 
 	var tableData = [];
 	for (var i=0; i<matrix.rows.length; i++) {
-	    var row = [ matrix.rows[i] ];
+	    var row = [ '<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+matrix.rows[i]+'\'})">'+matrix.rows[i]+'</a>' ];
 	    for (var h=0; h<matrix.data[i].length; h++) {
 		row.push(matrix.data[i][h]);
 	    }
@@ -1272,16 +1301,16 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-
+	
 	var matrix = Retina.copyMatrix(data || c.matrix.data);
 	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.parameters.distance));
 	var points = [];
-	var colors = GooglePalette();
+	
 	for (var i=0; i<pca.coordinates.length; i++) {
-	    points.push( { "x": pca.coordinates[i][c.parameters.pcaa], "y": pca.coordinates[i][c.parameters.pcab], "name": c.matrix.cols[i], "format": { "fill": colors[i] } } );
+	    points.push( { "x": pca.coordinates[i][c.parameters.pcaa], "y": pca.coordinates[i][c.parameters.pcab], "name": c.matrix.cols[i] } );
 	}
 	
-	return { "data": [ { "points": points } ], "cols": c.matrix.cols };
+	return { "data": [ { "points": points } ], "cols": c.matrix.cols, "headers": c.matrix.headers };
     };
 
     widget.container2differential = function () {
@@ -1300,10 +1329,8 @@
 
     widget.container2plot = function (field) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	var groups = [];
-
 	for (var i=0; i<c.items.length; i++) {
 	    groups.push({ name: c.matrix.cols[i], points: [] });
 	    var data = jQuery.extend(true, [], stm.DataStore.profile[c.items[i].id].metagenome.statistics[field]);
@@ -1324,13 +1351,22 @@
     widget.visualizationMapping = function () {
 	return { 'matrix': { title: 'abundance matrix',
 			     renderer: "matrix",
-			     settings: {},
+			     settings: {
+				 description: "The abundance matrix shows the samples as columns and the categories as rows. The abundance relative to the other samples in a category is highlighted by the opacity of the circle.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#normalisation' target=_blank>normalisation</a>, <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>log scaling</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the matrix.",
+				 extended: { "adjust graph data": true }
+			     },
 			     controlGroups: [
-				 { "data":
+				 { "adjust graph data":
 				   [
 				       { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
-				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true },
-				       { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
+				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true, "defaultTrue": true },
+				       { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true, "defaultTrue": false }
+				   ]
+				 },
+				 { "layout":
+				   [
+				       { "name": "colHeaderHeight", "type": "int", "description": "height of the header column", "title": "column height", "default": 100 },
+				       { "name": "circleColor", "type": "color", "description": "base color of the circles", "title": "ccircle color", "default": "purple" }
 				   ]
 				 }
 			     ]
@@ -1340,17 +1376,22 @@
 			      settings: widget.graphs.heatmap,
 			      controlGroups: widget.graphs.heatmap.controls
 			    },
-		 'piechart': { title: 'piechart',
+		 'piechart': { title: 'pie-chart',
 			       renderer: "svg2",
 			       settings: widget.graphs.pie,
 			       controlGroups: widget.graphs.pie.controls
 			     },
-		 'barchart': { title: 'barchart',
+		 'donutchart': { title: 'donut-chart',
+				 renderer: "svg2",
+				 settings: widget.graphs.donut,
+				 controlGroups: widget.graphs.donut.controls
+			     },
+		 'barchart': { title: 'stacked bar-chart',
 			       renderer: "svg2",
 			       settings: widget.graphs.stackedBar,
 			       controlGroups: widget.graphs.stackedBar.controls
 			     },
-		 'barchart2': { title: 'barchart',
+		 'barchart2': { title: 'grouped barchart',
 				renderer: "svg2",
 				settings: widget.graphs.bar,
 				controlGroups: widget.graphs.bar.controls,
@@ -1368,26 +1409,18 @@
 				   dataConversion: 'container2differential' },
 		 'table': { title: 'table',
 			    renderer: 'table',
-			    settings: { 'sort_autodetect': true },
+			    settings: { extended: { "adjust table data": true },
+					description: "The table shows the samples as columns and the categories as rows. Click the magnifying glass to show the filter for a column. Click the operator in the abundance column filters to change it.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#normalisation' target=_blank>normalisation</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The cogwheel icon above the table opens general options for the table.",
+					sort_autodetect: true,
+					filter_autodetect: true },
 			    dataConversion: "container2table",
 			    controlGroups:
 			    [
-				{ "general":
-				  [
-				      { "name": 'filter_autodetect', "type": 'bool', "description": "should all columns have an auto detected filter?",
-					"title": "filter autodetection" }
-				  ]
-				},
-				{ "data":
+				{ "adjust table data":
 				   [
 				       { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
 				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
 				   ]
-				},
-				{ "layout":
-				  [
-				      { "name": 'rows_per_page', "type": 'int', "description": "number of rows diplayed per page", "title": "rows per page" },
-				  ]
 				}
 			    ]
 			  },
@@ -1600,7 +1633,7 @@
 	    stm.DataStore.dataContainer = {};
 	}	
 
-	var name = widget.isRecipe ? widget.recipe.id : collectionName || widget.dataLoadParams.name || "analysis"+Retina.keys(stm.DataStore.dataContainer).length;
+	var name = widget.isRecipe ? widget.recipe.id : collectionName || widget.dataLoadParams.name || "analysis "+(Retina.keys(stm.DataStore.dataContainer).length + 1);
 
 	if (ids.length) {
 
@@ -1952,7 +1985,7 @@
 	    }
 	    // the image is html
 	    else {
-		var source = document.getElementById('visualizeTarget');
+		var source = document.getElementById('visualizeTarget').childNodes[1];
 		html2canvas(source, {
 		    onrendered: function(canvas) {
 			document.getElementById('canvasResult').appendChild(canvas);
@@ -2545,7 +2578,7 @@
     widget.loadGraphs = function () {
 	var widget = this;
 
-	var graphs = [ "pie", "stackedBar", "bar", "heatmap", "rarefaction", "pca", "differential" ];
+	var graphs = [ "pie", "donut", "stackedBar", "bar", "heatmap", "rarefaction", "pca", "differential" ];
 	for (var i=0; i<graphs.length; i++) {
 	    jQuery.ajax({ url: 'data/graphs/'+graphs[i]+'.json',
 			  contentType: 'application/json',

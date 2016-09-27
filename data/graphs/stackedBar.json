@@ -2,8 +2,10 @@
     "name": "stackedBar",
     "width": 800,
     "height": 500,
+    "extended": { "adjust graph data": true },
+    "description": "The stacked barchart displays the abundances of the categories stacked for each sample.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#normalisation' target=_blank>normalisation</a>, <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>log scaling</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the graph.",
     "controls": [
-	{ "data":
+	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true, "defaultTrue": true }

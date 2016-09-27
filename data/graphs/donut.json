@@ -1,9 +1,9 @@
 {
-  "name": "pie",
+  "name": "donut",
   "width": 700,
     "height": 500,
     "extended": { "adjust graph data": true },
-    "description": "The pie-chart shows the categories of a single sample as slices.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>log scaling</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the pie-chart.",
+    "description": "The donut-chart shows samples as rims and categories as slices on those rims.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>log scaling</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the donut-chart.",
     "controls": [
 	{ "adjust graph data":
 	  [
@@ -15,17 +15,13 @@
 	  [
 	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
 	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" },
-	      { "name": "items[0].parameters.center", "type": "int", "description": "radius of the pie chart", "title": "radius" },
+	      { "name": "items[0].parameters.width", "type": "int", "description": "width of each rim", "title": "rim width" },
+	      { "name": "items[0].parameters.center", "type": "int", "description": "distance from the border to the center", "title": "center point" },
 	      { "name": "items[1].parameters.top", "type": "int", "description": "top margin of the legend", "title": "legend top" },
 	      { "name": "items[1].parameters.left", "type": "int", "description": "left margin of the legend", "title": "legend left" }
 	  ]
 	}
     ],
-    "connections": { "0": { "center": [ { "type": "pinned",
-					"items": [ { "index": 0,
-						     "attribute": "width" } ] } ]
-			  }
-		   },
   "items": [
     {
       "type": "donutchart",
@@ -35,14 +31,14 @@
             "shiftX": 50,
             "shiftY": 50,
             "center": 200,
-            "width": 200,
+            "width": 20,
             "startAngle": 0,
             "id": "chart",
             "groupSettings": {},
             "data": [],
 	    "click": true
 	},
-	"data": "matrix2pie"
+	"data": "matrix2donut"
     },
     {
       "type": "legend",

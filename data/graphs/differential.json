@@ -2,8 +2,10 @@
   "name": "differential",
   "width": 500,
     "height": 500,
+    "extended": { "adjust graph data": true },
+    "description": "The differential abundance plot displays the <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>logarithmic</a> abundances of the categories of two samples, each on one axis.</p><p>You can choose which sample is displayed on which axis and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.",
     "controls": [
-	{ "data":
+	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "mga", "type": "select", "description": "metagenome a to compare", "title": "metagenome A", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "name" },

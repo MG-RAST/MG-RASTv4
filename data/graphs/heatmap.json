@@ -2,20 +2,18 @@
     "name": "heatmap",
     "width": 600,
     "height": 500,
+    "extended": { "adjust graph data": true },
+    "description": "The heatmap displays the normalized clustered euklidean distances of the categories across all samples.</p><p>You can select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the color scale and general layout of the heatmap.",
     "controls": [
-	{ "data":
+	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" }
 	  ]
 	},
-	{ "general":
-	  [
-	      { "name": "items[1].parameters.colorscale", "type": "select", "description": "what colors should the heatmap range between?",
-		"title": "heatmap color", "options": [ { "label": "green and red", "value": "green2red" }, { "label": "yellow and blue", "value": "blue2yellow" } ] }
-	  ]
-	},
 	{ "layout":
 	  [
+	      { "name": "items[1].parameters.colorscale", "type": "select", "description": "what colors should the heatmap range between?",
+		"title": "heatmap color", "options": [ { "label": "green and red", "value": "green2red" }, { "label": "yellow and blue", "value": "blue2yellow" } ] },
 	      { "name": "height", "type": "int", "description": "height of the heatmap", "title": "height" },
 	      { "name": "width", "type": "int", "description": "width of the heatmap", "title": "width" },
 	      { "name": "items[0].parameters.base", "type": "int", "description": "width of the row titles", "title": "row title width" },
@@ -145,7 +143,7 @@
 		"direction": "horizontal",
 		"orientation": "top",
 		"labelPosition": "left-bottom",
-		"labelRotation": 270,
+		"labelRotation": 310,
 		"shift": 160,
 		"base": 130,
 		"length": 400,

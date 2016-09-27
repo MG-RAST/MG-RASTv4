@@ -2,8 +2,10 @@
   "name": "rarefaction",
   "width": 700,
     "height": 500,
+    "extended": { "adjust graph data": true },
+    "description": "The rarefaction plot shows the increase in species for increased number of reads. This is static data that does not tke the selected filters into account.</p><p>You can adjust the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field. The layout tab has options to adjust the general layout of the graph.",
     "controls": [
-	{ "data":
+	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" }
 	  ]
@@ -136,7 +138,8 @@
           "fontFamily": "arial",
           "fontWeight": "normal"
         },
-        "inputType": "plot",
+          "inputType": "plot",
+	  "legendType": "column",
         "id": "item2",
         "groupSettings": {},
         "data": []

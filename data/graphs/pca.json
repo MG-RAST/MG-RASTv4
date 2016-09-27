@@ -2,14 +2,18 @@
   "name": "pca",
   "width": 800,
     "height": 500,
+    "extended": { "adjust graph data": true },
+    "description": "The principle component analysis plots the distances of the samples on two components on the x- and y-axis.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#normalisation' target=_blank>normalisation</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>You can also choose which <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#pcoa' target=_blank>components</a> to use for x and y axes, the <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#distance-metric' target=_blank>distance metric</a>, and assign a <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadatum</a> to each color and shape.</p><p>The layout tab has options to adjust the general layout of the graph.",
     "controls": [
-	{ "data":
+	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
-	      { "name": "pcaa", "type": "select", "description": "set the PCA x-component", "title": "PCA X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
-	      { "name": "pcab", "type": "select", "description": "set the PCA y-component", "title": "PCA Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
+	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project_name", "values": "metadata", "isDataUpdater": true },
+	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "biome", "values": "metadata", "isDataUpdater": true },
+	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
+	      { "name": "pcab", "type": "select", "description": "set the principle y-component", "title": "PC Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
 	      { "name": "distance", "type": "select", "description": "method for distance matrix", "title": "distance method", "default": "euclidean", "isDataUpdater": true, "options": [ { "label": "euclidean", "value": "euclidean" }, { "label": "manhattan", "value": "manhattan" }, { "label": "maximum", "value": "maximum" }, { "label": "braycurtis", "value": "braycurtis" }, { "label": "minkowski", "value": "minkowski" } ] },
-	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
+	      { "name": "normalize", "type": "bool", "defaultTrue": true, "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
 	  ]
 	},
 	{ "layout":
@@ -19,6 +23,15 @@
 	  ]
 	}
     ],
+    "connections": { "3": { "headerAttribute": [ { "type": "pinned",
+						   "items": [ { "index": 2,
+								"attribute": "colorAttribute" } ] } ]
+			  },
+		     "4": { "headerAttribute": [ { "type": "pinned",
+						   "items": [ { "index": 2,
+								"attribute": "shapeAttribute" } ] } ] 
+			  }
+		   },
   "items": [
     {
       "type": "axis",
@@ -101,31 +114,88 @@
       "data": "matrix2valueY"
     },
     {
-      "type": "plot",
-      "name": "item2",
-      "parameters": {
-        "height": 400,
-        "width": 400,
-        "radius": 4,
-        "shiftX": 50,
-        "shiftY": 50,
-        "format": {
-          "fill": "white",
-          "stroke": "black",
-          "strokeWidth": 1
-        },
-        "inputType": "plot",
-        "id": "item2",
-        "groupSettings": {},
-        "data": []
-      },
-      "data": "matrix2plot"
+	"type": "plot",
+	"name": "item2",
+	"parameters": {
+	    "colorAttribute": "project_name",
+	    "shapeAttribute": "biome",
+            "height": 400,
+            "width": 400,
+            "radius": 4,
+            "shiftX": 50,
+            "shiftY": 50,
+            "format": {
+		"fill": "white",
+		"stroke": "black",
+		"strokeWidth": 1
+            },
+            "inputType": "plot",
+            "id": "item2",
+            "groupSettings": {},
+            "data": []
+	},
+	"data": "matrix2plot"
     },
       {
       "type": "legend",
       "name": "legend",
 	"parameters": {
-	    "inputType": "matrix",
+	    "inputType": "plot",
+	    "legendType": "color",
+	    "headerAttribute": "project_name",
+        "top": 200,
+        "left": 500,
+        "colors": [
+          "#3366cc",
+          "#dc3912",
+          "#ff9900",
+          "#109618",
+          "#990099",
+          "#0099c6",
+          "#dd4477",
+          "#66aa00",
+          "#b82e2e",
+          "#316395",
+          "#994499",
+          "#22aa99",
+          "#aaaa11",
+          "#6633cc",
+          "#e67300",
+          "#8b0707",
+          "#651067",
+          "#329262",
+          "#5574a6",
+          "#3b3eac",
+          "#b77322",
+          "#16d620",
+          "#b91383",
+          "#f4359e",
+          "#9c5935",
+          "#a9c413",
+          "#2a778d",
+          "#668d1c",
+          "#bea413",
+          "#0c5922",
+          "#743411"
+        ],
+        "format": {
+          "fontSize": 12,
+          "fontFamily": "arial",
+          "fontWeight": "normal"
+        },
+        "id": "legend",
+        "groupSettings": {},
+        "data": []
+      },
+      "data": "matrix2plotlegend"
+      },
+      {
+      "type": "shapelegend",
+      "name": "shapelegend",
+	"parameters": {
+	    "inputType": "plot",
+	    "legendType": "shape",
+	    "headerAttribute": "biome",
         "top": 50,
         "left": 500,
         "colors": [
@@ -170,7 +240,7 @@
         "groupSettings": {},
         "data": []
       },
-      "data": "matrix2columnlegend"
+      "data": "matrix2plotlegend"
     }
   ]
 }
