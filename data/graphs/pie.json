@@ -3,25 +3,29 @@
   "width": 700,
     "height": 500,
     "extended": { "adjust graph data": true },
-    "description": "This vertically grouped barchart shows a list of samples showing the abundance by category. You can select which MIxS datum you would like to use to label the samples. The data can be normalized to adjust for different sample sizes. Performing log 10 will apply a base 10 logarithm to each data point. This enhances visibility of low abundance values.",
+    "description": "The pie-chart shows the categories of a single sample as slices.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>log scaling</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the pie-chart.",
     "controls": [
 	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
-	      { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
+	      { "name": "log", "type": "bool", "defaultTrue": false, "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true }
 	  ]
 	},
 	{ "layout":
 	  [
 	      { "name": "height", "type": "int", "description": "height of the chart", "title": "height" },
 	      { "name": "width", "type": "int", "description": "width of the chart", "title": "width" },
-	      { "name": "items[0].parameters.width", "type": "int", "description": "width of each rim", "title": "rim width" },
-	      { "name": "items[0].parameters.center", "type": "int", "description": "distance from the border to the center", "title": "center point" },
+	      { "name": "items[0].parameters.center", "type": "int", "description": "radius of the pie chart", "title": "radius" },
 	      { "name": "items[1].parameters.top", "type": "int", "description": "top margin of the legend", "title": "legend top" },
 	      { "name": "items[1].parameters.left", "type": "int", "description": "left margin of the legend", "title": "legend left" }
 	  ]
 	}
     ],
+    "connections": { "0": { "center": [ { "type": "pinned",
+					"items": [ { "index": 0,
+						     "attribute": "width" } ] } ]
+			  }
+		   },
   "items": [
     {
       "type": "donutchart",

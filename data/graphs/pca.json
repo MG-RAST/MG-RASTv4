@@ -3,17 +3,17 @@
   "width": 800,
     "height": 500,
     "extended": { "adjust graph data": true },
-    "description": "This vertically grouped barchart shows a list of samples showing the abundance by category. You can select which MIxS datum you would like to use to label the samples. The data can be normalized to adjust for different sample sizes. Performing log 10 will apply a base 10 logarithm to each data point. This enhances visibility of low abundance values.",
+    "description": "The principle component analysis plots the distances of the samples on two components on the x- and y-axis.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#normalisation' target=_blank>normalisation</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>You can also choose which <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#pcoa' target=_blank>components</a> to use for x and y axes, the <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#distance-metric' target=_blank>distance metric</a>, and assign a <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadatum</a> to each color and shape.</p><p>The layout tab has options to adjust the general layout of the graph.",
     "controls": [
 	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
-	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project_name", "values": "metadata" },
-	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "biome", "values": "metadata" },
-	      { "name": "pcaa", "type": "select", "description": "set the PCA x-component", "title": "PCA X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
-	      { "name": "pcab", "type": "select", "description": "set the PCA y-component", "title": "PCA Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
+	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project_name", "values": "metadata", "isDataUpdater": true },
+	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "biome", "values": "metadata", "isDataUpdater": true },
+	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
+	      { "name": "pcab", "type": "select", "description": "set the principle y-component", "title": "PC Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
 	      { "name": "distance", "type": "select", "description": "method for distance matrix", "title": "distance method", "default": "euclidean", "isDataUpdater": true, "options": [ { "label": "euclidean", "value": "euclidean" }, { "label": "manhattan", "value": "manhattan" }, { "label": "maximum", "value": "maximum" }, { "label": "braycurtis", "value": "braycurtis" }, { "label": "minkowski", "value": "minkowski" } ] },
-	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
+	      { "name": "normalize", "type": "bool", "defaultTrue": true, "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
 	  ]
 	},
 	{ "layout":
