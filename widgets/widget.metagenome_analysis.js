@@ -195,8 +195,11 @@
     	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-    	type = type || c.currentRendererType || widget.currentType;
-    	widget.currentType = type;
+	type = type || c.currentRendererType || widget.currentType;
+    	c.currentRendererType = widget.currentType = type;
+	if (! c.visualization.hasOwnProperty(type)) {
+	    c.visualization[type] = {};
+	}
 	
     	document.getElementById("data").style.display = "none";
     	document.getElementById("visualize").style.display = "";
@@ -219,34 +222,49 @@
 
 	// reset the renderer instance
     	if (Retina.RendererInstances[visMap[type].renderer]) {
-    	    Retina.RendererInstances[visMap[type].renderer] = [ Retina.RendererInstances[visMap[type].renderer][0] ];
+    	    Retina.RendererInstances[visMap[type].renderer] = [ jQuery.extend(true, {}, Retina.RendererInstances[visMap[type].renderer][0]) ];
     	}
 
 	// reset the renderer controller instance
     	if (Retina.WidgetInstances.RendererController) {
-    	    Retina.WidgetInstances.RendererController = [ Retina.WidgetInstances.RendererController[0] ];
+    	    Retina.WidgetInstances.RendererController = [ jQuery.extend(true, {}, Retina.WidgetInstances.RendererController[0]) ];
     	}
 	
-	// get the data
-	var settings = jQuery.extend(true, {}, visMap[type].settings);
-	
-	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
-
-	// set the callback
-	settings.callback = widget.graphCallback;
+	// get the settings
+	var settings = jQuery.extend(true, {}, visMap[type].settings, c.visualization[type]);
+	jQuery.extend(true, c.visualization[type], settings);
 
 	// check if we need to adjust the control groups
 	var requireDataUpdate = false;
 	var groups = visMap[type].controlGroups;
+	var dataUpdaters = [];
 	for (var i=0; i<groups.length; i++) {
 	    var k = Retina.keys(groups[i])[0];
 	    for (var h=0; h<groups[i][k].length; h++) {
 		var item = groups[i][k][h];
-		if (item.hasOwnProperty('default')) {
-		    settings[item.name] = item['default'];
-		} else if (item.hasOwnProperty('defaultTrue')) {
-		    settings[item.name] = item['defaultTrue'];
+
+		// create default settings, if no other settings are present
+		if (settings.hasOwnProperty(item.name)) {
+		    if (item.hasOwnProperty('default')) {
+			item['default'] = c.visualization[type][item.name];
+		    } else if (item.hasOwnProperty('defaultTrue')) {
+			item['defaultTrue'] = c.visualization[type][item.name];
+		    }
+		} else {
+		    if (item.hasOwnProperty('default')) {
+			c.visualization[type][item.name] = settings[item.name] = item['default'];
+		    } else if (item.hasOwnProperty('defaultTrue')) {
+			c.visualization[type][item.name] = settings[item.name] = item['defaultTrue'];
+		    }
 		}
+		
+		// check if this is a data updater
+		if (item.isDataUpdater) {
+		    dataUpdaters.push(item);
+		    requireDataUpdate = true;
+		}
+
+		// check if the control item needs to adapt to the sample data
 		if (item.adaptToData) {
 		    var opts = [];
 		    if (item.values && item.values == "metadata") {
@@ -270,10 +288,7 @@
 				opt.value = j;
 				opt.label = c.items[j].name;
 			    }
-			    if (! c.parameters.hasOwnProperty(item.name)) {
-				c.parameters[item.name] = item['default'];
-			    }
-			    if (c.parameters[item.name] == j) {
+			    if ((settings.hasOwnProperty(item.name) && settings[item.name] == j) || (item.hasOwnProperty('default') && item['default'] == j)) {
 				opt.selected = true;
 			    }
 			    opts.push(opt);
@@ -281,44 +296,47 @@
 		    }
 		    item.options = opts;
 		}
-		// check if this is a data updater and execute it
-		if (c.parameters.hasOwnProperty(item.name)) {
-		    if (item.isDataUpdater) {
-			settings[item.name] = c.parameters[item.name];
-			requireDataUpdate = true;
-		    }
-		    if (item.type == 'bool') {
-			if (c.parameters[item.name]) {
-			    item.defaultTrue = true;
-			} else {
-			    item.defaultTrue = false;
-			}
-		    }
-		}
 	    }
 	}
 
-	// set the current controller
-    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "showBreadcrumbs": true, "breadcrumbs": c.breadcrumbs || "", "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
+	// set the data
+	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
 
-	if (requireDataUpdate) {
-	    widget.dataCallback.call(widget.currentVisualizationController);
-	    widget.currentVisualizationController.renderer.render();
+	// perform the data callback if needed
+	if (requireDataUpdate && ! visMap[type].hasOwnProperty('dataField')) {
+	    settings = widget.dataCallback({"dataUpdaters": dataUpdaters, "settings": settings});
 	}
 
-	c.currentRendererType = type;
+	// set the callback
+	settings.callback = widget.graphCallback;
+
+	// set the current controller
+    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "showBreadcrumbs": true, "breadcrumbs": c.breadcrumbs || "", "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
     };
 
     // adjust renderer settings
     widget.settingsCallback = function (name, value) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-
-	stm.DataStore.dataContainer[widget.selectedContainer].parameters[name] = value;
+	
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var ind;
+	if (name.match(/^items\[/)) {
+	    var ret = name.match(/^items\[(\d+)\]\.parameters\.(.+)/);
+	    ind = ret[1];
+	    name = ret[2];
+	} else if (name.match(/^\d/)) {
+	    ind = parseInt(name.match(/^\d+/)[0]);
+	    name = name.match(/\D+/)[0];
+	} else {
+	    c.visualization[c.currentRendererType][name] = value;
+	    return;
+	}
+	c.visualization[c.currentRendererType].items[ind].parameters[name] = value;
     };
 
     // adjust the data for visualization
-    widget.dataCallback = function () {
-	var rc = this;
+    widget.dataCallback = function (rc) {
+	var settings = rc.hasOwnProperty('renderer') ? rc.renderer.settings : rc.settings;
 
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
@@ -337,25 +355,25 @@
 	    var opt = rc.dataUpdaters[i];
 	    
 	    // data normalization
-	    if (opt.name == "normalize" && rc.renderer.settings[opt.name]) {
+	    if (opt.name == "normalize" && settings[opt.name]) {
 		data.data = Retina.transposeMatrix(Retina.normalizeMatrix(Retina.transposeMatrix(data.data)));
 	    }
 
 	    // turn data to log
 	    else if (opt.name == "log") {
-		if (rc.renderer.settings[opt.name]) {
+		if (settings[opt.name]) {
 		    data.data = Retina.logMatrix(data.data);
 		    if (visMap.hasOwnProperty('logAxes')) {
 			for (var h=0; h<visMap.logAxes.length; h++) {
-			    rc.renderer.settings.items[visMap.logAxes[h]].parameters.isLog = true;
-			    rc.renderer.settings.items[visMap.logAxes[h]].data += "log";
+			    settings.items[visMap.logAxes[h]].parameters.isLog = true;
+			    settings.items[visMap.logAxes[h]].data += "log";
 			}
 		    }
 		} else {
 		    if (visMap.hasOwnProperty('logAxes')) {
 			for (var h=0; h<visMap.logAxes.length; h++) {
-			    rc.renderer.settings.items[visMap.logAxes[h]].parameters.isLog = false;
-			    rc.renderer.settings.items[visMap.logAxes[h]].data = rc.renderer.settings.items[visMap.logAxes[h]].data.replace(/log$/, '');
+			    settings.items[visMap.logAxes[h]].parameters.isLog = false;
+			    settings.items[visMap.logAxes[h]].data = settings.items[visMap.logAxes[h]].data.replace(/log$/, '');
 			}
 		    }
 		}
@@ -364,35 +382,37 @@
 	    // set pca components
 	    else if (opt.name == "pcaa" || opt.name == "pcab") {
 		if (opt.name == "pcaa") {
-		    c.parameters.pcaComponentA = rc.renderer.settings[opt.name] || 0;
+		    c.parameters.pcaComponentA = settings[opt.name] || 0;
 		} else {
-		    c.parameters.pcaComponentB = rc.renderer.settings.hasOwnProperty(opt.name) ? rc.renderer.settings[opt.name] : 1;
+		    c.parameters.pcaComponentB = settings.hasOwnProperty(opt.name) ? settings[opt.name] : 1;
 		}
 	    }
 
 	    // set the differential plot metagenomes
 	    else if (opt.name == "mga" || opt.name == "mgb") {
 		if (opt.name == "mga") {
-		    c.parameters.differentialMetagenomeA = rc.renderer.settings[opt.name] || 0;
+		    c.parameters.differentialMetagenomeA = settings[opt.name] || 0;
 		} else {
-		    c.parameters.differentialMetagenomeB = rc.renderer.settings.hasOwnProperty(opt.name) ? rc.renderer.settings[opt.name] : 1;
+		    c.parameters.differentialMetagenomeB = settings.hasOwnProperty(opt.name) ? settings[opt.name] : 1;
 		}
 	    }
 
 	    // update the metadatum
-	    else if (opt.name == "metadatum" && rc.renderer.settings.hasOwnProperty('metadatum')) {
-		c.parameters.metadatum = rc.renderer.settings.metadatum;
+	    else if (opt.name == "metadatum" && settings.hasOwnProperty('metadatum')) {
+		c.parameters.metadatum = settings.metadatum;
 		for (var h=0; h<data.cols.length; h++) {
-		    data.cols[h] = c.items[h][rc.renderer.settings[opt.name]];
+		    data.cols[h] = c.items[h][settings[opt.name]];
 		}
 	    }
 	}
 	
 	if (visMap.hasOwnProperty('dataConversion')) {
-	    data.data = widget[visMap.dataConversion](data.data).data;
+	    data = widget[visMap.dataConversion](data);
 	}
 	
-	rc.renderer.settings.data = data;
+	settings.data = data;
+	
+	return settings;
     };
 
     // a visualization was clicked to navigate
@@ -685,7 +705,7 @@
 	html.push('<div class="input-prepend"  id="abundanceField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 90px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'abundance\',this.nextSibling.value);">min.abundance</button><input id="abundanceInput" type="text" value="'+p.abundance+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
 	// reset to default
-	html.push('<button class="btn btn-mini" title="reset to defaults" style="position: relative; bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'default\')"><i class="icon icon-refresh"></i></button>');
+	html.push('<button class="btn btn-mini" title="reset to defaults" style="position: relative; bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'default\')"><i class="icon icon-step-backward"></i></button>');
 
 	// display params table
 	html.push('<table style="font-size: 12px;">');
@@ -1299,15 +1319,15 @@
 
     widget.container2pca = function (data) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
-	
+
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
-	
-	var matrix = Retina.copyMatrix(data || c.matrix.data);
-	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.parameters.distance));
+
+	var matrix = Retina.copyMatrix(data ? data.data : c.matrix.data);
+	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.visualization.pca.distance));
 	var points = [];
 	
 	for (var i=0; i<pca.coordinates.length; i++) {
-	    points.push( { "x": pca.coordinates[i][c.parameters.pcaa], "y": pca.coordinates[i][c.parameters.pcab], "name": c.matrix.cols[i] } );
+	    points.push( { "x": pca.coordinates[i][c.visualization.pca.pcaa], "y": pca.coordinates[i][c.visualization.pca.pcab], "name": c.matrix.cols[i] } );
 	}
 	
 	return { "data": [ { "points": points } ], "cols": c.matrix.cols, "headers": c.matrix.headers };
@@ -1321,7 +1341,7 @@
 	var matrix = Retina.copyMatrix(c.matrix.data);
 	var points = [];
 	for (var i=0; i<matrix.length; i++) {
-	    points.push( { "x": Retina.log10(matrix[i][c.parameters.mga]), "y": Retina.log10(matrix[i][c.parameters.mgb]), name: c.matrix.rows[i] });
+	    points.push( { "x": Retina.log10(matrix[i][c.visualization.differential.mga]), "y": Retina.log10(matrix[i][c.visualization.differential.mgb]), name: c.matrix.rows[i] });
 	}
 	
 	return { "data": [ { "points": points } ] };
@@ -1479,7 +1499,7 @@
 	    html.push('</div><div style="clear: both;"></div>');
 
 	     // metagenome selector
-	    html.push('<h5 style="margin-top: 0px;">metagenomes<div style="float: right;" id="loadedProfileSpace"></div><div style="float: right;" id="collectionSpace"></div></h5><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
+	    html.push('<h5 style="margin-top: 0px;"><div style="float: left;">metagenomes</div><div style="float: left; margin-left: 443px; height: 20px;"></div><div style="float: left; margin-right: 5px;" id="collectionSpace"></div><div style="float: left;" id="loadedProfileSpace"></div></h5><div style="clear: both; height: 5px;"></div><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
 
 	    // data progress
 	    html.push('<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; width: 90%;"></div><div style="clear: both;">');
@@ -1673,6 +1693,7 @@
 								    abundance: 1,
 								    taxFilter: [],
 								    ontFilter: [] },
+						      visualization: {},
 						      created: Retina.date_string(new Date().getTime()),
 						      user: stm.user || "anonymous" };
 		if (typeof Retina.WidgetInstances.metagenome_analysis[1].loadDone == "function") {
@@ -2598,7 +2619,7 @@
     widget.enableLoadedProfiles = function () {
 	var widget = this;
 
-	var html = [ '<div class="btn-group" style="position: relative; right: 87px;"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><i class="icon icon-folder-open" style=" margin-right: 5px;"></i>add loaded profiles <span class="caret"></span></a><ul class="dropdown-menu">' ];
+	var html = [ '<div class="btn-group"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><i class="icon icon-folder-open" style=" margin-right: 5px;"></i>add loaded profiles <span class="caret"></span></a><ul class="dropdown-menu">' ];
 
 	html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addLoadedProfile(null, true); return false;"><i>- all -</i></a></li>');
 	
@@ -2640,7 +2661,7 @@
     widget.enableCollections = function () {
 	var widget = this;
 
-	var html = [ '<div class="btn-group" style="position: relative; right: 87px;"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><img style="height: 16px; margin-right: 5px;" src="Retina/images/cart.png">add collection <span class="caret"></span></a><ul class="dropdown-menu">' ];
+	var html = [ '<div class="btn-group"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><img style="height: 16px; margin-right: 5px;" src="Retina/images/cart.png">add collection <span class="caret"></span></a><ul class="dropdown-menu">' ];
 
 	var colls = Retina.keys(stm.user.preferences.collections).sort();
 	for (var i=0; i<colls.length; i++) {
