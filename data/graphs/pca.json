@@ -8,8 +8,8 @@
 	{ "adjust graph data":
 	  [
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
-	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project_name", "values": "metadata", "isDataUpdater": true },
-	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "biome", "values": "metadata", "isDataUpdater": true },
+	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project_name", "values": "metadata" },
+	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "biome", "values": "metadata" },
 	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
 	      { "name": "pcab", "type": "select", "description": "set the principle y-component", "title": "PC Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
 	      { "name": "distance", "type": "select", "description": "method for distance matrix", "title": "distance method", "default": "euclidean", "isDataUpdater": true, "options": [ { "label": "euclidean", "value": "euclidean" }, { "label": "manhattan", "value": "manhattan" }, { "label": "maximum", "value": "maximum" }, { "label": "braycurtis", "value": "braycurtis" }, { "label": "minkowski", "value": "minkowski" } ] },
@@ -23,11 +23,11 @@
 	  ]
 	}
     ],
-    "connections": { "3": { "headerAttribute": [ { "type": "pinned",
+    "connections": { "3": { "headerAttribute": [ { "type": "equal",
 						   "items": [ { "index": 2,
 								"attribute": "colorAttribute" } ] } ]
 			  },
-		     "4": { "headerAttribute": [ { "type": "pinned",
+		     "4": { "headerAttribute": [ { "type": "equal",
 						   "items": [ { "index": 2,
 								"attribute": "shapeAttribute" } ] } ] 
 			  }
