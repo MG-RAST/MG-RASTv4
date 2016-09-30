@@ -426,3 +426,7 @@ h5 {
     width: 100%;
     height: 280px;
 }
+
+.spaced li {
+    margin-bottom: 20px;
+}
