@@ -97,7 +97,7 @@
 	    toolshtml += "<div id='availableContainers'></div>";
 	}
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
-	toolshtml += "<div id='currentContainerParams'></div><div id='recipeShowMoreOptions' style='display: none; text-align: center;'><button class='btn' onclick='document.getElementById(\"recipeShowMoreOptions\").style.display=\"none\";document.getElementById(\"containerActive\").style.display=\"\";'>show more options</button></div><div id='containerActive' style='display: none;'>";
+	toolshtml += "<div id='recipeShowMoreOptions' style='display: none; text-align: center;'><button class='btn' onclick='document.getElementById(\"recipeShowMoreOptions\").style.display=\"none\";document.getElementById(\"containerActive\").style.display=\"\";'>show all options</button></div><div id='containerActive' style='display: none;'><div id='currentContainerParams'></div>";
 	toolshtml += "<h4>View</h4>";
 	toolshtml += "<div id='visualContainerSpace'></div>";
 	toolshtml += "<h4>Plugins</h4>";
@@ -455,6 +455,36 @@
 	    dls.selectedIndex++;
 	    dls.onchange();
 	}
+    };
+
+    widget.setFilter = function (cat, level, source, type) {
+	var widget = this;
+
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	if (! c.hasOwnProperty('items')) {
+	    alert('You must select data first!');
+	    return;
+	}
+	level = level || c.parameters.displayLevel;
+	source = source || c.parameters.displaySource
+	type = type || 'tax';
+
+	// set filter
+	c.parameters[type+'Filter'] = [ { "level": level, "source": source, "value": cat } ];
+
+	// recalculate matrix
+	if (! widget.container2matrix()) { return; }
+	
+	// update breadcrumbs
+	var bread = "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb(0);'>&raquo; all</a> ";
+	var hier = c.hierarchy[Retina.keys(c.hierarchy)[0]];
+	for (var h=0; h<hier.length - 1; h++) {
+	    bread += "<a href='#' onclick='Retina.WidgetInstances.metagenome_analysis[1].activateBreadcrumb("+h+", \""+hier[h]+"\");'>&raquo; "+hier[h]+"</a> ";
+	}
+	c.breadcrumbs = bread;
+
+	widget.showCurrentContainerParams();
+	widget.visualize();
     };
 
     // navigate to a breadcrumb that was clicked
@@ -1047,8 +1077,8 @@
 			    } else {
 
 				// this is bad, the taxonomy does not match the data in the profile
-				if (org[k]) {
-				    console.log("org not found: "+org[k])
+				if (orgs[k]) {
+				    console.log("org not found: "+orgs[k])
 				}
 			    }
 			}
@@ -2112,8 +2142,11 @@
 
 	html.push("<table>");
 	html.push("<tr><td style='vertical-align: top;'>name</td><td><input type='text' id='recipeName' placeholder='name of the recipe' style='width: 360px;'></td></tr>");
-	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>description</td><td><textarea style='width: 360px; height: 90px;' id='recipeDescription' placeholder='a short description of what this recipe does'></textarea></td></tr>");
-
+	html.push("<tr><td style='vertical-align: top;'>categories</td><td><input type='text' id='recipeCategories' placeholder='comma separated list of categories' style='width: 360px;'></td></tr>");
+	html.push("<tr><td style='vertical-align: top;'>stars</td><td><select id='recipeStars' style='width: 360px;'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>");
+	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>short description</td><td><textarea style='width: 360px; height: 90px;' id='recipeShortDescription' placeholder='a short description of what this recipe does'></textarea></td></tr>");
+	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>description</td><td><textarea style='width: 360px; height: 90px;' id='recipeDescription' placeholder='a detailed description of the recipe'></textarea></td></tr>");
+	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>controls</td><td>taxonomy select <input type='checkbox' id='recipeTaxSelect' style='position: relative; bottom: 3px;'><br>e-value <input type='checkbox' id='recipeEvalue' style='position: relative; bottom: 3px;'><br>%-identity <input type='checkbox' id='recipeIdentity' style='position: relative; bottom: 3px;'><br>alignment length <input type='checkbox' id='recipeAlilen' style='position: relative; bottom: 3px;'><br>min. abundance <input type='checkbox' id='recipeAbundance' style='position: relative; bottom: 3px;'></td></tr>");
 	html.push("</table>");
 
 	document.getElementById('recipeModalContent').innerHTML = html.join('');
@@ -2151,14 +2184,51 @@
 	// check the parameters from the editor
 	var name = document.getElementById('recipeName').value;
 	var description = document.getElementById('recipeDescription').value;
-
-	if (name.length == 0 || description.length == 0) {
-	    alert('you must enter a name and a description');
+	var shortdescription = document.getElementById('recipeShortDescription').value;
+	var categories = document.getElementById('recipeCategories').value;
+	categories = categories.replace(/\s*,\s*/g, ",").split(/,/);
+	var keywords = {};
+	for (var i=0; i<categories.length; i++) {
+	    keywords[categories[i]] = true;
+	}
+	
+	if (name.length == 0 || description.length == 0 || shortdescription.length == 0) {
+	    alert('you must fill out all fields');
 	    return;
 	}
 
 	c.name = name;
 	c.description = description;
+	c.shortdescription = shortdescription;
+	c.keywords = keywords;
+	c.stars = parseInt(document.getElementById('recipeStars').options[document.getElementById('recipeStars').selectedIndex].value);
+
+	c.newbOptions = [];
+	if (document.getElementById('recipeTaxSelect').checked) {
+	    c.newbOptions.push({"type":"TaxSelect","params":{"level":c.parameters.taxFilter[0].level,"default":c.parameters.taxFilter[0].value}});
+	}
+	if (document.getElementById('recipeEvalue').checked) {
+	    c.newbOptions.push({"type":"evalue","params":{"default":c.parameters.evalue}});
+	}
+	if (document.getElementById('recipeIdentity').checked) {
+	    c.newbOptions.push({"type":"identity","params":{"default":c.parameters.identity}});
+	}
+	if (document.getElementById('recipeAlilen').checked) {
+	    c.newbOptions.push({"type":"alilen","params":{"default":c.parameters.alilen}});
+	}
+	if (document.getElementById('recipeAbundance').checked) {
+	    c.newbOptions.push({"type":"abundance","params":{"default":c.parameters.abundance}});
+	}
+	
+	/*
+	  ADMIN ONLY
+	 */
+
+	c.author = "MG-RAST"
+
+	/*
+	  ADMIN ONLY
+	 */
 	
 	// check where to store the recipe
 
@@ -2251,9 +2321,40 @@
 	stm.DataStore.dataContainer[data.id] = data;
 	widget.currentType = data.currentRendererType;
 	widget.selectedContainer = data.id;
+
+	// add the newb controls
+	var controlTypes = { 'taxSelect': { 'func': function(params) { jQuery("#newbTaxText").typeahead({"source": stm.DataStore.taxonomy[params.level]});
+								       if (params.hasOwnProperty('default')) { document.getElementById("newbTaxText").value = params["default"]; }
+								       document.getElementById("newbTaxTextPre").innerHTML = params.level
+								       document.getElementById("newbTaxTextButton").setAttribute("onclick", 'Retina.WidgetInstances.metagenome_analysis[1].setFilter(document.getElementById("newbTaxText").value, "'+params.level+'")'); },
+					    'html': '<div class="input-append input-prepend"><span class="add-on" id="newbTaxTextPre"></span><input type="text" id="newbTaxText" placeholder="enter tax category"><button class="btn" id="newbTaxTextButton">set</button></div>' },
+			     'evalue': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbEvalue").value = params["default"]; }},
+					  'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">e-value</span><input type="text" style="width: 80px;" id="newbEvalue"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\', document.getElementById(\'newbEvalue\').value);">set</button></div>' },
+			     'alilen': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbAlilen").value = params["default"]; }},
+					  'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">alignment length</span><input type="text" style="width: 80px;" id="newbAlilen"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'alilen\', document.getElementById(\'newbAlilen\').value);">set</button></div>' },
+			     'identity': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbIdentity").value = params["default"]; }},
+					   'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">%-identity</span><input type="text" style="width: 80px;" id="newbIdentity"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'identity\', document.getElementById(\'newbIdentity\').value);">set</button></div>' },
+			     'abundance': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbAbundance").value = params["default"]; }},
+					   'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">min. abundance</span><input type="text" style="width: 80px;" id="newbAbundance"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'abundance\', document.getElementById(\'newbAbundance\').value);">set</button></div>' },
+			   };
+	
+	var controls = [];
+	if (data.hasOwnProperty('newbOptions') && data.newbOptions.length) {
+	    for (var i=0; i<data.newbOptions.length; i++) {
+		controls.push(controlTypes[data.newbOptions[i].type].html);
+		
+	    }
+	    html += controls.join('<br>');
+	}
 	
 	document.getElementById('recipeDisplay').innerHTML = html;
 
+	if (data.hasOwnProperty('newbOptions') && data.newbOptions.length) {
+	    for (var i=0; i<data.newbOptions.length; i++) {
+		controlTypes[data.newbOptions[i].type].func(data.newbOptions[i].params);
+	    }
+	}
+	
 	document.getElementById('recipeTitle').innerHTML = data.name;
     };
 
