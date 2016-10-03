@@ -1724,9 +1724,8 @@
 		    break;
 		}
 	    }
-	    console.log(hasNonRNA);
+
 	    for (var i=0; i<ids.length; i++) {
-		console.log(ids[i].sequence_type);
 		if (ids[i].sequence_type == 'Amplicon' && hasNonRNA) {
 		    alert('You have chosen a non RNA datasource for an amplicon dataset.\n\nPlease remove either the datasource or the amplicon datasets from your selection.');
 		    return;
