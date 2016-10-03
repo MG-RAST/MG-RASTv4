@@ -85,7 +85,7 @@
 		continue;
 	    }
 	    numShown++;
-	    html.push('<div class="recipe"><table style="width: 100%;"><tr><td style="width: 280px;">'+d.image+'</div></td><td style="padding-left: 20px; vertical-align: top;"><h4 style="margin: 0px;"><a href="mgmain.html?mgpage=analysis&recipe='+(i+1)+'">'+d.name+'</a><div style="float: right; position: relative; bottom: 3px;">'+widget.stars(d.stars)+'</div></h4><p style="font-size: 10px; color: gray; margin: 0px;">by '+d.author+'</p><p>'+d.shortdescription+'</p></td></tr></table></div>');
+	    html.push('<div class="recipe"><table style="width: 100%;"><tr><td style="width: 280px; vertical-align: top;">'+d.image+'</div></td><td style="padding-left: 20px; vertical-align: top;"><h4 style="margin: 0px;"><a href="mgmain.html?mgpage=analysis&recipe='+(i+1)+'">'+d.name+'</a><div style="float: right; position: relative; bottom: 3px;">'+widget.stars(d.stars)+'</div></h4><p style="font-size: 10px; color: gray; margin: 0px;">by '+d.author+'</p><p>'+d.shortdescription+'</p></td></tr></table></div>');
 	}
 	document.getElementById('recipes').innerHTML = html.join("<div style='clear: both;'><hr></div>");
 	document.getElementById('keywords').innerHTML = 'showing '+numShown+' of '+widget.recipes.length;
