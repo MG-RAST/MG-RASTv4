@@ -89,11 +89,8 @@
 	if (Retina.cgiParam('recipe')) {
 	    widget.isRecipe = true;
 	    toolshtml += "<div id='recipeDisplay' style='border-radius: 5px;'></div>";
-	    jQuery.getJSON('data/recipes/recipe'+Retina.cgiParam('recipe')+'.recipe.json', function (data) {
-		Retina.WidgetInstances.metagenome_analysis[1].showRecipe(data);
-	    });
 	} else {
-	    toolshtml += "<h4>Analysis Containers</h4>";
+	    toolshtml += "<h4>Analysis</h4>";
 	    toolshtml += "<div id='availableContainers'></div>";
 	}
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
@@ -126,6 +123,12 @@
 	recipeDiv.setAttribute('role', "dialog");
 	recipeDiv.innerHTML = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>Create a new recipe</h3></div><div class="modal-body" id="recipeModalContent" style="max-height: 550px;"></div><div class="modal-footer"><a href="#" class="btn btn-danger pull-left" data-dismiss="modal" aria-hidden="true">cancel</a><a href="#" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].createRecipe(true);"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;"> download recipe</a><a href="#" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].createRecipe(false);"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;"> upload recipe to myData</a></div></div>';
 	document.body.appendChild(recipeDiv);
+
+	if (widget.isRecipe) {
+	    jQuery.getJSON('data/recipes/recipe'+Retina.cgiParam('recipe')+'.recipe.json', function (data) {
+		Retina.WidgetInstances.metagenome_analysis[1].showRecipe(data);
+	    });
+	}
     };
 
     /*
@@ -692,11 +695,11 @@
 			glow = " glow";
 			name = "<span style='color: blue;'>"+name+"</span>";
 		    }
-		    html += "<div title='click to select analysis container' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
+		    html += "<div title='click to select analysis' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
 		}
 		
 	    }
-	    html += "<div title='create a new analysis container' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
+	    html += "<div title='create a new analysis' style='width: 75px; word-wrap: break-word; float: left; padding-left: 7px;' onclick='Retina.WidgetInstances.metagenome_analysis[1].loadDataUI();Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();'><div class='tool' id='addDataIcon'><div style='font-weight: bold; font-size: 20px; margin-top: 4px; text-align: center;'>+</div></div></div>";
 	    container.innerHTML = html;
 
 	    if (widget.selectedContainer) {
@@ -718,7 +721,7 @@
 	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis container' onclick='if(confirm(\"Really delete this analysis container? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
 
 	// cutoffs
 	
@@ -1502,7 +1505,7 @@
 	    if (widget.isRecipe) {
 		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Analysis Recipe: <span id='recipeTitle'></span></h3><p>To start select datasets below and click <a class='btn btn-mini btn-success' style='position: relative; left: 5px; bottom: 1px;'><i class='icon-ok icon-white'></i></a></p><p>The analysis recipe will guide you through the analysis by presetting all parameters. You only need to select the datasets you want to perform the analysis for. Use the <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"mgselect\").className=\"glow\";' onmouseout='document.getElementById(\"mgselect\").className=\"\";'>selection box</span> below to do so.</p><p>Once the data is loaded, you will immediately see the analysis results. The <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"recipeDisplay\").className=\"glow\";' onmouseout='document.getElementById(\"recipeDisplay\").className=\"\";'>recipe description</span> is always visible on the righthand side. It will also inform you about important parameters you can adjust. Hover over the highlighted terms to see where to change those parameters.</p><div>");
 	    } else {
-		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis Container <span style='cursor: pointer;' title='click to see a short tutorial video'><sup>[?]</sup></span></h3><p>An analysis container holds all the <span class='tt' data-title='Analysis Container Settings' data-content='<p>The settings include the list of referenced profiles, the selected data-sources, the current cutoffs like e-value or alignment length, taxonomic or hierarchical filters and the current visualization.</p><p>Once the container is ready, you can adjust the settings in the righthand menu.</p>'>settings</span> for your analysis, as well as the current analysis result. It is based on metagenomic profiles, which contain all the raw data.</p><p>Select the databases and the profiles for your analysis container. You can name the container in the text-field <i>analysis container name</i>. Click the <i class='icon-ok'></i></a>-button below to begin.</p><p><span class='tt' data-title='Metagenomic Profiles' data-content='<p>Profiles are generated on our server on demand. The initial calculation may take some time, depending on the profile size. Once computed, they will be cached and subsequent requests will download immediately.</p><p>You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p>'>Profiles</span> which are not yet on your machine will be downloaded. Once all required profiles are available, the analysis container is ready for exploration!</p><div style='overflow-x: auto;'>");
+		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis</h3><p>To perform an analysis, you must first load the metagenomic profiles to analyze. A profile holds the abundance values and cutoffs for a list of database sources for a specific dataset. You can select the databases and datasets, as well as a name for your analysis below. Click the <i class='icon-ok'></i></a>-button to load the data from our server.</p><p>Profiles are generated on demand. Depending on profile size the initial calculation may take some time. Once computed they will be cached and subsequent requests will download immediately. You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p><p>Once all required data is loaded you can start the analysis.</p><div style='overflow-x: auto;'>");
 	    }
 
 
@@ -1510,19 +1513,7 @@
 	    html.push("<div>");
 	    if (! widget.isRecipe) {
 		// protein vs rna
-		html.push('<div class="span4"><h5>taxonomic / functional database</h5><div><div class="btn-group" data-toggle="buttons-radio" style="float: left;"><button type="button" class="btn active" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'protein\');">protein</button><button type="button" class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].showDatabases(\'RNA\');">RNA</button></div><div id="databaseSelect" style="position: relative; bottom: 3px"></div></div></div>');
-		
-		// ontology
-		var ontSources = widget.sources.hierarchical;
-		html.push('<div class="span4"><h5>hierarchical ontology database</h5><div><ul class="nav nav-pills" style="float: left; position: relative; bottom: 3px;"><li class="dropdown">\
-<a class="dropdown-toggle" style="border: 1px solid;" data-toggle="dropdown" href="#"><span id="selectedOntSource">'+ontSources[0]+'</span> <b class="caret"></b></a>\
-<ul class="dropdown-menu" role="menu">');
-		
-		for (var i=0; i<ontSources.length; i++) {
-		    html.push(' <li><a href="#" onclick="document.getElementById(\'selectedOntSource\').innerHTML=\''+ontSources[i]+'\';Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.sources[1]=\''+ontSources[i]+'\';">'+ontSources[i]+'</a></li>');
-		}
-		
-		html.push('</ul></li></ul></div></div>');
+		html.push('<div style="float: left;"><h5>selected databases</h5><div id="pickedDatabases"></div></div><div style="float: right; margin-right: 50px;"><h5>available databases</h5><div id="availableDatabases"></div></div>');
 	    }
 
 	    // params container close and divider
@@ -1545,7 +1536,7 @@
 
 	    // show the databases
 	    if (! widget.isRecipe) {
-		widget.showDatabases("protein");
+		widget.showDatabases();
 	    }
 
 	    // create a metagenome selection renderer
@@ -1568,7 +1559,7 @@
 		filter: result_columns,
 		keyMapping: result_attributes,
 		result_field: widget.isRecipe ? false : true,
-		result_field_placeholder: "analysis container name",
+		result_field_placeholder: "analysis name",
 		result_field_default: widget.result_field_default || "",
 		multiple: true,
 		extra_wide: true,
@@ -1584,22 +1575,55 @@
     }
 
     // show the available databases for either protein or RNA
-    widget.showDatabases = function (which) {
+    widget.showDatabases = function () {
 	var widget = this;
 
-	var html = ['<ul class="nav nav-pills" style="float: left; margin-left: 20px;"><li class="dropdown">\
-<a class="dropdown-toggle" style="border: 1px solid;" data-toggle="dropdown" href="#"><span id="selectedSource">'+widget.sources[which][0]+'</span> <b class="caret"></b></a>\
-<ul class="dropdown-menu" role="menu">'];
+	var types = [ 'protein', 'hierarchical', 'RNA' ];
+	var sources = {};
+	for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
+	    sources[widget.dataLoadParams.sources[i]] = true;
+	}
+	
+	var picked = [];
+	var avail = ['<div class="input-append"><select style="width: 125px;" id="dataLoadSourceSelect">'];
 
-	for (var i=0; i<widget.sources[which].length; i++) {
-	    html.push(' <li><a href="#" onclick="document.getElementById(\'selectedSource\').innerHTML=\''+widget.sources[which][i]+'\';Retina.WidgetInstances.metagenome_analysis[1].dataLoadParams.sources[0]=\''+widget.sources[which][i]+'\';">'+widget.sources[which][i]+'</a></li>');
+	for (var h=0; h<types.length; h++) {
+	    avail.push('<optgroup label="'+types[h]+'" style="font-style: normal;padding: 0px 5px 5px 5px;">');
+	    for (var i=0; i<widget.sources[types[h]].length; i++) {
+		var source = widget.sources[types[h]][i];
+		if (sources[source]) {
+		    picked.push('<button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeDatabases(\''+source+'\',\'remove\');" title="click to remove datasource">'+source+' &times;</button>');
+		} else {
+		    avail.push('<option>'+source+'</option>');
+		}
+	    }
+	    avail.push('</optgroup>');
 	}
 	   
-	html.push('</ul></li></ul>');
+	avail.push('</select><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeDatabases(document.getElementById(\'dataLoadSourceSelect\').options[document.getElementById(\'dataLoadSourceSelect\').selectedIndex].value,\'add\');">add</button></div>');
 
-	widget.dataLoadParams.sources[0] = widget.sources[which][0];
+	document.getElementById('availableDatabases').innerHTML = avail.join("");
 
-	document.getElementById('databaseSelect').innerHTML = html.join("");
+	document.getElementById('pickedDatabases').innerHTML = picked.join("");
+    };
+
+    widget.changeDatabases = function (db, action) {
+	var widget = this;
+
+	if (action == 'remove') {
+	    var sources = [];
+	    for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
+		var s = widget.dataLoadParams.sources[i];
+		if (s !== db) {
+		    sources.push(s);
+		}
+	    }
+	    widget.dataLoadParams.sources = sources;
+	} else {
+	    widget.dataLoadParams.sources.push(db);
+	}
+
+	widget.showDatabases();
     };
     
     widget.loadDone = function (container) {
@@ -1689,7 +1713,24 @@
 
 	    // sanity check if there is a sequence type mix
 	    var seqTypes = {};
+	    var rna = {};
+	    for (var i=0; i<widget.sources.RNA.length; i++) {
+		rna[widget.sources.RNA[i]] = true;
+	    }
+	    var hasNonRNA = false;
+	    for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
+		if (! rna[widget.dataLoadParams.sources[i]]) {
+		    hasNonRNA = true;
+		    break;
+		}
+	    }
+	    console.log(hasNonRNA);
 	    for (var i=0; i<ids.length; i++) {
+		console.log(ids[i].sequence_type);
+		if (ids[i].sequence_type == 'Amplicon' && hasNonRNA) {
+		    alert('You have chosen a non RNA datasource for an amplicon dataset.\n\nPlease remove either the datasource or the amplicon datasets from your selection.');
+		    return;
+		}
 		if (! seqTypes.hasOwnProperty(ids[i].sequence_type)) {
 		    seqTypes[ids[i].sequence_type] = 0;
 		}
@@ -2178,7 +2219,8 @@
 	if (document.getElementById('SVGdiv1')) {
 	    c.image = document.getElementById('SVGdiv1').innerHTML;
 	} else if (document.getElementById('visualizeTarget')) {
-	    c.image = document.getElementById('visualizeTarget').childNodes[1].innerHTML;
+	    var div = document.getElementById('visualizeTarget').childNodes[1];
+	    c.image = "<div style='transform-origin: 0px 0px 0px; transform: scale("+(200/parseInt(div.offsetWidth))+"); position: absolute;'>"+div.innerHTML+"</div>";
 	}
 
 	// check the parameters from the editor
@@ -2205,7 +2247,7 @@
 
 	c.newbOptions = [];
 	if (document.getElementById('recipeTaxSelect').checked) {
-	    c.newbOptions.push({"type":"TaxSelect","params":{"level":c.parameters.taxFilter[0].level,"default":c.parameters.taxFilter[0].value}});
+	    c.newbOptions.push({"type":"taxSelect","params":{"level":c.parameters.taxFilter[0].level,"default":c.parameters.taxFilter[0].value}});
 	}
 	if (document.getElementById('recipeEvalue').checked) {
 	    c.newbOptions.push({"type":"evalue","params":{"default":c.parameters.evalue}});
@@ -2214,7 +2256,7 @@
 	    c.newbOptions.push({"type":"identity","params":{"default":c.parameters.identity}});
 	}
 	if (document.getElementById('recipeAlilen').checked) {
-	    c.newbOptions.push({"type":"alilen","params":{"default":c.parameters.alilen}});
+	    c.newbOptions.push({"type":"alilen","params":{"default":c.parameters.alilength}});
 	}
 	if (document.getElementById('recipeAbundance').checked) {
 	    c.newbOptions.push({"type":"abundance","params":{"default":c.parameters.abundance}});
@@ -2321,6 +2363,7 @@
 	stm.DataStore.dataContainer[data.id] = data;
 	widget.currentType = data.currentRendererType;
 	widget.selectedContainer = data.id;
+	widget.dataLoadParams.sources = data.parameters.sources;
 
 	// add the newb controls
 	var controlTypes = { 'taxSelect': { 'func': function(params) { jQuery("#newbTaxText").typeahead({"source": stm.DataStore.taxonomy[params.level]});
@@ -2331,7 +2374,7 @@
 			     'evalue': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbEvalue").value = params["default"]; }},
 					  'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">e-value</span><input type="text" style="width: 80px;" id="newbEvalue"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\', document.getElementById(\'newbEvalue\').value);">set</button></div>' },
 			     'alilen': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbAlilen").value = params["default"]; }},
-					  'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">alignment length</span><input type="text" style="width: 80px;" id="newbAlilen"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'alilen\', document.getElementById(\'newbAlilen\').value);">set</button></div>' },
+					  'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">alignment length</span><input type="text" style="width: 80px;" id="newbAlilen"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'alilength\', document.getElementById(\'newbAlilen\').value);">set</button></div>' },
 			     'identity': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbIdentity").value = params["default"]; }},
 					   'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">%-identity</span><input type="text" style="width: 80px;" id="newbIdentity"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'identity\', document.getElementById(\'newbIdentity\').value);">set</button></div>' },
 			     'abundance': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbAbundance").value = params["default"]; }},
