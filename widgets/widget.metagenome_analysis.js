@@ -271,15 +271,41 @@
 		if (item.adaptToData) {
 		    var opts = [];
 		    if (item.values && item.values == "metadata") {
-			var mdkeys = Retina.keys(c.items[0]).sort();
-			for (var j=0; j<mdkeys.length; j++) {
-			    var opt = { "label": mdkeys[j], "value": mdkeys[j] };
-			    if (item.hasOwnProperty('default') && (item["default"] == mdkeys[j])) {
-				opt.selected = true;
-			    } else if (c.parameters.metadatum == mdkeys[j]) {
-				opt.selected = true;
+
+			// parse the metadata into the required structure
+			var g = [ "project", "env_package", "library", "sample" ];
+			var allMD = { "project": {}, "env_package": {}, "library": {}, "sample": {} };
+			for (var l=0; l<c.items.length; l++) {
+			    for (var j=0; j<g.length; j++) {
+				var d = stm.DataStore.profile[c.items[l].id].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[c.items[l].id].metagenome.metadata[g[j]].data : {};
+				var mds = Retina.keys(d);
+				for (var m=0; m<mds.length; m++) {
+				    if (! allMD[g[j]].hasOwnProperty(mds[m])) {
+					allMD[g[j]][mds[m]] = 0;
+				    }
+				    allMD[g[j]][mds[m]]++;
+				}
 			    }
-			    opts.push(opt);
+			}
+
+			// iterate over the metadata and create options
+			for (var j=0; j<g.length; j++) {
+			    opts.push( { "isGroup": true, "name": g[j] } );
+			    var mds = Retina.keys(allMD[g[j]]).sort();
+			    for (var l=0; l<mds.length; l++) {
+				var percent = parseInt(allMD[g[j]][mds[l]] / c.items.length * 100);
+				if (percent < 100) {
+				    percent = " ("+percent+"%)";
+				} else {
+				    percent = "";
+				}
+				var val = g[j]+"|"+mds[l];
+				var opt = { "label": mds[l].replace(/_/g, " ")+percent, "value": val };
+				if (item.hasOwnProperty('default') && (item["default"] == val)) {
+				    opt.selected = true;
+				}
+				opts.push(opt);
+			    }
 			}
 		    } else {
 			for (var j=0; j<c.items.length; j++) {
@@ -314,7 +340,7 @@
 	settings.callback = widget.graphCallback;
 
 	// set the current controller
-    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "showBreadcrumbs": true, "breadcrumbs": c.breadcrumbs || "", "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback });
+    	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "showBreadcrumbs": true, "breadcrumbs": c.breadcrumbs || "", "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback, "renderCallback": type == 'table' ? widget.visualize : null });
     };
 
     // adjust renderer settings
@@ -334,6 +360,7 @@
 	    c.visualization[c.currentRendererType][name] = value;
 	    return;
 	}
+	
 	c.visualization[c.currentRendererType].items[ind].parameters[name] = value;
     };
 
@@ -403,12 +430,13 @@
 	    // update the metadatum
 	    else if (opt.name == "metadatum" && settings.hasOwnProperty('metadatum')) {
 		c.parameters.metadatum = settings.metadatum;
+		var x = settings.metadatum.split(/\|/);
 		for (var h=0; h<data.cols.length; h++) {
-		    data.cols[h] = c.items[h][settings[opt.name]];
+		    data.cols[h] = stm.DataStore.profile[c.items[h].id].metagenome.metadata.hasOwnProperty(x[0]) && stm.DataStore.profile[c.items[h].id].metagenome.metadata[x[0]].data.hasOwnProperty(x[1]) ? stm.DataStore.profile[c.items[h].id].metagenome.metadata[x[0]].data[x[1]] : "-";
 		}
 	    }
 	}
-	
+
 	if (visMap.hasOwnProperty('dataConversion')) {
 	    data = widget[visMap.dataConversion](data);
 	}
@@ -647,6 +675,7 @@
 	
 	document.getElementById('visualize').removeAttribute('disabled');
 	widget.showCurrentContainerParams();
+
 	widget.visualize();
     };
     
@@ -1187,8 +1216,21 @@
 	for (var i=0; i<c.items.length; i++) {
 	    md5s[c.items[i].id] = [];
 	    matrix.abundances.push(0);
-	    matrix.cols.push(c.items[i][id]);
-	    matrix.headers.push(c.items[i]);
+	    var x = c.parameters.metadatum.split(/\|/);
+	    var colname = "-";
+	    if (stm.DataStore.profile[c.items[i].id].metagenome.metadata.hasOwnProperty(x[0]) && stm.DataStore.profile[c.items[i].id].metagenome.metadata[x[0]].data.hasOwnProperty(x[1])) {
+		colname = stm.DataStore.profile[c.items[i].id].metagenome.metadata[x[0]].data[x[1]];
+	    }
+	    matrix.cols.push(colname);
+	    var header = {};
+	    var fields = [ 'project', 'env_package', 'library', 'sample' ];
+	    for (var h=0; h<fields.length; h++) {
+		var mds = stm.DataStore.profile[c.items[i].id].metagenome.metadata.hasOwnProperty(fields[h]) ? Retina.keys(stm.DataStore.profile[c.items[i].id].metagenome.metadata[fields[h]].data) : [];
+		for (var j=0; j<mds.length; j++) {
+		    header[fields[h]+"|"+mds[j]] = stm.DataStore.profile[c.items[i].id].metagenome.metadata[fields[h]].data[mds[j]];
+		}
+	    }
+	    matrix.headers.push(header);
 
 	    var sourceIndex;
 	    if (c.parameters.sourceMap[c.items[i].id].hasOwnProperty(c.parameters.displaySource)) {
@@ -1319,7 +1361,8 @@
 
 	container.parameters.metadatum = metadatum;
 	for (var i=0; i<container.matrix.cols.length; i++) {
-	    container.matrix.cols[i] = container.items[i][metadatum];
+	    var x = metadatum.split(/\|/);
+	    container.matrix.cols[i] = stm.DataStore.profile[c.items[h].id].metagenome.metadata[x[0]].data.hasOwnProperty(x[1]) ? stm.DataStore.profile[c.items[h].id].metagenome.metadata[x[0]].data[x[1]] : "-";
 	}
 
 	if (redraw) {
@@ -1327,12 +1370,12 @@
 	}
     };
 
-    widget.container2table = function () {
+    widget.container2table = function (data, forExport) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 
-	var matrix = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+	var matrix = jQuery.extend(true, {}, data ? data : stm.DataStore.dataContainer[widget.selectedContainer].matrix);
 	var tableHeaders = [ c.parameters.displayLevel ];
 	for (var i=0; i<matrix.cols.length; i++) {
 	    tableHeaders.push(matrix.cols[i]);
@@ -1340,7 +1383,7 @@
 
 	var tableData = [];
 	for (var i=0; i<matrix.rows.length; i++) {
-	    var row = [ '<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+matrix.rows[i]+'\'})">'+matrix.rows[i]+'</a>' ];
+	    var row = [ forExport ? matrix.rows[i] : '<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+matrix.rows[i]+'\'})">'+matrix.rows[i]+'</a>' ];
 	    for (var h=0; h<matrix.data[i].length; h++) {
 		row.push(matrix.data[i][h]);
 	    }
@@ -1356,14 +1399,15 @@
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 
 	var matrix = Retina.copyMatrix(data ? data.data : c.matrix.data);
+	var cols = data ? data.cols : c.matrix.cols;
 	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.visualization.pca.distance));
 	var points = [];
 	
 	for (var i=0; i<pca.coordinates.length; i++) {
-	    points.push( { "x": pca.coordinates[i][c.visualization.pca.pcaa], "y": pca.coordinates[i][c.visualization.pca.pcab], "name": c.matrix.cols[i] } );
+	    points.push( { "x": pca.coordinates[i][c.visualization.pca.pcaa], "y": pca.coordinates[i][c.visualization.pca.pcab], "name": cols[i] } );
 	}
 	
-	return { "data": [ { "points": points } ], "cols": c.matrix.cols, "headers": c.matrix.headers };
+	return { "data": [ { "points": points } ], "cols": cols, "headers": c.matrix.headers };
     };
 
     widget.container2differential = function () {
@@ -1411,7 +1455,7 @@
 			     controlGroups: [
 				 { "adjust graph data":
 				   [
-				       { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
+				       { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
 				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true, "defaultTrue": true },
 				       { "name": "log", "type": "bool", "description": "view log base 10 of the data", "title": "perform log10", "isDataUpdater": true, "defaultTrue": false }
 				   ]
@@ -1471,7 +1515,7 @@
 			    [
 				{ "adjust table data":
 				   [
-				       { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
+				       { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
 				       { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
 				   ]
 				}
@@ -1630,7 +1674,7 @@
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	if (container.status == "ready") {
-	    var html = "<p style='text-align: center;'>Your data is loaded and was placed in this container.<br>Click to analyze.</p>";
+	    var html = "<h3 style='text-align: center;'>Your data is loaded and ready for analysis!</h3>";
 	    html += '<div style="cursor: pointer; border: 1px solid rgb(221, 221, 221); border-radius: 6px; box-shadow: 2px 2px 2px; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; font-weight: bold; height: 75px; width: 75px; text-align: center;" onclick="Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=\''+container.id+'\';Retina.WidgetInstances.metagenome_analysis[1].visualize(Retina.WidgetInstances.metagenome_analysis[1].currentType);document.getElementById(\'dataprogress\').innerHTML=\'\';" class="glow"><img src="Retina/images/bar-chart.png" style="margin-top: 5px; width: 50px;">'+container.id+'</div>';
 	    widget.selectedContainer = container.id;
 	    var c = stm.DataStore.dataContainer[widget.selectedContainer];
@@ -1756,7 +1800,7 @@
 						      parameters: { sources: widget.dataLoadParams.sources,
 								    displayLevel: "domain",
 								    displayType: "taxonomy",
-								    metadatum: "name",
+								    metadatum: "library|metagenome_name",
 								    evalue: widget.cutoffThresholds.evalue,
 								    identity: widget.cutoffThresholds.identity,
 								    alilength: widget.cutoffThresholds.alilength,
@@ -2092,7 +2136,7 @@
 		alert('this feature is not available for this view');
 	    }
 	} else if (type == 'tsv') {
-	    var exportData = widget.container2table({});
+	    var exportData = widget.container2table(null,true);
 	    var exportString = [];
 	    exportString.push(exportData.header.join("\t"));
 	    for (var i=0; i<exportData.data.length; i++) {
