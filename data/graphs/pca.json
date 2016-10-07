@@ -7,9 +7,9 @@
     "controls": [
 	{ "adjust graph data":
 	  [
-	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "name", "isDataUpdater": true, "values": "metadata" },
-	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project_name", "values": "metadata" },
-	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "biome", "values": "metadata" },
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
+	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project|project_name", "values": "metadata" },
+	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "sample|biome", "values": "metadata" },
 	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
 	      { "name": "pcab", "type": "select", "description": "set the principle y-component", "title": "PC Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
 	      { "name": "distance", "type": "select", "description": "method for distance matrix", "title": "distance method", "default": "euclidean", "isDataUpdater": true, "options": [ { "label": "euclidean", "value": "euclidean" }, { "label": "manhattan", "value": "manhattan" }, { "label": "maximum", "value": "maximum" }, { "label": "braycurtis", "value": "braycurtis" }, { "label": "minkowski", "value": "minkowski" } ] },
@@ -117,8 +117,8 @@
 	"type": "plot",
 	"name": "item2",
 	"parameters": {
-	    "colorAttribute": "project_name",
-	    "shapeAttribute": "biome",
+	    "colorAttribute": "project|project_name",
+	    "shapeAttribute": "sample|biome",
             "height": 400,
             "width": 400,
             "radius": 4,
@@ -142,7 +142,7 @@
 	"parameters": {
 	    "inputType": "plot",
 	    "legendType": "color",
-	    "headerAttribute": "project_name",
+	    "headerAttribute": "project|project_name",
         "top": 200,
         "left": 500,
         "colors": [
@@ -195,7 +195,7 @@
 	"parameters": {
 	    "inputType": "plot",
 	    "legendType": "shape",
-	    "headerAttribute": "biome",
+	    "headerAttribute": "sample|biome",
         "top": 50,
         "left": 500,
         "colors": [
