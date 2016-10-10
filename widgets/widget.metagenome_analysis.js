@@ -19,8 +19,8 @@
 
     widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species", "strain" ];
     widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
-    widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "LSU", "SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
-
+    widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
+    widget.sourcesNameMapping = { "Silva SSU": "SSU", "Silva LSU": "LSU" };
 
     widget.cutoffThresholds = {
 	"evalue": 5,
@@ -1636,9 +1636,10 @@
 	var widget = this;
 
 	var types = [ 'protein', 'hierarchical', 'RNA' ];
+	var sourceNameMapping = { "SSU": "Silva SSU", "LSU": "Silva LSU" };
 	var sources = {};
 	for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
-	    sources[widget.dataLoadParams.sources[i]] = true;
+	    sources[sourceNameMapping.hasOwnProperty(widget.dataLoadParams.sources[i]) ? sourceNameMapping[widget.dataLoadParams.sources[i]] : widget.dataLoadParams.sources[i]] = true;
 	}
 	
 	var picked = [];
@@ -1667,6 +1668,9 @@
     widget.changeDatabases = function (db, action) {
 	var widget = this;
 
+	if (widget.sourcesNameMapping.hasOwnProperty(db)) {
+	    db = widget.sourcesNameMapping[db];
+	}
 	if (action == 'remove') {
 	    var sources = [];
 	    for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
