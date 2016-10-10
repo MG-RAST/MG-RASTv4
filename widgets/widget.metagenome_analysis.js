@@ -1,5 +1,5 @@
 (function () {
-    var widget = Retina.Widget.extend({
+    var widget = Retina.Widget.extend({ //https://support.mozilla.org/en-US/kb/warning-unresponsive-script
         about: {
                 title: "Metagenome Analysis Widget",
                 name: "metagenome_analysis",
@@ -273,8 +273,8 @@
 		    if (item.values && item.values == "metadata") {
 
 			// parse the metadata into the required structure
-			var g = [ "project", "env_package", "library", "sample" ];
-			var allMD = { "project": {}, "env_package": {}, "library": {}, "sample": {} };
+			var g = [ "mixs", "project", "env_package", "library", "sample" ];
+			var allMD = { "mixs": {}, "project": {}, "env_package": {}, "library": {}, "sample": {} };
 			for (var l=0; l<c.items.length; l++) {
 			    for (var j=0; j<g.length; j++) {
 				var d = stm.DataStore.profile[c.items[l].id].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[c.items[l].id].metagenome.metadata[g[j]].data : {};
@@ -1223,7 +1223,7 @@
 	    }
 	    matrix.cols.push(colname);
 	    var header = {};
-	    var fields = [ 'project', 'env_package', 'library', 'sample' ];
+	    var fields = [ "mixs", 'project', 'env_package', 'library', 'sample' ];
 	    for (var h=0; h<fields.length; h++) {
 		var mds = stm.DataStore.profile[c.items[i].id].metagenome.metadata.hasOwnProperty(fields[h]) ? Retina.keys(stm.DataStore.profile[c.items[i].id].metagenome.metadata[fields[h]].data) : [];
 		for (var j=0; j<mds.length; j++) {
@@ -1399,6 +1399,19 @@
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 
 	var matrix = Retina.copyMatrix(data ? data.data : c.matrix.data);
+
+	// test if we have any data
+	var sum = 0;
+	for (var i=0; i<matrix.length; i++) {
+	    for (var h=0; h<matrix[i].length; h++) {
+		sum += matrix[i][h];
+	    }
+	}
+	if (sum == 0) {
+	    alert("your selection does not contain any hits");
+	    return false;
+	}
+	
 	var cols = data ? data.cols : c.matrix.cols;
 	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.visualization.pca.distance));
 	var points = [];
@@ -1915,6 +1928,7 @@
 					      console.log("error: "+data.ERROR);
 					      widget.updatePDiv(this.bound, 'error', data.ERROR);
 					  } else if (data.hasOwnProperty('statistics')) {
+					      data.metadata.mixs = { "data": data.mixs };
 					      if (stm.DataStore.profile.hasOwnProperty(this.metagenome)) {
 						  stm.DataStore.profile[this.metagenome].metagenome = data;
 					      } else {
