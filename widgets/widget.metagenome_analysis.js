@@ -185,6 +185,7 @@
 	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
 	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
 	
+	html += "<img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'>";
 
     	container.innerHTML = html;
     };
@@ -697,6 +698,16 @@
 	} else {
 	    alert("you did not choose a name");
 	}
+    };
+
+    /*
+      METADATA
+    */
+
+    widget.showMetadata = function () {
+	var widget = this;
+
+	alert('metadata');
     };
 
     /*
@@ -1775,12 +1786,13 @@
 	    // sanity check if there is a sequence type mix
 	    var seqTypes = {};
 	    var rna = {};
+	    var sourceNameMapping = { "SSU": "Silva SSU", "LSU": "Silva LSU" };
 	    for (var i=0; i<widget.sources.RNA.length; i++) {
 		rna[widget.sources.RNA[i]] = true;
 	    }
 	    var hasNonRNA = false;
 	    for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
-		if (! rna[widget.dataLoadParams.sources[i]]) {
+		if (! rna[sourceNameMapping.hasOwnProperty(widget.dataLoadParams.sources[i]) ? sourceNameMapping[widget.dataLoadParams.sources[i]] : widget.dataLoadParams.sources[i]]) {
 		    hasNonRNA = true;
 		    break;
 		}
@@ -2248,7 +2260,7 @@
 	html.push("<tr><td style='vertical-align: top;'>stars</td><td><select id='recipeStars' style='width: 360px;'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>");
 	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>short description</td><td><textarea style='width: 360px; height: 90px;' id='recipeShortDescription' placeholder='a short description of what this recipe does'></textarea></td></tr>");
 	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>description</td><td><textarea style='width: 360px; height: 90px;' id='recipeDescription' placeholder='a detailed description of the recipe'></textarea></td></tr>");
-	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>controls</td><td>taxonomy select <input type='checkbox' id='recipeTaxSelect' style='position: relative; bottom: 3px;'><br>e-value <input type='checkbox' id='recipeEvalue' style='position: relative; bottom: 3px;'><br>%-identity <input type='checkbox' id='recipeIdentity' style='position: relative; bottom: 3px;'><br>alignment length <input type='checkbox' id='recipeAlilen' style='position: relative; bottom: 3px;'><br>min. abundance <input type='checkbox' id='recipeAbundance' style='position: relative; bottom: 3px;'></td></tr>");
+	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>controls</td><td>taxonomy select <input type='checkbox' id='recipeTaxSelect' style='position: relative; bottom: 3px;'><br>recipe ontology select <input type='checkbox' id='recipeOntSelect' style='position: relative; bottom: 3px;'><br>e-value <input type='checkbox' id='recipeEvalue' style='position: relative; bottom: 3px;'><br>%-identity <input type='checkbox' id='recipeIdentity' style='position: relative; bottom: 3px;'><br>alignment length <input type='checkbox' id='recipeAlilen' style='position: relative; bottom: 3px;'><br>min. abundance <input type='checkbox' id='recipeAbundance' style='position: relative; bottom: 3px;'></td></tr>");
 	html.push("</table>");
 
 	document.getElementById('recipeModalContent').innerHTML = html.join('');
@@ -2309,6 +2321,9 @@
 	c.newbOptions = [];
 	if (document.getElementById('recipeTaxSelect').checked) {
 	    c.newbOptions.push({"type":"taxSelect","params":{"level":c.parameters.taxFilter[0].level,"default":c.parameters.taxFilter[0].value}});
+	}
+	if (document.getElementById('recipeOntSelect').checked) {
+	    c.newbOptions.push({"type":"ontSelect","params":{"level":c.parameters.ontFilter[0].level,"source":c.parameters.ontFilter[0].source,"default":c.parameters.ontFilter[0].value}});
 	}
 	if (document.getElementById('recipeEvalue').checked) {
 	    c.newbOptions.push({"type":"evalue","params":{"default":c.parameters.evalue}});
@@ -2432,6 +2447,11 @@
 								       document.getElementById("newbTaxTextPre").innerHTML = params.level
 								       document.getElementById("newbTaxTextButton").setAttribute("onclick", 'Retina.WidgetInstances.metagenome_analysis[1].setFilter(document.getElementById("newbTaxText").value, "'+params.level+'")'); },
 					    'html': '<div class="input-append input-prepend"><span class="add-on" id="newbTaxTextPre"></span><input type="text" id="newbTaxText" placeholder="enter tax category"><button class="btn" id="newbTaxTextButton">set</button></div>' },
+			     'ontSelect': { 'func': function(params) { jQuery("#newbOntText").typeahead({"source": stm.DataStore.ontology[params.source][params.level]});
+								       if (params.hasOwnProperty('default')) { document.getElementById("newbOntText").value = params["default"]; }
+								       document.getElementById("newbOntTextPre").innerHTML = params.level
+								       document.getElementById("newbOntTextButton").setAttribute("onclick", 'Retina.WidgetInstances.metagenome_analysis[1].setFilter(document.getElementById("newbOntText").value, "'+params.level+'", "'+params.source+'", "ont")'); },
+					    'html': '<div class="input-append input-prepend"><span class="add-on" id="newbOntTextPre"></span><input type="text" id="newbOntText" placeholder="enter ontology category"><button class="btn" id="newbOntTextButton">set</button></div>' },
 			     'evalue': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbEvalue").value = params["default"]; }},
 					  'html': '<div class="input-append input-prepend"><span class="add-on" style="width: 105px;">e-value</span><input type="text" style="width: 80px;" id="newbEvalue"><button class="btn" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'evalue\', document.getElementById(\'newbEvalue\').value);">set</button></div>' },
 			     'alilen': { 'func': function(params) {if (params.hasOwnProperty('default')) { document.getElementById("newbAlilen").value = params["default"]; }},

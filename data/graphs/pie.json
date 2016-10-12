@@ -3,7 +3,7 @@
   "width": 700,
     "height": 500,
     "extended": { "adjust graph data": true },
-    "description": "The pie-chart shows the categories of a single sample as slices.</p><p>You can choose to enable / disable <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#log-10' target=_blank>log scaling</a> and select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the pie-chart.",
+    "description": "The pie-chart shows the categories of a single sample as slices.</p><p>You can select the sample label by <a href='https://github.com/MG-RAST/tech-report/wiki/MG-RAST-glossary#metadata' target=_blank>metadata</a> field.</p><p>Click a category to drill down to the next level. The layout tab has options to adjust the general layout of the pie-chart.",
     "controls": [
 	{ "adjust graph data":
 	  [
