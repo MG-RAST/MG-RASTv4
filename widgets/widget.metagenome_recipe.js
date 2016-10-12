@@ -96,7 +96,7 @@
 	    jQuery.getJSON('data/recipes/recipe'+i+'.recipe.json', function (data) {
 		var widget = Retina.WidgetInstances.metagenome_recipe[1];
 		widget.recipes.push( data );
-		if (widget.recipes.length == 8) {
+		if (widget.recipes.length == 4) {
 		    var keywords = {};
 		    for (var h=0; h<widget.recipes.length; h++) {
 			var r = widget.recipes[h];
