@@ -185,7 +185,7 @@
 	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
 	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
 	
-//	html += "<img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'>";
+	html += "<img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'>";
 
     	container.innerHTML = html;
     };
@@ -704,12 +704,238 @@
       METADATA
     */
 
-    widget.showMetadata = function () {
+    widget.showMetadata = function (cat, newCol) {
 	var widget = this;
 
-	alert('metadata');
+	cat = cat || "mixs";
+
+	// fill the base html
+	document.getElementById('visualize').innerHTML = '\
+<h3>edit metadata of current container items</h3>\
+<ul><li>You can click any cell in the table and enter a new value</li><li>You can click a cell in the table and paste a single column of data from a textfile or Excel</li><li>You can add a new column via the + button in the last column</li><li>The entries are always sorted by the metagenome id (mgm1234.5)</li></ul><p>Updated values are <strong>temporary</strong> and will <strong>not</strong> be uploaded to the MG-RAST server. They will be stored in the profile you can download using the <i class="icon-folder-open"></i> profile manager at the top right of the page.</p><p>You can click the restore button below, to reset the metadata to what is reflected in our database.</p><p style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_analysis[1].resetMetadata();"><i class="icon icon-refresh"></i> restore original metadata</button></p>\
+<ul class="nav nav-tabs" id="metadataEdit" style="margin-bottom: 0px;">\
+  <li'+(cat == 'mixs' ? ' class="active"' : "")+'><a href="#mixs">MiXS</a></li>\
+  <li'+(cat == 'project' ? ' class="active"' : "")+'><a href="#project">project</a></li>\
+  <li'+(cat == 'library' ? ' class="active"' : "")+'><a href="#library">library</a></li>\
+  <li'+(cat == 'sample' ? ' class="active"' : "")+'><a href="#sample">sample</a></li>\
+  <li'+(cat == 'env_package' ? ' class="active"' : "")+'><a href="#env_package">environmental package</a></li>\
+</ul>\
+ \
+<div class="tab-content" style="border: 1px solid #ddd; border-top: none; padding-top: 20px; padding-bottom: 20px;">\
+  <div class="tab-pane'+(cat == 'mixs' ? ' active' : "")+'" id="mixs">mixs</div>\
+  <div class="tab-pane'+(cat == 'project' ? ' active' : "")+'" id="project">project</div>\
+  <div class="tab-pane'+(cat == 'library' ? ' active' : "")+'" id="library">library</div>\
+  <div class="tab-pane'+(cat == 'sample' ? ' active' : "")+'" id="sample">sample</div>\
+  <div class="tab-pane'+(cat == 'env_package' ? ' active' : "")+'" id="env_package">env_package</div>\
+</div>';
+	document.getElementById('data').style.display = "none";
+	document.getElementById('visualize').style.display = "";
+	jQuery('#metadataEdit a').click(function (e) {
+	    e.preventDefault();
+	    jQuery(this).tab('show');
+	});
+
+	// get all metadata of the current container
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var g = [ "mixs", "project", "env_package", "library", "sample" ];
+	var allMD = { "mixs": {}, "project": {}, "env_package": {}, "library": {}, "sample": {} };
+	var items = [];
+	for (var i=0; i<c.items.length; i++) {
+	    items.push(c.items[i].id);
+	    if (! stm.DataStore.profile[c.items[i].id].hasOwnProperty('originalMetadata')) {
+		stm.DataStore.profile[c.items[i].id].originalMetadata = jQuery.extend(true, {}, stm.DataStore.profile[c.items[i].id].metagenome.metadata);
+	    }
+	}
+	items = items.sort();
+	for (var l=0; l<items.length; l++) {
+	    for (var j=0; j<g.length; j++) {
+		var d = stm.DataStore.profile[items[l]].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[items[l]].metagenome.metadata[g[j]].data : {};
+		var mds = Retina.keys(d);
+		for (var m=0; m<mds.length; m++) {
+		    if (! allMD[g[j]].hasOwnProperty(mds[m])) {
+			allMD[g[j]][mds[m]] = true;
+		    }
+		}
+	    }
+	}
+
+	// iterate over the categories
+	for (var j=0; j<g.length; j++) {
+
+	    // get all fields for the current category
+	    var d = Retina.keys(allMD[g[j]]);
+
+	    // create table header
+	    var html = [];
+	    html.push('<table class="excel">');
+	    html.push('<tr><th>ID</th><th>'+d.join('</th><th>')+'</th><th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+g[j]+'\').parentNode.scrollLeft=document.getElementById(\''+g[j]+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_analysis[1].addMDField(\''+g[j]+'\',this.previousSibling.value);">add</button></div></th></tr>');
+
+	    // iterate over the metagenomes
+	    for (var l=0; l<items.length; l++) {
+
+		// start the current row
+		html.push('<tr><th>'+items[l]+'</th>');
+		
+		// iterate over the data fields
+		for (var k=0; k<d.length; k++) {
+
+		    html.push('<td class="editable" id="'+items[l]+'|'+g[j]+'|'+d[k]+'" data-next="'+(l == items.length - 1 ? "" : items[l+1])+'" onclick="if(!this.innerHTML.match(/^\<input/)){Retina.WidgetInstances.metagenome_analysis[1].editMDField(this);}">');
+		    
+		    // data field is present
+		    if (stm.DataStore.profile[items[l]].metagenome.metadata.hasOwnProperty(g[j]) && stm.DataStore.profile[items[l]].metagenome.metadata[g[j]].data.hasOwnProperty(d[k])) {
+			var val = stm.DataStore.profile[items[l]].metagenome.metadata[g[j]].data[d[k]];
+			html.push(val);
+		    }
+
+		    // data field is not present
+		    else {
+			html.push(' - ');
+		    }
+
+		    html.push('</td>');
+		}
+
+		// end the current row
+		html.push('</tr>');
+	    }
+	    
+	    html.push('</table>');
+	    document.getElementById(g[j]).innerHTML = html.join('');
+	}
+	if (newCol !== undefined) {
+	    document.getElementById(items[0]+"|"+cat+"|"+newCol).click();
+	    document.getElementById(cat).parentNode.scrollLeft = document.getElementById(cat).parentNode.scrollLeftMax;
+	}
     };
 
+    widget.resetMetadata = function () {
+	var widget = this;
+
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	for (var i=0; i<c.items.length; i++) {
+	    stm.DataStore.profile[c.items[i].id].metagenome.metadata = jQuery.extend(true, {}, stm.DataStore.profile[c.items[i].id].originalMetadata);
+	}
+
+	widget.showMetadata();
+    };
+
+    widget.editMDField = function (field) {
+	var widget = this;
+
+	var val = field.innerHTML;
+	
+	field.innerHTML = '';
+	var input = document.createElement('input');
+	input.setAttribute('type','text');
+	input.setAttribute('value', val);
+	field.appendChild(input);
+	input.select();
+	input.addEventListener('keypress', function (event) {
+	    event = event || window.event;
+	    var cell = this.parentNode;
+	    if (event.keyCode == '13' || event.keyCode == '9') {
+		cell.innerHTML = this.value;
+		var data = cell.getAttribute('id').split(/\|/);
+		var id = data[0];
+		var cat = data[1];
+		var fieldname = data[2];
+		var nextCell = cell.getAttribute('data-next');
+		Retina.WidgetInstances.metagenome_analysis[1].updateMDField(id, cat, fieldname, this.value);
+		event.preventDefault();
+		if (nextCell.length) {
+		    document.getElementById(nextCell+"|"+cat+"|"+fieldname).click();
+		}
+	    }
+	});
+	input.addEventListener('blur', function (event) {
+	    var cell = this.parentNode;
+	    cell.innerHTML = this.value;
+	    var data = cell.getAttribute('id').split(/\|/);
+	    var id = data[0];
+	    var cat = data[1];
+	    var fieldname = data[2];
+	    Retina.WidgetInstances.metagenome_analysis[1].updateMDField(id, cat, fieldname, this.value);
+	});
+	input.addEventListener('paste', function (event) {
+	    event = event || window.event;
+	    var cell = this.parentNode;
+	    var textfield = this;
+	    
+	    var paste = event.clipboardData.getData('text/plain');
+	    var rows = paste.split(/\n/);
+	    for (var i=0; i<rows.length; i++) {
+		var cols = rows[i].split(/\t/);
+		textfield.value = cols[0];
+		textfield.blur();
+
+		var nextCell = cell.getAttribute('data-next');
+		if (nextCell.length) {
+		    var data = cell.getAttribute('id').split(/\|/);
+		    var cat = data[1];
+		    var fieldname = data[2];
+		    cell = document.getElementById(nextCell+"|"+cat+"|"+fieldname);
+		    cell.click();
+		    textfield = cell.firstChild;
+		} else {
+		    break;
+		}
+	    }
+	    
+	    event.preventDefault();
+	});
+    };
+
+    widget.updateMDField = function (id, cat, field, value) {
+	var widget = this;
+
+	var updated = false;
+	if (! stm.DataStore.profile[id].metagenome.metadata.hasOwnProperty(cat)) {
+	    stm.DataStore.profile[id].metagenome.metadata[cat] = { "data": {} };
+	    updated = true;
+	}
+
+	if (stm.DataStore.profile[id].metagenome.metadata[cat].data.hasOwnProperty(field) && stm.DataStore.profile[id].metagenome.metadata[cat].data[field] != value) {
+	    updated = true;
+	}
+
+	// update the prodile data
+	stm.DataStore.profile[id].metagenome.metadata[cat].data[field] = value;
+
+	// get an id - index mapping
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	var id2index = {};
+	for (var i=0; i<c.items.length; i++){
+	    id2index[c.items[i].id] = i;
+	}
+
+	// update the header entry in the container
+	c.matrix.headers[id2index[id]][cat+"|"+field] = value;
+
+	// check if the metadata was actually updated, if so mark it in the profile
+	if (updated) {
+	    stm.DataStore.profile[id].metadataUpdated = true;
+	}
+    };
+
+    widget.addMDField = function (cat, name) {
+	var widget = this;
+
+	if (name == undefined || ! name.length) { return };
+	
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+	for (var i=0; i<c.items.length; i++) {
+	    var p = stm.DataStore.profile[c.items[i].id];
+	    if (! p.metagenome.metadata.hasOwnProperty(cat)) {
+		p.metagenome.metadata[cat] = { "data": {} };
+	    }
+	    if (! p.metagenome.metadata[cat].data.hasOwnProperty(name)) {
+		p.metagenome.metadata[cat].data[name] = "";
+	    }
+	}
+	
+	widget.showMetadata(cat, name);
+    };
+    
     /*
       HELPER FUNCTIONS
      */
