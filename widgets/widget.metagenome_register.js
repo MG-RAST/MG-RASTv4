@@ -189,7 +189,7 @@
 	}).render();
 
 	// set up recaptcha
-	grecaptcha.render('recap', { 'sitekey' : '6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z' });
+	grecaptcha.render('recap', { 'sitekey' : '6LcYEwkUAAAAACldWP-geGFMUvbYLnUrrKowaExe' });
  	
 	// set up country typeahead
 	jQuery('#inputCountry').typeahead({ source: Retina.values(widget.countryCodes) });
