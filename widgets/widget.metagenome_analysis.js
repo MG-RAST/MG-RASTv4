@@ -95,17 +95,34 @@
 	}
 	toolshtml += "<hr style='clear: both; margin-top: 15px; margin-bottom: 5px;'>";
 	toolshtml += "<div id='recipeShowMoreOptions' style='display: none; text-align: center;'><button class='btn' onclick='document.getElementById(\"recipeShowMoreOptions\").style.display=\"none\";document.getElementById(\"containerActive\").style.display=\"\";'>show all options</button></div><div id='containerActive' style='display: none;'><div id='currentContainerParams'></div>";
-	toolshtml += "<h4>View</h4>";
-	toolshtml += "<div id='visualContainerSpace'></div>";
-	toolshtml += "<h4>Plugins</h4>";
-	toolshtml += "<div id='pluginContainerSpace'></div>";
-	toolshtml += "<h4>myData &nbsp; Export</h4>";
-	toolshtml += "<div id='exportContainerSpace'></div></div>";
+
+	toolshtml += '<ul class="nav nav-tabs" id="toolsTab">';
+	toolshtml += '<li class="active"><a href="#visualContainerSpace">View</a></li>';
+	toolshtml += '<li><a href="#exportContainerSpace">Export</a></li>';
+	toolshtml += '<li><a href="#toolsContainerSpace">Tools</a></li>';
+	toolshtml += '<li><a href="#pluginContainerSpace">Plugins</a></li>';
+	toolshtml += '</ul>';
+
+	toolshtml += '<div class="tab-content">';
+	toolshtml += '<div class="tab-pane active" id="visualContainerSpace" style="padding: 0px;"></div>';
+	toolshtml += '<div class="tab-pane" id="pluginContainerSpace" style="padding: 0px;"></div>';
+	toolshtml += '<div class="tab-pane" id="exportContainerSpace" style="padding: 0px;"></div>';
+	toolshtml += '<div class="tab-pane" id="toolsContainerSpace" style="padding: 0px;"></div>';
+	toolshtml += '</div>';
+
+	toolshtml += '</div>';
+	
 	tools.innerHTML = toolshtml;
+
+	jQuery('#toolsTab a').click(function (e) {
+	    e.preventDefault();
+	    jQuery(this).tab('show');
+	});
 
 	widget.showDataContainers();
 	widget.fillVisualizations();
 	widget.fillExport();
+	widget.fillTools();
 	widget.fillPlugins();
 
 	widget.loadDataUI();
@@ -142,12 +159,21 @@
     	var container = document.getElementById('exportContainerSpace');
 	var html = "";
 
-	html += "<img src='Retina/images/cloud-upload.png' class='tool' style='float: left;' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><div style='float: left; width: 1px; height: 55px; background-color: rgb(204, 204, 204); position: relative; top: 5px; margin-left: 3px;'></div>";
 	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
 	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
 	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
 	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'>";
 
+
+	container.innerHTML = html;
+    };
+
+    widget.fillTools = function () {
+	var container = document.getElementById('toolsContainerSpace');
+	var html = "";
+
+	html += "<div style='float: left;'><img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'>myData</div>";
+    	html += "<div style='float: left;'><img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'>Metadata</div>";
 
 	container.innerHTML = html;
     };
@@ -185,8 +211,6 @@
 	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
 	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
 	
-	html += "<img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'>";
-
     	container.innerHTML = html;
     };
 
