@@ -98,9 +98,9 @@
 
 	toolshtml += '<ul class="nav nav-tabs" id="toolsTab">';
 	toolshtml += '<li class="active"><a href="#visualContainerSpace">View</a></li>';
-	toolshtml += '<li><a href="#exportContainerSpace">Export</a></li>';
 	toolshtml += '<li><a href="#toolsContainerSpace">Tools</a></li>';
 	toolshtml += '<li><a href="#pluginContainerSpace">Plugins</a></li>';
+	toolshtml += '<li><a href="#exportContainerSpace">Export</a></li>';
 	toolshtml += '</ul>';
 
 	toolshtml += '<div class="tab-content">';
