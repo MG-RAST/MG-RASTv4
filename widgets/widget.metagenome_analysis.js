@@ -159,10 +159,10 @@
     	var container = document.getElementById('exportContainerSpace');
 	var html = "";
 
-	html += "<img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'>";
-	html += "<img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'>";
-	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'>";
-	html += "<img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'>";
+	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
 
 
 	container.innerHTML = html;
@@ -172,8 +172,8 @@
 	var container = document.getElementById('toolsContainerSpace');
 	var html = "";
 
-	html += "<div style='float: left;'><img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'>myData</div>";
-    	html += "<div style='float: left;'><img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'>Metadata</div>";
+	html += "<div style='float: left;'><img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>myData</div></div>";
+    	html += "<div style='float: left;'><img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'<br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>metadata</div></div>";
 
 	container.innerHTML = html;
     };
@@ -185,8 +185,8 @@
 
 	var html = "";
 
-	html += "<img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'>Krona";
-	html += "<img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'>KEGG Mapper";
+	html += "<div style='float: left;'><img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Krona</div></div>";
+	html += "<div style='float: left;'><img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>KEGG mapper</div></div>";
 
 	container.innerHTML = html;
     };
@@ -198,18 +198,18 @@
     	var container = document.getElementById('visualContainerSpace');
 
     	var html = "";
-    	html += "<img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");' title='table'>";
-    	html += "<img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");' title='matrix'>";
+    	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"table\");' title='table'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>table</div></div>";
+    	html += "<div style='float: left;'><img src='Retina/images/matrix.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"matrix\");' title='matrix'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>matrix</div></div>";
 
-    	html += "<img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");' title='piechart'>";
-    	html += "<img src='Retina/images/donut.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donutchart\");' title='donutchart'>";
-	html += "<img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'>";
-    	html += "<img src='Retina/images/barchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart2\");' title='grouped barchart'>";
-    	html += "<img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'>";
+    	html += "<div style='float: left;'><img src='Retina/images/pie.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"piechart\");' title='piechart'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>pie-chart</div></div>";
+    	html += "<div style='float: left;'><img src='Retina/images/donut.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"donutchart\");' title='donutchart'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>donut-chart</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/rarefaction.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"rarefaction\");' title='rarefaction plot'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>rarefaction</div></div>";
+    	html += "<div style='float: left;'><img src='Retina/images/barchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart2\");' title='grouped barchart'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>barchart</div></div>";
+    	html += "<div style='float: left;'><img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>stacked bar</div></div>";
 
-	html += "<img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'>";
-	html += "<img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'>";
-	html += "<img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'>";
+	html += "<div style='float: left;'><img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>scatterplot</div></div>";
+	html += "<div style='float: left;'><img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>heatmap</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>differential</div></div>";
 	
     	container.innerHTML = html;
     };
@@ -736,7 +736,7 @@
 	// fill the base html
 	document.getElementById('visualize').innerHTML = '\
 <h3>edit metadata of current container items</h3>\
-<ul><li>You can click any cell in the table and enter a new value</li><li>You can click a cell in the table and paste a single column of data from a textfile or Excel</li><li>You can add a new column via the + button in the last column</li><li>The entries are always sorted by the metagenome id (mgm1234.5)</li></ul><p>Updated values are <strong>temporary</strong> and will <strong>not</strong> be uploaded to the MG-RAST server. They will be stored in the profile you can download using the <i class="icon-folder-open"></i> profile manager at the top right of the page.</p><p>You can click the restore button below, to reset the metadata to what is reflected in our database.</p><p style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_analysis[1].resetMetadata();"><i class="icon icon-refresh"></i> restore original metadata</button></p>\
+<ul><li>You can click any cell in the table and enter a new value</li><li>You can click a cell in the table and paste a single column of data from a textfile or Excel</li><li>You can add a new column via the + button in the last column</li><li>The entries are always sorted by the metagenome id (mgm1234.5)</li></ul><p>Updated values are <strong>temporary</strong> and will <strong>not</strong> be uploaded to the MG-RAST server. They will be stored in the profile you can download using the <i class="icon-folder-open"></i> profile manager at the top right of the page.</p><p>You can click the restore button below, to reset the metadata to what is reflected in our database.</p><p style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><button class="btn btn-small" onclick="if(confirm(\'Really reset all data? All your changes will be lost.\'){Retina.WidgetInstances.metagenome_analysis[1].resetMetadata();}"><i class="icon icon-refresh"></i> restore original metadata</button></p>\
 <ul class="nav nav-tabs" id="metadataEdit" style="margin-bottom: 0px;">\
   <li'+(cat == 'mixs' ? ' class="active"' : "")+'><a href="#mixs">MiXS</a></li>\
   <li'+(cat == 'project' ? ' class="active"' : "")+'><a href="#project">project</a></li>\
@@ -985,7 +985,7 @@
 			glow = " glow";
 			name = "<span style='color: blue;'>"+name+"</span>";
 		    }
-		    html += "<div title='click to select analysis' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br>"+name+"</div>";
+		    html += "<div title='click to select analysis' style='width: 75px; word-wrap: break-word; float: left; text-align: center;' cname='"+keys[i]+"' onclick='Retina.WidgetInstances.metagenome_analysis[1].selectedContainer=this.getAttribute(\"cname\");Retina.WidgetInstances.metagenome_analysis[1].showDataContainers();Retina.WidgetInstances.metagenome_analysis[1].visualize();'><img src='Retina/images/bar-chart.png' class='tool"+glow+"'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>"+name+"</div></div>";
 		}
 		
 	    }
