@@ -2742,6 +2742,7 @@
 	delete c.promises;
 	delete c.status;
 	delete c.user;
+	delete c.parameters.sourceMap;
 
 	// create download
 	if (download) {
@@ -2762,7 +2763,11 @@
 	    
 	    // set up the url
 	    var url = RetinaConfig.shock_url+'/node';
-	    var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id, "container": c }) ], { "type" : "text\/json" });
+	    var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id }) ], { "type" : "text\/json" });
+
+	    // the container must be parsed for keys with . because those cannot be uploaded into SHOCK
+	    //, "container": c }) ], { "type" : "text\/json" });
+
 	    var form = new FormData();
 	    var filename = widget.selectedContainer;
 	    form.append('attributes', attributes);
@@ -3236,7 +3241,7 @@
 	var widget = this;
 
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
-	var ranks = container.parameters.displayType == "taxonomy" ? widget.taxLevels.slice(0, container.parameters.depth) : widget.ontLevels[container.parameters.sources[container.parameters.displaySource]].slice(0, container.parameters.depth);
+	var ranks = container.parameters.displayType == "taxonomy" ? widget.taxLevels.slice(0, container.parameters.depth) : widget.ontLevels[container.parameters.displaySource].slice(0, container.parameters.depth);
 	var matrixdata = [];
 	for (var i=0; i<container.matrix.cols.length; i++) {
 	    matrixdata.push([]);
