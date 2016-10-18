@@ -207,7 +207,7 @@
     	html += "<div style='float: left;'><img src='Retina/images/barchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart2\");' title='grouped barchart'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>barchart</div></div>";
     	html += "<div style='float: left;'><img src='Retina/images/stackedbarchart.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"barchart\");' title='stacked barchart'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>stacked bar</div></div>";
 
-	html += "<div style='float: left;'><img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>scatterplot</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/scatterplot.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"pca\");' title='PCoA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PCoA</div></div>";
 	html += "<div style='float: left;'><img src='images/icon_heatmap.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"heatmap\");' title='heatmap'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>heatmap</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/differential.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].visualize(\"differential\");' title='differential coverage'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>differential</div></div>";
 	
