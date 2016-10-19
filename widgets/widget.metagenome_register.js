@@ -64,7 +64,7 @@
 	widget.main.innerHTML = html;
 
 	// set up recaptcha
-	grecaptcha.render('recap', { 'sitekey' : '6LfbRfYSAAAAAA2xPI95x5LIKvpW-Zl9Fz5Li5m-' });
+	grecaptcha.render('recap', { 'sitekey' : '6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z' });
     };
 
     widget.newAccount = function () {
@@ -189,7 +189,7 @@
 	}).render();
 
 	// set up recaptcha
-	grecaptcha.render('recap', { 'sitekey' : '6LcYEwkUAAAAACldWP-geGFMUvbYLnUrrKowaExe' });
+	grecaptcha.render('recap', { 'sitekey' : '6Lf1FL4SAAAAAO3ToArzXm_cu6qvzIvZF4zviX2z' });
  	
 	// set up country typeahead
 	jQuery('#inputCountry').typeahead({ source: Retina.values(widget.countryCodes) });

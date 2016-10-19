@@ -98,7 +98,7 @@
 
 	toolshtml += '<ul class="nav nav-tabs" id="toolsTab">';
 	toolshtml += '<li class="active"><a href="#visualContainerSpace">View</a></li>';
-	toolshtml += '<li><a href="#toolsContainerSpace">Tools</a></li>';
+	toolshtml += '<li><a href="#toolsContainerSpace">Metadata</a></li>';
 	toolshtml += '<li><a href="#pluginContainerSpace">Plugins</a></li>';
 	toolshtml += '<li><a href="#exportContainerSpace">Export</a></li>';
 	toolshtml += '</ul>';
@@ -162,7 +162,7 @@
 	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\")){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
 
 
 	container.innerHTML = html;
@@ -172,7 +172,7 @@
 	var container = document.getElementById('toolsContainerSpace');
 	var html = "";
 
-	html += "<div style='float: left;'><img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>myData</div></div>";
+	//html += "<div style='float: left;'><img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>myData</div></div>";
     	html += "<div style='float: left;'><img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'<br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>metadata</div></div>";
 
 	container.innerHTML = html;
@@ -241,7 +241,7 @@
 
     	var visMap = widget.visualizationMapping();
 	
-    	var html = "<p style='font-size: 20px; font-weight: 500;'>"+visMap[type].title+" of " + (widget.selectedContainer ? widget.selectedContainer : "demonstration analysis") + "</p><div id='visualizeTarget'></div>";
+    	var html = "<div id='visualizeTarget'></div>";
 
     	container.innerHTML = html;
 
@@ -363,6 +363,9 @@
 
 	// set the callback
 	settings.callback = widget.graphCallback;
+
+	// set the title
+	settings.title = visMap[type].title+" of " + (widget.selectedContainer ? widget.selectedContainer : "demonstration analysis");
 
 	// set the current controller
     	widget.currentVisualizationController = Retina.Widget.create('RendererController', { "target": document.getElementById("visualizeTarget"), "type": visMap[type].renderer, "settings": settings, "controls": groups, "showBreadcrumbs": true, "breadcrumbs": c.breadcrumbs || "", "dataCallback": widget.dataCallback, "settingsCallback": widget.settingsCallback, "renderCallback": type == 'table' ? widget.visualize : null });
@@ -1011,7 +1014,7 @@
 	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload container to myData'><img src='Retina/images/cloud-upload.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
 
 	// cutoffs
 	
@@ -1148,7 +1151,7 @@
 	// result data
 	html.push("<table style='font-size: 12px; width: 322px;'><th style='text-align: left;'>ID</th><th style='text-align: right; padding-left: 100px;'>hits</th></tr>");
 	for (var i=0; i<c.items.length; i++) {
-	    html.push("<tr><td title='"+c.items[i].name+"'>"+c.items[i].id+"</td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
+	    html.push("<tr><td title='"+c.items[i].name+"'><a href='mgmain.html?mgpage=overview&metagenome="+c.items[i].id+"' target=_blank>"+c.items[i].id+"</a></td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
 	}
 	html.push("</table>");
 	
@@ -2742,6 +2745,7 @@
 	delete c.promises;
 	delete c.status;
 	delete c.user;
+	delete c.parameters.sourceMap;
 
 	// create download
 	if (download) {
@@ -2762,7 +2766,11 @@
 	    
 	    // set up the url
 	    var url = RetinaConfig.shock_url+'/node';
-	    var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id, "container": c }) ], { "type" : "text\/json" });
+	    var attributes = new Blob([ JSON.stringify({ "type": "analysisObject", "hasVisualization": "1", "owner": stm.user.id }) ], { "type" : "text\/json" });
+
+	    // the container must be parsed for keys with . because those cannot be uploaded into SHOCK
+	    //, "container": c }) ], { "type" : "text\/json" });
+
 	    var form = new FormData();
 	    var filename = widget.selectedContainer;
 	    form.append('attributes', attributes);
@@ -3236,7 +3244,7 @@
 	var widget = this;
 
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
-	var ranks = container.parameters.displayType == "taxonomy" ? widget.taxLevels.slice(0, container.parameters.depth) : widget.ontLevels[container.parameters.sources[container.parameters.displaySource]].slice(0, container.parameters.depth);
+	var ranks = container.parameters.displayType == "taxonomy" ? widget.taxLevels.slice(0, container.parameters.depth) : widget.ontLevels[container.parameters.displaySource].slice(0, container.parameters.depth);
 	var matrixdata = [];
 	for (var i=0; i<container.matrix.cols.length; i++) {
 	    matrixdata.push([]);
