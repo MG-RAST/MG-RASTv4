@@ -162,7 +162,7 @@
 	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\"){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\")){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
 
 
 	container.innerHTML = html;
@@ -1148,7 +1148,7 @@
 	// result data
 	html.push("<table style='font-size: 12px; width: 322px;'><th style='text-align: left;'>ID</th><th style='text-align: right; padding-left: 100px;'>hits</th></tr>");
 	for (var i=0; i<c.items.length; i++) {
-	    html.push("<tr><td title='"+c.items[i].name+"'>"+c.items[i].id+"</td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
+	    html.push("<tr><td title='"+c.items[i].name+"'><a href='mgmain.html?mgpage=overview&metagenome="+c.items[i].id+"' target=_blank>"+c.items[i].id+"</a></td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
 	}
 	html.push("</table>");
 	
