@@ -68,7 +68,7 @@
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
 	    if (project.status == 'private') {
-		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='show sharing options'><i class='icon icon-share'></i> show sharing options</button>Private Study: "+project.name+"</h3>";
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='edit / share project'><i class='icon icon-share'></i> edit / share project</button>Private Study: "+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
@@ -132,6 +132,7 @@
 		sort_autodetect: true,
 		synchronous: true,
 		sort: "name",
+		show_export: true,
 		invisible_columns: { 0: true, 4: true, 5: true },
 		minwidths: [125,175,105,110,85,95,95,95,95,100,95,120,70,90,110],
 		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "sample", "library", "location", "country", "coordinates", "type", "method", "download" ] }
