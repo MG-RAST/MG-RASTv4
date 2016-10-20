@@ -88,9 +88,19 @@
 	    html += (project.metadata["PI_firstname"]||"-")+" "+(project.metadata["PI_lastname"]||"-")+" ("+(project.metadata["PI_email"]||"-")+")<br>"+(project.metadata["PI_organization"]||"-")+" ("+(project.metadata["PI_organization_url"]||"-")+")<br>";
 	    html += (project.metadata["PI_organization_address"]||"-")+", "+(project.metadata["PI_organization_country"]||"-")+"</address>";
 	    html += "<address><strong>Technical</strong><br>"+(project.metadata.firstname||"-")+" "+(project.metadata.lastname||"-")+" ("+(project.metadata.email||"-")+")<br>"+(project.metadata.organization||"-")+" ("+(project.metadata.organization_url||"-")+")<br>"+(project.metadata.organization_address||"-")+", "+(project.metadata.organization_country||"-")+"</address>";
-	    html += "<h4>metagenomes</h4><div id='metagenome_table'><img src='Retina/images/waiting.gif' style='margin-left: 40%;margin-top: 100px;'></div>";
+	    html += "<h4>metagenomes</h4><div id='project2collection' style='float: right;'></div><div id='metagenome_table'><img src='Retina/images/waiting.gif' style='margin-left: 40%;margin-top: 100px;'></div>";
 	    
 	    content.innerHTML = html;
+
+	    if (stm.user) {
+		stm.loadPreferences().then(function(){
+		    var widget = Retina.WidgetInstances.metagenome_project[1];
+		    var project = stm.DataStore.project[widget.id];
+		    if (! stm.user.preferences.collections.hasOwnProperty(project.name)) {
+			document.getElementById('project2collection').innerHTML = '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].createCollection();" title="create a collection from the\nmetagenomes of this project">create collection</button>';
+		    }
+		});
+	    }
 
 	    // check if this project has a custom image and load it if so
 	    jQuery.get(RetinaConfig.shock_url + "/node?querynode&attributes.inUseInProject="+widget.id, function(data){
@@ -104,9 +114,11 @@
 	    // create the metagenome table
 	    var rows = [];
 	    var url = RetinaConfig.mgrast_ftp+"/metagenome/";
+	    widget.metagenomes = {};
 	    for (var i=0; i<project.metagenomes.length; i++) {
 		var mg = project.metagenomes[i];
 		var mgid = mg.metagenome_id.match(/^mgm/) ? mg.metagenome_id : "mgm"+mg.metagenome_id;
+		widget.metagenomes[mgid] = mg.name;
 		var row = [ project.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
 			    "<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap(mgid) : mgid)+"' target=_blank>"+mg.name+"</a>",
 			    mg.basepairs,
@@ -202,6 +214,26 @@
 	    widget.table.update({},1);
 	}
 	
+    };
+
+    widget.createCollection = function () {
+	var widget = this;
+	
+	var collection = { type: "collection",
+			   metagenomes: widget.metagenomes,
+			   name: stm.DataStore.project[widget.id].name,
+			   description: "project "+stm.DataStore.project[widget.id].name + " metagenomes",
+			 };
+
+	if (! stm.user.preferences.hasOwnProperty('collections')) {
+	    stm.user.preferences.collections = {};
+	}
+
+	stm.user.preferences.collections[stm.DataStore.project[widget.id].name] = collection;
+	
+	stm.storePreferences("collection stored", "there was an error storing your collection");
+
+	document.getElementById('project2collection').innerHTML = "";
     };
 
     widget.authenticatedDownload = function (button, id, type) {

@@ -329,7 +329,9 @@
 		       url: RetinaConfig["mgrast_api"]+"/user/"+stm.user.login+"?verbosity=full",
 		       headers: stm.authHeader,
 		       success: function(data) {
-			   stm.user = data;
+			   data.oldPreferences = data.preferences.slice();
+			   delete data.preferences;
+			   jQuery.extend(true, stm.user, data);
 			   var widget = Retina.WidgetInstances.metagenome_mydata[1];
 			   widget.showProfile();
 			   if (! widget.hasOwnProperty('job_table')) {
@@ -578,7 +580,7 @@
 	    var sses = Retina.keys(stm.user.preferences.collections).sort();
 	    for (var i=0; i<sses.length; i++) {
 		var collection = stm.user.preferences.collections[sses[i]];
-		html.push('<tr><td style="padding-bottom: 20px;"><table><tr><td colspan=2 style="border: none;"><a href="mgmain.html?mgpage=collection&collection='+collection.name+'"><b>'+collection.name+'</b></a> ('+Retina.keys(collection.metagenomes).length+' metagenomes)</td></tr>');
+		html.push('<tr><td style="padding-bottom: 20px;"><table style="width: 100%;"><tr><td colspan=2 style="border: none;"><a href="mgmain.html?mgpage=collection&collection='+collection.name+'"><b>'+collection.name+'</b></a> ('+Retina.keys(collection.metagenomes).length+' metagenomes)<button class="btn btn-mini btn-danger" style="float: right;" title="delete collection" onclick="if (confirm(\'Really delete this collection?\')) {Retina.WidgetInstances.metagenome_mydata[1].deleteCollection(\''+collection.name+'\');}"><i class="icon icon-trash"></i></button></td></tr>');
 		html.push('<tr><td colspan=2 style="border: none;">'+(collection.description || '- no description available -')+'</td></tr>');
 		html.push('</table></td></tr>');
 	    }
@@ -589,6 +591,15 @@
 	
 	document.getElementById('collectionDiv').innerHTML = html.join("\n");
 	jQuery("#masonry").masonry({ itemSelector : '.box' });
+
+    };
+
+    widget.deleteCollection = function (cname) {
+	var widget = this;
+
+	delete stm.user.preferences.collections[cname];
+	stm.storePreferences("collection deleted", "there was an error deleting your collection");
+	widget.showCollections();
     };
     
     widget.showTasks = function () {
