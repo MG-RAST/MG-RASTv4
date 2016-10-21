@@ -1,0 +1,237 @@
+host	symbiont	410662
+host	human gut	408170
+host	fossil	444079
+host	coral	496922
+host	human skin	539655
+host	wallaby gut	703336
+host	wasp	1077529
+host	bat	1213622
+host	echinoderm	1411990
+host	marsupial	1477400
+host	human saliva	1679718
+host	koala	1573835
+host	dinoflagellate	1579005
+host	fish gut	1602388
+host	oral-nasopharyngeal	1675031
+host	lung	1729361
+host	frog	1789662
+host	mouse gut	410661
+host	fish	496924
+host	chicken gut	506600
+host	human tracheal	1712573
+host	bovine	1218275
+host	snake	1204294
+host	pig	1176744
+host	insect	1234904
+host	plant	1297885
+host	oyster	1541066
+host	lichen	1653169
+host	human vaginal	1632839
+host	parasite	1642408
+host	blood	1676987
+host	ovine	1704043
+host	mite	1848041
+host	grain	1868704
+host	placenta	1327954
+host	sea squirt	1041057
+host	sponge	1163772
+host	sheep	1898966
+host	mouse	1441287
+host	sheep gut	1904483
+host	human blood	1504969
+host	respiratory tract	1850221
+host	annelid	1580551
+host	invertebrate	1711999
+host	sea anemone	1825923
+host	rat gut	1436733
+host	human oral	447426
+host	mouse skin	540485
+host	phyllosphere	662107
+host	shoot	1006967
+host	viral	1070528
+host	human nasal/pharyngeal	1131769
+host	oral	1227552
+host	algae	1300146
+host	pollen	1628154
+host	seed	1335591
+host	rat	1427740
+host	mollusc	1417798
+host	human eye	1774142
+host	human reproductive system	1842734
+host	human semen	1837932
+host	mosquito	496923
+host	ant	1077528
+host	termite	1076140
+host	insect gut	1202446
+host	flower	1385665
+host	jellyfish	1549733
+host	human milk	1633571
+host	crab	1660082
+host	human	646099
+host	gill	1455666
+host	stomach	1284369
+host	leaf	1297858
+host	pig gut	1510822
+host	shrimp gut	1588881
+host	fungus	1670606
+host	moss	1675540
+host	invertebrate gut	1775950
+host	bird	1833763
+host	ear	1870980
+host	epibiont	408171
+host	primate	1441288
+host	endophyte	483425
+host	gut	749906
+host	upper respiratory tract	1115523
+host	root	1118232
+host	zebrafish	1331678
+host	urine	1346744
+host	spider	1519372
+host	ctenophore	1508044
+host	scorpion gut	1571227
+host	liver	1685930
+host	eye	1830148
+host	termite gut	433724
+host	human lung	433733
+host	bovine gut	506599
+host	honeybee	910258
+host	Crustacea gut	1009879
+host	beetle	1077527
+host	nematode	1130098
+host	skin	1338477
+host	human bile	1630596
+host	seagrass	1904484
+host	rodent	1521111
+host	vaginal	1549736
+host	tick	1595979
+host	gonad	1685929
+host	crustacean	1681198
+host	feces	1861841
+non-host	lake water	1647806
+non-host	marine	408172
+non-host	beach sand	412757
+non-host	riverine	1646512
+non-host	freshwater sediment	556182
+non-host	biofilm	718308
+non-host	food	870726
+non-host	dietary supplements	1698289
+non-host	museum specimen	1661029
+non-host	anaerobic digester	1263854
+non-host	mine tailings	1899497
+non-host	plastisphere	1342751
+non-host	salt mine	1545499
+non-host	milk	1616037
+non-host	lichen crust	1592514
+non-host	wine	1658780
+non-host	rice paddy	1672641
+non-host	food production	1699855
+non-host	parchment	1759405
+non-host	surface	1774230
+non-host	steel	1799687
+non-host	oasis	1799666
+non-host	cloud	1643811
+non-host	soil	410658
+non-host	manure	1792145
+non-host	musk	1664808
+non-host	salt lake	903395
+non-host	sand	1671699
+non-host	tomb wall	1243988
+non-host	retting	1292099
+non-host	money	1515737
+non-host	tin mine	1705994
+non-host	cold seep	1583376
+non-host	crude oil	1561020
+non-host	electrolysis cell	1604023
+non-host	termitarium	1715863
+non-host	microbial fuel cell	1759406
+non-host	peat	1799672
+non-host	anchialine	1859930
+non-host	wetland	1325974
+non-host	marine plankton	1874687
+non-host	termite fungus garden	1503069
+non-host	bioanode	1594593
+non-host	seawater	1561972
+non-host	biosolids	1748545
+non-host	glacier	1651087
+non-host	outdoor	1839947
+non-host	bioreactor sludge	412754
+non-host	microbial mat	527640
+non-host	compost	702656
+non-host	ant fungus garden	797283
+non-host	groundwater	717931
+non-host	hypersaline lake	904678
+non-host	rhizosphere	939928
+non-host	aquatic	1169740
+non-host	dust	1236744
+non-host	coal	1260732
+non-host	honey	1561046
+non-host	wood decay	1593443
+non-host	fuel tank	1628828
+non-host	cave	1723648
+non-host	soil crust	1710357
+non-host	concrete	1759404
+non-host	glacier lake	1898220
+non-host	saline spring	1651086
+non-host	mine drainage	410659
+non-host	marine sediment	412755
+non-host	hot springs	433727
+non-host	stromatolite	496921
+non-host	wastewater	527639
+non-host	hydrothermal vent	652676
+non-host	air	655179
+non-host	biogas fermenter	718289
+non-host	sediment	749907
+non-host	hydrocarbon	938273
+non-host	mixed culture	1306859
+non-host	soda lake	1627878
+non-host	paper pulp	1394888
+non-host	salt marsh	1504975
+non-host	solid waste	1540818
+non-host	poultry litter	1670605
+non-host	cow dung	1735564
+non-host	oil field	1768876
+non-host	lagoon	1763544
+non-host	mud volcano	1816089
+non-host	coral reef	471232
+non-host	snow	1263966
+non-host	terrestrial	1348798
+non-host	fertilizer	1765030
+non-host	industrial waste	1303196
+non-host	urban	1591089
+non-host	tobacco	1798876
+non-host	oil production facility	885331
+non-host	whale fall	412756
+non-host	ice	452919
+non-host	silage	1804158
+non-host	rock	1311626
+non-host	fermentation	1326787
+non-host	aquifer	1704045
+non-host	permafrost	1082480
+non-host	bioreactor	1076179
+non-host	indoor	1256227
+non-host	tidal flat	1269027
+non-host	power plant	1249455
+non-host	clinical	1447863
+non-host	root associated fungus	1518171
+non-host	biocathode	1527414
+non-host	subsurface	1564682
+non-host	probiotic	1659218
+non-host	estuary	1649191
+non-host	leaf litter	1642954
+non-host	aerosol	1708701
+non-host	floral nectar	1752603
+non-host	gas well	1778260
+non-host	pond	1851193
+non-host	freshwater	449393
+non-host	saltern	496920
+non-host	activated sludge	942017
+non-host	biofilter	1070537
+non-host	food fermentation	1154581
+non-host	activated carbon	1214127
+non-host	mangrove	1284368
+non-host	halite	1319833
+non-host	rock porewater	1531857
+non-host	food contamination	1897733
+non-host	moonmilk	1536899
+non-host	flotsam	1602165
+non-host	hypolithon	1690257

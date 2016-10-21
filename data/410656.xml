@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT request="download accessions">
+<taxon scientificName="organismal metagenomes" taxId="410656" parentTaxId="408169" hidden="false" taxonomicDivision="UNC" geneticCode="11" mitochondrialGeneticCode="2" plastIdGeneticCode="11">
+        <lineage>
+            <taxon scientificName="metagenomes" taxId="408169" hidden="false"></taxon>
+            <taxon scientificName="unclassified sequences" taxId="12908" hidden="false"></taxon>
+            <taxon scientificName="root" taxId="1" hidden="true"></taxon>
+        </lineage>
+        <children>
+            <taxon scientificName="symbiont metagenome" taxId="410662" rank="species"></taxon>
+            <taxon scientificName="human gut metagenome" taxId="408170" rank="species"></taxon>
+            <taxon scientificName="fossil metagenome" taxId="444079" rank="species"></taxon>
+            <taxon scientificName="coral metagenome" taxId="496922" rank="species"></taxon>
+            <taxon scientificName="human skin metagenome" taxId="539655" rank="species"></taxon>
+            <taxon scientificName="wallaby gut metagenome" taxId="703336" rank="species"></taxon>
+            <taxon scientificName="wasp metagenome" taxId="1077529" rank="species"></taxon>
+            <taxon scientificName="bat metagenome" taxId="1213622" rank="species"></taxon>
+            <taxon scientificName="echinoderm metagenome" taxId="1411990" rank="species"></taxon>
+            <taxon scientificName="marsupial metagenome" taxId="1477400" rank="species"></taxon>
+            <taxon scientificName="human saliva metagenome" taxId="1679718" rank="species"></taxon>
+            <taxon scientificName="koala metagenome" taxId="1573835" rank="species"></taxon>
+            <taxon scientificName="dinoflagellate metagenome" taxId="1579005" rank="species"></taxon>
+            <taxon scientificName="fish gut metagenome" taxId="1602388" rank="species"></taxon>
+            <taxon scientificName="oral-nasopharyngeal metagenome" taxId="1675031" rank="species"></taxon>
+            <taxon scientificName="lung metagenome" taxId="1729361" rank="species"></taxon>
+            <taxon scientificName="frog metagenome" taxId="1789662" rank="species"></taxon>
+            <taxon scientificName="mouse gut metagenome" taxId="410661" rank="species"></taxon>
+            <taxon scientificName="fish metagenome" taxId="496924" rank="species"></taxon>
+            <taxon scientificName="chicken gut metagenome" taxId="506600" rank="species"></taxon>
+            <taxon scientificName="human tracheal metagenome" taxId="1712573" rank="species"></taxon>
+            <taxon scientificName="bovine metagenome" taxId="1218275" rank="species"></taxon>
+            <taxon scientificName="snake metagenome" taxId="1204294" rank="species"></taxon>
+            <taxon scientificName="pig metagenome" taxId="1176744" rank="species"></taxon>
+            <taxon scientificName="insect metagenome" taxId="1234904" rank="species"></taxon>
+            <taxon scientificName="plant metagenome" taxId="1297885" rank="species"></taxon>
+            <taxon scientificName="oyster metagenome" taxId="1541066" rank="species"></taxon>
+            <taxon scientificName="lichen metagenome" taxId="1653169" rank="species"></taxon>
+            <taxon scientificName="human vaginal metagenome" taxId="1632839" rank="species"></taxon>
+            <taxon scientificName="parasite metagenome" taxId="1642408" rank="species"></taxon>
+            <taxon scientificName="blood metagenome" taxId="1676987" rank="species"></taxon>
+            <taxon scientificName="ovine metagenome" taxId="1704043" rank="species"></taxon>
+            <taxon scientificName="mite metagenome" taxId="1848041" rank="species"></taxon>
+            <taxon scientificName="grain metagenome" taxId="1868704" rank="species"></taxon>
+            <taxon scientificName="placenta metagenome" taxId="1327954" rank="species"></taxon>
+            <taxon scientificName="sea squirt metagenome" taxId="1041057" rank="species"></taxon>
+            <taxon scientificName="sponge metagenome" taxId="1163772" rank="species"></taxon>
+            <taxon scientificName="sheep metagenome" taxId="1898966" rank="species"></taxon>
+            <taxon scientificName="mouse metagenome" taxId="1441287" rank="species"></taxon>
+            <taxon scientificName="sheep gut metagenome" taxId="1904483" rank="species"></taxon>
+            <taxon scientificName="human blood metagenome" taxId="1504969" rank="species"></taxon>
+            <taxon scientificName="respiratory tract metagenome" taxId="1850221" rank="species"></taxon>
+            <taxon scientificName="annelid metagenome" taxId="1580551" rank="species"></taxon>
+            <taxon scientificName="invertebrate metagenome" taxId="1711999" rank="species"></taxon>
+            <taxon scientificName="sea anemone metagenome" taxId="1825923" rank="species"></taxon>
+            <taxon scientificName="rat gut metagenome" taxId="1436733" rank="species"></taxon>
+            <taxon scientificName="human oral metagenome" taxId="447426" rank="species"></taxon>
+            <taxon scientificName="mouse skin metagenome" taxId="540485" rank="species"></taxon>
+            <taxon scientificName="phyllosphere metagenome" taxId="662107" rank="species"></taxon>
+            <taxon scientificName="shoot metagenome" taxId="1006967" rank="species"></taxon>
+            <taxon scientificName="viral metagenome" taxId="1070528" rank="species"></taxon>
+            <taxon scientificName="human nasal/pharyngeal metagenome" taxId="1131769" rank="species"></taxon>
+            <taxon scientificName="oral metagenome" taxId="1227552" rank="species"></taxon>
+            <taxon scientificName="algae metagenome" taxId="1300146" rank="species"></taxon>
+            <taxon scientificName="pollen metagenome" taxId="1628154" rank="species"></taxon>
+            <taxon scientificName="seed metagenome" taxId="1335591" rank="species"></taxon>
+            <taxon scientificName="rat metagenome" taxId="1427740" rank="species"></taxon>
+            <taxon scientificName="mollusc metagenome" taxId="1417798" rank="species"></taxon>
+            <taxon scientificName="human eye metagenome" taxId="1774142" rank="species"></taxon>
+            <taxon scientificName="human reproductive system metagenome" taxId="1842734" rank="species"></taxon>
+            <taxon scientificName="human semen metagenome" taxId="1837932" rank="species"></taxon>
+            <taxon scientificName="mosquito metagenome" taxId="496923" rank="species"></taxon>
+            <taxon scientificName="ant metagenome" taxId="1077528" rank="species"></taxon>
+            <taxon scientificName="termite metagenome" taxId="1076140" rank="species"></taxon>
+            <taxon scientificName="insect gut metagenome" taxId="1202446" rank="species"></taxon>
+            <taxon scientificName="flower metagenome" taxId="1385665" rank="species"></taxon>
+            <taxon scientificName="jellyfish metagenome" taxId="1549733" rank="species"></taxon>
+            <taxon scientificName="human milk metagenome" taxId="1633571" rank="species"></taxon>
+            <taxon scientificName="crab metagenome" taxId="1660082" rank="species"></taxon>
+            <taxon scientificName="human metagenome" taxId="646099" rank="species"></taxon>
+            <taxon scientificName="gill metagenome" taxId="1455666" rank="species"></taxon>
+            <taxon scientificName="stomach metagenome" taxId="1284369" rank="species"></taxon>
+            <taxon scientificName="leaf metagenome" taxId="1297858" rank="species"></taxon>
+            <taxon scientificName="pig gut metagenome" taxId="1510822" rank="species"></taxon>
+            <taxon scientificName="shrimp gut metagenome" taxId="1588881" rank="species"></taxon>
+            <taxon scientificName="fungus metagenome" taxId="1670606" rank="species"></taxon>
+            <taxon scientificName="moss metagenome" taxId="1675540" rank="species"></taxon>
+            <taxon scientificName="invertebrate gut metagenome" taxId="1775950" rank="species"></taxon>
+            <taxon scientificName="bird metagenome" taxId="1833763" rank="species"></taxon>
+            <taxon scientificName="ear metagenome" taxId="1870980" rank="species"></taxon>
+            <taxon scientificName="epibiont metagenome" taxId="408171" rank="species"></taxon>
+            <taxon scientificName="primate metagenome" taxId="1441288" rank="species"></taxon>
+            <taxon scientificName="endophyte metagenome" taxId="483425" rank="species"></taxon>
+            <taxon scientificName="gut metagenome" taxId="749906" rank="species"></taxon>
+            <taxon scientificName="upper respiratory tract metagenome" taxId="1115523" rank="species"></taxon>
+            <taxon scientificName="root metagenome" taxId="1118232" rank="species"></taxon>
+            <taxon scientificName="zebrafish metagenome" taxId="1331678" rank="species"></taxon>
+            <taxon scientificName="urine metagenome" taxId="1346744" rank="species"></taxon>
+            <taxon scientificName="spider metagenome" taxId="1519372" rank="species"></taxon>
+            <taxon scientificName="ctenophore metagenome" taxId="1508044" rank="species"></taxon>
+            <taxon scientificName="scorpion gut metagenome" taxId="1571227" rank="species"></taxon>
+            <taxon scientificName="liver metagenome" taxId="1685930" rank="species"></taxon>
+            <taxon scientificName="eye metagenome" taxId="1830148" rank="species"></taxon>
+            <taxon scientificName="termite gut metagenome" taxId="433724" rank="species"></taxon>
+            <taxon scientificName="human lung metagenome" taxId="433733" rank="species"></taxon>
+            <taxon scientificName="bovine gut metagenome" taxId="506599" rank="species"></taxon>
+            <taxon scientificName="honeybee metagenome" taxId="910258" rank="species"></taxon>
+            <taxon scientificName="Crustacea gut metagenome" taxId="1009879" rank="species"></taxon>
+            <taxon scientificName="beetle metagenome" taxId="1077527" rank="species"></taxon>
+            <taxon scientificName="nematode metagenome" taxId="1130098" rank="species"></taxon>
+            <taxon scientificName="skin metagenome" taxId="1338477" rank="species"></taxon>
+            <taxon scientificName="human bile metagenome" taxId="1630596" rank="species"></taxon>
+            <taxon scientificName="seagrass metagenome" taxId="1904484" rank="species"></taxon>
+            <taxon scientificName="rodent metagenome" taxId="1521111" rank="species"></taxon>
+            <taxon scientificName="vaginal metagenome" taxId="1549736" rank="species"></taxon>
+            <taxon scientificName="tick metagenome" taxId="1595979" rank="species"></taxon>
+            <taxon scientificName="gonad metagenome" taxId="1685929" rank="species"></taxon>
+            <taxon scientificName="crustacean metagenome" taxId="1681198" rank="species"></taxon>
+            <taxon scientificName="feces metagenome" taxId="1861841" rank="species"></taxon>
+        </children>
+        <synonym type="synonym" name="organism-associated metagenomes"></synonym>
+        <synonym type="synonym" name="biomedical metagenomes"></synonym>
+    </taxon>
+</ROOT>

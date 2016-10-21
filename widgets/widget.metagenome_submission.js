@@ -511,8 +511,8 @@
 <p>Please note that only private data can be deleted.</p>\
 <div style="height:10px;" class="clear"></div>';
 	if (! RetinaConfig.v3) {
-	    html += '\
-<div class="control-group"><label class="control-label" for="submitEBI"><b>submit to EBI</b></label><div class="controls"><label class="checkbox"><input id="submitEBI" name="submitEBI" value="submitEBI" type="checkbox" checked>In addition to submitting this project to MG-RAST, also submit to the <a target="blank" href="http://www.ebi.ac.uk/submission/">EBI archive</a>.</label></div>';
+// 	    html += '\
+// <div class="control-group"><label class="control-label" for="submitEBI"><b>submit to EBI</b></label><div class="controls"><label class="checkbox"><input id="submitEBI" name="submitEBI" value="submitEBI" type="checkbox" checked>In addition to submitting this project to MG-RAST, also submit to the <a target="blank" href="http://www.ebi.ac.uk/submission/">EBI archive</a>.</label></div>';
 	}
 	html += '\
 <div style="height:10px;" class="clear"></div>\

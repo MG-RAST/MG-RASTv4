@@ -457,10 +457,70 @@
 		html += '<div><button class="btn btn-small">re-submit this project to EBI</button></div>';
 	    }
 	} else {
-	    html += '<button class="btn btn-small pull-left">submit to EBI</button>';
+	    html += '<button class="btn btn-small pull-left" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">submit to EBI</button>';
 	}
 
 	return html;
+    };
+
+    widget.submitToEBIModal = function (project_name, project_id) {
+	var widget = this;
+
+	jQuery.get('data/ebi.tsv').complete(function (xhr) {
+	    var data = xhr.responseText;
+	    var rows = data.split(/\n/).sort(function (a, b) {
+		return a.toLowerCase().localeCompare(b.toLowerCase());
+	    });
+	    var nopts = [];
+	    var hopts = [];
+	    for (var i=0; i<rows.length; i++) {
+		var cells = rows[i].split(/\t/);
+		if (cells.length > 1) {
+		    if (cells[0] == "host") {
+			hopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
+		    } else {
+			nopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
+		    }
+		}
+	    }
+	    
+	    // create the modal
+	    var html = '\
+      <div class="modal-header">\
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+        <h3><img src="images/ENA-logo.png" style="width: 150px; margin-right: 10px;">submit to the ENA at EBI</h3>\
+      </div>\
+      <div class="modal-body">\
+        <h4 style="margin-top: 0px;">'+project_name+'</h4>\
+        <p>To submit your project to the European Nucleotide Archive at the EBI, you need to specify the biome and sequencing technology below.</p>\
+        <table><tr><td><div style="margin-right: 10px; position: relative; bottom: 5px; font-weight: bold;">sequencing techonology</div></td><td><select id="ebi_tech"><option>LS454</option><option>ILLUMINA</option><option>COMPLETE_GENOMICS</option><option>PACBIO_SMRT</option><option>ION_TORRENT</option><option>OXFORD_NANOPORE</option><option>CAPILLARY</option></select></td></tr>\
+        <tr><td><div style="margin-right: 10px; position: relative; bottom: 5px; font-weight: bold;">biome</div></td><td><select id="ebi_biome"><optgroup label="host-associated">'+hopts.join('')+'</optgroup><optgroup label="non-host-associated">'+nopts.join('')+'</optgroup></select></td></tr></table><input type="hidden" id="ebi_project" value="'+project_id+'">\
+      </div>\
+      <div class="modal-footer">\
+        <button class="btn btn-danger pull-left" onclick="jQuery(\'#ebiModal\').modal(\'hide\')">cancel</button>\
+        <button class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBI();">submit</button>\
+      </div>';
+
+	    var modal = document.createElement('div');
+	    modal.setAttribute('id', 'ebiModal');
+	    modal.setAttribute('class', 'modal hide fade');
+	    document.body.appendChild(modal);
+	    modal.innerHTML = html;
+	    jQuery('#ebiModal').modal('show');
+	});
+    };
+
+    widget.submitToEBI = function () {
+	var widget = this;
+
+	var biome = document.getElementById('ebi_biome').options[document.getElementById('ebi_biome').selectedIndex].value;
+	var tech = document.getElementById('ebi_tech').options[document.getElementById('ebi_tech').selectedIndex].value;
+	var project_id = document.getElementById('ebi_project').value;
+
+	jQuery('#ebiModal').modal('hide');
+	document.body.removeChild(document.getElementById('ebiModal'));
+
+	alert('submitting project '+project_id+' biome '+biome+' tech '+tech);
     };
 
     widget.updateBasicProjectMetadata = function (projectid) {

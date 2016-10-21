@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT request="download accessions">
+<taxon scientificName="ecological metagenomes" taxId="410657" parentTaxId="408169" hidden="false" taxonomicDivision="UNC" geneticCode="11" mitochondrialGeneticCode="2" plastIdGeneticCode="11">
+        <lineage>
+            <taxon scientificName="metagenomes" taxId="408169" hidden="false"></taxon>
+            <taxon scientificName="unclassified sequences" taxId="12908" hidden="false"></taxon>
+            <taxon scientificName="root" taxId="1" hidden="true"></taxon>
+        </lineage>
+        <children>
+            <taxon scientificName="lake water metagenome" taxId="1647806" rank="species"></taxon>
+            <taxon scientificName="marine metagenome" taxId="408172" rank="species"></taxon>
+            <taxon scientificName="beach sand metagenome" taxId="412757" rank="species"></taxon>
+            <taxon scientificName="riverine metagenome" taxId="1646512" rank="species"></taxon>
+            <taxon scientificName="freshwater sediment metagenome" taxId="556182" rank="species"></taxon>
+            <taxon scientificName="biofilm metagenome" taxId="718308" rank="species"></taxon>
+            <taxon scientificName="food metagenome" taxId="870726" rank="species"></taxon>
+            <taxon scientificName="dietary supplements metagenome" taxId="1698289" rank="species"></taxon>
+            <taxon scientificName="museum specimen metagenome" taxId="1661029" rank="species"></taxon>
+            <taxon scientificName="anaerobic digester metagenome" taxId="1263854" rank="species"></taxon>
+            <taxon scientificName="mine tailings metagenome" taxId="1899497" rank="species"></taxon>
+            <taxon scientificName="plastisphere metagenome" taxId="1342751" rank="species"></taxon>
+            <taxon scientificName="salt mine metagenome" taxId="1545499" rank="species"></taxon>
+            <taxon scientificName="milk metagenome" taxId="1616037" rank="species"></taxon>
+            <taxon scientificName="lichen crust metagenome" taxId="1592514" rank="species"></taxon>
+            <taxon scientificName="wine metagenome" taxId="1658780" rank="species"></taxon>
+            <taxon scientificName="rice paddy metagenome" taxId="1672641" rank="species"></taxon>
+            <taxon scientificName="food production metagenome" taxId="1699855" rank="species"></taxon>
+            <taxon scientificName="parchment metagenome" taxId="1759405" rank="species"></taxon>
+            <taxon scientificName="surface metagenome" taxId="1774230" rank="species"></taxon>
+            <taxon scientificName="steel metagenome" taxId="1799687" rank="species"></taxon>
+            <taxon scientificName="oasis metagenome" taxId="1799666" rank="species"></taxon>
+            <taxon scientificName="cloud metagenome" taxId="1643811" rank="species"></taxon>
+            <taxon scientificName="soil metagenome" taxId="410658" rank="species"></taxon>
+            <taxon scientificName="manure metagenome" taxId="1792145" rank="species"></taxon>
+            <taxon scientificName="musk metagenome" taxId="1664808" rank="species"></taxon>
+            <taxon scientificName="salt lake metagenome" taxId="903395" rank="species"></taxon>
+            <taxon scientificName="sand metagenome" taxId="1671699" rank="species"></taxon>
+            <taxon scientificName="tomb wall metagenome" taxId="1243988" rank="species"></taxon>
+            <taxon scientificName="retting metagenome" taxId="1292099" rank="species"></taxon>
+            <taxon scientificName="money metagenome" taxId="1515737" rank="species"></taxon>
+            <taxon scientificName="tin mine metagenome" taxId="1705994" rank="species"></taxon>
+            <taxon scientificName="cold seep metagenome" taxId="1583376" rank="species"></taxon>
+            <taxon scientificName="crude oil metagenome" taxId="1561020" rank="species"></taxon>
+            <taxon scientificName="electrolysis cell metagenome" taxId="1604023" rank="species"></taxon>
+            <taxon scientificName="termitarium metagenome" taxId="1715863" rank="species"></taxon>
+            <taxon scientificName="microbial fuel cell metagenome" taxId="1759406" rank="species"></taxon>
+            <taxon scientificName="peat metagenome" taxId="1799672" rank="species"></taxon>
+            <taxon scientificName="anchialine metagenome" taxId="1859930" rank="species"></taxon>
+            <taxon scientificName="wetland metagenome" taxId="1325974" rank="species"></taxon>
+            <taxon scientificName="marine plankton metagenome" taxId="1874687" rank="species"></taxon>
+            <taxon scientificName="termite fungus garden metagenome" taxId="1503069" rank="species"></taxon>
+            <taxon scientificName="bioanode metagenome" taxId="1594593" rank="species"></taxon>
+            <taxon scientificName="seawater metagenome" taxId="1561972" rank="species"></taxon>
+            <taxon scientificName="biosolids metagenome" taxId="1748545" rank="species"></taxon>
+            <taxon scientificName="glacier metagenome" taxId="1651087" rank="species"></taxon>
+            <taxon scientificName="outdoor metagenome" taxId="1839947" rank="species"></taxon>
+            <taxon scientificName="bioreactor sludge metagenome" taxId="412754" rank="species"></taxon>
+            <taxon scientificName="microbial mat metagenome" taxId="527640" rank="species"></taxon>
+            <taxon scientificName="compost metagenome" taxId="702656" rank="species"></taxon>
+            <taxon scientificName="ant fungus garden metagenome" taxId="797283" rank="species"></taxon>
+            <taxon scientificName="groundwater metagenome" taxId="717931" rank="species"></taxon>
+            <taxon scientificName="hypersaline lake metagenome" taxId="904678" rank="species"></taxon>
+            <taxon scientificName="rhizosphere metagenome" taxId="939928" rank="species"></taxon>
+            <taxon scientificName="aquatic metagenome" taxId="1169740" rank="species"></taxon>
+            <taxon scientificName="dust metagenome" taxId="1236744" rank="species"></taxon>
+            <taxon scientificName="coal metagenome" taxId="1260732" rank="species"></taxon>
+            <taxon scientificName="honey metagenome" taxId="1561046" rank="species"></taxon>
+            <taxon scientificName="wood decay metagenome" taxId="1593443" rank="species"></taxon>
+            <taxon scientificName="fuel tank metagenome" taxId="1628828" rank="species"></taxon>
+            <taxon scientificName="cave metagenome" taxId="1723648" rank="species"></taxon>
+            <taxon scientificName="soil crust metagenome" taxId="1710357" rank="species"></taxon>
+            <taxon scientificName="concrete metagenome" taxId="1759404" rank="species"></taxon>
+            <taxon scientificName="glacier lake metagenome" taxId="1898220" rank="species"></taxon>
+            <taxon scientificName="saline spring metagenome" taxId="1651086" rank="species"></taxon>
+            <taxon scientificName="mine drainage metagenome" taxId="410659" rank="species"></taxon>
+            <taxon scientificName="marine sediment metagenome" taxId="412755" rank="species"></taxon>
+            <taxon scientificName="hot springs metagenome" taxId="433727" rank="species"></taxon>
+            <taxon scientificName="stromatolite metagenome" taxId="496921" rank="species"></taxon>
+            <taxon scientificName="wastewater metagenome" taxId="527639" rank="species"></taxon>
+            <taxon scientificName="hydrothermal vent metagenome" taxId="652676" rank="species"></taxon>
+            <taxon scientificName="air metagenome" taxId="655179" rank="species"></taxon>
+            <taxon scientificName="biogas fermenter metagenome" taxId="718289" rank="species"></taxon>
+            <taxon scientificName="sediment metagenome" taxId="749907" rank="species"></taxon>
+            <taxon scientificName="hydrocarbon metagenome" taxId="938273" rank="species"></taxon>
+            <taxon scientificName="mixed culture metagenome" taxId="1306859" rank="species"></taxon>
+            <taxon scientificName="soda lake metagenome" taxId="1627878" rank="species"></taxon>
+            <taxon scientificName="paper pulp metagenome" taxId="1394888" rank="species"></taxon>
+            <taxon scientificName="salt marsh metagenome" taxId="1504975" rank="species"></taxon>
+            <taxon scientificName="solid waste metagenome" taxId="1540818" rank="species"></taxon>
+            <taxon scientificName="sludge metagenome" taxId="1592332"></taxon>
+            <taxon scientificName="poultry litter metagenome" taxId="1670605" rank="species"></taxon>
+            <taxon scientificName="cow dung metagenome" taxId="1735564" rank="species"></taxon>
+            <taxon scientificName="oil field metagenome" taxId="1768876" rank="species"></taxon>
+            <taxon scientificName="lagoon metagenome" taxId="1763544" rank="species"></taxon>
+            <taxon scientificName="mud volcano metagenome" taxId="1816089" rank="species"></taxon>
+            <taxon scientificName="coral reef metagenome" taxId="471232" rank="species"></taxon>
+            <taxon scientificName="snow metagenome" taxId="1263966" rank="species"></taxon>
+            <taxon scientificName="terrestrial metagenome" taxId="1348798" rank="species"></taxon>
+            <taxon scientificName="fertilizer metagenome" taxId="1765030" rank="species"></taxon>
+            <taxon scientificName="industrial waste metagenome" taxId="1303196" rank="species"></taxon>
+            <taxon scientificName="urban metagenome" taxId="1591089" rank="species"></taxon>
+            <taxon scientificName="tobacco metagenome" taxId="1798876" rank="species"></taxon>
+            <taxon scientificName="oil production facility metagenome" taxId="885331" rank="species"></taxon>
+            <taxon scientificName="whale fall metagenome" taxId="412756" rank="species"></taxon>
+            <taxon scientificName="ice metagenome" taxId="452919" rank="species"></taxon>
+            <taxon scientificName="silage metagenome" taxId="1804158" rank="species"></taxon>
+            <taxon scientificName="rock metagenome" taxId="1311626" rank="species"></taxon>
+            <taxon scientificName="fermentation metagenome" taxId="1326787" rank="species"></taxon>
+            <taxon scientificName="aquifer metagenome" taxId="1704045" rank="species"></taxon>
+            <taxon scientificName="permafrost metagenome" taxId="1082480" rank="species"></taxon>
+            <taxon scientificName="bioreactor metagenome" taxId="1076179" rank="species"></taxon>
+            <taxon scientificName="indoor metagenome" taxId="1256227" rank="species"></taxon>
+            <taxon scientificName="tidal flat metagenome" taxId="1269027" rank="species"></taxon>
+            <taxon scientificName="power plant metagenome" taxId="1249455" rank="species"></taxon>
+            <taxon scientificName="clinical metagenome" taxId="1447863" rank="species"></taxon>
+            <taxon scientificName="root associated fungus metagenome" taxId="1518171" rank="species"></taxon>
+            <taxon scientificName="biocathode metagenome" taxId="1527414" rank="species"></taxon>
+            <taxon scientificName="subsurface metagenome" taxId="1564682" rank="species"></taxon>
+            <taxon scientificName="probiotic metagenome" taxId="1659218" rank="species"></taxon>
+            <taxon scientificName="estuary metagenome" taxId="1649191" rank="species"></taxon>
+            <taxon scientificName="leaf litter metagenome" taxId="1642954" rank="species"></taxon>
+            <taxon scientificName="aerosol metagenome" taxId="1708701" rank="species"></taxon>
+            <taxon scientificName="floral nectar metagenome" taxId="1752603" rank="species"></taxon>
+            <taxon scientificName="gas well metagenome" taxId="1778260" rank="species"></taxon>
+            <taxon scientificName="pond metagenome" taxId="1851193" rank="species"></taxon>
+            <taxon scientificName="freshwater metagenome" taxId="449393" rank="species"></taxon>
+            <taxon scientificName="saltern metagenome" taxId="496920" rank="species"></taxon>
+            <taxon scientificName="activated sludge metagenome" taxId="942017" rank="species"></taxon>
+            <taxon scientificName="biofilter metagenome" taxId="1070537" rank="species"></taxon>
+            <taxon scientificName="food fermentation metagenome" taxId="1154581" rank="species"></taxon>
+            <taxon scientificName="activated carbon metagenome" taxId="1214127" rank="species"></taxon>
+            <taxon scientificName="mangrove metagenome" taxId="1284368" rank="species"></taxon>
+            <taxon scientificName="halite metagenome" taxId="1319833" rank="species"></taxon>
+            <taxon scientificName="rock porewater metagenome" taxId="1531857" rank="species"></taxon>
+            <taxon scientificName="food contamination metagenome" taxId="1897733" rank="species"></taxon>
+            <taxon scientificName="moonmilk metagenome" taxId="1536899" rank="species"></taxon>
+            <taxon scientificName="flotsam metagenome" taxId="1602165" rank="species"></taxon>
+            <taxon scientificName="hypolithon metagenome" taxId="1690257" rank="species"></taxon>
+        </children>
+        <synonym type="synonym" name="geographical metagenomes"></synonym>
+    </taxon>
+</ROOT>
