@@ -457,10 +457,131 @@
 		html += '<div><button class="btn btn-small">re-submit this project to EBI</button></div>';
 	    }
 	} else {
-	    html += '<button class="btn btn-small pull-left">submit to EBI</button>';
+	    if (Retina.cgiParam('admin')) {
+		html += '<button class="btn btn-small pull-left" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">submit to EBI</button>';
+	    }
 	}
 
 	return html;
+    };
+
+    widget.submitToEBIModal = function (project_name, project_id) {
+	var widget = this;
+
+	var project;
+	var projectid;
+	for (var i=0; i<stm.DataStore.project.length; i++) {
+	    if (stm.DataStore.project[i].id == project_id) {
+		project = stm.DataStore.project[i];
+		    projectid = i;
+		break;
+	    }
+	}
+
+	if (project.status != 'public') {
+	    alert('You must make the project public before submitting to EBI');
+	    return;
+	}
+	
+	jQuery.get('data/ebi.tsv').complete(function (xhr) {
+	    var data = xhr.responseText;
+	    var rows = data.split(/\n/).sort(function (a, b) {
+		return a.toLowerCase().localeCompare(b.toLowerCase());
+	    });
+	    var nopts = [];
+	    var hopts = [];
+	    for (var i=0; i<rows.length; i++) {
+		var cells = rows[i].split(/\t/);
+		if (cells.length > 1) {
+		    if (cells[0] == "host") {
+			hopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
+		    } else {
+			nopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
+		    }
+		}
+	    }
+
+	    // get a hash of all biomes
+	    var biomes = {};
+	    for (var i=0; i<project.metagenomes.length; i++) {
+		if (! biomes.hasOwnProperty(project.metagenomes[i].biome)) {
+		    biomes[project.metagenomes[i].biome] = [];
+		}
+		biomes[project.metagenomes[i].biome].push(project.metagenomes[i].metagenome_id);
+	    }
+	    Retina.WidgetInstances.metagenome_share[1].biomes = biomes;
+	    var biome_list = Retina.keys(biomes).sort();
+	    var biome_selects = [];
+	    for (var i=0; i<biome_list.length; i++) {
+		if (biome_list[i].length) {
+		    biome_selects.push('<tr><td><div style="margin-right: 10px; position: relative; bottom: 5px;">'+biome_list[i]+'</div></td><td><select id="biome_'+biome_list[i]+'">');
+		    biome_selects.push('<optgroup label="host-associated">'+hopts.join('')+'</optgroup><optgroup label="non-host-associated">'+nopts.join('')+'</optgroup>');
+		    biome_selects.push('</select></td></tr>');
+		}
+	    }
+
+	    // create the modal
+	    var html = '\
+      <div class="modal-header">\
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+        <h3><img src="images/ENA-logo.png" style="width: 150px; margin-right: 10px;">submit to the ENA at EBI</h3>\
+      </div>\
+      <div class="modal-body">\
+        <h4 style="margin-top: 0px;">'+project_name+'</h4>\
+        <p>To submit your project to the European Nucleotide Archive at the EBI, you need to specify the biome and sequencing technology below.</p>\
+        <table><tr><td><div style="margin-right: 10px; position: relative; bottom: 5px; font-weight: bold;">sequencing techonology</div></td><td><select id="ebi_tech"><option>LS454</option><option>ILLUMINA</option><option>COMPLETE_GENOMICS</option><option>PACBIO_SMRT</option><option>ION_TORRENT</option><option>OXFORD_NANOPORE</option><option>CAPILLARY</option></select></td></tr>\
+        <tr><td colspan=2><div style="font-weight: bold;">biome mapping</div></td></tr></tr>'+biome_selects.join('')+'</table>\
+      </div>\
+      <div class="modal-footer">\
+        <button class="btn btn-danger pull-left" onclick="jQuery(\'#ebiModal\').modal(\'hide\')">cancel</button>\
+        <button class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBI(\''+projectid+'\');">submit</button>\
+      </div>';
+
+	    var modal = document.createElement('div');
+	    modal.setAttribute('id', 'ebiModal');
+	    modal.setAttribute('class', 'modal hide fade');
+	    document.body.appendChild(modal);
+	    modal.innerHTML = html;
+	    jQuery('#ebiModal').modal('show');
+	});
+    };
+
+    widget.submitToEBI = function (projectid) {
+	var widget = this;
+
+	var project = stm.DataStore.project[projectid];
+	var fd = new FormData();
+	
+	fd.append('ebi_tech', document.getElementById('ebi_tech').options[document.getElementById('ebi_tech').selectedIndex].value);
+	var mg2biome = {};
+	var biomes = Retina.keys(widget.biomes);
+	for (var i=0; i<biomes.length; i++) {
+	    for (var h=0; h<widget.biomes[biomes[i]].length; h++) {
+		mg2biome[widget.biomes[biomes[i]][h]] = biomes[i];
+	    }
+	}
+	
+	for (var i=0; i<project.metagenomes.length; i++) {
+	    var selname = 'biome_' + mg2biome[project.metagenomes[i].metagenome_id];
+	    fd.append(project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].value);
+	}
+	
+	jQuery.ajax({
+	    method: "POST",
+	    headers: stm.authHeader,
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    crossDomain: true,
+	    url: RetinaConfig.mgrast_api+'/project/'+project.id+"/submittoebi",
+	    complete: function (jqXHR) {
+		var data = JSON.parse(jqXHR.responseText);
+		console.log(data);
+	    }
+	});
+
+	jQuery('#ebiModal').modal('hide');
+	document.body.removeChild(document.getElementById('ebiModal'));
     };
 
     widget.updateBasicProjectMetadata = function (projectid) {

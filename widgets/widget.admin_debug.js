@@ -219,6 +219,7 @@
 												     lastname: d.lastname,
 												     email: d.email,
 												     tos: d.tos,
+												     id: d.id,
 												     login: d.login },
 											   "token": d.token }), { expires: 7 });
 		window.location = "mgmain.html?mgpage=pipeline";
