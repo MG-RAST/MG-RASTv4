@@ -2146,79 +2146,86 @@
 	    } else {
 		missingSources = widget.dataLoadParams.sources.slice();
 	    }
-	    if (needsLoad && ! stm.DataStore.inprogress.hasOwnProperty('profile'+id)) {
-		widget.pDiv('profile'+id, false, ids[i].name, name);
-
-		stm.DataStore.inprogress['profile'+id] = 1;
-		var source = missingSources.join(",");
-		stm.DataStore.dataContainer[name].promises.push(
-		    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?format=mgrast&condensed=1&verbosity=minimal&source="+source,
-				  dc: name,
-				  contentType: 'application/json',
-				  headers: stm.authHeader,
-				  bound: 'profile'+id,
-				  success: function (data) {
-				      var widget = Retina.WidgetInstances.metagenome_analysis[1];
-				      if (data != null) {
-					  if (data.hasOwnProperty('ERROR')) {
-					      console.log("error: "+data.ERROR);
-					      widget.updatePDiv(this.bound, 'error', data.ERROR);
-					  } else if (data.hasOwnProperty('status')) {
-					      if (data.status == 'done') {
-						  widget.downloadComputedData(this.bound, this.dc, data.url);
+	    if (needsLoad) {
+		for (var h=0; h<missingSources.length; h++) {
+		    var source = missingSources[h];
+		    if (! stm.DataStore.inprogress.hasOwnProperty('profile'+id+source)) {
+			widget.pDiv('profile'+id+source, false, ids[i].name+' '+source, name);
+			stm.DataStore.inprogress['profile'+id+source] = 1;
+			
+			stm.DataStore.dataContainer[name].promises.push(
+			    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?format=mgrast&condensed=1&verbosity=minimal&source="+source,
+					  dc: name,
+					  contentType: 'application/json',
+					  headers: stm.authHeader,
+					  bound: 'profile'+id+source,
+					  success: function (data) {
+					      var widget = Retina.WidgetInstances.metagenome_analysis[1];
+					      if (data != null) {
+						  if (data.hasOwnProperty('ERROR')) {
+						      console.log("error: "+data.ERROR);
+						      widget.updatePDiv(this.bound, 'error', data.ERROR);
+						  } else if (data.hasOwnProperty('status')) {
+						      if (data.status == 'done') {
+							  widget.downloadComputedData(this.bound, this.dc, data.url);
+						      } else {
+							  widget.queueDownload(this.bound, data.url, this.dc);
+						      }
+						  }
 					      } else {
-						  widget.queueDownload(this.bound, data.url, this.dc);
+						  console.log("error: invalid return structure from API server");
+						  console.log(data);
+						  widget.updatePDiv(this.bound, 'error', data.ERROR);
 					      }
+					  },
+					  error: function(jqXHR, error) {
+					      Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+					  },
+					  complete: function () {
+					      Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 					  }
-				      } else {
-					  console.log("error: invalid return structure from API server");
-					  console.log(data);
-					  widget.updatePDiv(this.bound, 'error', data.ERROR);
-				      }
-				  },
-				  error: function(jqXHR, error) {
-				      Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
-				  },
-				  complete: function () {
-				      Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
-				  }
-				}));
-		stm.DataStore.dataContainer[name].promises.push(
-		    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/metagenome/" + ids[i].id + "?verbosity=full",
-				  dc: name,
-				  contentType: 'application/json',
-				  headers: stm.authHeader,
-				  bound: "profile"+id,
-				  metagenome: id,
-				  success: function (data) {
-				      var widget = Retina.WidgetInstances.metagenome_analysis[1];
-				      if (data != null) {
-					  if (data.hasOwnProperty('ERROR')) {
-					      console.log("error: "+data.ERROR);
+					}));
+		    }
+		}
+		if (! stm.DataStore.metagenome.hasOwnProperty(ids[i].id) && ! (stm.DataStore.profile.hasOwnProperty(ids[i].id) && stm.DataStore.profile[ids[i].id].hasOwnProperty('metagenome'))) {
+		    stm.DataStore.dataContainer[name].promises.push(
+			jQuery.ajax({ url: RetinaConfig.mgrast_api + "/metagenome/" + ids[i].id + "?verbosity=full",
+				      dc: name,
+				      contentType: 'application/json',
+				      headers: stm.authHeader,
+				      bound: "profile"+id,
+				      metagenome: id,
+				      success: function (data) {
+					  var widget = Retina.WidgetInstances.metagenome_analysis[1];
+					  if (data != null) {
+					      if (data.hasOwnProperty('ERROR')) {
+						  console.log("error: "+data.ERROR);
+						  widget.updatePDiv(this.bound, 'error', data.ERROR);
+					      } else if (data.hasOwnProperty('statistics')) {
+						  data.metadata.mixs = { "data": data.mixs };
+						  if (stm.DataStore.profile.hasOwnProperty(this.metagenome)) {
+						      stm.DataStore.profile[this.metagenome].metagenome = data;
+						  } else {
+						      stm.DataStore.metagenome[this.metagenome] = data;
+						  }
+					      }
+					  } else {
+					      console.log("error: invalid return structure from API server");
+					      console.log(data);
 					      widget.updatePDiv(this.bound, 'error', data.ERROR);
-					  } else if (data.hasOwnProperty('statistics')) {
-					      data.metadata.mixs = { "data": data.mixs };
-					      if (stm.DataStore.profile.hasOwnProperty(this.metagenome)) {
-						  stm.DataStore.profile[this.metagenome].metagenome = data;
-					      } else {
-						  stm.DataStore.metagenome[this.metagenome] = data;
-					      }
 					  }
-				      } else {
-					  console.log("error: invalid return structure from API server");
-					  console.log(data);
-					  widget.updatePDiv(this.bound, 'error', data.ERROR);
+				      },
+				      error: function(jqXHR, error) {
+					  Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				      },
+				      complete: function () {
+					  Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 				      }
-				  },
-				  error: function(jqXHR, error) {
-				      Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
-				  },
-				  complete: function () {
-				      Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
-				  }
-				}));
-	    } else {
-		widget.pDiv('profile'+id, true, ids[i].name, name);
+				    }));
+		}
+	    }
+	    else {
+		widget.pDiv('profile'+id+source, true, ids[i].name, name);
 	    }
 	}
 	if (ids.length) {
@@ -2300,8 +2307,8 @@
 					 console.log("error: "+data.ERROR);
 				     } else {
 					 data.data.size = data.size;
-					 stm.DataStore.profile[data.data.id+"_load"] = data.data;
-					 widget.purgeProfile(data.data.id);
+					 stm.DataStore.profile[data.data.id+"_load_"+data.data.source] = data.data;
+					 widget.purgeProfile(data.data.id, data.data.source);
 					 if (stm.DataStore.metagenome.hasOwnProperty(data.data.id)) {
 					     stm.DataStore.profile[data.data.id].metagenome = jQuery.extend(true, {}, stm.DataStore.metagenome[data.data.id]);
 					     delete stm.DataStore.metagenome[data.data.id];
@@ -2933,14 +2940,14 @@
 	});
     };
 
-    widget.purgeProfile = function (id) {
+    widget.purgeProfile = function (id, source) {
 
 	// get the profile
-	var profile = stm.DataStore.profile[id+"_load"];
+	var profile = stm.DataStore.profile[id+"_load_"+source];
 	
 	// check if this profile is already purged
 	if (stm.DataStore.profile.hasOwnProperty(id)) {
-	    widget.mergeProfile(id);
+	    widget.mergeProfile(id, source);
 	    return;
 	}
 	
@@ -2955,43 +2962,25 @@
 		p.push(profile.data[h][j]);
 	    }
 
-	    // iterate over the sources annotation data
-	    for (var j=0; j<profile.sources.length; j++) {
-
-		// push the taxon
-		p.push( profile.data[h][5][j] && profile.data[h][5][j].length ? (profile.data[h][5][j].length > 1 ? profile.data[h][5][j].join(',') : profile.data[h][5][j][0]) : null );
-		
-		// push the function
-		p.push( profile.data[h][6][j] && profile.data[h][6][j].length ? (profile.data[h][6][j].length > 1 ? profile.data[h][6][j].join(',') : profile.data[h][6][j][0]) : null );
-	    }
-
+	    // push the taxon
+	    p.push( profile.data[h][5] && profile.data[h][5].length ? (profile.data[h][5].length > 1 ? profile.data[h][5].join(',') : profile.data[h][5][0]) : null );
+	    
+	    // push the function
+	    p.push( profile.data[h][6] && profile.data[h][6].length ? (profile.data[h][6].length > 1 ? profile.data[h][6].join(',') : profile.data[h][6][0]) : null );
 	}
 	profile.data = p;
+	profile.sources = [ profile.source ];
+	delete profile.source;
 	stm.DataStore.profile[id] = jQuery.extend(true, {}, profile);
-	delete stm.DataStore.profile[id+"_load"];
+	delete stm.DataStore.profile[id+"_load_"+source];
     };
 
-    widget.mergeProfile = function (id) {
+    widget.mergeProfile = function (id, source) {
 	var widget = this;
 
 	// get the profile
-	var profile = stm.DataStore.profile[id+"_load"];
+	var profile = stm.DataStore.profile[id+"_load_"+source];
 	var previous = stm.DataStore.profile[id];
-
-	// check which sources need to be integrated
-	var newSources = [];
-	for (var i=0; i<profile.sources.length; i++) {
-	    var hasSource = false;
-	    for (var h=0; h<previous.sources.length; h++) {
-		if (previous.sources[h] == profile.sources[i]) {
-		    hasSource = true;
-		    break;
-		}
-	    }
-	    if (! hasSource) {
-		newSources.push([ profile.sources[i], i ]);
-	    }
-	}
 	
 	// new target array
 	var p = [];
@@ -3011,11 +3000,8 @@
 		    p.push(previous.data[prevind + j]);
 		}
 		
-		// null values for new sources
-		for (var j=0; j<newSources.length; j++) {
-		    p.push(null);
-		    p.push(null);
-		}
+		p.push(null);
+		p.push(null);
 		
 		prevind += prevrow;
 	    }
@@ -3029,14 +3015,12 @@
 		}
 
 		// push new
-		for (var j=0; j<newSources.length; j++) {
-
-		    // push the taxon
-		    p.push( profile.data[h][5][newSources[j][1]] && profile.data[h][5][newSources[j][1]].length ? (profile.data[h][5][newSources[j][1]].length > 1 ? profile.data[h][5][newSources[j][1]].join(',') : profile.data[h][5][newSources[j][1]][0]) : null );
-		    
-		    // push the function
-		    p.push( profile.data[h][6][newSources[j][1]] && profile.data[h][6][newSources[j][1]].length ? (profile.data[h][6][newSources[j][1]].length > 1 ? profile.data[h][6][newSources[j][1]].join(',') : profile.data[h][6][newSources[j][1]][0]) : null );
-		}
+		
+		// push the taxon
+		p.push( profile.data[h][5] && profile.data[h][5].length ? (profile.data[h][5].length > 1 ? profile.data[h][5].join(',') : profile.data[h][5][0]) : null );
+		
+		// push the function
+		p.push( profile.data[h][6] && profile.data[h][6].length ? (profile.data[h][6].length > 1 ? profile.data[h][6].join(',') : profile.data[h][6][0]) : null );
 		
 		prevind += prevrow;
 	    }
@@ -3055,28 +3039,24 @@
 		    p.push(null);
 		}
 		
-		// iterate over the sources annotation data
-		for (var j=0; j<newSources.length; j++) {
+		// add new
 
-		    // push the taxon
-		    p.push( profile.data[h][5][newSources[j][1]] && profile.data[h][5][newSources[j][1]].length ? (profile.data[h][5][newSources[j][1]].length > 1 ? profile.data[h][5][newSources[j][1]].join(',') : profile.data[h][5][newSources[j][1]][0]) : null );
-		    
-		    // push the function
-		    p.push( profile.data[h][6][newSources[j][1]] && profile.data[h][6][newSources[j][1]].length ? (profile.data[h][6][newSources[j][1]].length > 1 ? profile.data[h][6][newSources[j][1]].join(',') : profile.data[h][6][newSources[j][1]][0]) : null );
-		}
+		// push the taxon
+		p.push( profile.data[h][5] && profile.data[h][5].length ? (profile.data[h][5].length > 1 ? profile.data[h][5].join(',') : profile.data[h][5][0]) : null );
+		
+		// push the function
+		p.push( profile.data[h][6] && profile.data[h][6].length ? (profile.data[h][6].length > 1 ? profile.data[h][6].join(',') : profile.data[h][6][0]) : null );
 	    }
 	}
 
-	// update the sources list
-	for (var i=0; i<newSources.length; i++) {
-	    previous.sources.push(newSources[i][0]);
-	}
+	// add the new source
+	previous.sources.push(profile.source);
 	
 	// set the data of the merged profile
 	previous.data = p;
 
 	// delete the loaded additional data
-	delete stm.DataStore.profile[id+"_load"];
+	delete stm.DataStore.profile[id+"_load_"+source];
     };
 
     widget.loadGraphs = function () {
