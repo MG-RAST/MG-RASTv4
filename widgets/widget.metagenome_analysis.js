@@ -1531,7 +1531,7 @@
 		} else if (typeof datums == "string") {
 		    datums = datums.split(",");
 		}
-
+		
 		// find indices in target id space
 		var key;
 		if (displayType == "taxonomy") {
@@ -2188,12 +2188,13 @@
 		    }
 		}
 		if (! stm.DataStore.metagenome.hasOwnProperty(ids[i].id) && ! (stm.DataStore.profile.hasOwnProperty(ids[i].id) && stm.DataStore.profile[ids[i].id].hasOwnProperty('metagenome'))) {
+		    stm.DataStore.inprogress['profile'+id+'metadata'] = 1;
 		    stm.DataStore.dataContainer[name].promises.push(
 			jQuery.ajax({ url: RetinaConfig.mgrast_api + "/metagenome/" + ids[i].id + "?verbosity=full",
 				      dc: name,
 				      contentType: 'application/json',
 				      headers: stm.authHeader,
-				      bound: "profile"+id,
+				      bound: "profile"+id+"metadata",
 				      metagenome: id,
 				      success: function (data) {
 					  var widget = Retina.WidgetInstances.metagenome_analysis[1];
@@ -2212,13 +2213,13 @@
 					  } else {
 					      console.log("error: invalid return structure from API server");
 					      console.log(data);
-					      widget.updatePDiv(this.bound, 'error', data.ERROR);
 					  }
 				      },
 				      error: function(jqXHR, error) {
-					  Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+					  console.log("error: metadata could not be loaded");
 				      },
 				      complete: function () {
+					  Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
 					  Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 				      }
 				    }));
@@ -2342,7 +2343,6 @@
 				 return xhr;
 			     },
 			     complete: function () {
-				 delete stm.DataStore.inprogress[this.bound];
 				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
 				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     }
@@ -2950,6 +2950,9 @@
 	    widget.mergeProfile(id, source);
 	    return;
 	}
+
+	// sort by md5
+	profile.data = profile.data.sort(Retina.propSort(0));
 	
 	// store all in one big array
 	var p = [];
@@ -2990,6 +2993,9 @@
 
 	// get the number of cells per row of previous
 	var prevrow = 5 + (2 * previous.sources.length);
+
+	// sort by md5
+	profile.data = profile.data.sort(Retina.propSort(0));
 	
 	// iterate over the new profile data
 	for (var h=0; h<profile.data.length; h++) {
@@ -3026,7 +3032,7 @@
 	    }
 
 	    // if the row is new, push new values
-	    if (previous.data[prevind] < profile.data[h][0]) {
+	    else if (previous.data[prevind] > profile.data[h][0]) {
 
 		// store the hit data
 		for (var j=0; j<5; j++) {
@@ -3049,6 +3055,16 @@
 	    }
 	}
 
+	// add the remaining values from the old source
+	for (var i=prevind; i<previous.data.length; i+=prevrow) {
+	    for (var j=0; j<prevrow; j++) {
+		p.push(previous.data[prevind + j]);
+	    }
+	    
+	    p.push(null);
+	    p.push(null);    
+	}
+	
 	// add the new source
 	previous.sources.push(profile.source);
 	
