@@ -149,6 +149,12 @@
 			 "s_scrofa": "Sus scrofa, NCBI v10.2",
 			 "none": "none" };
 	mg.details.pipeline_parameters.screen_indexes = screens[mg.details.pipeline_parameters.screen_indexes];
+
+	if (mg.info.userattr.status == "private") {
+	    if (mg.info.userattr.id.match(/^mgm/)) {
+		mg.info.userattr.id = Retina.idmap(mg.info.userattr.id);
+	    }
+	}
 	
 	return mg;
     };

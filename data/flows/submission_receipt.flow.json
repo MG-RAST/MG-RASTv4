@@ -1,5 +1,5 @@
 [ 
-    { "type": "Text", "style": "Title", "text": "$$info.userattr.name$$ (<a href='mgmain.html?mgpage=pipeline&job=$$jid$$'>$$jid$$</a>) <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$' class='btn btn-small pull-right' title='Metagenome Overview'><img src='Retina/images/dna.png' style='width: 16px;'></a>", "tocTitle": "Home", "tocName": "home" },
+    { "type": "Text", "style": "Title", "text": "$$info.userattr.name$$ (<a href='mgmain.html?mgpage=pipeline&job=$$info.userattr.job_id$$'>$$info.userattr.job_id$$</a>) <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$' class='btn btn-small pull-right' title='Metagenome Overview'><img src='Retina/images/dna.png' style='width: 16px;'> metagenome overview</a>", "tocTitle": "Home", "tocName": "home" },
     { "type": "Text", "style": "Subtitle", "text": "part of submission $$submission$$ for project '$$info.project$$'"  },
     { "type": "Text", "style": "Paragraph", "text": "An overview of the biological results of this job can be viewed <a href='mgmain.html?mgpage=overview&metagenome=$$info.userattr.id$$'>here</a>." },
     { "type": "Text", "style": "Header", "text": "User Defined Options", "tocTitle": "User Defined Options", "tocName": "user_options" },
