@@ -42,7 +42,7 @@
 	[ "<b>Environment (Material)</b>", "$$mixs.material$$" ],
 	[ "<b>Environmental Package</b>", "$$mixs.env_package_type$$" ],
 	[ "<b>Sequencing Method</b>", "$$mixs.seq_method$$" ],
-	[ "<b>More Metadata</b>", "<a href='#metadata'>click for full table</a>" ]
+	[ "<b>More Metadata</b>", "<a href='#sampledata'>click for full table</a>" ]
     ] },
     { "type": "Text", "style": "Header", "text": "K-mer Profile", "tocTitle": "K-mer Profile", "tocName": "kmer" },
     { "type": "Text", "style": "Paragraph", "text": "The kmer rank abundance graph plots the kmer coverage as a function of abundance rank, with the most abundant sequences at the left." },
