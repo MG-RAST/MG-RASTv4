@@ -123,7 +123,7 @@
 	var html = [];
 
 	// info box
-	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: left; width: 500px; display: none;" id="cellInfoBox"></div>');
+	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: left; width: 600px;" id="cellInfoBox"><h3 style="margin-top: 0px;">What does MetaZen do?</h3><p>Metadata (or data about the data) has become a necessity as the community generates large quantities of data sets.</p><p>Using community generated questionnaires we capture this metadata. MG-RAST has implemented the use of <a target="_blank" href="http://gensc.org/gc_wiki/index.php/MIxS">Minimum Information about any (X) Sequence</a> (miXs) developed by the <a target="_blank" href="http://gensc.org">Genomic Standards Consortium</a> (GSC).</p><p>The best form to capture metadata is via a simple spreadsheet with 12 mandatory terms. This tool is designed to help you fill out your metadata spreadsheet. The metadata you provide, helps us to analyze your data more accurately and helps make MG-RAST a more useful resource.</p></div>');
 	
 	// tab select
 	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: right;">');
@@ -146,8 +146,16 @@
 
 	// ENVO
 	html.push('<div style="float: left; margin-left: 20px;" id="envo_select_div"></div>');
+
+	// linebreak
+	html.push('<div style="clear: both;"></div></div>');
+
+	html.push('<div style="clear: both;"></div>');
 	
-	html.push('<div style="clear: both;"></div></div><div style="clear: both;"></div>');
+	// upload / download buttons
+	html.push('<div style="float: right; margin-left: 20px;"><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(true);" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel();" style="margin-left: 20px;"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;">download in Excel format</button></div>');
+	
+	html.push('<div style="clear: both;"></div>');
 	
 	// create tabs
 	html.push('<ul class="nav nav-tabs" id="metadataEdit" style="margin-bottom: 0px;">');
@@ -182,6 +190,8 @@
 	    tables.push( { "name": "ep-"+widget.eps[i], "data": widget.metadataTemplate.ep[widget.eps[i]] } );
 	}
 	html.push('</div>');
+
+	html.push('<div class="modal hide fade" id="feedbackModal"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>metadata not ready for upload</h3></div><div class="modal-body" id="feedbackContent"></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a></div></div>');
 	
 	widget.container.innerHTML = html.join('');
 
@@ -230,7 +240,13 @@
 	    empty = empty.join('</td><td class="editable">');
 	    var thtml = [];
 	    thtml.push('<table class="excel" onclick="Retina.WidgetInstances.metagenome_metazen2[1].tableClicked(event,\''+tables[i].name+'\');">');
-	    thtml.push('<tr><th>&nbsp</th><th>'+cols.join('</th><th>')+'</th><th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeft=document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_metazen2[1].addMDField(\''+tables[i].name+'\',this.previousSibling.value);">add</button></div></th></tr>');
+	    thtml.push('<tr><th>&nbsp</th><th>'+cols.join('</th><th>')+'</th>');
+
+	    // additional misc params currently disabled
+	    
+	    // thtml.push('<th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeft=document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_metazen2[1].addMDField(\''+tables[i].name+'\',this.previousSibling.value);">add</button></div></th>');
+	    
+	    thtml.push('</tr>');
 	    for (var h=0; h<25; h++) {
 		thtml.push('<tr><th></th><td class="editable">');
 		thtml.push(empty);
@@ -253,6 +269,11 @@
 	var cell = event.target;
 	if (cell.nodeName == 'TD') {
 
+	    // check if there is an unhandled element
+	    if (widget.currentInputElement) {
+		widget.updateCell('none');
+	    }
+
 	    // get the column metadata
 	    if (document.getElementById('cellInfoBox').style.display == 'none') {
 		jQuery('#cellInfoBox').toggle();
@@ -266,9 +287,6 @@
 	    var md = widget.tables[tablename][fieldname];
 	    if (! md) {
 		return;
-	    }
-	    if (widget.currField) {
-		widget.lastField = jQuery.extend(true, {}, widget.currField);
 	    }
 	    widget.currField = { "table": tablename, "field": fieldname, "data": md };
 	    document.getElementById('cellInfoBox').innerHTML = '<p style="font-size: 18px; font-weight: bold;">'+fieldname+'</p><p>'+md.definition+'</p><table style="text-align: left;"><tr><th>MiXS term</th><td>'+(md.hasOwnProperty('mixs') && md.mixs=='1' ? 'yes' : 'no')+'</td></tr><tr><th style="padding-right: 20px;">required field</th><td>'+(md.required=='0' ? 'no' : 'yes')+'</td></tr><tr><th>unit</th><td>'+(md.unit.length ? md.unit : '-')+'</td></tr><tr><th>type</th><td>'+md.type+'</td></tr></table>';
@@ -371,56 +389,31 @@
 			
 			// enter is pressed
 			if (event.keyCode == '13') {
-			    var p = this.parentNode.parentNode.parentNode.childNodes;
+			    event.preventDefault();
 			    
-			    // there are not enough rows, append a new one
-			    if (p.length <= this.parentNode.parentNode.rowIndex + 1) {
-				var cols = this.parentNode.parentNode.childNodes;
-				var empty = [];
-				for (var h=0; h<cols.length - 1; h++) {
-				    empty.push("");
-				}
-				empty = '<th></th><td class="editable">'+empty.join('</td><td class="editable">')+'</td>';
-				var r = document.createElement('tr');
-				r.innerHTML = empty;
-				this.parentNode.parentNode.parentNode.appendChild(r);
-			    }
-			    var next = p[this.parentNode.parentNode.rowIndex + 1].childNodes[this.parentNode.cellIndex];
-			    
-			    next.click();
+			    widget.updateCell('enter');
 			}
 			
 			// escape is pressed
 			else if (event.keyCode == '27') {
-			    this.parentNode.innerHTML = this.getAttribute('data-old');
-			    if (document.getElementById('cellInfoBox').style.display == '') {
-				jQuery('#cellInfoBox').toggle();
-			    }
+			    event.preventDefault();
+			    
+			    widget.updateCell('escape');
 			}
 			
 			// tab is pressed
 			else if (event.keyCode == '9') {
 			    event.preventDefault();
 			    
-			    var p = this.parentNode.parentNode.parentNode.childNodes;
-			    
-			    // check if there is a next column
-			    if (p.length > this.parentNode.cellIndex) {
-				var next = this.parentNode.parentNode.childNodes[this.parentNode.cellIndex + 1];
-				next.click();
-			    }
+			    widget.updateCell('tab');
 			}
 		    });
 		    
 		    // cell loses focus
 		    input.addEventListener('blur', function (event) {
 			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-			event = event || window.event;
-			this.parentNode.style.backgroundColor = "white";
-			Retina.WidgetInstances.metagenome_metazen2[1].updateCell();
-			if (document.getElementById('cellInfoBox').style.display == '') {
-			    jQuery('#cellInfoBox').toggle();
-			}
+			
+			Retina.WidgetInstances.metagenome_metazen2[1].updateCell('blur');
 		    });
 		}
 
@@ -443,33 +436,34 @@
 		    cell.appendChild(d);
 		    jQuery('#currInputField').timepicker({'showMeridian': false, 'minuteStep': 1, 'showSeconds': true,'defaultTime':t});
 		    input.addEventListener('blur', function (event) {
-			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-			event = event || window.event;
-			Retina.WidgetInstances.metagenome_metazen2[1].updateCell();
-			if (document.getElementById('cellInfoBox').style.display == '') {
-			    jQuery('#cellInfoBox').toggle();
-			}
+			Retina.WidgetInstances.metagenome_metazen2[1].updateCell('blur');
 		    });
 		    input.addEventListener('keypress', function (event) {
 			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-			event = event || window.event;
 
 			// escape
 			if (event.keyCode == '27') {
-			    this.parentNode.parentNode.style.backgroundColor = "white";
-			    this.parentNode.parentNode.innerHTML = this.getAttribute('data-old');
-			    if (document.getElementById('cellInfoBox').style.display == '') {
-				jQuery('#cellInfoBox').toggle();
-			    }
+			    widget.updateCell('escape');
 			}
 
 			// backspace
 			else if (event.keyCode == '8') {
 			    event.preventDefault();
-			    Retina.WidgetInstances.metagenome_metazen2[1].updateCell(true);
-			    if (document.getElementById('cellInfoBox').style.display == '') {
-				jQuery('#cellInfoBox').toggle();
-			    }
+			    widget.updateCell('clear');
+			}
+
+			// enter is pressed
+			else if (event.keyCode == '13') {
+			    event.preventDefault();
+			    
+			    widget.updateCell('enter');
+			}
+
+			// tab is pressed
+			else if (event.keyCode == '9') {
+			    event.preventDefault();
+			    
+			    widget.updateCell('tab');
 			}
 		    });
 
@@ -507,19 +501,34 @@
 			var inp = document.getElementById('tree_search_input_1');
 			inp.setAttribute('style', 'width: 144px; height: 24px; font-size: 12px; border: 1px solid #ddd; top: 0px; padding-left: 5px;');
 			inp.value = val;
-			inp.addEventListener('keypress', function (e) {
-			    e = e || window.event;
+			inp.addEventListener('keypress', function (event) {
+			    event = event || window.event;
+			    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 
 			    // escape
-			    if (e.keyCode == 27) {
-				var p = this.parentNode.parentNode;
-				p.style.backgroundColor = "white";
-				p.parentNode.innerHTML = p.getAttribute('data-old');
-				if (document.getElementById('cellInfoBox').style.display == '') {
-				    jQuery('#cellInfoBox').toggle();
-				}
+			    if (event.keyCode == 27) {
 				Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
+				Retina.WidgetInstances.metagenome_metazen2[1].updateCell('escape');
 			    }
+
+			    // enter is pressed
+			    else if (event.keyCode == 13) {
+				event.preventDefault();
+
+				widget.currentInputElement.value = this.value;
+				Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
+				widget.updateCell('enter');
+			    }
+			    
+			    // tab is pressed
+			    else if (event.keyCode == 9) {
+				event.preventDefault();
+
+				widget.currentInputElement.value = this.value;
+				Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
+				widget.updateCell('tab');
+			    }
+			    
 			});		     
 			inp.focus();
 		    } else {
@@ -542,10 +551,39 @@
 		    input.setAttribute('value', input.value.length ? input.value : dstring);
 		    jQuery('#currInputField').datepicker({format: 'yyyy-mm-dd'}).on('changeDate', function(ev) {
 			jQuery('#currInputField').datepicker('hide');
-			input.parentNode.style.backgroundColor = "white";
-			input.parentNode.innerHTML = input.value;
+			Retina.WidgetInstances.metagenome_metazen2[1].updateCell('tab');
 		    });
 		    jQuery('#currInputField').datepicker('show');
+		    input.addEventListener('keypress', function (event) {
+			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+
+			jQuery('#currInputField').datepicker('hide');
+
+			// escape
+			if (event.keyCode == '27') {
+			    widget.updateCell('escape');
+			}
+
+			// backspace
+			else if (event.keyCode == '8') {
+			    event.preventDefault();
+			    widget.updateCell('clear');
+			}
+
+			// enter is pressed
+			else if (event.keyCode == '13') {
+			    event.preventDefault();
+			    
+			    widget.updateCell('enter');
+			}
+
+			// tab is pressed
+			else if (event.keyCode == '9') {
+			    event.preventDefault();
+			    
+			    widget.updateCell('tab');
+			}
+		    });
 		}
 
 		// store a reference to the current input element
@@ -556,61 +594,120 @@
 
     widget.ontologySet = function (node) {
 	var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-	var rend = this;
-	var field = document.getElementById('currInputField');
-	Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 
-	widget.updateCell(node.label, field.parentNode.parentNode.rowIndex, field);
+	widget.currentInputElement.value = node.label;
+	Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
+	widget.updateCell('tab');
     };
 
     // a cell has new data
-    widget.updateCell = function (clear) {
+    widget.updateCell = function (action) {
 	var widget = this;
 
+	if (! widget.currentInputElement) {
+	    return;
+	}
 	
 	var val = widget.currentInputElement.value;
-	if (clear) {
+	if (action == 'clear') {
 	    val = "";
+	} else if (action == 'escape') {
+	    val = widget.currentInputElement.getAttribute('data-old');
 	}
-	var p = widget.currentInputElement.parentNode; // cell
+	
+	var p = widget.currentInputElement.parentNode;
+	if (p.nodeName !== 'TD') {
+	    p = p.parentNode;
+	}
 	var row = p.parentNode.rowIndex - 1;
 	
 	// perform validation
 	var valid = true;
+	var msg = "";
 	if (val.length) {
-	    if (widget.lastField.data.type == 'url' && ! val.match(/^http(s?)\:\/\//)) {
-		alert('invalid url');
+	    if (widget.currField.data.type == 'url' && ! val.match(/^http(s?)\:\/\//)) {
+		msg = 'invalid url';
 		val = "";
 		valid = false;
 	    }
-	    if (widget.lastField.data.type == 'email' && ! val.match(/\@/)) {
-		alert('invalid email');
+	    if (widget.currField.data.type == 'email' && ! val.match(/\@/)) {
+		msg = 'invalid email';
 		val = "";
 		valid = false;
 	    }
-	    if (widget.lastField.data.type == 'coordinate' && Math.abs(parseFloat(val)) > 180) {
-		alert('coordinates only range from -180 to 180 degrees');
+	    if (widget.currField.data.type == 'coordinate' && Math.abs(parseFloat(val)) > 180) {
+		msg = 'coordinates only range from -180 to 180 degrees';
 		val = "";
+		valid = false;
+	    }
+	    if (widget.currField.field == 'project_name' && ! val.match(/^[\w\s]+$/)) {
+		msg = 'project names may only contain word characters';
+		val = '';
+		valid = false;
+	    }
+	    if (widget.currField.field == 'file_name' && ! val.match(/\.gz$/)) {
+		msg = 'file names must be of the decompressed file';
+		val = '';
 		valid = false;
 	    }
 	} else {
 	    valid = false;
-	}
-
-	if (valid) {
-	    if (! widget.metadata.hasOwnProperty(widget.lastField.table)) {
-		widget.metadata[widget.lastField.table] = {};
+	    if (widget.metadata.hasOwnProperty(widget.currField.table) && widget.metadata[widget.currField.table].hasOwnProperty(widget.currField.field)) {
+		delete widget.metadata[widget.currField.table][widget.currField.field][row];
 	    }
-	    
-	    if (! widget.metadata[widget.lastField.table].hasOwnProperty(widget.lastField.field)) {
-		widget.metadata[widget.lastField.table][widget.lastField.field] = [];
-	    }
-	    
-	    widget.metadata[widget.lastField.table][widget.lastField.field][row] = val;
 	}
 
 	p.innerHTML = val;
+	widget.currentInputElement = null;
 	p.setAttribute('style','');
+	
+	if (valid) {
+	    if (! widget.metadata.hasOwnProperty(widget.currField.table)) {
+		widget.metadata[widget.currField.table] = {};
+	    }
+	    
+	    if (! widget.metadata[widget.currField.table].hasOwnProperty(widget.currField.field)) {
+		widget.metadata[widget.currField.table][widget.currField.field] = [];
+	    }
+	    
+	    widget.metadata[widget.currField.table][widget.currField.field][row] = val;
+	}
+	else if (msg.length) {
+	    action = "none";
+	    alert(msg);
+	}
+
+	if (action == 'escape' || action == 'blur') {
+	    if (document.getElementById('cellInfoBox').style.display == '') {
+		jQuery('#cellInfoBox').toggle();
+	    }
+	} else if (action == 'enter') {
+	    var pp = p.parentNode.parentNode.childNodes;
+	    
+	    // there are not enough rows, append a new one
+	    if (pp.length <= p.parentNode.rowIndex + 1) {
+		var cols = p.parentNode.childNodes;
+		var empty = [];
+		for (var h=0; h<cols.length - 1; h++) {
+		    empty.push("");
+		}
+		empty = '<th></th><td class="editable">'+empty.join('</td><td class="editable">')+'</td>';
+		var r = document.createElement('tr');
+		r.innerHTML = empty;
+		p.parentNode.parentNode.appendChild(r);
+	    }
+
+	    // click the cell below
+	    pp[p.parentNode.rowIndex + 1].childNodes[p.cellIndex].click();
+
+	} else if (action == 'tab') {
+	    var pp = p.parentNode.childNodes;
+	    
+	    // check if there is a next column
+	    if (pp.length > p.cellIndex) {
+		pp[p.cellIndex + 1].click();
+	    }
+	}
     };
 
     // ENVO
@@ -684,8 +781,9 @@
     };
 
     // add a new misc param
-    widget.addMDField = function (name, value) {
+    widget.addMDField = function (tab, name) {
 	var widget = this;
+
 	
     };
 
@@ -718,6 +816,10 @@
     	var wb = jQuery.extend(true, {}, widget.excelWorkbook);
 	var data = widget.metadata;
 
+	if (! widget.dependencyCheck()) {
+	    return;
+	}
+	
 	if (! (data.hasOwnProperty('project') && data.hasOwnProperty('sample'))) {
 	    alert('you must fill out the project and the sample sheet');
 	    return;
@@ -752,6 +854,10 @@
 
 	// export to user inbox
 	if (toSHOCK) {
+
+	    var ulbtn = document.getElementById('inboxUploadButton');
+	    ulbtn.setAttribute('disabled', 'disabled');
+	    ulbtn.innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px;">';
 	    
 	    xlsx(wb, 'blob').then(function(data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
@@ -763,7 +869,7 @@
 	
 		var xlsfile = data.base64;
 		var form = new FormData();
-		var filename = widget.metadata.project.project_name[0]+".xlsx";
+		var filename = widget.metadata.project.project_name[0].replace(/\s/g, "_")+".xlsx";
 		form.append('attributes', attributes);
 		form.append('file_name', filename);
 		form.append('upload', xlsfile);
@@ -784,11 +890,14 @@
 					  jQuery.ajax(url, {
 					      data: { "node_id": this.nodeid },
 					      success: function(data){
-						  console.log(data);
+						  ulbtn.removeAttribute('disabled');
+						  ulbtn.innerHTML = '<img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox';
+						  alert('metadata successfully uploaded to inbox');
 					      },
 					      error: function(jqXHR){
-						  console.log('error validate');
-						  console.log(jqXHR);
+						  ulbtn.removeAttribute('disabled');
+						  ulbtn.innerHTML = '<img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox';
+						  alert('there was an error upload the metadata to your inbox');
 					      },
 					      crossDomain: true,
 					      headers: stm.authHeader,
@@ -797,9 +906,9 @@
 					  
 				      },
 				      error: function(jqXHR) {
-					  console.log('error adding acl');
-					  console.log(jsXHR);
-					  
+						  ulbtn.removeAttribute('disabled');
+						  ulbtn.innerHTML = '<img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox';
+						  alert('there was an error upload the metadata to your inbox');					  
 				      },
 				      crossDomain: true,
 				      headers: stm.authHeader,
@@ -807,8 +916,9 @@
 				    });
 	    	    },
 	    	    error: function(jqXHR){
-	    		console.log('error upload');
-			console.log(jqXHR);
+			ulbtn.removeAttribute('disabled');
+			ulbtn.innerHTML = '<img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox';
+			alert('there was an error upload the metadata to your inbox');
 	    	    },
 	    	    crossDomain: true,
 	    	    headers: stm.authHeader,
@@ -842,5 +952,124 @@
 	}
     };
 
+    widget.dependencyCheck = function () {
+	var widget = this;
+
+	var problems = [];
+
+	// check mandatory project fields
+	for (var i in widget.tables.project) {
+	    if (widget.tables.project.hasOwnProperty(i)) {
+		if (widget.tables.project[i].required == "1" && ! (widget.metadata.project.hasOwnProperty(i) && widget.metadata.project[i][0].length)) {
+		    problems.push({'tab': 'project', 'message': 'missing mandatory field "'+i+'"'});
+		}
+	    }
+	}
+
+	// check mandatory sample fields
+	var sampleNames = {};
+	if (! widget.metadata.hasOwnProperty('sample')) {
+	    problems.push({'tab': 'sample', 'message': 'must must specify at least one sample'});
+	} else {
+	    if (widget.metadata.sample.hasOwnProperty('sample_name')) {
+		for (var h=0; h<widget.metadata.sample.sample_name.length; h++) {
+		    if (widget.metadata.sample.sample_name[h].length) {
+			for (var i in widget.tables.sample) {
+			    if (widget.tables.sample.hasOwnProperty(i)) {
+				if (widget.tables.sample[i].required == "1" && ! (widget.metadata.sample.hasOwnProperty(i) && widget.metadata.sample[i].hasOwnProperty(h) && widget.metadata.sample[i][h].length)) {
+				    problems.push({'tab': 'sample', 'row': h, 'message': 'missing mandatory field "'+i+'"'});
+				}
+			    }
+			}
+			sampleNames[widget.metadata.sample.sample_name[h]] = { "lib": null, "ep": null };
+			if (widget.metadata.sample.hasOwnProperty('env_package') && widget.metadata.sample.env_package.length && widget.metadata.sample.env_package.hasOwnProperty(h) && widget.metadata.sample.env_package[h].length) {
+			    sampleNames[widget.metadata.sample.sample_name[h]].ep = widget.metadata.sample.env_package[h];
+			    if (! widget.metadata.hasOwnProperty("ep-"+widget.metadata.sample.env_package[h])) {
+				problems.push({'tab': 'sample', 'row': h, 'message': 'environmental package sheet "'+widget.metadata.sample.env_package[h]+'" referenced but not filled out'});
+			    }
+			} 
+		    }
+		}
+	    } else {
+		problems.push({'tab': 'sample', 'message': 'no sample names'});
+	    }
+	}
+
+	// iterate over the other tabs
+	var k = Retina.keys(widget.metadata);
+	var hasLibrary = false;
+	for (var i=0; i<k.length; i++) {
+
+	    // environmental package
+	    if (k[i].match(/^ep/) || k[i].match(/^library/)) {
+		if (widget.metadata[k[i]].hasOwnProperty('sample_name')) {
+		    for (var h=0; h<widget.metadata[k[i]].sample_name.length; h++) {
+			if (widget.metadata[k[i]].sample_name[h].length) {
+			    if (sampleNames.hasOwnProperty(widget.metadata[k[i]].sample_name[h])) {
+				if (k[i].match(/^ep/) && sampleNames[widget.metadata[k[i]].sample_name[h]].ep && k[i].indexOf(sampleNames[widget.metadata[k[i]].sample_name[h]].ep) < 0) {
+				    problems.push({'tab': k[i], 'row': h, 'message': 'the referenced sample "'+widget.metadata[k[i]].sample_name[h]+'" has the wrong environmental package'});
+				} else {
+				    sampleNames[widget.metadata[k[i]].sample_name[h]].lib = k[i];
+				}
+			    } else {
+				problems.push({'tab': k[i], 'row': h, 'message': 'sample sheet has no row for sample name "'+widget.metadata[k[i]].sample_name[h]+'"'});
+			    }
+			    for (var j in widget.tables[k[i]]) {
+				if (widget.tables[k[i]].hasOwnProperty(j)) {
+				    if (widget.tables[k[i]][j].required == "1" && ! (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h].length)) {
+					problems.push({'tab': k[i], 'row': h, 'message': 'missing mandatory field "'+j+'"'});
+				    }
+				}
+			    }
+			}
+		    }
+		} else {
+		    problems.push({'tab': k[i], 'message': 'no sample names'});
+		}
+	    }
+
+	    // mark if any library is present
+	    if (k[i].match(/^library/)) {
+		hasLibrary = true;
+	    }
+	}
+
+	// check if all samples have a library and an environmental package
+	for (var i in sampleNames) {
+	    if (sampleNames.hasOwnProperty(i)) {
+		if (! sampleNames[i].ep) {
+		    problems.push({'tab': 'sample', 'message': 'sample '+i+' is not referenced in an environmental package'});
+		}
+		if (! sampleNames[i].lib) {
+		    problems.push({'tab': 'sample', 'message': 'sample '+i+' is not referenced in a library'});
+		}
+	    }
+	}
+
+	if (! hasLibrary) {
+	    problems.push({'tab': 'library', 'message': 'you must provide at least one of library metagenome, library mimarks-survey or library transcriptome'});
+	}
+	
+	if (problems.length) {
+	    var html = [];
+	    var last = "";
+	    for (var i=0; i<problems.length; i++) {
+		if (last != problems[i].tab) {
+		    last = problems[i].tab;
+		    if (i > 0) {
+			html.push('</ul>');
+		    }
+		    html.push('<h4>'+last+'</h4><ul>');
+		}
+		html.push('<li>'+problems[i].message+(problems[i].hasOwnProperty('row') ? ' in row ' + (problems[i].row + 1) : "")+'</li>');
+	    }
+	    html.push('</ul>');
+	    document.getElementById('feedbackContent').innerHTML = html.join('');
+	    jQuery('#feedbackModal').modal('show');
+	    return false;
+	} else {
+	    return true;
+	}
+    };
     
 })();
