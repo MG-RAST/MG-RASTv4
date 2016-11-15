@@ -93,7 +93,7 @@ function initWebApp () {
 					    { "title": "<img src='Retina/images/file-pdf.png' style='width: 16px; position: relative; bottom: 1px; margin-right: 5px;'> handbook", "url": "ftp://ftp.metagenomics.anl.gov/data/manual/mg-rast-manual.pdf" },
 					    { "title": "<img src='Retina/images/youtube.png' style='width: 16px; position: relative; bottom: 1px; margin-right: 5px;'> video tutorials", "url": "https://www.youtube.com/channel/UCoBKJ-yYJu5HK1szy3my91A" },
 					    { "title": "<img src='Retina/images/bubbles.png' style='width: 16px; position: relative; bottom: 1px; margin-right: 5px;'> forum", "url": "https://groups.google.com/forum/#!forum/mg-rast" },
-					    { "title": "<img src='Retina/images/envelop.png' style='width: 16px; position: relative; bottom: 1px; margin-right: 5px;'>  feedback", "url": "contact.html" }
+					    { "title": "<img src='Retina/images/envelop.png' style='width: 16px; position: relative; bottom: 1px; margin-right: 5px;'>  feedback", "url": "mailto:mg-rast@rt.mcs.anl.gov" }
 					],
 					"forgotEnabled": true,
 					"forgotLink": "mgmain.html?mgpage=register&forgot=1",
