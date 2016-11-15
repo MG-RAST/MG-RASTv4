@@ -1,7 +1,7 @@
 (function () {
     widget = Retina.Widget.extend({
         about: {
-                title: "MG-RAST v4 Test Widget",
+                title: "MG-RAST v4 Metadata Widget",
                 name: "metagenome_metazen2",
                 author: "Tobias Paczian",
                 requires: [ "jquery.timepicker.js", "jquery.datepicker.js", "xlsx.js", "jszip.min.js" ]
