@@ -146,13 +146,24 @@
 	var project = stm.DataStore.project[projectid];
 	var icon = "";
 	if (project.status !== 'public') {
-	    icon = '';
 	    if (project.metagenomes.length) {
-		var overdue = widget.checkOverdue(project.metagenomes[0]);
-		if (overdue.overdue) {
-		    icon += '<img src="Retina/images/warning.png" style="width: 16px; margin-right: 5px; position: relative; bottom: 2px;" title="this project is overdue for publication">';
+		var complete = true;
+		for (var i=0; i<project.metagenomes.length; i++) {
+		    if (! project.metagenomes[i].viewable) {
+			complete = false;
+			break;
+		    }
+		}
+		if (complete) {
+		    project.complete = true;
+		    var overdue = widget.checkOverdue(project.metagenomes[0]);
+		    if (overdue.overdue) {
+			icon += '<img src="Retina/images/warning.png" style="width: 16px; margin-right: 5px; position: relative; bottom: 2px;" title="this project is overdue for publication">';
+		    } else if (overdue.duedate) {
+			icon += '<img src="Retina/images/info.png" style="width: 16px; margin-right: 5px; position: relative; bottom: 2px;" title="this project must be made public soon">';
+		    }
 		} else {
-		    icon += '<img src="Retina/images/info.png" style="width: 16px; margin-right: 5px; position: relative; bottom: 2px;" title="this project must be made public soon">';
+		    project.complete = false;
 		}
 	    }
 	}
@@ -183,14 +194,18 @@
 	    details.push("<div class='alert alert-success'>public</div>");
 	} else {
 	    if (project.metagenomes.length) {
-		var overdue = widget.checkOverdue(project.metagenomes[0]);
-		details.push("<div class='alert alert-"+(overdue.overdue ? "error" : "info")+"' id='statusDiv"+projectid+"'><b>private</b><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_share[1].makeProjectPublic(\""+projectid+"\");'>make public</button><br>");
-		if (overdue.overdue) {
-		    details.push("This project was to be made public at "+overdue.duedate+". It is "+overdue.overdue+" days overdue.");
+		if (! project.complete) {
+		    details.push("<div class='alert alert-info'><b>This project has not yet completed computation.</b></div>");
 		} else {
-		    details.push("This project is due to be made public at "+overdue.duedate+".");
+		    var overdue = widget.checkOverdue(project.metagenomes[0]);
+		    details.push("<div class='alert alert-"+(overdue.overdue ? "error" : "info")+"' id='statusDiv"+projectid+"'><b>private</b><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_share[1].makeProjectPublic(\""+projectid+"\");'>make public</button><br>");
+		    if (overdue.overdue) {
+			details.push("This project was to be made public at "+overdue.duedate+". It is "+overdue.overdue+" days overdue.");
+		    } else {
+			details.push("This project is due to be made public at "+overdue.duedate+".");
+		    }
+		    details.push("</div>");
 		}
-		details.push("</div>");
 	    } else {
 		details.push("<div class='alert alert-info'><b>private project without metagenomes</b></div>");
 	    }
