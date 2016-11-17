@@ -25,6 +25,6 @@ var RetinaConfig = {
     
     // versions
     "m5nrversion": "1",
-    "serverVersion": "4.0b",
+    "serverVersion": "4.0",
     "tos": "2"
 };
