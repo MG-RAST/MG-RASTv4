@@ -626,12 +626,12 @@
 	var msg = "";
 	if (val.length) {
 	    if (widget.currField.data.type == 'url' && ! val.match(/^http(s?)\:\/\//)) {
-		msg = 'invalid url';
+		msg = 'invalid url "'+val+'"';
 		val = "";
 		valid = false;
 	    }
 	    if (widget.currField.data.type == 'email' && ! val.match(/\@/)) {
-		msg = 'invalid email';
+		msg = 'invalid email "'+val+'"';
 		val = "";
 		valid = false;
 	    }
@@ -969,7 +969,7 @@
 	// check mandatory sample fields
 	var sampleNames = {};
 	if (! widget.metadata.hasOwnProperty('sample')) {
-	    problems.push({'tab': 'sample', 'message': 'must must specify at least one sample'});
+	    problems.push({'tab': 'sample', 'message': 'must specify at least one sample'});
 	} else {
 	    if (widget.metadata.sample.hasOwnProperty('sample_name')) {
 		for (var h=0; h<widget.metadata.sample.sample_name.length; h++) {
