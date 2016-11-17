@@ -615,10 +615,10 @@
 
 	// get all jobs to be made public
 	if (widget.priorities && widget.priorities.length) {
-	    var project_prios = {};	    
+	    var project_prios = {};
 	    for (var i=0; i<widget.priorities.length; i++) {
-		var task = widget.priorities[i];
-		var co = task.created_on.substr(0,10).split(/-/);
+		var task = widget.priorities[i];		
+		var co = task.tag == "completedtime" ? task.value.substr(0,10).split(/-/) : task.created_on.substr(0,10).split(/-/);
 		var c = new Date(parseInt(co[0]), parseInt(co[1])-1, parseInt(co[2])).valueOf();
 		var n = Date.now();
 		if (task.value == 'date') {
@@ -630,33 +630,34 @@
 		}
 		var grace = 1000 * 60 * 60 * 24 * 21; // three weeks grace period
 		c += grace;
+		task.rawdate = c;
 		task.duedate = new Date(c);
 		task.duedate = task.duedate.toDateString();
 		if (c < n) {
 		    task.overdue = parseInt((n - c) / 1000 / 60 / 60 / 24);
 		    task.overdue > 0 ? task.overdue = "You are " + task.overdue + " days overdue with this task." : null;
 		}
-		task.title = "metagenome publication";
 		task.status = task.overdue ? "error": "info";
-		task.link = "?mgpage=share&project=mgp"+task.project_id;
-		task.message = task.metagenome_name + " publication "+(task.overdue ? "was" : "is")+" due "+task.duedate+"."+(task.overdue ? "<br>"+task.overdue : "");
-
-		if (! project_prios.hasOwnProperty(task.project_id)) {
-		    project_prios[task.project_id] = [];
+		task.mgs = {};
+		task.mgs[task.metagenome_id] = true;
+		
+		if (project_prios.hasOwnProperty(task.project_id)) {
+		    if (task.rawdate > project_prios[task.project_id].rawdate) {
+			task.mgs = project_prios[task.project_id].mgs;
+			project_prios[task.project_id] = task;
+		    }
+		    project_prios[task.project_id].mgs[task.metagenome_id] = true;
+		} else {
+		    project_prios[task.project_id] = task;
 		}
-		project_prios[task.project_id].push(task);
 	    }
 	    var k = Retina.keys(project_prios);
 	    for (var i=0; i<k.length; i++) {
-		if (project_prios[k[i]].length > 1) {
-		    var task = project_prios[k[i]].sort(Retina.propSort('duedate'))[0];
-		    task.title = "project publication";
-		    task.link = "?mgpage=share&project=mgp"+task.project_id;
-		    task.message = "The project "+task.project+" has "+project_prios[k[i]].length+" metagenomes "+(task.overdue ? "over" : "")+"due for publication."+(task.overdue ? "<br>"+task.overdue : "");
-		    tasks.push(task);
-		} else {
-		    tasks.push(project_prios[k[i]][0]);
-		}
+		var task = project_prios[k[i]];
+		task.title = "project publication";
+		task.link = "?mgpage=share&project=mgp"+task.project_id;
+		task.message = "The project "+task.project+" has "+Retina.keys(project_prios[k[i]].mgs).length+" metagenomes "+(task.overdue ? "over" : "")+"due for publication."+(task.overdue ? "<br>"+task.overdue : "");
+		tasks.push(task);
 	    }
 	}
 
