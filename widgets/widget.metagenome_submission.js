@@ -319,7 +319,7 @@
 					 "value": "assembled",
 					 "class": "checkbox",
 					 "checked": false,
-					 "text": 'Select this option if your input sequence file(s) contain assembled data and include the coverage information within each sequence header as described <a target="blank" href="http://blog.metagenomics.anl.gov/mg-rast-v3-2-faq/#assembled_pipeline">here</a>.' } ] },
+					 "text": 'Select this option if your input sequence file(s) contain assembled data and include the coverage information within each sequence header as described <a target="blank" href="ftp://ftp.metagenomics.anl.gov/data/manual/mg-rast-manual.pdf#98">here</a>.' } ] },
 				   { "name": "dereplication",
 				     "fields": [
 					 { "id": "dereplication",
