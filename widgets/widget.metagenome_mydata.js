@@ -370,7 +370,7 @@
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_mydata[1];
 		widget.priorities = data.priorities;
-		Retina.WidgetInstances.metagenome_mydata[1].showTasks();
+		widget.showTasks();
 	    },
 	    error: function (xhr) {
 		Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
@@ -382,7 +382,6 @@
     widget.getCollections = function () {
 	stm.loadPreferences().then(function() {
 	    Retina.WidgetInstances.metagenome_mydata[1].showCollections();
-	    //Retina.WidgetInstances.metagenome_mydata[1].showTasks();
 	});
     };
     
@@ -607,6 +606,7 @@
 	var html = [];
 
 	var tasks = [];
+	var projects = widget.projectData;
 
 	// get all preferences tasks
 	if (stm.user.preferences && stm.user.preferences.tasks) {
@@ -617,47 +617,66 @@
 	if (widget.priorities && widget.priorities.length) {
 	    var project_prios = {};
 	    for (var i=0; i<widget.priorities.length; i++) {
-		var task = widget.priorities[i];		
-		var co = task.tag == "completedtime" ? task.value.substr(0,10).split(/-/) : task.created_on.substr(0,10).split(/-/);
-		var c = new Date(parseInt(co[0]), parseInt(co[1])-1, parseInt(co[2])).valueOf();
-		var n = Date.now();
-		if (task.value == 'date') {
-		    c += 1000 * 60 * 60 * 24 * 360;		    
-		} else if (task.value == '3months') {
-		    c += 1000 * 60 * 60 * 24 * 90;
-		} else if (task.value == '6months') {
-		    c += 1000 * 60 * 60 * 24 * 180;
-		}
-		var grace = 1000 * 60 * 60 * 24 * 21; // three weeks grace period
-		c += grace;
-		task.rawdate = c;
-		task.duedate = new Date(c);
-		task.duedate = task.duedate.toDateString();
-		if (c < n) {
-		    task.overdue = parseInt((n - c) / 1000 / 60 / 60 / 24);
-		    task.overdue > 0 ? task.overdue = "You are " + task.overdue + " days overdue with this task." : null;
-		}
-		task.status = task.overdue ? "error": "info";
-		task.mgs = {};
-		task.mgs[task.metagenome_id] = true;
+		var task = widget.priorities[i];
+		if (task.tag == "completedtime"){
+		    var co = task.value.substr(0,10).split(/-/);
+		    var c = new Date(parseInt(co[0]), parseInt(co[1])-1, parseInt(co[2])).valueOf();
+		    var n = Date.now();
+		    if (task.value == 'date') {
+			c += 1000 * 60 * 60 * 24 * 360;		    
+		    } else if (task.value == '3months') {
+			c += 1000 * 60 * 60 * 24 * 90;
+		    } else if (task.value == '6months') {
+			c += 1000 * 60 * 60 * 24 * 180;
+		    }
+		    var grace = 1000 * 60 * 60 * 24 * 21; // three weeks grace period
+		    c += grace;
+		    task.rawdate = c;
+		    task.duedate = new Date(c);
+		    task.duedate = task.duedate.toDateString();
+		    if (c < n) {
+			task.overdue = parseInt((n - c) / 1000 / 60 / 60 / 24);
+			task.overdue > 0 ? task.overdue = "You are " + task.overdue + " days overdue with this task." : null;
+		    }
+		    task.status = task.overdue ? "error": "info";
+		    task.mgs = {};
+		    task.incomplete = 0;
+		    task.mgs[task.metagenome_id] = true;
 		
-		if (project_prios.hasOwnProperty(task.project_id)) {
-		    if (task.rawdate > project_prios[task.project_id].rawdate) {
-			task.mgs = project_prios[task.project_id].mgs;
+		    if (project_prios.hasOwnProperty(task.project_id)) {
+			if (project_prios[task.project_id].mgs.hasOwnProperty(task.metagenome_id)) {
+			    project_prios.incomplete--;
+			}
+			if (task.rawdate > project_prios[task.project_id].rawdate) {
+			    task.mgs = project_prios[task.project_id].mgs;
+			    project_prios[task.project_id] = task;
+			}
+			project_prios[task.project_id].mgs[task.metagenome_id] = true;
+		    } else {
 			project_prios[task.project_id] = task;
 		    }
-		    project_prios[task.project_id].mgs[task.metagenome_id] = true;
 		} else {
-		    project_prios[task.project_id] = task;
+		    if (! project_prios.hasOwnProperty(task.project_id)) {
+			project_prios[task.project_id] = { "incomplete": 1, "mgs": {} };
+			project_prios[task.project_id].mgs[task.metagenome_id] = true;
+		    } else {
+			if (! project_prios[task.project_id].mgs.hasOwnProperty(task.metagenome_id)) {
+			    project_prios[task.project_id].mgs[task.metagenome_id] = true;
+			    project_prios[task.project_id].incomplete++;
+			}
+		    }
 		}
 	    }
+	    console.log(project_prios);
 	    var k = Retina.keys(project_prios);
 	    for (var i=0; i<k.length; i++) {
 		var task = project_prios[k[i]];
-		task.title = "project publication";
-		task.link = "?mgpage=share&project=mgp"+task.project_id;
-		task.message = "The project "+task.project+" has "+Retina.keys(project_prios[k[i]].mgs).length+" metagenomes "+(task.overdue ? "over" : "")+"due for publication."+(task.overdue ? "<br>"+task.overdue : "");
-		tasks.push(task);
+		if (! task.incomplete) {
+		    task.title = "project publication";
+		    task.link = "?mgpage=share&project=mgp"+task.project_id;
+		    task.message = "The project "+task.project+" has "+Retina.keys(project_prios[k[i]].mgs).length+" metagenomes "+(task.overdue ? "over" : "")+"due for publication."+(task.overdue ? "<br>"+task.overdue : "");
+		    tasks.push(task);
+		}
 	    }
 	}
 
