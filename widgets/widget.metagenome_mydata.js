@@ -667,7 +667,6 @@
 		    }
 		}
 	    }
-	    console.log(project_prios);
 	    var k = Retina.keys(project_prios);
 	    for (var i=0; i<k.length; i++) {
 		var task = project_prios[k[i]];

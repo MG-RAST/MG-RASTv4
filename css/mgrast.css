@@ -450,8 +450,13 @@ h5 {
     height: 20px;
 }
 
-.editable td {
+.editable {
     cursor: cell;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100px;
+    max-height: 20px;
 }
 
 .editable input {

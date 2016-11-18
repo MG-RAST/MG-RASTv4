@@ -25,7 +25,7 @@
 	container.className = "span10 offset1";
 	document.getElementById("pageTitle").innerHTML = "metazen";
 
-	html = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading data ...';
+	html = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading template data ...';
 	
 	container.innerHTML = html;
 
@@ -130,14 +130,14 @@
 	
 	// libraries
 	html.push('<div style="float: left;"><div style="font-weight: bold;">libraries</div>');
-	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" type="checkbox"'+(widget.activeTabs['library-metagenome'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-metagenome"> metagenome</div>');
-	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" type="checkbox"'+(widget.activeTabs['library-mimarks-survey'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-mimarks-survey"> mimarks-survey</div>');
-	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" type="checkbox"'+(widget.activeTabs['library-metatranscriptome'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-metatranscriptome"> metatranscriptome</div></div>');
+	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="library-metagenomeCheckbox" type="checkbox"'+(widget.activeTabs['library-metagenome'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-metagenome"> metagenome</div>');
+	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="library-mimarks-surveyCheckbox" type="checkbox"'+(widget.activeTabs['library-mimarks-survey'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-mimarks-survey"> mimarks-survey</div>');
+	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="library-metatranscriptomeCheckbox" type="checkbox"'+(widget.activeTabs['library-metatranscriptome'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-metatranscriptome"> metatranscriptome</div></div>');
 	
 	// eps
 	html.push('<div style="float: left; margin-left: 20px;"><div style="font-weight: bold;">environmental packages</div><div style="float: left;">');
 	for (var i=0; i<widget.eps.length; i++) {
-	    html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" type="checkbox"'+(widget.activeTabs["ep-"+widget.eps[i]] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="ep-'+widget.eps[i]+'"> '+widget.eps[i]+'</div>');
+	    html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="ep-'+widget.eps[i]+'Checkbox" type="checkbox"'+(widget.activeTabs["ep-"+widget.eps[i]] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="ep-'+widget.eps[i]+'"> '+widget.eps[i]+'</div>');
 	    if (i % 7 == 0 && i > 0) {
 		html.push('</div><div style="float: left;">');
 	    }
@@ -228,6 +228,12 @@
 		widget.envo_cell += unordered;
 	    }
 	    tarray.sort(Retina.propSort('order'));
+
+	    // set the order to the correct value for the unordered
+	    for (var h=0; h<tarray.length; h++) {
+		tarray[h].order = h;
+	    }
+	    
 	    var cols = [];
 	    for (var h=0; h<tarray.length; h++) {
 		cols.push(tarray[h].name);
@@ -259,6 +265,11 @@
 	widget.tables = hashTable;
 
 	widget.showENVOselect();
+
+	if (Retina.cgiParam('project')) {
+	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading project data...';
+	    widget.loadProjectData(Retina.cgiParam('project'));
+	}
     };
 
     // cell edit helper
@@ -289,7 +300,7 @@
 		return;
 	    }
 	    widget.currField = { "table": tablename, "field": fieldname, "data": md };
-	    document.getElementById('cellInfoBox').innerHTML = '<p style="font-size: 18px; font-weight: bold;">'+fieldname+'</p><p>'+md.definition+'</p><table style="text-align: left;"><tr><th>MiXS term</th><td>'+(md.hasOwnProperty('mixs') && md.mixs=='1' ? 'yes' : 'no')+'</td></tr><tr><th style="padding-right: 20px;">required field</th><td>'+(md.required=='0' ? 'no' : 'yes')+'</td></tr><tr><th>unit</th><td>'+(md.unit.length ? md.unit : '-')+'</td></tr><tr><th>type</th><td>'+md.type+'</td></tr></table>';
+	    document.getElementById('cellInfoBox').innerHTML = '<p style="font-size: 18px; font-weight: bold;">'+fieldname+'</p><p>'+md.definition+'</p><table style="text-align: left;"><tr><th>MiXS term</th><td>'+(md.hasOwnProperty('mixs') && md.mixs=='1' ? 'yes' : 'no')+'</td></tr><tr><th style="padding-right: 20px;">required field</th><td>'+(md.required=='0' ? 'no' : 'yes')+'</td></tr><tr><th>unit</th><td>'+(md.unit.length ? md.unit : '-')+'</td></tr><tr><th>type</th><td>'+md.type+'</td></tr><tr><th style="vertical-align: top; width: 120px;">current value</th><td>'+cell.innerHTML+'</td></tr></table>';
 	    
 	    // this cell is not in input mode
 	    if (! cell.innerHTML.match(/\<input/) && ! cell.innerHTML.match(/\<select/) && ! cell.innerHTML.match(/\<div/)) {
@@ -784,6 +795,134 @@
     widget.addMDField = function (tab, name) {
 	var widget = this;
 
+	
+    };
+
+    // load existing data from project
+    widget.loadProjectData = function (project) {
+	var widget = this;
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/metadata/export/'+project,
+	    success: function (data) {
+		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+
+		document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
+		widget.loadedData = data;
+		widget.fillSpreadSheet();
+	    },
+	    error: function (xhr) {
+		alert("could not retrieve metadata for this project");
+	    }
+	});
+    };
+
+    widget.fillSpreadSheet = function (excel) {
+	var widget = this;
+
+	if (excel) {
+	    
+	} else {
+
+	    // uncheck all eps and libraries
+	    var checkboxes = ['library-metagenome','library-mimarks-survey','library-metatranscriptome'];
+	    for (var i=0;i<widget.eps.length; i++) {
+		checkboxes.push('ep-'+widget.eps[i]);
+	    }
+	    for (var i=0; i<checkboxes.length; i++) {
+		var sheet = checkboxes[i];
+		if (widget.activeTabs[sheet]) {
+		    widget.activeTabs[sheet] = false;
+		    document.getElementById(sheet+"Checkbox").removeAttribute('checked');
+		    var name = sheet.replace(/\|/g, " ").replace(/\s/g, "-");
+		    jQuery('#'+name+"-li").toggle();
+		}
+	    }
+
+	    // data shortcut
+	    var d = widget.loadedData;
+	    
+	    // fill in project sheet
+	    var fields = Retina.keys(d.data);
+	    for (var i=0; i<fields.length; i++) {
+		widget.setCell('project', fields[i], d.data[fields[i]].value);
+	    }
+
+	    // iterate over the samples
+	    for (var h=0; h<d.samples.length; h++) {
+
+		// fill in the sample sheet
+		var s = d.samples[h];
+		widget.setCell('sample', 'sample_id', s.id);
+		fields = Retina.keys(s.data);
+		for (var i=0; i<fields.length; i++) {
+		    widget.setCell('sample', fields[i], s.data[fields[i]].value);
+		}
+
+		// fill in the env package
+		var e = s.envPackage;
+		var sn = "ep-"+e.type;
+		fields = Retina.keys(e.data);
+		for (var i=0; i<fields.length; i++) {
+		    widget.setCell(sn, fields[i], e.data[fields[i]].value);
+		}
+
+		// iterate over the libraries
+		for (var j=0; j<s.libraries.length; j++) {
+
+		    // fill in the library sheet
+		    var l = s.libraries[j];
+		    sn = "library-"+l.type;
+		    fields = Retina.keys(l.data);
+		    for (var i=0; i<fields.length; i++) {
+			widget.setCell(sn, fields[i], l.data[fields[i]].value);
+		    }
+		}
+	    }
+	}
+    };
+
+    widget.setCell = function (sheet, field, value) {
+	var widget = this;
+
+	// check if the sheet is visible
+	if (sheet.match(/^library/) || sheet.match(/^ep/)) {
+	    if (! widget.activeTabs[sheet]) {
+		widget.activeTabs[sheet] = true;
+		document.getElementById(sheet+"Checkbox").setAttribute('checked', 'checked');
+		var name = sheet.replace(/\|/g, " ").replace(/\s/g, "-");
+		jQuery('#'+name+"-li").toggle();
+	    }
+	}
+
+	// check if we know about this field
+	var cat = sheet.indexOf('-') > -1 ? sheet.substr(0, sheet.indexOf('-')) : sheet;
+	var subcat = sheet.indexOf('-') > -1 ? sheet.substr(sheet.indexOf('-') + 1) : sheet;
+	
+	if (! widget.metadataTemplate[cat][subcat].hasOwnProperty(field)) {
+	    console.log('unknown field: '+field);
+	    return;
+	}
+
+	// add the data to the metadata in memory
+	if (! widget.metadata.hasOwnProperty(sheet)) {
+	    widget.metadata[sheet] = {};
+	}
+	
+	if (! widget.metadata[sheet].hasOwnProperty(field)) {
+	    widget.metadata[sheet][field] = [];
+	}
+	widget.metadata[sheet][field].push(value);
+
+	// find the table cell to enter the data into
+	var column = widget.metadataTemplate[cat][subcat][field].order + 1;
+	var row = widget.metadata[sheet][field].length;
+	var table = document.getElementById(sheet).firstChild;
+	
+	table.rows[row].cells[column].innerHTML = value;
 	
     };
 

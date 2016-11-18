@@ -39,7 +39,7 @@
 
 	widget.sidebar.style.paddingLeft = "20px";
 	widget.sidebar.style.paddingRight = "20px";
-	widget.sidebar.innerHTML = "<h3><img style='height: 20px; margin-right: 10px; margin-top: -4px;' src='Retina/images/info.png'>Password Reset fails?</h3><p>If you are trying to reset your password, but you do not remember the login / email combination you registered with, you need to <a href='contact.html'>contact our support</a> to retrieve a new password.</p><p>We will need to verify that you are the owner of the account. The easiest way is for you to send an email originating from the account you registered with MG-RAST.</p><p>It helps us a lot you add information about your account, like metagenome or project ids you own, your full name or your organization.</p>";
+	widget.sidebar.innerHTML = "<h3><img style='height: 20px; margin-right: 10px; margin-top: -4px;' src='Retina/images/info.png'>Password Reset fails?</h3><p>If you are trying to reset your password, but you do not remember the login / email combination you registered with, you need to <a href='mailto:mg-rast@rt.mcs.anl.gov'>contact our support</a> to retrieve a new password.</p><p>We will need to verify that you are the owner of the account. The easiest way is for you to send an email originating from the account you registered with MG-RAST.</p><p>It helps us a lot you add information about your account, like metagenome or project ids you own, your full name or your organization.</p>";
 
 	var html = '\
 <h3>Reset your Password</h3>\
