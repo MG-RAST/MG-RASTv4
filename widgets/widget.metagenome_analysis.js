@@ -1151,7 +1151,6 @@
 	// result data
 	html.push("<table style='font-size: 12px; width: 322px;'><th style='text-align: left;'>name</th><th style='text-align: right; padding-left: 10px;'>hits</th></tr>");
 	for (var i=0; i<c.items.length; i++) {
-	    console.log(c.items[i].id);
 	    html.push("<tr><td title='"+c.items[i].name+"'><a href='mgmain.html?mgpage=overview&metagenome="+(c.items[i].status=="private" ? Retina.idmap(c.items[i].id) : c.items[i].id)+"' target=_blank style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 250px;'>"+c.items[i].name+"</a></td><td style='text-align: right; padding-left: 10px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
 	}
 	html.push("</table>");
