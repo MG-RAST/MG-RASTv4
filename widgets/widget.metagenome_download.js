@@ -32,6 +32,7 @@
 
 	if (Retina.cgiParam('metagenome')) {
 	    var id = Retina.cgiParam('metagenome');
+	    widget.id = id;
 	    if (id.length < 15 && ! id.match(/^mgm/)) {
 		id = "mgm"+id;
 	    }
@@ -40,7 +41,7 @@
 		id = "mgm"+id;
 	    }
 	    
-	    html += "<h3>Metagenome Datasets for <span id='mginfo'></span><a class='btn btn-small pull-right' title='show metagenome overview' href='mgmain.html?mgpage=overview&metagenome="+Retina.idmap(id)+"'><i class='icon icon-eye-open'></i></a></h3><p>Data are available from each step in the <a target=_blank href='http://blog.metagenomics.anl.gov/howto/quality-control'>MG-RAST pipeline</a>. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. They also include a brief description of the output format, buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p><div id='metagenome_download'><img src='Retina/images/waiting.gif' style='left: 40%; position: relative; margin-top: 100px;'></div>";
+	    html += "<h3>Metagenome Datasets for <span id='mginfo'></span><a class='btn btn-small pull-right' title='show metagenome overview' href='mgmain.html?mgpage=overview&metagenome="+Retina.idmap(id)+"'><i class='icon icon-eye-open'></i> metagenome overview</a></h3><p>Data are available from each step in the <a target=_blank href='http://blog.metagenomics.anl.gov/howto/quality-control'>MG-RAST pipeline</a>. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. They also include a brief description of the output format, buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p><div id='metagenome_download'><img src='Retina/images/waiting.gif' style='left: 40%; position: relative; margin-top: 100px;'></div>";
 	    content.innerHTML = html;
 
 	    jQuery.ajax( { dataType: "json",
@@ -105,9 +106,9 @@
 	    var target = document.getElementById('metagenome_download');
 
 	    var html = "";
-
 	    for (var i=0; i<data.data.length; i++) {
 		var d = data.data[i];
+		d.file_name = d.file_name.replace(d.id, widget.id);
 		if (d.file_size == null || ! pipelinedata.hasOwnProperty(d.stage_id)) {
 		    continue;
 		}
@@ -190,7 +191,6 @@
 
     widget.authenticatedDownload = function (button, url) {
 	var widget = Retina.WidgetInstances.metagenome_download[1];
-	console.log(url);
 	button.setAttribute('disabled', 'true');
 	jQuery.ajax( { url: url+"&link=1",
 		       headers: stm.authHeader,
