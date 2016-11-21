@@ -173,7 +173,11 @@
 	var ann = document.getElementById('ann_type').options[document.getElementById('ann_type').selectedIndex].value;
 	var ont = document.getElementById('ont_source').options[document.getElementById('ont_source').selectedIndex].value;
 	var org = document.getElementById('org_source').options[document.getElementById('org_source').selectedIndex].value;
-	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+Retina.cgiParam('metagenome')+"?type="+ann+"&source="+(ann == "ontology" ? ont : org);
+	var id = Retina.cgiParam('metagenome');
+	if (! id.match(/^mgm/)) {
+	    id = Retina.idmap(id);
+	}
+	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org);
 	var filename = Retina.cgiParam('metagenome')+"_"+ann+"_"+(ann == "ontology" ? ont : org)+".tab";
 
 	jQuery.ajax( { url: url,
