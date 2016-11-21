@@ -1149,9 +1149,10 @@
 	}
 	
 	// result data
-	html.push("<table style='font-size: 12px; width: 322px;'><th style='text-align: left;'>ID</th><th style='text-align: right; padding-left: 100px;'>hits</th></tr>");
+	html.push("<table style='font-size: 12px; width: 322px;'><th style='text-align: left;'>name</th><th style='text-align: right; padding-left: 10px;'>hits</th></tr>");
 	for (var i=0; i<c.items.length; i++) {
-	    html.push("<tr><td title='"+c.items[i].name+"'><a href='mgmain.html?mgpage=overview&metagenome="+c.items[i].id+"' target=_blank>"+c.items[i].id+"</a></td><td style='text-align: right; padding-left: 100px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
+	    console.log(c.items[i].id);
+	    html.push("<tr><td title='"+c.items[i].name+"'><a href='mgmain.html?mgpage=overview&metagenome="+(c.items[i].status=="private" ? Retina.idmap(c.items[i].id) : c.items[i].id)+"' target=_blank style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 250px;'>"+c.items[i].name+"</a></td><td style='text-align: right; padding-left: 10px;'>"+c.matrix.abundances[i].formatString()+"</td></tr>");
 	}
 	html.push("</table>");
 	
@@ -1889,11 +1890,29 @@
 		filter_type: 'strict',
 		specialFilters: specialFilters,
 		asynch_filter_attribute: 'name',
+		data_manipulation: Retina.WidgetInstances.metagenome_analysis[1].select_manipulation,
 		value: "id"
 	    }).render();
 	    widget.mgselect.update();
 	}
-    }
+    };
+
+    widget.select_manipulation = function (data) {
+	var widget = this;
+	
+	var result_data = [];
+
+	for (var i=0; i<data.length; i++) {
+	    var item = data[i];
+	    if (data[i].status != "public") {
+		data[i].id = Retina.idmap(data[i].id);
+		data[i].project_id = Retina.idmap(data[i].project_id);
+	    }
+	    result_data.push(item);
+	}
+
+	return result_data;
+    };
 
     // show the available databases for either protein or RNA
     widget.showDatabases = function () {
@@ -2025,6 +2044,13 @@
     // perform a set of API requests and create a data container
     widget.loadData = function (ids, collectionName, params) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
+
+	ids = jQuery.extend(true, [], ids);
+	for (var i=0; i<ids.length; i++) {
+	    if (! ids[i].id.match(/^mgm/)) {
+		ids[i].id = Retina.idmap(ids[i].id);
+	    }
+	}
 
 	params = params || widget.isRecipe;
 	
