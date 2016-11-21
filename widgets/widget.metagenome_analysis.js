@@ -2470,7 +2470,7 @@
 		var h = document.createElement('input');
 		h.setAttribute('type', 'text');
 		h.setAttribute('name', 'auth');
-		h.setAttribute('value', stm.authHeader.Authorization.replace(/ /, '%20'));
+		h.setAttribute('value', stm.authHeader.Authorization);
 		doc.appendChild(h);
 	    }
 	    document.body.appendChild(doc);
