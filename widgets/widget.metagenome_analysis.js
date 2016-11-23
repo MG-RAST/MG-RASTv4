@@ -2954,9 +2954,9 @@
 				}
 				stm.DataStore.ontology = out;
 				document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
-				stm.updateHardStorage("analysis", { "ontology": true, "taxonomy": true }).then( function () {
+				//stm.updateHardStorage("analysis", { "ontology": true, "taxonomy": true }).then( function () {
 				    Retina.WidgetInstances.metagenome_analysis[1].display();
-				});
+				//});
 			    });
 			});
 		    });
