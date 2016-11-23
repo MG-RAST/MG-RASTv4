@@ -153,7 +153,7 @@
 	html.push('<div style="clear: both;"></div>');
 	
 	// upload / download buttons
-	html.push('<div style="float: right; margin-left: 20px;"><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(true);" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel();" style="margin-left: 20px;"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;">download in Excel format</button></div>');
+	html.push('<div style="float: right; margin-left: 20px;"><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'shock\');" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel();" style="margin-left: 20px;"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;">download in Excel format</button></div>');
 	
 	html.push('<div style="clear: both;"></div>');
 	
