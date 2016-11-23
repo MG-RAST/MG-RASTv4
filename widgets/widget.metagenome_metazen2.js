@@ -235,18 +235,20 @@
 	    }
 	    
 	    var cols = [];
+	    var colheaders = [];
 	    for (var h=0; h<tarray.length; h++) {
 		cols.push(tarray[h].name);
+		colheaders.push(tarray[h].required == "1" ? "<span style='color: red;' title='required field'>"+tarray[h].name+"</span>" : tarray[h].name);
 	    }
 	    hashTable[tables[i].name].order = cols;
 	    var empty = [];
 	    for (var h=0; h<cols.length + 1; h++) {
 		empty.push("");
 	    }
-	    empty = empty.join('</td><td class="editable">');
+	    empty = empty.join('</td><td class="editable viewtext">');
 	    var thtml = [];
 	    thtml.push('<table class="excel" onclick="Retina.WidgetInstances.metagenome_metazen2[1].tableClicked(event,\''+tables[i].name+'\');">');
-	    thtml.push('<tr><th>&nbsp</th><th>'+cols.join('</th><th>')+'</th>');
+	    thtml.push('<tr><th>&nbsp</th><th>'+colheaders.join('</th><th>')+'</th>');
 
 	    // additional misc params currently disabled
 	    
@@ -254,7 +256,7 @@
 	    
 	    thtml.push('</tr>');
 	    for (var h=0; h<25; h++) {
-		thtml.push('<tr><th></th><td class="editable">');
+		thtml.push('<tr><th></th><td class="editable viewtext">');
 		thtml.push(empty);
 		thtml.push('</td></tr>');
 	    }
@@ -599,6 +601,8 @@
 
 		// store a reference to the current input element
 		widget.currentInputElement = input;
+
+		jQuery(cell).toggleClass('viewtext', false);
 	    }
 	}
     };
@@ -669,6 +673,7 @@
 	}
 
 	p.innerHTML = val;
+	jQuery(p).toggleClass('viewtext', true);
 	widget.currentInputElement = null;
 	p.setAttribute('style','');
 	
@@ -702,7 +707,7 @@
 		for (var h=0; h<cols.length - 1; h++) {
 		    empty.push("");
 		}
-		empty = '<th></th><td class="editable">'+empty.join('</td><td class="editable">')+'</td>';
+		empty = '<th></th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
 		var r = document.createElement('tr');
 		r.innerHTML = empty;
 		p.parentNode.parentNode.appendChild(r);
@@ -949,7 +954,7 @@
 	return widget.excelPromise;
     };
 
-    widget.exportExcel = function (toSHOCK) {
+    widget.exportExcel = function (target) {
     	var widget = this;
 
     	var wb = jQuery.extend(true, {}, widget.excelWorkbook);
@@ -992,7 +997,7 @@
 	}
 
 	// export to user inbox
-	if (toSHOCK) {
+	if (target == 'shock') {
 
 	    var ulbtn = document.getElementById('inboxUploadButton');
 	    ulbtn.setAttribute('disabled', 'disabled');
@@ -1067,6 +1072,55 @@
 	    });
 	}
 
+	// update the project metadata
+	else if (target == 'project') {
+	    var id = Retina.cgiParam('project');
+	    var btn = document.getElementById('projectUploadButton');
+	    
+	    btn.setAttribute('disabled', 'disabled');
+	    btn.innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px;">';
+	
+	    var fd = new FormData();
+	    fd.append('project', id);
+	    for (var i=0; i<stm.DataStore.project[id].metagenomes.length; i++) {
+		var mgid = stm.DataStore.project[id].metagenomes[i].metagenome_id;
+		if (! mgid.match(/^mgm/)) {
+		    mgid = "mgm"+mgid;
+		}
+		fd.append('metagenome', mgid);
+	    }
+	    fd.append('map_by_id', "1");
+	    fd.append('upload', btn.files[0], btn.files[0].name);
+	    jQuery.ajax({
+		method: "POST",
+		headers: stm.authHeader,
+		data: fd,
+		divid: id,
+		contentType: false,
+		processData: false,
+		url: RetinaConfig.mgrast_api+'/metadata/update',
+		complete: function(xhr) {
+		    var response = JSON.parse(xhr.responseText);
+		    if (response.hasOwnProperty('ERROR')) {
+			document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = '<div class="alert alert-error">'+response.ERROR+'</div>';
+		    }
+		    else if (response.hasOwnProperty('errors') && response.errors.length) {
+			var html = "";
+			var added = "";
+			if (response.added.length) {
+			    html =+ '<div class="alert alert-info">The following metagenomes had metadata added:<br>' + response.added.join('<br>')+'</div>';
+			}
+			html =+ '<div class="alert alert-error">' + response.errors.join('<br>')+'</div>';
+			document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = html;
+		    }
+		    else {
+			document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = '<div class="alert alert-success">The metadata for this project was successfully updated.</div>';
+		    }
+		    document.getElementById('uploadMetadataButton'+this.divid).removeAttribute('disabled');
+		}
+	    });
+	}
+    
 	// export to xlsx file
 	else {
     	    xlsx(wb).then(function(data) {

@@ -452,6 +452,9 @@ h5 {
 
 .editable {
     cursor: cell;
+}
+
+.viewtext {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
