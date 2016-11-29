@@ -74,7 +74,7 @@
 				       
 				       // check public / private status
 				       if (data.status == "private") {
-					   widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share&project='+stm.DataStore.metagenome[data.id].project[0]+'" title="show sharing options"><i class="icon icon-share"></i> show sharing options</a></div>';
+					   widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share'+(stm.DataStore.metagenome[data.id].project ? '&project='+stm.DataStore.metagenome[data.id].project[0] : "")+'" title="show sharing options"><i class="icon icon-share"></i> show sharing options</a></div>';
 				       }
 				       
 				       widget.variableExtractorMetagenome(data.id);
@@ -119,27 +119,27 @@
 
 	    // dynamically resolve pubmed
 	    var mg = stm.DataStore.metagenome[widget.id];
-	    if (mg.hasOwnProperty('metadata') && mg.metadata.hasOwnProperty('library') && mg.metadata.library.data.hasOwnProperty('pubmed_id')) {
-	    var pubmed_ids = mg.metadata.library.data.pubmed_id.split(", ");
+	    if (mg.metadata && mg.metadata.hasOwnProperty('library') && mg.metadata.library.data.hasOwnProperty('pubmed_id')) {
+		var pubmed_ids = mg.metadata.library.data.pubmed_id.split(", ");
 	    
-	    jQuery.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id="+pubmed_ids[0], function (data) {
-		var journal, pubdate;
-		var items = data.children[0].children[0].children;
-		for (var i=0; i<items.length; i++) {
-		    if (items[i].attributes.length) {
-			if (items[i].attributes[0].nodeValue == "FullJournalName") {
-			    journal = items[i].innerHTML;
-			}
-			if (items[i].attributes[0].nodeValue == "PubDate") {
-			    pubdate = items[i].innerHTML;
+		jQuery.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id="+pubmed_ids[0], function (data) {
+		    var journal, pubdate;
+		    var items = data.children[0].children[0].children;
+		    for (var i=0; i<items.length; i++) {
+			if (items[i].attributes.length) {
+			    if (items[i].attributes[0].nodeValue == "FullJournalName") {
+				journal = items[i].innerHTML;
+			    }
+			    if (items[i].attributes[0].nodeValue == "PubDate") {
+				pubdate = items[i].innerHTML;
+			    }
 			}
 		    }
-		}
-		if (journal && pubdate) {
-		    document.getElementById('pubmed').innerHTML = " - published in <a href='http://www.ncbi.nlm.nih.gov/pubmed/"+pubmed_ids[0]+"' target=_blank>"+journal+", "+pubdate+"</a>";
-		}
-	    });
-	}
+		    if (journal && pubdate) {
+			document.getElementById('pubmed').innerHTML = " - published in <a href='http://www.ncbi.nlm.nih.gov/pubmed/"+pubmed_ids[0]+"' target=_blank>"+journal+", "+pubdate+"</a>";
+		    }
+		});
+	    }
 	    
 	} else {
 	    container.innerHTML = '\
@@ -253,7 +253,7 @@
 	}
 	
 	var allmetadata = [];
-	if (mg.hasOwnProperty('metadata')) {
+	if (mg.metadata) {
 	    var cats = ['env_package', 'library', 'project', 'sample'];
 	    for (var h=0; h<cats.length; h++) {
 		if (! mg.metadata.hasOwnProperty(cats[h])) {
@@ -369,7 +369,7 @@
 	    mg.drisee_score = "not calculated";
 	}
 	
-	mg.alphadiversity = { min: parseFloat(mg.project_alpha_diversity.min), max: parseFloat(mg.project_alpha_diversity.max), mean: parseFloat(mg.project_alpha_diversity.avg), stdv: parseFloat(mg.project_alpha_diversity.stdv), val: mg.statistics.sequence_stats.alpha_diversity_shannon };
+	mg.alphadiversity = (mg.project_alpha_diversity && mg.statistics) ? { min: parseFloat(mg.project_alpha_diversity.min), max: parseFloat(mg.project_alpha_diversity.max), mean: parseFloat(mg.project_alpha_diversity.avg), stdv: parseFloat(mg.project_alpha_diversity.stdv), val: mg.statistics.sequence_stats.alpha_diversity_shannon } : { min: 0, max: 0, mean: 0, stdv: 0, val: 0 };
 	mg.statistics.sequence_stats.alpha_diversity_shannon = mg.statistics.sequence_stats.alpha_diversity_shannon.formatString();
 	
 	var kmer = [];
@@ -420,14 +420,14 @@
 	mg.sequenceGCUpload = sequenceGCUpload;
 
 	mg.ids = { "ncbi": "-", "pubmed": "-", "gold": "-" };
-	if (mg.metadata.hasOwnProperty('project') && mg.metadata.project.hasOwnProperty('data') && mg.metadata.project.data.hasOwnProperty('ncbi_id')) {
+	if (mg.metadata && mg.metadata.hasOwnProperty('project') && mg.metadata.project.hasOwnProperty('data') && mg.metadata.project.data.hasOwnProperty('ncbi_id')) {
 	    var ncbiids = mg.metadata.project.data.ncbi_id.split(/, /);
 	    for (var i=0; i<ncbiids.length; i++) {
 		ncbiids[i] = '<a target="_blank" href="http://www.ncbi.nlm.nih.gov/genomeprj/'+ncbiids[i]+'">'+ncbiids[i]+'</a>';
 	    }
 	    mg.ids.ncbi = ncbiids.join(', ');
 	}
-	if (mg.hasOwnProperty('metadata') && mg.metadata.hasOwnProperty('library')) {
+	if (mg.metadata && mg.metadata.hasOwnProperty('library')) {
 	    if (mg.metadata.library.data.hasOwnProperty('pubmed_id')) {
 		var pubmedids = mg.metadata.library.data.pubmed_id.split(/, /);
 		for (var i=0; i< pubmedids.length; i++) {
@@ -447,7 +447,9 @@
 	    mg.staticLink = "<a href='http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"' title='static link'>http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"</a>";
 	} else {
 	    mg.id = Retina.idmap(mg.id);
-	    mg.metadata.project.id = Retina.idmap(mg.metadata.project.id);
+	    if (mg.metadata && mg.metadata.project) {
+		mg.metadata.project.id = Retina.idmap(mg.metadata.project.id);
+	    }
 	    mg.staticLink = 'private metagenomes cannot be linked';	    
 	}
     };
