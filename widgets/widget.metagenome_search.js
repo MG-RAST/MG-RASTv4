@@ -393,7 +393,7 @@
 	    document.getElementById('result_text').innerHTML = "";
 	    return '<div class="alert alert-warning" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">Your search returned no results.</div>';
 	} else {
-	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count.formatString()+" results. Showing "+showing;
+	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count.formatString()+" results. Showing "+showing+" <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].downloadResults()' style='position: relative; bottom: 3px; margin-left: 10px;'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download metadata</button>";
 	}
 
 	var html = [];
@@ -450,6 +450,32 @@
 	}
 
 	return html.join("");
+    };
+
+    widget.downloadResults = function () {
+	var widget = this;
+
+	var data = [];
+	for (var i in stm.DataStore.search) {
+	    if (stm.DataStore.search.hasOwnProperty(i)) {
+		data.push(jQuery.extend(true, {}, stm.DataStore.search[i]));
+	    }
+	}
+	data = data.sort(Retina.propSort(widget.sort, widget.sortDir == 'asc' ? false : true));
+	var exportData = [];
+	var fields = Retina.keys(data[0]).sort();
+	exportData.push(fields.join("\t"));
+	for (var i=0; i<data.length; i++) {
+	    var row = [];
+	    for (var h=0; h<fields.length; h++) {
+		if (fields[h] == 'id' || fields[h] == 'project_id' && data[i].status == 'private') {
+		    data[i][fields[h]] = Retina.idmap(data[i][fields[h]]);
+		}
+		row.push(data[i][fields[h]]);
+	    }
+	    exportData.push(row.join("\t"));
+	}
+	stm.saveAs(exportData.join("\n"), "searchResultsMetadata.txt");
     };
 
     widget.queryAPI = function (more, howmany) {
