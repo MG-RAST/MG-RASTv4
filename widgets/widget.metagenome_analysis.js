@@ -2204,9 +2204,42 @@
 					      }
 					  },
 					  error: function(jqXHR, error) {
-					      Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+					      if (this.url.match(/api\.metagenomics/)) {
+						  var pql = this.url.replace(/api\.metagenomics/, "api-pql.metagenomics");
+						  jQuery.ajax({ url: pql,
+								dc: this.dc,
+								contentType: 'application/json',
+								headers: stm.authHeader,
+								bound: this.bound,
+								success: function (data) {
+								    var widget = Retina.WidgetInstances.metagenome_analysis[1];
+								    if (data != null) {
+									if (data.hasOwnProperty('ERROR')) {
+									    console.log("error: "+data.ERROR);
+									    widget.updatePDiv(this.bound, 'error', data.ERROR);
+									} else if (data.hasOwnProperty('status')) {
+									    if (data.status == 'done') {
+										widget.downloadComputedData(this.bound, this.dc, data.url);
+									    } else {
+										widget.queueDownload(this.bound, data.url, this.dc);
+									    }
+									}
+								    } else {
+									console.log("error: invalid return structure from API server");
+									console.log(data);
+									widget.updatePDiv(this.bound, 'error', data.ERROR);
+								    }
+								},
+								error: function(jqXHR, error) {
+								    Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, true);
+								},
+								complete: function (jqXHR) {
+								    Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
+								}
+							      });
+					      }
 					  },
-					  complete: function () {
+					  complete: function (jqXHR) {
 					      Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 					  }
 					}));
@@ -2304,7 +2337,7 @@
 				 }
 			     },
 			     error: function(jqXHR, error) {
-				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, true);
 			     },
 			     complete: function () {
 				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
@@ -2374,15 +2407,21 @@
 			   });
     };
 
-    widget.deleteProgress = function (id) {
+    widget.deleteProgress = function (id, error) {
 	var widget = this;
 
 	delete stm.DataStore.inprogress[id];
 	var bar = document.getElementById('progressbar'+id);
 	if (bar) {
-	    document.getElementById('progress'+id).innerHTML += " - complete.";
+	    if (error) {
+		document.getElementById('progress'+id).innerHTML = "could not load profile - server error.";
+		bar.setAttribute('class', 'bar bar-danger');
+	    } else {
+		document.getElementById('progress'+id).innerHTML += " - complete.";
+		bar.setAttribute('class', 'bar bar-success');
+	    }
 	    bar.parentNode.setAttribute('class', 'progress');
-	    bar.setAttribute('class', 'bar bar-success');
+	    bar.parentNode.style.marginBottom = "5px";
 	    bar.style.width = '100%';
 	}
     };
