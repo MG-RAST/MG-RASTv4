@@ -249,21 +249,25 @@
 	var password2 = document.getElementById('user_password_repeat').value;
 	var firstname = document.getElementById('user_firstname').value;
 	var lastname = document.getElementById('user_lastname').value;
-	var email = document.getElementById('user_email2').value;
-	if (email != stm.user.email2) {
+	var email = document.getElementById('user_email').value;
+	var email2 = document.getElementById('user_email2').value;
+	if (email != stm.user.email) {
+	    alert("You will receive a link at the new email address to activate it.\nUntil you have done so, your email will remain unchanged.");
+	}
+	if (email2 != stm.user.email2) {
 	    alert("You will receive a link at the new email address to activate it.\nUntil you have done so, your email will remain unchanged.");
 	}
 
 	var promises = [];
 
-	if (firstname != stm.user.firstname || lastname != stm.user.lastname || email != stm.user.email2) {
+	if (firstname != stm.user.firstname || lastname != stm.user.lastname || email2 != stm.user.email2 || email != stm.user.email) {
 	    var p1 = jQuery.Deferred();
 	    promises.push(p1);
 	    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/" + stm.user.login,
 			  method: "PUT",
 			  dataType: "json",
 			  p: p1,
-			  data: "firstname="+firstname+"&lastname="+lastname+"&email2="+email,
+			  data: "firstname="+firstname+"&lastname="+lastname+"&email2="+email2+"&email="+email,
 			  error: function(jqXHR, error) {
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
@@ -710,7 +714,7 @@
 	}
 	
 	html.push('<tr><td style="height: 40px;"><b>login</b></td><td>'+stm.user.login+'</td></tr>\
-<tr><td style="height: 40px;"><b>email</b></td><td>'+stm.user.email+'</td></tr>\
+<tr><td style="height: 40px;"><b>email</b></td><td><input id="user_email" type="text" value="'+(stm.user.email || "")+'" placeholder="enter primary email"></td></tr>\
 <tr><td><b>secondary email</b></td><td><input id="user_email2" type="text" value="'+(stm.user.email2 || "")+'" placeholder="enter secondary email"></td></tr>\
 <tr><td><b>change password</b></td><td><input id="user_password" type="text" placeholder="enter new password" style="margin-bottom: 0px; margin-right: 25px;"></td></tr>\
 <tr><td><b>repeat password</b></td><td><input id="user_password_repeat" type="text" placeholder="repeat new password" style="margin-bottom: 0px; margin-right: 25px;"></td></tr>\
