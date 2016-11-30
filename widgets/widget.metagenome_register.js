@@ -137,13 +137,6 @@
       <input type="text" id="inputCountry" onchange="Retina.WidgetInstances.metagenome_register[1].checkChina(this);" placeholder="country" data-provide="typeahead" autocomplete="off" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline">If you allow geolocation, this is filled automatically. Otherwise start typing for autocompletion.</span>\
     </div>\
   </div>\
-  <div class="control-group">\
-    <div class="controls">\
-      <label class="checkbox">\
-        <input type="checkbox" checked id="inputMailinglist"> Add me to the MG-RAST mailing-list<span class="help-inline">(We encourage you to subscribe as the list is used to inform you about major changes to the MG-RAST service and announces MG-RAST workshops. Email originates from the MG-RAST team only and is quite rare.)</span>\
-      </label>\
-    </div>\
-  </div>\
   <div id="recap"></div>\
   <button type="button" class="btn pull-right" onclick="Retina.WidgetInstances.metagenome_register[1].performRegistration();" id="submit">register</button>\
 </form>\
