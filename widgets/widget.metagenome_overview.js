@@ -228,7 +228,7 @@
 		    continue;
 		}
 		for (var j=0; j<d.length; j++) {
-		    mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source=RefSeq&browser=1&filter_level='+taxa[h]+'&type=organism&browser=1&filter='+d[j][0].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
+		    mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source=RefSeq&browser=1&filter_level='+taxa[h]+'&type=organism&filter='+d[j][0].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
 		}
 	    }
 	} catch (error) {
@@ -245,7 +245,7 @@
 		    continue;
 		}
 		for (var j=0; j<d.length; j++) {
-		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source='+onto[h]+'&browser=1&type=ontology&filter_level=level1&browser=1&filter='+d[j][0].replace(/ /g, '\%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+ '");}'} );
+		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source='+onto[h]+'&type=ontology&filter_level=level1&browser=1&filter='+d[j][0].replace(/ /g, '\%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+ '");}'} );
 		}
 	    }
 	} catch (error) {
