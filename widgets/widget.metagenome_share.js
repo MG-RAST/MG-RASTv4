@@ -1122,9 +1122,9 @@
 		    var html = "";
 		    var added = "";
 		    if (response.added && response.added.length > 0) {
-			html =+ '<div class="alert alert-info">The following metagenomes had metadata added:<br>' + response.added.join('<br>')+'</div>';
+			html += '<div class="alert alert-info">The following metagenomes had metadata added:<br>' + response.added.join('<br>')+'</div>';
 		    }
-		    html =+ '<div class="alert alert-error">' + response.errors.join('<br>')+'</div>';
+		    html += '<div class="alert alert-error">' + response.errors.join('<br>')+'</div>';
 		    document.getElementById('uploadMetadataDiv'+this.divid).innerHTML = html;
 		}
 		else {
