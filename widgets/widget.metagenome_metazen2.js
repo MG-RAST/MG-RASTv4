@@ -219,27 +219,17 @@
 	    hashTable[tables[i].name] = tables[i].data;
 	    var tarray = [];
 	    var k = Retina.keys(tables[i].data);
-	    var unordered = 0;
 	    for (var h=0; h<k.length; h++) {
 		tables[i].data[k[h]].name = k[h];
 		if (! tables[i].data[k[h]].hasOwnProperty('order')) {
-		    tables[i].data[k[h]].order = 999;
-		    unordered++;
+		    continue;
 		}
 		if (k[h] == 'envo_release') {
-		    widget.envo_cell = tables[i].data[k[h]].order - 1;
+		    widget.envo_cell = tables[i].data[k[h]].order + 1;
 		}
 		tarray.push(tables[i].data[k[h]]);
 	    }
-	    if (tables[i].name == 'project') {
-		widget.envo_cell += unordered;
-	    }
 	    tarray.sort(Retina.propSort('order'));
-
-	    // set the order to the correct value for the unordered
-	    for (var h=0; h<tarray.length; h++) {
-		tarray[h].order = h;
-	    }
 	    
 	    var cols = [];
 	    var colheaders = [];
@@ -258,8 +248,7 @@
 	    thtml.push('<tr><th>&nbsp</th><th>'+colheaders.join('</th><th>')+'</th>');
 
 	    // additional misc params currently disabled
-	    
-	    // thtml.push('<th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeft=document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_metazen2[1].addMDField(\''+tables[i].name+'\',this.previousSibling.value);">add</button></div></th>');
+	    //thtml.push('<th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeft=document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_metazen2[1].addMDField(\''+tables[i].name+'\',this.previousSibling.value);">add</button></div></th>');
 	    
 	    thtml.push('</tr>');
 	    for (var h=0; h<25; h++) {
@@ -886,7 +875,11 @@
 	    // fill in project sheet
 	    var fields = Retina.keys(d.data);
 	    for (var i=0; i<fields.length; i++) {
-		widget.setCell('project', fields[i], d.data[fields[i]].value);
+		widget.setCell('project', fields[i], d.data[fields[i]].value, 0);
+		if (fields[i] == 'envo_version') {
+		    widget.currentENVOversion = d.data[fields[i]].value;
+		    widget.showENVOselect();
+		}
 	    }
 
 	    // iterate over the samples
@@ -928,6 +921,7 @@
 
     widget.setCell = function (sheet, field, value, targetrow) {
 	var widget = this;
+
 	// check if the sheet is visible
 	if (sheet.match(/^library/) || sheet.match(/^ep/)) {
 	    if (! widget.activeTabs[sheet]) {
@@ -944,6 +938,11 @@
 	
 	if (! widget.metadataTemplate[cat][subcat].hasOwnProperty(field)) {
 	    console.log('unknown field: '+field);
+	    return;
+	}
+
+	// check if this field is in the sheet
+	if (! widget.metadataTemplate[cat][subcat][field].hasOwnProperty('order')) {
 	    return;
 	}
 
@@ -1190,14 +1189,25 @@
     widget.getTemplateOrder = function () {
 	var widget = this;
 
+	widget.metadataTemplate.sample.sample.sample_size = widget.metadataTemplate.sample.sample.samp_size;
+	widget.metadataTemplate.library.metagenome.lib_construction = widget.metadataTemplate.library.metagenome.lib_const_meth;
+	widget.metadataTemplate.library.metatranscriptome.lib_construction = widget.metadataTemplate.library.metatranscriptome.lib_const_meth;
+	
+
 	var wb = jQuery.extend(true, {}, widget.excelWorkbook);
 	for (var h=1; h<wb.worksheets.length; h++) {
 	    var ws = wb.worksheets[h];
 	    var x1 = ws.name.split(/\s/)[0];
 	    var x2 = ws.name.substr(ws.name.indexOf(" ") > -1 ? ws.name.indexOf(" ") + 1 : 0);
+	    var order = 0;
 	    for (var i=0; i<ws.maxCol; i++) {
+		ws.data[0][i].value = ws.data[0][i].value.replace(/\s+/, "");
+		if (ws.data[0][i].value == "sample_id") {
+		    continue;
+		}
 		if (widget.metadataTemplate[x1][x2].hasOwnProperty(ws.data[0][i].value)) {
-		    widget.metadataTemplate[x1][x2][ws.data[0][i].value].order = i;
+		    widget.metadataTemplate[x1][x2][ws.data[0][i].value].order = order;
+		    order++;
     		}
 	    }
 	}
@@ -1223,8 +1233,16 @@
 	    problems.push({'tab': 'sample', 'message': 'must specify at least one sample'});
 	} else {
 	    if (widget.metadata.sample.hasOwnProperty('sample_name')) {
+
+		// make sure sample name is unique
+		var snames = {};
 		for (var h=0; h<widget.metadata.sample.sample_name.length; h++) {
 		    if (widget.metadata.sample.sample_name[h] !== undefined && widget.metadata.sample.sample_name[h].length) {
+			if (snames.hasOwnProperty(widget.metadata.sample.sample_name[h])) {
+			    problems.push({'tab': 'sample', 'row': h, 'message': 'duplicate sample name "'+widget.metadata.sample.sample_name[h]+'"'});
+			} else {
+			    snames[widget.metadata.sample.sample_name[h]] = true;
+			}
 			for (var i in widget.tables.sample) {
 			    if (widget.tables.sample.hasOwnProperty(i)) {
 				if (widget.tables.sample[i].required == "1" && ! (widget.metadata.sample.hasOwnProperty(i) && widget.metadata.sample[i].hasOwnProperty(h) && widget.metadata.sample[i][h].length)) {
@@ -1254,6 +1272,9 @@
 	    // environmental package and library
 	    if (k[i].match(/^ep/) || k[i].match(/^library/)) {
 		if (widget.metadata[k[i]].hasOwnProperty('sample_name')) {
+
+		    var fnames = {};
+		    var mgnames = {};
 		    for (var h=0; h<widget.metadata[k[i]].sample_name.length; h++) {
 			if (widget.metadata[k[i]].sample_name[h] !== undefined && widget.metadata[k[i]].sample_name[h].length) {
 			    if (sampleNames.hasOwnProperty(widget.metadata[k[i]].sample_name[h])) {
@@ -1267,6 +1288,26 @@
 			    }
 			    for (var j in widget.tables[k[i]]) {
 				if (widget.tables[k[i]].hasOwnProperty(j)) {
+
+				    // check uniqueness of filenames and metagenome names
+				    if (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h].length) {
+					if (j == "file_name") {
+					    if (fnames.hasOwnProperty(widget.metadata[k[i]][j][h])) {
+						problems.push({'tab': k[i], 'row': h, 'message': 'duplicate filename "'+widget.metadata[k[i]][j][h]+'"'});
+					    } else {
+						fnames[widget.metadata[k[i]][j][h]] = true;
+					    }
+					}
+
+					if (j == "metagenome_name") {
+					    if (mgnames.hasOwnProperty(widget.metadata[k[i]][j][h])) {
+						problems.push({'tab': k[i], 'row': h, 'message': 'duplicate metagenome name "'+widget.metadata[k[i]][j][h]+'"'});
+					    } else {
+						mgnames[widget.metadata[k[i]][j][h]] = true;
+					    }
+					}
+				    }
+				    
 				    if (widget.tables[k[i]][j].required == "1" && ! (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h].length)) {
 					
 					// auto fill investigation type
