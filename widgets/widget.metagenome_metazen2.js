@@ -282,7 +282,8 @@
 
 	    // check if there is an unhandled element
 	    if (widget.currentInputElement) {
-		widget.updateCell('none');
+		widget.updateCell('escape');
+		Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 	    }
 
 	    // get the column metadata
@@ -514,6 +515,7 @@
 			inp.value = val;
 			inp.addEventListener('keypress', function (event) {
 			    event = event || window.event;
+
 			    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 
 			    // escape
@@ -616,7 +618,7 @@
     // a cell has new data
     widget.updateCell = function (action) {
 	var widget = this;
-
+	
 	if (! widget.currentInputElement) {
 	    return;
 	}
@@ -632,6 +634,7 @@
 	if (p.nodeName !== 'TD') {
 	    p = p.parentNode;
 	}
+
 	var row = p.parentNode.rowIndex - 1;
 	
 	// perform validation
@@ -1120,7 +1123,7 @@
 		    } else if (dname.match(/^library-/)) {
 			cat = cat.replace(/^library-/, "");
 		    }
-    		    if (data[dname].hasOwnProperty(i) && widget.miscParams[cat].hasOwnProperty(i)) {
+    		    if (data[dname].hasOwnProperty(i) && widget.miscParams[cat] && widget.miscParams[cat].hasOwnProperty(i)) {
     			wb.setCell(h, wb.worksheets[h].maxCol, 0, i);
 			var vals = data[dname][i];
 			for (var j=2; j<(vals.length+2); j++) {

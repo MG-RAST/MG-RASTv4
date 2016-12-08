@@ -126,7 +126,7 @@
     <div class="controls">\
       <div class="input-prepend">\
         <span class="add-on">http://</span>\
-        <input type="text" id="inputURL" placeholder="URL" style="width: 238px;" onblur="Retina.WidgetInstances.metagenome_register[1].checkURL();">\
+        <input type="text" id="inputURL" placeholder="URL" style="width: 238px;">\
       </div>\
       <span class="help-inline" style="margin-left: -4px;" id="urlcheck">enter the homepage URL of your organization</span>\
     </div>\
