@@ -14,6 +14,8 @@
 
     widget.metadata = {};
 
+    widget.miscParams = {};
+
     widget.activeTabs = { "library-metagenome": true, "library-mimarks-survey": true, "library-metatranscriptome": true };
         
     widget.display = function (wparams) {
@@ -247,12 +249,12 @@
 	    thtml.push('<table class="excel" onclick="Retina.WidgetInstances.metagenome_metazen2[1].tableClicked(event,\''+tables[i].name+'\');">');
 	    thtml.push('<tr><th>&nbsp</th><th>'+colheaders.join('</th><th>')+'</th>');
 
-	    // additional misc params currently disabled
-	    //thtml.push('<th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeft=document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_metazen2[1].addMDField(\''+tables[i].name+'\',this.previousSibling.value);">add</button></div></th>');
+	    // misc params
+	    thtml.push('<th title="add a new column"><button class="btn btn-mini" onclick="jQuery(this).toggle();jQuery(this.nextSibling).toggle();document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeft=document.getElementById(\''+tables[i].name+'\').parentNode.scrollLeftMax;">+</button><div class="input-append" style="display: none; position: relative; top: 4px;"><input type="text" style="font-size: 12px; height: 12px; width: 100px;"><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_metazen2[1].addMDField(\''+tables[i].name+'\',this);">add</button></div></th>');
 	    
 	    thtml.push('</tr>');
 	    for (var h=0; h<25; h++) {
-		thtml.push('<tr><th></th><td class="editable viewtext">');
+		thtml.push('<tr><th>'+(h+1)+'</th><td class="editable viewtext">');
 		thtml.push(empty);
 		thtml.push('</td></tr>');
 	    }
@@ -793,10 +795,67 @@
     };
 
     // add a new misc param
-    widget.addMDField = function (tab, name) {
+    widget.addMDField = function (tab, button) {
 	var widget = this;
 
+	var name = button.previousSibling.value;
+	if (! name.length) {
+	    button.parentNode.previousSibling.click();
+	    return;
+	}
+
+	var group = tab;
+	var subgroup = tab;
+	if (group.match(/^ep-/)) {
+	    subgroup = group.replace(/^ep-/, "");
+	    group = "ep";
+	} else if (group.match(/^library-/)) {
+	    subgroup = group.replace(/^library-/, "");
+	    group = "library";
+	}
+
+	// check if this tab already has misc params
+	if (! widget.miscParams.hasOwnProperty(subgroup)) {
+	    widget.miscParams[subgroup] = {};
+	}
 	
+	// check if the misc params of this tab already have this field
+	if (widget.miscParams[subgroup].hasOwnProperty(name)) {
+	    alert("This tab already has a parameter called "+name);
+	    button.previousSibling.value = "";
+	    button.parentNode.previousSibling.click();
+	    return;
+	} else {
+	    widget.miscParams[subgroup][name] = true;
+	}
+
+	// check if the template already has this field
+	if (widget.metadataTemplate[group][subgroup].hasOwnProperty(name)) {
+	    button.previousSibling.value = "";
+	    button.parentNode.previousSibling.click();
+	    alert("This tab already has a parameter called "+name);
+	}
+
+	// we have a new field
+	// add it to the template
+	widget.metadataTemplate[group][subgroup]._maxOrder++;
+	widget.metadataTemplate[group][subgroup][name] = { "required": 0, "mixs": 0, "name": name, "type": "text", "unit": "", "aliases": [ "", "" ], "definition": "user custom  misc param", "order": widget.metadataTemplate[group][subgroup]._maxOrder };
+	widget.tables[tab][name] = jQuery.extend(true, {}, widget.metadataTemplate[group][subgroup][name]);
+	widget.tables[tab].order.push(name);
+	
+	// add the column to the sheet
+	var cell = button.parentNode.parentNode;
+	var row = cell.parentNode;
+	var table = row.parentNode;
+	var header = document.createElement('TH');
+	header.innerHTML = name;
+	table.rows[0].insertBefore(header, cell);
+	for (var i=1; i<table.rows.length; i++) {
+	    var c = table.rows[i].insertCell(cell.cellIndex);
+	    c.className = "editable viewtext";
+	}
+	button.previousSibling.value = "";
+	button.parentNode.previousSibling.click();
     };
 
     // load existing data from project
@@ -825,12 +884,26 @@
 			widget.fillSpreadSheet();
 		    },
 		    error: function (xhr) {
-			alert("could not retrieve metadata for this project");
+			var error = "";
+			try {
+			    error = ": "+JSON.parse(xhr.responseText).ERROR;
+			}
+			catch (e) {
+			    error = "";
+			}
+			alert("could not retrieve metadata for this project"+error);
 		    }
 		});
 	    },
 	    error: function (xhr) {
-		alert("could not retrieve data for this project");
+		var error = "";
+		try {
+		    error = ": "+JSON.parse(xhr.responseText).ERROR;
+		}
+		catch (e) {
+		    error = "";
+		}
+		alert("could not retrieve data for this project"+error);
 	    }
 	});
 		
@@ -882,6 +955,9 @@
 		}
 	    }
 
+	    // sort samples by sample name
+	    d.samples = d.samples.sort(function (a,b) { return a.data.hasOwnProperty('sample_name') ? a.data.sample_name.value.localeCompare(b.data.sample_name.value) : -1 });
+	    
 	    // iterate over the samples
 	    for (var h=0; h<d.samples.length; h++) {
 
@@ -935,10 +1011,14 @@
 	// check if we know about this field
 	var cat = sheet.indexOf('-') > -1 ? sheet.substr(0, sheet.indexOf('-')) : sheet;
 	var subcat = sheet.indexOf('-') > -1 ? sheet.substr(sheet.indexOf('-') + 1) : sheet;
+	var table = document.getElementById(sheet).firstChild;
 	
+	// this is a misc param, add the column
 	if (! widget.metadataTemplate[cat][subcat].hasOwnProperty(field)) {
-	    console.log('unknown field: '+field);
-	    return;
+	    var cell = table.rows[0].cells[table.rows[0].cells.length - 1];
+	    cell.firstChild.click();
+	    cell.childNodes[1].firstChild.value = field;
+	    cell.childNodes[1].childNodes[1].click();
 	}
 
 	// check if this field is in the sheet
@@ -963,8 +1043,6 @@
 	// find the table cell to enter the data into
 	var column = widget.metadataTemplate[cat][subcat][field].order + 1;
 	var row = targetrow || widget.metadata[sheet][field].length;
-	var table = document.getElementById(sheet).firstChild;
-
 
 	// there are not enough rows, append a new one
 	if (table.rows.length <= row + 1) {
@@ -972,7 +1050,7 @@
 	    for (var h=0; h<table.rows[0].cells.length - 1; h++) {
 		empty.push("");
 	    }
-	    empty = '<th></th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
+	    empty = '<th>'+table.rows.length+'</th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
 	    var r = document.createElement('tr');
 	    r.innerHTML = empty;
 	    table.appendChild(r);
@@ -1036,7 +1114,13 @@
     		    }
     		}
 		for (var i in data[dname]) {
-    		    if (data[dname].hasOwnProperty(i) && i.match(/^misc_param_\d+/)) {
+		    var cat = dname;
+		    if (dname.match(/^ep-/)) {
+			cat = cat.replace(/^ep-/, "");
+		    } else if (dname.match(/^library-/)) {
+			cat = cat.replace(/^library-/, "");
+		    }
+    		    if (data[dname].hasOwnProperty(i) && widget.miscParams[cat].hasOwnProperty(i)) {
     			wb.setCell(h, wb.worksheets[h].maxCol, 0, i);
 			var vals = data[dname][i];
 			for (var j=2; j<(vals.length+2); j++) {
@@ -1202,11 +1286,12 @@
 	    var order = 0;
 	    for (var i=0; i<ws.maxCol; i++) {
 		ws.data[0][i].value = ws.data[0][i].value.replace(/\s+/, "");
-		if (ws.data[0][i].value == "sample_id") {
+		if (ws.data[0][i].value == "sample_id" || ws.data[0][i].value == "misc_param") {
 		    continue;
 		}
 		if (widget.metadataTemplate[x1][x2].hasOwnProperty(ws.data[0][i].value)) {
 		    widget.metadataTemplate[x1][x2][ws.data[0][i].value].order = order;
+		    widget.metadataTemplate[x1][x2]._maxOrder = order;
 		    order++;
     		}
 	    }
