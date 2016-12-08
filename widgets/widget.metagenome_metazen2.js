@@ -515,7 +515,7 @@
 			inp.value = val;
 			inp.addEventListener('keypress', function (event) {
 			    event = event || window.event;
-			    console.log(event.keyCode);
+
 			    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 
 			    // escape
