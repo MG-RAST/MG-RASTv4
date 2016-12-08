@@ -515,6 +515,7 @@
 			inp.value = val;
 			inp.addEventListener('keypress', function (event) {
 			    event = event || window.event;
+			    console.log(event.keyCode);
 			    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 
 			    // escape
@@ -633,6 +634,7 @@
 	if (p.nodeName !== 'TD') {
 	    p = p.parentNode;
 	}
+
 	var row = p.parentNode.rowIndex - 1;
 	
 	// perform validation
@@ -1121,7 +1123,7 @@
 		    } else if (dname.match(/^library-/)) {
 			cat = cat.replace(/^library-/, "");
 		    }
-    		    if (data[dname].hasOwnProperty(i) && widget.miscParams[cat].hasOwnProperty(i)) {
+    		    if (data[dname].hasOwnProperty(i) && widget.miscParams[cat] && widget.miscParams[cat].hasOwnProperty(i)) {
     			wb.setCell(h, wb.worksheets[h].maxCol, 0, i);
 			var vals = data[dname][i];
 			for (var j=2; j<(vals.length+2); j++) {
