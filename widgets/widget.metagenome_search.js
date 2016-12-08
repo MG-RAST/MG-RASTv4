@@ -393,7 +393,7 @@
 	    document.getElementById('result_text').innerHTML = "";
 	    return '<div class="alert alert-warning" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">Your search returned no results.</div>';
 	} else {
-	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count.formatString()+" results. Showing "+showing+" <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].downloadResults()' style='position: relative; bottom: 3px; margin-left: 10px;'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download metadata</button>";
+	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count.formatString()+" results. Showing "+showing+" <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].downloadResults()' style='position: relative; bottom: 3px; margin-left: 10px;'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download search results</button>";
 	}
 
 	var html = [];
