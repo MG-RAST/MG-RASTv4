@@ -278,7 +278,6 @@
 	    	"organization": document.getElementById('inputOrganization').value,
 	    	"lru": document.getElementById('inputURL').value,
 	    	"country": document.getElementById('inputCountry').value,
-	    	"mailinglist": document.getElementById('inputMailinglist').checked,
 		"response": grecaptcha.getResponse()
 	    }, function (result) {
 		if (result.hasOwnProperty('ERROR')) {

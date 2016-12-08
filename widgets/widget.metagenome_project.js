@@ -141,7 +141,8 @@
 		target: document.getElementById('metagenome_table'),
 		rows_per_page: 10,
 		filter_autodetect: true,
-		sort_autodetect: true,
+		sort_autodetect: false,
+		sorttype: { 2: "number", 3: "number" },
 		synchronous: true,
 		sort: "name",
 		show_export: true,
@@ -188,20 +189,15 @@
 	    // create the job table
 	    var columns = [ "name", "pi", "status" ];
 	    
-	    var table_filter = { 0: { "type": "text" },
-				 1: { "type": "text" },
-				 2: { "type": "text" } };
 	    if (! widget.hasOwnProperty('table')) {
 		widget.table = Retina.Renderer.create("table", {
 		    target: document.getElementById('project_table'),
 		    rows_per_page: 20,
 		    filter_autodetect: false,
-		    filter: table_filter,
 		    sort_autodetect: true,
 		    synchronous: false,
-		    sort: "name",
 		    query_type: "equal",
-		    default_sort: "name",
+		    disable_sort: { 0: true, 1: true, 2: true},
 		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_project[1].tableManipulation,
 		    navigation_url: RetinaConfig['mgrast_api'] + "/project",

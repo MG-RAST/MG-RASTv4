@@ -2231,7 +2231,15 @@
 								    }
 								},
 								error: function(jqXHR, error) {
-								    Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, true);
+								    var errorMsg = "server error";
+								    try {
+									errorMsg = JSON.parse(jqXHR.responseText).ERROR;
+								    }
+								    catch (e) {
+									errorMsg = "server error";
+								    }
+								    errorMsq = errorMsg.replace(/id \d+\.\d/, "job");
+								    Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, errorMsg);
 								},
 								complete: function (jqXHR) {
 								    Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
@@ -2337,7 +2345,17 @@
 				 }
 			     },
 			     error: function(jqXHR, error) {
-				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, true);
+				 console.log('check');
+				 console.log(jqXHR);
+				 var errorMsg = "server error";
+				 try {
+				     errorMsg = JSON.parse(jqXHR.responseText).ERROR;
+				 }
+				 catch (e) {
+				     errorMsg = "server error";
+				 }
+				 errorMsq = errorMsg.replace(/id \d+\.\d/, "job");
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, errorMsg);
 			     },
 			     complete: function () {
 				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
@@ -2414,7 +2432,7 @@
 	var bar = document.getElementById('progressbar'+id);
 	if (bar) {
 	    if (error) {
-		document.getElementById('progress'+id).innerHTML = "could not load profile - server error.";
+		document.getElementById('progress'+id).innerHTML = "could not load profile - "+error;
 		bar.setAttribute('class', 'bar bar-danger');
 	    } else {
 		document.getElementById('progress'+id).innerHTML += " - complete.";
