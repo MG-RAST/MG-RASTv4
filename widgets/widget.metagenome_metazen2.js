@@ -282,7 +282,8 @@
 
 	    // check if there is an unhandled element
 	    if (widget.currentInputElement) {
-		widget.updateCell('none');
+		widget.updateCell('escape');
+		Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 	    }
 
 	    // get the column metadata
@@ -616,7 +617,7 @@
     // a cell has new data
     widget.updateCell = function (action) {
 	var widget = this;
-
+	
 	if (! widget.currentInputElement) {
 	    return;
 	}
