@@ -917,12 +917,66 @@
 	zip.loadAsync(file).then(function(zip) {
 	    xlsx(zip).then(function (wb) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-
+		widget.clearSpreadSheet();
 		widget.loadedData = wb;
 		widget.fillSpreadSheet(true);
 	    });
 	});
 	
+    };
+
+    // clear the entire spreadsheet
+    widget.clearSpreadSheet = function () {
+	var widget = this;
+
+	widget.metadata = {};
+	
+	var tables = [];
+	tables.push( { "name": "project", "data": widget.metadataTemplate.project.project } );
+	tables.push( { "name": "sample", "data": widget.metadataTemplate.sample.sample } );
+	tables.push( { "name": "library-metagenome", "data": widget.metadataTemplate.library.metagenome } );
+	tables.push( { "name": "library-mimarks-survey", "data": widget.metadataTemplate.library["mimarks-survey"] } );
+	tables.push( { "name": "library-metatranscriptome", "data": widget.metadataTemplate.library.metatranscriptome } );
+	for (var i=0; i<widget.eps.length; i++) {
+	    tables.push( { "name": "ep-"+widget.eps[i], "data": widget.metadataTemplate.ep[widget.eps[i]] } );
+	}
+	widget.tables = tables;
+
+	for (var i=0; i<tables.length; i++) {
+	    var sn = tables[i].name.replace(/\s/, "-").replace(/\|/, "-");
+	    var table = document.getElementById(sn).firstChild;
+	    for (var h=1; h<table.rows.length; h++) {
+		for (var j=1; j<table.rows[h].cells.length; j++) {
+		    table.rows[h].cells[j].innerHTML = "";
+		}
+	    }
+	}
+
+	var hashTable = {}
+	for (var i=0; i<tables.length; i++) {
+	    hashTable[tables[i].name] = tables[i].data;
+	    var tarray = [];
+	    var k = Retina.keys(tables[i].data);
+	    for (var h=0; h<k.length; h++) {
+		tables[i].data[k[h]].name = k[h];
+		if (! tables[i].data[k[h]].hasOwnProperty('order')) {
+		    continue;
+		}
+		if (k[h] == 'envo_release') {
+		    widget.envo_cell = tables[i].data[k[h]].order + 1;
+		}
+		tarray.push(tables[i].data[k[h]]);
+	    }
+	    tarray.sort(Retina.propSort('order'));
+	    
+	    var cols = [];
+	    var colheaders = [];
+	    for (var h=0; h<tarray.length; h++) {
+		cols.push(tarray[h].name);
+	    }
+	    hashTable[tables[i].name].order = cols;
+	}
+	widget.tables = hashTable;
     };
 
 
@@ -964,7 +1018,7 @@
 		    for (var j=2; j<ws.maxRow; j++) {
 			if (ws.data[j][h] != undefined) {
 			    var val = ws.data[j][h].value;
-			    widget.setCell(sheet, col, val, sheet == "project" ? 1 : undefined);
+			    widget.setCell(sheet, col, val, sheet == "project" ? 0 : undefined);
 			}
 		    }
 		}
@@ -1350,7 +1404,7 @@
 	// check mandatory project fields
 	for (var i in widget.tables.project) {
 	    if (widget.tables.project.hasOwnProperty(i)) {
-		if (widget.tables.project[i].required == "1" && ! (widget.metadata.project.hasOwnProperty(i) && widget.metadata.project[i][0].length)) {
+		if (widget.tables.project[i].required == "1" && ! widget.metadata.project[i][0].length) {
 		    problems.push({'tab': 'project', 'message': 'missing mandatory field "'+i+'"'});
 		}
 	    }
@@ -1374,13 +1428,13 @@
 			}
 			for (var i in widget.tables.sample) {
 			    if (widget.tables.sample.hasOwnProperty(i)) {
-				if (widget.tables.sample[i].required == "1" && ! (widget.metadata.sample.hasOwnProperty(i) && widget.metadata.sample[i].hasOwnProperty(h) && widget.metadata.sample[i][h].length)) {
+				if (widget.tables.sample[i].required == "1" && ! (widget.metadata.sample.hasOwnProperty(i) && widget.metadata.sample[i].hasOwnProperty(h) && widget.metadata.sample[i][h] != undefined)) {
 				    problems.push({'tab': 'sample', 'row': h, 'message': 'missing mandatory field "'+i+'"'});
 				}
 			    }
 			}
 			sampleNames[widget.metadata.sample.sample_name[h]] = { "lib": null, "ep": null };
-			if (widget.metadata.sample.hasOwnProperty('env_package') && widget.metadata.sample.env_package.length && widget.metadata.sample.env_package.hasOwnProperty(h) && widget.metadata.sample.env_package[h].length) {
+			if (widget.metadata.sample.hasOwnProperty('env_package') && widget.metadata.sample.env_package.length && widget.metadata.sample.env_package.hasOwnProperty(h) && widget.metadata.sample.env_package[h] != undefined) {
 			    sampleNames[widget.metadata.sample.sample_name[h]].ep = widget.metadata.sample.env_package[h];
 			    if (! widget.metadata.hasOwnProperty("ep-"+widget.metadata.sample.env_package[h])) {
 				problems.push({'tab': 'sample', 'row': h, 'message': 'environmental package sheet "'+widget.metadata.sample.env_package[h]+'" referenced but not filled out'});
@@ -1419,7 +1473,7 @@
 				if (widget.tables[k[i]].hasOwnProperty(j)) {
 
 				    // check uniqueness of filenames and metagenome names
-				    if (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h].length) {
+				    if (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h] != undefined) {
 					if (j == "file_name") {
 					    if (fnames.hasOwnProperty(widget.metadata[k[i]][j][h])) {
 						problems.push({'tab': k[i], 'row': h, 'message': 'duplicate filename "'+widget.metadata[k[i]][j][h]+'"'});
@@ -1437,7 +1491,7 @@
 					}
 				    }
 				    
-				    if (widget.tables[k[i]][j].required == "1" && ! (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h].length)) {
+				    if (widget.tables[k[i]][j].required == "1" && ! (widget.metadata[k[i]].hasOwnProperty(j) && widget.metadata[k[i]][j].hasOwnProperty(h) && widget.metadata[k[i]][j][h] != undefined)) {
 					
 					// auto fill investigation type
 					if (k[i].match(/^library/) && j=='investigation_type') {
