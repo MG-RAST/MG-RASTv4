@@ -504,10 +504,10 @@
 			    data: stm.DataStore[widget.currField.field],
 			    width: 0,
 			    height: 0,
-			    buttonText: "set",
+			    showGoButton: false,
 			    showCollapseAllButton: false,
 			    showExpandAllButton: false,
-			    callback: widget.ontologySet }).render();
+			}).render();
 			input.setAttribute('class', '');
 			cell.setAttribute('style', '');
 			var inp = document.getElementById('tree_search_input_1');
@@ -605,14 +605,6 @@
 		jQuery(cell).toggleClass('viewtext', false);
 	    }
 	}
-    };
-
-    widget.ontologySet = function (node) {
-	var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-
-	widget.currentInputElement.value = node.label;
-	Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
-	widget.updateCell('tab');
     };
 
     // a cell has new data
