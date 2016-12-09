@@ -162,6 +162,9 @@
 	    html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\');" id="projectUploadButton" style="margin-left: 20px;"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button>');
 	}
 	html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'excel\');" style="margin-left: 20px;"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;">download in Excel format</button>');
+
+	html.push('<button class="btn" onclick="this.nextSibling.click();" style="margin-left: 20px;"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">load from Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
+	
 	html.push('</div>');
 	
 	html.push('<div style="clear: both;"></div>');
@@ -904,41 +907,81 @@
 		
     };
 
-    widget.fillSpreadSheet = function (excel) {
+    // load existing data from an Excel file
+    widget.loadExcelData = function (event) {
 	var widget = this;
 
-	// get the metagenome ids
-	var metagenomes = [];
-	for (var i=0; i<widget.projectData.metagenomes.length; i++) {
-	    var mgid = widget.projectData.metagenomes[i].metagenome_id;
-	    if (! mgid.match(/^mgm/)) {
-		mgid = "mgm"+mgid;
-	    }
-	    metagenomes.push(mgid);
-	}
-	widget.metagenomes = metagenomes;
+	event = event || window.event;
+	var file = event.target.files[0];
+	var zip = new JSZip();
+	zip.loadAsync(file).then(function(zip) {
+	    xlsx(zip).then(function (wb) {
+		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+
+		widget.loadedData = wb;
+		widget.fillSpreadSheet(true);
+	    });
+	});
 	
+    };
+
+
+    // fill the spreadsheet with data loaded from an Excel sheet or from a project
+    widget.fillSpreadSheet = function (excel) {
+	var widget = this;
+	
+	// uncheck all eps and libraries
+	var checkboxes = ['library-metagenome','library-mimarks-survey','library-metatranscriptome'];
+	for (var i=0;i<widget.eps.length; i++) {
+	    checkboxes.push('ep-'+widget.eps[i]);
+	}
+	for (var i=0; i<checkboxes.length; i++) {
+	    var sheet = checkboxes[i];
+	    if (widget.activeTabs[sheet]) {
+		widget.activeTabs[sheet] = false;
+		document.getElementById(sheet+"Checkbox").removeAttribute('checked');
+		var name = sheet.replace(/\|/g, " ").replace(/\s/g, "-");
+		jQuery('#'+name+"-li").toggle();
+	    }
+	}
+	
+	// data shortcut
+	var d = widget.loadedData;
+
 	if (excel) {
+	    var ignoreCols = {"sample_id": true, "metagenome_id": true, "project_id": true };
+	    for (var i=0; i<d.worksheets.length; i++) {
+		if (d.worksheets[i].name == "README") {
+		    continue;
+		}
+		var ws = d.worksheets[i];
+		var sheet = ws.name.replace(/\s/, "-");
+		for (var h=0; h<ws.maxCol; h++) {
+		    var col = ws.data[0][h].value;
+		    if (ignoreCols[col]) {
+			continue;
+		    }
+		    for (var j=2; j<ws.maxRow; j++) {
+			if (ws.data[j][h] != undefined) {
+			    var val = ws.data[j][h].value;
+			    widget.setCell(sheet, col, val, sheet == "project" ? 1 : undefined);
+			}
+		    }
+		}
+	    }
 	    
 	} else {
 
-	    // uncheck all eps and libraries
-	    var checkboxes = ['library-metagenome','library-mimarks-survey','library-metatranscriptome'];
-	    for (var i=0;i<widget.eps.length; i++) {
-		checkboxes.push('ep-'+widget.eps[i]);
-	    }
-	    for (var i=0; i<checkboxes.length; i++) {
-		var sheet = checkboxes[i];
-		if (widget.activeTabs[sheet]) {
-		    widget.activeTabs[sheet] = false;
-		    document.getElementById(sheet+"Checkbox").removeAttribute('checked');
-		    var name = sheet.replace(/\|/g, " ").replace(/\s/g, "-");
-		    jQuery('#'+name+"-li").toggle();
+	    // get the metagenome ids
+	    var metagenomes = [];
+	    for (var i=0; i<widget.projectData.metagenomes.length; i++) {
+		var mgid = widget.projectData.metagenomes[i].metagenome_id;
+		if (! mgid.match(/^mgm/)) {
+		    mgid = "mgm"+mgid;
 		}
+		metagenomes.push(mgid);
 	    }
-
-	    // data shortcut
-	    var d = widget.loadedData;
+	    widget.metagenomes = metagenomes;
 	    
 	    // fill in project sheet
 	    var fields = Retina.keys(d.data);
@@ -949,13 +992,13 @@
 		    widget.showENVOselect();
 		}
 	    }
-
+	    
 	    // sort samples by sample name
 	    d.samples = d.samples.sort(function (a,b) { return a.data.hasOwnProperty('sample_name') ? a.data.sample_name.value.localeCompare(b.data.sample_name.value) : -1 });
 	    
 	    // iterate over the samples
 	    for (var h=0; h<d.samples.length; h++) {
-
+		
 		// fill in the sample sheet
 		var s = d.samples[h];
 		widget.setCell('sample', 'sample_id', s.id);
@@ -966,7 +1009,7 @@
 		    }
 		    widget.setCell('sample', fields[i], s.data[fields[i]].value);
 		}
-
+		
 		// fill in the env package
 		var e = s.envPackage;
 		var sn = "ep-"+e.type;
@@ -974,10 +1017,10 @@
 		for (var i=0; i<fields.length; i++) {
 		    widget.setCell(sn, fields[i], e.data[fields[i]].value);
 		}
-
+		
 		// iterate over the libraries
 		for (var j=0; j<s.libraries.length; j++) {
-
+		    
 		    // fill in the library sheet
 		    var l = s.libraries[j];		    
 		    sn = "library-"+l.type;
@@ -989,9 +1032,15 @@
 	    }
 	}
     };
-
+    
     widget.setCell = function (sheet, field, value, targetrow) {
 	var widget = this;
+
+	// check if we know this sheet
+	if (! document.getElementById(sheet)) {
+	    console.log('unknown sheet: '+sheet);
+	    return;
+	}
 
 	// check if the sheet is visible
 	if (sheet.match(/^library/) || sheet.match(/^ep/)) {
