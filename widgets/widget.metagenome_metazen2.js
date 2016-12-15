@@ -930,6 +930,15 @@
 	var widget = this;
 
 	widget.metadata = {};
+
+	var s = document.getElementById('sample').firstChild;
+	for (var i=0; i<s.rows.length; i++) {
+	    if (i==0) {
+		s.rows[i].cells[0].innerHTML = "";
+	    } else {
+		s.rows[i].cells[0].innerHTML = i;
+	    }
+	}
 	
 	var tables = [];
 	tables.push( { "name": "project", "data": widget.metadataTemplate.project.project } );
@@ -1051,11 +1060,19 @@
 	    d.samples = d.samples.sort(function (a,b) { return a.data.hasOwnProperty('sample_name') ? a.data.sample_name.value.localeCompare(b.data.sample_name.value) : -1 });
 	    
 	    // iterate over the samples
+	    document.getElementById('sample').firstChild.rows[0].cells[0].innerHTML = "ID";
 	    for (var h=0; h<d.samples.length; h++) {
 		
 		// fill in the sample sheet
 		var s = d.samples[h];
-		widget.setCell('sample', 'sample_id', s.id);
+		document.getElementById('sample').firstChild.rows[h + 1].cells[0].innerHTML = s.id;
+		if (! widget.metadata.hasOwnProperty('sample')) {
+		    widget.metadata.sample = {};
+		}
+		if (! widget.metadata.sample.hasOwnProperty('id')) {
+		    widget.metadata.sample.id = [];
+		}
+		widget.metadata.sample.id.push(s.id);
 		fields = Retina.keys(s.data);
 		for (var i=0; i<fields.length; i++) {
 		    if (fields[i] == "sample_id") {

@@ -1640,14 +1640,29 @@
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 
 	var matrix = jQuery.extend(true, {}, data ? data : stm.DataStore.dataContainer[widget.selectedContainer].matrix);
-	var tableHeaders = [ c.parameters.displayLevel ];
+	var l = c.hierarchy[Retina.keys(c.hierarchy)[0]].length;
+	var tableHeaders = [];
+	for (var i=0; i<l; i++) {
+	    tableHeaders.push(document.getElementById('displayLevelSelect').options[i].value);
+	}
 	for (var i=0; i<matrix.cols.length; i++) {
 	    tableHeaders.push(matrix.cols[i]);
 	}
 
 	var tableData = [];
 	for (var i=0; i<matrix.rows.length; i++) {
-	    var row = [ forExport ? matrix.rows[i] : '<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+matrix.rows[i]+'\'})">'+matrix.rows[i]+'</a>' ];
+	    var row = [];
+	    for (var h=0; h<l; h++) {
+		if (forExport) {
+		    row.push(c.hierarchy[matrix.rows[i]][h]);
+		} else {
+		    if (h == l-1 && h < document.getElementById('displayLevelSelect').options.length - 1) {
+			row.push('<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+c.hierarchy[matrix.rows[i]][h]+'\'})">'+c.hierarchy[matrix.rows[i]][h]+'</a>');
+		    } else {
+			row.push(c.hierarchy[matrix.rows[i]][h]);
+		    }
+		}
+	    }
 	    for (var h=0; h<matrix.data[i].length; h++) {
 		row.push(matrix.data[i][h]);
 	    }
