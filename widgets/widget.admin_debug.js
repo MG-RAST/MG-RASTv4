@@ -29,7 +29,7 @@
 
 	var html = "";
 	
-	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>ID Finder</h4><div><div class='input-append'><input type='text' placeholder='enter ID' id='idFinderID'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].idFinder();'>find</button></div><div id='idFinderResult'></div></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div>";
+	html += "<h4>User Table</h4><div id='usertable'><img src='Retina/images/waiting.gif'></div><h4>ID Finder</h4><div><div class='input-append'><input type='text' placeholder='enter ID' id='idFinderID'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].idFinder();'>find</button><input type='button' value='deobfuscate' class='btn' onclick='document.getElementById(\"idFinderID\").value=Retina.idmap(document.getElementById(\"idFinderID\").value);'></div><div id='idFinderResult'></div></div><h4>Jobs in the Queue</h4><div id='queueMenu'></div><div id='actionResult'></div><div id='queueTable'><img src='Retina/images/waiting.gif'></div><div id='jobDetails'></div>";
 
 //	html += "<div><h4>move metagenomes between projects</h4><table><tr><th style='padding-right: 55px;'>Source Project ID</th><td><div class='input-append'><input type='text' id='projectSel'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].showProject(document.getElementById(\"projectSel\").value);'>select</button></div></td></tr></table></div><div id='projectSpace'></div>";
 
