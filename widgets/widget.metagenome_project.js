@@ -50,7 +50,7 @@
 		jQuery.ajax({
 		    dataType: "json",
 		    headers: stm.authHeader, 
-		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=summary&nocache=1',
+		    url: RetinaConfig.mgrast_api+'/project/'+widget.id+'?verbosity=full&nocache=1',
 		    success: function (data) {
 			if (! stm.DataStore.hasOwnProperty('project')) {
 			    stm.DataStore.project = {};
@@ -67,8 +67,20 @@
 	    var project = stm.DataStore.project[widget.id];
 	    var id_no_prefix = widget.id.substr(3);
 	    var html = "";
-	    if (project.status == 'private') {
-		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='edit / share project'><i class='icon icon-share'></i> edit / share project</button>Private Study: "+project.name+"</h3>";
+	    var canEdit = false;
+	    if (stm.user && project.permissions) {
+		for (var i=0; i<project.permissions.project.length; i++) {
+		    if (project.permissions.project[i][4] == "user:"+stm.user.login) {
+			canEdit = true;
+			break;
+		    }
+		}
+		if (stm.user.admin) {
+		    canEdit = true;
+		}
+	    }
+	    if (project.status == 'private' || canEdit) {
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='edit / share project'><i class='icon icon-share'></i> edit / share project</button>"+(project.status == 'public' ? "" : "Private Study: ")+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
