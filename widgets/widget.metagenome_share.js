@@ -903,6 +903,9 @@
 		canEdit = true;
 		break;
 	    }
+	    if (stm.user.admin) {
+		canEdit = true;
+	    }
 	}
 
 	if (canEdit) {
