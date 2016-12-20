@@ -186,7 +186,8 @@
 	var html = "";
 
 	html += "<div style='float: left;'><img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Krona</div></div>";
-	html += "<div style='float: left;'><img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>KEGG mapper</div></div>";
+	html += "<div style='float: left;'><img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>KEGGmap</div></div>";
+	html += "<div style='float: left;'><img src='images/cytoscape_logo.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"cytoscape\");' title='Cytoscape'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Cytoscape</div></div>";
 
 	container.innerHTML = html;
     };
@@ -3272,8 +3273,9 @@
 	var widget = this;
 
 	var info = { "krona": { "authors": "Ondov BD, Bergman NH, and Phillippy AM", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/21961884" },
-		     "kegg": { "authors": "Tobias Paczian" } };
-
+		     "kegg": { "authors": "Tobias Paczian" },
+		     "cytoscape": { "authors": "Franz M, Lopes CT, Huck G, Dong Y, Sumer O, Bader GD", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/26415722" } };
+	
 	var d = widget["container2"+which]();
 	if (! d) {
 	    return;
@@ -3287,6 +3289,61 @@
 	w.onload = function () {
 	    w.initWebApp(data);
 	};
+    };
+
+    widget.container2cytoscape = function () {
+	var widget = this;
+
+	// get the data matrix
+	var c = jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer]);
+	var l = c.hierarchy[Retina.keys(c.hierarchy)[0]].length;
+
+	var data = [];
+	var colors = GooglePalette(l);
+	var elements = [ { "data": { "id": 0, "weight": 1, "name": "root", "color": "black" } }];
+	var idcounter = 1;
+	var total = 0;
+	for (var h=0; h<l; h++) {
+	    data[h] = {};
+	    for (var i=0; i<c.matrix.rows.length; i++) {
+		var name = c.hierarchy[c.matrix.rows[i]][h].replace(/'/g, "").replace(/"/g, "");
+		if (! data[h].hasOwnProperty(name)) {
+		    data[h][name] = { "data": { "id": idcounter, "weight": 0, "origWeight": 0, "name": name, "color": colors[h] } };
+		    if (h>0) {
+			data[h][name].data.parentName = c.hierarchy[c.matrix.rows[i]][h -1];
+		    }
+		    idcounter++;
+		    if (h==0) {
+			elements.push({ "data": { "id": idcounter, "source": 0, "target": idcounter - 1, "color": "black" }});
+			idcounter++;
+		    }
+		}
+		data[h][name].data.weight += c.matrix.data[i][0];
+		data[h][name].data.origWeight += c.matrix.data[i][0];
+		if (h==0) {
+		    total += c.matrix.data[i][0];
+		}
+		if (h>0) {
+		    elements.push({ "data": { "id": idcounter, "source": data[h - 1][c.hierarchy[c.matrix.rows[i]][h -1]].data.id, "target": data[h][name].data.id, "color": "black" }});
+		    idcounter++;
+		}
+	    }
+	}
+
+	for (var h=0; h<l; h++) {
+	    var nodes = Retina.keys(data[h]);
+	    for (var i=0; i<nodes.length; i++) {
+		var factor = 100 / total;
+		if (h>0) {
+		    factor = 100 / data[h - 1][data[h][nodes[i]].data.parentName].data.origWeight;
+		}
+		data[h][nodes[i]].data.weight = data[h][nodes[i]].data.weight * factor;
+		data[h][nodes[i]].data.weight = data[h][nodes[i]].data.weight < 10 ? 10 : data[h][nodes[i]].data.weight;
+		elements.push(data[h][nodes[i]]);
+	    }
+	}
+
+	return { "elements": elements, "title": widget.selectedContainer };
     };
 
     widget.container2kegg = function () {
