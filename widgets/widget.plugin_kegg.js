@@ -20,7 +20,7 @@
 
 	var content = widget.content = wparams ? wparams.main : widget.content;
 
-	document.getElementById('pageTitle').innerHTML = '<div style="float: left; color: white; font-weight: lighter; margin-right: 10px;">plugin-hub | </div><img src="images/kegg.png" style="height: 50px; position: relative; bottom: 9px;"><span style="position: relative; bottom: 9px; margin-left: 10px;">KEGG Mapper</span><div style="float: right; font-size: 12px; font-weight: normal; position: relative; top: 14px;">by '+stm.DataStore.info.authors+(stm.DataStore.info.publication ? ' - <a href="'+stm.DataStore.info.publication+'" target=_blank>citation</a>' : '')+'</div>';
+	document.getElementById('pageTitle').innerHTML = '<div style="float: left; color: white; font-weight: lighter; margin-right: 10px;">plugin-hub | </div><img src="images/kegg.png" style="height: 50px; position: relative; bottom: 9px;"><span style="position: relative; bottom: 9px; margin-left: 10px;">KEGG Mapper</span><div style="float: right; font-size: 12px; font-weight: normal; position: relative; top: 14px; margin-left: 10px;">by '+stm.DataStore.info.authors+(stm.DataStore.info.publication ? ' - <a href="'+stm.DataStore.info.publication+'" target=_blank>citation</a>' : '')+'</div>';
 
 	if (! stm.DataStore.hasOwnProperty('keggdata')) {
 	    content.innerHTML = "<img src='Retina/images/waiting.gif' style='width: 24px;'> loading kegg data...";
