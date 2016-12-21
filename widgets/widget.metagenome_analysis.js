@@ -187,7 +187,7 @@
 
 	html += "<div style='float: left;'><img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Krona</div></div>";
 	html += "<div style='float: left;'><img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>KEGGmap</div></div>";
-	html += "<div style='float: left;'><img src='images/cytoscape_logo.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"cytoscape\");' title='Cytoscape'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Cytoscape</div></div>";
+//	html += "<div style='float: left;'><img src='images/cytoscape_logo.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"cytoscape\");' title='Cytoscape'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Cytoscape</div></div>";
 
 	container.innerHTML = html;
     };
@@ -1015,7 +1015,9 @@
 	var ontLevels = widget.ontLevels;
 
 	// container name
-	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' id='uploadButton' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload container to myData'><img src='Retina/images/cloud-upload.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button></h4>" ];
+	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' id='uploadButton' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload container to myData'><img src='Retina/images/cloud-upload.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button>" ];
+	//html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>"; );
+	html.push("</h4>");
 
 	// cutoffs
 	
@@ -1229,7 +1231,13 @@
 
     /*
       DATA CONTAINER CONVERSION METHODS
-     */
+    */
+
+    widget.mergeContainer = function (container) {
+	var widget = this;
+
+	container = container || stm.DataStore.dataContainer[widget.selectedContainer];
+    };
 
     widget.container2matrix = function (container, md5only) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
