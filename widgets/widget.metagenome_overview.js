@@ -53,7 +53,7 @@
 		jQuery.getJSON(RetinaConfig.mgrast_api + '/server/MG-RAST').then(function(d) {
 		    var widget = Retina.WidgetInstances.metagenome_overview[1];
 		    widget.driseeMGRAST = { "min": d.driseemin, "max": d.driseemax, "avg": d.driseeavg, "stdv": d.driseestdv };
-		    var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
+		    var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full&nocache=1';
 		    jQuery.ajax( { dataType: "json",
 				   url: url,
 				   headers: stm.authHeader,
