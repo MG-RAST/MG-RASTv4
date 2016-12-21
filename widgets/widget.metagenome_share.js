@@ -1080,11 +1080,11 @@
 	
 	var html = [];
 	
-	html.push('<h4>export existing metadata</h4><p>Download the full metadata for this project in JSON or Excel format.</p><div style="text-align: center;"><button id="exportMetadataButton'+found+'" style="margin-right: 20px;" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\');">export metadata as JSON</button><button id="exportMetadataExcelButton'+found+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\', true);">export metadata as Excel</button></div><div style="text-align: center;" id="exportMetadataDiv'+found+'"></div>');
+	//html.push('<h4>export existing metadata</h4><p>Download the full metadata for this project in JSON or Excel format.</p><div style="text-align: center;"><button id="exportMetadataButton'+found+'" style="margin-right: 20px;" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\');">export metadata as JSON</button><button id="exportMetadataExcelButton'+found+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\', true);">export metadata as Excel</button></div><div style="text-align: center;" id="exportMetadataDiv'+found+'"></div>');
 
-	html.push('<br><h4>MetaZen</h4><p>MetaZen can assist you in creating your metadata spreadsheet.</p><div style="text-align: center;"><button class="btn" onclick="window.open(\'mgmain.html?mgpage=metazen2&project='+project.id+'\');">open MetaZen</button></div>');
-	html.push('<br><h4>upload new / updated metadata</h4><p>Upload an Excel metadata spreadsheet with new or updated metadata.</p><div style="text-align: center;"><button class="btn" id="uploadMetadataButton'+found+'" onclick="document.getElementById(\'uploadMetadata'+found+'\').click();">upload new metadata</button></div><div id="uploadMetadataDiv'+found+'" style="text-align: center;"></div>');
-	html.push('<input type="file" id="uploadMetadata'+found+'" style="display: none;" onchange="Retina.WidgetInstances.metagenome_share[1].uploadMetadata(event)">');
+	html.push('<br><h4>MetaZen</h4><p>MetaZen is our metadata editor that supports importing, exporting and editing of metadata.</p><p>Click the button below to open this project in the MetaZen editor.</p><div style="text-align: center;"><button class="btn" onclick="window.open(\'mgmain.html?mgpage=metazen2&project='+project.id+'\');">open MetaZen</button></div>');
+	//html.push('<br><h4>upload new / updated metadata</h4><p>Upload an Excel metadata spreadsheet with new or updated metadata.</p><div style="text-align: center;"><button class="btn" id="uploadMetadataButton'+found+'" onclick="document.getElementById(\'uploadMetadata'+found+'\').click();">upload new metadata</button></div><div id="uploadMetadataDiv'+found+'" style="text-align: center;"></div>');
+	//html.push('<input type="file" id="uploadMetadata'+found+'" style="display: none;" onchange="Retina.WidgetInstances.metagenome_share[1].uploadMetadata(event)">');
 	
 	target.innerHTML = html.join('');
     };
