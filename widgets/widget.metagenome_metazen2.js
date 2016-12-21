@@ -273,6 +273,10 @@
 	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading project data...';
 	    widget.loadProjectData(Retina.cgiParam('project'));
 	}
+	else if (Retina.cgiParam('inbox')) {
+	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading inbox data...';
+	    widget.loadInboxData(Retina.cgiParam('inbox'));
+	}
     };
 
     // cell edit helper
@@ -907,6 +911,36 @@
 		
     };
 
+    // load existing excel file from inbox
+    widget.loadInboxData = function (nodeid) {
+	var widget = this;
+
+	jQuery.ajax({
+	    method: "GET",
+	    headers: stm.authHeader,
+	    beforeSend: function( xhr ) {
+		xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+	    },
+	    url: RetinaConfig.shock_url+'/node/'+nodeid+'?download',
+	    success: function (data) {
+		var zip = new JSZip();
+		zip.loadAsync(data).then(function (zip) {
+		    xlsx(zip).then(function (wb) {
+			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+			widget.clearSpreadSheet();
+			widget.loadedData = wb;
+			widget.fillSpreadSheet(true);
+			document.getElementById('cellInfoBox').innerHTML = "inbox data loaded";
+		    });
+		});
+	    },
+	    error: function (xhr) {
+		document.getElementById('cellInfoBox').innerHTML = "could not load inbox file";
+		alert("could not load inbox file");
+	    }
+	 });
+    };
+
     // load existing data from an Excel file
     widget.loadExcelData = function (event) {
 	var widget = this;
@@ -1027,6 +1061,9 @@
 		    for (var j=2; j<ws.maxRow; j++) {
 			if (ws.data[j][h] != undefined) {
 			    var val = ws.data[j][h].value;
+			    if (typeof val=='number' && isNaN(val)) {
+				continue;
+			    }
 			    widget.setCell(sheet, col, val, sheet == "project" ? 0 : undefined);
 			}
 		    }
@@ -1421,7 +1458,7 @@
 	// check mandatory project fields
 	for (var i in widget.tables.project) {
 	    if (widget.tables.project.hasOwnProperty(i)) {
-		if (widget.tables.project[i].required == "1" && ! widget.metadata.project[i][0].length) {
+		if (widget.tables.project[i].required == "1" && ! (widget.metadata.project[i] !== undefined && widget.metadata.project[i][0] !== undefined && widget.metadata.project[i][0].length)) {
 		    problems.push({'tab': 'project', 'message': 'missing mandatory field "'+i+'"'});
 		}
 	    }

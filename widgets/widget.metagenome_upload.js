@@ -428,25 +428,7 @@
 	    } else {
 		var txt = data.message.replace(/\[error\]/, "");
 		var messages = (data.hasOwnProperty('errors') && data.errors.length) ? "<br>"+data.errors.join("<br>") : "";
-//		jQuery.ajax(RetinaConfig['mgrast_api']+"/metadata/google/"+nodeid, {
-			// success: function(data){
-			//     var resultDiv = document.getElementById('metadataValidation');
-			//     if (resultDiv) {
-			// 	resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata</b><br>'+txt+messages+'</div><div style="text-align: center;"><button class="btn btn-primary" onclick="window.open(\'https://docs.google.com/spreadsheets/d/1lpLH6mStkgm81cTM5UoDrJpsLQoj9Camy0xMGyVB5bQ/edit?usp=sharing&newcopy=true\');">edit in google sheets</button></div>';
-			//     }
-			// },
-			// error: function(jqXHR, error){
-			//     var resultDiv = document.getElementById('metadataValidation');
-			//     if (resultDiv) {
-				resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata</b><br>'+txt+messages+'</div>';
-		    // 	    }
-		    // 	    console.log(error);
-		    // 	    console.log(jqXHR);
-		    // 	},
-		    // 	crossDomain: true,
-		    // 	headers: stm.authHeader,
-		    // 	type: "GET"
-		    // });
+		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors below.</b><br>'+txt+messages+'</div>';
 	    }
 	}
     };
