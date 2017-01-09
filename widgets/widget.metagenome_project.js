@@ -132,7 +132,7 @@
 		var mgid = mg.metagenome_id.match(/^mgm/) ? mg.metagenome_id : "mgm"+mg.metagenome_id;
 		widget.metagenomes[mgid] = mg.name;
 		var row = [ project.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
-			    "<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap(mgid) : mgid)+"' target=_blank>"+mg.name+"</a>",
+			    mg.viewable ? ("<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap(mgid) : mgid)+"' target=_blank>"+mg.name+"</a>") : "<a style='cursor: help;' title='This metagenome has not yet completed computation'>"+mg.name+"</a>",
 			    mg.basepairs,
 			    mg.sequences,
 			    mg.biome,
@@ -145,7 +145,7 @@
 			    mg.coordinates,
 			    mg.sequence_type,
 			    mg.sequencing_method,
-			    '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'metadata\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'submitted\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> submitted</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'processed\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> results</button>'
+			    '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'metadata\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> metadata</button><button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'submitted\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> submitted</button>'+(mg.viewable ? '<button class="btn btn-mini" onclick="Retina.WidgetInstances.metagenome_project[1].authenticatedDownload(this, \''+mg.metagenome_id+'\', \'processed\');"><img src="Retina/images/cloud-download.png" style="width: 16px;"> results</button>' : '')
 			  ];
 		rows.push(row);
 	    }
