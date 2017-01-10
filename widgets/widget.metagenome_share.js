@@ -177,9 +177,9 @@
 	    }
 	    details.push("<p>The project "+project.name+" contains "+project.metagenomes.length+" metagenome"+(project.metagenomes.length>1 ? "s" : "")+" listed below.</p>");
 	    details.push("<div id='targetProject"+projectid+"' class='alert alert-info' style='display: none;'></div>");
-	    details.push("<table class='table table-condensed table-hover'><tr><td style='display: none;' class='selectcolumn"+projectid+"'>select</td><td>ID</td><td>name</td><td>basepairs</td><td>sequences</td></tr>");
+	    details.push("<table class='table table-condensed table-hover'><tr><th style='display: none;' class='selectcolumn"+projectid+"'>select</th><th>ID</th><th class='namecolumn_"+projectid+"'>name<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].editMetagenomeNames(\""+projectid+"\");'>edit</button></th><th class='namecolumn2_"+projectid+"' style='display: none;'>name<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].canceleditMetagenomeNames(\""+projectid+"\");'>cancel</button><button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].performeditMetagenomeNames(\""+projectid+"\");'>update</button></th><th>basepairs</th><th>sequences</th><th class='typecolumn_"+projectid+"'>sequence type<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].editSequenceTypes(\""+projectid+"\");'>edit</button></th><th class='typecolumn2_"+projectid+"' style='display: none;'>sequence type<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].canceleditSequenceTypes(\""+projectid+"\");'>cancel</button><button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].performeditSequenceTypes(\""+projectid+"\");'>update</button></th></tr>");
 	    for (var h=0; h<project.metagenomes.length; h++) {
-		details.push("<tr><td style='display: none; text-align: center;' class='selectcolumn"+projectid+"'><input type='checkbox' style='position: relative; bottom: 3px;' data-id='"+project.metagenomes[h].metagenome_id+"' class='checkbox_"+projectid+"'></td><td>"+project.metagenomes[h].metagenome_id+"</td><td>"+project.metagenomes[h].name+"</td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td></tr>");
+		details.push("<tr><td style='display: none; text-align: center;' class='selectcolumn"+projectid+"'><input type='checkbox' style='position: relative; bottom: 3px;' data-id='"+project.metagenomes[h].metagenome_id+"' class='checkbox_"+projectid+"'></td><td>"+project.metagenomes[h].metagenome_id+"</td><td class='namecolumn_"+projectid+"'>"+project.metagenomes[h].name+"</td><td style='display: none;' class='namecolumn2_"+projectid+"'><input type='text' value='"+project.metagenomes[h].name+"' data-id='"+project.metagenomes[h].metagenome_id+"' data-name='"+project.metagenomes[h].name+"' class='textbox_"+projectid+"'></td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td><td class='typecolumn_"+projectid+"'>"+project.metagenomes[h].sequence_type+"</td><td style='display: none;' class='typecolumn2_"+projectid+"'><select data-id='"+project.metagenomes[h].metagenome_id+"' data-type='"+project.metagenomes[h].sequence_type+"' class='selectbox_"+projectid+"'><option"+(project.metagenomes[h].sequence_type=='WGS' ? " selected=selected" : "")+">WGS</option><option"+(project.metagenomes[h].sequence_type=='Amplicon' ? " selected=selected" : "")+">Amplicon</option><option"+(project.metagenomes[h].sequence_type=='MT' ? " selected=selected" : "")+">MT</option></select></td></tr>");
 	    }
 	    details.push("</table>");
 	} else {
@@ -710,6 +710,117 @@
 		 "overdue": overdue };
     };
 
+    widget.editMetagenomeNames = function (projectid) {
+	var widget = this;
+
+	jQuery(".namecolumn_"+projectid).toggle();
+	jQuery(".namecolumn2_"+projectid).toggle();
+    };
+
+    widget.performeditMetagenomeNames = function (projectid) {
+	var widget = this;
+
+	jQuery(".namecolumn_"+projectid).toggle();
+	jQuery(".namecolumn2_"+projectid).toggle();
+
+	var metagenomes = [];
+	jQuery('.textbox_'+projectid).each(function(index) {
+	    if (jQuery(this)[0].value != jQuery(this)[0].getAttribute('data-name')) {
+		metagenomes.push( [ jQuery(this)[0].getAttribute('data-id'), jQuery(this)[0].value ] );
+	    }
+	});
+
+	var alldone = jQuery.Deferred();
+	var promises = [];
+	for (var i=0; i<metagenomes.length; i++) {
+	    var fd = new FormData();
+	    fd.append('POSTDATA', JSON.stringify({ "metagenome_id": metagenomes[i][0], "name": metagenomes[i][1] }));
+	    promises.push(jQuery.ajax({
+		method: "POST",
+		contentType: false,
+		processData: false,
+		data: fd,
+		crossDomain: true,
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/job/rename' }));
+	}
+	alldone.then(function () {
+	    window.location.reload(true);
+	});
+	jQuery.when.apply(this, promises).then(function() {
+	    alldone.resolve();
+	});
+    };
+
+    widget.canceleditMetagenomeNames = function (projectid) {
+	var widget = this;
+
+	jQuery('.textbox_'+projectid).each(function(index) {
+	    jQuery(this)[0].value = jQuery(this)[0].getAttribute('data-name');
+	});
+	
+	jQuery(".namecolumn_"+projectid).toggle();
+	jQuery(".namecolumn2_"+projectid).toggle();
+    };
+    
+    widget.editSequenceTypes = function (projectid) {
+	var widget = this;
+
+	jQuery(".typecolumn_"+projectid).toggle();
+	jQuery(".typecolumn2_"+projectid).toggle();
+    };
+
+    widget.performeditSequenceTypes = function (projectid) {
+	var widget = this;
+
+	var metagenomes = [];
+	jQuery('.selectbox_'+projectid).each(function(index) {
+	    if (jQuery(this)[0].options[jQuery(this)[0].selectedIndex].value != jQuery(this)[0].getAttribute('data-type')) {
+		metagenomes.push( [ jQuery(this)[0].getAttribute('data-id'), jQuery(this)[0].options[jQuery(this)[0].selectedIndex].value ] );
+	    }
+	});
+
+	var alldone = jQuery.Deferred();
+	var promises = [];
+	for (var i=0; i<metagenomes.length; i++) {
+	    var fd = new FormData();
+	    fd.append('POSTDATA', JSON.stringify({ "metagenome_id": metagenomes[i][0], "sequence_type": metagenomes[i][1] }));
+	    promises.push(jQuery.ajax({
+		method: "POST",
+		contentType: false,
+		processData: false,
+		data: fd,
+		crossDomain: true,
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/job/changesequencetype' }));
+	}
+	alldone.then(function () {
+	    window.location.reload(true);
+	});
+	jQuery.when.apply(this, promises).then(function() {
+	    alldone.resolve();
+	});
+
+	jQuery(".typecolumn_"+projectid).toggle();
+	jQuery(".typecolumn2_"+projectid).toggle();
+    };
+
+    widget.canceleditSequenceTypes = function (projectid) {
+	var widget = this;
+
+	jQuery('.selectbox_'+projectid).each(function(index) {
+	    for (var i=0; i<jQuery(this)[0].options.length; i++) {
+		if (jQuery(this)[0].options[i].value == jQuery(this)[0].getAttribute('data-type')) {
+		    jQuery(this)[0].selectedIndex = i;
+		    break;
+		}
+	    }
+	});
+
+	jQuery(".typecolumn_"+projectid).toggle();
+	jQuery(".typecolumn2_"+projectid).toggle();
+    };
+
     widget.moveMetagenomes = function (projectid) {
 	var widget = this;
 
@@ -912,6 +1023,7 @@
 	    jQuery.ajax({
 		method: "GET",
 		dataType: "json",
+		processData: false,
 		headers: stm.authHeader,
 		url: RetinaConfig.mgrast_api+'/project/'+projectid+'?verbosity=summary&nocache=1',
 		success: function (data) {
