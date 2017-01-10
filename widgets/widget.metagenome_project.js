@@ -58,8 +58,13 @@
 			stm.DataStore.project[Retina.WidgetInstances.metagenome_project[1].id] = data;
 			Retina.WidgetInstances.metagenome_project[1].display();
 		    }}).fail(function(xhr, error) {
-			content.innerHTML = "<div class='alert alert-danger' style='width: 500px;'>the project could not be loaded.</div>";
-			console.log(error);
+			var msg = '';
+			try {
+			    msg = JSON.parse(xhr.responseText).ERROR;
+			} catch (error) {
+			    msg = 'the project could not be loaded';
+			}
+			content.innerHTML = "<div class='alert alert-danger' style='width: 500px;'>"+msg+"</div>";
 		    });
 		return;
             }
