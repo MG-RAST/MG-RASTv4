@@ -65,16 +65,27 @@ function initWebApp () {
 		}
 	    });
 	}
+
+	if (page == 'mydata') {
+	    jQuery.getJSON(RetinaConfig.mgrast_api+'/server/twitter', function(data) {
+		showNews(data);
+	    });
+	}
     });
 };
 
-function showNewsFeed () {
-    var feed = new google.feeds.Feed("http://press.igsb.anl.gov/mg-rast/feed/");
-    feed.load(function(result) {
-	if (Retina.WidgetInstances.hasOwnProperty('metagenome_mydata') && document.getElementById('newsfeed')) {
-	    Retina.WidgetInstances.metagenome_mydata[1].showNews(result);
-	} else {
-	    window.newsFeedResult = result;
+function showNews (result) {
+    var html = '<table class="table table-condensed" style="width: 100%; font-size: 12px;">';
+    for (var i=0; i<result.length; i++) {
+    	var entry = result[i];
+	entry.date = entry.created_at.substr(0, 11) + entry.created_at.substr(-4);
+	entry.link = "https://twitter.com/mg_rast/status/"+entry.id_str;
+	if (!((entry.in_reply_to_screen_name == 'mg_rast') || (entry.in_reply_to_screen_name == null))) {
+	    continue;
 	}
-    });
-}
+    	html += '<tr><td style="white-space: nowrap;">'+entry.date+'</td><td><a href="'+entry.link+'" target=_blank>'+entry.text+'</a></td></tr>';
+    }
+    html += "</table>";
+    document.getElementById("newsfeed").innerHTML = html;
+};
+
