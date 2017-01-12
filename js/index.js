@@ -111,46 +111,21 @@ function initWebApp () {
 	});
     }, 3000);
 
-
-};
-
-// google newsfeed
-function showNewsFeed () {
-    var feed = new google.feeds.Feed("http://press.igsb.anl.gov/mg-rast/feed/");
-    feed.load(function(result) {
-	if (!result.error) {
-	    window.newsFeedResult = result;
-	    jQuery.getJSON(RetinaConfig.mgrast_api+'/server/twitter', function(data) {
-		window.newsFeedResult.feed.entries = data.concat(window.newsFeedResult.feed.entries);
-		showNews(window.newsFeedResult);
-	    });
-	}
+    jQuery.getJSON(RetinaConfig.mgrast_api+'/server/twitter', function(data) {
+	showNews(data);
     });
 };
 
 function showNews (result) {
     var html = '<table class="table table-condensed" style="width: 100%; font-size: 12px;">';
-    for (var i = 0; i<result.feed.entries.length; i++) {
-	var entry = result.feed.entries[i];
-	// twitter
-	if (entry.hasOwnProperty("created_at")) {
-	    entry.date = entry.created_at.substr(0, 11) + entry.created_at.substr(-4);
-	    entry.title = entry.text;
-	    entry.link = "https://twitter.com/mg_rast/status/"+entry.id_str;
+    for (var i=0; i<result.length; i++) {
+    	var entry = result[i];
+	entry.date = entry.created_at.substr(0, 11) + entry.created_at.substr(-4);
+	entry.link = "https://twitter.com/mg_rast/status/"+entry.id_str;
+	if (!((entry.in_reply_to_screen_name == 'mg_rast') || (entry.in_reply_to_screen_name == null))) {
+	    continue;
 	}
-	// blog
-	else {
-	    entry.date = entry.publishedDate.replace(/^(\w+),\s(\d+)\s(\w+)\s(\d+).+$/, "$1, $3 $2 $4");
-	}
-    }
-    for (var i=0; i<result.feed.entries.length; i++) {
-    	var entry = result.feed.entries[i];
-	if (entry.hasOwnProperty('in_reply_to_screen_name')) {
-	    if (!((entry.in_reply_to_screen_name == 'mg_rast') || (entry.in_reply_to_screen_name == null))) {
-		continue;
-	    }
-	}
-    	html += '<tr><td style="white-space: nowrap;">'+entry.date+'</td><td><a href="'+entry.link+'" target=_blank>'+entry.title+'</a></td></tr>';
+    	html += '<tr><td style="white-space: nowrap;">'+entry.date+'</td><td><a href="'+entry.link+'" target=_blank>'+entry.text+'</a></td></tr>';
     }
     html += "</table>";
     document.getElementById("newsfeed").innerHTML = html;

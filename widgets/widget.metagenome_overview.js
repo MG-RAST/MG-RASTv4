@@ -53,7 +53,7 @@
 		jQuery.getJSON(RetinaConfig.mgrast_api + '/server/MG-RAST').then(function(d) {
 		    var widget = Retina.WidgetInstances.metagenome_overview[1];
 		    widget.driseeMGRAST = { "min": d.driseemin, "max": d.driseemax, "avg": d.driseeavg, "stdv": d.driseestdv };
-		    var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full';
+		    var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full&nocache=1';
 		    jQuery.ajax( { dataType: "json",
 				   url: url,
 				   headers: stm.authHeader,
@@ -107,8 +107,12 @@
 					   Retina.WidgetInstances.metagenome_overview[1].display();
 				       });
 				   },
-				   error: function () {
-				       widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
+				   error: function (jqxhr) {
+				       if (jqxhr.status == 500) {
+					   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
+				       } else if (jqxhr.status == 401) {
+					   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
+				       }
 				   }
 				 } );
 		});

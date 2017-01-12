@@ -224,6 +224,7 @@
 	    hashTable[tables[i].name] = tables[i].data;
 	    var tarray = [];
 	    var k = Retina.keys(tables[i].data);
+	    if (i==1) { console.log(k); }
 	    for (var h=0; h<k.length; h++) {
 		tables[i].data[k[h]].name = k[h];
 		if (! tables[i].data[k[h]].hasOwnProperty('order')) {
@@ -235,7 +236,6 @@
 		tarray.push(tables[i].data[k[h]]);
 	    }
 	    tarray.sort(Retina.propSort('order'));
-	    
 	    var cols = [];
 	    var colheaders = [];
 	    for (var h=0; h<tarray.length; h++) {
@@ -1258,8 +1258,11 @@
 	    dname = dname.replace(/\s/, "-");
 	    if (data.hasOwnProperty(dname)) {
 		for (var i=0; i<wb.worksheets[h].maxCol; i++) {
-    		    if (data[dname].hasOwnProperty(wb.worksheets[h].data[0][i].value)) {
-			var vals = data[dname][wb.worksheets[h].data[0][i].value];
+		    var cname = wb.worksheets[h].data[0][i].value;
+		    if (cname == "sample_size") { cname = "samp_size"; }
+		    if (cname == "lib_contruction") { cname = "lib_const_meth"; }
+    		    if (data[dname].hasOwnProperty(cname)) {
+			var vals = data[dname][cname];
 			for (var j=2; j<(vals.length+2); j++) {
     			    wb.setCell(h, i, j, vals[j-2]);
 			}
@@ -1423,14 +1426,10 @@
     };
 
     widget.getTemplateOrder = function () {
-	var widget = this;
-
-	widget.metadataTemplate.sample.sample.sample_size = widget.metadataTemplate.sample.sample.samp_size;
-	widget.metadataTemplate.library.metagenome.lib_construction = widget.metadataTemplate.library.metagenome.lib_const_meth;
-	widget.metadataTemplate.library.metatranscriptome.lib_construction = widget.metadataTemplate.library.metatranscriptome.lib_const_meth;
-	
+	var widget = this;	
 
 	var wb = jQuery.extend(true, {}, widget.excelWorkbook);
+	var ignoreCols = {"sample_id": true, "metagenome_id": true, "project_id": true, "misc_param": true };
 	for (var h=1; h<wb.worksheets.length; h++) {
 	    var ws = wb.worksheets[h];
 	    var x1 = ws.name.split(/\s/)[0];
@@ -1438,9 +1437,11 @@
 	    var order = 0;
 	    for (var i=0; i<ws.maxCol; i++) {
 		ws.data[0][i].value = ws.data[0][i].value.replace(/\s+/, "");
-		if (ws.data[0][i].value == "sample_id" || ws.data[0][i].value == "misc_param") {
+		if (ignoreCols[ws.data[0][i].value]) {
 		    continue;
 		}
+		if (ws.data[0][i].value == "sample_size") { ws.data[0][i].value = "samp_size"; }
+		if (ws.data[0][i].value == "lib_contruction") { ws.data[0][i].value = "lib_const_meth"; }
 		if (widget.metadataTemplate[x1][x2].hasOwnProperty(ws.data[0][i].value)) {
 		    widget.metadataTemplate[x1][x2][ws.data[0][i].value].order = order;
 		    widget.metadataTemplate[x1][x2]._maxOrder = order;
