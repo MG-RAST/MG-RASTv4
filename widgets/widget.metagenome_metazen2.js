@@ -224,7 +224,6 @@
 	    hashTable[tables[i].name] = tables[i].data;
 	    var tarray = [];
 	    var k = Retina.keys(tables[i].data);
-	    if (i==1) { console.log(k); }
 	    for (var h=0; h<k.length; h++) {
 		tables[i].data[k[h]].name = k[h];
 		if (! tables[i].data[k[h]].hasOwnProperty('order')) {
@@ -868,7 +867,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+project+'?verbosity=summary',
+	    url: RetinaConfig.mgrast_api+'/project/'+project+'?verbosity=summary&nocache=1',
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		widget.projectData = data;
@@ -1378,8 +1377,7 @@
 				
 		var xlsfile = data.base64;
 		var form = new FormData();
-		var filename = widget.metadata.project.project_name[0].replace(/\s/g, "_")+".xlsx";
-		form.append('upload', xlsfile, filename);
+		form.append('upload', xlsfile, "metadata.xlsx");
 		form.append('project', id);
 		for (var i=0; i<widget.metagenomes.length; i++) {
 		    form.append('metagenome', widget.metagenomes[i]);
