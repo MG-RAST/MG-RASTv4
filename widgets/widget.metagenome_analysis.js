@@ -1016,11 +1016,7 @@
 
 	// container name
 	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' id='uploadButton' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload container to myData'><img src='Retina/images/cloud-upload.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button>" ];
-<<<<<<< Updated upstream
 	//html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>" );
-=======
-	html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>" );
->>>>>>> Stashed changes
 	html.push("</h4>");
 
 	// cutoffs
