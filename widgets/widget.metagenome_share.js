@@ -636,7 +636,7 @@
 		} else {
 		    alert('metadata updated');
 		}
-		window.location = "mgmain.html?mgpage=share";
+		window.location.reload();
 	    }
 	});
 
