@@ -2434,14 +2434,13 @@
 				     } else {
 					 // check if the profile generation failed
 					 if (data.data.hasOwnProperty('ERROR')) {
-
 					     var retry = 1;
 					     
 					     // check if this has happened before
 					     if (data.hasOwnProperty('retry')) {
 						 retry = parseInt(data.retry) + 1;
 					     }
-
+					     
 					     // now send a retry request
 					     stm.DataStore.dataContainer[this.dc].promises.push(
 						 jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + data.parameters.id + "?format=mgrast&condensed=1&verbosity=minimal&source="+data.parameters.source+"&retry="+retry,
@@ -2469,6 +2468,7 @@
 								   }
 							       },
 							     }));
+					     return;
 					 } else {
 					     data.data.size = data.size;
 					     stm.DataStore.profile[data.data.id+"_load_"+data.data.source] = data.data;
@@ -2483,9 +2483,13 @@
 				     console.log("error: invalid return structure from API server");
 				     console.log(data);
 				 }
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     },
 			     error: function(jqXHR, error) {
 				 Retina.WidgetInstances.metagenome_analysis[1].abortLoad(this.bound, error, this.dc);
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     },
 			     xhr: function() {
 				 var xhr = new window.XMLHttpRequest();
@@ -2505,10 +2509,6 @@
 				     }
 				 }, false); 
 				 return xhr;
-			     },
-			     complete: function () {
-				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
-				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     }
 			   });
     };
