@@ -1016,7 +1016,7 @@
 
 	// container name
 	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' id='uploadButton' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload container to myData'><img src='Retina/images/cloud-upload.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button>" ];
-	//html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>"; );
+	//html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>" );
 	html.push("</h4>");
 
 	// cutoffs
@@ -1235,8 +1235,33 @@
 
     widget.mergeContainer = function (container) {
 	var widget = this;
-
+	
 	container = container || stm.DataStore.dataContainer[widget.selectedContainer];
+
+	if (stm.DataStore.profile.hasOwnProperty(container.id)) {
+	    if (! confirm("You already have a profile called\n'"+container.id+"',\noverwrite?")) {
+		return;
+	    }
+	}
+	
+	var profile = { "columns": jQuery.extend(true, [], stm.DataStore.profile[container.items[0].id].columns),
+			"created": "",
+			"id": container.id,
+			"type": "merge",
+			"metagenome": { "mixs": { "sequence_type": container.items[0].sequence_type }, "name": container.id, "id": container.id },
+			"sources": jQuery.extend(true, [], container.sources),
+			"originalItems": jQuery.extend(true, [], container.items),
+			"version": 1 };
+	
+	var data = [];
+	for (var i=0; i<container.items.length; i++) {
+	    var p = stm.DataStore.profile[container.items[i].id];
+	    
+	}
+	
+	profile.data = data;
+	stm.DataStore.profile[profile.id] = profile;
+	widget.enableLoadedProfiles();
     };
 
     widget.container2matrix = function (container, md5only) {
@@ -2070,7 +2095,7 @@
 
 	ids = jQuery.extend(true, [], ids);
 	for (var i=0; i<ids.length; i++) {
-	    if (! ids[i].id.match(/^mgm/)) {
+	    if (! ids[i].id.match(/^mgm/) && ! stm.DataStore.profile.hasOwnProperty(ids[i].id)) {
 		ids[i].id = Retina.idmap(ids[i].id);
 	    }
 	}
@@ -2407,21 +2432,64 @@
 				     if (data.hasOwnProperty('ERROR')) {
 					 console.log("error: "+data.ERROR);
 				     } else {
-					 data.data.size = data.size;
-					 stm.DataStore.profile[data.data.id+"_load_"+data.data.source] = data.data;
-					 widget.purgeProfile(data.data.id, data.data.source);
-					 if (stm.DataStore.metagenome.hasOwnProperty(data.data.id)) {
-					     stm.DataStore.profile[data.data.id].metagenome = jQuery.extend(true, {}, stm.DataStore.metagenome[data.data.id]);
-					     delete stm.DataStore.metagenome[data.data.id];
+					 // check if the profile generation failed
+					 if (data.data.hasOwnProperty('ERROR')) {
+					     var retry = 1;
+					     
+					     // check if this has happened before
+					     if (data.hasOwnProperty('retry')) {
+						 retry = parseInt(data.retry) + 1;
+					     }
+					     
+					     // now send a retry request
+					     stm.DataStore.dataContainer[this.dc].promises.push(
+						 jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + data.parameters.id + "?format=mgrast&condensed=1&verbosity=minimal&source="+data.parameters.source+"&retry="+retry,
+							       dc: this.dc,
+							       contentType: 'application/json',
+							       headers: stm.authHeader,
+							       bound: this.bound,
+							       success: function (data) {
+								   var widget = Retina.WidgetInstances.metagenome_analysis[1];
+								   if (data != null) {
+								       if (data.hasOwnProperty('ERROR')) {
+									   console.log("error: "+data.ERROR);
+									   widget.updatePDiv(this.bound, 'error', data.ERROR);
+								       } else if (data.hasOwnProperty('status')) {
+									   if (data.status == 'done') {
+									       widget.downloadComputedData(this.bound, this.dc, data.url);
+									   } else {
+									       widget.queueDownload(this.bound, data.url, this.dc);
+									   }
+								       }
+								   } else {
+								       console.log("error: invalid return structure from API server");
+								       console.log(data);
+								       widget.updatePDiv(this.bound, 'error', data.ERROR);
+								   }
+							       },
+							     }));
+					     return;
+					 } else {
+					     data.data.size = data.size;
+					     stm.DataStore.profile[data.data.id+"_load_"+data.data.source] = data.data;
+					     widget.purgeProfile(data.data.id, data.data.source);
+					     if (stm.DataStore.metagenome.hasOwnProperty(data.data.id)) {
+						 stm.DataStore.profile[data.data.id].metagenome = jQuery.extend(true, {}, stm.DataStore.metagenome[data.data.id]);
+						 delete stm.DataStore.metagenome[data.data.id];
+					     }
 					 }
 				     }
 				 } else {
 				     console.log("error: invalid return structure from API server");
 				     console.log(data);
 				 }
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     },
 			     error: function(jqXHR, error) {
 				 Retina.WidgetInstances.metagenome_analysis[1].abortLoad(this.bound, error, this.dc);
+				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
+				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     },
 			     xhr: function() {
 				 var xhr = new window.XMLHttpRequest();
@@ -2441,10 +2509,6 @@
 				     }
 				 }, false); 
 				 return xhr;
-			     },
-			     complete: function () {
-				 Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound);
-				 Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
 			     }
 			   });
     };
