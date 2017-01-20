@@ -85,6 +85,13 @@
 	    "success": function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		widget.metadataTemplate = data;
+
+		// turn metagenome_name into a select if this is an existing project
+		if (Retina.cgiParam('project')) {
+		    widget.metadataTemplate.library.metagenome.metagenome_name.type = 'select';
+		    widget.metadataTemplate.library["mimarks-survey"].metagenome_name.type = 'select';
+		    widget.metadataTemplate.library.metatranscriptome.metagenome_name.type = 'select';
+		}
 		var eps = Retina.keys(data.ep).sort();
 		widget.eps = eps;
 		for (var i=0; i<eps.length; i++) {
@@ -1073,14 +1080,17 @@
 
 	    // get the metagenome ids
 	    var metagenomes = [];
+	    var metagenome_names = [];
 	    for (var i=0; i<widget.projectData.metagenomes.length; i++) {
 		var mgid = widget.projectData.metagenomes[i].metagenome_id;
 		if (! mgid.match(/^mgm/)) {
 		    mgid = "mgm"+mgid;
 		}
 		metagenomes.push(mgid);
+		metagenome_names.push(widget.projectData.metagenomes[i].name);
 	    }
 	    widget.metagenomes = metagenomes;
+	    stm.DataStore.cv.select.metagenome_name = metagenome_names;
 	    
 	    // fill in project sheet
 	    var fields = Retina.keys(d.data);
@@ -1129,7 +1139,7 @@
 		for (var j=0; j<s.libraries.length; j++) {
 		    
 		    // fill in the library sheet
-		    var l = s.libraries[j];		    
+		    var l = s.libraries[j];
 		    sn = "library-"+l.type;
 		    fields = Retina.keys(l.data);
 		    for (var i=0; i<fields.length; i++) {
