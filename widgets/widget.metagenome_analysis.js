@@ -159,10 +159,11 @@
     	var container = document.getElementById('exportContainerSpace');
 	var html = "";
 
-	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='SVG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='PNG'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='TSV'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom\");' title='biom'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='scalable vector graphic'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='portable network graphic'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='tab separated data'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom\");' title='one biom file per dataset with abundance and e-value'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom_abu\");' title='biom file containing all datasets and abundance only'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom hits only</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\")){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
 
 
@@ -1265,20 +1266,15 @@
 	widget.enableLoadedProfiles();
     };
 
-    widget.container2biom = function (container) {
+    widget.container2biom = function (container, abundanceOnly) {
 	var widget = this;
 
 	var result = [];
 	
 	container = container || stm.DataStore.dataContainer[widget.selectedContainer];
 
-	// iterate over all items of the container
-	for (var i=0; i<container.items.length; i++) {
-
-	    // set up the basic biom object
-	    var c = jQuery.extend(true, {}, container);
-	    c.items = [ c.items[i] ];
-	    c = widget.container2matrix(c);
+	if (abundanceOnly) {
+	    var c = container;
 	    var biom = {
 		"matrix_element_type": "float",
 		"generated_by": "MG-RAST",
@@ -1290,13 +1286,16 @@
 		"type": "Feature table",
 		"source_type": "protein",
 		"data_source": c.parameters.displaySource,
-		"shape": [ c.matrix.itemsY, 2 ],
-		"columns": [ { "id": "abundance" },
-			     { "id": "e-value" } ],
+		"shape": [ c.matrix.itemsY, c.matrix.itemsX ],
+		"columns": [],
 		"rows": [],
 		"data": []
 	    };
 
+	    for (var i=0; i<container.items.length; i++) {
+		biom.columns.push( { "id": container.items[i].name } );
+	    }
+	    
 	    // construct the rows and data entries
 	    for (var h=0; h<c.matrix.data.length; h++) {
 		var md = {};
@@ -1306,10 +1305,55 @@
 		    md.functionalHierarchy = c.hierarchy[c.matrix.rows[h]];
 		}
 		biom.rows.push( { "id": h+1, "metadata": md } );
-		biom.data.push( [ c.matrix.data[h][0], c.matrix.evalues[h][0] ] );
+		var row = [];
+		for (var i=0; i<container.items.length; i++) {
+		    row.push( c.matrix.data[h][i] );
+		}
+		biom.data.push( row );
 	    }
+
+	    result = [ biom ];
 	    
-	    result.push(biom);
+	} else {
+	    // iterate over all items of the container
+	    for (var i=0; i<container.items.length; i++) {
+		
+		// set up the basic biom object
+		var c = jQuery.extend(true, {}, container);
+		c.items = [ c.items[i] ];
+		c = widget.container2matrix(c);
+		var biom = {
+		    "matrix_element_type": "float",
+		    "generated_by": "MG-RAST",
+		    "format": "Biological Observation Matrix 1.0",
+		    "format_url": "http://biom-format.org",
+		    "id": c.items[0].id,
+		    "matrix_type": "dense",
+		    "date": Retina.date_string(),
+		    "type": "Feature table",
+		    "source_type": "protein",
+		    "data_source": c.parameters.displaySource,
+		    "shape": [ c.matrix.itemsY, 2 ],
+		    "columns": [ { "id": "abundance" },
+				 { "id": "e-value" } ],
+		    "rows": [],
+		    "data": []
+		};
+		
+		// construct the rows and data entries
+		for (var h=0; h<c.matrix.data.length; h++) {
+		    var md = {};
+		    if (c.parameters.displayType == "taxonomy") {
+			md.taxonomy = c.hierarchy[c.matrix.rows[h]];
+		    } else {
+			md.functionalHierarchy = c.hierarchy[c.matrix.rows[h]];
+		    }
+		    biom.rows.push( { "id": h+1, "metadata": md } );
+		    biom.data.push( [ c.matrix.data[h][0], c.matrix.evalues[h][0] ] );
+		}
+	    
+		result.push(biom);
+	    }
 	}
 	
 	return result;
@@ -2666,6 +2710,9 @@
 	    for (var i=0; i<bioms.length; i++) {
 		stm.saveAs(JSON.stringify(bioms[i]), stm.DataStore.dataContainer[widget.selectedContainer].items[i].name+".biom");
 	    }
+	} else if (type == 'biom_abu') {
+	    var bioms = widget.container2biom(null, true);
+	    stm.saveAs(JSON.stringify(bioms[0]), widget.selectedContainer+".biom");
 	}
     };
 
