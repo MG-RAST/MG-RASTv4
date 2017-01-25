@@ -182,6 +182,12 @@
 	    	    success: function (data) {
 	    	    	var widget = Retina.WidgetInstances.metagenome_receipt[1];
 	    	    	widget.submission = data;
+
+			// check if there is valid data
+			if (typeof data.status == "string") {
+			    Retina.WidgetInstances.metagenome_receipt[1].target.innerHTML = "<div class='alert alert-error'>There the data for your processing receipt was not found.<br><br>Processing receipts are only available for datasets upload after January 1st of 2017.</div>";
+			    return;
+			}
 			
 			// get the flow
 			jQuery.getJSON("data/flows/submission_receipt"+(widget.metagenome.pipeline_parameters.hasOwnProperty('filter_ambig') ? "_fasta" : "")+".flow.json").complete(function(d) {

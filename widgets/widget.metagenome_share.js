@@ -834,6 +834,7 @@
 		html.push('<option value="'+stm.DataStore.projectnames[i].id+'">'+stm.DataStore.projectnames[i].name+'</option>');
 	    }
 	}
+	html.push('<option value="0">- create new project -</option>');
 	html.push('</select></td><td>');
 	html.push('<button id="moveButton'+projectid+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].performMove(\''+projectid+'\');">move</button></td></tr></table>');
 	target.innerHTML = html.join("");
@@ -844,6 +845,48 @@
 	var sourceProject = stm.DataStore.project[projectid];
 	var sourceProjectId = sourceProject.id;
 	var targetProjectId = document.getElementById('targetProjectSelect'+projectid).options[document.getElementById('targetProjectSelect'+projectid).selectedIndex].value;
+
+	if (targetProjectId == "0") {
+	    var name = prompt('Enter a name for the project');
+	    if (name.length == 0) {
+		alert('you must enter a project name');
+		return;
+	    }
+	    var fd = new FormData();
+	    fd.append('user', stm.user.login);
+	    fd.append('name', name);
+	    jQuery.ajax({
+		method: "POST",
+		contentType: false,
+		processData: false,
+		pname: name,
+		pid: projectid,
+		data: fd,
+		crossDomain: true,
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/project/create',
+		complete: function (xhr) {
+		    try {
+			var pid = this.pid;
+			var resp = JSON.parse(xhr.responseText);
+			if (resp.hasOwnProperty('OK')) {
+			    var opt = document.createElement('option');
+			    opt.value = resp.project;
+			    opt.text = this.pname;
+			    document.getElementById('targetProjectSelect'+pid).appendChild(opt);
+			    document.getElementById('targetProjectSelect'+pid).selectedIndex = document.getElementById('targetProjectSelect'+pid).options.length - 1;
+			    Retina.WidgetInstances.metagenome_share[1].performMove(pid);
+			} else if (resp.ERROR == 'project name taken') {
+			    alert('that project name is already taken');
+			} else {
+			    alert('project creation failed');
+			}
+		    } catch (error) {
+			alert('invalid server response');
+		    }
+		}});
+	    return;
+	}
 
 	var metagenomes = [];
 	jQuery('.checkbox_'+projectid).each(function(index) {
