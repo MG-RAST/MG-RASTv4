@@ -220,7 +220,12 @@
 	mg.statistics.sequence_breakdown.known_prot_percent = (mg.statistics.sequence_breakdown.known_prot / mg.statistics.sequence_breakdown.predicted_feature * 100).formatString(2);
 	mg.statistics.sequence_breakdown.unknown_prot_percent = (mg.statistics.sequence_breakdown.unknown_prot / mg.statistics.sequence_breakdown.predicted_feature * 100).formatString(2);
 
-	
+	if (mg.hasOwnProperty('submission') && mg.submission != null) {
+	    var mgid = mg.status == 'public' ? mg.id : Retina.idmap(mg.id);
+	    mg.receipt = "<a href='mgmain.html?mgpage=receipt&metagenome="+mgid+"' class='btn btn-small pull-right' title='Processing Receipt'><img src='Retina/images/settings3.png' style='width: 16px;'> processing receipt</a>";
+	} else {
+	    mg.receipt = "";
+	}
 	
 	mg.taxonomy = {};
 	try {
@@ -454,7 +459,7 @@
 	    if (mg.metadata && mg.metadata.project) {
 		mg.metadata.project.id = Retina.idmap(mg.metadata.project.id);
 	    }
-	    mg.staticLink = 'private metagenomes cannot be linked';	    
+	    mg.staticLink = 'private metagenomes cannot be linked';
 	}
     };
     
