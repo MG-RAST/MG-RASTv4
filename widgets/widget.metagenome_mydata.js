@@ -32,7 +32,7 @@
 	document.getElementById("pageTitle").innerHTML = "my data";
 	
 	if (stm.user) {
-	    var html = [ '<h3 style="width: 94.7%;">Welcome back, '+stm.user.firstname+' '+stm.user.lastname+'<div id="toggleBar" style="float: right;"></div><div class="input-append pull-right" style="margin-top: 7px; width: 250px; margin-right: 10px;"><input type="text" class="search" style="padding-left: 10px;border-radius: 14px 0 0 14px; width: 144px;" placeholder="search string" id="searchtext"><button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="window.location=\'mgmain.html?mgpage=search&amp;search=\'+document.getElementById(\'searchtext\').value;" id="searchbutton">search <img src="Retina/images/search.png" style="width: 16px; position: relative; bottom 2px;"></button></div></h3>' ];
+	    var html = [ '<h3 style="width: 94.7%;">Welcome back, '+stm.user.firstname+' '+stm.user.lastname+'<div id="toggleBar" style="float: right;"></div><div class="input-append pull-right" style="margin-top: 7px; width: 250px; margin-right: 10px;"><input type="text" class="search" style="padding-left: 10px;border-radius: 14px 0 0 14px; width: 144px;" placeholder="search string" id="searchtext"><button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="Retina.WidgetInstances.metagenome_mydata[1].search(document.getElementById(\'searchtext\').value);" id="searchbutton">search <img src="Retina/images/search.png" style="width: 16px; position: relative; bottom 2px;"></button></div></h3>' ];
 
 	    // add the status
 	    html.push(widget.serverStatusSection());
@@ -105,6 +105,18 @@
 	    
 	} else {
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
+	}
+    };
+
+    widget.search = function (term) {
+	var widget = this;
+
+	if (term.match(/^mgp\d+$/)) {
+	    window.location = 'mgmain.html?mgpage=project&project='+term;
+	} else if (term.match(/^mgm\d+\.\d+$/)) {
+	    window.location = 'mgmain.html?mgpage=overview&metagenome='+term;
+	} else {
+	    window.location = 'mgmain.html?mgpage=search&search='+term;
 	}
     };
     
