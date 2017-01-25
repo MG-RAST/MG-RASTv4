@@ -1,0 +1,151 @@
+{
+    "name": "graph1",
+    "width": 800,
+    "height": 800,
+    "items": [
+	{
+	    "type": "axis",
+	    "name": "y-axis",
+	    "parameters": {
+		"direction": "vertical",
+		"orientation": "bottom",
+		"labelPosition": "left-bottom",
+		"labelRotation": 0,
+		"shift": 100,
+		"base": 100,
+		"length": 600,
+		"min": 0,
+		"max": 7,
+		"spaceMajor": 57.142857142857146,
+		"numMinor": 5,
+		"tickShift": 0,
+		"tickBase": 0,
+		"majorTickLength": 10,
+		"minorTickLength": 5,
+		"lineFormat": {
+		    "stroke": "black",
+		    "strokeWidth": 1
+		},
+		"labelFormat": {
+		    "fontFamily": "Helvetica",
+		    "fontWeight": 100,
+		    "fontSize": 12
+		},
+		"showLabels": true,
+		"labelOrigin": true,
+		"isLog": false,
+		"noLine": false,
+		"inputType": "plot",
+		"id": "item0",
+		"groupSettings": {},
+		"data": []
+	    },
+	    "data": "matrix2valueY"
+	},
+	{
+	    "type": "axis",
+	    "name": "x-axis",
+	    "parameters": {
+		"direction": "horizontal",
+		"orientation": "bottom",
+		"labelPosition": "left-bottom",
+		"labelRotation": 30,
+		"shift": 100,
+		"base": 100,
+		"length": 600,
+		"min": 0,
+		"max": 6,
+		"spaceMajor": 66.66666666666667,
+		"numMinor": 5,
+		"tickShift": 0,
+		"tickBase": 0,
+		"majorTickLength": 10,
+		"minorTickLength": 5,
+		"lineFormat": {
+		    "stroke": "black",
+		    "strokeWidth": 1
+		},
+		"labelFormat": {
+		    "fontFamily": "Helvetica",
+		    "fontWeight": 100,
+		    "fontSize": 12
+		},
+		"showLabels": true,
+		"labelOrigin": true,
+		"isLog": false,
+		"noLine": false,
+		"inputType": "plot",
+		"id": "item1",
+		"groupSettings": {},
+		"data": []
+	    },
+	    "data": "matrix2valueX"
+	},
+	{
+	    "type": "plot",
+	    "name": "plot",
+	    "parameters": {
+		"height": 600,
+		"width": 600,
+		"radius": 2,
+		"shiftX": 100,
+		"shiftY": 100,
+		"format": {
+		    "fill": "white",
+		    "stroke": "black",
+		    "strokeWidth": 1
+		},
+		"inputType": "plot",
+		"id": "item2",
+		"groupSettings": {},
+		"data": []
+	    },
+	    "data": "matrix2plot"
+	},
+	{
+	    "type": "grid",
+	    "name": "h-grid",
+	    "data": "matrix2valueY",
+	    "parameters": {
+		"direction": "horizontal",
+		"shift": 100,
+		"base": 100,
+		"height": 600,
+		"width": 600,
+		"inputType": "plot"
+	    }
+	},
+	{
+	    "type": "grid",
+	    "name": "v-grid",
+	    "data": "matrix2valueX",
+	    "parameters": {
+		"direction": "vertical",
+		"shift": 100,
+		"base": 100,
+		"width": 600,
+		"height": 600,
+		"inputType": "plot"
+	    }
+	},
+	{
+	    "type": "title",
+	    "name": "x-title",
+	    "parameters": {
+		"shiftX": 375,
+		"shiftY": 780,
+		"data": "size (MB)"
+	    }
+	},
+	{
+	    "type": "title",
+	    "name": "y-title",
+	    "parameters": {
+		"shiftX": 10,
+		"shiftY": 425,
+		"rotation": 90,
+		"data": "time (minutes)"
+	    }
+	}
+  ]
+}
