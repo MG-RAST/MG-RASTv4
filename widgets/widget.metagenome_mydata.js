@@ -533,8 +533,9 @@
 		html.push('<p>'+item.description+'</p>');
 		html.push('<hr style="margin-top: 0px; margin-bottom: 0px;">');
 	    }
-	    if (result.total > result.data.length) {
-		html.push('<a class="btn btn-mini" href="mgmain.html?mgpage=share" style="width: 100%">...</a>');
+	    console.log(result);
+	    if (result.total_count > result.data.length) {
+		html.push('<div style="text-align: center;"><a class="btn btn-mini" href="mgmain.html?mgpage=share" style="width: 90%">show all '+result.total_count+' studies</a></div>');
 	    }
 	} else {
 	    html.push("<p style='margin-bottom: 30px;'>You currently do not have access to any projects. For help on uploading, try the tutorial below.</p>");
