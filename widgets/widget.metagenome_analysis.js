@@ -2636,13 +2636,11 @@
 	    b.setAttribute('name', 'browser');
 	    b.setAttribute('value', '1');
 	    doc.appendChild(b);
-	    if (c.items[i].status == "private") {
-		var h = document.createElement('input');
-		h.setAttribute('type', 'text');
-		h.setAttribute('name', 'auth');
-		h.setAttribute('value', stm.authHeader.Authorization);
-		doc.appendChild(h);
-	    }
+	    var h = document.createElement('input');
+	    h.setAttribute('type', 'text');
+	    h.setAttribute('name', 'auth');
+	    h.setAttribute('value', stm.authHeader.Authorization);
+	    doc.appendChild(h);
 	    document.body.appendChild(doc);
 	    doc.submit();
 	    document.body.removeChild(doc);
