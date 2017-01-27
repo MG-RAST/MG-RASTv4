@@ -2479,6 +2479,41 @@
 						 widget.updatePDiv(this.bound, 'error', data.status);
 						 return;
 					     }
+
+					     // check for a stale process
+					     var staleTime = 1000 * 60 * 60;
+					     if (data.status == 'processing' && new Date(data.progress.updated).getTime() + staleTime < Date.now()) {
+						 
+						 retry = parseInt(data.retry || 0) + 1;
+						 stm.DataStore.dataContainer[this.dc].promises.push(
+						     jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + data.parameters.id + "?format=mgrast&condensed=1&verbosity=minimal&source="+data.parameters.source+"&retry="+retry,
+								   dc: this.dc,
+								   contentType: 'application/json',
+								   headers: stm.authHeader,
+								   bound: this.bound,
+								   success: function (data) {
+								       var widget = Retina.WidgetInstances.metagenome_analysis[1];
+								       if (data != null) {
+									   if (data.hasOwnProperty('ERROR')) {
+									       console.log("error: "+data.ERROR);
+									       widget.updatePDiv(this.bound, 'error', data.ERROR);
+									   } else if (data.hasOwnProperty('status')) {
+									       if (data.status == 'done') {
+										   widget.downloadComputedData(this.bound, this.dc, data.url);
+									       } else {
+										   widget.queueDownload(this.bound, data.url, this.dc);
+									       }
+									   }
+								       } else {
+									   console.log("error: invalid return structure from API server");
+									   console.log(data);
+									   widget.updatePDiv(this.bound, 'error', data.ERROR);
+								       }
+								   },
+								 }));
+						 return;
+					     }
+					     
 					     widget.updatePDiv(this.bound, data.status, null, this.dc);
 					     widget.queueDownload(this.bound, data.url, this.dc);
 					 }
