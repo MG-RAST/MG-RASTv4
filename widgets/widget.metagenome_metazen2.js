@@ -1208,7 +1208,7 @@
 	// there are not enough rows, append a new one
 	if (table.rows.length <= row + 1) {
 	    var empty = [];
-	    for (var h=0; h<table.rows[0].cells.length - 1; h++) {
+	    for (var x=0; x<table.rows[0].cells.length - 1; x++) {
 		empty.push("");
 	    }
 	    empty = '<th>'+table.rows.length+'</th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
