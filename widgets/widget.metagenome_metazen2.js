@@ -12,14 +12,20 @@
 	return [ Retina.load_renderer("tree") ];
     };
 
+    widget.activeProject = null;
+    
     widget.metadata = {};
-
+    
     widget.miscParams = {};
-
+    
     widget.activeTabs = { "library-metagenome": true, "library-mimarks-survey": true, "library-metatranscriptome": true };
-        
+    
     widget.display = function (wparams) {
         widget = this;
+
+	if (Retina.cgiParam('project')) {
+	    widget.project = Retina.cgiParam('project');
+	}
 
 	var container = widget.container = wparams ? wparams.main : widget.container;
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
@@ -43,10 +49,27 @@
 	var promise3 = jQuery.Deferred();
 	var promise4 = jQuery.Deferred();
 	var promises = [ promise1, promise2, promise3, promise4 ];
-
+	
 	// load excel template
 	promises.push(widget.loadExcelTemplate());
-
+	
+	// if there is a user, load project list
+	if (stm.user) {
+	    promises.push(jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=minimal&limit=999',
+		success: function (data) {
+		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+		    widget.projectnames = [];
+		    for (var i=0; i<data.data.length; i++) {
+			widget.projectnames[i] = data.data[i];
+		    }
+		}
+	    }));
+	}
+	
 	// load controlled vocabularies
 	promises.push(jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/cv", function (data) {
 	    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
@@ -87,7 +110,7 @@
 		widget.metadataTemplate = data;
 
 		// turn metagenome_name into a select if this is an existing project
-		if (Retina.cgiParam('project')) {
+		if (widget.activeProject) {
 		    widget.metadataTemplate.library.metagenome.metagenome_name.type = 'select';
 		    widget.metadataTemplate.library["mimarks-survey"].metagenome_name.type = 'select';
 		    widget.metadataTemplate.library.metatranscriptome.metagenome_name.type = 'select';
@@ -158,20 +181,28 @@
 
 	// linebreak
 	html.push('<div style="clear: both;"></div></div>');
-
 	html.push('<div style="clear: both;"></div>');
 	
 	// upload / download buttons
 	html.push('<div style="float: right; margin-left: 20px;">');
 
+	// project list
+	if (widget.hasOwnProperty('projectnames')) {
+	    html.push('<div class="input-append" style="float: right; margin-left: 20px;"><select id="projectSelect">');
+	    for (var i=0; i<widget.projectnames.length; i++) {
+		html.push('<option value="'+widget.projectnames[i].id+'">'+widget.projectnames[i].name+'</option>');
+	    }
+	    html.push('</select><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].loadProject();">load</button></div>');
+	}
+
 	html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'shock\');" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button>');
-	if (Retina.cgiParam('project')) {
+	if (widget.activeProject) {
 	    html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\');" id="projectUploadButton" style="margin-left: 20px;"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button>');
 	}
 	html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'excel\');" style="margin-left: 20px;"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;">download in Excel format</button>');
-
-	html.push('<button class="btn" onclick="this.nextSibling.click();" style="margin-left: 20px;"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">load from Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
 	
+	html.push('<button class="btn" onclick="this.nextSibling.click();" style="margin-left: 20px;"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">load from Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
+		
 	html.push('</div>');
 	
 	html.push('<div style="clear: both;"></div>');
@@ -275,9 +306,9 @@
 
 	widget.showENVOselect();
 
-	if (Retina.cgiParam('project')) {
+	if (widget.activeProject) {
 	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading project data...';
-	    widget.loadProjectData(Retina.cgiParam('project'));
+	    widget.loadProjectData(widget.activeProject);
 	}
 	else if (Retina.cgiParam('inbox')) {
 	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading inbox data...';
@@ -763,9 +794,9 @@
 	
 	document.getElementById('envo_select_div').innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 24px;'> loading selected ENVO version</div>";
     };
-
-    widget.showENVOselect = function () {
-	var widget = this;
+	
+	widget.showENVOselect = function () {
+	    var widget = this;
 
 	var select = document.getElementById('envo_select_div');
 
@@ -843,7 +874,7 @@
 	    button.parentNode.previousSibling.click();
 	    alert("This tab already has a parameter called "+name);
 	}
-
+	
 	// we have a new field
 	// add it to the template
 	widget.metadataTemplate[group][subgroup]._maxOrder++;
@@ -866,6 +897,15 @@
 	button.parentNode.previousSibling.click();
     };
 
+    widget.loadProject = function () {
+	var widget = this;
+	
+	var pid = document.getElementById('projectSelect').options[document.getElementById('projectSelect').selectedIndex].value;
+	widget.activeProject = pid;
+	document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading project data...';
+	widget.loadProjectData(pid);
+    };
+	
     // load existing data from project
     widget.loadProjectData = function (project) {
 	var widget = this;
@@ -1376,7 +1416,7 @@
 
 	// update the project metadata
 	else if (target == 'project') {
-	    var id = Retina.cgiParam('project');
+	    var id = widget.activeProject;
 	    var btn = document.getElementById('projectUploadButton');
 	    
 	    btn.setAttribute('disabled', 'disabled');
