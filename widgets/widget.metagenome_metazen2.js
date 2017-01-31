@@ -24,7 +24,7 @@
         widget = this;
 
 	if (Retina.cgiParam('project')) {
-	    widget.project = Retina.cgiParam('project');
+	    widget.activeProject = Retina.cgiParam('project');
 	}
 
 	var container = widget.container = wparams ? wparams.main : widget.container;
@@ -169,7 +169,7 @@
 	// eps
 	html.push('<div style="float: left; margin-left: 20px;"><div style="font-weight: bold;">environmental packages</div><div style="float: left;">');
 	for (var i=0; i<widget.eps.length; i++) {
-	    html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="ep-'+widget.eps[i]+'Checkbox" type="checkbox"'+(widget.activeTabs["ep-"+widget.eps[i]] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="ep-'+widget.eps[i]+'"> '+widget.eps[i]+'</div>');
+	    html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="ep-'+widget.eps[i].replace(/\s/g, "-")+'Checkbox" type="checkbox"'+(widget.activeTabs["ep-"+widget.eps[i]] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="ep-'+widget.eps[i]+'"> '+widget.eps[i]+'</div>');
 	    if (i % 7 == 0 && i > 0) {
 		html.push('</div><div style="float: left;">');
 	    }
@@ -1193,8 +1193,10 @@
     widget.setCell = function (sheet, field, value, targetrow) {
 	var widget = this;
 
+	var sheetID = sheet.replace(/\s/g, "-");
+	
 	// check if we know this sheet
-	if (! document.getElementById(sheet)) {
+	if (! document.getElementById(sheetID)) {
 	    console.log('unknown sheet: '+sheet);
 	    return;
 	}
@@ -1203,8 +1205,8 @@
 	if (sheet.match(/^library/) || sheet.match(/^ep/)) {
 	    if (! widget.activeTabs[sheet]) {
 		widget.activeTabs[sheet] = true;
-		document.getElementById(sheet+"Checkbox").setAttribute('checked', 'checked');
-		var name = sheet.replace(/\|/g, " ").replace(/\s/g, "-");
+		document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
+		var name = sheetID.replace(/\|/g, " ");
 		jQuery('#'+name+"-li").toggle();
 	    }
 	}
@@ -1212,7 +1214,7 @@
 	// check if we know about this field
 	var cat = sheet.indexOf('-') > -1 ? sheet.substr(0, sheet.indexOf('-')) : sheet;
 	var subcat = sheet.indexOf('-') > -1 ? sheet.substr(sheet.indexOf('-') + 1) : sheet;
-	var table = document.getElementById(sheet).firstChild;
+	var table = document.getElementById(sheetID).firstChild;
 	
 	// this is a misc param, add the column
 	if (! widget.metadataTemplate[cat][subcat].hasOwnProperty(field)) {
