@@ -68,7 +68,7 @@
 		default_sort: "lastname",
 		data_manipulation: Retina.WidgetInstances.admin_debug[1].userTable,
 		navigation_url: RetinaConfig.mgrast_api+'/user?verbosity=minimal',
-		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id", "actions" ] }
+		data: { data: [], header: [ "login", "firstname", "lastname", "email", "id", "action" ] }
 	    });
 	} else {
 	    widget.user_table.settings.target = document.getElementById('usertable');
@@ -199,7 +199,7 @@
 				"lastname": data[i].lastname,
 				"email": data[i].email,
 				"id": data[i].id,
-				"action": '<button class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].impersonateUser(\''+data[i].login+'\');">impersonate</button><button style="margin-left: 10px;" class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].deActivateUser(\''+data[i].login+'\', '+data[i].active+');">'+(data[i].active ? 'disable' : 'enable')+'</button>' } );
+				"action": '<button class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].impersonateUser(\''+data[i].login+'\');">impersonate</button><button style="margin-left: 10px;" class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].deActivateUser(\''+data[i].login+'\', '+data[i].active+');">'+(data[i].active == "1" ? 'disable' : 'enable')+'</button>' } );
 	}
 
 	return result_data;
@@ -213,7 +213,9 @@
 	    dataType: "json",
 	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/user/deactivate/'+login+'?active='+(deactivate ? "0" : "1"),
-	    success: function () {
+	    success: function (d) {
+		console.log(d);
+		alert('user updated');
 		window.location.reload();
 	    }}).fail(function(xhr, error) {
 		alert('action failed');
