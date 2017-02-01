@@ -11,8 +11,6 @@
     widget.setup = function () {
 	return [ Retina.load_renderer("tree") ];
     };
-
-    widget.activeProject = null;
     
     widget.metadata = {};
     
@@ -22,10 +20,6 @@
     
     widget.display = function (wparams) {
         widget = this;
-
-	if (Retina.cgiParam('project')) {
-	    widget.activeProject = Retina.cgiParam('project');
-	}
 
 	var container = widget.container = wparams ? wparams.main : widget.container;
 	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
@@ -59,12 +53,12 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=minimal&limit=999',
+		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=999',
 		success: function (data) {
 		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-		    widget.projectnames = [];
+		    widget.projectData = [];
 		    for (var i=0; i<data.data.length; i++) {
-			widget.projectnames[i] = data.data[i];
+			widget.projectData[i] = data.data[i];
 		    }
 		}
 	    }));
@@ -108,13 +102,6 @@
 	    "success": function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		widget.metadataTemplate = data;
-
-		// turn metagenome_name into a select if this is an existing project
-		if (widget.activeProject) {
-		    widget.metadataTemplate.library.metagenome.metagenome_name.type = 'select';
-		    widget.metadataTemplate.library["mimarks-survey"].metagenome_name.type = 'select';
-		    widget.metadataTemplate.library.metatranscriptome.metagenome_name.type = 'select';
-		}
 		var eps = Retina.keys(data.ep).sort();
 		widget.eps = eps;
 		for (var i=0; i<eps.length; i++) {
@@ -184,24 +171,34 @@
 	html.push('<div style="clear: both;"></div>');
 	
 	// upload / download buttons
-	html.push('<div style="float: right; margin-left: 20px;">');
+	html.push('<div style="float: right;">');
 
-	// project list
-	if (widget.hasOwnProperty('projectnames')) {
-	    html.push('<div class="input-append" style="float: right; margin-left: 20px;"><select id="projectSelect">');
-	    for (var i=0; i<widget.projectnames.length; i++) {
-		html.push('<option value="'+widget.projectnames[i].id+'">'+widget.projectnames[i].name+'</option>');
+	// load from excel
+	html.push('<button style="float: left;" class="btn" onclick="this.nextSibling.click();" style="margin-left: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">upload Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
+
+	// download as excel
+	html.push('<button style="float: left; margin-left: -1px;" class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'excel\');" style="margin-left: 20px; border-radius: 0px;"><img src="Retina/images/file-excel.png" style="width: 16px; margin-right: 5px;">download Excel file</button>');
+
+	// load from project
+	if (widget.hasOwnProperty('projectData')) {
+	    html.push('<div class="dropdown" style="float: left; margin-left: -1px;"><button class="btn dropdown-toggle" style="border-radius: 0px;" data-toggle="dropdown"><img src="Retina/images/file-powerpoint.png" style="width: 16px; margin-right: 5px;">load project</button><ul class="dropdown-menu">');
+	    for (var i=0; i<widget.projectData.length; i++) {
+		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_metazen2[1].loadProject(\''+widget.projectData[i].id+'\');">'+widget.projectData[i].name+'</a></li>');
 	    }
-	    html.push('</select><button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].loadProject();">load</button></div>');
+	    html.push('</ul></div>');
 	}
-
-	html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'shock\');" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button>');
-	if (widget.activeProject) {
-	    html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\');" id="projectUploadButton" style="margin-left: 20px;"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button>');
-	}
-	html.push('<button class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'excel\');" style="margin-left: 20px;"><img src="Retina/images/cloud-download.png" style="width: 16px; margin-right: 5px;">download in Excel format</button>');
 	
-	html.push('<button class="btn" onclick="this.nextSibling.click();" style="margin-left: 20px;"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">load from Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
+	// upload to inbox
+	html.push('<button style="float: left; margin-left: -1px; border-radius: 0px;" class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'shock\');" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button>');
+
+	// update project
+	if (widget.hasOwnProperty('projectData')) {
+	    html.push('<div class="dropdown" style="float: left; margin-left: -1px;"><button class="btn dropdown-toggle" style="border-bottom-left-radius: 0px; border-top-left-radius: 0px;" data-toggle="dropdown"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button><ul class="dropdown-menu">');
+	    for (var i=0; i<widget.projectData.length; i++) {
+		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\', \''+widget.projectData[i].id+'\');">'+widget.projectData[i].name+'</a></li>');
+	    }
+	    html.push('</ul></div>');
+	}
 		
 	html.push('</div>');
 	
@@ -306,9 +303,9 @@
 
 	widget.showENVOselect();
 
-	if (widget.activeProject) {
+	if (Retina.cgiParam('project')) {
 	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading project data...';
-	    widget.loadProjectData(widget.activeProject);
+	    widget.loadProjectData(Retina.cgiParam('project'));
 	}
 	else if (Retina.cgiParam('inbox')) {
 	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading inbox data...';
@@ -884,8 +881,7 @@
 	
 	// add the column to the sheet
 	var cell = button.parentNode.parentNode;
-	var row = cell.parentNode;
-	var table = row.parentNode;
+	var table = document.getElementById(tab).firstChild;
 	var header = document.createElement('TH');
 	header.innerHTML = name;
 	table.rows[0].insertBefore(header, cell);
@@ -897,13 +893,11 @@
 	button.parentNode.previousSibling.click();
     };
 
-    widget.loadProject = function () {
+    widget.loadProject = function (id) {
 	var widget = this;
 	
-	var pid = document.getElementById('projectSelect').options[document.getElementById('projectSelect').selectedIndex].value;
-	widget.activeProject = pid;
 	document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading project data...';
-	widget.loadProjectData(pid);
+	widget.loadProjectData(id);
     };
 	
     // load existing data from project
@@ -914,34 +908,13 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project/'+project+'?verbosity=summary&nocache=1',
+	    url: RetinaConfig.mgrast_api+'/metadata/export/'+project,
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-		widget.projectData = data;
-
-		jQuery.ajax({
-		    method: "GET",
-		    dataType: "json",
-		    headers: stm.authHeader,
-		    url: RetinaConfig.mgrast_api+'/metadata/export/'+project,
-		    success: function (data) {
-			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 			
-			document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
-			widget.loadedData = data;
-			widget.fillSpreadSheet();
-		    },
-		    error: function (xhr) {
-			var error = "";
-			try {
-			    error = ": "+JSON.parse(xhr.responseText).ERROR;
-			}
-			catch (e) {
-			    error = "";
-			}
-			alert("could not retrieve metadata for this project"+error);
-		    }
-		});
+		document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
+		widget.loadedData = data;
+		widget.fillSpreadSheet();
 	    },
 	    error: function (xhr) {
 		var error = "";
@@ -951,7 +924,7 @@
 		catch (e) {
 		    error = "";
 		}
-		alert("could not retrieve data for this project"+error);
+		alert("could not retrieve metadata for this project"+error);
 	    }
 	});
 		
@@ -1090,7 +1063,6 @@
 	
 	// data shortcut
 	var d = widget.loadedData;
-
 	if (excel) {
 	    var ignoreCols = {"sample_id": true, "metagenome_id": true, "project_id": true };
 	    for (var i=0; i<d.worksheets.length; i++) {
@@ -1117,20 +1089,6 @@
 	    }
 	    
 	} else {
-
-	    // get the metagenome ids
-	    var metagenomes = [];
-	    var metagenome_names = [];
-	    for (var i=0; i<widget.projectData.metagenomes.length; i++) {
-		var mgid = widget.projectData.metagenomes[i].metagenome_id;
-		if (! mgid.match(/^mgm/)) {
-		    mgid = "mgm"+mgid;
-		}
-		metagenomes.push(mgid);
-		metagenome_names.push(widget.projectData.metagenomes[i].name);
-	    }
-	    widget.metagenomes = metagenomes;
-	    stm.DataStore.cv.select.metagenome_name = metagenome_names;
 	    
 	    // fill in project sheet
 	    var fields = Retina.keys(d.data);
@@ -1189,10 +1147,43 @@
 	    }
 	}
     };
+
+    widget.checkProject = function (pname) {
+	var widget = this;
+
+	for (var i=0; i<widget.projectData.length; i++) {
+	    // turn metagenome_name into a select if this is an existing project
+	    if (widget.projectData[i].name == pname) {
+		widget.tables["library-metagenome"].metagenome_name.type = 'select';
+		widget.tables["library-mimarks-survey"].metagenome_name.type = 'select';
+		widget.tables["library-metatranscriptome"].metagenome_name.type = 'select';
+
+		// get the metagenome ids
+		var metagenomes = [];
+		var metagenome_names = [];
+		for (var h=0; h<widget.projectData[i].metagenomes.length; h++) {
+		    var mgid = widget.projectData[i].metagenomes[h].metagenome_id;
+		    if (! mgid.match(/^mgm/)) {
+			mgid = "mgm"+mgid;
+		    }
+		    metagenomes.push(mgid);
+		    metagenome_names.push(widget.projectData[i].metagenomes[h].name);
+		}
+		widget.metagenomes = metagenomes;
+		stm.DataStore.cv.select.metagenome_name = metagenome_names;
+		
+		break;
+	    }
+	}
+    };
     
     widget.setCell = function (sheet, field, value, targetrow) {
 	var widget = this;
 
+	if (sheet == 'project' && field == 'project_name') {
+	    widget.checkProject(value);
+	}
+	
 	var sheetID = sheet.replace(/\s/g, "-");
 	
 	// check if we know this sheet
@@ -1286,7 +1277,7 @@
 	return widget.excelPromise;
     };
 
-    widget.exportExcel = function (target) {
+    widget.exportExcel = function (target, id) {
     	var widget = this;
 
     	var wb = jQuery.extend(true, {}, widget.excelWorkbook);
@@ -1418,7 +1409,6 @@
 
 	// update the project metadata
 	else if (target == 'project') {
-	    var id = widget.activeProject;
 	    var btn = document.getElementById('projectUploadButton');
 	    
 	    btn.setAttribute('disabled', 'disabled');
