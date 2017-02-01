@@ -53,7 +53,7 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=999',
+		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=verbose&limit=999',
 		success: function (data) {
 		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		    widget.projectData = [];
@@ -193,7 +193,7 @@
 
 	// update project
 	if (widget.hasOwnProperty('projectData')) {
-	    html.push('<div class="dropdown" style="float: left; margin-left: -1px;"><button class="btn dropdown-toggle" style="border-bottom-left-radius: 0px; border-top-left-radius: 0px;" data-toggle="dropdown"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button><ul class="dropdown-menu">');
+	    html.push('<div class="dropdown" style="float: left; margin-left: -1px;"><button class="btn dropdown-toggle" id="projectUploadButton" style="border-bottom-left-radius: 0px; border-top-left-radius: 0px;" data-toggle="dropdown"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button><ul class="dropdown-menu">');
 	    for (var i=0; i<widget.projectData.length; i++) {
 		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\', \''+widget.projectData[i].id+'\');">'+widget.projectData[i].name+'</a></li>');
 	    }
