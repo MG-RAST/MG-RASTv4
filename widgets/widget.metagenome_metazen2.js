@@ -174,10 +174,10 @@
 	html.push('<div style="float: right;">');
 
 	// load from excel
-	html.push('<button style="float: left;" class="btn" onclick="this.nextSibling.click();" style="margin-left: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">upload Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
+	html.push('<button style="float: left; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" class="btn" onclick="this.nextSibling.click();"><img src="Retina/images/disk.png" style="width: 16px; margin-right: 5px;">upload Excel file</button><input type="file" style="display: none;" onchange="Retina.WidgetInstances.metagenome_metazen2[1].loadExcelData(event);">');
 
 	// download as excel
-	html.push('<button style="float: left; margin-left: -1px;" class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'excel\');" style="margin-left: 20px; border-radius: 0px;"><img src="Retina/images/file-excel.png" style="width: 16px; margin-right: 5px;">download Excel file</button>');
+	html.push('<button style="float: left; margin-left: -1px; border-radius: 0px;" class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'excel\');"><img src="Retina/images/file-excel.png" style="width: 16px; margin-right: 5px;">download Excel file</button>');
 
 	// load from project
 	if (widget.hasOwnProperty('projectData')) {
