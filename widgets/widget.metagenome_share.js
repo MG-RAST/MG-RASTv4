@@ -544,7 +544,7 @@
       <div class="modal-body">\
         <h4 style="margin-top: 0px;">'+project_name+'</h4>\
         <p>To submit your project to the European Nucleotide Archive at the EBI, you need to specify the biome and sequencing technology below.</p>\
-        <table><tr><td><div style="margin-right: 10px; position: relative; bottom: 5px; font-weight: bold;">sequencing techonology</div></td><td><select id="ebi_tech"><option>LS454</option><option>ILLUMINA</option><option>COMPLETE_GENOMICS</option><option>PACBIO_SMRT</option><option>ION_TORRENT</option><option>OXFORD_NANOPORE</option><option>CAPILLARY</option></select></td></tr>\
+        <table><tr><td><div style="margin-right: 10px; position: relative; bottom: 5px; font-weight: bold;">sequencing techonology</div></td><td><select id="ebi_tech"><option>LS454</option><option>ILLUMINA</option><option>HELICOS</option><option>ABI_SOLID</option><option>COMPLETE_GENOMICS</option><option>BGISEQ</option><option>OXFORD_NANOPORE</option><option>PACBIO_SMRT</option><option>ION_TORRENT</option><option>CAPILLARY</option></select></td></tr>\
         <tr><td colspan=2><div style="font-weight: bold;">biome mapping</div></td></tr></tr>'+biome_selects.join('')+'</table>\
       </div>\
       <div class="modal-footer">\

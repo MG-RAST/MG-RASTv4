@@ -97,6 +97,13 @@
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+", "+project.metadata.PI_organization+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
 	    html += "<tr><td><b>static link</b></td><td>"+(project.status == "public" ? "<a href='http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"'>http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"</a>" : "private projects cannot be linked")+"</td></tr>";
+	    var invis = { 0: true, 4: true, 5: true };
+	    if (project.metadata.hasOwnProperty('ebi_id')) {
+		html += "<tr><td><b>EBI link</b></td><td><a href='https://www.ebi.ac.uk/metagenomics/projects/"+project.metadata.ebi_id+"' target=_blank>"+project.metadata.ebi_id+"</a></td></tr>";
+		html += "<tr><td><b>ENA link</b></td><td><a href='http://www.ebi.ac.uk/ena/data/view/"+project.metadata.ebi_id+"' target=_blank>"+project.metadata.ebi_id+"</a></td></tr>";
+	    } else {
+		invis[9] = true;
+	    }
 	    html += "</table>";
 	    var custom = "<span id='custom'></span>";
 	    html += "<h4>description</h4>"+custom+"<p>"+project.description+"</p>";
@@ -145,6 +152,7 @@
 			    mg.material,
 			    mg.sample ? "<a href='?mgpage=sample&sample="+mg.sample+"'>"+mg.sample+"</a>" : "-",
 			    mg.library ? "<a href='?mgpage=library&library="+mg.library+"'>"+mg.library+"</a>" : "-",
+			    mg.attributes && mg.attributes.ebi_id ? "<a href='http://www.ebi.ac.uk/ena/data/view/"+mg.attributes.ebi_id+"' target=_blank>"+mg.attributes.ebi_id+"</a>" : "-",
 			    mg.location,
 			    mg.country,
 			    mg.coordinates,
@@ -154,6 +162,7 @@
 			  ];
 		rows.push(row);
 	    }
+	    
 	    Retina.Renderer.create("table", {
 		target: document.getElementById('metagenome_table'),
 		rows_per_page: 10,
@@ -163,9 +172,9 @@
 		synchronous: true,
 		sort: "name",
 		show_export: true,
-		invisible_columns: { 0: true, 4: true, 5: true },
-		minwidths: [125,175,105,110,85,95,95,95,95,100,95,120,70,90,110],
-		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "sample", "library", "location", "country", "coordinates", "type", "method", "download" ] }
+		invisible_columns: invis,
+		minwidths: [125,175,105,110,85,95,95,95,95,95,100,95,120,70,90,110],
+		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "sample", "library", "ENA", "location", "country", "coordinates", "type", "method", "download" ] }
 	    }).render();
 
 	    // create a google map of the samples
