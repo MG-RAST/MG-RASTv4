@@ -1132,16 +1132,20 @@
 		for (var i=0; i<fields.length; i++) {
 		    widget.setCell(sn, fields[i], e.data[fields[i]].value);
 		}
+
+		// check if the sample has libraries
+		if (s.hasOwnProperty('libraries')) {
 		
-		// iterate over the libraries
-		for (var j=0; j<s.libraries.length; j++) {
-		    
-		    // fill in the library sheet
-		    var l = s.libraries[j];
-		    sn = "library-"+l.type;
-		    fields = Retina.keys(l.data);
-		    for (var i=0; i<fields.length; i++) {
-			widget.setCell(sn, fields[i], l.data[fields[i]].value);
+		    // iterate over the libraries
+		    for (var j=0; j<s.libraries.length; j++) {
+			
+			// fill in the library sheet
+			var l = s.libraries[j];
+			sn = "library-"+l.type;
+			fields = Retina.keys(l.data);
+			for (var i=0; i<fields.length; i++) {
+			    widget.setCell(sn, fields[i], l.data[fields[i]].value);
+			}
 		    }
 		}
 	    }
