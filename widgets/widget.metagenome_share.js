@@ -454,11 +454,7 @@
 
 	var html = '';
 
-	//if (project.status == 'public') {
-	    // html = 'name<br><p>'+project.name+'</p><br><br>description<br><p>'+project.description+'</p><br><br>funding source<br><p>'+(project.funding_source || "")+'</p><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><p>'+(project.metadata.PI_email || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><p>'+(project.metadata.PI_firstname || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><p>'+(project.metadata.PI_lastname || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><p>'+(project.metadata.PI_organization || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><p>'+(project.metadata.PI_organization_url || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><p>'+(project.metadata.PI_organization_address || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><p>'+(project.metadata.PI_organization_country || "")+'</p></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><p>'+(project.metadata.email || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><p>'+(project.metadata.firstname || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><p>'+(project.metadata.lastname || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><p>'+(project.metadata.organization || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><p>'+(project.metadata.organization_url || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><p>'+(project.metadata.organization_address || "")+'</p></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><p>'+(project.metadata.organization_country || "")+'</p></td></tr></tbody></table>';
-	//} else {
-	    html = 'name<br><input type="text" value="'+project.name+'" style="width: 465px;" id="md'+projectid+'project_name"><br><br>description<br><textarea style="width: 465px;" id="md'+projectid+'project_description">'+project.description+'</textarea><br><br>funding source<br><input type="text" id="md'+projectid+'project_funding" value="'+(project.funding_source || "")+'" style="width: 465px;"><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'pi_email" value="'+(project.metadata.PI_email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'pi_firstname" value="'+(project.metadata.PI_firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'pi_lastname" value="'+(project.metadata.PI_lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'pi_organization" value="'+(project.metadata.PI_organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'pi_organization_url" value="'+(project.metadata.PI_organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'pi_organization_address" value="'+(project.metadata.PI_organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'pi_organization_country" value="'+(project.metadata.PI_organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'email" value="'+(project.metadata.email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'firstname" value="'+(project.metadata.firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'lastname" value="'+(project.metadata.lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'organization" value="'+(project.metadata.organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'organization_url" value="'+(project.metadata.organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'organization_address" value="'+(project.metadata.organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'organization_country" value="'+(project.metadata.organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><button class="btn btn-small pull-right" onclick="Retina.WidgetInstances.metagenome_share[1].updateBasicProjectMetadata(\''+projectid+'\');">update</button>';
-	//}
+	html = 'name<br><input type="text" value="'+project.name+'" style="width: 465px;" id="md'+projectid+'project_name"><br><br>description<br><textarea style="width: 465px;" id="md'+projectid+'project_description">'+project.description+'</textarea><br><br>funding source<br><input type="text" id="md'+projectid+'project_funding" value="'+(project.funding_source || "")+'" style="width: 465px;"><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'pi_email" value="'+(project.metadata.PI_email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'pi_firstname" value="'+(project.metadata.PI_firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'pi_lastname" value="'+(project.metadata.PI_lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'pi_organization" value="'+(project.metadata.PI_organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'pi_organization_url" value="'+(project.metadata.PI_organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'pi_organization_address" value="'+(project.metadata.PI_organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'pi_organization_country" value="'+(project.metadata.PI_organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'email" value="'+(project.metadata.email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'firstname" value="'+(project.metadata.firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'lastname" value="'+(project.metadata.lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'organization" value="'+(project.metadata.organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'organization_url" value="'+(project.metadata.organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'organization_address" value="'+(project.metadata.organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'organization_country" value="'+(project.metadata.organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><button class="btn btn-small pull-right" onclick="Retina.WidgetInstances.metagenome_share[1].updateBasicProjectMetadata(\''+projectid+'\');">update</button>';
 
 	if (project.metadata.hasOwnProperty('EBIstatus') && project.metadata.hasOwnProperty('EBIid')) {
 	    if (project.metadata.EBIstatus == 'complete') {
@@ -497,16 +493,59 @@
 	    alert('You must make the project public before submitting to EBI');
 	    return;
 	}
-	
-	jQuery.get('data/ebi.tsv').complete(function (xhr) {
-	    var data = xhr.responseText;
-	    var rows = data.split(/\n/).sort(function (a, b) {
-		return a.toLowerCase().localeCompare(b.toLowerCase());
+
+	var promises = [ ];
+
+	if (! widget.hasOwnProperty('ebi_biomes')) {
+	    var p1 = jQuery.Deferred();
+	    promises.push(p1);
+	    jQuery.get('data/ebi.tsv').complete(function (xhr) {
+		var data = xhr.responseText;
+		var rows = data.split(/\n/).sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
+		Retina.WidgetInstances.metagenome_share[1].ebi_biomes = rows;
+		p1.resolve();
 	    });
+	}
+	
+	if (! widget.hasOwnProperty('ebi_techs')) {
+	    var p2 = jQuery.Deferred();
+	    promises.push(p2);
+	    jQuery.getJSON('data/ebi.json').complete(function (xhr) {
+		var techs = xhr.responseJSON;
+		Retina.WidgetInstances.metagenome_share[1].ebi_techs = techs;
+		p2.resolve();
+	    });
+	}
+
+	if (! stm.DataStore.hasOwnProperty('project_metadata')) {
+	    stm.DataStore.project_metadata = {};
+	}
+
+	if (! stm.DataStore.project_metadata.hasOwnProperty(project_id)) {
+	    promises.push(jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		projectid: project_id,
+		processData: false,
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/metadata/export/'+project_id,
+		success: function (data) {
+		    var widget = Retina.WidgetInstances.metagenome_share[1];
+		    stm.DataStore.project_metadata[this.projectid] = data;
+		}
+	    }));
+	}
+
+	jQuery.when.apply(this, promises).then(function() {
+	    var widget = Retina.WidgetInstances.metagenome_share[1];
+	    
+	    // make option lists for biomes
 	    var nopts = [];
 	    var hopts = [];
-	    for (var i=0; i<rows.length; i++) {
-		var cells = rows[i].split(/\t/);
+	    for (var i=0; i<widget.ebi_biomes.length; i++) {
+		var cells = widget.ebi_biomes[i].split(/\t/);
 		if (cells.length > 1) {
 		    if (cells[0] == "host") {
 			hopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
@@ -515,7 +554,7 @@
 		    }
 		}
 	    }
-
+	    
 	    // get a hash of all biomes
 	    var biomes = {};
 	    for (var i=0; i<project.metagenomes.length; i++) {
@@ -524,7 +563,7 @@
 		}
 		biomes[project.metagenomes[i].biome].push(project.metagenomes[i].metagenome_id);
 	    }
-	    Retina.WidgetInstances.metagenome_share[1].biomes = biomes;
+	    widget.biomes = biomes;
 	    var biome_list = Retina.keys(biomes).sort();
 	    var biome_selects = [];
 	    for (var i=0; i<biome_list.length; i++) {
@@ -534,9 +573,46 @@
 		    biome_selects.push('</select></td></tr>');
 		}
 	    }
+	    
+	    // get a list of all techs
+	    var techs = {};
+	    for (var i=0; i<stm.DataStore.project_metadata[project_id].samples.length; i++) {
+		for (var h=0; h<stm.DataStore.project_metadata[project_id].samples[i].libraries.length; h++) {
+		    var lib = stm.DataStore.project_metadata[project_id].samples[i].libraries[h];
+		    if (! lib.data.hasOwnProperty('seq_model')) {
+			lib.data.seq_model = { "value": '0' };
+		    }
+		    if (! techs.hasOwnProperty(lib.data.seq_model.value)) {
+			techs[lib.data.seq_model.value] = [];
+		    }
+		    techs[lib.data.seq_model.value].push(lib.data.metagenome_id.value);
+		}
+	    }
+	    widget.techs = techs;
 
+	    // make option lists for techs
+	    var tech_list = Retina.keys(techs).sort();
+	    var tech_selects = [];
+	    var t = widget.ebi_techs;
+	    var k = Retina.keys(t).sort();
+	    for (var i=0; i<tech_list.length; i++) {
+		var title = tech_list[i];
+		if (title == '0') {
+		    title = '<div style="text-align: center;"><img src="Retina/images/info.png" style="width: 16px; cursor: help;" title="You do not have any seq_models set in your library metadata.\nYou can update your metadata to supply these information."></div>';
+		}
+		tech_selects.push('<tr><td><div style="margin-right: 10px; position: relative; bottom: 5px;">'+title+'</div></td><td><select id="tech_'+tech_list[i]+'">');
+		for (var i=0; i<k.length; i++) {
+		    tech_selects.push('<optgroup label="'+k[i]+'">');
+		    for (var h=0; h<t[k[i]].length; h++) {
+			tech_selects.push('<option value="'+k[i]+'|'+t[k[i]][h]+'">'+t[k[i]][h]+'</option>');
+		    }
+		    tech_selects.push('</optgroup>');
+		}
+		tech_selects.push('</select></td></tr>');
+	    }
+	    
 	    // create the modal
-	    var html = '\
+	    var html = [ '\
       <div class="modal-header">\
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
         <h3><img src="images/ENA-logo.png" style="width: 150px; margin-right: 10px;">submit to the ENA at EBI</h3>\
@@ -544,19 +620,21 @@
       <div class="modal-body">\
         <h4 style="margin-top: 0px;">'+project_name+'</h4>\
         <p>To submit your project to the European Nucleotide Archive at the EBI, you need to specify the biome and sequencing technology below.</p>\
-        <table><tr><td><div style="margin-right: 10px; position: relative; bottom: 5px; font-weight: bold;">sequencing techonology</div></td><td><select id="ebi_tech"><option>LS454</option><option>ILLUMINA</option><option>HELICOS</option><option>ABI_SOLID</option><option>COMPLETE_GENOMICS</option><option>BGISEQ</option><option>OXFORD_NANOPORE</option><option>PACBIO_SMRT</option><option>ION_TORRENT</option><option>CAPILLARY</option></select></td></tr>\
+        <table><tr><td colspan=2><div style="font-weight: bold;">sequencer model mapping</div></td></tr>'+tech_selects.join('') ];
+	    
+	    html.push('\
         <tr><td colspan=2><div style="font-weight: bold;">biome mapping</div></td></tr></tr>'+biome_selects.join('')+'</table>\
       </div>\
       <div class="modal-footer">\
         <button class="btn btn-danger pull-left" onclick="jQuery(\'#ebiModal\').modal(\'hide\')">cancel</button>\
         <button class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBI(\''+projectid+'\');">submit</button>\
-      </div>';
+      </div>');
 
 	    var modal = document.createElement('div');
 	    modal.setAttribute('id', 'ebiModal');
 	    modal.setAttribute('class', 'modal hide fade');
 	    document.body.appendChild(modal);
-	    modal.innerHTML = html;
+	    modal.innerHTML = html.join("");
 	    jQuery('#ebiModal').modal('show');
 	});
     };
@@ -567,7 +645,6 @@
 	var project = stm.DataStore.project[projectid];
 	var fd = new FormData();
 	
-	fd.append('ebi_tech', document.getElementById('ebi_tech').options[document.getElementById('ebi_tech').selectedIndex].value);
 	var mg2biome = {};
 	var biomes = Retina.keys(widget.biomes);
 	for (var i=0; i<biomes.length; i++) {
@@ -575,10 +652,19 @@
 		mg2biome[widget.biomes[biomes[i]][h]] = biomes[i];
 	    }
 	}
-	
+	var mg2tech = {};
+	var techs = Retina.keys(widget.techs);
+	for (var i=0; i<techs.length; i++) {
+	    for (var h=0; h<widget.techs[techs[i]].length; h++) {
+		mg2tech[widget.techs[techs[i]][h]] = techs[i];
+	    }
+	}
+
 	for (var i=0; i<project.metagenomes.length; i++) {
 	    var selname = 'biome_' + mg2biome[project.metagenomes[i].metagenome_id];
-	    fd.append(project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].value);
+	    fd.append('biome'+project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].value);
+	    var selname2 = 'tech_' + mg2tech[project.metagenomes[i].metagenome_id];
+	    fd.append('tech'+project.metagenomes[i].metagenome_id, document.getElementById(selname2).options[document.getElementById(selname2).selectedIndex].value);
 	}
 	
 	jQuery.ajax({
@@ -1234,12 +1320,8 @@
 	}
 	
 	var html = [];
-	
-	//html.push('<h4>export existing metadata</h4><p>Download the full metadata for this project in JSON or Excel format.</p><div style="text-align: center;"><button id="exportMetadataButton'+found+'" style="margin-right: 20px;" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\');">export metadata as JSON</button><button id="exportMetadataExcelButton'+found+'" class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].exportMetadata(\''+project.id+'\', \''+found+'\', true);">export metadata as Excel</button></div><div style="text-align: center;" id="exportMetadataDiv'+found+'"></div>');
 
 	html.push('<br><h4>MetaZen</h4><p>MetaZen is our metadata editor that supports importing, exporting and editing of metadata.</p><p>Click the button below to open this project in the MetaZen editor.</p><div style="text-align: center;"><button class="btn" onclick="window.open(\'mgmain.html?mgpage=metazen2&project='+project.id+'\');">open MetaZen</button></div>');
-	//html.push('<br><h4>upload new / updated metadata</h4><p>Upload an Excel metadata spreadsheet with new or updated metadata.</p><div style="text-align: center;"><button class="btn" id="uploadMetadataButton'+found+'" onclick="document.getElementById(\'uploadMetadata'+found+'\').click();">upload new metadata</button></div><div id="uploadMetadataDiv'+found+'" style="text-align: center;"></div>');
-	//html.push('<input type="file" id="uploadMetadata'+found+'" style="display: none;" onchange="Retina.WidgetInstances.metagenome_share[1].uploadMetadata(event)">');
 	
 	target.innerHTML = html.join('');
     };
