@@ -226,6 +226,13 @@
 	} else {
 	    mg.receipt = "";
 	}
+
+	mg.ebi_project = "";
+	mg.ebi_library = "";
+	if (mg.metadata.project.data.hasOwnProperty('ebi_id')) {
+	    mg.ebi_project = "<a href='http://www.ebi.ac.uk/ena/data/view/"+mg.metadata.project.data.ebi_id+"' target=_blank>"+mg.metadata.project.data.ebi_id+"</a>";
+	    mg.ebi_library = "<a href='http://www.ebi.ac.uk/ena/data/view/"+mg.metadata.library.data.ebi_id+"' target=_blank>"+mg.metadata.library.data.ebi_id+"</a>";
+	}
 	
 	mg.taxonomy = {};
 	try {

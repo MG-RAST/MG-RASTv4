@@ -67,7 +67,11 @@
 	html.push('<table>');
 	var k = Retina.keys(lib.metadata).sort();
 	for (var i=0; i<k.length; i++) {
-	    html.push('<tr><td style="padding-right: 20px;"><b>'+k[i].replace(/_/ig, ' ')+'</b></td><td>'+lib.metadata[k[i]]+'</td></tr>');
+	    if (k[i] == "ebi_id") {
+		html.push('<tr><td style="padding-right: 20px;"><b>ENA link</b></td><td><a href="http://www.ebi.ac.uk/ena/data/view/'+lib.metadata[k[i]]+'" target=_blank>'+lib.metadata[k[i]]+"</a></td></tr>");
+	    } else {
+		html.push('<tr><td style="padding-right: 20px;"><b>'+k[i].replace(/_/ig, ' ')+'</b></td><td>'+lib.metadata[k[i]]+'</td></tr>');
+	    }
 	}
 	html.push('<tr><td style="padding-right: 20px;"><b>created</b></td><td>'+lib.created+'</td></tr>');
 	html.push('</table>');
