@@ -177,20 +177,8 @@
 	if (! id.match(/^mgm/)) {
 	    id = Retina.idmap(id);
 	}
-	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org);
-	var filename = Retina.cgiParam('metagenome')+"_"+ann+"_"+(ann == "ontology" ? ont : org)+".tab";
-
-	jQuery.ajax( { url: url,
-		       headers: stm.authHeader,
-		       success: function(data) {
-			   stm.saveAs(data, filename);
-			   document.getElementById('download_progress').innerHTML = "";
-		       },
-		       error: function () {
-			   alert('there was an error retrieving the data');
-			   document.getElementById('download_progress').innerHTML = "";
-		       }
-		     } );
+	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org)+"&auth="+stm.authHeader.Authorization+"&browser=1";
+	window.open(url);
     };
 
     widget.authenticatedDownload = function (button, url) {
