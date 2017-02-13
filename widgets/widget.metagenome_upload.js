@@ -893,6 +893,10 @@
 	var data = [];
 	var d = widget.inboxData;
 	for (var i=0; i<d.length; i++) {
+	    if (d[i].tasks[0].inputs.length == 0) {
+		widget.cancelInboxAction(d[i].id);
+		continue;
+	    }
 	    if (d[i].tasks[0].inputs[0].filename != "submission_parameters.json") {
 		data.push(d[i]);
 	    }
