@@ -677,7 +677,6 @@
 	    url: RetinaConfig.mgrast_api+'/project/'+project.id+"/submittoebi",
 	    complete: function (jqXHR) {
 		var data = JSON.parse(jqXHR.responseText);
-		console.log(data);
 	    }
 	});
 
@@ -1153,20 +1152,16 @@
 	    	method: "GET",
 	    	dataType: "json",
 		dataFilter : function ( data, type ) {
-		    console.log(data);
 		    return data;
 		},
 	    	headers: stm.authHeader,
 	    	url: RetinaConfig.mgrast_api+'/project/'+projectid+'?verbosity=summary&nocache=1',
 	    	success: function (data) {
-		    console.log('success');
-		    console.log(data);
 	    	    var widget = Retina.WidgetInstances.metagenome_share[1];
 	    	    stm.DataStore.project = [ data ];
 	    	    widget.main.innerHTML = widget.showProject(0).details.join("");
 	    	},
 	    	error: function (xhr) {
-		    console.log('error');
 	    	    Retina.WidgetInstances.metagenome_share[1].main.innerHTML = "<div class='alert alert-error'>There was an error accessing your data</div>";
 	    	    widget.main.setAttribute('class','span7 offset1');
 	    	}
