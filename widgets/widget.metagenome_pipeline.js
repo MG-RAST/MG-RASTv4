@@ -158,7 +158,7 @@
 		    headers: stm.authHeader,
 		    data_manipulation: Retina.WidgetInstances.metagenome_pipeline[1].jobTable,
 		    minwidths: [1,1,1,1],
-		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID,
+		    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod-4.0&info.user="+widget.userID,
 		    data: { data: [], header: job_columns }
 		});
 	    } else {
@@ -293,7 +293,7 @@
 	var widget = this;
 	
 	widget.userID = id;
-	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&info.user="+widget.userID;
+	widget.job_table.settings.navigation_url = RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod-4.0&info.user="+widget.userID;
 	widget.display();
     };
     
