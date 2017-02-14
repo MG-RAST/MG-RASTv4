@@ -1259,7 +1259,11 @@
 		if (mperm[i][5].match(/^Reviewer/) && mperm[i][1] != null) {
 		    users[mperm[i][4]].claimed++;
 		}
-		users[mperm[i][3]+mperm[i][4]][mperm[i][0]] = true;
+		if (users[mperm[i][3]+mperm[i][4]]) {
+		    users[mperm[i][3]+mperm[i][4]][mperm[i][0]] = true;
+		} else {
+		    console.log(jQuery.extend(true, {}, mperm[i]));
+		}
 	    }
 	    var uarray = [];
 	    for (var i in users) {
