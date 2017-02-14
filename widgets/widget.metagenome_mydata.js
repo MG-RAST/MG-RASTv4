@@ -285,7 +285,6 @@
 			      console.log(error);
 			  },
 			  completed: function (jqXHR) {
-			      console.log(this);
 			      this.p.resolve();
 			  },
 			  headers: stm.authHeader
@@ -421,7 +420,7 @@
 		headers: stm.authHeader,
 		data_manipulation: widget.showJobs,
 		minwidths: [1,1,1],
-		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod&state=suspend&state=in-progress&state=checkout&state=queued&info.user="+stm.user.id,
+		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod-4.0&state=suspend&state=in-progress&state=checkout&state=queued&info.user="+stm.user.id,
 		data: { data: [], header: job_columns }
 	    });
 	} else {
@@ -545,7 +544,6 @@
 		html.push('<p>'+item.description+'</p>');
 		html.push('<hr style="margin-top: 0px; margin-bottom: 0px;">');
 	    }
-	    console.log(result);
 	    if (result.total_count > result.data.length) {
 		html.push('<div style="text-align: center;"><a class="btn btn-mini" href="mgmain.html?mgpage=share" style="width: 90%">show all '+result.total_count+' studies</a></div>');
 	    }
