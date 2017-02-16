@@ -420,7 +420,7 @@
 		headers: stm.authHeader,
 		data_manipulation: widget.showJobs,
 		minwidths: [1,1,1],
-		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline=mgrast-prod-4.0&state=suspend&state=in-progress&state=checkout&state=queued&info.user="+stm.user.id,
+		navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&state=suspend&state=in-progress&state=checkout&state=queued&info.user="+stm.user.id,
 		data: { data: [], header: job_columns }
 	    });
 	} else {

@@ -343,7 +343,7 @@
 	    synchronous: false,
 	    query_type: "prefix",
 	    data_manipulation: Retina.WidgetInstances.admin_debug[1].queueTableDataManipulation,
-	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?userattr=bp_count&info.pipeline=mgrast-prod-4.0",
+	    navigation_url: RetinaConfig['mgrast_api'] + "/pipeline?userattr=bp_count&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline="),
 	    minwidths: [ 80, 1, 1, 1, 105, 50, 1, 1, 70, 1 ],
 	    rows_per_page: 10,
 	    filter_autodetect: false,
