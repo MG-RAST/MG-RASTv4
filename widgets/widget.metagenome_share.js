@@ -630,10 +630,15 @@
         <button class="btn" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBI(\''+projectid+'\');">submit</button>\
       </div>');
 
-	    var modal = document.createElement('div');
-	    modal.setAttribute('id', 'ebiModal');
-	    modal.setAttribute('class', 'modal hide fade');
-	    document.body.appendChild(modal);
+	    var modal;
+	    if (! document.getElementById('ebiModal')) {
+		modal = document.createElement('div');
+		modal.setAttribute('id', 'ebiModal');
+		modal.setAttribute('class', 'modal hide fade');
+		document.body.appendChild(modal);
+	    } else {
+		modal = document.getElementById('ebiModal');
+	    }
 	    modal.innerHTML = html.join("");
 	    jQuery('#ebiModal').modal('show');
 	});

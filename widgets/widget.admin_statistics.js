@@ -542,7 +542,7 @@
 	var prom = jQuery.Deferred();
 	promises.push(prom);
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&info.pipeline=mgrast-prod-4.0&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -579,7 +579,7 @@
 				   } ) );
 
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&info.pipeline=mgrast-prod-4.0&limit=100000&state=suspend&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&limit=100000&state=suspend&userattr=bp_count",
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
@@ -595,7 +595,7 @@
 				   } ) );
 	
 	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&info.pipeline=mgrast-prod-4.0&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
+				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
 				     headers: stm.authHeader,
 				     success: function(data) {
 					 stm.DataStore.activejobs = {};
@@ -648,7 +648,7 @@
 		jQuery.ajax( { dataType: "json",
 			       promise: p,
 			       date: d,
-			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline=mgrast-prod-4.0&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&state=pending&state=in-progress&state=suspend&state=queued&userattr=bp_count",
+			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&state=pending&state=in-progress&state=suspend&state=queued&userattr=bp_count",
 			       headers: stm.authHeader,
 			       success: function(data) {
 				   var states = { "in-progress": 0, "completed": 0, "pending": 0, "suspend": 0, "queued": 0 };
