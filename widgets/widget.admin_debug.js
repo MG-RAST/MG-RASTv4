@@ -193,18 +193,105 @@
     widget.userTable = function (data) {
 	var result_data = [];
 
+	stm.DataStore.userTmp = data;
+
 	for (var i=0; i<data.length; i++) {
 	    result_data.push( { "login": data[i].login,
 				"firstname": data[i].firstname,
 				"lastname": data[i].lastname,
 				"email": data[i].email,
 				"id": data[i].id,
-				"action": '<button class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].impersonateUser(\''+data[i].login+'\');">impersonate</button><button style="margin-left: 10px;" class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].deActivateUser(\''+data[i].login+'\', '+data[i].active+');">'+(data[i].active == "1" ? 'disable' : 'enable')+'</button>' } );
+				"action": '<button class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].impersonateUser(\''+data[i].login+'\');">impersonate</button><button style="margin-left: 10px;" class="btn btn-mini" onclick="Retina.WidgetInstances.admin_debug[1].editUser(\''+data[i].login+'\');">edit</button>' } );
 	}
 
 	return result_data;
     };
 
+    widget.editUser = function (login) {
+	var widget = this;
+
+	var user;
+	for (var i=0; i<stm.DataStore.userTmp.length; i++) {
+	    if (stm.DataStore.userTmp[i].login == login) {
+		user = stm.DataStore.userTmp[i];
+		break;
+	    }
+	}
+
+	var html = [ '\
+      <div class="modal-header">\
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+        <h3>edit user</h3>\
+      </div>\
+      <div class="modal-body">\
+        <h4 style="margin-top: 0px;">'+user.firstname+' '+user.lastname+' ('+user.login+')</h4>' ];
+
+	html.push('<table>');
+	html.push('<tr><td>firstname</td><td><input type="text" value="'+user.firstname+'" id="editFirstname"></td></tr>');
+	html.push('<tr><td>lastname</td><td><input type="text" value="'+user.lastname+'" id="editLastname"></td></tr>');
+	html.push('<tr><td>email</td><td><input type="text" value="'+user.email+'" id="editEmail"></td></tr>');
+	html.push('<tr><td>email 2</td><td><input type="text" value="'+user.email2+'" id="editEmail2"></td></tr>');
+	html.push('<tr><td>password</td><td><input type="text" value="" id="editPassword"></td></tr>');
+	html.push('</table>');
+	html.push('<button class="btn" onclick="Retina.WidgetInstances.admin_debug[1].deActivateUser(\''+user.login+'\', '+(user.active == "1" ? 'true' : 'false')+');jQuery(\'#editUserDiv\').modal(\'hide\');">'+(user.active == "1" ? 'deactivate' : 'activate')+'</button><button class="btn" onclick="Retina.WidgetInstances.admin_debug[1].resetUserPassword(\''+user.login+'\',\''+user.email+'\');jQuery(\'#editUserDiv\').modal(\'hide\');">reset password</button>');
+	html.push('</div>\
+      <div class="modal-footer">\
+        <button class="btn btn-danger pull-left" onclick="jQuery(\'#editUserDiv\').modal(\'hide\')">cancel</button>\
+        <button class="btn" onclick="Retina.WidgetInstances.admin_debug[1].updateUser(\''+user.id+'\');">submit</button>\
+      </div>');
+
+	var modal;
+	if (! document.getElementById('editUserDiv')) {
+	    modal = document.createElement('div');
+	    modal.setAttribute('id', 'editUserDiv');
+	    modal.setAttribute('class', 'modal hide fade');
+	    document.body.appendChild(modal);
+	} else {
+	    modal = document.getElementById('editUserDiv');
+	}
+	modal.innerHTML = html.join("");
+	jQuery('#editUserDiv').modal('show');
+    };
+
+    widget.updateUser = function (id) {
+	var widget = this;
+
+	var fd = 'firstname='+document.getElementById('editFirstname').value+'&lastname='+document.getElementById('editLastname').value+'&email='+document.getElementById('editEmail').value+'&email2='+document.getElementById('editEmail2').value;
+	if (document.getElementById('editPassword').value.length) {
+	    fd += '&dwp='+document.getElementById('editPassword').value;
+	}
+
+	jQuery.ajax({
+	    method: "PUT",
+	    data: fd,
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/user/'+id,
+	    success: function (d) {
+		alert('user updated');
+		window.location.reload();
+	    }}).fail(function(xhr, error) {
+		alert('updating user failed');
+	    });
+
+	jQuery('#editUserDiv').modal('hide');
+    };
+
+    widget.resetUserPassword = function (login, email) {
+	var widget = this;
+
+	jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: RetinaConfig.mgrast_api+'/user/resetpassword?login='+login+'&email='+email,
+	    success: function (d) {
+		alert('new credentials sent to user');
+		window.location.reload();
+	    }}).fail(function(xhr, error) {
+		alert('reset password failed');
+	    });
+    };
+    
     widget.deActivateUser = function (login, deactivate) {
 	var widget = Retina.WidgetInstances.admin_debug[1];
 	
@@ -214,11 +301,10 @@
 	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/user/deactivate/'+login+'?active='+(deactivate ? "0" : "1"),
 	    success: function (d) {
-		console.log(d);
-		alert('user updated');
+		alert('user status updated');
 		window.location.reload();
 	    }}).fail(function(xhr, error) {
-		alert('action failed');
+		alert('updating user failed');
 	    });
 
     };
@@ -375,40 +461,6 @@
 
 	window.open("mgmain.html?mgpage=pipeline&admin=1&user="+user+"&job="+id);
     };
-
-    // widget.showProject = function (pid, data) {
-    // 	var widget = Retina.WidgetInstances.admin_debug[1];
-
-    // 	var html = "<b>loading project data for "+pid+"</b><img src'Retina/images/waiting.gif'>";
-
-    // 	if (data) {
-    // 	    html = "<div id='project_message_space'></div><table><tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Source Project</th><td>"+data.name+" ("+data.id+")<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].deleteProject(\""+data.id+"\");'>delete</button></td></tr>";
-    // 	    html += "<tr><th style='text-align: left; vertical-align: top; padding-right: 20px;'>Metagenomes to move</th><td><select size=10 multiple id='project_a'>";
-    // 	    for (var i=0; i<data.metagenomes.length; i++) {
-    // 		html += "<option>"+data.metagenomes[i][0]+"</option>";
-    // 	    }
-    // 	    html += "</select></td></tr><tr><th style='text-align: left; padding-right: 20px;'>Target Project ID<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.admin_debug[1].createProject();'>create</button></th><td><div class='input-append'><input type='text' id='project_b'><button class='btn' onclick='Retina.WidgetInstances.admin_debug[1].moveMetagenomes(\""+pid+"\");'>move metagenomes</button></div></td></tr></table>";
-    // 	} else {
-    // 	    if (pid.match(/^\d+$/)) {
-    // 		pid = "mgp"+pid;
-    // 		document.getElementById('projectSel').value = pid;
-    // 	    }
-    // 	    jQuery.ajax({
-    // 		method: "GET",
-    // 		dataType: "json",
-    // 		headers: stm.authHeader,
-    // 		url: RetinaConfig.mgrast_api+'/project/'+pid+"?verbosity=full",
-    // 		success: function (data) {
-    // 		    var widget = Retina.WidgetInstances.admin_debug[1];
-    // 		    widget.showProject(data.id, data);
-    // 		},
-    // 		error: function (data) {
-    // 		    document.getElementById('projectSpace').innerHTML = "<div class='alert alert-error'>retrieving project data failed, is the ID valid?</div>";
-    // 		}});
-    // 	}
-
-    // 	document.getElementById('projectSpace').innerHTML = html;
-    // };
 
     widget.deleteProject = function(id) {
 	var widget = this;
