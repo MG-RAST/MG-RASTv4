@@ -12,7 +12,7 @@ var RetinaConfig = {
 
     // server urls
     "mgrast_ftp": "ftp://ftp.metagenomics.anl.gov",
-    "mgrast_api": "http://api.metagenomics.anl.gov",
+    "mgrast_api": "http://api-dev.metagenomics.anl.gov",
     "shock_url": "http://shock.metagenomics.anl.gov",
     "awe_url": "http://awe.metagenomics.anl.gov",
     "m5nr_solr_url": "http://140.221.67.212:8983/solr/",
