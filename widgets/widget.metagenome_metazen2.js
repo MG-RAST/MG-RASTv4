@@ -53,7 +53,7 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=verbose&limit=999',
+		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=999',
 		success: function (data) {
 		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		    widget.projectData = [];
@@ -156,7 +156,7 @@
 	// eps
 	html.push('<div style="float: left; margin-left: 20px;"><div style="font-weight: bold;">environmental packages</div><div style="float: left;">');
 	for (var i=0; i<widget.eps.length; i++) {
-	    html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="ep-'+widget.eps[i].replace(/\s/g, "-")+'Checkbox" type="checkbox"'+(widget.activeTabs["ep-"+widget.eps[i]] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="ep-'+widget.eps[i]+'"> '+widget.eps[i]+'</div>');
+	    html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="ep-'+widget.eps[i].replace(/\|/g, "-").replace(/\s/g, "-")+'Checkbox" type="checkbox"'+(widget.activeTabs["ep-"+widget.eps[i]] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="ep-'+widget.eps[i]+'"> '+widget.eps[i]+'</div>');
 	    if (i % 7 == 0 && i > 0) {
 		html.push('</div><div style="float: left;">');
 	    }
@@ -212,7 +212,7 @@
 	html.push('<li id="library-mimarks-survey-li"><a href="#library-mimarks-survey">library mimarks-survey</a></li>');
 	html.push('<li id="library-metatranscriptome-li"><a href="#library-metatranscriptome">library metatranscriptome</a></li>');
 	for (var i=0; i<widget.eps.length; i++) {
-	    var safeEP = widget.eps[i].replace(/\|/g, " ").replace(/\s/g, "-");
+	    var safeEP = widget.eps[i].replace(/\|/g, "-").replace(/\s/g, "-");
 	    html.push('<li id="ep-'+safeEP+'-li"><a href="#ep-'+safeEP+'">'+ widget.eps[i]+'</a></li>');
 	}
 
@@ -232,7 +232,7 @@
 	html.push('<div class="tab-pane" id="library-metatranscriptome">metatranscriptome</div>');
 	tables.push( { "name": "library-metatranscriptome", "data": widget.metadataTemplate.library.metatranscriptome } );
 	for (var i=0; i<widget.eps.length; i++) {
-	    var safeEP = widget.eps[i].replace(/\|/g, " ").replace(/\s/g, "-");
+	    var safeEP = widget.eps[i].replace(/\|/g, "-").replace(/\s/g, "-");
 	    html.push('<div class="tab-pane" id="ep-'+safeEP+'">'+ widget.eps[i]+'</div>');
 	    tables.push( { "name": "ep-"+widget.eps[i], "data": widget.metadataTemplate.ep[widget.eps[i]] } );
 	}
@@ -249,7 +249,7 @@
 
 	for (var i=0; i<widget.eps.length; i++) {
 	    if (! widget.activeTabs["ep-"+widget.eps[i]]) {
-		var safeEP = widget.eps[i].replace(/\|/g, " ").replace(/\s/g, "-");
+		var safeEP = widget.eps[i].replace(/\|/g, "-").replace(/\s/g, "-");
 		jQuery('#ep-'+safeEP+'-li').toggle();
 	    }
 	}
@@ -296,7 +296,7 @@
 		thtml.push('</td></tr>');
 	    }
 	    thtml.push('</table>');
-	    var safeName = tables[i].name.replace(/\|/g, " ").replace(/\s/g, "-");
+	    var safeName = tables[i].name.replace(/\|/g, "-").replace(/\s/g, "-");
 	    document.getElementById(safeName).innerHTML = thtml.join("");
 	}
 	widget.tables = hashTable;
@@ -792,7 +792,7 @@
 	document.getElementById('envo_select_div').innerHTML = "<div class='alert alert-info'><img src='Retina/images/waiting.gif' style='width: 24px;'> loading selected ENVO version</div>";
     };
 	
-	widget.showENVOselect = function () {
+    widget.showENVOselect = function () {
 	    var widget = this;
 
 	var select = document.getElementById('envo_select_div');
@@ -821,7 +821,7 @@
     widget.updateTabs = function (checkbox) {
 	var widget = this;
 
-	var name = checkbox.getAttribute('name').replace(/\|/g, " ").replace(/\s/g, "-");
+	var name = checkbox.getAttribute('name').replace(/\|/g, "-").replace(/\s/g, "-");
 	var sel = checkbox.checked;
 	
 	widget.activeTabs[name] = sel;
@@ -912,9 +912,9 @@
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 			
-		document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
 		widget.loadedData = data;
 		widget.fillSpreadSheet();
+		document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
 	    },
 	    error: function (xhr) {
 		var error = "";
@@ -1056,7 +1056,7 @@
 	    if (widget.activeTabs[sheet]) {
 		widget.activeTabs[sheet] = false;
 		document.getElementById(sheet+"Checkbox").removeAttribute('checked');
-		var name = sheet.replace(/\|/g, " ").replace(/\s/g, "-");
+		var name = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
 		jQuery('#'+name+"-li").toggle();
 	    }
 	}
@@ -1157,7 +1157,7 @@
 
 	for (var i=0; i<widget.projectData.length; i++) {
 	    // turn metagenome_name into a select if this is an existing project
-	    if (widget.projectData[i].name == pname) {
+	    if (widget.projectData[i].name == pname && widget.projectData[i].metagenomes.length) {
 		widget.tables["library-metagenome"].metagenome_name.type = 'select';
 		widget.tables["library-mimarks-survey"].metagenome_name.type = 'select';
 		widget.tables["library-metatranscriptome"].metagenome_name.type = 'select';
@@ -1188,7 +1188,7 @@
 	    widget.checkProject(value);
 	}
 	
-	var sheetID = sheet.replace(/\s/g, "-");
+	var sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
 	
 	// check if we know this sheet
 	if (! document.getElementById(sheetID)) {
@@ -1201,7 +1201,7 @@
 	    if (! widget.activeTabs[sheet]) {
 		widget.activeTabs[sheet] = true;
 		document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
-		var name = sheetID.replace(/\|/g, " ");
+		var name = sheetID.replace(/\|/g, "-");
 		jQuery('#'+name+"-li").toggle();
 	    }
 	}
@@ -1428,7 +1428,7 @@
 		for (var i=0; i<widget.metagenomes.length; i++) {
 		    form.append('metagenome', widget.metagenomes[i]);
 		}
-	
+
 		jQuery.ajax({
 		    method: "POST",
 		    headers: stm.authHeader,

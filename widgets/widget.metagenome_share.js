@@ -1153,12 +1153,10 @@
 	}
 
 	if (canEdit) {
+
 	    jQuery.ajax({
 	    	method: "GET",
 	    	dataType: "json",
-		dataFilter : function ( data, type ) {
-		    return data;
-		},
 	    	headers: stm.authHeader,
 	    	url: RetinaConfig.mgrast_api+'/project/'+projectid+'?verbosity=summary&nocache=1',
 	    	success: function (data) {

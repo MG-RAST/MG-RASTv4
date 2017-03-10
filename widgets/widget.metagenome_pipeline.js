@@ -318,7 +318,7 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader, 
-		url: RetinaConfig.mgrast_api+'/metagenome/'+job.info.userattr.id,
+		url: RetinaConfig.mgrast_api+'/metagenome/'+job.info.userattr.id+'?nocache=1',
 		success: function (data) {
 		    stm.DataStore.metagenome[data.id] = data;
 		    Retina.WidgetInstances.metagenome_pipeline[1].showJobDetails(jobid);
@@ -411,11 +411,7 @@
 	var average_wait_time = widget.averageWaitTime(job.info.priority, job.tasks[0].inputs[Retina.keys(job.tasks[0].inputs)[0]].size);	
 	var html = "";
 
-	if (RetinaConfig.v3) {
-	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='"+RetinaConfig.v3CGIUrl+"?page=MetagenomeProject&project="+job.info.userattr.project_id.replace(/mgp/, "")+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
-	} else {
-	    html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
-	}
+	html += "<p>The job <b>"+job.info.userattr.name+" ("+job.info.name+")</b> was submitted as part of the project <b><a href='?mgpage=project&project="+job.info.userattr.project_id+"' target=_blank>"+job.info.project+"</a></b> at <b>"+widget.prettyAWEdate(job.info.submittime)+"</b>.</p>";
 
 	html += "<p>The current status is <b>"+job.state+"</b>, ";
 	if (job.state == "suspend") {
@@ -438,11 +434,7 @@
 		var time_passed = widget.timePassed(Date.parse(job.info.submittime), Date.parse(job.info.completedtime));
 		html += "the computation is finished. It took <b>"+time_passed+"</b> from job submission until completion.";
 
-		if (RetinaConfig.v3) {
-		    html += "<p>The result data is available for download on the <a href='"+RetinaConfig.v3CGIUrl+"?page=DownloadMetagenome&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='"+RetinaConfig.v3CGIUrl+"?page=MetagenomeOverview&metagenome="+job.info.userattr.id.replace(/mgm/, "")+"' target=_blank>metagenome overview page</a>.</p>";
-		} else {
-		    html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+Retina.idmap(job.info.userattr.id)+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+Retina.idmap(job.info.userattr.id)+"' target=_blank>metagenome overview page</a>.</p>";
-		}
+		html += "<p>The result data is available for download on the <a href='?mgpage=download&metagenome="+Retina.idmap(job.info.userattr.id)+"' target=_blank>download page</a>. You can take a look at the overview analysis data on the <a href='?mgpage=overview&metagenome="+Retina.idmap(job.info.userattr.id)+"' target=_blank>metagenome overview page</a>.</p>";
 	    }
 	    html += "</p>";
 	    
@@ -469,6 +461,27 @@
 	    }
 	}
 
+	// priority section
+	if (job.remaintasks > 0) {
+	    html += "<div id='jobprioritychecker'></div>";
+	    if (! stm.DataStore.metagenome.hasOwnProperty('mixsCompliant')) {
+		jQuery.ajax({
+		    method: "GET",
+		    dataType: "json",
+		    dataid: job.info.userattr.id,
+		    headers: stm.authHeader, 
+		    url: RetinaConfig.mgrast_api+'/job/check_mixs/'+job.info.userattr.id,
+		    success: function (data) {
+			stm.DataStore.metagenome[this.dataid].mixsCompliant = data.has_mixs;
+			Retina.WidgetInstances.metagenome_pipeline[1].showPriorityDetails(this.dataid);
+		    }}).fail(function(xhr, error) {
+			document.getElementById('jobprioritychecker').innerHTML = "<div class='alert alert-error' style='margin: 20px;'>could not retrieve priority data</div>";
+		    });
+	    } else {
+		Retina.WidgetInstances.metagenome_pipeline[1].showPriorityDetails(job.info.userattr.id);
+	    }
+	}
+
 	if (job.remaintasks > 0 && Retina.cgiParam('admin')) {
 	    html += "<h4>Administrator Tasks</h4><div>";
 	    html += "<div style='margin-bottom: 10px;'>This job is owned by user <a href='#' onclick='Retina.WidgetInstances.metagenome_pipeline[1].changeDisplayUser(\""+job.info.user+"\");'>"+job.info.user+"</a></div>";
@@ -480,6 +493,67 @@
 	}
 
 	return html;
+    };
+
+    widget.showPriorityDetails = function (id) {
+	var widget = this;
+
+	var job = stm.DataStore.metagenome[id];
+	if (stm.DataStore.job[job.pipeline_id].info.priority < 20) {
+	    var html = [];
+	    html.push('<h4>Priority Increase</h4><p>Your job priority is not at maximum. You can increase it if you make your data publicly available sooner.</p>');
+
+	    if (job.mixsCompliant) {
+		html.push('<p>You metadata is already MiXS compliant. Select a new option for when you are making your data publically available and click set.</p>');
+
+		html.push('<p style="text-align: center;"><select id="newPublicationSetting" style="margin-bottom: 0px;"><option value="immediately">immediately</option>');
+		var p = job.pipeline_parameters.priority;
+		if (p != '3months') {
+		    html.push('<option value="3months">in 3 months</option>');
+		    if (p != '6months') {
+			html.push('<option value="6months">in 6 months</option>');
+			if (p != 'date') {
+			    html.push('<option value="date">eventually</option>');
+			}
+		    }
+		}		
+		html.push('</select> <button class="btn" id="setButton" onclick="Retina.WidgetInstances.metagenome_pipeline[1].updatePublicationSetting(\''+job.id+'\');">set</button></p>');
+	    } else {
+		html.push('<p>Before you can update your publication setting you need to provide minimal metadata (MiXS). To do so, click the button below.</p><p style="text-align: center;"><button class="btn" onclick="window.location=\'mgmain.html?mgpage=metazen2&project='+job.project[0]+'\';">add metadata</button></p>');
+	    }
+
+	    document.getElementById('jobprioritychecker').innerHTML = html.join("");
+	}
+	
+	return;
+    };
+
+    widget.updatePublicationSetting = function (id) {
+	var widget = this;
+
+	var newPublicationSetting = document.getElementById('newPublicationSetting').options[document.getElementById('newPublicationSetting').selectedIndex].value;
+	var job = stm.DataStore.metagenome[id];
+
+	var data = '{ "metagenome_id": "'+job.id+'", "priority": "'+newPublicationSetting+'", "awe_id": "'+job.pipeline_id+'" }';
+	jQuery('#setButton').prop("disabled",true);
+	
+	jQuery.ajax({
+	    method: "POST",
+	    dataType: "json",
+	    data: data,
+	    processData: false,
+	    contentType: false,
+	    headers: stm.authHeader, 
+	    url: RetinaConfig.mgrast_api+'/job/publicationadjust',
+	    success: function (data) {
+		alert("publication date adjusted");
+		jQuery('#setButton').prop("disabled",false);
+		Retina.WidgetInstances.metagenome_pipeline[1].display();
+	    }}).fail(function(xhr, error) {
+		alert("priority adjustment failed");
+		jQuery('#setButton').prop("disabled",false);
+		console.log(error);
+	    });
     };
 
     widget.errorHandling = function (job) {
@@ -636,14 +710,12 @@
 
 	if (prompt("Really delete job "+mgid+"? This cannot be undone. Type 'DELETE' to confirm", "") == "DELETE") {
 	    var reason = prompt("Why do you want to delete the job?", "- not specified -");
-	    var form = new FormData();
-	    form.append('metagenome_id', mgid);
-	    form.append('reason', reason);
+	    var data = '{ "metagenome_id": "'+mgid+'", "reason": "'+reason+'" }';
 	    jQuery('#deleteButton').prop("disabled",true);
 	    jQuery.ajax({
 		method: "POST",
 		dataType: "json",
-		data: form,
+		data: data,
 		processData: false,
 		contentType: false,
 		headers: stm.authHeader, 
