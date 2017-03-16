@@ -613,12 +613,6 @@
     widget.changeContainerParam = function (param, value, value2, value3, value4) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
-	if (widget.cutoffThresholds.hasOwnProperty(param) && widget.cutoffThresholds[param] > value) {
-	    document.getElementById('containerParam'+param).value = widget.cutoffThresholds[param];
-	    alert(param+' minimum threshols is '+widget.cutoffThresholds[param]);
-	    return;
-	} 
-	
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
 	
 	// check if this is a tax filter
