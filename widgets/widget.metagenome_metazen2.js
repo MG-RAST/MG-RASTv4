@@ -13,7 +13,7 @@
     };
     
     widget.metadata = {};
-    
+    widget.samples = {};
     widget.miscParams = {};
     
     widget.activeTabs = { "library-metagenome": true, "library-mimarks-survey": true, "library-metatranscriptome": true };
@@ -73,6 +73,7 @@
 	    stm.DataStore.cv.versions.biome = stm.DataStore.cv.versions.biome.sort(Retina.sortDesc);
 	    stm.DataStore.cv.versions.feature = stm.DataStore.cv.versions.feature.sort(Retina.sortDesc);
 	    stm.DataStore.cv.versions.material = stm.DataStore.cv.versions.material.sort(Retina.sortDesc);
+	    stm.DataStore.cv.select.sample_name = [];
 
 	    widget.currentENVOversion = stm.DataStore.cv.versions.biome[0];	    
 
@@ -105,11 +106,7 @@
 		var eps = Retina.keys(data.ep).sort();
 		widget.eps = eps;
 		for (var i=0; i<eps.length; i++) {
-		    if (i==0) {
-			widget.activeTabs["ep-"+eps[i]] = true;
-		    } else {
-			widget.activeTabs["ep-"+eps[i]] = false;
-		    }
+		    widget.activeTabs["ep-"+eps[i]] = false;
 		}
 		promise4.resolve();
 	    },
@@ -218,6 +215,10 @@
 
 	// store div data
 	var tables = [];
+
+	widget.metadataTemplate.library.metagenome.sample_name.type = 'select';
+	widget.metadataTemplate.library["mimarks-survey"].sample_name.type = 'select';
+	widget.metadataTemplate.library.metatranscriptome.sample_name.type = 'select';
 	
 	// create divs
 	html.push('</ul><div class="tab-content" style="border: 1px solid #ddd; border-top: none; padding-top: 20px; padding-bottom: 20px;">');
@@ -231,9 +232,11 @@
 	tables.push( { "name": "library-mimarks-survey", "data": widget.metadataTemplate.library["mimarks-survey"] } );
 	html.push('<div class="tab-pane" id="library-metatranscriptome">metatranscriptome</div>');
 	tables.push( { "name": "library-metatranscriptome", "data": widget.metadataTemplate.library.metatranscriptome } );
+	
 	for (var i=0; i<widget.eps.length; i++) {
 	    var safeEP = widget.eps[i].replace(/\|/g, "-").replace(/\s/g, "-");
 	    html.push('<div class="tab-pane" id="ep-'+safeEP+'">'+ widget.eps[i]+'</div>');
+	    widget.metadataTemplate.ep[widget.eps[i]].sample_name.type = 'select';
 	    tables.push( { "name": "ep-"+widget.eps[i], "data": widget.metadataTemplate.ep[widget.eps[i]] } );
 	}
 	html.push('</div>');
@@ -699,6 +702,31 @@
 		val = '';
 		valid = false;
 	    }
+
+	    // check for new sample names
+	    if (widget.currField.table == 'sample') {
+		if (widget.currField.field == 'sample_name') {
+		    if (widget.samples.hasOwnProperty(val)) {
+			valid = false;
+			val = '';
+			msg = 'a sample of this name already exists in this sheet';
+		    } else {
+			widget.samples[val] = row;
+			stm.DataStore.cv.select.sample_name.push(val);
+		    }
+		}
+		else if (widget.currField.field == 'env_package') {
+		    var sheet = 'ep-'+val;
+		    var sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
+		    if (! widget.activeTabs[sheet]) {
+			widget.activeTabs[sheet] = true;
+			document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
+			var name = sheetID.replace(/\|/g, "-");
+			jQuery('#'+name+"-li").toggle();
+		    }
+		}
+	    }
+	    
 	} else {
 	    valid = false;
 	    if (widget.metadata.hasOwnProperty(widget.currField.table) && widget.metadata[widget.currField.table].hasOwnProperty(widget.currField.field)) {
@@ -1224,6 +1252,29 @@
 	    return;
 	}
 
+	// check for new sample names
+	if (cat == 'sample') {
+	    if (field == 'sample_name') {
+		if (widget.samples.hasOwnProperty(value)) {
+		    alert('a sample of this name already exists in this sheet');
+		    return;
+		} else {
+		    widget.samples[value] = targetrow;
+		    stm.DataStore.cv.select.sample_name.push(value);
+		}
+	    }
+	    else if (field == 'env_package') {
+		sheet = 'ep-'+value;
+		sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
+		if (! widget.activeTabs[sheet]) {
+		    widget.activeTabs[sheet] = true;
+		    document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
+		    var name = sheetID.replace(/\|/g, "-");
+		    jQuery('#'+name+"-li").toggle();
+		}
+	    }
+	}
+
 	// add the data to the metadata in memory
 	if (! widget.metadata.hasOwnProperty(sheet)) {
 	    widget.metadata[sheet] = {};
@@ -1255,7 +1306,6 @@
 	}
 	
 	table.rows[row].cells[column].innerHTML = value;
-	
     };
 
     // Excel export / import
