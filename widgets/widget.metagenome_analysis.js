@@ -613,12 +613,6 @@
     widget.changeContainerParam = function (param, value, value2, value3, value4) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
-	if (widget.cutoffThresholds.hasOwnProperty(param) && widget.cutoffThresholds[param] > value) {
-	    document.getElementById('containerParam'+param).value = widget.cutoffThresholds[param];
-	    alert(param+' minimum threshols is '+widget.cutoffThresholds[param]);
-	    return;
-	} 
-	
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
 	
 	// check if this is a tax filter
@@ -1409,15 +1403,9 @@
 
 	// fill the filters array with the cutoffs
     	var filters = [];
-	// if (c.parameters.evalue > widget.cutoffThresholds['evalue']) {
-	//     filters.push([ 2, c.parameters.evalue ]);
-	// }
-	// if (c.parameters.identity > widget.cutoffThresholds['identity']) {
-	//     filters.push([ 3, c.parameters.identity ]);
-	// }
-	// if (c.parameters.alilength > widget.cutoffThresholds['alilength']) {
-	//     filters.push([ 4, c.parameters.alilength ]);
-	// }
+	filters.push([ 2, c.parameters.evalue ]);
+	filters.push([ 3, c.parameters.identity ]);
+	filters.push([ 4, c.parameters.alilength ]);
 	
 	// create array index lookups for taxonomy and ontology levels
 	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6, "strain": 7 };

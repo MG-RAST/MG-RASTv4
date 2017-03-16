@@ -182,19 +182,7 @@
     };
 
     widget.authenticatedDownload = function (button, url) {
-	var widget = Retina.WidgetInstances.metagenome_download[1];
-	button.setAttribute('disabled', 'true');
-	jQuery.ajax( { url: url+"&link=1",
-		       headers: stm.authHeader,
-		       success: function(data) {
-			   button.removeAttribute('disabled');
-			   window.location = data.url;
-		       },
-		       error: function () {
-			   button.removeAttribute('disabled');
-			   alert('download failed');
-		       }
-		     } );
+	window.location = url+"&auth="+stm.authHeader.Authorization+"&browser=1";
     };
     
     widget.apiDownloadHTML = function () {
