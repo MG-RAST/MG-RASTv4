@@ -54,7 +54,6 @@
 		      headers: stm.authHeader,
 		      contentType: 'application/json',
 		      success: function (data) {
-			  console.log(data);
 			  var html = "";
 			  if (data) {
 			      if (data.ERROR) {
