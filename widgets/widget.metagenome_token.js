@@ -53,7 +53,7 @@
 	jQuery.ajax({ url: RetinaConfig.mgrast_api + "/user/claimtoken/" + Retina.cgiParam('token'),
 		      headers: stm.authHeader,
 		      contentType: 'application/json',
-		      complete: function (data) {
+		      success: function (data) {
 			  var html = "";
 			  if (data) {
 			      if (data.ERROR) {

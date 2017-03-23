@@ -97,7 +97,7 @@
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+", "+project.metadata.PI_organization+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
 	    html += "<tr><td><b>static link</b></td><td>"+(project.status == "public" ? "<a href='http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"'>http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"</a>" : "private projects cannot be linked")+"</td></tr>";
-	    var invis = { 0: true, 4: true, 5: true };
+	    var invis = { 4: true, 5: true };
 	    if (project.metadata.hasOwnProperty('ebi_id')) {
 		html += "<tr><td><b>ENA link</b></td><td><a href='http://www.ebi.ac.uk/ena/data/view/"+project.metadata.ebi_id+"' target=_blank>"+project.metadata.ebi_id+"</a></td></tr>";
 	    } else {
@@ -142,7 +142,7 @@
 		var mg = project.metagenomes[i];
 		var mgid = mg.metagenome_id.match(/^mgm/) ? mg.metagenome_id : "mgm"+mg.metagenome_id;
 		widget.metagenomes[mgid] = mg.name;
-		var row = [ project.status == "private" ? "n/a" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
+		var row = [ project.status == "private" ? "<span title='click the share project button above to make the project public and obtain stable identifiers' style='cursor: help;'>n/a</span>" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
 			    mg.viewable ? ("<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap(mgid) : mgid)+"' target=_blank>"+mg.name+"</a>") : "<a style='cursor: help;' title='This metagenome has not yet completed computation'>"+mg.name+"</a>",
 			    mg.basepairs,
 			    mg.sequences,
