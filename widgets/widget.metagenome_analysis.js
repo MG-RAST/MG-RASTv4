@@ -2003,11 +2003,11 @@
 
 	    // create a metagenome selection renderer
 	    var result_columns = [ "name", "ID", "project id", "project name", "PI last name", "biome", "feature", "material", "environmental package", "location", "country", "sequencing method" ];
-	    var result_attributes = { "ID": "metagenome_id", "project id": "project_id", "project name": "project_name", "PI last name": "pi_lastname","environmental package": "env_package_type", "sequencing method": "seq_method" };
+	    var result_attributes = { "ID": "id", "project id": "project_id", "project name": "project_name", "PI last name": "pi_lastname","environmental package": "env_package_type", "sequencing method": "seq_method" };
 
 	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "WGS", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "MT", "title": "metatranscriptome", "checked": false } ] } ];
 	    if (stm.user) {
-		specialFilters.push( { "attribute": "public", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "true", "title": "public", "checked": false }, { "value": "false", "title": "private", "checked": false } ] } );
+		specialFilters.push( { "attribute": "status", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "public", "title": "public", "checked": false }, { "value": "private", "title": "private", "checked": false } ] } );
 	    }
 
 	    widget.mgselect = Retina.Renderer.create("listselect", {
@@ -2016,7 +2016,7 @@
 		callback: Retina.WidgetInstances.metagenome_analysis[1].loadData,
 		asynch_limit: 100,
 		synchronous: false,
-		navigation_url: RetinaConfig.mgrast_api+'/search?',//'/metagenome?match=all&verbosity=mixs',
+		navigation_url: RetinaConfig.mgrast_api+'/metagenome?match=all&verbosity=mixs',
 		data: [],
 		filter: result_columns,
 		keyMapping: result_attributes,
@@ -2031,7 +2031,7 @@
 		specialFilters: specialFilters,
 		asynch_filter_attribute: 'name',
 		data_manipulation: Retina.WidgetInstances.metagenome_analysis[1].select_manipulation,
-		value: "metagenome_id"
+		value: "id"
 	    }).render();
 	    widget.mgselect.update();
 	}
@@ -2044,10 +2044,10 @@
 
 	for (var i=0; i<data.length; i++) {
 	    var item = data[i];
-	    // if (data[i].status != "public") {
-	    // 	data[i].metagenome_id = Retina.idmap(data[i].metagenome_id);
-	    // 	data[i].project_id = Retina.idmap(data[i].project_id);
-	    // }
+	    if (data[i].status != "public") {
+	    	data[i].id = Retina.idmap(data[i].id);
+	    	data[i].project_id = Retina.idmap(data[i].project_id);
+	    }
 	    result_data.push(item);
 	}
 
@@ -2187,7 +2187,6 @@
 
 	ids = jQuery.extend(true, [], ids);
 	for (var i=0; i<ids.length; i++) {
-	    ids[i].id = ids[i].id || ids[i].metagenome_id;
 	    if (! ids[i].id.match(/^mgm/) && ! stm.DataStore.profile.hasOwnProperty(ids[i].id)) {
 		ids[i].id = Retina.idmap(ids[i].id);
 	    }

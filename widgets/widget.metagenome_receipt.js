@@ -171,7 +171,7 @@
 		var widget = Retina.WidgetInstances.metagenome_receipt[1];
 		widget.metagenome = data;
 		if (! data.hasOwnProperty('submission')) {
-		    widget.target.innerHTML = "<div class='alert'>The processing receipt is only available for metagenomes processed after May 1st 2016.</div>";
+		    widget.target.innerHTML = "<div class='alert'>The processing receipt is only available for metagenomes processed after January 1st 2017.</div>";
 		    return;
 		}
 		
