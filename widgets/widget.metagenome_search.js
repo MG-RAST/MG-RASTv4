@@ -83,15 +83,15 @@
     </div>\
   </div>";
 
-	// option buttons
-	html += "\
-  <div style='width: 175px; float: left;'>\
-    <div class='btn-group' data-toggle='buttons-radio'>\
-      <button class='btn btn-mini active' data-toggle='button' id='metadata_button'>metadata</button>\
-      <button class='btn btn-mini' data-toggle='button' id='function_button'>function</button>\
-      <button class='btn btn-mini' data-toggle='button' id='organism_button'>organism</button>\
-    </div>\
-  </div>";
+  // 	// option buttons
+  // 	html += "\
+  // <div style='width: 175px; float: left;'>\
+  //   <div class='btn-group' data-toggle='buttons-radio'>\
+  //     <button class='btn btn-mini active' data-toggle='button' id='metadata_button'>metadata</button>\
+  //     <button class='btn btn-mini' data-toggle='button' id='function_button'>function</button>\
+  //     <button class='btn btn-mini' data-toggle='button' id='organism_button'>organism</button>\
+  //   </div>\
+  // </div>";
 
 	// result text
 	html += "\
@@ -433,13 +433,18 @@
 	for (var i=0;i<rows.length;i++) {
             html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+">");
 	    html.push("<td>"+Retina.dateString(data[rows[i][0]]["created"]).split(/\s/)[0]+"</td>");
-	    html.push("<td><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>");
+	    if (data[rows[i][0]]["project_id"]) {
+		html.push("<td><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>");
+	    } else {
+		html.push("<td>-</td>");
+	    }
 
+	    
             html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["id"]) : data[rows[i][0]]["id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></td>");
 	    html.push("<td>"+seqTypes[data[rows[i][0]]["sequence_type"]]+"</td>");
-            html.push("<td>"+data[rows[i][0]]["biome"]+"</td>");
-            html.push("<td>"+data[rows[i][0]]["country"]+"</td>");
-	    html.push("<td>"+data[rows[i][0]]["location"]+"</td>");
+            html.push("<td>"+(data[rows[i][0]]["biome"] || "-")+"</td>");
+            html.push("<td>"+(data[rows[i][0]]["country"] || "-")+"</td>");
+	    html.push("<td>"+(data[rows[i][0]]["location"] || "-")+"</td>");
 	    html.push("</tr>");
 	}
         
@@ -502,39 +507,47 @@
 	}
 
 	var api_url = RetinaConfig.mgrast_api + '/metagenome?verbosity=mixs&';
-			
+	//var api_url = RetinaConfig.mgrast_api + '/search?';
+		
 	// metadata function organism
-	var type = [];
-	var poss = [ 'metadata', 'organism', 'function' ];
-	for (var i=0; i<poss.length; i++) {
-	    var btn = document.getElementById(poss[i] + '_button');
-	    for (var h=0; h<btn.classList.length; h++) {
-		if (btn.classList[h] == 'active') {
-		    type.push(poss[i]);
-		    break;
-		}
-	    }
-	}
+	// var type = [];
+	// var poss = [ 'metadata', 'organism', 'function' ];
+	// for (var i=0; i<poss.length; i++) {
+	//     var btn = document.getElementById(poss[i] + '_button');
+	//     for (var h=0; h<btn.classList.length; h++) {
+	// 	if (btn.classList[h] == 'active') {
+	// 	    type.push(poss[i]);
+	// 	    break;
+	// 	}
+	//     }
+	// }
 
 	widget.match = "all";
 	
 	var query_str = "";
-	for (var h=0;h<type.length; h++) {
-	    if(query_str != "") {
-		query_str += "&";
-	    }
-	    query_str += type[h] + "=" + widget.query.split(/\s/).join("&"+type[h]+"=");
+	if (widget.query) {
+	    query_str += "all=" + widget.query.split(/\s/).join("&all=");
 	}
+	// for (var h=0;h<type.length; h++) {
+	//     if(query_str != "") {
+	// 	query_str += "&";
+	//     }
+	//     query_str += type[h] + "=" + widget.query.split(/\s/).join("&"+type[h]+"=");
+	// }
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
-		query_str += "&"+h;
+		query_str += (query_str.length ? "&" : "")+h.toLowerCase();
 		query_str += "="+widget.advancedOptions[h];
 	    }
 	}
 
+	// if (! query_str.length) {
+	//     query_str = "all=*";
+	// }
+
 	widget.limit = howmany || widget.limit;
-	var url = api_url + query_str + "&order=" + widget.sort + "&direction=" + widget.sortDir + "&match=" + widget.match + "&limit=" + widget.limit + "&offset=" + widget.offset;
+	var url = api_url + query_str + "direction=" + widget.sortDir + "&limit=" + widget.limit + "&offset=" + widget.offset + "&order="+widget.sort;
 	
 	jQuery.ajax( { dataType: "json",
 		       url: url,
