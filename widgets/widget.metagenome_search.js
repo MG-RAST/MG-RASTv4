@@ -526,7 +526,7 @@
 	
 	var query_str = "";
 	if (widget.query) {
-	    query_str += "all=" + widget.query.split(/\s/).join("&all=");
+	    query_str += "metadata=" + widget.query.split(/\s/).join("&all=");
 	}
 	// for (var h=0;h<type.length; h++) {
 	//     if(query_str != "") {
@@ -537,14 +537,16 @@
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
-		query_str += (query_str.length ? "&" : "")+h.toLowerCase();
+		query_str += (query_str.length ? "&" : "")+h;//.toLowerCase();
 		query_str += "="+widget.advancedOptions[h];
 	    }
 	}
 
-	// if (! query_str.length) {
+	if (query_str.length) {
+	    query_str += "&";
+	} else {
 	//     query_str = "all=*";
-	// }
+	}
 
 	widget.limit = howmany || widget.limit;
 	var url = api_url + query_str + "direction=" + widget.sortDir + "&limit=" + widget.limit + "&offset=" + widget.offset + "&order="+widget.sort;

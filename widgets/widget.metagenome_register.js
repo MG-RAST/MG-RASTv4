@@ -228,14 +228,17 @@
 	    	"challenge": null,
 	    	"response": grecaptcha.getResponse()
 	    }, function (result) {
+		console.log(result);
 		if (result.hasOwnProperty('ERROR')) {
 		    alert("Resetting your password failed: "+result.ERROR);
 		} else {
 		    Retina.WidgetInstances.metagenome_register[1].main.innerHTML = "<h3>Password Reset Successful</h3><p>Your password has been reset. You will receive an email at your registered email address containing further instructions.</p>";
 		}
 	    }).fail(function(result){
-		if (result.hasOwnProperty('ERROR')) {
-		    alert("Resetting your password failed: "+result.ERROR);
+		console.log('fail');
+		console.log(result);
+		if (result.hasOwnProperty('responseJSON')) {
+		    alert("Resetting your password failed: "+result.responseJSON.ERROR);
 		} else {
 		    alert('An error occurred while resetting your password');
 		}
