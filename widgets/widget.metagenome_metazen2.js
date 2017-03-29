@@ -189,14 +189,8 @@
 	html.push('<button style="float: left; margin-left: -1px; border-radius: 0px;" class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'shock\');" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button>');
 
 	// update project
-	if (widget.hasOwnProperty('projectData')) {
-	    html.push('<div class="dropdown" style="float: left; margin-left: -1px;"><button class="btn dropdown-toggle" id="projectUploadButton" style="border-bottom-left-radius: 0px; border-top-left-radius: 0px;" data-toggle="dropdown"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button><ul class="dropdown-menu">');
-	    for (var i=0; i<widget.projectData.length; i++) {
-		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\', \''+widget.projectData[i].id+'\');">'+widget.projectData[i].name+'</a></li>');
-	    }
-	    html.push('</ul></div>');
-	}
-		
+	html.push('<button class="btn" id="projectUploadButton" style="display: none;"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\');">update project</button>');
+	
 	html.push('</div>');
 	
 	html.push('<div style="clear: both;"></div>');
@@ -245,6 +239,7 @@
 	
 	widget.container.innerHTML = html.join('');
 
+	// check if we have a valid project	
 	jQuery('#metadataEdit a').click(function (e) {
 	    e.preventDefault();
 	    jQuery(this).tab('show');
@@ -941,6 +936,8 @@
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 			
 		widget.loadedData = data;
+		widget.currentProject = data.id;
+		document.getElementById('projectUploadButton').style.display = '';
 		widget.fillSpreadSheet();
 		document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
 	    },
@@ -1096,6 +1093,18 @@
 	    for (var i=0; i<d.worksheets.length; i++) {
 		if (d.worksheets[i].name == "README") {
 		    continue;
+		}
+		if (d.worksheets[i].name == "project") {
+		    var pname = d.worksheets[i].data[2][0].value;
+		    if (widget.hasOwnProperty('projectData') && widget.projectData.length) {
+			for (var x=0; x<widget.projectData.length; x++) {
+			    if (widget.projectData[x].name == pname) {
+				widget.currentProject = widget.projectData[x].id;
+				document.getElementById('projectUploadButton').style.display = '';
+				break;
+			    }
+			}
+		    }
 		}
 		var ws = d.worksheets[i];
 		var sheet = ws.name.replace(/\s/, "-");
@@ -1259,19 +1268,19 @@
 		    alert('a sample of this name already exists in this sheet');
 		    return;
 		} else {
-		    widget.samples[value] = targetrow;
+		    widget.samples[value] = targetrow || Retina.keys(widget.samples).length;
 		    stm.DataStore.cv.select.sample_name.push(value);
 		}
 	    }
 	    else if (field == 'env_package') {
-		sheet = 'ep-'+value;
-		sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
-		if (! widget.activeTabs[sheet]) {
-		    widget.activeTabs[sheet] = true;
-		    document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
-		    var name = sheetID.replace(/\|/g, "-");
-		    jQuery('#'+name+"-li").toggle();
-		}
+	    	var s = 'ep-'+value;
+	    	sheetID = s.replace(/\|/g, "-").replace(/\s/g, "-");
+	    	if (! widget.activeTabs[s]) {
+	    	    widget.activeTabs[s] = true;
+	    	    document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
+	    	    var name = sheetID.replace(/\|/g, "-");
+	    	    jQuery('#'+name+"-li").toggle();
+	    	}
 	    }
 	}
 
@@ -1347,6 +1356,10 @@
 	if (! (data.hasOwnProperty('project') && data.hasOwnProperty('sample'))) {
 	    alert('you must fill out the project and the sample sheet');
 	    return;
+	}
+
+	if (! id) {
+	    id = widget.currentProject;
 	}
 	
 	for (var h=1; h<wb.worksheets.length; h++) {
@@ -1558,7 +1571,7 @@
 		}
 	    }
 	}
-
+	
 	// check mandatory sample fields
 	var sampleNames = {};
 	if (! widget.metadata.hasOwnProperty('sample')) {
