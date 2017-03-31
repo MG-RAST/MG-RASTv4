@@ -189,7 +189,7 @@
 	html.push('<button style="float: left; margin-left: -1px; border-radius: 0px;" class="btn" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'shock\');" id="inboxUploadButton"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox</button>');
 
 	// update project
-	html.push('<button class="btn" id="projectUploadButton" style="display: none;"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\');">update project</button>');
+	html.push('<button class="btn" id="projectUploadButton" style="display: none;" onclick="Retina.WidgetInstances.metagenome_metazen2[1].exportExcel(\'project\');"><img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">update project</button>');
 	
 	html.push('</div>');
 	
