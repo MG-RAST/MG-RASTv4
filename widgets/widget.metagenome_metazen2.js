@@ -378,6 +378,7 @@
 		    // check if there is an entry in the row above
 		    var preval = "";
 		    if (cell.parentNode.rowIndex > 1) {
+			window.x = cell;
 			preval = cell.parentNode.parentNode.childNodes[cell.parentNode.rowIndex - 1].childNodes[cell.cellIndex].innerHTML;
 		    }
 
@@ -418,10 +419,10 @@
 		if (! (widget.currField.data.type == 'ontology' || widget.currField.data.type == 'time' || widget.currField.data.type == 'date')) {
 		    
 		    // keypress listener
-		    input.addEventListener('keypress', function (event) {
+		    input.addEventListener('keyup', function (event) {
 			var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 			event = event || window.event;
-			
+
 			// validation
 			var s = String.fromCharCode(event.charCode);
 			if (s.match(/[\u0020-\u007e\u00a0-\u00ff]/)) {
@@ -649,7 +650,7 @@
     // a cell has new data
     widget.updateCell = function (action) {
 	var widget = this;
-	
+
 	if (! widget.currentInputElement) {
 	    return;
 	}
@@ -767,7 +768,7 @@
 		empty = '<th></th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
 		var r = document.createElement('tr');
 		r.innerHTML = empty;
-		p.parentNode.parentNode.appendChild(r);
+		p.parentNode.parentNode.firstChild.appendChild(r);
 	    }
 
 	    // click the cell below
@@ -1064,6 +1065,7 @@
 	    hashTable[tables[i].name].order = cols;
 	}
 	widget.tables = hashTable;
+	widget.samples = {};
     };
 
 
@@ -1311,7 +1313,7 @@
 	    empty = '<th>'+table.rows.length+'</th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
 	    var r = document.createElement('tr');
 	    r.innerHTML = empty;
-	    table.appendChild(r);
+	    table.firstChild.appendChild(r);
 	}
 	
 	table.rows[row].cells[column].innerHTML = value;
