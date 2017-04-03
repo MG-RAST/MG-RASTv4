@@ -1076,7 +1076,7 @@
 	    url: RetinaConfig.mgrast_api+'/job/delete',
 	    complete: function (jqXHR) {
 		var data = JSON.parse(jqXHR.responseText);
-		console.log(data);
+		window.location.reload();
 	    }
 	});
     };
