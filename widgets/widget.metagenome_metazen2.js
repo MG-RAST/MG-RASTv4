@@ -378,7 +378,6 @@
 		    // check if there is an entry in the row above
 		    var preval = "";
 		    if (cell.parentNode.rowIndex > 1) {
-			window.x = cell;
 			preval = cell.parentNode.parentNode.childNodes[cell.parentNode.rowIndex - 1].childNodes[cell.cellIndex].innerHTML;
 		    }
 
