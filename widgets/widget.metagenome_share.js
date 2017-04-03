@@ -138,7 +138,7 @@
 	
 	widget.main.innerHTML = html;
     };
-
+    
     widget.showProject = function (projectid) {
 	var widget = this;
 
@@ -177,9 +177,13 @@
 	    }
 	    details.push("<p>The project "+project.name+" contains "+project.metagenomes.length+" metagenome"+(project.metagenomes.length>1 ? "s" : "")+" listed below.</p>");
 	    details.push("<div id='targetProject"+projectid+"' class='alert alert-info' style='display: none;'></div>");
-	    details.push("<table class='table table-condensed table-hover'><tr><th style='display: none;' class='selectcolumn"+projectid+"'>select</th>"+(project.status == 'public' ?"<th>ID</th>" : "" )+"<th class='namecolumn_"+projectid+"'>name<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].editMetagenomeNames(\""+projectid+"\");'>edit</button></th><th class='namecolumn2_"+projectid+"' style='display: none;'>name<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].canceleditMetagenomeNames(\""+projectid+"\");'>cancel</button><button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].performeditMetagenomeNames(\""+projectid+"\");'>update</button></th><th>basepairs</th><th>sequences</th><th class='typecolumn_"+projectid+"'>sequence type<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].editSequenceTypes(\""+projectid+"\");'>edit</button></th><th class='typecolumn2_"+projectid+"' style='display: none;'>sequence type<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].canceleditSequenceTypes(\""+projectid+"\");'>cancel</button><button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].performeditSequenceTypes(\""+projectid+"\");'>update</button></th></tr>");
+	    details.push("<table class='table table-condensed table-hover'><tr><th></th><th style='display: none;' class='selectcolumn"+projectid+"'>select</th>"+(project.status == 'public' ?"<th>ID</th>" : "" )+"<th class='namecolumn_"+projectid+"'>name<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].editMetagenomeNames(\""+projectid+"\");'>edit</button></th><th class='namecolumn2_"+projectid+"' style='display: none;'>name<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].canceleditMetagenomeNames(\""+projectid+"\");'>cancel</button><button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].performeditMetagenomeNames(\""+projectid+"\");'>update</button></th><th>basepairs</th><th>sequences</th><th class='typecolumn_"+projectid+"'>sequence type<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].editSequenceTypes(\""+projectid+"\");'>edit</button></th><th class='typecolumn2_"+projectid+"' style='display: none;'>sequence type<button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].canceleditSequenceTypes(\""+projectid+"\");'>cancel</button><button class='btn btn-mini pull-right' style='margin-left: 5px;' onclick='Retina.WidgetInstances.metagenome_share[1].performeditSequenceTypes(\""+projectid+"\");'>update</button></th></tr>");
 	    for (var h=0; h<project.metagenomes.length; h++) {
-		details.push("<tr><td style='display: none; text-align: center;' class='selectcolumn"+projectid+"'><input type='checkbox' style='position: relative; bottom: 3px;' data-id='"+project.metagenomes[h].metagenome_id+"' class='checkbox_"+projectid+"'></td>"+(project.status == 'public' ? "<td>mgm"+project.metagenomes[h].metagenome_id+"</td>" : "") +"<td class='namecolumn_"+projectid+"'>"+project.metagenomes[h].name+"</td><td style='display: none;' class='namecolumn2_"+projectid+"'><input type='text' value='"+project.metagenomes[h].name+"' data-id='"+project.metagenomes[h].metagenome_id+"' data-name='"+project.metagenomes[h].name+"' class='textbox_"+projectid+"'></td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td><td class='typecolumn_"+projectid+"'>"+project.metagenomes[h].sequence_type+"</td><td style='display: none;' class='typecolumn2_"+projectid+"'><select data-id='"+project.metagenomes[h].metagenome_id+"' data-type='"+project.metagenomes[h].sequence_type+"' class='selectbox_"+projectid+"'><option"+(project.metagenomes[h].sequence_type=='WGS' ? " selected=selected" : "")+">WGS</option><option"+(project.metagenomes[h].sequence_type=='Amplicon' ? " selected=selected" : "")+">Amplicon</option><option"+(project.metagenomes[h].sequence_type=='MT' ? " selected=selected" : "")+">MT</option></select></td></tr>");
+		var show_delete = true;
+		if (project.metagenomes[h].attributes.hasOwnProperty('priority') && project.metagenomes[h].attributes.priority !== 'never') {
+		    show_delete = false;
+		}
+		details.push("<tr><td>"+(show_delete ? "<button class='btn btn-mini btn-danger' onclick='Retina.WidgetInstances.metagenome_share[1].deleteMetagenome(\""+project.metagenomes[h].metagenome_id+"\");' title='delete dataset'>x</button>" : "")+"</td><td style='display: none; text-align: center;' class='selectcolumn"+projectid+"'><input type='checkbox' style='position: relative; bottom: 3px;' data-id='"+project.metagenomes[h].metagenome_id+"' class='checkbox_"+projectid+"'></td>"+(project.status == 'public' ? "<td>mgm"+project.metagenomes[h].metagenome_id+"</td>" : "") +"<td class='namecolumn_"+projectid+"'>"+project.metagenomes[h].name+"</td><td style='display: none;' class='namecolumn2_"+projectid+"'><input type='text' value='"+project.metagenomes[h].name+"' data-id='"+project.metagenomes[h].metagenome_id+"' data-name='"+project.metagenomes[h].name+"' class='textbox_"+projectid+"'></td><td>"+project.metagenomes[h].basepairs+"</td><td>"+project.metagenomes[h].sequences+"</td><td class='typecolumn_"+projectid+"'>"+project.metagenomes[h].sequence_type+"</td><td style='display: none;' class='typecolumn2_"+projectid+"'><select data-id='"+project.metagenomes[h].metagenome_id+"' data-type='"+project.metagenomes[h].sequence_type+"' class='selectbox_"+projectid+"' style='width: 100px;'><option"+(project.metagenomes[h].sequence_type=='WGS' ? " selected=selected" : "")+">WGS</option><option"+(project.metagenomes[h].sequence_type=='Amplicon' ? " selected=selected" : "")+">Amplicon</option><option"+(project.metagenomes[h].sequence_type=='MT' ? " selected=selected" : "")+">MT</option></select></td></tr>");
 	    }
 	    details.push("</table>");
 	} else {
@@ -1047,6 +1051,34 @@
 		alert('deleting project failed');
 	    }});
 	
+    };
+
+    widget.deleteMetagenome = function (mgid) {
+	var widget = this;
+
+	if (! confirm("Really delete this dataset? This cannot be undone.")) {
+	    return;
+	}
+	
+	if (! mgid.match(/^mgm/)) {
+	    mgid = "mgm"+mgid;
+	}
+
+	var fd = new FormData();
+	fd.append('POSTDATA', JSON.stringify({ "metagenome_id": mgid, "reson": "deleted by user" }));
+	jQuery.ajax({
+	    method: "POST",
+	    headers: stm.authHeader,
+	    contentType: false,
+	    processData: false,
+	    data: fd,
+	    crossDomain: true,
+	    url: RetinaConfig.mgrast_api+'/job/delete',
+	    complete: function (jqXHR) {
+		var data = JSON.parse(jqXHR.responseText);
+		console.log(data);
+	    }
+	});
     };
 
     widget.navigate = function (pos) {
