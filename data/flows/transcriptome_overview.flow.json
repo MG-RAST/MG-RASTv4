@@ -1,5 +1,5 @@
 [ 
-    { "type": "Text", "style": "Title", "text": "$$name$$$$receipt$$", "tocTitle": "Home", "tocName": "home"  },
+    { "type": "Text", "style": "Title", "text": "$$name$$", "tocTitle": "Home", "tocName": "home"  },
     { "type": "Text", "style": "Subtitle", "text": "This shotgun metatranscriptome is part of the study <a href='mgmain.html?mgpage=project&project=$$metadata.project.id$$'>'$$metadata.project.name$$'</a>" },
     { "type": "Text", "style": "Subtitle", "text": "by $$metadata.project.data.PI_firstname$$ $$metadata.project.data.PI_lastname$$, $$metadata.project.data.PI_organization$$<span id='pubmed'></span>." },
     { "type": "Table", "noDownload": true, "width": "span11", "style": "table-condensed table-bordered spacey", "data": [ [ "<b>Visibility</b>", "$$status$$", "<b>NCBI Project ID</b>", "$$ids.ncbi$$"],
