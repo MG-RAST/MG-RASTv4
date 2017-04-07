@@ -41,23 +41,50 @@
 		id = "mgm"+id;
 	    }
 	    
-	    html += "<h3>Metagenome Datasets for <span id='mginfo'></span><a class='btn btn-small pull-right' title='show metagenome overview' href='mgmain.html?mgpage=overview&metagenome="+Retina.idmap(id)+"'><i class='icon icon-eye-open'></i> metagenome overview</a></h3><p>Data are available from each step in the MG-RAST pipeline. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. They also include a brief description of the output format, buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p><div id='metagenome_download'><img src='Retina/images/waiting.gif' style='left: 40%; position: relative; margin-top: 100px;'></div>";
+	    html += "<h2 style='font-weight: normal;'>Processing Information and Downloads for <a class='btn btn-small pull-right' title='show metagenome overview' href='mgmain.html?mgpage=overview&metagenome="+Retina.idmap(id)+"'><i class='icon icon-eye-open'></i> metagenome overview</a><br><span id='mginfo'></span></h2><p>The three sections below provide thorough information about your dataset in MG-RAST. The <a href='#generalInfo'>general information</a> lists the details of your submission, the environment it was run in and the options you chose. The <a href='#processingSteps'>processing steps</a> lists each step of the pipeline with detailed information and offers downloads of its data products. The <a href='#annotationDownloads'>annotation downloads</a> section offers downloads for all annotation databases available in MG-RAST.</p><div id='metagenome_download'><img src='Retina/images/waiting.gif' style='left: 40%; position: relative; margin-top: 100px;'></div>";
 	    content.innerHTML = html;
 
 	    jQuery.ajax( { dataType: "json",
 			   url: RetinaConfig['mgrast_api']+"/metagenome/"+id,
 			   headers: stm.authHeader,
 			   success: function(data) {
+			       var widget = Retina.WidgetInstances.metagenome_download[1];
 			       var did = data.id.substr(3);
-			       document.getElementById('mginfo').innerHTML = data.name+(data.status=="public" ? " ("+data.id+")" : "");
+			       document.getElementById('mginfo').innerHTML = data.name+(data.status=="public" ? " ("+data.id+")" : " (Temporary ID "+Retina.idmap(data.id)+")");
+			       widget.metagenomeInfo = data;
+			       if (data.submission) {
+				   jQuery.ajax( { dataType: "json",
+						  url: RetinaConfig['mgrast_api']+"/submission/"+data.submission,
+						  headers: stm.authHeader,
+						  success: function(data) {
+						      var widget = Retina.WidgetInstances.metagenome_download[1];
+						      widget.pipelineInfo = data;
+						      if (widget.hasOwnProperty('downloadInfo')) {
+							  widget.displayMetagenomeDownloads();
+						      }
+						  },
+						  error: function (xhr, data) {
+						      
+						  }
+						} );
+			       } else {
+				   widget.pipelineInfo = false;
+				   if (widget.hasOwnProperty('downloadInfo')) {
+				       widget.displayMetagenomeDownloads();
+				   }
+			       }
 			   }
 			 } );
 
 	    jQuery.ajax( { dataType: "json",
-			   url: RetinaConfig['mgrast_api']+"/download/"+id,
+			   url: RetinaConfig['mgrast_api']+"/download/history/"+id,
 			   headers: stm.authHeader,
 			   success: function(data) {
-			       Retina.WidgetInstances.metagenome_download[1].displayMetagenomeDownloads(data);
+			       var widget = Retina.WidgetInstances.metagenome_download[1];
+			       widget.downloadInfo = data.data;
+			       if (widget.hasOwnProperty('pipelineInfo')) {
+				   widget.displayMetagenomeDownloads();
+			       }
 			   },
 			   error: function (xhr, data) {
 
@@ -100,69 +127,104 @@
 	}
     };
 
-    widget.displayMetagenomeDownloads = function (data) {
-	jQuery.getJSON("data/pipeline.json", function (pipelinedata) {
-	    var widget = Retina.WidgetInstances.metagenome_download[1];
-	    var target = document.getElementById('metagenome_download');
+    widget.displayMetagenomeDownloads = function () {
+	var widget = this;
+	var download = widget.downloadInfo;
+	var pipeline = widget.pipelineInfo;
+	
+	var html = [];
 
-	    var html = "";
-	    for (var i=0; i<data.data.length; i++) {
-		var d = data.data[i];
-		d.file_name = d.file_name.replace(d.id, widget.id);
-		if (d.file_size == null || ! pipelinedata.hasOwnProperty(d.stage_id)) {
-		    continue;
+	var psubmit = pipeline.error == null ? pipeline.info.submittime : download.info.submittime;
+	var pstarted = pipeline.error == null ? pipeline.info.startedtime : download.info.startedtime;
+	var pcompleted = pipeline.error == null ? pipeline.info.completedtime : download.info.completedtime;
+
+	html.push('<a name="generalInfo" style="position: relative; bottom: 60px;"></a><h3>General Information</h3>');
+	
+	html.push('<p>Your '+widget.metagenomeInfo.pipeline_parameters.file_type+' dataset of '+parseInt(download.info.userattr.bp_count).baseSize()+' was submitted to version '+download.info.userattr.pipeline_version+' of the MG-RAST pipeline at '+psubmit+' with priority '+download.info.priority+'. It started to compute at '+pstarted+' and finished computation at '+pcompleted+'.</p><p>You chose the following options for this pipeline:</p>');
+
+	var filterMapping = { "h_sapiens": "H. sapiens, NCBI v36",
+			      "m_musculus": "M. musculus, NCBI v37",
+			      "r_norvegicus": "R. norvegicus, UCSC rn4",
+			      "b_taurus": "B. taurus, UMD v3.0",
+			      "d_melanogaster": "D. melanogaster, Flybase, r5.22",
+			      "a_thaliana": "A. thaliana, TAIR, TAIR9",
+			      "e_coli": "E. coli, NCBI, st. 536",
+			      "s_scrofa": "Sus scrofa, NCBI v10.2",
+			      "none": "none" };
+	html.push('<table style="text-align: left; margin-left: 100px; margin-bottom: 20px; margin-top: 20px;">');
+	html.push('<tr><th>assembled</th><td>'+widget.metagenomeInfo.pipeline_parameters.assembled+'</td></tr>');
+	html.push('<tr><th>dereplication</th><td>'+widget.metagenomeInfo.pipeline_parameters.dereplicate+'</td></tr>');
+	html.push('<tr><th>screening</th><td>'+filterMapping[widget.metagenomeInfo.pipeline_parameters.screen_indexes]+'</td></tr>');
+	html.push('<tr><th>publication</th><td>'+widget.metagenomeInfo.pipeline_parameters.priority+'</td></tr>');
+	if (widget.metagenomeInfo.pipeline_parameters.file_type == 'fastq') {
+	    html.push('<tr><th>dynamic trimming</th><td>'+widget.metagenomeInfo.pipeline_parameters.dynamic_trim+'</td></tr>');
+	    html.push('<tr><th>minimum quality</th><td>'+widget.metagenomeInfo.pipeline_parameters.min_qual+'</td></tr>');
+	    html.push('<tr><th style="padding-right: 20px;">maximum low quality basepairs</th><td>'+widget.metagenomeInfo.pipeline_parameters.max_lqb+'</td></tr>');
+	} else {
+	    html.push('<tr><th>length filtering</th><td>'+widget.metagenomeInfo.pipeline_parameters.filter_ln+'</td></tr>');
+	    html.push('<tr><th>length filter deviation multiplicator</th><td>'+widget.metagenomeInfo.pipeline_parameters.deviation+'</td></tr>');
+	    html.push('<tr><th>ambiguous base filtering</th><td>'+widget.metagenomeInfo.pipeline_parameters.filter_ambig+'</td></tr>');
+	    html.push('<tr><th>maximum ambiguous basepairs</th><td>'+widget.metagenomeInfo.pipeline_parameters.max_ambig+'</td></tr>');
+	}
+	html.push('</table>');
+	html.push('<p>The computational environment and workflow can be downloded below:</p><ul style="margin-left: 100px;"><li><a href="'+download.enviroment+'" target=_blank>environment</a></li><li><a href="'+download.template+'" target=_blank>workflow document</a></li></ul>');
+
+	html.push('<a name="processingSteps" style="position: relative; bottom: 60px;"></a><h3>Processing Steps</h3><p>Data are available from each step in the MG-RAST pipeline. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. They also include a brief description of the output format, buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p>');
+	
+	for (var i=0; i<download.tasks.length; i++) {
+	    var t = download.tasks[i];
+
+	    html.push("<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>"+i+'. '+t.title+"</h4>");
+	    html.push("<div class='span6'>");
+	    html.push("<p>"+t.description+"</p>");
+
+	    var files = t.outputs;
+	    if (i==0) {
+		files = t.inputs;
+	    } else {
+		html.push('<p>The script executed at this step is available <a href="'+t.link+'" target=_blank>here</a>.'+(t.uses.length ? ' It uses the following software:' : '' )+'</p>');
+		for (var h=0; h<t.uses.length; h++) {
+		    html.push('<div style="margin-top: 15px;"><b>'+t.uses[h].name+'</b><a href="'+t.uses[h].link+'" target=_blank class="btn btn-mini" style="margin-left: 25px; margin-right: 25px; position: relative; bottom: 2px;">download</a><a style="position: relative; bottom: 2px;" class="btn btn-mini" href="'+t.uses[h].paper+'" target=_blank>citation</a><br/><pre style="margin-top: 10px;">'+t.uses[h].cmd.replace(/\</g, "&lt;")+'</pre></div>');
 		}
-		var sname = d.stage_name;
-		var offset = "";
-		var p = pipelinedata[d.stage_id];
-		var files = Retina.keys(p.output).sort();
-		if (d.stage_name == files[0]) {
-		    html += "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>"+p.title+"</h4>";
-		    offset = " offset6";
-		    html += "<div class='span6'>";
-		    html += "<p>"+p.input+"</p>";
-		    html += "<p>"+p.description+"</p>";
-		    for (var h=0; h<files.length; h++) {
-			html += "<p>"+p.output[files[h]].description+"</p>";
-			if (p.output[files[h]].hasOwnProperty('fields')) {
-			    html += "<p>Column fields are as follows:</p><ul><li>";
-			    html += p.output[files[h]].format.join("</li><li>");
-			    html += "</li></ul>";
-			}
-		    }
-		    html += "</div>";
+	    }
+	    
+	    html.push("</div><div class='span5'>");
+
+	    for (var h=0; h<files.length; h++) {
+		var downloadButton;
+		if (files[h].hasOwnProperty('node_id')) {
+		    downloadButton = "<button class='btn btn-mini' style='float: right;' onclick='Retina.WidgetInstances.metagenome_download[1].authenticatedDownload(\""+files[h].url+"\");'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download</button>";
 		} else {
-		    html += "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><span></span><div class='span6'></div>";
+		    downloadButton = " <i>(temporary)</i>";
 		}
-		
 		var stats = "";
 		var statsbutton = "";
-		if (d.hasOwnProperty('statistics')) {
-		    statsbutton = "<button class='btn pull-right btn-mini' onclick='if(document.getElementById(\"stats_"+sname+"\").style.display==\"none\"){document.getElementById(\"stats_"+sname+"\").style.display=\"\";}else{document.getElementById(\"stats_"+sname+"\").style.display=\"none\";}'>statistics</button>";
-		    stats += "<div style='display:none;' id='stats_"+sname+"' class='span5"+offset+"'><table class='table table-condensed' style=''>";
-		    var keys = Retina.keys(d.statistics).sort();
-		    for (var h=0; h<keys.length; h++) {
-			var desc = keys[h].replace(/_/g, " ");
-			stats += "<tr><td><b>"+desc+"</b></td><td>"+d.statistics[keys[h]]+"</td>";	
-		    }		    
-		    stats += "</table></div>";
+		if (files[h].hasOwnProperty('statistics') && Retina.keys(files[h].statistics).length) {
+	    	    statsbutton = "<button class='btn pull-right btn-mini' onclick='if(document.getElementById(\"stats_"+i+"_"+h+"\").style.display==\"none\"){document.getElementById(\"stats_"+i+"_"+h+"\").style.display=\"\";}else{document.getElementById(\"stats_"+i+"_"+h+"\").style.display=\"none\";}'>statistics</button>";
+	    	    stats += "<div style='display:none;' id='stats_"+i+"_"+h+"'><table class='table table-condensed' style=''>";
+	    	    var keys = Retina.keys(files[h].statistics).sort();
+	    	    for (var j=0; j<keys.length; j++) {
+	    		var desc = keys[j].replace(/_/g, " ");
+	    		stats += "<tr><td><b>"+desc+"</b></td><td>"+files[h].statistics[keys[j]]+"</td>";	
+	    	    }		    
+	    	    stats += "</table></div>";
 		}
-		
-		html += "<div class='span5'><table class='table table-condensed'>";
-		html += "<tr><td colspan=2><b>"+d.file_name+"</b></td></tr>";
-		html += "<tr><td><b>filesize</b></td><td>"+d.file_size.byteSize()+statsbutton+"<button class='btn btn-mini' style='float: right; margin-right: 10px;' onclick='Retina.WidgetInstances.metagenome_download[1].authenticatedDownload(this, \""+d.url+"\");'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download</button></td></tr>";
-		html += "<tr><td><b>sequence format</b></td><td>"+d.seq_format+"</td></tr>";
-		html += "<tr><td><b>file format</b></td><td>"+d.file_format+"</td></tr>";
-		html += "<tr><td><b>MD5</b></td><td>"+d.file_md5+"</td></tr>";
-		html += "</table></div>";
-		html += stats;
-		html += "</div>";
-		html += "</div>";
+		html.push("<div><table class='table table-condensed'>");
+		html.push("<tr><td colspan=2><b>"+files[h].file_name+"</b>"+downloadButton+"</td></tr>");
+		html.push("<tr><td><b>filesize</b></td><td>"+parseInt(files[h].file_size).byteSize()+statsbutton+"</td></tr>");
+		if (files[h].hasOwnProperty('node_id')) {
+		    html.push("<tr><td><b>MD5</b></td><td>"+(files[h].file_md5 ? files[h].file_md5 : "-")+"</td></tr>");
+		}
+		html.push("</table>"+stats);
+		html.push(stats);
+		html.push("</div>");
 	    }
-	    html += widget.apiDownloadHTML();
-
-	    target.innerHTML = html;
-	});
+	    
+	    html.push("</div></div>");
+	}
+	html.push(widget.apiDownloadHTML());
+	
+	document.getElementById('metagenome_download').innerHTML = html.join("");
     };
 
     widget.apiDownload = function () {
@@ -181,12 +243,12 @@
 	window.open(url);
     };
 
-    widget.authenticatedDownload = function (button, url) {
+    widget.authenticatedDownload = function (url) {
 	window.location = url+"&auth="+stm.authHeader.Authorization+"&browser=1";
     };
     
     widget.apiDownloadHTML = function () {
-	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>Annotation Download</h4>\
+	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><a name='annotationDownloads' style='position: relative; bottom: 60px;'></a><h3>Annotation Downloads</h3>\
     <table width='100%'><tr><td align='left'>\
       <p>Annotated reads are available through the <a href='"+RetinaConfig.mgrast_api+"' target='_blank'>MG-RAST API</a>.<br>\
          They are built dynamicly based on the chosen annotation type and source.<br>\
