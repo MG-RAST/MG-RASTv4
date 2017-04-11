@@ -134,23 +134,46 @@
 	
 	var html = [];
 
-	var psubmit = pipeline.error == null ? pipeline.info.submittime : download.info.submittime;
-	var pstarted = pipeline.error == null ? pipeline.info.startedtime : download.info.startedtime;
-	var pcompleted = pipeline.error == null ? pipeline.info.completedtime : download.info.completedtime;
+	var psubmit = pipeline && pipeline.error == null ? pipeline.info.submittime : download.info.submittime;
+	var pstarted = pipeline && pipeline.error == null ? pipeline.info.startedtime : download.info.startedtime;
+	var pcompleted = pipeline && pipeline.error == null ? pipeline.info.completedtime : download.info.completedtime;
 
 	html.push('<a name="generalInfo" style="position: relative; bottom: 60px;"></a><h3>General Information</h3>');
 	
-	html.push('<p>Your '+widget.metagenomeInfo.pipeline_parameters.file_type+' dataset of '+parseInt(download.info.userattr.bp_count).baseSize()+' was submitted to version '+download.info.userattr.pipeline_version+' of the MG-RAST pipeline at '+psubmit+' with priority '+download.info.priority+'. It started to compute at '+pstarted+' and finished computation at '+pcompleted+'.</p><p>You chose the following options for this pipeline:</p>');
+	html.push('<p>Your '+widget.metagenomeInfo.pipeline_parameters.file_type+' dataset of '+parseInt(download.info.userattr.bp_count).baseSize()+' was submitted to version '+download.info.userattr.pipeline_version+' of the MG-RAST pipeline at '+psubmit+' with priority '+download.info.priority+'.');
+	if (pstarted && pcompleted) {
+	    html.push(' It started to compute at '+pstarted+' and finished computation at '+pcompleted+'.')
+	}
+	html.push('</p>');
 
-	var filterMapping = { "h_sapiens": "H. sapiens, NCBI v36",
-			      "m_musculus": "M. musculus, NCBI v37",
-			      "r_norvegicus": "R. norvegicus, UCSC rn4",
-			      "b_taurus": "B. taurus, UMD v3.0",
-			      "d_melanogaster": "D. melanogaster, Flybase, r5.22",
-			      "a_thaliana": "A. thaliana, TAIR, TAIR9",
-			      "e_coli": "E. coli, NCBI, st. 536",
-			      "s_scrofa": "Sus scrofa, NCBI v10.2",
-			      "none": "none" };
+	if (pipeline && pipeline.inputs && pipeline.inputs.length > 1) {
+	    var mbp = 0;
+	    for (var i=0; i<pipeline.inputs.length; i++) {
+		mbp += parseInt(pipeline.inputs[i].stats_info.bp_count);
+	    }
+	    html.push('<p>This dataset was part of a submission of a total of '+pipeline.inputs.length+' datasets with '+mbp.baseSize()+'.');
+	    //html.push('<button class="btn btn-mini" style="margin-left: 20px;" onclick="this.innerHTML==\'show\' ? this.innerHTML=\'hide\' : this.innerHTML=\'show\'; jQuery(\'#submissionInfo\').toggle();">show</button>');
+	    html.push('</p><div id="submissionInfo"><table class="table table-condensed table-hover"><tr><th>dataset</th><th>filesize</th><th>basepairs</th><th>sequences</th><th>length</th></tr>');//style="display: none;" 
+	    for (var i=0; i<pipeline.outputs.length; i++) {
+		var id = Retina.idmap(pipeline.outputs[i].metagenome_id);
+		html.push('<tr><td style="padding-right: 50px;"><a href="?mgpage=download&metagenome='+id+'">'+pipeline.outputs[i].metagenome_name+'</a></td><td>'+pipeline.inputs[i].stats_info.file_size.byteSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.bp_count).baseSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.sequence_count).formatString()+'</td><td>'+pipeline.inputs[i].stats_info.average_length+'bp ('+pipeline.inputs[i].stats_info.length_min+'bp - '+pipeline.inputs[i].stats_info.length_max+'bp)</td></tr>');
+	    }
+	    html.push('</table></div>');
+	}
+	
+	html.push('<p>You chose the following pipeline options for this submission:</p>');
+
+	var filterMapping = {
+	    "h_sapiens_asm": "H. sapiens, NCBI v36",
+	    "h_sapiens": "H. sapiens, NCBI v36",
+	    "m_musculus": "M. musculus, NCBI v37",
+	    "r_norvegicus": "R. norvegicus, UCSC rn4",
+	    "b_taurus": "B. taurus, UMD v3.0",
+	    "d_melanogaster": "D. melanogaster, Flybase, r5.22",
+	    "a_thaliana": "A. thaliana, TAIR, TAIR9",
+	    "e_coli": "E. coli, NCBI, st. 536",
+	    "s_scrofa": "Sus scrofa, NCBI v10.2",
+	    "none": "none" };
 	html.push('<table style="text-align: left; margin-left: 100px; margin-bottom: 20px; margin-top: 20px;">');
 	html.push('<tr><th>assembled</th><td>'+widget.metagenomeInfo.pipeline_parameters.assembled+'</td></tr>');
 	html.push('<tr><th>dereplication</th><td>'+widget.metagenomeInfo.pipeline_parameters.dereplicate+'</td></tr>');
@@ -162,20 +185,23 @@
 	    html.push('<tr><th style="padding-right: 20px;">maximum low quality basepairs</th><td>'+widget.metagenomeInfo.pipeline_parameters.max_lqb+'</td></tr>');
 	} else {
 	    html.push('<tr><th>length filtering</th><td>'+widget.metagenomeInfo.pipeline_parameters.filter_ln+'</td></tr>');
-	    html.push('<tr><th>length filter deviation multiplicator</th><td>'+widget.metagenomeInfo.pipeline_parameters.deviation+'</td></tr>');
+	    html.push('<tr><th style="padding-right: 20px;">length filter deviation multiplicator</th><td>'+widget.metagenomeInfo.pipeline_parameters.filter_ln_mult+'</td></tr>');
 	    html.push('<tr><th>ambiguous base filtering</th><td>'+widget.metagenomeInfo.pipeline_parameters.filter_ambig+'</td></tr>');
 	    html.push('<tr><th>maximum ambiguous basepairs</th><td>'+widget.metagenomeInfo.pipeline_parameters.max_ambig+'</td></tr>');
 	}
 	html.push('</table>');
 	html.push('<p>The computational environment and workflow can be downloded below:</p><ul style="margin-left: 100px;"><li><a href="'+download.enviroment+'" target=_blank>environment</a></li><li><a href="'+download.template+'" target=_blank>workflow document</a></li></ul>');
 
-	html.push('<a name="processingSteps" style="position: relative; bottom: 60px;"></a><h3>Processing Steps</h3><p>Data are available from each step in the MG-RAST pipeline. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. They also include a brief description of the output format, buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p>');
+	html.push('<a name="processingSteps" style="position: relative; bottom: 60px;"></a><h3>Processing Steps</h3><p>Data are available from each step in the MG-RAST pipeline. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. Buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p>');
 	
 	for (var i=0; i<download.tasks.length; i++) {
 	    var t = download.tasks[i];
 
 	    html.push("<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>"+i+'. '+t.title+"</h4>");
 	    html.push("<div class='span6'>");
+	    if (t.hasOwnProperty('starteddate') && t.hasOwnProperty('completeddate')) {
+		html.push('<p><i>started '+t.starteddate+' - completed '+t.completeddate+'</i></p>');
+	    }
 	    html.push("<p>"+t.description+"</p>");
 
 	    var files = t.outputs;
