@@ -41,7 +41,7 @@
 		id = "mgm"+id;
 	    }
 	    
-	    html += "<h2 style='font-weight: normal;'>Processing Information and Downloads for <a class='btn btn-small pull-right' title='show metagenome overview' href='mgmain.html?mgpage=overview&metagenome="+Retina.idmap(id)+"'><i class='icon icon-eye-open'></i> metagenome overview</a><br><span id='mginfo'></span></h2><p>The three sections below provide thorough information about your dataset in MG-RAST. The <a href='#generalInfo'>general information</a> lists the details of your submission, the environment it was run in and the options you chose. The <a href='#processingSteps'>processing steps</a> lists each step of the pipeline with detailed information and offers downloads of its data products. The <a href='#annotationDownloads'>annotation downloads</a> section offers downloads for all annotation databases available in MG-RAST.</p><div id='metagenome_download'><img src='Retina/images/waiting.gif' style='left: 40%; position: relative; margin-top: 100px;'></div>";
+	    html += "<h2 style='font-weight: normal;'>Processing Information and Downloads for <a class='btn btn-small pull-right' title='show metagenome overview' href='mgmain.html?mgpage=overview&metagenome="+Retina.idmap(id)+"'><i class='icon icon-eye-open'></i> metagenome overview</a><br><span id='mginfo'></span></h2><p>The three sections below provide thorough information about your dataset in MG-RAST. The <a href='#generalInfo'>general information</a> lists the details of your submission, the environment it was run in and the options you chose. The <a href='#annotationDownloads'>annotation downloads</a> section offers downloads for all annotation databases available in MG-RAST. The <a href='#processingSteps'>processing steps</a> lists each step of the pipeline with detailed information and offers downloads of its data products.</p><div id='metagenome_download'><img src='Retina/images/waiting.gif' style='left: 40%; position: relative; margin-top: 100px;'></div>";
 	    content.innerHTML = html;
 
 	    jQuery.ajax( { dataType: "json",
@@ -153,12 +153,12 @@
 	    }
 	    html.push('<p>This dataset was part of a submission of a total of '+pipeline.inputs.length+' datasets with '+mbp.baseSize()+'.');
 	    //html.push('<button class="btn btn-mini" style="margin-left: 20px;" onclick="this.innerHTML==\'show\' ? this.innerHTML=\'hide\' : this.innerHTML=\'show\'; jQuery(\'#submissionInfo\').toggle();">show</button>');
-	    html.push('</p><div id="submissionInfo"><table class="table table-condensed table-hover"><tr><th>dataset</th><th>filesize</th><th>basepairs</th><th>sequences</th><th>length</th></tr>');//style="display: none;" 
-	    for (var i=0; i<pipeline.outputs.length; i++) {
-		var id = Retina.idmap(pipeline.outputs[i].metagenome_id);
-		html.push('<tr><td style="padding-right: 50px;"><a href="?mgpage=download&metagenome='+id+'">'+pipeline.outputs[i].metagenome_name+'</a></td><td>'+pipeline.inputs[i].stats_info.file_size.byteSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.bp_count).baseSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.sequence_count).formatString()+'</td><td>'+pipeline.inputs[i].stats_info.average_length+'bp ('+pipeline.inputs[i].stats_info.length_min+'bp - '+pipeline.inputs[i].stats_info.length_max+'bp)</td></tr>');
-	    }
-	    html.push('</table></div>');
+	    // html.push('</p><div id="submissionInfo"><table class="table table-condensed table-hover"><tr><th>dataset</th><th>filesize</th><th>basepairs</th><th>sequences</th><th>length</th></tr>');//style="display: none;" 
+	    // for (var i=0; i<pipeline.outputs.length; i++) {
+	    // 	var id = Retina.idmap(pipeline.outputs[i].metagenome_id);
+	    // 	html.push('<tr><td style="padding-right: 50px;"><a href="?mgpage=download&metagenome='+id+'">'+pipeline.outputs[i].metagenome_name+'</a></td><td>'+pipeline.inputs[i].stats_info.file_size.byteSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.bp_count).baseSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.sequence_count).formatString()+'</td><td>'+pipeline.inputs[i].stats_info.average_length+'bp ('+pipeline.inputs[i].stats_info.length_min+'bp - '+pipeline.inputs[i].stats_info.length_max+'bp)</td></tr>');
+	    // }
+	    // html.push('</table></div>');
 	}
 	
 	html.push('<p>You chose the following pipeline options for this submission:</p>');
@@ -192,6 +192,8 @@
 	html.push('</table>');
 	html.push('<p>The computational environment and workflow can be downloded below:</p><ul style="margin-left: 100px;"><li><a href="'+download.enviroment+'" target=_blank>environment</a></li><li><a href="'+download.template+'" target=_blank>workflow document</a></li></ul>');
 
+	html.push(widget.apiDownloadHTML());
+
 	html.push('<a name="processingSteps" style="position: relative; bottom: 60px;"></a><h3>Processing Steps</h3><p>Data are available from each step in the MG-RAST pipeline. Each section below corresponds to a step in the processing pipeline. Each of these sections includes a description of the input, output, and procedures implemented by the indicated step. Buttons to download data processed by the step and detailed statistics (click on &ldquo;show stats&rdquo; to make collapsed tables visible).</p>');
 	
 	for (var i=0; i<download.tasks.length; i++) {
@@ -210,7 +212,7 @@
 	    } else {
 		html.push('<p>The script executed at this step is available <a href="'+t.link+'" target=_blank>here</a>.'+(t.uses.length ? ' It uses the following software:' : '' )+'</p>');
 		for (var h=0; h<t.uses.length; h++) {
-		    html.push('<div style="margin-top: 15px;"><b>'+t.uses[h].name+'</b><a href="'+t.uses[h].link+'" target=_blank class="btn btn-mini" style="margin-left: 25px; margin-right: 25px; position: relative; bottom: 2px;">download</a><a style="position: relative; bottom: 2px;" class="btn btn-mini" href="'+t.uses[h].paper+'" target=_blank>citation</a><br/><pre style="margin-top: 10px;">'+t.uses[h].cmd.replace(/\</g, "&lt;")+'</pre></div>');
+		    html.push('<div style="margin-top: 15px;"><b>'+t.uses[h].name+'</b><a href="'+t.uses[h].link+'" target=_blank style="margin-left: 25px; margin-right: 25px;">download</a><a href="'+t.uses[h].paper+'" target=_blank>citation</a><br/><pre style="margin-top: 10px;">'+t.uses[h].cmd.replace(/\</g, "&lt;")+'</pre></div>');
 		}
 	    }
 	    
@@ -248,15 +250,31 @@
 	    
 	    html.push("</div></div>");
 	}
-	html.push(widget.apiDownloadHTML());
+
+	html.push('<style>.popover{ max-width: 450px; }</style>');
 	
 	document.getElementById('metagenome_download').innerHTML = html.join("");
+	jQuery("#downloadhelp").popover({"html": true, "trigger": "hover", "placement": "left", "title": "<b>Download Column Fields</b>", "content": "<ol>\
+           <li>Query / read id, e.g. mgm4441681.3|12342588</li>\
+           <li>Hit id / md5, e.g. afcfe216e7d39b7c789d6760194b6deb</li>\
+           <li>percentage identity, e.g. 100.00</li>\
+           <li>alignment length, e.g. 107</li>\
+           <li>number of mismatches, e.g. 0</li>\
+           <li>number of gap openings, e.g. 0</li>\
+           <li>q.start, e.g. 1</li>\
+           <li>q.end, e.g. 107</li>\
+           <li>s.start, e.g. 1262</li>\
+           <li>s.end, e.g. 1156</li>\
+           <li>e-value, e.g. 1.7e-54</li>\
+           <li>score in bits, e.g. 210.0</li>\
+           <li>semicolon seperated list of annotation text(s) for the given type and source</li>\
+         </ol>"});
     };
 
     widget.apiDownload = function () {
 	var widget = Retina.WidgetInstances.metagenome_download[1];
 
-	document.getElementById('download_progress').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 25px; position: relative; bottom: 5px; margin-left: 15px;'>";
+	//document.getElementById('download_progress').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 25px; position: relative; bottom: 5px; margin-left: 15px;'>";
 
 	var ann = document.getElementById('ann_type').options[document.getElementById('ann_type').selectedIndex].value;
 	var ont = document.getElementById('ont_source').options[document.getElementById('ont_source').selectedIndex].value;
@@ -276,23 +294,7 @@
     widget.apiDownloadHTML = function () {
 	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><a name='annotationDownloads' style='position: relative; bottom: 60px;'></a><h3>Annotation Downloads</h3>\
     <table width='100%'><tr><td align='left'>\
-      <p>Annotated reads are available through the <a href='"+RetinaConfig.mgrast_api+"' target='_blank'>MG-RAST API</a>.<br>\
-         They are built dynamicly based on the chosen annotation type and source.<br>\
-         Column fields are as follows:<ol>\
-           <li>Query / read id, e.g. mgm4441681.3|12342588</li>\
-           <li>Hit id / md5, e.g. afcfe216e7d39b7c789d6760194b6deb</li>\
-           <li>percentage identity, e.g. 100.00</li>\
-           <li>alignment length, e.g. 107</li>\
-           <li>number of mismatches, e.g. 0</li>\
-           <li>number of gap openings, e.g. 0</li>\
-           <li>q.start, e.g. 1</li>\
-           <li>q.end, e.g. 107</li>\
-           <li>s.start, e.g. 1262</li>\
-           <li>s.end, e.g. 1156</li>\
-           <li>e-value, e.g. 1.7e-54</li>\
-           <li>score in bits, e.g. 210.0</li>\
-           <li>semicolon seperated list of annotation text(s) for the given type and source</li>\
-         </ol></p>\
+      <p>Annotated reads are available through the <a href='"+RetinaConfig.mgrast_api+"' target='_blank'>MG-RAST API</a>. They are built dynamicly based on the chosen annotation type and source.<span id='downloadhelp' style='cursor: help;'><sup>[?]</sup></span></p>\
       <table>\
         <tr><td>Annotation Type</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>Data Source</td><td></td><td></td></tr>\
         <tr>\

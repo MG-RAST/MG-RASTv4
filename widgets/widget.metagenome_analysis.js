@@ -1728,6 +1728,14 @@
 	    matrix.evalues.push(e[matrix.rows[i]]);
 	}
 	matrix.rows = mr;
+
+	var hasZero = false;
+	for (var i=0; i<matrix.abundances.length; i++) {
+	    if (matrix.abundances[i] == 0) {
+		hasZero = true;
+		break;
+	    }
+	}
 	
 	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[displaySource+"-"+displayLevel]) + 1;
 	c.matrix = matrix;
@@ -1736,6 +1744,10 @@
 	c.matrix.itemsProd = matrix.cols.length * matrix.rows.length;
 	c.hierarchy = hier;
 
+	if (hasZero) {
+	    alert("At least one of your datasets has no hits when applying the chosen cutoffs and filters.\n\nLower cutoffs may provide more hits.");
+	}
+	
 	return c;
     };
 
