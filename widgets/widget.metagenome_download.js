@@ -202,7 +202,7 @@
 	    html.push("<div class='span12' style='margin-left: 0px; margin-top: 20px;'><h4>"+i+'. '+t.title+"</h4>");
 	    html.push("<div class='span6'>");
 	    if (t.hasOwnProperty('starteddate') && t.hasOwnProperty('completeddate')) {
-		html.push('<p><i>started '+t.starteddate+' - completed '+t.completeddate+'</i></p>');
+		html.push('<p><i>started '+new Date(t.starteddate).toGMTString()+' - completed '+new Date(t.completeddate).toGMTString() +'</i></p>');
 	    }
 	    html.push("<p>"+t.description+"</p>");
 
