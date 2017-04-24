@@ -284,7 +284,7 @@
 			      console.log("error: unable to connect to API server");
 			      console.log(error);
 			  },
-			  completed: function (jqXHR) {
+			  success: function (jqXHR) {
 			      this.p.resolve();
 			  },
 			  headers: stm.authHeader
@@ -315,7 +315,6 @@
 
 	if (promises.length) {
 	    document.getElementById('profileDiv').innerHTML = '<div style="text-align: center;"><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></div>';
-	    
 	    jQuery.when.apply(this, promises).then(function() {
 		Retina.WidgetInstances.metagenome_mydata[1].getProfile();
 	    });
