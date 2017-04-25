@@ -672,6 +672,7 @@
 	for (var i=0; i<project.metagenomes.length; i++) {
 	    var selname = 'biome_' + mg2biome[project.metagenomes[i].metagenome_id];
 	    fd.append('biome'+project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].value);
+	    fd.append('biomename'+project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].text);
 	    var selname2 = 'tech_' + mg2tech[project.metagenomes[i].metagenome_id];
 	    fd.append('tech'+project.metagenomes[i].metagenome_id, document.getElementById(selname2).options[document.getElementById(selname2).selectedIndex].value);
 	}
