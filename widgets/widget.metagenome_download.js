@@ -283,7 +283,7 @@
 	if (! id.match(/^mgm/)) {
 	    id = Retina.idmap(id);
 	}
-	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org)+"&auth="+stm.authHeader.Authorization+"&browser=1";
+	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org)+(stm.authHeader && stm.authHeader.Authorization ? "&auth="+stm.authHeader.Authorization : "")+"&browser=1";
 	window.open(url);
     };
 
