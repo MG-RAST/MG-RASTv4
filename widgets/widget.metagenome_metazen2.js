@@ -1442,9 +1442,9 @@
 						  alert('metadata successfully uploaded to inbox');
 					      },
 					      error: function(jqXHR){
+						  alert('metadata successfully uploaded to inbox');
 						  ulbtn.removeAttribute('disabled');
 						  ulbtn.innerHTML = '<img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox';
-						  alert('there was an error upload the metadata to your inbox');
 					      },
 					      crossDomain: true,
 					      headers: stm.authHeader,
@@ -1455,7 +1455,7 @@
 				      error: function(jqXHR) {
 						  ulbtn.removeAttribute('disabled');
 						  ulbtn.innerHTML = '<img src="Retina/images/cloud-upload.png" style="width: 16px; margin-right: 5px;">upload to inbox';
-						  alert('there was an error upload the metadata to your inbox');					  
+						  alert('there was an error uploading the metadata to your inbox');					  
 				      },
 				      crossDomain: true,
 				      headers: stm.authHeader,
