@@ -51,7 +51,7 @@
 				   this.prom.resolve();
 			       },
 			       error: function () {
-				   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permisson to view this data.</div>";
+				   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
 			       }
 			     } );
 	    }
