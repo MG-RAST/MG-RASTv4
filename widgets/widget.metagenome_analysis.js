@@ -2019,7 +2019,7 @@
 
 	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "WGS", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "MT", "title": "metatranscriptome", "checked": false } ] } ];
 	    if (stm.user) {
-		specialFilters.push( { "attribute": "status", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "public", "title": "public", "checked": false }, { "value": "private", "title": "private", "checked": false } ] } );
+		specialFilters.push( { "attribute": "public", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": 1, "title": "public", "checked": false }, { "value": 0, "title": "private", "checked": false } ] } );
 	    }
 
 	    widget.mgselect = Retina.Renderer.create("listselect", {
@@ -2028,7 +2028,7 @@
 		callback: Retina.WidgetInstances.metagenome_analysis[1].loadData,
 		asynch_limit: 100,
 		synchronous: false,
-		navigation_url: RetinaConfig.mgrast_api+'/metagenome?match=all&verbosity=mixs',
+		navigation_url: RetinaConfig.mgrast_api+'/search?',
 		data: [],
 		filter: result_columns,
 		keyMapping: result_attributes,
@@ -2056,9 +2056,11 @@
 
 	for (var i=0; i<data.length; i++) {
 	    var item = data[i];
-	    if (data[i].status != "public") {
-	    	data[i].id = Retina.idmap(data[i].id);
+	    if (! data[i]['public']) {
+	    	data[i].id = Retina.idmap(data[i].metagenome_id);
 	    	data[i].project_id = Retina.idmap(data[i].project_id);
+	    } else {
+		data[i].id = data[i].metagenome_id;
 	    }
 	    result_data.push(item);
 	}
@@ -2230,7 +2232,7 @@
 	    }
 
 	    for (var i=0; i<ids.length; i++) {
-		if (ids[i].sequence_type == 'Amplicon' && hasNonRNA) {
+		if (ids[i].sequence_type == 'amplicon' && hasNonRNA) {
 		    alert('You have chosen a non RNA datasource for an amplicon dataset.\n\nPlease remove either the datasource or the amplicon datasets from your selection.');
 		    return;
 		}
