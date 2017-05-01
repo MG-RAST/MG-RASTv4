@@ -426,12 +426,12 @@
 	}
 
 	// mapping for nice sequence type names
-	var seqTypes = { "WGS": "shotgun metagenome",
-			 "MT": "metatranscriptome",
-			 "Amplicon": "amplicon metagenome" };
+	var seqTypes = { "wgs": "shotgun metagenome",
+			 "mt": "metatranscriptome",
+			 "amplicon": "amplicon metagenome" };
 	
 	for (var i=0;i<rows.length;i++) {
-            html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+">");
+            html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["metagenome_id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+">");
 	    html.push("<td>"+Retina.dateString(data[rows[i][0]]["created"]).split(/\s/)[0]+"</td>");
 	    if (data[rows[i][0]]["project_id"]) {
 		html.push("<td><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>");
@@ -440,7 +440,7 @@
 	    }
 
 	    
-            html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["id"]) : data[rows[i][0]]["id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></td>");
+            html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["id"]) : data[rows[i][0]]["metagenome_id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["metagenome_id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></td>");
 	    html.push("<td>"+seqTypes[data[rows[i][0]]["sequence_type"]]+"</td>");
             html.push("<td>"+(data[rows[i][0]]["biome"] || "-")+"</td>");
             html.push("<td>"+(data[rows[i][0]]["country"] || "-")+"</td>");
@@ -473,7 +473,7 @@
 	for (var i=0; i<data.length; i++) {
 	    var row = [];
 	    for (var h=0; h<fields.length; h++) {
-		if (fields[h] == 'id' || fields[h] == 'project_id' && data[i].status == 'private') {
+		if (fields[h] == 'metagenome_id' || fields[h] == 'project_id' && data[i].status == 'private') {
 		    data[i][fields[h]] = Retina.idmap(data[i][fields[h]]);
 		}
 		row.push(data[i][fields[h]]);
@@ -506,57 +506,30 @@
 	    widget.offset = 0;
 	}
 
-	var api_url = RetinaConfig.mgrast_api + '/metagenome?verbosity=mixs&';
-	//var api_url = RetinaConfig.mgrast_api + '/search?';
-		
-	// metadata function organism
-	// var type = [];
-	// var poss = [ 'metadata', 'organism', 'function' ];
-	// for (var i=0; i<poss.length; i++) {
-	//     var btn = document.getElementById(poss[i] + '_button');
-	//     for (var h=0; h<btn.classList.length; h++) {
-	// 	if (btn.classList[h] == 'active') {
-	// 	    type.push(poss[i]);
-	// 	    break;
-	// 	}
-	//     }
-	// }
-
-	widget.match = "all";
-	
+	var api_url = RetinaConfig.mgrast_api + '/search?';
 	var query_str = "";
 	if (widget.query) {
-	    query_str += "metadata=" + widget.query.split(/\s/).join("&all=");
+	    query_str = "&all="+widget.query.split(/\s/).join("&all=");
+	} else {
+	    query_str = "&all=*";
 	}
-	// for (var h=0;h<type.length; h++) {
-	//     if(query_str != "") {
-	// 	query_str += "&";
-	//     }
-	//     query_str += type[h] + "=" + widget.query.split(/\s/).join("&"+type[h]+"=");
-	// }
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
-		query_str += (query_str.length ? "&" : "")+h;//.toLowerCase();
+		query_str += "&"+h.toLowerCase();
 		query_str += "="+widget.advancedOptions[h];
 	    }
 	}
 
-	if (query_str.length) {
-	    query_str += "&";
-	} else {
-	//     query_str = "all=*";
-	}
-
 	widget.limit = howmany || widget.limit;
-	var url = api_url + query_str + "direction=" + widget.sortDir + "&limit=" + widget.limit + "&offset=" + widget.offset + "&order="+widget.sort;
+	var url = api_url + "direction=" + widget.sortDir + "&limit=" + widget.limit + "&offset=" + widget.offset + "&order="+widget.sort + query_str;
 	
 	jQuery.ajax( { dataType: "json",
 		       url: url,
 		       headers: stm.authHeader,
 		       success: function(data) {
 			   for (var i=0;i<data.data.length;i++) {
-			       stm.DataStore.search[data.data[i]["id"]] = data.data[i];
+			       stm.DataStore.search[data.data[i]["metagenome_id"]] = data.data[i];
 			   }
 			   Retina.WidgetInstances.metagenome_search[1].total = data.total_count;
 			   document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, data.total_count);
