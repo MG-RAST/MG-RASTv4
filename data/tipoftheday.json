@@ -4,7 +4,7 @@
     "Changing parameters for comparisons and data exports is a core function of MG-RAST enabling you to narrow comparisons down.",
     "You can select a taxonomic group (e.g. Actinobacteria) or function (e.g. Lysine Biosynthesis) and extract all sequence features matched to said group or function for downstream analysis.",
     "MG-RAST has an R interface. <a href='https://cran.r-project.org/web/packages/matR/index.html' target=_blank>",
-    "The MG-RAST API allows platform agnostic access to the data and analysis in MG-RAST. <a href='http:://api.metagenomics.anl.gov/api.html' target=_blank>",
+    "The MG-RAST <a href='http://api.metagenomics.anl.gov/api.html' target=_blank>API</a> allows platform agnostic access to the data and analysis in MG-RAST. <a href='http:://api.metagenomics.anl.gov/api.html' target=_blank>",
     "You can retrieve a list of species or set of features linked to a specific functional category, e.g. KEGG pathway or SEED subsystem.",
     "You can retrieve a set of functions or functional categories (and/or the respective features) for a specific taxonomic group.",
     "Collections offer a convenient way to group metagenomes and facilitate easier analysis.",

@@ -10,21 +10,23 @@ To build this image:
 
 make sure you have cloned the required repositories (including git submodules)
 
-cd into that directory 
-
-
+```bash
+git clone --recursive https://github.com/MG-RAST/MG-RASTv4.git
+```
 
 To build the image either download the Docker file into an empty directory of provide the url to Dockerfile as in this example:
 
 ```bash
-export TAG=`date +"%Y%m%d.%H%M"`
-docker build -t mgrast/v4-web:${TAG} .
+cd MG-RASTv4
+docker build -t mgrast/v4-web .
 ```
 
 Example for manual invocation:
 ```bash
-docker run -t -i mgrast/v4-web:${TAG} 
+docker run -ti -p80:80 --name mgrast-v4-web mgrast/v4-web
 ```
+
+Once that is done, connect to localhost on your machine with your favorite browser. (http://127.0.0.1)
 
 ### Other notes ###
 
