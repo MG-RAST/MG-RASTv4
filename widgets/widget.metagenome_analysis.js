@@ -2015,7 +2015,7 @@
 
 	    // create a metagenome selection renderer
 	    var result_columns = [ "name", "ID", "project id", "project name", "PI last name", "biome", "feature", "material", "environmental package", "location", "country", "sequencing method" ];
-	    var result_attributes = { "ID": "id", "project id": "project_id", "project name": "project_name", "PI last name": "pi_lastname","environmental package": "env_package_type", "sequencing method": "seq_method" };
+	    var result_attributes = { "ID": "metagenome_id", "project id": "project_id", "project name": "project_name", "PI last name": "pi_lastname","environmental package": "env_package_type", "sequencing method": "seq_method" };
 
 	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "wgs", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "mt", "title": "metatranscriptome", "checked": false } ] } ];
 	    if (stm.user) {
@@ -2058,6 +2058,7 @@
 	    var item = data[i];
 	    if (! data[i]['public']) {
 	    	data[i].id = Retina.idmap(data[i].metagenome_id);
+		data[i].metagenome_id = data[i].id;
 	    	data[i].project_id = Retina.idmap(data[i].project_id);
 	    } else {
 		data[i].id = data[i].metagenome_id;

@@ -27,39 +27,92 @@
 				 "seq_method": "sequencing method",
 				 "job": "job id",
 				 "id": "metagenome id" };
-    widget.keylist = [//[ 117, 97, 112, 97, 97, 97, 97 ];
+    widget.keylist = [
 	{ "name": "Project",
 	  "items": [
- 	      { "name": "created", "value": "created", "selected": true, "width": 117 },
-	      { "name": "pi_firstname", "value": "PI firstname", "width": 110 },
-	      { "name": "pi_lastname", "value": "PI lastname", "width": 110 },
-	      { "name": "project_name", "value": "study", "selected": true, "width": 97 },
+ 	      { "name": "created", "value": "created", "selected": true },
+	      { "name": "pi_firstname", "value": "PI firstname" },
+	      { "name": "pi_lastname", "value": "PI lastname" },
+	      { "name": "pi_organization", "value": "PI organization" },
+	      { "name": "pi_organization_country", "value": "PI org country" },
+	      { "name": "project_funding", "value": "funding" },
+	      { "name": "project_name", "value": "study", "selected": true },
 	      { "name": "library_name", "value": "library" },
 	      { "name": "sample_name", "value": "sample" },
-	      { "name": "name", "value": "dataset", "selected": true, "width": 112 },
-	      { "name": "sequence_type", "value": "seq type", "selected": true, "width": 97 },
-	      { "name": "seq_method", "value": "seq method", "width": 105 },
-	      { "name": "status", "value": "status" }] },
+	      { "name": "name", "value": "dataset", "selected": true },
+	      { "name": "sequence_type", "value": "seq type", "selected": true },
+	      { "name": "seq_method", "value": "seq method" },
+	      { "name": "public", "value": "public" },
+	      { "name": "mixs_compliant", "value": "MiXS" },
+	  ] },
 	{ "name": "Environment",
 	  "items": [
 	      { "name": "feature", "value": "feature" },
 	      { "name": "material", "value": "material" },
-	      { "name": "biome", "value": "biome", "selected": true, "width": 97 },
-	      { "name": "env_package_name", "value": "env package name", "width": 123 },
-	      { "name": "env_package_type", "value": "env package type", "width": 123 },
+	      { "name": "biome", "value": "biome", "selected": true },
+	      { "name": "env_package_name", "value": "env package name" },
+	      { "name": "env_package_type", "value": "env package type" },
+	      { "name": "investigation_type", "value": "investigation type" },
+	      { "name": "target_gene", "value": "target gene" },
+	      { "name": "mrna_percent", "value": "mrna percent" },
 	      { "name": "latitude", "value": "latitude" },
 	      { "name": "longitude", "value": "longitude" },
-	      { "name": "country", "value": "country", "selected": true, "width": 97 },
-	      { "name": "location", "value": "location", "selected": true, "width": 97 },
-	      { "name": "collection_date", "value": "collection date", "width": 123 } ] },
+	      { "name": "depth", "value": "depth" },
+	      { "name": "elevation", "value": "elevation" },
+	      { "name": "altitude", "value": "altitude" },
+	      { "name": "temperature", "value": "temperature" },
+	      { "name": "country", "value": "country", "selected": true },
+	      { "name": "continent", "value": "continent" },
+	      { "name": "location", "value": "location", "selected": true },
+	      { "name": "collection_date", "value": "collection date" }
+	  ] },
 	{ "name": "IDs",
 	  "items": [
-	      { "name": "job", "value": "job id" },
+	      { "name": "job_id", "value": "job id" },
 	      { "name": "project_id", "value": "project id" },
 	      { "name": "sample_id", "value": "sample id" },
 	      { "name": "library_id", "value": "library id" },
-	      { "name": "id", "value": "metagenome id" },
-	      { "name": "version", "value": "version" } ] },
+	      { "name": "metagenome_id", "value": "metagenome id" },
+	      { "name": "pubmed_id", "value": "pubmed id" },
+	      { "name": "gold_id", "value": "gold id" },
+	      { "name": "ebi_id", "value": "ebi id" },
+	      { "name": "ncbi_id", "value": "ncbi id" },
+	      { "name": "greengenes_id", "value": "greengenes id" },	      
+	      { "name": "version", "value": "version" }
+	  ] },
+	{ "name": "Statistics",
+	  "items": [
+	      { "name": "sequence_count_raw", "value": "sequence count" },
+	      { "name": "drisee_score_raw", "value": "drisee score" },
+	      { "name": "bp_count_raw", "value": "bp count" },
+	      { "name": "average_gc_ratio_raw", "value": "gc ratio" },
+	      { "name": "alpha_diversity_shannon", "value": "alpha diversity" },
+	      { "name": "average_length_raw", "value": "average length" }
+	  ]
+	},
+	{ "name": "Pipeline Parameters",
+	  "items": [
+	      { "name": "fgs_type", "value": "fgs type" },
+	      { "name": "m5nr_sims_version", "value": "m5nr sims version" },
+	      { "name": "rna_pid", "value": "rna pid" },
+	      { "name": "m5rna_annotation_version", "value": "m5rna annotation version" },
+	      { "name": "pipeline_version", "value": "pipeline version" },
+	      { "name": "file_type", "value": "file type" },
+	      { "name": "aa_pid", "value": "aa pid" },
+	      { "name": "priority", "value": "priority" },
+	      { "name": "dereplicate", "value": "dereplicate" },
+	      { "name": "bowtie", "value": "bowtie" },
+	      { "name": "filter_ln", "value": "filter ln" },
+	      { "name": "filter_ln_mult", "value": "filter ln mult" },
+	      { "name": "screen_indexes", "value": "screen indexes" },
+	      { "name": "assembled", "value": "assembled" },
+	      { "name": "m5rna_sims_version", "value": "m5rna sims version" },
+	      { "name": "filter_ambig", "value": "filter ambig" },
+	      { "name": "max_ambig", "value": "max ambig" },
+	      { "name": "m5nr_annotation_version", "value": "m5nr annotation version" },
+	      { "name": "prefix_length", "value": "prefix length" }
+	  ]
+	}
     ];
     
     widget.display = function (params) {
@@ -412,14 +465,12 @@
 
 	var fields = widget.fields = [];
 	var fnames = widget.fieldnames = [];
-	var widths = [];
 	for (var i=0; i<widget.keylist.length; i++) {
 	    var list = widget.keylist[i].items;
 	    for (var h=0; h<list.length; h++) {
 		if (list[h].selected) {
 		    fields.push(list[h].name);
 		    fnames.push(list[h].value)
-		    widths.push(list[h].width || 100);
 		}
 	    }
 	}
@@ -464,7 +515,7 @@
                     style_d = "border: 1px solid #0088CC; border-radius: 7px; padding: 2px 1px 1px;";
 		}
             }
-            html.push("<th style='min-width: "+widths[i]+"px;'><input type='text' field='"+i+"' style='display: none; position: absolute; font-size: 12px; height: 12px; width: 100px;' onblur=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event, true)\" onkeypress=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event)\">"+fnames[i]+(fields[i] == "created" ? "" : "<img src='Retina/images/search.png' style='width: 10px; cursor: pointer; margin-right: 2px; margin-top: -2px; margin-left: 2px;' onclick='this.parentNode.firstChild.style.display=\"\"; this.style.display=\"none\";this.parentNode.firstChild.focus();'>")+"<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;margin-left: 2px;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;"+style_d+"\" />");
+            html.push("<th style='white-space: nowrap; padding-right: 30px;'><input type='text' field='"+i+"' style='display: none; position: absolute; font-size: 12px; height: 12px; width: 100px;' onblur=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event, true)\" onkeypress=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event)\">"+fnames[i]+(fields[i] == "created" ? "" : "<img src='Retina/images/search.png' style='width: 10px; cursor: pointer; margin-right: 2px; margin-top: -2px; margin-left: 2px;' onclick='this.parentNode.firstChild.style.display=\"\"; this.style.display=\"none\";this.parentNode.firstChild.focus();'>")+"<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;margin-left: 2px;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;"+style_d+"\" />");
 	    
             html.push("</th>");
 	}
