@@ -27,36 +27,40 @@
 				 "seq_method": "sequencing method",
 				 "job": "job id",
 				 "id": "metagenome id" };
-    widget.keylist = [ { "name": "Project",
-			 "items": [ { "name": "PI_firstname", "value": "PI firstname" },
-				    { "name": "PI_lastname", "value": "PI lastname" },
-				    { "name": "project_name", "value": "project name" },
-				    { "name": "library_name", "value": "library name" },
-				    { "name": "sample_name", "value": "sample name" },
-				    { "name": "created", "value": "creation date" },
-				    { "name": "name", "value": "metagenome name" },
-				    { "name": "sequence_type", "value": "sequence type" },
-				    { "name": "seq_method", "value": "sequencing method" },
-				    { "name": "status", "value": "status" }] },
-		       { "name": "Environment",
-			 "items": [ { "name": "feature", "value": "feature" },
-				    { "name": "material", "value": "material" },
-				    { "name": "biome", "value": "biome" },
-				    { "name": "env_package_name", "value": "env package name" },
-				    { "name": "env_package_type", "value": "env package type" },
-				    { "name": "latitude", "value": "latitude" },
-				    { "name": "longitude", "value": "longitude" },
-				    { "name": "location", "value": "location" },
-				    { "name": "country", "value": "country" },
-				    { "name": "collection_date", "value": "collection date" } ] },
-		       { "name": "IDs",
-			 "items": [ { "name": "job", "value": "job id" },
-				    { "name": "project_id", "value": "project id" },
-				    { "name": "sample_id", "value": "sample id" },
-				    { "name": "library_id", "value": "library id" },
-				    { "name": "id", "value": "metagenome id" },
-				    { "name": "version", "value": "version" } ] },
-		     ];
+    widget.keylist = [//[ 117, 97, 112, 97, 97, 97, 97 ];
+	{ "name": "Project",
+	  "items": [
+ 	      { "name": "created", "value": "created", "selected": true, "width": 117 },
+	      { "name": "pi_firstname", "value": "PI firstname", "width": 110 },
+	      { "name": "pi_lastname", "value": "PI lastname", "width": 110 },
+	      { "name": "project_name", "value": "study", "selected": true, "width": 97 },
+	      { "name": "library_name", "value": "library" },
+	      { "name": "sample_name", "value": "sample" },
+	      { "name": "name", "value": "dataset", "selected": true, "width": 112 },
+	      { "name": "sequence_type", "value": "seq type", "selected": true, "width": 97 },
+	      { "name": "seq_method", "value": "seq method", "width": 105 },
+	      { "name": "status", "value": "status" }] },
+	{ "name": "Environment",
+	  "items": [
+	      { "name": "feature", "value": "feature" },
+	      { "name": "material", "value": "material" },
+	      { "name": "biome", "value": "biome", "selected": true, "width": 97 },
+	      { "name": "env_package_name", "value": "env package name", "width": 123 },
+	      { "name": "env_package_type", "value": "env package type", "width": 123 },
+	      { "name": "latitude", "value": "latitude" },
+	      { "name": "longitude", "value": "longitude" },
+	      { "name": "country", "value": "country", "selected": true, "width": 97 },
+	      { "name": "location", "value": "location", "selected": true, "width": 97 },
+	      { "name": "collection_date", "value": "collection date", "width": 123 } ] },
+	{ "name": "IDs",
+	  "items": [
+	      { "name": "job", "value": "job id" },
+	      { "name": "project_id", "value": "project id" },
+	      { "name": "sample_id", "value": "sample id" },
+	      { "name": "library_id", "value": "library id" },
+	      { "name": "id", "value": "metagenome id" },
+	      { "name": "version", "value": "version" } ] },
+    ];
     
     widget.display = function (params) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
@@ -82,17 +86,7 @@
       <button class='btn' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
     </div>\
   </div>";
-
-  // 	// option buttons
-  // 	html += "\
-  // <div style='width: 175px; float: left;'>\
-  //   <div class='btn-group' data-toggle='buttons-radio'>\
-  //     <button class='btn btn-mini active' data-toggle='button' id='metadata_button'>metadata</button>\
-  //     <button class='btn btn-mini' data-toggle='button' id='function_button'>function</button>\
-  //     <button class='btn btn-mini' data-toggle='button' id='organism_button'>organism</button>\
-  //   </div>\
-  // </div>";
-
+	
 	// result text
 	html += "\
   <div style='font-size: 12px; float: left;' id='result_text'></div>\
@@ -103,7 +97,8 @@
 	html += "<div id='result' style='clear: both; min-height: 300px;'></div>";
 
 	content.innerHTML = html;
-
+	jQuery(".sidebar").css('position', 'relative');
+	
 	document.getElementById('searchtext').addEventListener('keypress', function (event) {
 	    event = event || window.event;
 	    
@@ -248,6 +243,7 @@
 	for (var i=0; i<keylist.length; i++) {
 	    keyselect_html += "<optgroup label='"+keylist[i].name+"'>"
 	    for (var h=0; h<keylist[i].items.length; h++) {
+		if (keylist[i].items[h].value == "created") { continue; }
 		keyselect_html += "<option value='"+keylist[i].items[h].name+"'>"+keylist[i].items[h].value+"</option>";
 	    }
 	    keyselect_html += "</optgroup>";
@@ -299,9 +295,15 @@
 
 	    // add key and value to the advance options
 	    var skeyList = document.getElementById('advanced_search_key');
-	    var skey = skeyList.options[skeyList.selectedIndex].value;
-	    var sname = skeyList.options[skeyList.selectedIndex].text;
-	    var sval = document.getElementById('advanced_search_value').value;
+	    var skey = item ? item.key : skeyList.options[skeyList.selectedIndex].value;
+	    var sname = item ? item.name : skeyList.options[skeyList.selectedIndex].text;
+	    var sval = item ? item.val : document.getElementById('advanced_search_value').value;
+
+	    // check if we already have a filter for this key
+	    if (widget.advancedOptions.hasOwnProperty(skey)) {
+		target.removeChild(document.getElementById('advSearch_'+skey));
+	    }
+	    
 	    widget.advancedOptions[skey] = sval;
 	    widget.checkStoreSearch();
 
@@ -376,8 +378,51 @@
     /* 
        TABLE
     */
+    widget.tableFilter = function (event, blur) {
+	var widget = this;
+	event = event || window.event;
+	if (blur) {
+	    event.keyCode = 27;
+	}
+
+	if (event.keyCode == 13 || event.keyCode == 27) {
+
+	    var inp = event.target;
+	    
+	    if (event.keyCode == 13) {
+		widget.refineSearch('add', { name: widget.fieldnames[inp.getAttribute('field')], key: widget.fields[inp.getAttribute('field')], val: inp.value });
+	    }
+	    
+	    inp.value = "";
+	    inp.style.display = "none";
+	    inp.parentNode.lastChild.previousSibling.previousSibling.style.display = "";
+
+	}
+    };
+
+    widget.updateFields = function (key, subkey, checked) {
+	var widget = this;
+
+	widget.keylist[key].items[subkey].selected = checked;
+	document.getElementById('result').innerHTML = widget.resultTable(stm.DataStore.search, widget.total);
+    };
+    
     widget.resultTable = function (data, total_count) {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
+
+	var fields = widget.fields = [];
+	var fnames = widget.fieldnames = [];
+	var widths = [];
+	for (var i=0; i<widget.keylist.length; i++) {
+	    var list = widget.keylist[i].items;
+	    for (var h=0; h<list.length; h++) {
+		if (list[h].selected) {
+		    fields.push(list[h].name);
+		    fnames.push(list[h].value)
+		    widths.push(list[h].width || 100);
+		}
+	    }
+	}
 
 	var showing = "all matches.";
 	var num = 0;
@@ -397,11 +442,18 @@
 	}
 
 	var html = [];
+
+	html.push('<div class="dropdown" style="position: relative; right: 30px;"><a class="dropdown-toggle btn btn-mini" data-toggle="dropdown" href="#"><img src="Retina/images/settings3.png" style="height: 12px;"></a><ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" style="font-size: 12px;">');
+	for (var i=0; i<widget.keylist.length; i++) {
+	    var list = widget.keylist[i].items;
+	    html.push('<li style="font-weight: bold; padding-left: 5px;">'+widget.keylist[i].name+'</li>');
+	    for (var h=0; h<list.length; h++) {
+		html.push('<li onclick="Retina.WidgetInstances.metagenome_search[1].updateFields('+i+','+h+',this.firstChild.firstChild.checked);"><a href=# style="padding: 0px 5px;"><input type="checkbox"'+(list[h].selected ? " checked=checked" : "")+' style="position: relative; bottom: 4px;"> '+list[h].value+'</a></li>');
+	    }
+	}
+	html.push('</ul></div>');
 	
-	html.push("<table class='table' style='font-size: 12px;' id='result_table'><thead><tr>");
-	var fields = ["created", "project_name", "name", "sequence_type", "biome", "country", "location"];
-	var fnames = ["Created", "Study", "Metagenome", "Seq&nbsp;Type", "Biome", "Country", "Location"];
-	var widths = [ 105, 85, 100, 85, 85, 85, 85 ];
+	html.push("<table class='table' style='font-size: 12px; position: relative; bottom: 30px; word-wrap: break-word;' id='result_table'><thead><tr>");
 	for (var i=0;i<fields.length;i++) {
 	    var style_a = "";
 	    var style_d = "";
@@ -412,7 +464,7 @@
                     style_d = "border: 1px solid #0088CC; border-radius: 7px; padding: 2px 1px 1px;";
 		}
             }
-            html.push("<th style='min-width: "+widths[i]+"px;'>"+fnames[i]+"&nbsp;<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;"+style_d+"\" />");
+            html.push("<th style='min-width: "+widths[i]+"px;'><input type='text' field='"+i+"' style='display: none; position: absolute; font-size: 12px; height: 12px; width: 100px;' onblur=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event, true)\" onkeypress=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event)\">"+fnames[i]+(fields[i] == "created" ? "" : "<img src='Retina/images/search.png' style='width: 10px; cursor: pointer; margin-right: 2px; margin-top: -2px; margin-left: 2px;' onclick='this.parentNode.firstChild.style.display=\"\"; this.style.display=\"none\";this.parentNode.firstChild.focus();'>")+"<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;margin-left: 2px;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;"+style_d+"\" />");
 	    
             html.push("</th>");
 	}
@@ -432,19 +484,24 @@
 	
 	for (var i=0;i<rows.length;i++) {
             html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["metagenome_id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+">");
-	    html.push("<td>"+Retina.dateString(data[rows[i][0]]["created"]).split(/\s/)[0]+"</td>");
-	    if (data[rows[i][0]]["project_id"]) {
-		html.push("<td><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></td>");
-	    } else {
-		html.push("<td>-</td>");
-	    }
 
+	    for (var h=0; h<fields.length; h++) {
+		var cell = data[rows[i][0]][fields[h]];
+		if (cell && fields[h] == "created") {
+		    cell = cell.split(/t/)[0];
+		} else if (cell && fields[h] == "project_name") {
+		    cell = "<div style='max-width: 300px;'><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></div>";
+		} else if (cell && fields[h] == "name") {
+		    cell = "<div style='max-width: 300px;'><a href='?mgpage=overview&metagenome="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["id"]) : data[rows[i][0]]["metagenome_id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["metagenome_id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></div>";
+		} else if (cell && fields[h] == "sequence_type") {
+		    cell = seqTypes[data[rows[i][0]]["sequence_type"]]
+		}
+		if (! cell) {
+		    cell = "-";
+		}
+		html.push("<td>"+cell+"</td>");
+	    }
 	    
-            html.push("<td style='max-width: 200px; overflow: hidden;'><a href='?mgpage=overview&metagenome="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["id"]) : data[rows[i][0]]["metagenome_id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["metagenome_id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></td>");
-	    html.push("<td>"+seqTypes[data[rows[i][0]]["sequence_type"]]+"</td>");
-            html.push("<td>"+(data[rows[i][0]]["biome"] || "-")+"</td>");
-            html.push("<td>"+(data[rows[i][0]]["country"] || "-")+"</td>");
-	    html.push("<td>"+(data[rows[i][0]]["location"] || "-")+"</td>");
 	    html.push("</tr>");
 	}
         
@@ -483,6 +540,23 @@
 	stm.saveAs(exportData.join("\n"), "searchResultsMetadata.txt");
     };
 
+    widget.parseSearchTerms = function (term) {
+	var widget = this;
+
+	var mapping = { "shotgun": "wgs",
+			"metatranscriptome": "mt",
+			"amplicon metagenome": "amplicon",
+			"shotgun metagenome": "wgs" };
+	
+	if (mapping.hasOwnProperty(term)) {
+	    term = mapping[term];
+	} else if (Retina.idmap(term).match(/^mg[mp]\d+\.?\d?$/)) {
+	    term = Retina.idmap(term);
+	}
+	
+	return term;
+    };
+
     widget.queryAPI = function (more, howmany) {
 	var widget = Retina.WidgetInstances.metagenome_search[1];
 
@@ -509,15 +583,17 @@
 	var api_url = RetinaConfig.mgrast_api + '/search?';
 	var query_str = "";
 	if (widget.query) {
-	    query_str = "&all="+widget.query.split(/\s/).join("&all=");
-	} else {
-	    query_str = "&all=*";
+	    var items = widget.query.split(/\s/);
+	    for (var i=0; i<items.length; i++) {
+		items[i] = widget.parseSearchTerms(items[i]);
+	    }
+	    query_str = "&all="+items.join("&all=");
 	}
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
 		query_str += "&"+h.toLowerCase();
-		query_str += "="+widget.advancedOptions[h];
+		query_str += "="+widget.parseSearchTerms(widget.advancedOptions[h]);
 	    }
 	}
 
@@ -528,11 +604,12 @@
 		       url: url,
 		       headers: stm.authHeader,
 		       success: function(data) {
+			   var widget = Retina.WidgetInstances.metagenome_search[1];
 			   for (var i=0;i<data.data.length;i++) {
 			       stm.DataStore.search[data.data[i]["metagenome_id"]] = data.data[i];
 			   }
-			   Retina.WidgetInstances.metagenome_search[1].total = data.total_count;
-			   document.getElementById('result').innerHTML = Retina.WidgetInstances.metagenome_search[1].resultTable(stm.DataStore.search, data.total_count);
+			   widget.total = data.total_count;
+			   document.getElementById('result').innerHTML = widget.resultTable(stm.DataStore.search, data.total_count);
 			   document.getElementById('opaq').style.display = 'none';
 		       },
 		       error: function () {
