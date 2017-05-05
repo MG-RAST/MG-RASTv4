@@ -13,7 +13,7 @@
     };
     
     widget.query = "";
-    widget.sort = "created";
+    widget.sort = "created_on";
     widget.sortDir = "desc";
     widget.offset = 0;
     widget.limit = 20;
@@ -30,11 +30,11 @@
     widget.keylist = [
 	{ "name": "Project",
 	  "items": [
- 	      { "name": "created", "value": "created", "selected": true },
-	      { "name": "pi_firstname", "value": "PI firstname" },
-	      { "name": "pi_lastname", "value": "PI lastname" },
-	      { "name": "pi_organization", "value": "PI organization" },
-	      { "name": "pi_organization_country", "value": "PI org country" },
+ 	      { "name": "created_on", "value": "created", "selected": true },
+	      { "name": "PI_firstname", "value": "PI firstname" },
+	      { "name": "PI_lastname", "value": "PI lastname" },
+	      { "name": "PI_organization", "value": "PI organization" },
+	      { "name": "PI_organization_country", "value": "PI org country" },
 	      { "name": "project_funding", "value": "funding" },
 	      { "name": "project_name", "value": "study", "selected": true },
 	      { "name": "library_name", "value": "library" },
