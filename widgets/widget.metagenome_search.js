@@ -13,7 +13,7 @@
     };
     
     widget.query = "";
-    widget.sort = "created";
+    widget.sort = "created_on";
     widget.sortDir = "desc";
     widget.offset = 0;
     widget.limit = 20;
@@ -22,7 +22,7 @@
     widget.advancedOptions = {};
     widget.selectedMetagenomes = {};
     widget.addingMetagenomes = false;
-    widget.specialKeyMapping = { "created": "creation date",
+    widget.specialKeyMapping = { "created_on": "creation date",
 				 "name": "metagenome name",
 				 "seq_method": "sequencing method",
 				 "job": "job id",
@@ -30,11 +30,11 @@
     widget.keylist = [
 	{ "name": "Project",
 	  "items": [
- 	      { "name": "created", "value": "created", "selected": true },
-	      { "name": "pi_firstname", "value": "PI firstname" },
-	      { "name": "pi_lastname", "value": "PI lastname" },
-	      { "name": "pi_organization", "value": "PI organization" },
-	      { "name": "pi_organization_country", "value": "PI org country" },
+ 	      { "name": "created_on", "value": "created", "selected": true },
+	      { "name": "PI_firstname", "value": "PI firstname" },
+	      { "name": "PI_lastname", "value": "PI lastname" },
+	      { "name": "PI_organization", "value": "PI organization" },
+	      { "name": "PI_organization_country", "value": "PI org country" },
 	      { "name": "project_funding", "value": "funding" },
 	      { "name": "project_name", "value": "study", "selected": true },
 	      { "name": "library_name", "value": "library" },
@@ -296,7 +296,7 @@
 	for (var i=0; i<keylist.length; i++) {
 	    keyselect_html += "<optgroup label='"+keylist[i].name+"'>"
 	    for (var h=0; h<keylist[i].items.length; h++) {
-		if (keylist[i].items[h].value == "created") { continue; }
+		if (keylist[i].items[h].value == "created_on") { continue; }
 		keyselect_html += "<option value='"+keylist[i].items[h].name+"'>"+keylist[i].items[h].value+"</option>";
 	    }
 	    keyselect_html += "</optgroup>";
@@ -515,7 +515,7 @@
                     style_d = "border: 1px solid #0088CC; border-radius: 7px; padding: 2px 1px 1px;";
 		}
             }
-            html.push("<th style='white-space: nowrap; padding-right: 30px;'><input type='text' field='"+i+"' style='display: none; position: absolute; font-size: 12px; height: 12px; width: 100px;' onblur=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event, true)\" onkeypress=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event)\">"+fnames[i]+(fields[i] == "created" ? "" : "<img src='Retina/images/search.png' style='width: 10px; cursor: pointer; margin-right: 2px; margin-top: -2px; margin-left: 2px;' onclick='this.parentNode.firstChild.style.display=\"\"; this.style.display=\"none\";this.parentNode.firstChild.focus();'>")+"<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;margin-left: 2px;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;"+style_d+"\" />");
+            html.push("<th style='white-space: nowrap; padding-right: 30px;'><input type='text' field='"+i+"' style='display: none; position: absolute; font-size: 12px; height: 12px; width: 100px;' onblur=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event, true)\" onkeypress=\"Retina.WidgetInstances.metagenome_search[1].tableFilter(event)\">"+fnames[i]+(fields[i] == "created_on" ? "" : "<img src='Retina/images/search.png' style='width: 10px; cursor: pointer; margin-right: 2px; margin-top: -2px; margin-left: 2px;' onclick='this.parentNode.firstChild.style.display=\"\"; this.style.display=\"none\";this.parentNode.firstChild.focus();'>")+"<img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'asc\');\" src=\"Retina/images/up-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;margin-left: 2px;"+style_a+"\" /><img onclick=\"Retina.WidgetInstances.metagenome_search[1].sortQuery(\'"+fields[i]+"\', \'desc\');\" src=\"Retina/images/down-arrow.gif\" style=\"cursor: pointer;margin-top: -2px;"+style_d+"\" />");
 	    
             html.push("</th>");
 	}
@@ -538,7 +538,7 @@
 
 	    for (var h=0; h<fields.length; h++) {
 		var cell = data[rows[i][0]][fields[h]];
-		if (cell && fields[h] == "created") {
+		if (cell && fields[h] == "created_on") {
 		    cell = cell.split(/t/)[0];
 		} else if (cell && fields[h] == "project_name") {
 		    cell = "<div style='max-width: 300px;'><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></div>";
@@ -643,7 +643,7 @@
 
 	for (var h in widget.advancedOptions) {
 	    if (widget.advancedOptions.hasOwnProperty(h)) {
-		query_str += "&"+h.toLowerCase();
+		query_str += "&"+h;
 		query_str += "="+widget.parseSearchTerms(widget.advancedOptions[h]);
 	    }
 	}

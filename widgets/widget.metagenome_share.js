@@ -546,16 +546,14 @@
 	    var widget = Retina.WidgetInstances.metagenome_share[1];
 	    
 	    // make option lists for biomes
-	    var nopts = [];
-	    var hopts = [];
+	    var opts = {};
 	    for (var i=0; i<widget.ebi_biomes.length; i++) {
 		var cells = widget.ebi_biomes[i].split(/\t/);
 		if (cells.length > 1) {
-		    if (cells[0] == "host") {
-			hopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
-		    } else {
-			nopts.push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
+		    if (! opts.hasOwnProperty(cells[0])) {
+			opts[cells[0]] = [];
 		    }
+		    opts[cells[0]].push('<option value="'+cells[2]+'">'+cells[1]+'</option>');
 		}
 	    }
 	    
@@ -570,10 +568,15 @@
 	    widget.biomes = biomes;
 	    var biome_list = Retina.keys(biomes).sort();
 	    var biome_selects = [];
+	    var optTypes = Retia.keys(opts).sort();
 	    for (var i=0; i<biome_list.length; i++) {
 		if (biome_list[i].length) {
 		    biome_selects.push('<tr><td><div style="margin-right: 10px; position: relative; bottom: 5px;">'+biome_list[i]+'</div></td><td><select id="biome_'+biome_list[i]+'">');
-		    biome_selects.push('<optgroup label="host-associated">'+hopts.join('')+'</optgroup><optgroup label="non-host-associated">'+nopts.join('')+'</optgroup>');
+		    for (var h=0; h<optTypes.length; h++) {
+			biome_selects.push('<optgroup label="'+optTypes[h]+'">');
+			biome_selects.push(opts[optTypes[h]].join(""));
+			biome_selects.push('</optgroup>');
+		    }
 		    biome_selects.push('</select></td></tr>');
 		}
 	    }
