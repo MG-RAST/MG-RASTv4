@@ -603,6 +603,8 @@
 	    term = mapping[term];
 	} else if (Retina.idmap(term).match(/^mg[mp]\d+\.?\d?$/)) {
 	    term = Retina.idmap(term);
+	} else if (term.match(/^\d+\.\d$/)) {
+	    term = "mgm"+term;
 	}
 	
 	return term;
