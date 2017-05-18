@@ -1323,7 +1323,7 @@
 	var widget = this;
 
 	widget.excelPromise = jQuery.Deferred();
-	var base_url = "data/MGRAST_MetaData_template_1.7.xlsx";
+	var base_url = "data/MGRAST_MetaData_template_1.8.xlsx";
 
 	JSZipUtils.getBinaryContent(base_url, function(err, data) {
 	    if(err) {
