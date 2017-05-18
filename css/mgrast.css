@@ -474,3 +474,47 @@ h5 {
     position: relative;
     bottom: 1px;
 }
+
+/* API documentation */
+.request {
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 30px;
+    min-height: 22px;
+    color: #47474c;
+    background-color: #e0e0e0;
+    font-size: 16px;
+}
+
+.requestMethod {
+    float: right;
+    width: 300px;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
+.requestMethod :nth-child(1) {
+    border: 1px solid gray;
+    border-radius: 5px 0 0 5px;
+    background-color: #0095dd;
+    color: white;
+    padding: 5px;
+}
+
+.requestMethod :nth-child(2) {
+    border: 1px solid gray;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    padding: 5px;
+    background-color: white;
+    color: #333333;
+}
+
+.requestchild {
+    margin-top: 15px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 14px;
+}
