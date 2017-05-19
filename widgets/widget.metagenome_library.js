@@ -61,8 +61,9 @@
 	
 	html = ['<h3>library '+widget.id+'<div class="btn-group pull-right"><a href="?mgpage=project&project='+lib.project[0]+'" class="btn">study</a><a href="?mgpage=sample&sample='+lib.sample[0]+'" class="btn">sample</button>'];
 	if (lib.metagenome) {
-	    html.push('<a href="?mgpage=overview&metagenome='+lib.metagenome[0]+'" class="btn">metagenome</a></div></h3>');
+	    html.push('<a href="?mgpage=overview&metagenome='+lib.metagenome[0]+'" class="btn">metagenome</a>');
 	}
+	html.push('</div></h3>');
 	
 	html.push('<table>');
 	var k = Retina.keys(lib.metadata).sort();
