@@ -934,10 +934,16 @@
 	    url: RetinaConfig.mgrast_api+'/metadata/export/'+project,
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-			
+
 		widget.loadedData = data;
 		widget.currentProject = data.id;
 		document.getElementById('projectUploadButton').style.display = '';
+		for (var i=0; i<widget.projectData.length; i++) {
+		    if (widget.projectData[i].id == data.id) {
+			widget.checkProject(widget.projectData[i].name);
+			break;
+		    }
+		}
 		widget.fillSpreadSheet();
 		document.getElementById('cellInfoBox').innerHTML = 'project data loaded';
 	    },
@@ -1192,7 +1198,6 @@
 
     widget.checkProject = function (pname) {
 	var widget = this;
-
 	for (var i=0; i<widget.projectData.length; i++) {
 	    // turn metagenome_name into a select if this is an existing project
 	    if (widget.projectData[i].name == pname && widget.projectData[i].metagenomes.length) {
