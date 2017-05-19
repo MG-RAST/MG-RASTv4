@@ -42,7 +42,8 @@
 	var promise2 = jQuery.Deferred();
 	var promise3 = jQuery.Deferred();
 	var promise4 = jQuery.Deferred();
-	var promises = [ promise1, promise2, promise3, promise4 ];
+	var promise5 = jQuery.Deferred();
+	var promises = [ promise1, promise2, promise3, promise4, promise5 ];
 	
 	// load excel template
 	promises.push(widget.loadExcelTemplate());
@@ -93,6 +94,10 @@
 		stm.DataStore.material = data;
 		promise3.resolve();
 	    });
+	    jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=metagenome_taxonomy" function (data) {
+		stm.DataStore.metagenome_taxonomy = data;
+		promise4.resolve();
+	    });
 	}));
 
 	// load metadata template
@@ -108,7 +113,7 @@
 		for (var i=0; i<eps.length; i++) {
 		    widget.activeTabs["ep-"+eps[i]] = false;
 		}
-		promise4.resolve();
+		promise5.resolve();
 	    },
 	    "error": function (xhr) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
@@ -792,7 +797,8 @@
 	var promise1 = jQuery.Deferred();
 	var promise2 = jQuery.Deferred();
 	var promise3 = jQuery.Deferred();
-	var promises = [ promise1, promise2, promise3 ];
+	var promise4 = jQuery.Deferred();
+	var promises = [ promise1, promise2, promise3, promise4 ];
 	
 	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=biome&version="+widget.currentENVOversion, function (data) {
 	    stm.DataStore.biome = data;
@@ -806,6 +812,10 @@
 	    stm.DataStore.material = data;
 	    promise3.resolve();
 	});
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=metagenome_taxonomy" function (data) {
+	    stm.DataStore.metagenome_taxonomy = data;
+	    promise4.resolve();
+    });
 
 	jQuery.when.apply(this, promises).then(function() {
 	    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
