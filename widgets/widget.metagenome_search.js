@@ -534,7 +534,7 @@
 			 "amplicon": "amplicon metagenome" };
 	
 	for (var i=0;i<rows.length;i++) {
-            html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["metagenome_id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+">");
+            html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["metagenome_id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+" mgname='"+data[rows[i][0]]["name"]+"' mgid='"+data[rows[i][0]]["metagenome_id"]+"'>");
 
 	    for (var h=0; h<fields.length; h++) {
 		var cell = data[rows[i][0]][fields[h]];
@@ -892,9 +892,8 @@
 	    document.getElementById('result_table').addEventListener('click', function(event) {
 		event = event || window.event;
 		var widget = Retina.WidgetInstances.metagenome_search[1];
-		var href = event.target.parentNode.childNodes[2].childNodes[0].href;
-		var name = event.target.parentNode.childNodes[2].childNodes[0].innerHTML;
-		var mgid = href.substr(href.lastIndexOf('=')+1);
+		var name = event.target.parentNode.getAttribute('mgname');
+		var mgid = event.target.parentNode.getAttribute('mgid');
 		if (widget.selectedMetagenomes.hasOwnProperty(mgid)) {
 		    delete widget.selectedMetagenomes[mgid];
 		} else {
