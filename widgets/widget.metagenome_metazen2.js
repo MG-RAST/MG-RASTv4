@@ -1121,6 +1121,9 @@
 			continue;
 		    }
 		    for (var j=2; j<ws.maxRow; j++) {
+			if (! ws.data.hasOwnProperty(j)) {
+			    continue;
+			}
 			if (ws.data[j][h] != undefined) {
 			    var val = ws.data[j][h].value;
 			    if (typeof val=='number' && isNaN(val)) {
