@@ -141,21 +141,7 @@
   <button type="button" class="btn pull-right" onclick="Retina.WidgetInstances.metagenome_register[1].performRegistration();" id="submit">register</button>\
 </form>\
 ';
-
-  // <div class="control-group">\
-  //   <label class="control-label" for="inputPassword">Password</label>\
-  //   <div class="controls">\
-  //     <input type="password" id="inputPassword" placeholder="password" autocomplete="off" onkeyup="Retina.WidgetInstances.metagenome_register[1].checkPasswordStrength();" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline">Password strength: <span id="passwordStrength" style="color: red;">none</span></span>\
-  //   </div>\
-  // </div>\
-  // <div class="control-group">\
-  //   <label class="control-label" for="inputVerifyPassword">Verify Password</label>\
-  //   <div class="controls">\
-  //     <input type="password" id="inputVerifyPassword" placeholder="verify password" onblur="Retina.WidgetInstances.metagenome_register[1].checkVerifyPassword();" class="span4"><span class="help-inline">this must match your password</span>\
-  //   </div>\
-  // </div>\
-
-
+	
 	// set the output area
 	widget.main.innerHTML = html;
 
@@ -397,69 +383,6 @@
 	    return "error";
 	}
     };
-
-    // widget.checkPasswordStrength = function () {
-    // 	var widget = Retina.WidgetInstances.metagenome_register[1];
-	
-    // 	var pass = document.getElementById('inputPassword');
-    // 	var strength = 0;
-    // 	if (pass.value.length > 7) {
-    // 	    strength += 5;
-    // 	}
-    // 	if (pass.value.length > 1) {
-    // 	    strength++;
-    // 	}
-    // 	if (pass.value.length > 15) {
-    // 	    strength++;
-    // 	}
-    // 	if (pass.value.match(/[^\w\d]+/)) {
-    // 	    strength++;
-    // 	}
-    // 	if (pass.value.toLowerCase() != pass.value) {
-    // 	    strength++;
-    // 	}
-    // 	if (pass.value.match(/\d+/) && pass.value.match(/\w+/)) {
-    // 	    strength++;
-    // 	}
-    // 	var result = document.getElementById('passwordStrength');
-    // 	if (strength == 0) {
-    // 	    result.setAttribute('style', 'color: red;');
-    // 	    result.innerHTML = "none";
-    // 	} else if (strength < 5) {
-    // 	    result.setAttribute('style', 'color: orange;');
-    // 	    result.innerHTML = "very weak";
-    // 	} else if (strength < 6) {
-    // 	    result.setAttribute('style', 'color: orange;');
-    // 	    result.innerHTML = "weak";
-    // 	} else if (strength < 7) {
-    // 	    result.setAttribute('style', 'color: green;');
-    // 	    result.innerHTML = "ok";
-    // 	}  else if (strength < 8) {
-    // 	    result.setAttribute('style', 'color: green;');
-    // 	    result.innerHTML = "good";
-    // 	} else if (strength < 9) {
-    // 	    result.setAttribute('style', 'color: green;');
-    // 	    result.innerHTML = "strong";
-    // 	} else if (strength < 10) {
-    // 	    result.setAttribute('style', 'color: green;');
-    // 	    result.innerHTML = "very strong";
-    // 	} else if (strength < 11) {
-    // 	    result.setAttribute('style', 'color: green;');
-    // 	    result.innerHTML = "awesome!";
-    // 	}
-    // };
-
-    // widget.checkVerifyPassword = function () {
-    // 	var widget = Retina.WidgetInstances.metagenome_register[1];
-	
-    // 	var pass = document.getElementById('inputPassword');
-    // 	var very = document.getElementById('inputVerifyPassword');
-    // 	if (pass.value == very.value) {
-    // 	    very.parentNode.parentNode.setAttribute('class', 'control-group');
-    // 	} else {
-    // 	    very.parentNode.parentNode.setAttribute('class', 'control-group error');
-    // 	}
-    // };
 
     widget.checkURL = function (check) {
 	var widget = Retina.WidgetInstances.metagenome_register[1];

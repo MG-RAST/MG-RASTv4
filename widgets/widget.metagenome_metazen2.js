@@ -94,7 +94,7 @@
 		stm.DataStore.material = data;
 		promise3.resolve();
 	    });
-	    jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=metagenome_taxonomy" function (data) {
+	    jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=metagenome_taxonomy", function (data) {
 		stm.DataStore.metagenome_taxonomy = data;
 		promise4.resolve();
 	    });
@@ -812,10 +812,10 @@
 	    stm.DataStore.material = data;
 	    promise3.resolve();
 	});
-	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=metagenome_taxonomy" function (data) {
+	jQuery.getJSON(RetinaConfig.mgrast_api+"/metadata/ontology?name=metagenome_taxonomy", function (data) {
 	    stm.DataStore.metagenome_taxonomy = data;
 	    promise4.resolve();
-    });
+	});
 
 	jQuery.when.apply(this, promises).then(function() {
 	    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
