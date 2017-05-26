@@ -632,6 +632,10 @@
 		container.parameters.taxFilter.push({ "source": value2, "level": value3, "value": value4 });
 	    }
 	}
+	// check if this is changing hit type
+	else if (param == 'hittype') {
+	    container.parameters.hittype = value;
+	}
 	// check if this is an ontology filter
 	else if (param == 'ontFilter') {
 	    if (value == "remove") {
@@ -648,6 +652,7 @@
 	    container.parameters.evalue = widget.cutoffThresholds.evalue;
 	    container.parameters.identity = widget.cutoffThresholds.identity;
 	    container.parameters.alilength = widget.cutoffThresholds.alilength;
+	    container.parameters.hittype = 'besthit';
 	    container.parameters.abundace = 1;
 	}
 	else {
@@ -1038,6 +1043,9 @@
 	// abundance cutoff
 	html.push('<div class="input-prepend"  id="abundanceField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 90px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'abundance\',this.nextSibling.value);">min.abundance</button><input id="abundanceInput" type="text" value="'+p.abundance+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
+	// hit type
+	html.push('<div class="btn-group" style="margin-bottom: 10px; margin-right: 5px;" data-toggle="buttons-radio" id="hittypeField" style="margin-right: 5px;"><button class="btn btn-mini'+(p.hittype=='besthit'?' active':'')+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'hittype\',\'besthit\');">best hit</button><button class="btn btn-mini'+(p.hittype=='besthit'?'':' active')+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'hittype\',\'rephit\');">representative hit</button></div>');
+
 	// reset to default
 	html.push('<button class="btn btn-mini" title="reset to defaults" style="position: relative; bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'default\')"><i class="icon icon-step-backward"></i></button>');
 
@@ -1054,9 +1062,6 @@
 	    html.push("<option"+sel+">"+c.parameters.sources[i]+"</option>");
 	}
 	html.push("</select></td></tr>");
-
-	// type
-//	html.push("<tr id='typeField'><td>type</td><td><select id='displayTypeSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayType\",this.options[this.selectedIndex].value);'><option"+(c.parameters.displayType=="taxonomy" ? " selected=selected" : "")+">taxonomy</option><option"+(c.parameters.displayType=="function" ? " selected=selected" : "")+">function</option></select></td></tr>");
 
 	// level
 	var displayLevelSelect = "<select id='displayLevelSelect' style='margin-bottom: 0px; font-size: 12px; height: 27px;' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"displayLevel\",this.options[this.selectedIndex].value);'>";
@@ -1480,8 +1485,7 @@
 			}
 
 			// iterate over the organisms
-			var single = true;
-			var iterator = single ? 1 : orgs.length;
+			var iterator = c.parameters.hittype == 'besthit' ? 1 : orgs.length;
 			for (var k=0; k<iterator; k++) {			    
 
 			    // check if the organism exists in the taxonomy
@@ -1546,8 +1550,7 @@
 			}
 
 			// iterate over the function array
-			var single = true;
-			var iterator = single ? 1 : funcs.length;
+			var iterator = c.parameters.hittype == 'besthit' ? 1 : funcs.length;
 			for (var k=0; k<iterator; k++) {
 
 			    // if the ontology does not have an entry for this id, we're in trouble
@@ -1660,41 +1663,47 @@
 		
 		// find indices in target id space
 		var key;
-		if (displayType == "taxonomy") {
-		    if (! stm.DataStore.taxonomy["organism"][datums[0]]) {
-			console.log("organism not found: "+datums[0]);
-			continue;
-		    }
-		    key = stm.DataStore.taxonomy[displayLevel][stm.DataStore.taxonomy["organism"][datums[0]][levelIndex[displayLevel]]];
-		    hier[key] = [];
-		    for (var j=0; j<=levelIndex[displayLevel]; j++) {
-			hier[key].push(stm.DataStore.taxonomy[widget.taxLevels[j]][stm.DataStore.taxonomy["organism"][datums[0]][j]]);
-		    }
-		} else {
-		    if (! stm.DataStore.ontology.hasOwnProperty(displaySource)) {
-			continue;
-		    }
-		    if (! stm.DataStore.ontology[displaySource]['id'][datums[0]]) {
-			console.log("function not found: "+datums[0]);
-			continue;
-		    }
-		    key = stm.DataStore.ontology[displaySource][displayLevel][stm.DataStore.ontology[displaySource]['id'][datums[0]][flevelIndex[displaySource+"-"+displayLevel]]];
-		    hier[key] = [];
-		    for (var j=0; j<=flevelIndex[displaySource+"-"+displayLevel]; j++) {
-			hier[key].push(stm.DataStore.ontology[displaySource][widget.ontLevels[displaySource][j]][stm.DataStore.ontology[displaySource]['id'][datums[0]][j]]);
-		    }
+		var hitlen = 1;
+		if (c.parameters.hittype != 'besthit') {
+		    hitlen = datums.length;
 		}
-		if (! d.hasOwnProperty(key)) {
-		    d[key] = [];
-		    e[key] = [];
-		    for (var j=0;j<c.items.length;j++) {
-			d[key][j] = 0;
-			e[key][j] = 0;
+		for (var k=0; k<hitlen; k++) {
+		    if (displayType == "taxonomy") {
+			if (! stm.DataStore.taxonomy["organism"][datums[k]]) {
+			    console.log("organism not found: "+datums[k]);
+			    continue;
+			}
+			key = stm.DataStore.taxonomy[displayLevel][stm.DataStore.taxonomy["organism"][datums[k]][levelIndex[displayLevel]]];
+			hier[key] = [];
+			for (var j=0; j<=levelIndex[displayLevel]; j++) {
+			    hier[key].push(stm.DataStore.taxonomy[widget.taxLevels[j]][stm.DataStore.taxonomy["organism"][datums[k]][j]]);
+			}
+		    } else {
+			if (! stm.DataStore.ontology.hasOwnProperty(displaySource)) {
+			    continue;
+			}
+			if (! stm.DataStore.ontology[displaySource]['id'][datums[k]]) {
+			    console.log("function not found: "+datums[k]);
+			    continue;
+			}
+			key = stm.DataStore.ontology[displaySource][displayLevel][stm.DataStore.ontology[displaySource]['id'][datums[k]][flevelIndex[displaySource+"-"+displayLevel]]];
+			hier[key] = [];
+			for (var j=0; j<=flevelIndex[displaySource+"-"+displayLevel]; j++) {
+			    hier[key].push(stm.DataStore.ontology[displaySource][widget.ontLevels[displaySource][j]][stm.DataStore.ontology[displaySource]['id'][datums[k]][j]]);
+			}
 		    }
+		    if (! d.hasOwnProperty(key)) {
+			d[key] = [];
+			e[key] = [];
+			for (var j=0;j<c.items.length;j++) {
+			    d[key][j] = 0;
+			    e[key][j] = 0;
+			}
+		    }
+		    d[key][i] += val;
+		    e[key][i] += val * p.data[row + dataRow + 1];
+		    matrix.abundances[i] += val;
 		}
-		d[key][i] += val;
-		e[key][i] += val * p.data[row + dataRow + 1];
-		matrix.abundances[i] += val;
 	    }
 	}
 
@@ -2261,6 +2270,7 @@
 						      promises: [],
 						      callbacks: [],
 						      parameters: { sources: widget.dataLoadParams.sources,
+								    hittype: 'besthit',
 								    displayLevel: widget.sourceType[widget.dataLoadParams.sources[0]] == "taxonomy" ? "domain" : "level1",
 								    displayType: widget.sourceType[widget.dataLoadParams.sources[0]],
 								    metadatum: "library|metagenome_name",
@@ -2996,6 +3006,7 @@
 			 [ /\$\%-identity/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#identityField\").toggleClass(\"glow\");' onmouseout='$(\"#identityField\").toggleClass(\"glow\");'>%-identity</span>" ],
 			 [ /alignment length/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#alilenField\").toggleClass(\"glow\");' onmouseout='$(\"#alilenField\").toggleClass(\"glow\");'>alignment length</span>" ],
 			 [ /\$minimum abundance/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#abundanceField\").toggleClass(\"glow\");' onmouseout='$(\"#abundanceField\").toggleClass(\"glow\");'>minimum abundance</span>" ],
+			 [ /\$hit type/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#hittypeField\").toggleClass(\"glow\");' onmouseout='$(\"#hittypeField\").toggleClass(\"glow\");'>hit type</span>" ],
 			 [ /\$source/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#sourceField\").toggleClass(\"glow\");' onmouseout='$(\"#sourceField\").toggleClass(\"glow\");'>source</span>" ],
 			 [ /\$type/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#typeField\").toggleClass(\"glow\");' onmouseout='$(\"#typeField\").toggleClass(\"glow\");'>type</span>" ],
 			 [ /\$level/g, "<span style='cursor: help; color: blue;' onmouseover='$(\"#levelField\").toggleClass(\"glow\");' onmouseout='$(\"#levelField\").toggleClass(\"glow\");'>level</span>" ],
@@ -3247,9 +3258,7 @@
 				}
 				stm.DataStore.ontology = out;
 				document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
-				//stm.updateHardStorage("analysis", { "ontology": true, "taxonomy": true }).then( function () {
-				    Retina.WidgetInstances.metagenome_analysis[1].display();
-				//});
+				Retina.WidgetInstances.metagenome_analysis[1].display();
 			    });
 			});
 		    });
