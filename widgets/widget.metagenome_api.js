@@ -81,8 +81,41 @@
 		    h.push('<h4>requests</h4>');
 		    for (var j=0; j<d.requests.length; j++) {
 			var req = d.requests[j];
+			
+			if (req.hasOwnProperty('example')) {
+			    var example_description = req.example[1];
+			    var example_params = req.example[0].substr(req.example[0].lastIndexOf('/')+1).split('?');
+			    var example_id = null;
+			    var phash = {};
+			    if (example_params.length > 1) {
+				if (example_params[0] != req.name) {
+				    example_id = example_params[0];
+				    example_params[0] = example_params[1];
+				    var idfield = req.request.substring(req.request.indexOf('{')+1, req.request.indexOf('}')).toLowerCase();
+				    phash[idfield] = example_id;
+				} else {
+				    example_params[0] = example_params[1];
+				}
+			    }
+			    example_params = example_params[0].split('&');
+			    for (var k=0; k<example_params.length; k++) {
+				if (example_params[k].indexOf('=') > -1) {
+				    var x = example_params[k].split('=');
+				    phash[x[0]] = x[1];
+				}
+			    }
+			    example_params = phash;
+			    req.example = { "description": example_description,
+					    "params": example_params,
+					    "id": example_id };
+			}
+			
 			req.call = req.request.substring(RetinaConfig.mgrast_api.length).replace('//', '/');
 			h.push('<div class="request" style="cursor: pointer;"><div class="requestMethod"><span>'+req.method+'</span><span>'+req.call+'</span></div><div onclick="jQuery(\'#request'+this.res+req.name+req.method+'\').toggle();">'+req.description+'</div><div class="requestchild" id="request'+this.res+req.name+req.method+'" style="display: none;">');
+
+			if (req.example) {
+			    h.push('<h5>example</i></h5><p style="padding-left: 100px;">'+req.example.description+'</p>');
+			}
 
 			h.push('<form class="form-horizontal" onsubmit="return false" resource="'+this.rid+'" request="'+j+'" target="request'+this.res+req.name+req.method+'target">')
 			
@@ -90,7 +123,7 @@
 
 			var params = Retina.keys(req.parameters.required).sort();
 			for (var k=0; k<params.length; k++) {
-			    h.push(widget.formField(params[k], req.parameters.required[params[k]]));
+			    h.push(widget.formField(params[k], req.parameters.required[params[k]], req));
 			}
 			if (params.length == 0) {
 			    h.push('<div style="padding-left: 100px;"> - no required parameters - </div>');
@@ -100,11 +133,11 @@
 
 			params = Retina.keys(req.parameters.options).sort();
 			for (var k=0; k<params.length; k++) {
-			    h.push(widget.formField(params[k], req.parameters.options[params[k]]));
+			    h.push(widget.formField(params[k], req.parameters.options[params[k]], req));
 			}
 			bparams = Retina.keys(req.parameters.body).sort();
 			for (var k=0; k<bparams.length; k++) {
-			    h.push(widget.formField(bparams[k], req.parameters.body[bparams[k]]));
+			    h.push(widget.formField(bparams[k], req.parameters.body[bparams[k]], req));
 			}
 			if (params.length + bparams.length == 0) {
 			    h.push('<div style="padding-left: 100px;"> - no optional parameters - </div>');
@@ -127,23 +160,32 @@
 	}
     };
 
-    widget.formField = function (name, p) {
+    widget.formField = function (name, p, req) {
 	var h = [];
 	h.push('<div class="control-group"><label class="control-label" >'+name+'</label><div class="controls">');
 	if (p[0] == 'string') {
-	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'"'+(name == 'auth' && stm.user ? ' value="'+stm.user.token+'"' : '')+'>');
+	    var val = "";
+	    if (name == 'auth' && stm.user) {
+		val = stm.user.token;
+	    } else if (req.example && req.example.params.hasOwnProperty(name)) {
+		val = req.example.params[name];
+	    }
+	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
 	} else if (p[0] == 'cv') {
 	    h.push('<select name="'+name+'">');
+	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : null;
 	    for (var l=0; l<p[1].length; l++) {
-		h.push('<option title="'+p[1][l][1]+'">'+p[1][l][0]+'</option>');
+		h.push('<option title="'+p[1][l][1]+'"'+(val !== null && val == p[1][l][0] ? ' selected="selected"' : '')+'>'+p[1][l][0]+'</option>');
 	    }
 	    h.push('</select>');
 	} else if (p[0] == 'boolean') {
-	    h.push('<select name="'+name+'"><option value=0>no</option><option value=1>yes</option></select>');
+	    h.push('<select name="'+name+'"><option value=0>no</option><option value=1'+(req.example && req.example.params.hasOwnProperty(name) && req.example.params[name] ? ' selected="selected"' : "")+'>yes</option></select>');
 	} else if (p[0] == 'int' || p[0] == 'integer') {
-	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'">');
+	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
+	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
 	} else {
-	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'">');
+	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
+	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
 	}
 	if (p[0] !== 'cv') {
 	    h.push('<span class="help-inline">'+p[1]+'</span>');
@@ -199,17 +241,22 @@
 	if (curlOnly) {
 	    document.getElementById(target).innerHTML = "<h5 style='clear: both; margin-top: 30px;'>curl</h5><pre style='margin-bottom: 30px;'>curl "+(stm.user ? "-H 'Authorization: mgrast "+stm.user.token+"' " : "")+"'"+(request.method == "POST" ? "-d '"+JSON.stringify(values).replace(/'/g, "\\'")+"' " : "")+""+url+"'</pre>";
 	} else {
-	    jQuery.ajax({
-		method: request.method,
-		url: url,
-		data: request.method == "POST" ? values : null,
-		target: target,
-		success: function (d) {
-		    document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><h5>response</h5><pre style='margin-bottom: 30px;'>"+JSON.stringify(d, null, 2)+"</pre>";
-		}}).fail(function(xhr, error) {
-		    document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><div class='alert alert-danger'>"+xhr.responseText+"</div>";
-		    console.log(error);
-		});
+	    if (request.attributes.hasOwnProperty("streaming text")) {
+		url += (stm.authHeader && stm.authHeader.Authorization ? "&auth="+stm.authHeader.Authorization : "")+"&browser=1";
+		window.open(url);
+	    } else {
+		jQuery.ajax({
+		    method: request.method,
+		    url: url,
+		    data: request.method == "POST" ? values : null,
+		    target: target,
+		    success: function (d) {
+			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><h5>response</h5><pre style='margin-bottom: 30px;'>"+JSON.stringify(d, null, 2)+"</pre>";
+		    }}).fail(function(xhr, error) {
+			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><div class='alert alert-danger'>"+xhr.responseText+"</div>";
+			console.log(error);
+		    });
+	    }
 	}
     };
 	
