@@ -60,6 +60,13 @@
 	html.push('<div style="text-align: center;"><button class="btn btn-mini" style="width: 50px; margin-bottom: 30px;" onclick="jQuery(\'#fullDesc\').toggle();">...</button></div>');
 	html.push('<div id="fullDesc" style="display: none;">'+fullDesc+'</div>');
 
+	html.push('<h3>access to private data</h3>');
+	if (stm.user) {
+	    html.push('<p>You are logged in and your webkey is auto-filled into the forms below. This is needed to access your private data. To access your current webkey, go to the <b>myData page</b>, click the <b>user icon</b> and then the <b>show webkey</b> button. <sup onmouseover="jQuery(\'#webkey\').toggle();" onmouseout="jQuery(\'#webkey\').toggle();">[?]</sup></p><img src="images/webkey.png" style="display: none;" id="webkey">');
+	} else {
+	    html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
+	}
+	
 	for (var i=0; i<data.resources.length; i++) {
 	    var r = data.resources[i];
 	    html.push('<h3>'+r.name+'</h3><div id="resource'+r.name+'"><img src="Retina/images/waiting.gif" style="width: 16px;"> loading...</div>');
@@ -142,8 +149,8 @@
 			if (params.length + bparams.length == 0) {
 			    h.push('<div style="padding-left: 100px;"> - no optional parameters - </div>');
 			}
-			h.push('<button class="btn pull-left" onclick="Retina.WidgetInstances.metagenome_api[1].submitForm(this.parentNode, true);">show curl</button>');
-			h.push('<button class="btn pull-right" onclick="Retina.WidgetInstances.metagenome_api[1].submitForm(this.parentNode);">send</button>');
+			h.push('<button class="btn pull-left" onclick="Retina.WidgetInstances.metagenome_api[1].submitForm(this, true);">show curl</button>');
+			h.push('<button class="btn pull-right" onclick="Retina.WidgetInstances.metagenome_api[1].submitForm(this);">send</button>');
 			h.push('</form>');
 
 			h.push('<div id="request'+this.res+req.name+req.method+'target"></div>');
@@ -195,9 +202,15 @@
 	return h.join("");
     };
 
-    widget.submitForm = function (form, curlOnly) {
+    widget.submitForm = function (btn, curlOnly) {
 	var widget = this;
 
+	var form = btn.parentNode;
+	if (btn.innerHTML == 'send') {
+	    btn.setAttribute('disabled', 'disabled');
+	    btn.innerHTML = '<img src="Retina/images/waiting.gif" style="width: 12px;">';
+	}
+	
 	var resource = stm.DataStore.api.resources[form.getAttribute('resource')];
 	var request = resource.requests[form.getAttribute('request')];
 	var target = form.getAttribute('target');
@@ -242,17 +255,25 @@
 	    document.getElementById(target).innerHTML = "<h5 style='clear: both; margin-top: 30px;'>curl</h5><pre style='margin-bottom: 30px;'>curl "+(stm.user ? "-H 'Authorization: mgrast "+stm.user.token+"' " : "")+"'"+(request.method == "POST" ? "-d '"+JSON.stringify(values).replace(/'/g, "\\'")+"' " : "")+""+url+"'</pre>";
 	} else {
 	    if (request.attributes.hasOwnProperty("streaming text")) {
+		btn.removeAttribute('disabled');
+		btn.innerHTML = 'send';
 		url += (stm.authHeader && stm.authHeader.Authorization ? "&auth="+stm.authHeader.Authorization : "")+"&browser=1";
-		window.open(url);
+		window.w = window.open(url);
+		window.setTimeout(function () { window.w.close(); }, 5000);
 	    } else {
 		jQuery.ajax({
 		    method: request.method,
 		    url: url,
+		    button: btn,
 		    data: request.method == "POST" ? values : null,
 		    target: target,
 		    success: function (d) {
+			this.btn.removeAttribute('disabled');
+			this.btn.innerHTML = 'send';
 			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><h5>response</h5><pre style='margin-bottom: 30px;'>"+JSON.stringify(d, null, 2)+"</pre>";
 		    }}).fail(function(xhr, error) {
+			this.btn.removeAttribute('disabled');
+			this.btn.innerHTML = 'send';
 			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><div class='alert alert-danger'>"+xhr.responseText+"</div>";
 			console.log(error);
 		    });
