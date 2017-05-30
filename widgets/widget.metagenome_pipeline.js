@@ -560,7 +560,7 @@
     widget.errorHandling = function (job) {
 	var widget = this;
 
-	var html = "please <a href='contact.html?sbj="+encodeURIComponent("suspended job failed automatic resolution "+Retina.idmap(job.info.userattr.id))+"' target=_blank>contact our support team</a>.";
+	var html = "please <a href='mailto:help@mg-rast.org'>contact our support team</a>.";
 
 	// check if the failure was recent
 	if (Date.now() - Date.parse(job.updatetime) < (48 * 60 * 60 * 1000)) {
