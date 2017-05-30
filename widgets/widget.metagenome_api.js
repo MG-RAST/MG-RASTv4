@@ -60,6 +60,13 @@
 	html.push('<div style="text-align: center;"><button class="btn btn-mini" style="width: 50px; margin-bottom: 30px;" onclick="jQuery(\'#fullDesc\').toggle();">...</button></div>');
 	html.push('<div id="fullDesc" style="display: none;">'+fullDesc+'</div>');
 
+	html.push('<h3>access to private data</h3>');
+	if (stm.user) {
+	    html.push('<p>You are logged in and your webkey is auto-filled into the forms below. This is needed to access your private data. To access your current webkey, go to the <b>myData page</b>, click the <b>user icon</b> and then the <b>show webkey</b> button. <sup onmouseover="jQuery(\'#webkey\').toggle();" onmouseout="jQuery(\'#webkey\').toggle();">[?]</sup></p><img src="images/webkey.png" style="display: none;" id="webkey">');
+	} else {
+	    html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
+	}
+	
 	for (var i=0; i<data.resources.length; i++) {
 	    var r = data.resources[i];
 	    html.push('<h3>'+r.name+'</h3><div id="resource'+r.name+'"><img src="Retina/images/waiting.gif" style="width: 16px;"> loading...</div>');
