@@ -541,9 +541,9 @@
 		if (cell && fields[h] == "created_on") {
 		    cell = cell.split(/t/)[0];
 		} else if (cell && fields[h] == "project_name") {
-		    cell = "<div style='max-width: 300px;'><a href='?mgpage=project&project="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></div>";
+		    cell = "<div style='max-width: 300px;'><a href='?mgpage=project&project="+(! data[rows[i][0]]["public"] ? Retina.idmap(data[rows[i][0]]["project_id"]) : data[rows[i][0]]["project_id"])+"' target=_blank>"+data[rows[i][0]]["project_name"]+"</a></div>";
 		} else if (cell && fields[h] == "name") {
-		    cell = "<div style='max-width: 300px;'><a href='?mgpage=overview&metagenome="+(data[rows[i][0]]["status"] == "private" ? Retina.idmap(data[rows[i][0]]["id"]) : data[rows[i][0]]["metagenome_id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["metagenome_id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></div>";
+		    cell = "<div style='max-width: 300px;'><a href='?mgpage=overview&metagenome="+(! data[rows[i][0]]["public"] ? Retina.idmap(data[rows[i][0]]["metagenome_id"]) : data[rows[i][0]]["metagenome_id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["metagenome_id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></div>";
 		} else if (cell && fields[h] == "sequence_type") {
 		    cell = seqTypes[data[rows[i][0]]["sequence_type"]]
 		}
@@ -581,7 +581,7 @@
 	for (var i=0; i<data.length; i++) {
 	    var row = [];
 	    for (var h=0; h<fields.length; h++) {
-		if (fields[h] == 'metagenome_id' || fields[h] == 'project_id' && data[i].status == 'private') {
+		if (fields[h] == 'metagenome_id' || fields[h] == 'project_id' && ! data[i]['public']) {
 		    data[i][fields[h]] = Retina.idmap(data[i][fields[h]]);
 		}
 		row.push(data[i][fields[h]]);
