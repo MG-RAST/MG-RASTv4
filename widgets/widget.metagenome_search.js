@@ -119,7 +119,7 @@
         var widget = Retina.WidgetInstances.metagenome_search[1];
 	
 	if (params && params.main) {
-	    widget.main = params.main;
+	    widget.main = widget.target = params.main;
 	    widget.sidebar = params.sidebar;
 	}
 	var content = widget.main;
@@ -666,7 +666,8 @@
 			   document.getElementById('opaq').style.display = 'none';
 		       },
 		       error: function () {
-			   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
+			   var widget = Retina.WidgetInstances.metagenome_search[1];
+			   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error accessing the database.</div>";
 		       }
 		     });
 	return;
