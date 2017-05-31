@@ -551,6 +551,7 @@
 			    showGoButton: false,
 			    showCollapseAllButton: false,
 			    showExpandAllButton: false,
+			    searchDescription: true
 			}).render();
 			input.setAttribute('class', '');
 			cell.setAttribute('style', '');
