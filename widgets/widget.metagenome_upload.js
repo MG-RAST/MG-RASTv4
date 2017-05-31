@@ -531,7 +531,7 @@
 			    }
 			}
 			if (alreadyDemultiplexed) {
-			    html += "<div class='alert alert-info' style='margin-top: 20px;'>The demultiplex files of these barcodes have already been generated.</div>";
+			    html += "<div class='alert alert-info' style='margin-top: 20px;'>The demultiplex files of these barcodes are already in your inbox.</div>";
 			} else {
 			    html += "<h5>Demultiplex</h5><div id='convert'><p>This is a valid barcode file. Select a file below to demultiplex:</p>";
 			    html += "<select id='demultiplexFile' style='width: 100%;'>";
