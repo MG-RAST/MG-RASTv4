@@ -230,7 +230,9 @@
 	    }
 	}
 
-	var url = request.request.replace(/[^\:]\/\//, "/");
+	var url = request.request.replace(/([^\:])\/\//, "$1/");
+	console.log(url);
+	console.log(request.request);
 	if (url.match(/\{ID\}/)) {
 	    url = url.replace("{ID}", values.id);
 	} else if (url.match(/\{id\}/)) {
