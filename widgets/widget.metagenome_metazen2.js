@@ -549,6 +549,7 @@
 			    width: 0,
 			    height: 0,
 			    showGoButton: false,
+			    sortNodes: true,
 			    showCollapseAllButton: false,
 			    showExpandAllButton: false,
 			    searchDescription: true
