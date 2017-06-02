@@ -363,7 +363,7 @@
 		    var options;
 		    var o = [ '<option value=""></option>' ];
 		    if (widget.currField.data.type == 'timezone') {
-			options = stm.DataStore.cv.select.timezone;
+			options = stm.DataStore.cv.select.timezone.slice();
 			options.shift();
 		    }
 		    else if (widget.currField.data.type == 'boolean') {
@@ -1015,6 +1015,7 @@
 		widget.clearSpreadSheet();
 		widget.loadedData = wb;
 		widget.fillSpreadSheet(true);
+		document.getElementById('cellInfoBox').innerHTML = "excel file loaded";
 	    });
 	});
 	
