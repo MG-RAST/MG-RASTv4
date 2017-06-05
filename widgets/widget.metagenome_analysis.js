@@ -644,6 +644,14 @@
 		container.parameters.ontFilter.push({ "source": value2, "level": value3, "value": value4 });
 	    }
 	}
+	// check if this is a list filter
+	else if (param == 'listFilter') {
+	    if (value == 'remove') {
+		delete container.parameters.listFilter;
+	    } else {
+		container.parameters.listFilter = value2;
+	    }
+	}
 	// check if this is a numerical filter
 	else if (param == "evalue" || param == "identity" || param == "alilength" || param == "abundance") {
 	    container.parameters[param] = parseFloat(value);
@@ -1095,6 +1103,22 @@
 
 	// filter form
 
+	// list filter
+	if (widget.filterlists.hasOwnProperty(c.parameters.displaySource)) {
+	    var k = Retina.keys(widget.filterlists[c.parameters.displaySource]).sort();
+	    html.push('<div id="listFilterDiv" style="margin-bottom: 5px;">');
+	    html.push("<select style='margin-bottom: 2px; font-size: 12px; height: 27px;' id='displayListSelect' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"listFilter\", \"add\", this.options[this.selectedIndex].value);'><optgroup label='filter list'><option value='0'>- select list -</option>");
+	    for (var i=0; i<k.length; i++) {
+		var sel = "";
+		if (c.parameters.listFilter && k[i] == c.parameters.listFilter) {
+		    sel = " selected=selected";
+		}
+		html.push("<option"+sel+">"+k[i]+"</option>");
+	    }
+	    html.push("</optgroup></select>");
+	    html.push('</div>');
+	}
+
 	// filter source
 	html.push("<select id='taxType' style='margin-bottom: 2px; font-size: 12px; height: 27px;'>");
 	for (var i=0; i<c.parameters.sources.length; i++) {
@@ -1144,6 +1168,12 @@
 	html.push('</div>');
 	
 	var hasFilter = false;
+
+	// list filter
+	if (c.parameters.hasOwnProperty('listFilter')) {
+	    html.push("<button class='btn btn-mini btn-primary' style='margin-right: 5px;' title='remove this filter' onclick='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"listFilter\", \"remove\");'>"+c.parameters.listFilter + " &times;</button>");
+	    hasFilter = true;
+	}
 	
 	// ontology
 	for (var i=0; i<c.parameters.ontFilter.length; i++) {
@@ -1450,6 +1480,38 @@
 		// if no filters hit, the row stays
     		var stay = true;
 
+		// check list filter
+		if (c.parameters.listFilter) {
+		    
+		    // the the function array for this row for this ontology
+		    var funcs = p.data[h + 6 + (sm[c.parameters.displaySource] * 2)];
+			
+		    // if there is no function, it definitely fails
+		    if (funcs == null) {
+			continue;
+		    } else if (typeof funcs == "number") {
+			funcs = [ funcs ];
+		    } else if (typeof funcs == "string") {
+			funcs = funcs.split(",");
+		    }
+
+		    // iterate over the function array
+		    var iterator = c.parameters.hittype == 'besthit' ? 1 : funcs.length;
+		    for (var k=0; k<iterator; k++) {
+
+			// if the ontology does not have an entry for this id, we're in trouble
+			if (stm.DataStore.ontology[c.parameters.displaySource]['id'].hasOwnProperty(funcs[k])) {
+
+			    // get the value in the chosen ontology and level
+			    var val = stm.DataStore.ontology[c.parameters.displaySource]['function'][stm.DataStore.ontology[c.parameters.displaySource]['id'][funcs[k]][flevelIndex[c.parameters.displaySource+"-function"]]];
+			    // we have a match, the row stays
+			    if (! widget.filterlists[c.parameters.displaySource][c.parameters.listFilter][val]) {
+				stay = false;
+			    }
+			}
+		    }
+		}
+		
 		// test cutoff filters
 		for (var j=0; j<filters.length; j++) {
     		    if (Math.abs(p.data[h + filters[j][0]]) < filters[j][1]) {
@@ -3257,8 +3319,12 @@
 				    }
 				}
 				stm.DataStore.ontology = out;
-				document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
-				Retina.WidgetInstances.metagenome_analysis[1].display();
+				document.getElementById('data').innerHTML = 'loading filterlists... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+				jQuery.getJSON('data/filterlists.json', function(data) {
+				    Retina.WidgetInstances.metagenome_analysis[1].filterlists = data;
+				    document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+				    Retina.WidgetInstances.metagenome_analysis[1].display();
+				});
 			    });
 			});
 		    });
