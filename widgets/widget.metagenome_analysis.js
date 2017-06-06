@@ -660,7 +660,7 @@
 	    container.parameters.evalue = widget.cutoffThresholds.evalue;
 	    container.parameters.identity = widget.cutoffThresholds.identity;
 	    container.parameters.alilength = widget.cutoffThresholds.alilength;
-	    container.parameters.hittype = 'besthit';
+	    container.parameters.hittype = 'rephit';
 	    container.parameters.abundace = 1;
 	}
 	else {
@@ -1052,7 +1052,7 @@
 	html.push('<div class="input-prepend"  id="abundanceField" style="margin-right: 5px;"><button class="btn btn-mini" style="width: 90px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'abundance\',this.nextSibling.value);">min.abundance</button><input id="abundanceInput" type="text" value="'+p.abundance+'" style="height: 12px; font-size: 12px; width: 30px;"></div>');
 
 	// hit type
-	html.push('<div class="btn-group" style="margin-bottom: 10px; margin-right: 5px;" data-toggle="buttons-radio" id="hittypeField" style="margin-right: 5px;"><button class="btn btn-mini'+(p.hittype=='besthit'?' active':'')+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'hittype\',\'besthit\');">best hit</button><button class="btn btn-mini'+(p.hittype=='besthit'?'':' active')+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'hittype\',\'rephit\');">representative hit</button></div>');
+	html.push('<div class="btn-group" style="margin-bottom: 10px; margin-right: 5px;" data-toggle="buttons-radio" id="hittypeField" style="margin-right: 5px;"><button class="btn btn-mini'+(p.hittype=='rephit'?' active':'')+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'hittype\',\'rephit\');">representative hit</button><button class="btn btn-mini'+(p.hittype=='rephit'?'':' active')+'" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'hittype\',\'besthit\');">best hit</button></div>');
 
 	// reset to default
 	html.push('<button class="btn btn-mini" title="reset to defaults" style="position: relative; bottom: 5px;" onclick="Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\'default\')"><i class="icon icon-step-backward"></i></button>');
@@ -1496,7 +1496,7 @@
 		    }
 
 		    // iterate over the function array
-		    var iterator = c.parameters.hittype == 'besthit' ? 1 : funcs.length;
+		    var iterator = c.parameters.hittype == 'rephit' ? 1 : funcs.length;
 		    for (var k=0; k<iterator; k++) {
 
 			// if the ontology does not have an entry for this id, we're in trouble
@@ -1547,7 +1547,7 @@
 			}
 
 			// iterate over the organisms
-			var iterator = c.parameters.hittype == 'besthit' ? 1 : orgs.length;
+			var iterator = c.parameters.hittype == 'rephit' ? 1 : orgs.length;
 			for (var k=0; k<iterator; k++) {			    
 
 			    // check if the organism exists in the taxonomy
@@ -1612,7 +1612,7 @@
 			}
 
 			// iterate over the function array
-			var iterator = c.parameters.hittype == 'besthit' ? 1 : funcs.length;
+			var iterator = c.parameters.hittype == 'rephit' ? 1 : funcs.length;
 			for (var k=0; k<iterator; k++) {
 
 			    // if the ontology does not have an entry for this id, we're in trouble
@@ -1726,7 +1726,7 @@
 		// find indices in target id space
 		var key;
 		var hitlen = 1;
-		if (c.parameters.hittype != 'besthit') {
+		if (c.parameters.hittype != 'rephit') {
 		    hitlen = datums.length;
 		}
 		for (var k=0; k<hitlen; k++) {
@@ -2332,7 +2332,7 @@
 						      promises: [],
 						      callbacks: [],
 						      parameters: { sources: widget.dataLoadParams.sources,
-								    hittype: 'besthit',
+								    hittype: 'rephit',
 								    displayLevel: widget.sourceType[widget.dataLoadParams.sources[0]] == "taxonomy" ? "domain" : "level1",
 								    displayType: widget.sourceType[widget.dataLoadParams.sources[0]],
 								    metadatum: "library|metagenome_name",
