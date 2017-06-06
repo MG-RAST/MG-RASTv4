@@ -3321,7 +3321,7 @@
 				stm.DataStore.ontology = out;
 				document.getElementById('data').innerHTML = 'loading filterlists... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 				jQuery.getJSON('data/filterlists.json', function(data) {
-				    Retina.WidgetInstances.metagenome_analysis[1].filterlists = data;
+				    Retina.WidgetInstances.metagenome_analysis[1].filterlists = {};//data;
 				    document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 				    Retina.WidgetInstances.metagenome_analysis[1].display();
 				});
