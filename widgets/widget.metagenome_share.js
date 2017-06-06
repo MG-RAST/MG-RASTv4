@@ -205,6 +205,8 @@
 		    details.push("<div class='alert alert-"+(overdue.overdue ? "error" : "info")+"' id='statusDiv"+projectid+"'><b>private</b><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_share[1].makeProjectPublic(\""+projectid+"\");'>make public</button><br>");
 		    if (overdue.overdue) {
 			details.push("This project was to be made public at "+overdue.duedate+". It is "+overdue.overdue+" days overdue.");
+		    } else if (overdue.duedate == 'never') {
+			details.push("You chose to not make this project public.");
 		    } else {
 			details.push("This project is due to be made public at "+overdue.duedate+".");
 		    }
@@ -794,6 +796,8 @@
 	    c += 1000 * 60 * 60 * 24 * 90;
 	} else if (prio == '6months') {
 	    c += 1000 * 60 * 60 * 24 * 180;
+	} else {
+	    return { "duedate": "never", "overdue": false };
 	}
 	var grace = 1000 * 60 * 60 * 24 * 21; // three weeks grace period
 	c += grace;
@@ -1177,6 +1181,9 @@
     widget.loadProject = function (projectid) {
 	var widget = Retina.WidgetInstances.metagenome_share[1];
 
+	if (! projectid.match(/^mgp/)) {
+	    projectid = Retina.idmap(projectid);
+	}
 	var canEdit = false;
 	for (var i=0; i<stm.DataStore.projectnames.length; i++) {
 	    if (stm.DataStore.projectnames[i].id == projectid) {
