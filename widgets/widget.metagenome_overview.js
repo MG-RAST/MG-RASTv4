@@ -377,7 +377,10 @@
 	} else {
 	    mg.drisee_score = "not calculated";
 	}
-	
+
+	if (! mg.statistics.sequence_stats.alpha_diversity_shannon) {
+	    mg.statistics.sequence_stats.alpha_diversity_shannon = 0;
+	}
 	mg.alphadiversity = (mg.project_alpha_diversity && mg.statistics) ? { min: parseFloat(mg.project_alpha_diversity.min), max: parseFloat(mg.project_alpha_diversity.max), mean: parseFloat(mg.project_alpha_diversity.avg), stdv: parseFloat(mg.project_alpha_diversity.stdv), val: mg.statistics.sequence_stats.alpha_diversity_shannon } : { min: 0, max: 0, mean: 0, stdv: 0, val: 0 };
 	mg.statistics.sequence_stats.alpha_diversity_shannon = mg.statistics.sequence_stats.alpha_diversity_shannon.formatString();
 	
