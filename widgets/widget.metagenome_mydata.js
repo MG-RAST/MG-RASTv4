@@ -686,7 +686,7 @@
 		var task = project_prios[k[i]];
 		if (! task.incomplete) {
 		    task.title = "project publication";
-		    task.link = "?mgpage=share&project=mgp"+task.project_id;
+		    task.link = "?mgpage=share&project="+Retina.idmap('mgp'+task.project_id);
 		    task.message = "The project "+task.project+" has "+Retina.keys(project_prios[k[i]].mgs).length+" metagenomes "+(task.overdue ? "over" : "")+"due for publication."+(task.overdue ? "<br>"+task.overdue : "");
 		    tasks.push(task);
 		}
