@@ -21,7 +21,7 @@
     widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
     widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
     widget.sourcesNameMapping = { "Silva SSU": "SSU", "Silva LSU": "LSU" };
-    widget.sourceType = { "RefSeq": "taxonomy", "IMG": "taxonomy", "TrEMBL": "taxonomy", "SEED": "taxonomy", "KEGG": "taxonomy", "GenBank": "taxonomy", "SwissProt": "taxonomy", "PATRIC": "taxonomy", "eggNOG": "taxonomy", "RDP": "taxonomy", "Silva LSU": "taxonomy", "Silva SSU": "taxonomy", "ITS": "taxonomy", "Greengenes": "taxonomy", "Subsystems": "function","KO": "function","COG": "function","NOG": "function" };
+    widget.sourceType = { "RefSeq": "taxonomy", "IMG": "taxonomy", "TrEMBL": "taxonomy", "SEED": "taxonomy", "KEGG": "taxonomy", "GenBank": "taxonomy", "SwissProt": "taxonomy", "PATRIC": "taxonomy", "eggNOG": "taxonomy", "RDP": "taxonomy", "Silva LSU": "taxonomy", "Silva SSU": "taxonomy", "SSU": "taxonomy", "LSU": "taxonomy", "ITS": "taxonomy", "Greengenes": "taxonomy", "Subsystems": "function","KO": "function","COG": "function","NOG": "function" };
     widget.filterlists = {};
 
     widget.cutoffThresholds = {
