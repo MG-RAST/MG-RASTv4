@@ -205,7 +205,10 @@
     widget.performPasswordReset = function () {
 	var widget = Retina.WidgetInstances.metagenome_register[1];
 
-	if (grecaptcha.getResponse() && document.getElementById('inputLogin').value && document.getElementById('inputEmail').value) {
+	if (grecaptcha.getResponse() && document.getElementById('inputEmail').value) {
+	    if (! document.getElementById('inputLogin').value && ! confirm("You did not supply a login. Do you want to recover your login?")) {
+		return;
+	    }
 	    document.getElementById('submit').setAttribute('disabled', 'disabled');
 	    jQuery.post(RetinaConfig.mgrast_api+"/user/resetpassword", {
 	    	"email": document.getElementById('inputEmail').value,
@@ -218,7 +221,11 @@
 		if (result.hasOwnProperty('ERROR')) {
 		    alert("Resetting your password failed: "+result.ERROR);
 		} else {
-		    Retina.WidgetInstances.metagenome_register[1].main.innerHTML = "<h3>Password Reset Successful</h3><p>Your password has been reset. You will receive an email at your registered email address containing further instructions.</p>";
+		    if (document.getElementById('inputLogin').value) {
+			Retina.WidgetInstances.metagenome_register[1].main.innerHTML = "<h3>Password Reset Successful</h3><p>Your password has been reset. You will receive an email at your registered email address containing further instructions.</p>";
+		    } else {
+			Retina.WidgetInstances.metagenome_register[1].main.innerHTML = "<h3>Credential Retrieval Successful</h3><p>You will receive an email at your registered email address containing further instructions.</p>";
+		    }
 		}
 	    }).fail(function(result){
 		console.log('fail');
