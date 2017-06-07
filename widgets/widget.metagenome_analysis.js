@@ -2131,7 +2131,7 @@
 	    if (! data[i]['public']) {
 	    	data[i].id = Retina.idmap(data[i].metagenome_id);
 		data[i].metagenome_id = data[i].id;
-	    	data[i].project_id = Retina.idmap(data[i].project_id);
+	    	data[i].project_id = data[i].project_id ? Retina.idmap(data[i].project_id) : null;
 	    } else {
 		data[i].id = data[i].metagenome_id;
 	    }
