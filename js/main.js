@@ -13,6 +13,12 @@ function initWebApp () {
 	    window.location = loc;
 	}
     };
+    Retina.errorCallback = function (jqXHR, textStatus, errorThrown) {
+	var c = document.getElementById("content");
+	c.setAttribute('class', 'span8 offset2');
+	document.getElementById('sidebar').parentNode.parentNode.removeChild(document.getElementById('sidebar').parentNode);
+	c.innerHTML = '<div style="font-size: 100px; margin-top: 200px; text-align: center;">404</div><div style="font-size: 50px; margin-top: 100px; text-align: center; line-height: normal;">The page you are requesting could not be found.</div>';
+    };
     Retina.load_widget("metagenome_"+page).then( function() {
 	var mgp = Retina.Widget.create('metagenome_'+page, { "main": document.getElementById("content"),
 							     "sidebar": document.getElementById("sidebar") }, true);
