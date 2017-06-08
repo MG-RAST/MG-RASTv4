@@ -39,7 +39,6 @@
 	    html += "<tr><td><a href='#api'><b>API</b></a></td><td id='system_api'></td></tr>";
 	    html += "<tr><td><b>m5nr solr</b></td><td id='system_M5NR'></td></tr>";
 	    html += "<tr><td><b>metagenome solr</a></td><td id='system_solr'></td></tr>";
-	    html += "<tr><td><b>postgres</a></td><td id='system_postgres'></td></tr>";
 	    html += "<tr><td><b>mySQL</a></td><td id='system_mySQL'></td></tr>";
 	    html += "<tr><td><b>Cassandra</a></td><td id='system_cassandra'></td></tr>";
 	    html += "</table>";
@@ -90,7 +89,6 @@
 		     'AWE',
 		     'M5NR',
 		     'solr',
-		     'postgres',
 		     'mySQL',
 		     'cassandra' ];
 
