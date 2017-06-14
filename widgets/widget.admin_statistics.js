@@ -9,7 +9,7 @@
     });
     
     widget.setup = function () {
-	return [ Retina.load_renderer("graph") ];
+	return [ Retina.load_renderer('svg2') ];
     };
     
     widget.display = function (wparams) {
@@ -25,18 +25,15 @@
 
 	if (stm.user) {
 
-            var html = '<h3>Job Statistics</h3><button class="btn btn-mini" style="float: right;" onclick="indexedDB.deleteDatabase(\'admin_statistics\').onsuccess=function(){stm.init({});Retina.WidgetInstances.admin_statistics[1].display();}">clear cache</button><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><div id="longtermgraph2"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
+            var html = '<h3>Job Statistics</h3><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
 
-	    if (! stm.DataStore.hasOwnProperty('jobtemplate') && ! navigator.userAgent.match(/iPhone/i) && ! navigator.userAgent.match(/Android/i)) {
-	    	stm.init({useDB: true, dbName: 'admin_statistics'}).then(function() {
-	    	    Retina.WidgetInstances.admin_statistics[1].getJobData();
-	    	});
-	    } else {
-	    	Retina.WidgetInstances.admin_statistics[1].getJobData();
-	    }
+	    Retina.WidgetInstances.admin_statistics[1].getJobData();
+	    Retina.WidgetInstances.admin_statistics[1].getUserData();
+	    Retina.WidgetInstances.admin_statistics[1].getLongTermJobData();
+
 	} else {
 	    widget.sidebar.style.display = "none";
 	    widget.main.innerHTML = "<h3>Authentication required</h3><p>You must be logged in to view this page.</p>";
@@ -52,137 +49,33 @@
 	// the target div
 	var target = document.getElementById('statistics');
 
-	// the job template
-	var template = stm.DataStore.jobtemplate[1];
-	var templateShort = stm.DataStore.jobtemplateshort[1];
-
 	// get the names for the task ids and initialize the task counter
 	var tasklabels = [];
 	var tasknames = {};
 	var taskcount = {};
-	for (var i=0; i<template.tasks.length; i++) {
-	    tasklabels[i] = template.tasks[i].cmd.description;
-	    tasknames[i] = template.tasks[i].cmd.description;
+	var template = stm.DataStore.templates[RetinaConfig.pipelines[RetinaConfig.pipelines.length - 1]];
+	for (var i=0; i<template.length; i++) {
+	    tasklabels[i] = template[i].cmd.description;
+	    tasknames[i] = template[i].cmd.description;
 	    taskcount[i] = [ 0, 0, 0, 0 ];
 	}
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
 
-	var num_in_pipeline = 0;
-
-	// store all unfinished jobs
-	var unfinishedJobs = [];
-
-	// all jobs submitted within the last 30 days (initially only the inactive ones)
-	var jobs30 = [];
-	var jk = Retina.keys(stm.DataStore.inactivejobs);
-	var size_in_pipeline = 0;
-	for (var i=0;i<jk.length;i++) {
-	    jobs30.push(stm.DataStore.inactivejobs[jk[i]]);
-	    if (stm.DataStore.inactivejobs[jk[i]].state[0] == 'suspend') {
-		unfinishedJobs.push(stm.DataStore.inactivejobs[jk[i]]);
-		num_in_pipeline++;
-		var j = stm.DataStore.inactivejobs[jk[i]];
-		if (j.task) {
-		    for (var h=0; h<j.task.length; h++) {
-			if (! taskcount.hasOwnProperty(j.task[h])) {
-			    taskcount[j.task[h]] = [ 0, 0, 0, 0 ];
-			}
-			taskcount[j.task[h]][1]++;
-			taskcount[j.task[h]][3] += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
-		    }
-		    size_in_pipeline += j.userattr.bp_count ? parseInt(j.userattr.bp_count) : j.size;
-		} else {
-		    console.log("WARNING: the following job has no tasks");
-		    console.log(j);
-		}
-	    }
-	}
-
-	// jobs currently active in the pipeline
-	var jobsactive = [];
-	jk = Retina.keys(stm.DataStore.activejobs);
-	for (var i=0;i<jk.length;i++) {
-	    jobsactive.push(stm.DataStore.activejobs[jk[i]]);
-	    if (stm.DataStore.activejobs[jk[i]].state) {
-		if (stm.DataStore.activejobs[jk[i]].state[0] != 'completed') {
-		    unfinishedJobs.push(stm.DataStore.activejobs[jk[i]]);
-		}
-	    } else {
-		console.log("WARNING: job with invalid state");
-		console.log(stm.DataStore.activejobs[jk[i]]);
-	    }
-	}
+	var cdaydata = {};
+	var sdaydata = {};
+	var daysh = {};
 
 	// timestamp of 30 days ago
 	var month = widget.dateString(1000 * 60 * 60 * 24 * 30);
 	var week = widget.dateString(1000 * 60 * 60 * 24 * 7);
 	var day = widget.dateString(1000 * 60 * 60 * 24);
-	
+
 	// chicago day
 	var chicagoTime = new Date( new Date().getTime() - (1000 * 60 * 60 * 6) ); // UTC-6
 	var chicagoDayStart = chicagoTime.getUTCMilliseconds() + (1000 * chicagoTime.getUTCSeconds()) + (1000 * 60 * chicagoTime.getUTCMinutes()) + (1000 * 60 * 60 * chicagoTime.getUTCHours());
 	chicagoDayStart =  widget.dateString(chicagoDayStart);
-
-	// initialize state counter
-	var states = { "in-progress": 0,
-		       "pending": 0,
-		       "queued": 0,
-		       "suspend": 0,
-		       "unknown": 0 };
-
-	// iterate over the active jobs
-	for (var i=0; i<jobsactive.length; i++) {
-
-	    // count the total size in the pipeline
-	    size_in_pipeline += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
-
-	    // count the current state
-	    if (! jobsactive[i].state) {
-		continue;
-	    }
-	    for (var h=0; h<jobsactive[i].state.length; h++) {
-		states[jobsactive[i].state[h]]++;
-	    }
-
-	    for (var h=0; h<jobsactive[i].state.length; h++) {
-
-		if (jobsactive[i].task) {
-		
-		    // count the current task
-		    if (jobsactive[i].state[h] == "in-progress") {
-			if (! taskcount.hasOwnProperty(jobsactive[i].task[h])) {
-			    taskcount[jobsactive[i].task[h]] = [ 0, 0, 0, 0 ];
-			}
-			taskcount[jobsactive[i].task[h]][0]++;
-			taskcount[jobsactive[i].task[h]][2] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
-		    } else {
-			if (! taskcount.hasOwnProperty(jobsactive[i].task[h])) {
-			    taskcount[jobsactive[i].task[h]] = [ 0, 0, 0, 0 ];
-			}
-			taskcount[jobsactive[i].task[h]][1]++;
-			taskcount[jobsactive[i].task[h]][3] += jobsactive[i].userattr.bp_count ? parseInt(jobsactive[i].userattr.bp_count) : jobsactive[i].size;
-		    }
-		    
-		}
-	    }
-
-	    // get the active jobs for last 30 days
-	    if (jobsactive[i].submittime >= month) {
-		jobs30.push(jobsactive[i]);
-	    }
-	}
-
-	// add chicago timestamps
-	var chicago = 1000 * 60 * 60 * 6;
-	var now = new Date().getTime();
-	for (var i=0; i<jobs30.length; i++) {
-	    jobs30[i].submitChicago = widget.dateString(now - (Date.parse(jobs30[i].submittime) - chicago));
-	    jobs30[i].completeChicago = widget.dateString(now - (Date.parse(jobs30[i].completedtime) - chicago));
-	}
-
-	num_in_pipeline += jobsactive.length;
-
+	
 	// initialize vars
 	var submitted_today = 0;
 	var num_submitted_today = 0;
@@ -203,50 +96,108 @@
 	var submitted_bases = {};
 	
 	var completed_chicago_day = 0;
+	var inprogress = [];
+	
+	// initialize state counter
+	var states = { "in-progress": 0,
+		       "pending": 0,
+		       "queued": 0,
+		       "suspend": 0,
+		       "unknown": 0 };
 
-	// iterate over all jobs of the last month
-	for (var i=0; i<jobs30.length; i++) {
-	    var submitted_day = jobs30[i].submitChicago.substr(0,10);
-	    var completed_day = jobs30[i].completeChicago.substr(0,10);
+	var num_in_pipeline = 0;
+	var size_in_pipeline = 0;
+
+	// all jobs 
+	var jk = Retina.keys(stm.DataStore.jobs30);
+	
+	for (var i=0;i<jk.length;i++) {
+
+	    var job = stm.DataStore.jobs30[jk[i]];
+
+	    // add chicago timestamps
+	    var chicago = 1000 * 60 * 60 * 6;
+	    var now = new Date().getTime();
+	    job.submitChicago = widget.dateString(now - (Date.parse(job.submittime) - chicago));
+
+	    // completed
+	    if (job.state[0] == "completed") {
+		job.completeChicago = widget.dateString(now - (Date.parse(job.completedtime) - chicago));
+
+		var completed_day = job.completeChicago.substr(0,10);
+		if (! completed_jobs.hasOwnProperty(completed_day)) {
+		    completed_jobs[completed_day] = 0;
+		    completed_bases[completed_day] = 0;
+		}
+		completed_jobs[completed_day]++;
+		completed_bases[completed_day] += job.size;
+		if (job.completedtime >= month) {
+		    num_completed_month++;
+		    completed_month += job.size;
+		}
+		if (job.completedtime >= week) {
+		    num_completed_week++;
+		    completed_week += job.size;
+		}
+		if (job.completedtime >= day) {
+		    num_completed_today++;
+		    completed_today += job.size;
+		}
+		if (job.completedtime >= chicagoDayStart) {
+		    completed_chicago_day += job.size;
+		}
+	    }
+
+	    // in progress
+	    else {
+		num_in_pipeline++;
+		size_in_pipeline += job.size;
+		inprogress.push(job);
+		
+		// count the current tasks
+		for (var h=0; h<job.state.length; h++) {
+
+		    if (states.hasOwnProperty(job.state[h])) {
+			states[job.state[h]]++;
+		    } else {
+			states.unknown ++;
+		    }
+
+		    
+		    if (job.state[h] == "in-progress") {
+			if (! taskcount.hasOwnProperty(job.task[h])) {
+			    taskcount[job.task[h]] = [ 0, 0, 0, 0 ];
+			}
+			taskcount[job.task[h]][0]++;
+			taskcount[job.task[h]][2] += job.size;
+		    } else {
+			if (! taskcount.hasOwnProperty(job.task[h])) {
+			    taskcount[job.task[h]] = [ 0, 0, 0, 0 ];
+			}
+			taskcount[job.task[h]][1]++;
+			taskcount[job.task[h]][3] += job.size;
+		    }
+		}
+	    }
+
+	    var submitted_day = job.submitChicago.substr(0,10);
 	    if (! submitted_jobs.hasOwnProperty(submitted_day)) {
 		submitted_jobs[submitted_day] = 0;
 		submitted_bases[submitted_day] = 0;
 	    }
 	    submitted_jobs[submitted_day]++;
-	    submitted_bases[submitted_day] += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
-	    if (! completed_jobs.hasOwnProperty(completed_day)) {
-		completed_jobs[completed_day] = 0;
-		completed_bases[completed_day] = 0;
-	    }
-	    completed_jobs[completed_day]++;
-	    completed_bases[completed_day] += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
-
-	    if (jobs30[i].submittime >= month) {
+	    submitted_bases[submitted_day] += job.size;
+	    if (job.submittime >= month) {
 		num_submitted_month++;
-		submitted_month += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
+		submitted_month += job.size;
 	    }
-	    if (jobs30[i].submittime >= week) {
+	    if (job.submittime >= week) {
 		num_submitted_week++;
-		submitted_week += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
+		submitted_week += job.size;
 	    }
-	    if (jobs30[i].submittime >= day) {
+	    if (job.submittime >= day) {
 		num_submitted_today++;
-		submitted_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
-	    }
-	    if (jobs30[i].completedtime >= month) {
-		num_completed_month++;
-		completed_month += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
-	    }
-	    if (jobs30[i].completedtime >= week) {
-		num_completed_week++;
-		completed_week += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
-	    }
-	    if (jobs30[i].completedtime >= day) {
-		num_completed_today++;
-		completed_today += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
-	    }
-	    if (jobs30[i].completedtime >= chicagoDayStart) {
-		completed_chicago_day += jobs30[i].userattr.bp_count ? parseInt(jobs30[i].userattr.bp_count) : jobs30[i].size;
+		submitted_today += job.size;
 	    }
 	}
 
@@ -272,21 +223,20 @@
 
 	// display unfinished jobs
 	html += "<h4>ten oldest unfinished jobs</h4>";
-	unfinishedJobs.sort(Retina.propSort('submittime'));
+	inprogress.sort(Retina.propSort('submittime'));
 	html += "<table class='table table-striped table-condensed' style='width: 550px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th><th>current tasks</th></tr>";
 	var iMax = 10;
-	var template = stm.DataStore.jobtemplate[1];
-	for (var i=0; i<unfinishedJobs.length; i++) {
+	for (var i=0; i<inprogress.length; i++) {
 	    if (i == iMax) {
 		break;
 	    }
 	    var t = new Date();
-	    var daysInQueue = parseInt((t.getTime() - Date.parse(unfinishedJobs[i].submittime)) / (1000 * 60 * 60 * 24));
+	    var daysInQueue = parseInt((t.getTime() - Date.parse(inprogress[i].submittime)) / (1000 * 60 * 60 * 24));
 	    var ts = [];
-	    for (var j=0; j<unfinishedJobs[i].task.length; j++) {
-		ts.push(template.tasks[unfinishedJobs[i].task[j]].cmd.description);
+	    for (var j=0; j<inprogress[i].task.length; j++) {
+		ts.push(template[inprogress[i].task[j]].cmd.description);
 	    }
-	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+unfinishedJobs[i].name+"\");' style='cursor: pointer;'>"+unfinishedJobs[i].name+"</a></td><td>"+(unfinishedJobs[i].userattr.bp_count ? parseInt(unfinishedJobs[i].userattr.bp_count).baseSize() : unfinishedJobs[i].size.baseSize())+"</td><td>"+unfinishedJobs[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+inprogress[i].name+"\");' style='cursor: pointer;'>"+inprogress[i].name+"</a></td><td>"+(inprogress[i].userattr.bp_count ? parseInt(inprogress[i].userattr.bp_count).baseSize() : inprogress[i].size.baseSize())+"</td><td>"+inprogress[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
 	}
 	html += "</table>";
 
@@ -296,7 +246,32 @@
 	target.innerHTML = html;
 
 	// backlog graph
-	widget.updateGraph();
+	var days = Retina.keys(submitted_bases).sort().slice(-30).reverse();
+	var graphData = [];
+	var labels = [];
+	var backlogs = [];
+	var btemp = size_in_pipeline;
+	for (var i=0; i<30; i++) {
+	    var b = String(btemp / 1000000000);
+	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
+	    btemp += submitted_bases[days[i]] - completed_bases[days[i]];
+	}
+	labels = days;
+	backlogs = backlogs.reverse();
+	days = days.reverse();
+	for (var i=0; i<backlogs.length; i++) {
+	    graphData.push([ backlogs[i] ]);
+	}
+
+	// draw the backlog graph
+	document.getElementById('graph_target').innerHTML = "";
+
+	var settings1 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings1.target = document.getElementById('graph_target');
+	settings1.width = 1200;
+	settings1.items[4].parameters.width = 20;
+	settings1.data = { "data": graphData, "rows": labels, "cols": ["backlog"], "itemsX": labels.length, "itemsY": 1, "itemsProd": labels.length };
+	Retina.Renderer.create("svg2", settings1).render();
 
 	// gauges
 	var gauges = ['day','week','month'];
@@ -304,8 +279,8 @@
 	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
 	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
 	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i] == 'day' ? "24h" : gauges[i], val] ]);
-	    var mt = ["0",20,40,60,80,100,120,140,160,180,200];
-	    if (val > 200 || tick > 200) {
+	    var mt = ["0",75,150,225,300,375,450,525,600];
+	    if (val > 600 || tick > 600) {
 		mt = [];
 		var v = (val > tick) ? val : tick;
 		var t = parseInt(v / 10);
@@ -320,7 +295,7 @@
 		majorTicks: mt,
 		minorTicks: 0,
 		min: 0,
-		max: val > tick ? (val > 200 ? val : 200) : (tick > 200 ? tick : 200)
+		max: val > tick ? (val > 600 ? val : 600) : (tick > 600 ? tick : 600)
             };
 
             var chart = new google.visualization.Gauge(document.getElementById('gauge_'+gauges[i]));
@@ -329,418 +304,208 @@
 	document.getElementById('gauge_title').innerHTML = "average Gigabasepair throughput per 24h period (red mark shows submission)";
 
 	// state graph
-	var sdata = [ { name: "count", data: [] } ];
+	var sdata = [];
 	var slabels = [];
 	for (var i in states) {
 	    if (states.hasOwnProperty(i)) {
-		sdata[0].data.push(states[i]);
-		slabels.push(i+" ("+states[i]+")");
+		sdata.push([ states[i] ]);
+		slabels.push(i);
 	    }
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('state_graph'),
-					  x_labels: slabels,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
-					  data: sdata }).render();
+	var settings2 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings2.items[4].parameters.width = 20;
+	settings2.target = document.getElementById('state_graph');
+	settings2.data = { "data": sdata, "rows": slabels, "cols": ["currently running stages"], "itemsX": sdata[0].length, "itemsY": sdata.length, "itemsProd": sdata[0].length * sdata.length };
+	Retina.Renderer.create("svg2", settings2).render();
 	
 	// task graph s
-	var tdatar = [ { name: "running", data: [] } ];
-	for (var i=0; i<template.tasks.length; i++) {
-	    tdatar[0].data.push(taskcount[i][0]);
+	var tdatar = [];
+	for (var i=0; i<template.length; i++) {
+	    tdatar.push([ taskcount[i][0] ]);
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_running'),
-					  data: tdatar,
-					  x_labels: tasklabels,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
-					  type: "column" }).render();
-
-	var tdatap = [ { name: "pending", data: [] } ];
-	for (var i=0; i<template.tasks.length; i++) {
-	    tdatap[0].data.push(taskcount[i][1]);
+	var settings3 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings3.target = document.getElementById('task_graph_running');
+	settings3.items[4].parameters.width = 20;
+	settings3.data = { "data": tdatar, "rows": tasklabels, "cols": ["running"], "itemsX": tdatar[0].length, "itemsY": tdatar.length+1, "itemsProd": tdatar[0].length * (tdatar.length+1) };
+	Retina.Renderer.create("svg2", settings3).render();
+	
+	var tdatap = [];
+	for (var i=0; i<template.length; i++) {
+	    tdatap.push([taskcount[i][1]]);
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_pending'),
-					  data: tdatap,
-					  x_labels: tasklabels,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
-					  type: "column" }).render();
-
+	var settings4 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings4.target = document.getElementById('task_graph_pending');
+	settings4.items[4].parameters.width = 20;
+	settings4.data = { "data": tdatap, "rows": tasklabels, "cols": ["pending"], "itemsX": tdatap[0].length, "itemsY": tdatap.length+1, "itemsProd": tdatap[0].length * (tdatap.length+1) };
+	Retina.Renderer.create("svg2", settings4).render();
 
 	// task GB graph s
-	var tdatars = [ { name: "running", data: [] } ];
-	for (var i=0; i<template.tasks.length; i++) {
-	    tdatars[0].data.push(parseInt(taskcount[i][2] / 1000000000));
+	var tdatars = [];
+	for (var i=0; i<template.length; i++) {
+	    tdatars.push([parseInt(taskcount[i][2] / 1000000000)]);
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_running_GB'),
-					  data: tdatars,
-					  x_labels: tasklabels,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
-					  type: "column" }).render();
+	var settings5 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings5.target = document.getElementById('task_graph_running_GB');
+	settings5.items[4].parameters.width = 20;
+	settings5.data = { "data": tdatars, "rows": tasklabels, "cols": ["running"], "itemsX": tdatars[0].length, "itemsY": tdatars.length+1, "itemsProd": tdatars[0].length * (tdatars.length+1) };
+	Retina.Renderer.create("svg2", settings5).render();
 
-	var tdataps = [ { name: "pending", data: [] } ];
-	for (var i=0; i<template.tasks.length; i++) {
-	    tdataps[0].data.push(parseInt(taskcount[i][3] / 1000000000));
+	var tdataps = [];
+	for (var i=0; i<template.length; i++) {
+	    tdataps.push([parseInt(taskcount[i][3] / 1000000000)]);
 	}
-	Retina.Renderer.create("graph", { target: document.getElementById('task_graph_pending_GB'),
-					  data: tdataps,
-					  x_labels: tasklabels,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-25",
-					  type: "column" }).render();
-
+	var settings6 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings6.items[4].parameters.width = 20;
+	settings6.target = document.getElementById('task_graph_pending_GB');
+	settings6.data = { "data": tdataps, "rows": tasklabels, "cols": ["pending"], "itemsX": tdataps[0].length, "itemsY": tdataps.length+1, "itemsProd": tdataps[0].length * (tdataps.length+1) };
+	Retina.Renderer.create("svg2", settings6).render();
 
 	// daygraph
-	var days = [];
+	days = [];
 	var one_day = 1000 * 60 * 60 * 24;
 	for (var i=0; i<30; i++) {
 	    days.push(widget.dateString((29 - i) * one_day).substr(0,10));
 	}
-	var daydata = [ { name: "#submitted", data: [] },
-			{ name: "#completed", data: [] } ];
-	var daycdata = [ { name: "submitted (GB)", data: [] },
-			 { name: "completed (GB)", data: [] } ];
-	var avgsizedata = [ { name: "average jobsize submitted", data: [] },
-			    { name: "average jobsize completed", data: [] } ];
+	var daydata = [];
+	var daycdata = [];
 	for (var i=0; i<days.length; i++) {
-	    daydata[0].data.push(submitted_jobs.hasOwnProperty(days[i]) ? submitted_jobs[days[i]] : 0)
-	    daydata[1].data.push(completed_jobs.hasOwnProperty(days[i]) ? completed_jobs[days[i]] : 0);
-	    daycdata[0].data.push(submitted_bases.hasOwnProperty(days[i]) ? parseInt(submitted_bases[days[i]] / 1000000000) : 0);
-	    daycdata[1].data.push(completed_bases.hasOwnProperty(days[i]) ? parseInt(completed_bases[days[i]] / 1000000000) : 0);
-	}
-	Retina.Renderer.create("graph", { target: document.getElementById('day_graph'),
-					  data: daydata,
-					  x_labels: days,
-					  width: 950,
-					  chartArea: [0.05, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-35",
-					  type: "column" }).render();
-	Retina.Renderer.create("graph", { target: document.getElementById('dayc_graph'),
-					  data: daycdata,
-					  width: 950,
-					  x_labels: days,
-					  chartArea: [0.05, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-35",
-					  type: "column" }).render();
-    };
-
-    widget.updateGraph = function (params) {
-	var widget = Retina.WidgetInstances.admin_statistics[1];
-
-	// get all data
-	var data = [];
-	var inactivejobs = stm.DataStore.inactivejobs;
-	var activejobs = stm.DataStore.activejobs;
-	for (var i in activejobs) {
-	    if (activejobs.hasOwnProperty(i)) {
-		data.push(activejobs[i]);
-	    }
-	}
-	for (var i in inactivejobs) {
-	    if (inactivejobs.hasOwnProperty(i)) {
-		data.push(inactivejobs[i]);
-	    }
+	    daydata.push([ submitted_jobs.hasOwnProperty(days[i]) ? submitted_jobs[days[i]] : 0, completed_jobs.hasOwnProperty(days[i]) ? completed_jobs[days[i]] : 0 ] );
+	    daycdata.push([ submitted_bases.hasOwnProperty(days[i]) ? parseInt(submitted_bases[days[i]] / 1000000000) : 0, completed_bases.hasOwnProperty(days[i]) ? parseInt(completed_bases[days[i]] / 1000000000) : 0 ]);
 	}
 
-	// add chicago time
-	var chicago = 1000 * 60 * 60 * 6;
-	var now = new Date().getTime();
-	for (var i=0; i<data.length; i++) {
-	    data[i].submitChicago = widget.dateString(now - (Date.parse(data[i].submittime) - chicago));
-	    data[i].completeChicago = widget.dateString(now - (Date.parse(data[i].completedtime) - chicago));
-	}
-
-	// get initial backlog
-	var backlog = 0;
-	for (var i=0; i<data.length; i++) {
-	    if (! data[i].state) {
-		continue;
-	    }
-	    if (data[i].state[0] != "completed") {
-		if (data[i].userattr.hasOwnProperty('bp_count')) {
-		    backlog += parseInt(data[i].userattr.bp_count) || 0;
-		} else if (data[i].hasOwnProperty('size')) {
-		    backlog += data[i].size;
-		}
-	    }
-	}
-
-	// get the daydata
-	var cdaydata = {};
-	var sdaydata = {};
-	var daysh = {};
-	for (var i=0; i<data.length; i++) {
-	    if (! data[i].state) {
-		continue;
-	    }
-	    if (data[i].state[0] == 'completed') {
-		var cday = data[i].completeChicago.substr(0,10);
-		daysh[cday] = 1;
-		if (! cdaydata.hasOwnProperty(cday)) {
-		    cdaydata[cday] = 0;
-		}
-		cdaydata[cday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
-	    }
-	    var sday = data[i].submitChicago.substr(0,10);
-	    daysh[sday] = 1;
-	    if (! sdaydata.hasOwnProperty(sday)) {
-		sdaydata[sday] = 0;
-	    }
-	    sdaydata[sday] += data[i].userattr.bp_count ? parseInt(data[i].userattr.bp_count) : data[i].size;
-	}
-	var days = Retina.keys(daysh).sort().slice(-30).reverse();
-
-	// process data
-	var graphData = [];
-	var labels = [];
-	var backlogs = [];
-	for (var i=0; i<30; i++) {
-	    var b = String(backlog / 1000000000);
-	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
-	    backlog = backlog + (cdaydata[days[i]] || 0) - (sdaydata[days[i]] || 0);
-	}
-	labels = days;
-	backlogs = backlogs.reverse();
-	days = days.reverse();
-
-	graphData.push({ name: "backlog", data: backlogs, lineColor: "blue" });
-
-	// redraw the graph
-	var target = document.getElementById('graph_target');
-	target.innerHTML = "";
-
-	Retina.Renderer.create("graph", { target: target,
-					  data: graphData,
-					  width: 800,
-					  height: 600,
-					  chartArea: [0.1, 0.1, 0.95, 0.7],
-					  x_labels_rotation: "-35",
-					  x_labels: labels,
-					  type: "line" }).render();
+	var settings7 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings7.items[4].parameters.width = 10;
+	settings7.width = 1200;
+	settings7.target = document.getElementById('day_graph');
+	settings7.data = { "data": daydata, "rows": days, "cols": ["# submitted","# completed"], "itemsX": 2, "itemsY": daydata.length, "itemsProd": 2 * daydata.length };
+	Retina.Renderer.create("svg2", settings7).render();
 	
+	var settings8 = jQuery.extend(true, {}, widget.graphs.bar);
+	settings8.items[4].parameters.width = 10;
+	settings8.width = 1200;
+	settings8.target = document.getElementById('dayc_graph');
+	settings8.data = { "data": daydata, "rows": days, "cols": ["submitted GB","completed GB"], "itemsX": 2, "itemsY": daycdata.length, "itemsProd": 2 * daycdata.length };
+	Retina.Renderer.create("svg2", settings8).render();
     };
 
-    widget.dateString = function (period) {
-	var past = new Date(new Date().getTime() - period);
-	var d = past.getUTCDate().padLeft();
-	var m = (past.getUTCMonth() + 1).padLeft();
-	var hour = past.getUTCHours().padLeft();
-	var minute = past.getUTCMinutes().padLeft();
-	var second = past.getUTCSeconds().padLeft();
-	var ms = past.getUTCMilliseconds().padLeft(100);
-	var timestamp;
-	timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
-	return timestamp;
-    };
-
+    // SHORT TERM DATA
     widget.getJobData = function () {
 	var widget = Retina.WidgetInstances.admin_statistics[1];
-	
-	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
-	if (stm.DataStore.hasOwnProperty('updateTime') && stm.DataStore.updateTime[1]) {
-	     timestamp = widget.dateString(new Date().getTime() - stm.DataStore.updateTime[1].update_time);
-	}
-	var utime = new Date().getTime();
-	var promises = [];
-	var prom = jQuery.Deferred();
-	promises.push(prom);
-	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&verbosity=minimal&limit=100000&state=completed&userattr=bp_count",
-				     headers: stm.authHeader,
-				     success: function(data) {
-					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
-					     stm.DataStore.inactivejobs = {};
-					 }
-					 for (var i=0; i<data.data.length; i++) {
-					     stm.DataStore.inactivejobs[data.data[i].id] = data.data[i];
-					 }
-					 if (stm.DataStore.hasOwnProperty('jobtemplate') && stm.DataStore.jobtemplate[1]) {
-					     prom.resolve();
-					 } else {
-					     jQuery.getJSON("data/jobtemplate.json", function (data) {
-						 stm.DataStore.jobtemplate = data;
-						 jQuery.getJSON("data/jobtemplate.json", function (data) {
-						     stm.DataStore.jobtemplateshort = data;
-						 }).then(function(){ prom.resolve(); });
-					     });
-					     // jQuery.ajax( { dataType: "json",
-					     // 		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					     // 		    headers: stm.authHeader,
-					     // 		    success: function(data) {
-					     // 			stm.DataStore.jobtemplate = { 1: data.data[1] };
-					     // 			stm.DataStore.jobtemplateshort = { 1: data.data[0] };
-					     // 		    },
-					     // 		    error: function (xhr) {
-					     // 			Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-					     // 		    }
-					     // 		  } ).then(function(){ prom.resolve(); });
-					 }
-				     },
-				     error: function (xhr) {
-					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-				     }
-				   } ) );
 
-	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?verbosity=minimal&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&limit=100000&state=suspend&userattr=bp_count",
-				     headers: stm.authHeader,
-				     success: function(data) {
-					 if (! stm.DataStore.hasOwnProperty('inactivejobs')) {
-					     stm.DataStore.inactivejobs = {};
+	widget.graphs = {};
+	stm.DataStore.jobs30 = {};
+	stm.DataStore.templates = {};
+
+	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
+	var promises = [];
+	var graphs = ['bar'];
+	for (var i=0; i<graphs.length; i++) {
+	    var prom = jQuery.Deferred();
+	    promises.push(prom);
+	    jQuery.ajax({ url: 'data/graphs/'+graphs[i]+'.json',
+			  contentType: 'application/json',
+			  graph: graphs[i],
+			  p: prom,
+			  complete: function (xhr) {
+			      var widget = Retina.WidgetInstances.admin_statistics[1];
+			      
+			      widget.graphs[this.graph] = JSON.parse(xhr.responseText);
+			      this.p.resolve();
+			  }
+			});
+	}
+	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+	    var prom = jQuery.Deferred();
+	    promises.push(prom);
+	    promises.push(jQuery.ajax( { dataType: "json",
+					 url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&state=completed&limit=100000&userattr=bp_count",
+					 headers: stm.authHeader,
+					 p: prom,
+					 pipeline: RetinaConfig.pipelines[i],
+					 success: function(data) {
+					     for (var h=0; h<data.data.length; h++) {
+						 data.data[h].pipeline = this.pipeline;
+						 stm.DataStore.jobs30[data.data[h].id] = data.data[h];
+					     }
+					     jQuery.ajax( { dataType: "json",
+					     		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
+					     		    headers: stm.authHeader,
+							    p: this.p,
+							    pipeline: this.pipeline,
+					     		    success: function(data) {
+					     			stm.DataStore.templates[this.pipeline] = data.data[0].tasks;
+								this.p.resolve();
+					     		    },
+					     		    error: function (xhr) {
+					     			Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+					     		    }
+					     		  } );
+					 },
+					 error: function (xhr) {
+					     Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 					 }
-					 for (var i=0; i<data.data.length; i++) {
-					     stm.DataStore.inactivejobs[data.data[i].id] = data.data[i];
+				       } ) );
+	    promises.push(jQuery.ajax( { dataType: "json",
+					 url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&state=suspend&state=in-progress&state=queued&limit=100000&userattr=bp_count",
+					 headers: stm.authHeader,
+					 p: prom,
+					 pipeline: RetinaConfig.pipelines[i],
+					 success: function(data) {
+					     for (var h=0; h<data.data.length; h++) {
+						 data.data[h].pipeline = this.pipeline;
+						 stm.DataStore.jobs30[data.data[h].id] = data.data[h];
+					     }
+					 },
+					 error: function (xhr) {
+					     Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
 					 }
-				     },
-				     error: function (xhr) {
-					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-				     }
-				   } ) );
-	
-	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/pipeline?state=in-progress&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&state=queued&state=pending&verbosity=minimal&limit=100000&userattr=bp_count",
-				     headers: stm.authHeader,
-				     success: function(data) {
-					 stm.DataStore.activejobs = {};
-					 for (var i=0; i<data.data.length; i++) {
-					     stm.DataStore.activejobs[data.data[i].id] = data.data[i];
-					 }
-				     },
-				     error: function (xhr) {
-					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-				     }
-				   } ) );
+				       } ) );
+	}
+
 	jQuery.when.apply(this, promises).then(function() {
-	    stm.DataStore.updateTime = { 1: { update_time: new Date().getTime() } };
-	    stm.dump(true, 'admin_statistics').then(function() {
-		Retina.WidgetInstances.admin_statistics[1].getUserData();
-		Retina.WidgetInstances.admin_statistics[1].getLongTermJobData();
-	    });
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
 	});
     };
 
+    // LONG TERM DATA
     widget.getLongTermJobData = function () {
 	var widget = Retina.WidgetInstances.admin_statistics[1];
 
-	var year = "2014";
-	var month = "09";
-	var now_year = new Date().getFullYear();
-	var now_month = (new Date().getMonth() + 1).padLeft();
-	var promises = [];
-	while (year < now_year || month < now_month) {
-	    var tstart = year+"-"+month+"-01T00:00:00.000Z";
-	    var d = year+"-"+month;
-	    month = parseInt(month);
-	    month++;
-	    if (month > 12) {
-		month = "01";
-		year = parseInt(year);
-		year++;
-		year += "";
-	    } else {
-		month = month.padLeft();
-	    }
-	    var tend = year+"-"+month+"-01T00:00:00.000Z";
-	    if (! stm.DataStore.hasOwnProperty('longTermJobData')) {
-		stm.DataStore.longTermJobData = {};
-	    }
-	    if (! stm.DataStore.longTermJobData.hasOwnProperty(d)) {
-		var p = jQuery.Deferred();
-		promises.push(p);
-		jQuery.ajax( { dataType: "json",
-			       promise: p,
-			       date: d,
-			       url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+tstart+"&info.pipeline="+RetinaConfig.pipelines.join("&info.pipeline=")+"&date_end="+tend+"&verbosity=minimal&limit=10000&state=completed&state=pending&state=in-progress&state=suspend&state=queued&userattr=bp_count",
-			       headers: stm.authHeader,
-			       success: function(data) {
-				   var states = { "in-progress": 0, "completed": 0, "pending": 0, "suspend": 0, "queued": 0 };
-				   var bps = 0;
-				   var min = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
-				   var max = data.data[0].userattr.bp_count ? parseInt(data.data[0].userattr.bp_count) : data.data[0].size;
-				   for (var i=0; i<data.data.length; i++) {
-				       var s = data.data[i].userattr.bp_count ? parseInt(data.data[i].userattr.bp_count) : data.data[i].size;
-				       max = s > max ? s : max;
-				       min = s < min ? s : min;
-				       bps += s;
-				       states[data.data[i].state[0]]++;
-				   }
-				   stm.DataStore.longTermJobData[this.date] = { id: this.date, num: data.data.length, bp: bps, min: min, max: max, states: states };
-				   this.promise.resolve();
-			       },
-			       error: function (xhr) {
-				   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-				   alert('there was an error retrieving the long term job data for '+this.date);
-				   this.promise.resolve();
-			       }
-			     } );
-	    }
-	}
-	if (promises.length) {
-	    jQuery.when.apply(this, promises).then(function() {
-		stm.updateHardStorage('admin_statistics', { longTermJobData: true }).then(function() {
-		    Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
-		});
-	    });
-	} else {
-	    Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
-	}
+	stm.DataStore.longTermJobData = {};
+
+	jQuery.ajax( { url: RetinaConfig['mgrast_api'] + "/server/jobcount",
+		       success: function(data) {
+			   for (var i=0; i<data.length; i++) {
+			       stm.DataStore.longTermJobData[data[i][1]] = { id: data[i][1], num: data[i][0], bp: data[i][2], min: data[i][3], max: data[i][4], avg: data[i][5] };
+			   }
+			   Retina.WidgetInstances.admin_statistics[1].showLongTermJobData();
+		       },
+		       error: function (xhr) {
+			   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+			   alert('there was an error retrieving the long term job data');
+		       }
+		     } );
     };
 
     widget.showLongTermJobData = function () {
 	var widget = Retina.WidgetInstances.admin_statistics[1];
 
-	var d = jQuery.extend(true, stm.DataStore.longTermJobData, widget.legacyJobData);
+	var d = stm.DataStore.longTermJobData;
 	var months = Retina.keys(d).sort();
-	var longdata = [ { name: "data submitted (Gbp)", data: [] },
-			 //{ name: "accumulated data (Tbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
-			 { name: "average jobsize (Mbp)", data: [], settings: { isY2: true, seriesType: "line", stroke: "red", strokeWidth: 3, fill: "none" } },
-		       ];
-	var longdata2 = [ { name: "completed", data: [] },
-			  { name: "suspend", data: [] },
-			  { name: "in-progress", data: [] },
-			  { name: "pending", data: [] },
-			  { name: "queued", data: [] } ];
+	var longdata = [];
 	var sumbp = 0;
-	for (var i=0; i<months.length; i++) {
+	for (var i=months.length-24; i<months.length; i++) {
 	    var item = d[months[i]];
-	    longdata[0].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000000).formatString(3, null, "")));
-	    longdata[1].data.push(parseFloat(((item.legacy ? (item.bp * 1000000000) : item.bp) / 1000000 / item.num).formatString(3, null, "")));
-	    if (! item.legacy) {
-		longdata2[0].data.push(item.states["completed"]);
-		longdata2[1].data.push(item.states["suspend"]);
-		longdata2[2].data.push(item.states["in-progress"]);
-		longdata2[3].data.push(item.states["pending"]);
-		longdata2[4].data.push(item.states["queued"]);
-	    }
-	    
-	    //sumbp += item.legacy ? (item.bp * 1000000000) : item.bp;
-	    //longdata[1].data.push(parseFloat((sumbp / 1000000000000).formatString(3, null, "")));
+	    longdata.push([ parseFloat(item.bp) / 1000000000, parseFloat(item.avg) / 1000000 ]);
 	}
-
-	Retina.Renderer.create("graph", { target: document.getElementById('longtermgraph'),
-					  data: longdata,
-					  hasY2: true,
-					  y_title: "submitted data (Gbp)",
-					  y2_title: "average jobsize (Mbp)",
-					  x_labels: months,
-					  width: 1100,
-					  chartArea: [100, 0.1, 850, 0.7],
-					  x_labels_rotation: "-35",
-					  type: "column" }).render();
+	months = months.slice(months.length - 24);
 	
-	Retina.Renderer.create("graph", { target: document.getElementById('longtermgraph2'),
-					  data: longdata2,
-					  unnormalized: true,
-					  show_legend: true,
-					  x_labels: months.slice(32),
-					  width: 1100,
-					  height: 500,
-					  chartArea: [100, 0.1, 850, 0.7],
-					  legendArea: [860,0.1,1100,0.7],
-					  x_labels_rotation: "-35",
-					  type: "stackedColumn" }).render();
+	var settings = jQuery.extend(true, {}, widget.graphs.bar);
+	settings.target = document.getElementById('longtermgraph');
+	settings.items[4].parameters.width = 10;
+	settings.width = 1000;
+	settings.data = { "data": longdata, "rows": months, "cols": ["data submitted (Gbp)","average jobsize (Mbp)"], "itemsX": months.length, "itemsY": 2, "itemsProd": months.length * 2 };
+	Retina.Renderer.create("svg2", settings).render();
     };
 
     // USERS
@@ -764,17 +529,14 @@
 	var last12 = labels.slice(labels.length - 12);
 	var d = [];
 	for (var i=0;i<last12.length;i++) {
-	    d.push(stm.DataStore.userCounts[last12[i]].count);
+	    d.push([stm.DataStore.userCounts[last12[i]].count]);
 	}
-	var graphData = [ { name: "new users", data: d, lineColor: "blue" } ];
-	Retina.Renderer.create("graph", { target: document.getElementById('userCountGraph'),
-					  data: graphData,
-					  width: 800,
-					  height: 600,
-					  chartArea: [50, 0.1, 0.99, 0.7],
-					  x_labels_rotation: "-35",
-					  x_labels: last12,
-					  type: "line" }).render();
+
+	var settings = jQuery.extend(true, {}, widget.graphs.bar);
+	settings.target = document.getElementById('userCountGraph');
+	settings.items[4].parameters.width = 25;
+	settings.data = { "data": d, "rows": last12, "cols": ["new users"], "itemsX": 12, "itemsY": 1, "itemsProd": 12 };
+	Retina.Renderer.create("svg2", settings).render();
     };
 
     widget.getUserData = function () {
@@ -783,159 +545,39 @@
 	if (! stm.DataStore.hasOwnProperty('userCounts')) {
 	    stm.DataStore.userCounts = {};
 	}
-	var promises = [];
-	var year = "2007";
-	var month = "07";
-	var now_year = new Date().getFullYear();
-	var now_month = (new Date().getMonth() + 1).padLeft();
-	while (year < now_year || month < now_month) {
-	    var d = year+"-"+month;
-	    var timestamp = "["+d;
-	    month = parseInt(month);
-	    month++;
-	    if (month > 12) {
-		month = "01";
-		year = parseInt(year);
-		year++;
-		year += "";
-	    } else {
-		month = month.padLeft();
-	    }
-	    timestamp += ";"+year+"-"+month+"[";
-	    if (! stm.DataStore.userCounts.hasOwnProperty(d)) {
-		var p = jQuery.Deferred();
-		promises.push(p);
-		jQuery.ajax( { dataType: "json",
-			       url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent(timestamp)+"&verbosity=minimal&limit=1",
-			       promise: p,
-			       date: d,
-			       headers: stm.authHeader,
-			       success: function(data) {
-				   stm.DataStore.userCounts[this.date] = { "count": data.total_count };
-				   this.promise.resolve();
-			       },
-			       error: function (xhr) {
-				   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-			       } 
-			     });
-	    }
-	}
-	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['mgrast_api'] + "/user?entry_date="+encodeURIComponent("["+now_year+"-"+now_month)+"&verbosity=minimal&limit=1",
-				     date: now_year+"-"+now_month,
-				     headers: stm.authHeader,
-				     success: function(data) {
-					 Retina.WidgetInstances.admin_statistics[1].currentUserCount = data.total_count;
-				     },
-				     error: function (xhr) {
-					 Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-				     }
-				   } ));
 	
-	jQuery.when.apply(this, promises).then(function() {
-	    if (promises.length > 1) {
-		stm.updateHardStorage('admin_statistics', { userCounts: true }).then(function() {
-		    Retina.WidgetInstances.admin_statistics[1].showUserData();
-		});
-	    } else {
-		Retina.WidgetInstances.admin_statistics[1].showUserData();
-	    }
-	});
+	jQuery.ajax( { dataType: "json",
+		       url: RetinaConfig['mgrast_api'] + "/server/usercount",
+		       headers: stm.authHeader,
+		       success: function(data) {
+			   for (var i=0; i<data.length; i++) {
+			       if (i + 1 < data.length) {
+				   stm.DataStore.userCounts[data[i][1]] = { "count": data[i][0] };
+			       } else {
+				   Retina.WidgetInstances.admin_statistics[1].currentUserCount = data[i][0];
+			       }
+			   }
+			   Retina.WidgetInstances.admin_statistics[1].showUserData();
+		       },
+		       error: function (xhr) {
+			   Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
+		       } 
+		     });
     };
 
-    /*
-      Legacy Job Data
-     */
-    widget.legacyJobData = {
-	// "2007-04": { "num": 10, "bp": 0.09, "legacy": true },
-	// "2007-05": { "num": 7, "bp": 0.16, "legacy": true },
-	// "2007-06": { "num": 2, "bp": 0.12, "legacy": true },
-	// "2007-07": { "num": 45, "bp": 1.21, "legacy": true },
-	// "2007-08": { "num": 27, "bp": 0.39, "legacy": true },
-	// "2007-09": { "num": 23, "bp": 0.39, "legacy": true },
-	// "2007-10": { "num": 25, "bp": 0.40, "legacy": true },
-	// "2007-11": { "num": 36, "bp": 0.90, "legacy": true },
-	// "2007-12": { "num": 82, "bp": 0.88, "legacy": true },
-	// "2008-01": { "num": 111, "bp": 0.50, "legacy": true },
-	// "2008-02": { "num": 58, "bp": 1.39, "legacy": true },
-	// "2008-03": { "num": 57, "bp": 1.17, "legacy": true },
-	// "2008-04": { "num": 84, "bp": 0.99, "legacy": true },
-	// "2008-05": { "num": 110, "bp": 2.77, "legacy": true },
-	// "2008-06": { "num": 141, "bp": 1.92, "legacy": true },
-	// "2008-07": { "num": 87, "bp": 3.67, "legacy": true },
-	// "2008-08": { "num": 49, "bp": 1.88, "legacy": true },
-	// "2008-09": { "num": 105, "bp": 3.51, "legacy": true },
-	// "2008-10": { "num": 239, "bp": 14.26, "legacy": true },
-	// "2008-11": { "num": 149, "bp": 2.74, "legacy": true },
-	// "2008-12": { "num": 229, "bp": 3.22, "legacy": true },
-	// "2009-01": { "num": 179, "bp": 3.90, "legacy": true },
-	// "2009-02": { "num": 195, "bp": 3.97, "legacy": true },
-	// "2009-03": { "num": 316, "bp": 4.83, "legacy": true },
-	// "2009-04": { "num": 154, "bp": 8.64, "legacy": true },
-	// "2009-05": { "num": 210, "bp": 5.44, "legacy": true },
-	// "2009-06": { "num": 314, "bp": 12.43, "legacy": true },
-	// "2009-07": { "num": 245, "bp": 5.35, "legacy": true },
-	// "2009-08": { "num": 186, "bp": 6.38, "legacy": true },
-	// "2009-09": { "num": 165, "bp": 8.41, "legacy": true },
-	// "2009-10": { "num": 162, "bp": 6.36, "legacy": true },
-	// "2009-11": { "num": 238, "bp": 8.75, "legacy": true },
-	// "2009-12": { "num": 183, "bp": 7.05, "legacy": true },
-	// "2010-01": { "num": 256, "bp": 13.67, "legacy": true },
-	// "2010-02": { "num": 196, "bp": 31.35, "legacy": true },
-	// "2010-03": { "num": 531, "bp": 20.13, "legacy": true },
-	// "2010-04": { "num": 485, "bp": 31.39, "legacy": true },
-	// "2010-05": { "num": 622, "bp": 33.11, "legacy": true },
-	// "2010-06": { "num": 539, "bp": 30.50, "legacy": true },
-	// "2010-07": { "num": 595, "bp": 31.70, "legacy": true },
-	// "2010-08": { "num": 436, "bp": 25.65, "legacy": true },
-	// "2010-09": { "num": 421, "bp": 23.68, "legacy": true },
-	// "2010-10": { "num": 529, "bp": 44.45, "legacy": true },
-	// "2010-11": { "num": 759, "bp": 15.98, "legacy": true },
-	// "2010-12": { "num": 516, "bp": 36.08, "legacy": true },
-	// "2011-01": { "num": 506, "bp": 29.35, "legacy": true },
-	// "2011-02": { "num": 727, "bp": 33.68, "legacy": true },
-	// "2011-03": { "num": 149, "bp": 30.18, "legacy": true },
-	// "2011-04": { "num": 159, "bp": 73.15, "legacy": true },
-	// "2011-05": { "num": 9868, "bp": 501.33, "legacy": true },
-	// "2011-06": { "num": 1867, "bp": 720.18, "legacy": true },
-	// "2011-07": { "num": 2083, "bp": 221.71, "legacy": true },
-	// "2011-08": { "num": 2101, "bp": 472.44, "legacy": true },
-	// "2011-09": { "num": 3104, "bp": 4732.48, "legacy": true },
-	// "2011-10": { "num": 1394, "bp": 592.07, "legacy": true },
-	// "2011-11": { "num": 1692, "bp": 111.78, "legacy": true },
-	// "2011-12": { "num": 1660, "bp": 1260.73, "legacy": true },
-	"2012-01": { "num": 1922, "bp": 896.64, "legacy": true },
-	"2012-02": { "num": 3550, "bp": 1081.32, "legacy": true },
-	"2012-03": { "num": 2602, "bp": 695.20, "legacy": true },
-	"2012-04": { "num": 2487, "bp": 650.16, "legacy": true },
-	"2012-05": { "num": 3305, "bp": 1193.34, "legacy": true },
-	"2012-06": { "num": 1445, "bp": 446.47, "legacy": true },
-	"2012-07": { "num": 3080, "bp": 791.64, "legacy": true },
-	"2012-08": { "num": 2446, "bp": 476.42, "legacy": true },
-	"2012-09": { "num": 2720, "bp": 1260.94, "legacy": true },
-	"2012-10": { "num": 3357, "bp": 951.35, "legacy": true },
-	"2012-11": { "num": 2593, "bp": 786.49, "legacy": true },
-	"2012-12": { "num": 1759, "bp": 1077.42, "legacy": true },
-	"2013-01": { "num": 2895, "bp": 953.34, "legacy": true },
-	"2013-02": { "num": 3135, "bp": 1700.24, "legacy": true },
-	"2013-03": { "num": 2573, "bp": 1984.73, "legacy": true },
-	"2013-04": { "num": 2550, "bp": 1695.53, "legacy": true },
-	"2013-05": { "num": 2409, "bp": 1241.64, "legacy": true },
-	"2013-06": { "num": 3248, "bp": 876.77, "legacy": true },
-	"2013-07": { "num": 2527, "bp": 2100.13, "legacy": true },
-	"2013-08": { "num": 3832, "bp": 1491.26, "legacy": true },
-	"2013-09": { "num": 2922, "bp": 2302.40, "legacy": true },
-	"2013-10": { "num": 4377, "bp": 3188.31, "legacy": true },
-	"2013-11": { "num": 3438, "bp": 1472.80, "legacy": true },
-	"2013-12": { "num": 3362, "bp": 1776.19, "legacy": true },
-	"2014-01": { "num": 2859, "bp": 1705.05, "legacy": true },
-	"2014-02": { "num": 3049, "bp": 1327.80, "legacy": true },
-	"2014-03": { "num": 4280, "bp": 1663.67, "legacy": true },
-	"2014-04": { "num": 4010, "bp": 2244.64, "legacy": true },
-	"2014-05": { "num": 4009, "bp": 1799.97, "legacy": true },
-	"2014-06": { "num": 3753, "bp": 1953.90, "legacy": true },
-	"2014-07": { "num": 4271, "bp": 2301.45, "legacy": true },
-	"2014-08": { "num": 4357, "bp": 1380.57, "legacy": true },
+    // HELPER FUNCTIONS
+    widget.dateString = function (period) {
+	var past = new Date(new Date().getTime() - period);
+	var d = past.getUTCDate().padLeft();
+	var m = (past.getUTCMonth() + 1).padLeft();
+	var hour = past.getUTCHours().padLeft();
+	var minute = past.getUTCMinutes().padLeft();
+	var second = past.getUTCSeconds().padLeft();
+	var ms = past.getUTCMilliseconds().padLeft(100);
+	var timestamp;
+	timestamp = past.getUTCFullYear() + "-" + m + "-" + d + "T" + hour +":" + minute + ":" + second + "." + ms + "Z";
+	return timestamp;
     };
+
 
 })();
