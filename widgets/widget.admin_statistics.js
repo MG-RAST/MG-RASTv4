@@ -20,12 +20,29 @@
 	    widget.sidebar = wparams.sidebar;
 	}
 
+	var pipelines = {};
+	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+	    pipelines[RetinaConfig.pipelines[i]] = true;
+	}
+	widget.params = {
+	    "activePipelines": pipelines,
+	    "startMonth": 30,
+	    "startDay": 30
+	};
+
 	widget.sidebar.parentNode.style.display = "none";
 	widget.main.className = "span10 offset1";
 
 	if (stm.user) {
 
-            var html = '<h3>Job Statistics</h3><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
+	    var pipeline_selection = '';
+	    for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+		pipeline_selection += '<input style="margin-top: 0px; margin-left: 10px;" type="checkbox" checked value="'+RetinaConfig.pipelines[i]+'" onchange="Retina.WidgetInstances.admin_statistics[1].params.activePipelines[this.value]=this.checked;Retina.WidgetInstances.admin_statistics[1].showJobData();"> '+RetinaConfig.pipelines[i];
+	    }
+
+	    var month_selection = '<span style="margin-left: 20px;"></span> how many months back <input type="text" value="30" style="width: 50px; margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_statistics[1].params.startMonth=this.value;Retina.WidgetInstances.admin_statistics[1].showJobData();"><span style="margin-left: 20px;"></span> how many days back <input type="text" value="30" style="width: 50px; margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_statistics[1].params.startDay=this.value;Retina.WidgetInstances.admin_statistics[1].showJobData();">';
+
+            var html = '<h3>Job Statistics</h3><div>'+pipeline_selection+month_selection+'</div><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
 	    // set the main content html
 	    widget.main.innerHTML = html;
@@ -48,6 +65,8 @@
 
 	// the target div
 	var target = document.getElementById('statistics');
+
+	var params = widget.params;
 
 	// get the names for the task ids and initialize the task counter
 	var tasklabels = [];
@@ -115,6 +134,10 @@
 
 	    var job = stm.DataStore.jobs30[jk[i]];
 
+	    if (! params.activePipelines[job.pipeline]) {
+		continue;
+	    }
+	    
 	    // add chicago timestamps
 	    var chicago = 1000 * 60 * 60 * 6;
 	    var now = new Date().getTime();
@@ -241,17 +264,17 @@
 	html += "</table>";
 
 	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
-	html += "<h4>backlog graph for the last 30 days in Gbp</h4><div id='graph_target'></div></div>";
+	html += "<h4>backlog graph in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
 
 	// backlog graph
-	var days = Retina.keys(submitted_bases).sort().slice(-30).reverse();
+	var days = Retina.keys(submitted_bases).sort().slice(-1 * params.startDay).reverse();
 	var graphData = [];
 	var labels = [];
 	var backlogs = [];
 	var btemp = size_in_pipeline;
-	for (var i=0; i<30; i++) {
+	for (var i=0; i<params.startDay; i++) {
 	    var b = String(btemp / 1000000000);
 	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
 	    btemp += submitted_bases[days[i]] - completed_bases[days[i]];
@@ -363,8 +386,8 @@
 	// daygraph
 	days = [];
 	var one_day = 1000 * 60 * 60 * 24;
-	for (var i=0; i<30; i++) {
-	    days.push(widget.dateString((29 - i) * one_day).substr(0,10));
+	for (var i=0; i<params.startDay; i++) {
+	    days.push(widget.dateString((params.startDay - i - 1) * one_day).substr(0,10));
 	}
 	var daydata = [];
 	var daycdata = [];
@@ -494,16 +517,16 @@
 	var months = Retina.keys(d).sort();
 	var longdata = [];
 	var sumbp = 0;
-	for (var i=months.length-24; i<months.length; i++) {
+	for (var i=months.length-widget.params.startMonth; i<months.length; i++) {
 	    var item = d[months[i]];
 	    longdata.push([ parseFloat(item.bp) / 1000000000, parseFloat(item.avg) / 1000000 ]);
 	}
-	months = months.slice(months.length - 24);
+	months = months.slice(months.length - widget.params.startMonth);
 	
 	var settings = jQuery.extend(true, {}, widget.graphs.bar);
 	settings.target = document.getElementById('longtermgraph');
 	settings.items[4].parameters.width = 10;
-	settings.width = 1000;
+	settings.width = 1200;
 	settings.data = { "data": longdata, "rows": months, "cols": ["data submitted (Gbp)","average jobsize (Mbp)"], "itemsX": months.length, "itemsY": 2, "itemsProd": months.length * 2 };
 	Retina.Renderer.create("svg2", settings).render();
     };
@@ -526,7 +549,7 @@
 	
 	target.innerHTML = html;
 	
-	var last12 = labels.slice(labels.length - 12);
+	var last12 = labels.slice(labels.length - widget.params.startMonth);
 	var d = [];
 	for (var i=0;i<last12.length;i++) {
 	    d.push([stm.DataStore.userCounts[last12[i]].count]);
@@ -534,8 +557,9 @@
 
 	var settings = jQuery.extend(true, {}, widget.graphs.bar);
 	settings.target = document.getElementById('userCountGraph');
-	settings.items[4].parameters.width = 25;
-	settings.data = { "data": d, "rows": last12, "cols": ["new users"], "itemsX": 12, "itemsY": 1, "itemsProd": 12 };
+	settings.width = 1200;
+	settings.items[4].parameters.width = 20;
+	settings.data = { "data": d, "rows": last12, "cols": ["new users"], "itemsX": last12.length, "itemsY": 1, "itemsProd": last12.length };
 	Retina.Renderer.create("svg2", settings).render();
     };
 
