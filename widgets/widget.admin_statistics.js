@@ -40,7 +40,7 @@
 		pipeline_selection += '<input style="margin-top: 0px; margin-left: 10px;" type="checkbox" checked value="'+RetinaConfig.pipelines[i]+'" onchange="Retina.WidgetInstances.admin_statistics[1].params.activePipelines[this.value]=this.checked;Retina.WidgetInstances.admin_statistics[1].showJobData();"> '+RetinaConfig.pipelines[i];
 	    }
 
-	    var month_selection = '<span style="margin-left: 20px;"></span> how many months back <input type="text" value="30" style="width: 50px; margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_statistics[1].params.startMonth=this.value;Retina.WidgetInstances.admin_statistics[1].showJobData();"><span style="margin-left: 20px;"></span> how many days back <input type="text" value="30" style="width: 50px; margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_statistics[1].params.startDay=this.value;Retina.WidgetInstances.admin_statistics[1].showJobData();">';
+	    var month_selection = '<span style="margin-left: 20px;"></span> how many months back <input type="text" value="'+widget.params.startMonth+'" style="width: 50px; margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_statistics[1].params.startMonth=this.value;Retina.WidgetInstances.admin_statistics[1].showJobData();"><span style="margin-left: 20px;"></span> how many days back <input type="text" value="'+widget.params.startDay+'" style="width: 50px; margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_statistics[1].params.startDay=this.value;Retina.WidgetInstances.admin_statistics[1].showJobData();">';
 
             var html = '<h3>Job Statistics</h3><div>'+pipeline_selection+month_selection+'</div><div><div id="gauge_day" style="float: left; margin-left: 100px;"></div><div id="gauge_week" style="float: left; margin-left: 100px;"></div><div id="gauge_month" style="float: left; margin-left: 100px;"></div><div style="clear: both; padding-left: 240px;  margin-bottom: 50px;" id="gauge_title"></div></div><div id="statistics" style="clear: both;"><img src="Retina/images/waiting.gif" style="margin-left: 40%;"></div><h3>Monthly Job Submission</h3><div id="longtermgraph"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div><h3>User Statistics</h3><div id="userData"><img src="Retina/images/waiting.gif" style="margin-left: 40%; margin-top: 50px;"></div>';
 
@@ -76,7 +76,7 @@
 	for (var i=0; i<template.length; i++) {
 	    tasklabels[i] = template[i].cmd.description;
 	    tasknames[i] = template[i].cmd.description;
-	    taskcount[i] = [ 0, 0, 0, 0 ];
+	    taskcount[i] = [];
 	}
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
@@ -96,40 +96,66 @@
 	chicagoDayStart =  widget.dateString(chicagoDayStart);
 	
 	// initialize vars
-	var submitted_today = 0;
-	var num_submitted_today = 0;
-	var completed_today = 0;
-	var num_completed_today = 0;
-	var submitted_week = 0;
-	var num_submitted_week = 0;
-	var completed_week = 0;
-	var num_completed_week = 0;
-	var submitted_month = 0;
-	var num_submitted_month = 0;
-	var completed_month = 0;
-	var num_completed_month = 0;
+	var submitted_today = [0];
+	var num_submitted_today = [0];
+	var completed_today = [0];
+	var num_completed_today = [0];
+	var submitted_week = [0];
+	var num_submitted_week = [0];
+	var completed_week = [0];
+	var num_completed_week = [0];
+	var submitted_month = [0];
+	var num_submitted_month = [0];
+	var completed_month = [0];
+	var num_completed_month = [0];
+	var num_in_pipeline = [0];
+	var size_in_pipeline = [0];
 
 	var completed_jobs = {};
 	var submitted_jobs = {};
 	var completed_bases = {};
 	var submitted_bases = {};
 	
-	var completed_chicago_day = 0;
+	var completed_chicago_day = [0];
 	var inprogress = [];
 	
 	// initialize state counter
-	var states = { "in-progress": 0,
-		       "pending": 0,
-		       "queued": 0,
-		       "suspend": 0,
-		       "unknown": 0 };
+	var states = { "in-progress": [0],
+		       "pending": [0],
+		       "queued": [0],
+		       "suspend": [0] };
 
-	var num_in_pipeline = 0;
-	var size_in_pipeline = 0;
-
+	var pipelineIndex = {};
+	for (var i=0; i<template.length; i++) {
+	    taskcount[i].push( [ 0, 0, 0, 0 ] );
+	}
+	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+	    pipelineIndex[RetinaConfig.pipelines[i]] = i + 1;
+	    submitted_today.push(0);
+	    num_submitted_today.push(0);
+	    completed_today.push(0);
+	    num_completed_today.push(0);
+	    submitted_week.push(0);
+	    num_submitted_week.push(0);
+	    completed_week.push(0);
+	    num_completed_week.push(0);
+	    submitted_month.push(0);
+	    num_submitted_month.push(0);
+	    completed_month.push(0);
+	    num_completed_month.push(0);
+	    num_in_pipeline.push(0);
+	    size_in_pipeline.push(0);
+	    states['in-progress'].push(0);
+	    states.pending.push(0);
+	    states.queued.push(0);
+	    states.suspend.push(0);
+	    for (var h=0; h<template.length; h++) {
+		taskcount[h].push( [ 0, 0, 0, 0 ] );
+	    }
+	}
+	
 	// all jobs 
 	var jk = Retina.keys(stm.DataStore.jobs30);
-	
 	for (var i=0;i<jk.length;i++) {
 
 	    var job = stm.DataStore.jobs30[jk[i]];
@@ -149,99 +175,149 @@
 
 		var completed_day = job.completeChicago.substr(0,10);
 		if (! completed_jobs.hasOwnProperty(completed_day)) {
-		    completed_jobs[completed_day] = 0;
-		    completed_bases[completed_day] = 0;
+		    completed_jobs[completed_day] = [0];
+		    completed_bases[completed_day] = [0];
+		    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
+			completed_jobs[completed_day].push(0);
+			completed_bases[completed_day].push(0);
+		    }
 		}
-		completed_jobs[completed_day]++;
-		completed_bases[completed_day] += job.size;
+		completed_jobs[completed_day][pipelineIndex[job.pipeline]]++;
+		completed_bases[completed_day][pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		completed_jobs[completed_day][0]++;
+		completed_bases[completed_day][0] += parseInt(job.userattr.bp_count);
 		if (job.completedtime >= month) {
-		    num_completed_month++;
-		    completed_month += job.size;
+		    num_completed_month[0]++;
+		    completed_month[0] += parseInt(job.userattr.bp_count);
+		    num_completed_month[pipelineIndex[job.pipeline]]++;
+		    completed_month[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 		}
 		if (job.completedtime >= week) {
-		    num_completed_week++;
-		    completed_week += job.size;
+		    num_completed_week[0]++;
+		    completed_week[0] += parseInt(job.userattr.bp_count);
+		    num_completed_week[pipelineIndex[job.pipeline]]++;
+		    completed_week[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 		}
 		if (job.completedtime >= day) {
-		    num_completed_today++;
-		    completed_today += job.size;
+		    num_completed_today[0]++;
+		    completed_today[0] += parseInt(job.userattr.bp_count);
+		    num_completed_today[pipelineIndex[job.pipeline]]++;
+		    completed_today[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 		}
 		if (job.completedtime >= chicagoDayStart) {
-		    completed_chicago_day += job.size;
+		    completed_chicago_day[0] += parseInt(job.userattr.bp_count);
+		    completed_chicago_day[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 		}
 	    }
 
 	    // in progress
 	    else {
-		num_in_pipeline++;
-		size_in_pipeline += job.size;
+		num_in_pipeline[0]++;
+		size_in_pipeline[0] += parseInt(job.userattr.bp_count);
+		num_in_pipeline[pipelineIndex[job.pipeline]]++;
+		size_in_pipeline[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 		inprogress.push(job);
 		
 		// count the current tasks
 		for (var h=0; h<job.state.length; h++) {
 
 		    if (states.hasOwnProperty(job.state[h])) {
-			states[job.state[h]]++;
-		    } else {
-			states.unknown ++;
+			states[job.state[h]][0]++;
+			states[job.state[h]][pipelineIndex[job.pipeline]]++;
 		    }
-
 		    
 		    if (job.state[h] == "in-progress") {
 			if (! taskcount.hasOwnProperty(job.task[h])) {
-			    taskcount[job.task[h]] = [ 0, 0, 0, 0 ];
+			    taskcount[job.task[h]] = [];
+			    for (var j=0; j<RetinaConfig.pipelines.length; j++) {
+				taskcount[job.task[h]][j] = [ 0, 0, 0, 0 ];
+			    }
 			}
-			taskcount[job.task[h]][0]++;
-			taskcount[job.task[h]][2] += job.size;
+			taskcount[job.task[h]][pipelineIndex[job.pipeline]][0]++;
+			taskcount[job.task[h]][pipelineIndex[job.pipeline]][2] += parseInt(job.userattr.bp_count);
 		    } else {
 			if (! taskcount.hasOwnProperty(job.task[h])) {
-			    taskcount[job.task[h]] = [ 0, 0, 0, 0 ];
+			    taskcount[job.task[h]] = [];
+			    for (var j=0; j<RetinaConfig.pipelines.length; j++) {
+				taskcount[job.task[h]][j] = [ 0, 0, 0, 0 ];
+			    }
 			}
-			taskcount[job.task[h]][1]++;
-			taskcount[job.task[h]][3] += job.size;
+			taskcount[job.task[h]][pipelineIndex[job.pipeline]][1]++;
+			taskcount[job.task[h]][pipelineIndex[job.pipeline]][3] += parseInt(job.userattr.bp_count);
 		    }
 		}
 	    }
 
 	    var submitted_day = job.submitChicago.substr(0,10);
 	    if (! submitted_jobs.hasOwnProperty(submitted_day)) {
-		submitted_jobs[submitted_day] = 0;
-		submitted_bases[submitted_day] = 0;
+		submitted_jobs[submitted_day] = [0];
+		submitted_bases[submitted_day] = [0];
+		for (var j=0; j<RetinaConfig.pipelines.length; j++) {
+		    submitted_jobs[submitted_day].push(0);
+		    submitted_bases[submitted_day].push(0);
+		}
 	    }
-	    submitted_jobs[submitted_day]++;
-	    submitted_bases[submitted_day] += job.size;
+	    submitted_jobs[submitted_day][0]++;
+	    submitted_bases[submitted_day][0] += parseInt(job.userattr.bp_count);
+	    submitted_jobs[submitted_day][pipelineIndex[job.pipeline]]++;
+	    submitted_bases[submitted_day][pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 	    if (job.submittime >= month) {
-		num_submitted_month++;
-		submitted_month += job.size;
+		num_submitted_month[0]++;
+		submitted_month[0] += parseInt(job.userattr.bp_count);
+		num_submitted_month[pipelineIndex[job.pipeline]]++;
+		submitted_month[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 	    }
 	    if (job.submittime >= week) {
-		num_submitted_week++;
-		submitted_week += job.size;
+		num_submitted_week[0]++;
+		submitted_week[0] += parseInt(job.userattr.bp_count);
+		num_submitted_week[pipelineIndex[job.pipeline]]++;
+		submitted_week[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 	    }
 	    if (job.submittime >= day) {
-		num_submitted_today++;
-		submitted_today += job.size;
+		num_submitted_today[0]++;
+		submitted_today[0] += parseInt(job.userattr.bp_count);
+		num_submitted_today[pipelineIndex[job.pipeline]]++;
+		submitted_today[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
 	    }
 	}
 
-	var submitted_week_per_day = submitted_week / 7;
-	var num_submitted_week_per_day = parseInt(num_submitted_week / 7);
-	var completed_week_per_day = completed_week / 7;
-	var num_completed_week_per_day = parseInt(num_completed_week / 7);
-	var submitted_month_per_day = submitted_month / 30;
-	var num_submitted_month_per_day = parseInt(num_submitted_month / 30);
-	var completed_month_per_day = completed_month / 30;
-	var num_completed_month_per_day = parseInt(num_completed_month / 30);
+	var submitted_week_per_day = [0];
+	var num_submitted_week_per_day = [0];
+	var completed_week_per_day = [0];
+	var num_completed_week_per_day = [0];
+	var submitted_month_per_day = [0];
+	var num_submitted_month_per_day = [0];
+	var completed_month_per_day = [0];
+	var num_completed_month_per_day = [0];
+	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+	    submitted_week_per_day[0] += submitted_week[i] / 7;
+	    num_submitted_week_per_day[0] += parseInt(num_submitted_week[i] / 7);
+	    completed_week_per_day[0] += completed_week[i] / 7;
+	    num_completed_week_per_day[0] += parseInt(num_completed_week[i] / 7);
+	    submitted_month_per_day[0] += submitted_month[i] / 30;
+	    num_submitted_month_per_day[0] += parseInt(num_submitted_month[i] / 30);
+	    completed_month_per_day[0] += completed_month[i] / 30;
+	    num_completed_month_per_day[0] += parseInt(num_completed_month[i] / 30);
+	    
+	    submitted_week_per_day.push(submitted_week[i] / 7);
+	    num_submitted_week_per_day.push(parseInt(num_submitted_week[i] / 7));
+	    completed_week_per_day.push(completed_week[i] / 7);
+	    num_completed_week_per_day.push(parseInt(num_completed_week[i] / 7));
+	    submitted_month_per_day.push(submitted_month[i] / 30);
+	    num_submitted_month_per_day.push(parseInt(num_submitted_month[i] / 30));
+	    completed_month_per_day.push(completed_month[i] / 30);
+	    num_completed_month_per_day.push(parseInt(num_completed_month[i] / 30));
+	}
 	
-	var html = '<div><b>Data completed today (since 00:00AM Chicago time)</b><div class="progress"><div class="bar" style="width: '+(completed_chicago_day / 2000000000)+'%;"></div></div></div><div style="position: relative; bottom: 40px; color: lightgray; left: 20px;">'+(completed_chicago_day / 1000000000).formatString(3)+' Gbp</div>';
+	var html = '<div><b>Data completed today (since 00:00AM Chicago time)</b><div class="progress"><div class="bar" style="width: '+(completed_chicago_day[0] / 2000000000)+'%;"></div></div></div><div style="position: relative; bottom: 40px; color: lightgray; left: 20px;">'+(completed_chicago_day[0] / 1000000000).formatString(3)+' Gbp</div>';
 	html += '<table class="table">';
-	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+size_in_pipeline.baseSize()+" in "+num_in_pipeline+" jobs</td></tr>";
-	html += "<tr><td><b>submitted last 24h</b></td><td>"+submitted_today.baseSize()+" in "+num_submitted_today+" jobs</td></tr>";
-	html += "<tr><td><b>completed last 24h</b></td><td>"+completed_today.baseSize()+" in "+num_completed_today+" jobs</td></tr>";
-	html += "<tr><td><b>submitted last 7 days</b></td><td>"+submitted_week.baseSize()+" (avg. "+submitted_week_per_day.baseSize()+" per day) in "+num_submitted_week+" jobs (avg. "+num_submitted_week_per_day+" per day)</td></tr>";
-	html += "<tr><td><b>completed last 7 days</b></td><td>"+completed_week.baseSize()+" (avg. "+completed_week_per_day.baseSize()+" per day) in "+num_completed_week+" jobs (avg. "+num_completed_week_per_day+" per day)</td></tr>";
-	html += "<tr><td><b>submitted last 30 days</b></td><td>"+submitted_month.baseSize()+" (avg. "+submitted_month_per_day.baseSize()+" per day) in "+num_submitted_month+" jobs (avg. "+num_submitted_month_per_day+" per day)</td></tr>";
-	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month.baseSize()+" (avg. "+completed_month_per_day.baseSize()+" per day) in "+num_completed_month+" jobs (avg. "+num_completed_month_per_day+" per day)</td></tr>";
+	html += "<tr><td><b>data currently in the pipeline</b></td><td>"+parseInt(size_in_pipeline[0]).baseSize()+" in "+num_in_pipeline[0]+" jobs</td></tr>";
+	html += "<tr><td><b>submitted last 24h</b></td><td>"+submitted_today[0].baseSize()+" in "+num_submitted_today[0]+" jobs</td></tr>";
+	html += "<tr><td><b>completed last 24h</b></td><td>"+completed_today[0].baseSize()+" in "+num_completed_today[0]+" jobs</td></tr>";
+	html += "<tr><td><b>submitted last 7 days</b></td><td>"+submitted_week[0].baseSize()+" (avg. "+submitted_week_per_day[0].baseSize()+" per day) in "+num_submitted_week[0]+" jobs (avg. "+num_submitted_week_per_day[0]+" per day)</td></tr>";
+	html += "<tr><td><b>completed last 7 days</b></td><td>"+completed_week[0].baseSize()+" (avg. "+completed_week_per_day[0].baseSize()+" per day) in "+num_completed_week[0]+" jobs (avg. "+num_completed_week_per_day[0]+" per day)</td></tr>";
+	html += "<tr><td><b>submitted last 30 days</b></td><td>"+submitted_month[0].baseSize()+" (avg. "+submitted_month_per_day[0].baseSize()+" per day) in "+num_submitted_month[0]+" jobs (avg. "+num_submitted_month_per_day[0]+" per day)</td></tr>";
+	html += "<tr><td><b>completed last 30 days</b></td><td>"+completed_month[0].baseSize()+" (avg. "+completed_month_per_day[0].baseSize()+" per day) in "+num_completed_month[0]+" jobs (avg. "+num_completed_month_per_day[0]+" per day)</td></tr>";
 	html += "</table>";
 
 	// display unfinished jobs
@@ -259,11 +335,11 @@
 	    for (var j=0; j<inprogress[i].task.length; j++) {
 		ts.push(template[inprogress[i].task[j]].cmd.description);
 	    }
-	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+inprogress[i].name+"\");' style='cursor: pointer;'>"+inprogress[i].name+"</a></td><td>"+(inprogress[i].userattr.bp_count ? parseInt(inprogress[i].userattr.bp_count).baseSize() : inprogress[i].size.baseSize())+"</td><td>"+inprogress[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+inprogress[i].name+"\");' style='cursor: pointer;'>"+inprogress[i].name+"</a></td><td>"+parseInt(inprogress[i].userattr.bp_count).baseSize()+"</td><td>"+inprogress[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
 	}
 	html += "</table>";
 
-	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of <span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> jobs</h4><div id='day_graph'></div><h4><span style='color: blue;'>submitted</span> and <span style='color: red;'>completed</span> GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
+	html += "<h4>currently running stages</h4><div id='task_graph_running'></div><h4>currently pending stages</h4><div id='task_graph_pending'></div><h4>currently running data in stages in GB</h4><div id='task_graph_running_GB'></div><h4>currently pending data in stages in GB</h4><div id='task_graph_pending_GB'></div><h4>number of submitted and completed jobs</h4><div id='day_graph'></div><h4>submitted and completed GB</h4><div id='dayc_graph'></div><h4>current job states</h4><div id='state_graph'></div><div>";
 	html += "<h4>backlog graph in Gbp</h4><div id='graph_target'></div></div>";
 
 	target.innerHTML = html;
@@ -273,37 +349,49 @@
 	var graphData = [];
 	var labels = [];
 	var backlogs = [];
-	var btemp = size_in_pipeline;
+	var btemp = [];
+
+	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+	    btemp.push(size_in_pipeline[i + 1]);
+	}
+
 	for (var i=0; i<params.startDay; i++) {
-	    var b = String(btemp / 1000000000);
-	    backlogs[i] = parseFloat(b.substr(0, b.indexOf('.')+3));
-	    btemp += submitted_bases[days[i]] - completed_bases[days[i]];
+	    backlogs[i] = [];
+	    if (! completed_bases.hasOwnProperty(days[i])) {
+		continue;
+	    }
+	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
+		var b = String(btemp[h] / 1000000000);
+		backlogs[i][h] = parseFloat(b.substr(0, b.indexOf('.')+3));
+		btemp[h] += completed_bases[days[i]][h + 1] - submitted_bases[days[i]][h + 1];
+	    }
 	}
 	labels = days;
 	backlogs = backlogs.reverse();
 	days = days.reverse();
 	for (var i=0; i<backlogs.length; i++) {
-	    graphData.push([ backlogs[i] ]);
+	    graphData.push(backlogs[i]);
 	}
 
 	// draw the backlog graph
 	document.getElementById('graph_target').innerHTML = "";
 
-	var settings1 = jQuery.extend(true, {}, widget.graphs.bar);
+	graphData = Retina.transpose(graphData);
+
+	var settings1 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings1.target = document.getElementById('graph_target');
 	settings1.width = 1200;
-	settings1.items[4].parameters.width = 20;
-	settings1.data = { "data": graphData, "rows": labels, "cols": ["backlog"], "itemsX": labels.length, "itemsY": 1, "itemsProd": labels.length };
+	settings1.data = { "data": graphData, "rows": RetinaConfig.pipelines, "cols": labels, "itemsX": labels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": labels.length * RetinaConfig.pipelines.length };
 	Retina.Renderer.create("svg2", settings1).render();
 
 	// gauges
 	var gauges = ['day','week','month'];
 	for (var i=0; i<gauges.length; i++) {
-	    var val = parseInt(((i == 1) ? completed_week_per_day : (i == 2 ? completed_month_per_day : completed_today)) / 1000000000);
-	    var tick =  parseInt(((i == 1) ? submitted_week_per_day : (i == 2 ? submitted_month_per_day : submitted_today)) / 1000000000);
+	    var val = parseInt(((i == 1) ? completed_week_per_day[0] : (i == 2 ? completed_month_per_day[0] : completed_today[0])) / 1000000000);
+	    var tick =  parseInt(((i == 1) ? submitted_week_per_day[0] : (i == 2 ? submitted_month_per_day[0] : submitted_today[0])) / 1000000000);
 	    var gauge_data = google.visualization.arrayToDataTable([ ['Label', 'Value'], [gauges[i] == 'day' ? "24h" : gauges[i], val] ]);
-	    var mt = ["0",75,150,225,300,375,450,525,600];
-	    if (val > 600 || tick > 600) {
+	    var mt = ["0",50,100,150,200,250,300,350,400];
+	    if (val > 400 || tick > 400) {
 		mt = [];
 		var v = (val > tick) ? val : tick;
 		var t = parseInt(v / 10);
@@ -318,7 +406,7 @@
 		majorTicks: mt,
 		minorTicks: 0,
 		min: 0,
-		max: val > tick ? (val > 600 ? val : 600) : (tick > 600 ? tick : 600)
+		max: val > tick ? (val > 400 ? val : 400) : (tick > 400 ? tick : 400)
             };
 
             var chart = new google.visualization.Gauge(document.getElementById('gauge_'+gauges[i]));
@@ -331,56 +419,85 @@
 	var slabels = [];
 	for (var i in states) {
 	    if (states.hasOwnProperty(i)) {
-		sdata.push([ states[i] ]);
+		var row = [];
+		for (var h=1; h<states[i].length; h++) {
+		    row.push(states[i][h]);
+		}
+		sdata.push(row);
 		slabels.push(i);
 	    }
 	}
-	var settings2 = jQuery.extend(true, {}, widget.graphs.bar);
-	settings2.items[4].parameters.width = 20;
+
+	var settings2 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings2.target = document.getElementById('state_graph');
-	settings2.data = { "data": sdata, "rows": slabels, "cols": ["currently running stages"], "itemsX": sdata[0].length, "itemsY": sdata.length, "itemsProd": sdata[0].length * sdata.length };
+	settings2.data = { "data": sdata, "rows": RetinaConfig.pipelines, "cols": slabels, "itemsX": sdata.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": RetinaConfig.pipelines.length * sdata.length };
 	Retina.Renderer.create("svg2", settings2).render();
 	
 	// task graph s
 	var tdatar = [];
 	for (var i=0; i<template.length; i++) {
-	    tdatar.push([ taskcount[i][0] ]);
+	    var row = [];
+	    for (var h=1; h<taskcount[i].length; h++) {
+		row.push(taskcount[i][h][0]);
+	    }
+	    tdatar.push(row);
 	}
-	var settings3 = jQuery.extend(true, {}, widget.graphs.bar);
+	tdatar = Retina.transpose(tdatar);
+
+	var settings3 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings3.target = document.getElementById('task_graph_running');
-	settings3.items[4].parameters.width = 20;
-	settings3.data = { "data": tdatar, "rows": tasklabels, "cols": ["running"], "itemsX": tdatar[0].length, "itemsY": tdatar.length+1, "itemsProd": tdatar[0].length * (tdatar.length+1) };
+	settings3.width = 1200;
+	settings3.data = { "data": tdatar, "rows": RetinaConfig.pipelines, "cols": tasklabels, "itemsX": tasklabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": RetinaConfig.pipelines.length * tasklabels.length };
 	Retina.Renderer.create("svg2", settings3).render();
 	
 	var tdatap = [];
 	for (var i=0; i<template.length; i++) {
-	    tdatap.push([taskcount[i][1]]);
+	    var row = [];
+	    for (var h=1; h<taskcount[i].length; h++) {
+		row.push(taskcount[i][h][1]);
+	    }
+	    tdatap.push(row);
 	}
-	var settings4 = jQuery.extend(true, {}, widget.graphs.bar);
+	tdatap = Retina.transpose(tdatap);
+	
+	var settings4 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings4.target = document.getElementById('task_graph_pending');
-	settings4.items[4].parameters.width = 20;
-	settings4.data = { "data": tdatap, "rows": tasklabels, "cols": ["pending"], "itemsX": tdatap[0].length, "itemsY": tdatap.length+1, "itemsProd": tdatap[0].length * (tdatap.length+1) };
+	settings4.width = 1200;
+	settings4.data = { "data": tdatap, "rows": RetinaConfig.pipelines, "cols": tasklabels, "itemsX": tasklabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": RetinaConfig.pipelines.length * tasklabels.length };
 	Retina.Renderer.create("svg2", settings4).render();
 
 	// task GB graph s
 	var tdatars = [];
 	for (var i=0; i<template.length; i++) {
-	    tdatars.push([parseInt(taskcount[i][2] / 1000000000)]);
+	    var row = [];
+	    for (var h=1; h<taskcount[i].length; h++) {
+		row.push(parseInt(taskcount[i][h][2] / 1000000000));
+	    }
+	    tdatars.push(row);
 	}
-	var settings5 = jQuery.extend(true, {}, widget.graphs.bar);
+	tdatars = Retina.transpose(tdatars);
+	
+	var settings5 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings5.target = document.getElementById('task_graph_running_GB');
-	settings5.items[4].parameters.width = 20;
-	settings5.data = { "data": tdatars, "rows": tasklabels, "cols": ["running"], "itemsX": tdatars[0].length, "itemsY": tdatars.length+1, "itemsProd": tdatars[0].length * (tdatars.length+1) };
+	settings5.width = 1200;
+	settings5.data = { "data": tdatars, "rows": RetinaConfig.pipelines, "cols": tasklabels, "itemsX": tasklabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": RetinaConfig.pipelines.length * tasklabels.length };
 	Retina.Renderer.create("svg2", settings5).render();
 
 	var tdataps = [];
 	for (var i=0; i<template.length; i++) {
-	    tdataps.push([parseInt(taskcount[i][3] / 1000000000)]);
+	    var row = [];
+	    for (var h=1; h<taskcount[i].length; h++) {
+		row.push(parseInt(taskcount[i][h][3] / 1000000000));
+	    }
+	    tdataps.push(row);
 	}
-	var settings6 = jQuery.extend(true, {}, widget.graphs.bar);
-	settings6.items[4].parameters.width = 20;
+	tdataps = Retina.transpose(tdataps);
+
+	
+	var settings6 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings6.target = document.getElementById('task_graph_pending_GB');
-	settings6.data = { "data": tdataps, "rows": tasklabels, "cols": ["pending"], "itemsX": tdataps[0].length, "itemsY": tdataps.length+1, "itemsProd": tdataps[0].length * (tdataps.length+1) };
+	settings6.width = 1200;
+	settings6.data = { "data": tdataps, "rows": RetinaConfig.pipelines, "cols": tasklabels, "itemsX": tasklabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": RetinaConfig.pipelines.length * tasklabels.length };
 	Retina.Renderer.create("svg2", settings6).render();
 
 	// daygraph
@@ -389,25 +506,51 @@
 	for (var i=0; i<params.startDay; i++) {
 	    days.push(widget.dateString((params.startDay - i - 1) * one_day).substr(0,10));
 	}
+	var daylabels = [];
+	for (var i=0; i<days.length; i++) {
+	    daylabels.push(days[i] + " submitted");
+	    daylabels.push(days[i] + " completed");
+	}
 	var daydata = [];
 	var daycdata = [];
 	for (var i=0; i<days.length; i++) {
-	    daydata.push([ submitted_jobs.hasOwnProperty(days[i]) ? submitted_jobs[days[i]] : 0, completed_jobs.hasOwnProperty(days[i]) ? completed_jobs[days[i]] : 0 ] );
-	    daycdata.push([ submitted_bases.hasOwnProperty(days[i]) ? parseInt(submitted_bases[days[i]] / 1000000000) : 0, completed_bases.hasOwnProperty(days[i]) ? parseInt(completed_bases[days[i]] / 1000000000) : 0 ]);
+	    var rowa1 = [];
+	    var rowb1 = [];
+	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
+		rowa1.push(submitted_jobs.hasOwnProperty(days[i]) ? submitted_jobs[days[i]][h+1] : 0);
+		rowb1.push(submitted_bases.hasOwnProperty(days[i]) ? parseInt(submitted_bases[days[i]][h+1] / 1000000000) : 0);
+	    }
+	    daydata.push(rowa1);
+	    daycdata.push(rowb1);
+	    var rowa2 = [];
+	    var rowb2 = [];
+	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
+		rowa2.push(completed_jobs.hasOwnProperty(days[i]) ? completed_jobs[days[i]][h+1] : 0);
+		rowb2.push(completed_bases.hasOwnProperty(days[i]) ? parseInt(completed_bases[days[i]][h+1] / 1000000000) : 0);
+	    }
+	    daydata.push(rowa2);
+	    daycdata.push(rowb2);
 	}
 
-	var settings7 = jQuery.extend(true, {}, widget.graphs.bar);
-	settings7.items[4].parameters.width = 10;
-	settings7.width = 1200;
+	daydata = Retina.transpose(daydata);
+	daycdata = Retina.transpose(daycdata);
+
+	var settings7 = jQuery.extend(true, {}, widget.graphs.stackedBar);
+	settings7.width = 1800;
+	settings7.items[4].parameters.width = 15;
+	settings7.items[1].parameters.spaceMajor = 25;
+	settings7.items[1].parameters.shift = 70;
 	settings7.target = document.getElementById('day_graph');
-	settings7.data = { "data": daydata, "rows": days, "cols": ["# submitted","# completed"], "itemsX": 2, "itemsY": daydata.length, "itemsProd": 2 * daydata.length };
+	settings7.data = { "data": daydata, "rows": RetinaConfig.pipelines, "cols": daylabels, "itemsX": daylabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": daylabels.length * RetinaConfig.pipelines.length };
 	Retina.Renderer.create("svg2", settings7).render();
 	
-	var settings8 = jQuery.extend(true, {}, widget.graphs.bar);
-	settings8.items[4].parameters.width = 10;
-	settings8.width = 1200;
+	var settings8 = jQuery.extend(true, {}, widget.graphs.stackedBar);
+	settings8.width = 1800;
+	settings8.items[4].parameters.width = 15;
+	settings8.items[1].parameters.spaceMajor = 25;
+	settings8.items[1].parameters.shift = 70;
 	settings8.target = document.getElementById('dayc_graph');
-	settings8.data = { "data": daydata, "rows": days, "cols": ["submitted GB","completed GB"], "itemsX": 2, "itemsY": daycdata.length, "itemsProd": 2 * daycdata.length };
+	settings8.data = { "data": daycdata, "rows": RetinaConfig.pipelines, "cols": daylabels, "itemsX": daylabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": daylabels.length * RetinaConfig.pipelines.length };
 	Retina.Renderer.create("svg2", settings8).render();
     };
 
@@ -421,7 +564,7 @@
 
 	var timestamp = widget.dateString(1000 * 60 * 60 * 24 * 30);
 	var promises = [];
-	var graphs = ['bar'];
+	var graphs = ['bar','stackedBar'];
 	for (var i=0; i<graphs.length; i++) {
 	    var prom = jQuery.Deferred();
 	    promises.push(prom);
