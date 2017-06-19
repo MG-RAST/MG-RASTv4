@@ -385,6 +385,7 @@
 	settings1.items[1].parameters.spaceMajor = 25;
 	settings1.items[1].parameters.shift = 70;
 	settings1.data = { "data": graphData, "rows": RetinaConfig.pipelines, "cols": labels, "itemsX": labels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": labels.length * RetinaConfig.pipelines.length };
+	Retina.Renderer.create("svg2", settings1).render();
 
 	// gauges
 	var gauges = ['day','week','month'];
