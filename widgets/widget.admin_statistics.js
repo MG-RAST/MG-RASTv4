@@ -519,6 +519,11 @@
 	}
 	var daydata = [];
 	var daycdata = [];
+	var rows = jQuery.extend(true, [], RetinaConfig.pipelines);
+	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
+	    rows[i] += ' submitted';
+	    rows.push(RetinaConfig.pipelines[i] + ' completed');
+	}
 	for (var i=0; i<days.length; i++) {
 	    var rowa1 = [];
 	    var rowb1 = [];
@@ -526,10 +531,18 @@
 		rowa1.push(submitted_jobs.hasOwnProperty(days[i]) ? submitted_jobs[days[i]][h+1] : 0);
 		rowb1.push(submitted_bases.hasOwnProperty(days[i]) ? parseInt(submitted_bases[days[i]][h+1] / 1000000000) : 0);
 	    }
+	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
+		rowa1.push(0);
+		rowb1.push(0);
+	    }
 	    daydata.push(rowa1);
 	    daycdata.push(rowb1);
 	    var rowa2 = [];
 	    var rowb2 = [];
+	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
+		rowa2.push(0);
+		rowb2.push(0);
+	    }
 	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
 		rowa2.push(completed_jobs.hasOwnProperty(days[i]) ? completed_jobs[days[i]][h+1] : 0);
 		rowb2.push(completed_bases.hasOwnProperty(days[i]) ? parseInt(completed_bases[days[i]][h+1] / 1000000000) : 0);
@@ -547,7 +560,7 @@
 	settings7.items[1].parameters.spaceMajor = 25;
 	settings7.items[1].parameters.shift = 70;
 	settings7.target = document.getElementById('day_graph');
-	settings7.data = { "data": daydata, "rows": RetinaConfig.pipelines, "cols": daylabels, "itemsX": daylabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": daylabels.length * RetinaConfig.pipelines.length };
+	settings7.data = { "data": daydata, "rows": rows, "cols": daylabels, "itemsX": daylabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": daylabels.length * RetinaConfig.pipelines.length };
 	Retina.Renderer.create("svg2", settings7).render();
 	
 	var settings8 = jQuery.extend(true, {}, widget.graphs.stackedBar);
@@ -556,7 +569,7 @@
 	settings8.items[1].parameters.spaceMajor = 25;
 	settings8.items[1].parameters.shift = 70;
 	settings8.target = document.getElementById('dayc_graph');
-	settings8.data = { "data": daycdata, "rows": RetinaConfig.pipelines, "cols": daylabels, "itemsX": daylabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": daylabels.length * RetinaConfig.pipelines.length };
+	settings8.data = { "data": daycdata, "rows": rows, "cols": daylabels, "itemsX": daylabels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": daylabels.length * RetinaConfig.pipelines.length };
 	Retina.Renderer.create("svg2", settings8).render();
     };
 
