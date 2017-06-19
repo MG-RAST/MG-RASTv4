@@ -377,10 +377,13 @@
 	document.getElementById('graph_target').innerHTML = "";
 
 	graphData = Retina.transpose(graphData);
-
+	
 	var settings1 = jQuery.extend(true, {}, widget.graphs.stackedBar);
 	settings1.target = document.getElementById('graph_target');
 	settings1.width = 1200;
+	settings1.items[4].parameters.width = 15;
+	settings1.items[1].parameters.spaceMajor = 25;
+	settings1.items[1].parameters.shift = 70;
 	settings1.data = { "data": graphData, "rows": RetinaConfig.pipelines, "cols": labels, "itemsX": labels.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": labels.length * RetinaConfig.pipelines.length };
 	Retina.Renderer.create("svg2", settings1).render();
 
@@ -427,11 +430,14 @@
 		slabels.push(i);
 	    }
 	}
-
-	var settings2 = jQuery.extend(true, {}, widget.graphs.stackedBar);
-	settings2.target = document.getElementById('state_graph');
-	settings2.data = { "data": sdata, "rows": RetinaConfig.pipelines, "cols": slabels, "itemsX": sdata.length, "itemsY": RetinaConfig.pipelines.length, "itemsProd": RetinaConfig.pipelines.length * sdata.length };
-	Retina.Renderer.create("svg2", settings2).render();
+	sdata = Retina.transpose(sdata);
+	var table = [ "<table class='table' style='width: 800px;'>" ];
+	table.push('<tr><td></td><th>'+slabels.join('</th><th>')+'</th><tr>');
+	for (var i=0; i<sdata.length; i++) {
+	    table.push('<tr><th>'+RetinaConfig.pipelines[i]+'</th><td>'+sdata[i].join('</td><td>')+'</td></tr>');
+	}
+	table.push('</table>');
+	document.getElementById('state_graph').innerHTML = table.join('');
 	
 	// task graph s
 	var tdatar = [];
