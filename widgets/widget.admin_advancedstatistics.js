@@ -13,6 +13,7 @@
     };
 
     widget.graphs = {};
+    widget.seqtypes = { "Amplicon": true, "MT": true, "WGS": true };
     
     widget.display = function (wparams) {
         var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
@@ -25,7 +26,8 @@
 	    "pipeline": 4,
 	    "priority": 5,
 	    "bpcount": 6,
-	    "tasks": 7
+	    "seqtype": 7,
+	    "tasks": 8
 	};
 	stm.DataStore.taskDataIndex = {
 	    "cmd": 0,
@@ -37,7 +39,8 @@
 	};
 
 	stm.DataStore.pipelines = {};
-
+	widget.pipelines = {};
+	
 	if (wparams && wparams.main) {
 	    widget.main = wparams.main;
 	    widget.sidebar = wparams.sidebar;
@@ -91,14 +94,15 @@
 	    widget.data = { "ctime": {},
 			    "rtime": {},
 			    "numjobs": 0 };
-	    for (var i=0; i<data.length; i+=8) {
+	    for (var i=0; i<data.length; i+=9) {
 		widget.data.numjobs++;
-		var t = data[i+7].split('^');
+		var t = data[i+8].split('^');
 		var tasks = [];
 		for (var h=0; h<t.length; h++) {
 		    tasks.push(t[h].split("|")[0]);
 		}
 		if (! stm.DataStore.pipelines.hasOwnProperty(data[i + 4])) {
+		    widget.pipelines[data[i+4]] = true;
 		    widget.data.ctime[data[i+4]] = { "job": [0,0] };
 		    widget.data.rtime[data[i+4]] = { "job": [0,0] };
 		    for (var h=0; h<tasks.length; h++) {
@@ -129,7 +133,7 @@
 
     widget.loadJobs = function (offset, promise) {
 	jQuery.ajax( { dataType: "json",
-		       url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[0]+"&verbosity=full&offset="+offset+"&state=completed&limit=100",
+		       url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[2]+"&verbosity=full&offset="+offset+"&state=completed&limit=100",
 		       headers: stm.authHeader,
 		       p: promise,
 		       o: offset,
@@ -142,13 +146,14 @@
 			   }
 			   for (var i=0; i<data.data.length; i++) {
 			       var d = data.data[i];
-			       stm.DataStore.jobdata.push(d.id);
+			       stm.DataStore.jobdata.push(d.info.userattr.id);
 			       stm.DataStore.jobdata.push(d.info.submittime);
 			       stm.DataStore.jobdata.push(d.info.startedtime);
 			       stm.DataStore.jobdata.push(d.info.completedtime);
 			       stm.DataStore.jobdata.push(d.info.pipeline);
 			       stm.DataStore.jobdata.push(d.info.priority);
 			       stm.DataStore.jobdata.push(d.info.userattr.bp_count);
+			       stm.DataStore.jobdata.push(d.info.userattr.sequence_type);
 			       var tasks = [];
 			       for (var h=0; h<d.tasks.length; h++) {
 				   var t = d.tasks[h];
@@ -183,51 +188,61 @@
 
 	// prepare the HTML
 	var html = [];
+	var tasks = widget.tasks = stm.DataStore.pipelines[RetinaConfig.pipelines[0]];
+	html.push('<div style="float: left; margin-right: 50px;"><h4>select data</h4><div class="input-prepend"><span class="add-on">display</span><select id="display_select"><option>runtime-size</option><option>computetime-size</option></select></div><br><div class="input-prepend"><span class="add-on" style="width: 45px;">task</span><select style="margin-bottom: 0px;" id="task_select">');
+for (var i=0; i<tasks.length; i++) {
+	    html.push('<option>'+tasks[i]+'</option>');
+	}
+	html.push('</select></div></div>');
 
-	html.push('<div><div class="input-prepend"><span class="add-on">display</span></div><select id="display_select"><option>runtime-size</option><option>computetime-size</option></select></div></div>');
-
-	html.push('<div class="input-prepend"><span class="add-on">pipeline</span><select id="pipeline_select" style="margin-bottom: 0px;" onchange="Retina.WidgetInstances.admin_advancedstatistics[1].updateTasklist();"><option> - select - </option>');
+	html.push('<div style="float: left; margin-right: 50px;"><h4>select cutoffs</h4>');
+	html.push('<div class="input-prepend"><span class="add-on">min size</span><input type="text" id="min_size" value="0" style="width: 100px;"></div><br>');
+	html.push('<div class="input-prepend"><span class="add-on">max size</span><input type="text" id="max_size" value="0" style="width: 100px;"></div><br>');
+	html.push('<div class="input-prepend"><span class="add-on">min time</span><input type="text" id="min_time" value="0" style="width: 100px;"></div><br>');
+	html.push('<div class="input-prepend"><span class="add-on">max time</span><input type="text" id="max_time" value="0" style="width: 100px;"></div>');
+	html.push('</div>');
+	
+	html.push('<div style="float: left; margin-right: 50px;"><h4>select pipelines</h4>');
 
 	var pipelines = Retina.keys(stm.DataStore.pipelines).sort();
 	for (var i=0; i<pipelines.length; i++) {
-	    html.push('<option>'+pipelines[i]+'</option>');
+	    html.push('<div><input type="checkbox" style="margin-top: 0px;" checked="checked" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].pipelines[\''+pipelines[i]+'\']=this.checked;"> '+pipelines[i]+'</div>');
 	}
-	html.push('</select></div><div class="input-prepend"><span class="add-on">task</span><select id="task_select" style="margin-bottom: 0px;"></select></div>');
+	html.push('</div>');
 
-	html.push('<div>');
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><span class="add-on">min size</span><input type="text" id="min_size" value="0" style="width: 100px;"></div>');
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><span class="add-on">max size</span><input type="text" id="max_size" value="0" style="width: 100px;"></div>');
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><span class="add-on">min time</span><input type="text" id="min_time" value="0" style="width: 100px;"></div>');
-	html.push('<div class="input-prepend" style="margin-right: 5px;"><span class="add-on">max time</span><input type="text" id="max_time" value="0" style="width: 100px;"></div>');
+	html.push('<div style="float: left; margin-right: 50px;"><h4>select sequence types</h4>');
+
+	var seqtypes = Retina.keys(widget.seqtypes).sort();
+	for (var i=0; i<seqtypes.length; i++) {
+	    html.push('<div><input type="checkbox" style="margin-top: 0px;" checked="checked" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].seqtypes[\''+seqtypes[i]+'\']=this.checked;"> '+seqtypes[i]+'</div>');
+	}
 	html.push('</div>');
 	
-	html.push('<button class="btn" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].updateGraph();" style="margin-bottom: 10px; margin-left: 20px;">update</button>');
+	html.push('<button class="btn" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].updateGraph();" style="margin-bottom: 10px; margin-left: 20px;">update</button><br><button class="btn" onclick="Retina.WidgetInstances.admin_advancedstatistics[1].resetZoom();" style="margin-bottom: 10px; margin-left: 20px;">reset zoom</button>');
 
 	html.push('<div id="graph" style="margin-top: 50px;"></div>');
 
 	document.getElementById('statistics').innerHTML = html.join("");
     };
 
-    widget.updateTasklist = function () {
+    widget.resetZoom = function () {
 	var widget = this;
 
-	var pipeline = widget.pipeline = document.getElementById('pipeline_select').options[document.getElementById('pipeline_select').selectedIndex].value;
-	var tasks = stm.DataStore.pipelines[pipeline];
-	var html = [];
-	for (var i=0; i<tasks.length; i++) {
-	    html.push('<option>'+tasks[i]+'</option>');
-	}
-	document.getElementById('task_select').innerHTML = html.join("");
-    };
+	document.getElementById('min_size').value = 0;
+	document.getElementById('max_size').value = 0;
+    	document.getElementById('min_time').value = 0;
+    	document.getElementById('max_time').value = 0;
 
+	widget.updateGraph();
+    };
+    
     widget.updateGraph = function () {
 	var widget = this;
 
-	var pipeline = document.getElementById('pipeline_select').options[document.getElementById('pipeline_select').selectedIndex].value;
 	var task = document.getElementById('task_select').options[document.getElementById('task_select').selectedIndex].value;
 	var display = document.getElementById('display_select').options[document.getElementById('display_select').selectedIndex].value;
 	var taskindex;
-	var tasks = stm.DataStore.pipelines[pipeline];
+	var tasks = widget.tasks;
 	for (var i=0; i<tasks.length; i++) {
 	    if (tasks[i] == task) {
 		taskindex = i;
@@ -241,14 +256,28 @@
 	var colors = GooglePalette();
 	var data = stm.DataStore.jobdata;
 	var names = {};
-	var d = { "data": [] };
+	var seqtypes = {};
+	var d = { "data": [], "cols": [], "headers": [] };
 	for (var i=0; i<data.length; i+=8) {
+	    if (! widget.pipelines[data[i+4]]) {
+		continue;
+	    }
+
+	    if (! widget.seqtypes[data[i+7]]) {
+		continue;
+	    }
+	    
 	    if (! names.hasOwnProperty(data[i+4])) {
 		names[data[i+4]] = Retina.keys(names).length;
 		d.data.push({ "name": data[i+4], "points": [] })
+		d.cols.push(data[i+4]);
+	    }
+	    if (! seqtypes.hasOwnProperty(data[i+7])) {
+		seqtypes[data[i+7]] = shapes[Retina.keys(seqtypes).length];
+		d.headers.push({"seqtype": data[i+7]});
 	    }
 	    
-	    var t = data[i+7].split('^')[taskindex].split("|");
+	    var t = data[i+8].split('^')[taskindex].split("|");
 
 	    // check filters
 	    var minsize = parseInt(document.getElementById('min_size').value);
@@ -286,16 +315,33 @@
 		continue;
 	    }
 	    
-	    d.data[names[data[i+4]]].points.push({ "x": x, "y": y, "shape": shapes[names[data[i+4]]], "format": { "fill": colors[names[data[i+4]]], "onclick": "alert('"+data[i]+"');" } });
+	    d.data[names[data[i+4]]].points.push({ "x": x, "y": y, "shape": seqtypes[data[i+7]], "format": { "fill": colors[names[data[i+4]]], "onclick": "window.open('mgmain.html?mgpage=overview&metagenome="+data[i]+"');" } });
 	}
 	
 	var params = jQuery.extend(true, {}, widget.graphs[widget.graphType]);
 	params.target = document.getElementById('graph');
 	params.data = d;
+	params.items[2].parameters.radius = 3;
+	params.dragCallback = widget.zoom;
 
 	Retina.RendererInstances.svg2 = [ Retina.RendererInstances.svg2[0] ];
 	widget.graph = Retina.Renderer.create('svg2', params);
 	widget.graph.render();
+    };
+
+    widget.zoom = function (params) {
+	var widget = Retina.WidgetInstances.admin_advancedstatistics[1];
+
+	if (params.x1 == params.x2 || params.y1 == params.y2) {
+	    return;
+	}
+
+	document.getElementById('min_size').value = parseInt(params.x1);
+	document.getElementById('max_size').value = parseInt(params.x2);
+    	document.getElementById('min_time').value = parseInt(params.y1);
+    	document.getElementById('max_time').value = parseInt(params.y2);
+
+	widget.updateGraph();
     };
 
     widget.timeDifference = function(a, b) {

@@ -20,5 +20,5 @@ var RetinaConfig = {
     "m5nrversion": "1",
     "serverVersion": "4.0",
     "tos": "2",
-    "pipelines": [ 'mgrast-prod-4.0', 'mgrast-prod-4.0.1' ]
+    "pipelines": [ 'mgrast-prod-4.0', 'mgrast-prod-4.0.1', 'mgrast-prod-4.0.2' ]
 };
