@@ -1,6 +1,6 @@
 {
     "name": "graph1",
-    "width": 800,
+    "width": 1200,
     "height": 800,
     "items": [
 	{
@@ -90,6 +90,7 @@
 		"radius": 2,
 		"shiftX": 100,
 		"shiftY": 100,
+		"zoom": true,
 		"format": {
 		    "fill": "white",
 		    "stroke": "black",
@@ -145,6 +146,78 @@
 		"shiftY": 425,
 		"rotation": 90,
 		"data": "time (minutes)"
+	    }
+	},
+	{
+	    "data": "matrix2plotlegend",
+	    "name": "legend",
+	    "type": "shapelegend",
+	    "parameters": {
+		"inputType": "plot",
+		"legendType": "shape",
+		"headerAttribute": "seqtype",
+		"colors": [],
+		"left": 800,
+		"id": "legend",
+		"top": 150,
+		"data": [],
+		"format": {
+		    "fontSize": 12,
+		    "fontFamily": "arial",
+		    "fontWeight": "normal"
+		},
+		"groupSettings": {}
+	    }
+	},
+	{
+	    "data": "matrix2columnlegend",
+	    "name": "legend",
+	    "type": "legend",
+	    "parameters": {
+		"inputType": "plot",
+		"colors": [
+		    "#3366cc",
+		    "#dc3912",
+		    "#ff9900",
+		    "#109618",
+		    "#990099",
+		    "#0099c6",
+		    "#dd4477",
+		    "#66aa00",
+		    "#b82e2e",
+		    "#316395",
+		    "#994499",
+		    "#22aa99",
+		    "#aaaa11",
+		    "#6633cc",
+		    "#e67300",
+		    "#8b0707",
+		    "#651067",
+		    "#329262",
+		    "#5574a6",
+		    "#3b3eac",
+		    "#b77322",
+		    "#16d620",
+		    "#b91383",
+		    "#f4359e",
+		    "#9c5935",
+		    "#a9c413",
+		    "#2a778d",
+		    "#668d1c",
+		    "#bea413",
+		    "#0c5922",
+		    "#743411"
+		],
+		"left": 950,
+		"id": "legend",
+		"top": 150,
+		"data": [],
+		"format": {
+		    "fontSize": 12,
+		    "fontFamily": "arial",
+		    "fontWeight": "normal"
+		},
+		"groupSettings": {}
 	    }
 	}
   ]
