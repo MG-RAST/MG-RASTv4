@@ -1029,6 +1029,9 @@
 	    d.shift();
 	    barcode = 1;
 	    samplename = 0;
+	} else if (! d[0].match(/^[atcg-]+\t.+/i) && d[0].match(/^[^\t]+\t[atcg-]+/i)) {
+	    barcode = 1;
+	    samplename = 0;
 	}
 	
 	var validBarcode = true;
@@ -1037,7 +1040,7 @@
 		continue;
 	    }
 	    var l = d[i].split(/\t/);
-	    if (! (l[barcode].match(/^[atcg]+$/i) && l[samplename].match(/^(\S)+$/))) {
+	    if (! (l[barcode].match(/^[atcg-]+$/i) && l[samplename].match(/^(\S)+$/))) {
 		validBarcode = false;
 		console.log(l);
 		break;
