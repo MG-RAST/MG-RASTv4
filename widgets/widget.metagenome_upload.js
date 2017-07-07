@@ -118,6 +118,7 @@
 								       "calculateMD5": true,
 								       "allowMultiselect": true,
 								       "allowMultiFileUpload": true,
+								       "enableDrag": true,
 								       "customButtons": [ { "title": "download sequence file details",
 											    "id": "inboxDetailsButton",
 											    "image": "Retina/images/info.png",
@@ -163,17 +164,506 @@
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
 	}
     };
-
+    
     widget.mergeMatepairInfo = function () {
-	var widget = this;
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	alert("To join paired end files, select the first file to join in the left window below and click the button 'join paired ends' in the righthand window.");
+	widget.demultiplexInfo();
     };
 
     widget.demultiplexInfo = function () {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	widget.slots = { "barcode": null,
+			 "sequence": null,
+			 "sequence pair": null,
+			 "index": null,
+			 "index pair": null };
+
+	var html = "<div id='slotspace'><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_upload[1].cancelSlots();'>&times;</button></div><div style='border-radius: 5px; border: 1px dashed gray; height: 415px; margin: 30px; text-align: center; font-weight: lighter; font-size: 20px;' id='dropzone' ondragover='Retina.WidgetInstances.metagenome_upload[1].drag(event);' ondragenter='Retina.WidgetInstances.metagenome_upload[1].drag(event);' ondrop='Retina.WidgetInstances.metagenome_upload[1].fileDropped(event);'><p style='margin-top: 195px;'>drag file(s) here</p></div>";
+
+	widget.browser.preserveDetail = true;
+	widget.browser.sections.detailSection.innerHTML = html;
+    };
+
+    widget.drag = function (event) {
+	event.preventDefault();
+    };
+
+    widget.fileDropped = function (ev) {
+	ev.preventDefault();
+	ev.stopPropagation();
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+	var files = ev.dataTransfer.getData('text/plain').split('|');
+	var promises = [];
+	widget.testFiles = [];
+	for (var i=0; i<files.length; i++) {
+	    var url = widget.browser.shockBase + "/node/" + files[i] + "?download_raw&length=10240";
+	    promises.push(jQuery.ajax({ url: url,
+					id: files[i],
+					success: function(data, status, xhr) {
+					    var widget = Retina.WidgetInstances.metagenome_upload[1];
+					    var shock = Retina.WidgetInstances.shockbrowse[1];
+					    var info = {};
+					    for (var h=0; h<shock.data.data.length; h++) {
+						if (shock.data.data[h].id == this.id) {
+						    info = jQuery.extend(true, {}, shock.data.data[h]);
+						    info.type = widget.detectFiletype(info.file.name);
+						    break;
+						}
+					    }
+					    widget.testFiles.push({ "data": data, "info": info });
+					},
+					error: function(jqXHR) {
+					    alert('could not retrieve file');
+					},
+					crossDomain: true,
+					headers: widget.browser.authHeader
+				      }));
+	}
+	jQuery.when.apply(this, promises).then(function() {
+	    Retina.WidgetInstances.metagenome_upload[1].examineFiles();
+	});
+    };
+
+    widget.examineFiles = function () {
 	var widget = this;
 
-	alert("To demultiplex a file, select a barcode file in the left window below.");
+	if (widget.testFiles.length > 5) {
+	    alert('You have selected more than five files. You can have a maximum of two index, one barcode and two sequence files.');
+	    return;
+	}
+
+	for (var i=0; i<widget.testFiles.length; i++) {
+	    var f = widget.testFiles[i];
+	    if (f.info.type.fileType == 'text') {
+		if (widget.slots.barcode) {
+		    if (! confirm("You have already selected a barcode file.\nUse "+f.info.file.name+" instead?")) {
+			continue;
+		    }
+		}
+		widget.slots.barcode = jQuery.extend(true, {}, f);
+	    } else if (f.info.type.fileType == 'sequence') {
+		var lines = f.data.split(/\n/);
+		if (lines.length == 1) {
+		    lines = f.data.split(/\r/);
+		}
+		if (f.info.type.sequenceType == 'fastq') {
+		    var shortLines = 0;
+		    var totLines = 0;
+		    for (var h=0; h<lines.length; h+=4) {
+			totLines++;
+			if (lines[h + 1] && lines[h + 1].length < 40) {
+			    shortLines++;
+			}
+		    }
+		    if (shortLines > 0 && (shortLines + 1) >= totLines) {
+			if (widget.slots.index) {
+			    if (widget.slots['index pair']) {
+				if (! confirm("You have already selected two index files.\nDo you want to replace the second one with "+f.info.file.name+"?")) {
+				    continue;
+				}
+			    }
+			    widget.slots['index pair'] = jQuery.extend(true, {}, f);
+			} else {
+			    widget.slots.index = jQuery.extend(true, {}, f);
+			}
+		    } else {
+			if (widget.slots.sequence) {
+			    if (widget.slots['sequence pair']) {
+				if (! confirm("You have already selected two sequence files.\nDo you want to replace the second one with "+f.info.file.name+"?")) {
+				    continue;
+				}
+			    }
+			    widget.slots['sequence pair'] = jQuery.extend(true, {}, f);
+			} else {
+			    widget.slots.sequence = jQuery.extend(true, {}, f);			    
+			}
+		    }
+		} else if (f.info.type.sequenceType == 'fasta') {
+		    if (widget.slots.sequence) {
+			if (widget.slots['sequence pair']) {
+			    if (! confirm("You have already selected two sequence files.\nDo you want to replace the second one with "+f.info.file.name+"?")) {
+				continue;
+			    }
+			}
+			widget.slots['sequence pair'] = jQuery.extend(true, {}, f);
+		    } else {
+			widget.slots.sequence = jQuery.extend(true, {}, f);			    
+		    }
+		}
+	    }
+	}
+
+	widget.updateSlotspace();
+    };
+
+    widget.cancelSlots = function () {
+	var widget = this;
+
+	widget.slots = { "barcode": null,
+			 "sequence": null,
+			 "sequence pair": null,
+			 "index": null,
+			 "index pair": null };
+	widget.browser.preserveDetail = false;
+	widget.browser.selectedFiles = [];
+	widget.browser.sections.detailSection.innerHTML = "";
+    };
+
+    widget.updateSlotspace = function () {
+	var widget = this;
+
+	var title = "&nbsp;";
+	if (widget.slots.barcode || widget.slots.index) {
+	    title += "demultiplex";
+	}
+	if (widget.slots['sequence pair']) {
+	    if (widget.slots.barcode || widget.slots.index) {
+		title += " & ";
+	    }
+	    title += "join paired ends";
+	}
+	
+	var html = ['<h4 style="margin-top: 0px;">'+title+'<button class="btn btn-mini btn-danger pull-right" onclick="Retina.WidgetInstances.metagenome_upload[1].cancelSlots();">&times;</button></h4>'];
+
+	var slots = Retina.keys(widget.slots).sort();
+	for (var i=0; i<slots.length; i++) {
+	    if (widget.slots[slots[i]]) {
+		html.push('<div style="display: inline-block; width: 125px;">'+slots[i]+'</div><div style="display: inline-block; width: 250px; height: 22px; border: 1px inset gray; background-color: white; margin-left: 10px; padding-left: 3px; cursor: pointer;">'+widget.slots[slots[i]].info.file.name+'</div><button class="btn btn-mini btn-danger pull-right" onclick="Retina.WidgetInstances.metagenome_upload[1].slots[\''+slots[i]+'\']=null;Retina.WidgetInstances.metagenome_upload[1].updateSlotspace();">&times;</button><div style="clear: both; height: 5px;"></div>');
+	    }
+	}
+
+	// check if we have a valid action yet
+	var info = "";
+	var valid = false;
+	if (! widget.slots.barcode && ! widget.slots.index && ! widget.slots['index pair']) {
+	    if (widget.slots.sequence || widget.slots['sequence pair']) {
+		if (widget.slots['sequence pair'] && widget.slots.sequence) {
+		    valid = true;
+		} else {
+		    info = "select a second sequence file to join paired ends";
+		}
+	    }
+	} else {
+	    if (! widget.slots.barcode) {
+		info = "select a barcode file to demultiplex";
+	    } else if (! widget.slots.sequence && ! widget.slots['sequence pair']) {
+		info = "select a sequence file to demultiplex";
+	    } else {
+		var barcodes = {};
+		var barcodes_reverse = {};
+		if (widget.slots.barcode) {
+		    var barcode = widget.validateBarcode(widget.slots.barcode.data);
+		    var samples = Retina.keys(barcode.barcodes);
+		    for (var i=0; i<samples.length; i++) {
+			barcodes[barcode.barcodes[samples[i]]] = true;
+			barcodes_reverse[Retina.reverseComplement(barcode.barcodes[samples[i]])] = true;
+		    }
+		}
+		if (widget.slots.index || widget.slots['index pair']) {
+		    // check if index files match the sequence files
+		    var idsa = {};
+		    var idsb = {};
+		    
+		    var codesa = 0;
+		    var codesar = 0;
+		    var codesb = 0;
+		    var codesbr = 0;
+		    
+		    var matchaa = 0;
+		    var matchab = 0;
+		    var matchba = 0;
+		    var matchbb = 0;
+
+		    var amatch = null;
+		    var bmatch = null;
+		    
+		    if (widget.slots.index) {
+			var lines = widget.slots.index.data.split(/\n/);
+			if (! lines.length > 1) {
+			    lines = widget.slots.index.data.split(/\r/);
+			}
+			for (var i=0; i<lines.length; i+=4) {
+			    if (lines[i]) {
+				idsa[lines[i].split(/\s/)[0]] = true;
+			    }
+			    if (lines[i+1]) {
+				if (barcodes[lines[i+1]]) {
+				    codesa++;
+				} else if (barcodes_reverse[lines[i+1]]) {
+				    codesar++;
+				}
+			    }
+			}
+			if (codesa > 0) {
+			    valid = true;
+			    if (codesa > codesar) {
+				widget.slots.sequence.isreverse = true;
+			    }
+			} else if (codesar) {
+			    valid = true;
+			    widget.slots.sequence.isreverse = true;
+			} else {
+			    valid = false;
+			    info = "the index file "+widget.slots.index.info.file.name+" has no sequence matches to the barcode file";
+			}
+
+		    }
+		    if (widget.slots['index pair']) {
+			var lines = widget.slots['index pair'].data.split(/\n/);
+			if (! lines.length > 1) {
+			    lines = widget.slots['index pair'].data.split(/\r/);
+			}
+			for (var i=0; i<lines.length; i+=4) {
+			    if (lines[i]) {
+				idsb[lines[i].split(/\s/)[0]] = true;
+			    }
+			    if (lines[i+1]) {
+				if (barcodes[lines[i+1]]) {
+				    codesb++;
+				} else if (barcodes_reverse[lines[i+1]]) {
+				    codesbr++;
+				}
+			    }
+			}
+			if (codesb > 0) {
+			    valid = true;
+			    if (codesb > codesbr) {
+				widget.slots['sequence pair'].isreverse = true;
+			    }
+			} else if (codesbr) {
+			    valid = true;
+			    widget.slots['sequence pair'].isreverse = true;
+			} else {
+			    valid = false;
+			    info = "the index file "+widget.slots['index pair'].info.file.name+" has no sequence matches to the barcode file";
+			}
+		    }
+		    if (widget.slots.sequence) {
+			var lines = widget.slots.sequence.data.split(/\n/);
+			if (! lines.length > 1) {
+			    lines = widget.slots.sequence.data.split(/\r/);
+			}
+			for (var i=0; i<lines.length; i+=4) {
+			    if (lines[i]) {
+				if (idsa[lines[i].split(/\s/)[0]]) { matchaa++; }
+				if (idsb[lines[i].split(/\s/)[0]]) { matchab++; }
+			    }
+			}
+			if (matchaa > 0) {
+			    if (matchab > matchaa) {
+				widget.slots.sequence.matches = 2;
+			    } else {
+				widget.slots.sequence.matches = 1;
+			    }
+			} else if (matchab > 0) {
+			    widget.slots.sequence.matches = 2;
+			} else {
+			    valid = false;
+			    info = "the ids in the index file"+(widget.slots.sequence && widget.slots['sequence pair'] ? "s" : "")+" do not match the ids in the sequence file "+widget.slots.sequence.info.file.name;
+			}
+		    }
+		    if (widget.slots['sequence pair']) {
+			var lines = widget.slots['sequence pair'].data.split(/\n/);
+			if (! lines.length > 1) {
+			    lines = widget.slots['sequence pair'].data.split(/\r/);
+			}
+			for (var i=0; i<lines.length; i+=4) {
+			    if (lines[i]) {
+				if (idsa[lines[i].split(/\s/)[0]]) { matchba++; }
+				if (idsb[lines[i].split(/\s/)[0]]) { matchbb++; }
+			    }
+			}
+			if (matchba > 0) {
+			    if (matchbb > matchba) {
+				widget.slots['sequence pair'].matches = 2;
+			    } else {
+				widget.slots['sequence pair'].matches = 1;
+			    }
+			} else if (matchbb > 0) {
+			    widget.slots['sequence pair'].matches = 2;
+			} else {
+			    valid = false;
+			    info = "the ids in the index file"+(widget.slots.sequence && widget.slots['sequence pair'] ? "s" : "")+" do not match the ids in the sequence file "+widget.slots['sequence pair'].info.file.name;
+			}
+		    }
+		} else {
+		    if (widget.slots.sequence) {
+			var retval = widget.checkBarcodes(widget.slots.sequence.data, barcodes, barcodes_reverse);
+			if (retval.valid) {
+			    valid = true;
+			    if (retval.reverse) {
+				widget.slots.sequence.isreverse = true;
+			    }
+			} else {
+			    valid = false;
+			    slot1 = "invalid";
+			    info = "the barcodes in "+widget.slots.barcode.info.file.name+" do not match the sequence file "+widget.slots.sequence.info.file.name;
+			}
+		    }
+		    if (widget.slots['sequence pair'] && slot1 != "invalid") {
+			var retval = widget.checkBarcodes(widget.slots.sequence.data, barcodes, barcode_reverse);
+			if (retval.valid) {
+			    valid = true;
+			    if (retval.reverse) {
+				widget.slots['sequence pair'].isreverse = true;
+			    }
+			} else {
+			    valid = false;
+			    info = "the barcodes in "+widget.slots.barcode.info.file.name+" do not match the sequence file "+widget.slots['sequence pair'].info.file.name;
+			}
+		    }
+		}
+	    }
+	}
+	if (widget.slots.sequence && widget.slots['sequence pair']) {
+	    html.push('<div><input type="checkbox" id="retain" style="margin-top: 0px; vertical-align: middle;"> retain non-joined sequences</div>');
+	}
+	if (info.length) {
+	    info = '<div class="alert alert-info" style="margin-bottom: 5px;">'+info+'</div>';
+	}
+	html.push('<div style="clear: both; height: 5px;"></div>')
+	if (valid) {
+	    html.push('<button class="btn btn-success pull right" onclick="Retina.WidgetInstances.metagenome_upload[1].submitSlots();">start</button>');
+	} else {
+	    html.push(info+'<button class="btn btn-success pull-right" disabled>start</button>');
+	}
+	html.push('<div style="clear: both; height: 5px;"></div>')
+
+	var s = document.getElementById('slotspace');
+	s.innerHTML = html.join("");
+	jQuery(s).css('height', '250px');
+	jQuery(s).css('margin-bottom', '15px');
+	jQuery(s).css('padding', '10px');
+	var d = document.getElementById('dropzone');
+	jQuery(d).css('height', '150px');
+	jQuery(d.firstChild).css('margin-top', '65px');
+    };
+
+    widget.checkBarcodes = function (data, barcodes, barcodes_reverse) {
+	var widget = this;
+
+	var d;
+	if (data.match(/\n/)) {
+	    d = data.split(/\n/);
+	} else {
+	    d = data.split(/\r/);
+	}
+
+	var bclen = Retina.keys(barcodes)[0].length;
+	var fasta = d[0].charAt(0) == ">" ? true : false;
+	var valid = false;
+	var rev = 0;
+	var forward = 0;
+	for (var i=0; i<d.length; i++) {
+	    if (d[i + 1]) {
+		var seq = d[i+1].substring(0,bclen);
+		if (barcodes[seq]) {
+		    valid = true;
+		    forward++;
+		} else if (barcodes_reverse[seq]) {
+		    valid = true;
+		    rev++;
+		}
+	    }
+	    if (fasta) {
+		while (d[i+1] && ! d[i + 1].match(/^>/)) {
+		    i++;
+		}
+	    } else {
+		i+=3;
+	    }
+	}
+	var reverse = rev > forward ? true : false;
+
+	return { "valid": valid, "reverse": reverse };
+    };
+
+    widget.submitSlots = function () {
+	var widget = this;
+
+	var url = RetinaConfig.mgrast_api+'/inbox/';
+	var d = { };
+	if ((widget.slots.sequence && widget.slots.sequence.isreverse) || (widget.slots['sequence pair'] && widget.slots['sequence pair'].isreverse)) {
+	    d.rc_index = true;
+	}
+	if (widget.slots.barcode) {
+	    d.barcode_file = widget.slots.barcode.info.id;
+	}
+	if (widget.slots.sequence && widget.slots['sequence pair']) {
+	    if (document.getElementById('retain').checked) {
+		d.retain = true;
+	    }
+	    d.pair_file_1 = widget.slots.sequence.info.id;
+	    d.pair_file_2 = widget.slots['sequence pair'].info.id;
+	    var fn1 = widget.slots.sequence.info.file.name;
+	    var fn2 = widget.slots['sequence pair'].info.file.name;
+	    var fn = "";
+	    for (var i=0; i<fn1.length; i++) {
+		if (fn1.charAt(i) == fn2.charAt(i)) {
+		    fn += fn1.charAt(i);
+		} else {
+		    break;
+		}
+	    }
+	    if (fn.length == 0) {
+		fn = fn1;
+	    } else {
+		fn += ".fastq";
+	    }
+	    d.output = fn;
+	    if (widget.slots.barcode) {
+		url += 'pairjoin_demultiplex';
+	    } else {
+		url += 'pairjoin';
+	    }
+	    if (widget.slots.index) {
+		d.index_file = widget.slots.index.info.id;
+	    }
+	    if (widget.slots['index pair']) {
+		if (widget.slots.index) {
+		    d.index_file_2 = widget.slots['index pair'].info.id;
+		} else {
+		    d.index_file = widget.slots['index pair'].info.id;
+		}
+	    }
+	} else {
+	    url += 'demultiplex';
+	    if (widget.slots.sequence) {
+		d.seq_file = widget.slots.sequence.info.id;
+	    } else {
+		d.seq_file = widget.slots['sequence pair'].info.id;
+	    }
+	    if (widget.slots.index) {
+		d.index_file = widget.slots.index.info.id;
+	    }
+	    if (widget.slots['index pair']) {
+		d.index_file = widget.slots['index pair'].info.id;
+	    }
+	}
+
+	jQuery.ajax(url, {
+	    data: d,
+	    success: function(data){
+		var widget = Retina.WidgetInstances.metagenome_upload[1];
+		widget.browser.preserveDetail = false;
+		widget.browser.sections.detailSection.innerHTML = '<div class="alert alert-success" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">action submitted successfully</div>';
+		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
+	    },
+	    error: function(jqXHR, error){
+		var widget = Retina.WidgetInstances.metagenome_upload[1];
+		widget.browser.preserveDetail = false;
+		widget.browser.sections.detailSection.innerHTML = '<div class="alert alert-error" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">action failed</div>';
+		console.log(error);
+		console.log(jqXHR);
+	    },
+	    crossDomain: true,
+	    headers: stm.authHeader,
+	    type: "POST"
+	});
+
+	widget.browser.sections.detailSection.innerHTML = '<div class="alert alert-info" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">submitting request... <img src="Retina/images/waiting.gif" style="width: 16px;"></div>';
     };
 
     // do some convenience checks before the file is uploaded
@@ -1029,6 +1519,9 @@
 	    d.shift();
 	    barcode = 1;
 	    samplename = 0;
+	} else if (! d[0].match(/^[atcg-]+\t.+/i) && d[0].match(/^[^\t]+\t[atcg-]+/i)) {
+	    barcode = 1;
+	    samplename = 0;
 	}
 	
 	var validBarcode = true;
@@ -1037,16 +1530,19 @@
 		continue;
 	    }
 	    var l = d[i].split(/\t/);
-	    if (! (l[barcode].match(/^[atcg]+$/i) && l[samplename].match(/^(\S)+$/))) {
+	    if (! (l[barcode].match(/^[atcg-]+$/i) && l[samplename].match(/^(\S)+$/))) {
 		validBarcode = false;
 		console.log(l);
 		break;
 	    } else {
-		barcodes[l[samplename]] = l[barcode];
+		var bc = l[barcode].split(/-/);
+		for (var h=0; h<bc.length; h++) {
+		    barcodes[l[samplename]] = bc[h];
+		}
 	    }
 	}
 
-	return { "valid": validBarcode, "barcodes": barcodes };
+	return { "valid": validBarcode, "barcodes": barcodes, "numcodes": d.length, "type": d[barcode].indexOf('-') > -1 ? "double" : "single" };
     };
     
 })();
