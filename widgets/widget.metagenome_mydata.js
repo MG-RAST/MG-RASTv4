@@ -70,14 +70,6 @@
 	    
 	    container.innerHTML = html.join("\n");
 	    
-	    // keybind for searchbox
-	    document.getElementById('searchtext').addEventListener("keypress", function(event){
-		event=event || window.event;
-		if(event.keyCode=='13') {
-		    document.getElementById('searchbutton').click();
-		}
-	    });
-	    
 	    for (var i=0; i<order.length; i++) {
 		if (order[i].active) {
 		    document.getElementById(order[i].name+'Section').className = "box";
