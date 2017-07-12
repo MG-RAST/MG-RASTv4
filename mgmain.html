@@ -80,6 +80,11 @@
     	<!-- session management -->
     	<span id="session_space" style="float: right; margin-right: 10px;"></span>
       </div>
+
+      <!-- search space -->
+      <div class="input-append pull-right" style="margin-top: 7px; width: 250px; margin-right: 10px;" id="headerSearch">
+	<input type="text" class="search" style="padding-left: 10px;border-radius: 14px 0 0 14px; width: 144px;" placeholder="search string" id="searchtext1" onkeypress="if(event.keyCode==13){this.nextSibling.click();}"><button class="btn search-button" style="border-radius: 0 14px 14px 0;" onclick="search(document.getElementById('searchtext1').value);">search <img src="Retina/images/search.png" style="width: 16px; position: relative; bottom 2px;"></button>
+      </div>
     </div>
 
     <div style="height: 80px;" class="visible-desktop"></div>
