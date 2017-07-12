@@ -119,10 +119,12 @@
 								       "allowMultiselect": true,
 								       "allowMultiFileUpload": true,
 								       "enableDrag": true,
-								       "customButtons": [ { "title": "download sequence file details",
+								       "requireLogin": true,
+								       "initialLoadCallback": widget.browserLoaded,
+								       "customButtons": [ { "title": "show inbox information",
 											    "id": "inboxDetailsButton",
 											    "image": "Retina/images/info.png",
-											    "callback": widget.downloadInboxDetails },
+											    "callback": widget.browserLoaded },
 											  { "title": "join paired ends",
 											    "id": "mergeMatepairsInfoButton",
 											    "image": "Retina/images/merge.png",
@@ -131,8 +133,7 @@
 											    "id": "demultiplexInfoButton",
 											    "image": "Retina/images/tree_rtl.png",
 											    "callback": widget.demultiplexInfo }],
-	    							       "user": stm.user,
-								       "fileSectionColumns": [
+	    							       "fileSectionColumns": [
 									   { "path": "file.name", "name": "Name", "width": "75%", "type": "file", "sortable": true },
 									   { "path": "attributes.data_type", "name": "Type", "width": "25%", "sortable": true }
 								       ],
@@ -164,31 +165,46 @@
 	    content.innerHTML = "<div class='alert alert-info' style='width: 500px;'>You must be logged in to upload data.</div>";
 	}
     };
+
+    widget.browserLoaded = function () {
+	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	return;
+
+	var html = '<div style="padding-left: 10px;"><h3 style="margin: 0px;">Welcome to your inbox</h3><ul><li style="margin-top: 10px; margin-bottom: 10px;">click the upload <img src="Retina/images/upload.png" style="width: 16px;"> button above to upload files</li><li style="margin-top: 10px; margin-bottom: 10px;">click a file on the left for details and options</li><li style="margin-top: 10px; margin-bottom: 10px;">click <img src="Retina/images/merge.png" style="width: 16px;"> or <img src="Retina/images/tree_rtl.png" style="width: 16px;"> above to join paired ends / demultiplex</li></ul></div>';
+	
+	widget.browser.sections.detailSectionContent.innerHTML = html;
+	widget.browser.preserveDetail = false;
+    };
     
     widget.mergeMatepairInfo = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	alert('please select a sequence file, then click the "join paired ends" button in the righthand window');
+	alert('select a sequence file on the left then click "join paired ends" on the right');
 	return;
+	
 	widget.demultiplexInfo();
     };
 
     widget.demultiplexInfo = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	alert('please select a sequence file, then click the "demultiplex" button in the righthand window');
+	alert('select a sequence file on the left then click "demultiplex" on the right');
 	return;
-
+	
 	widget.slots = { "barcode": null,
 			 "sequence": null,
 			 "sequence pair": null,
 			 "index": null,
 			 "index pair": null };
 
-	var html = "<div id='slotspace'><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_upload[1].cancelSlots();'>&times;</button></div><div style='border-radius: 5px; border: 1px dashed gray; height: 415px; margin: 30px; text-align: center; font-weight: lighter; font-size: 20px;' id='dropzone' ondragover='Retina.WidgetInstances.metagenome_upload[1].drag(event);' ondragenter='Retina.WidgetInstances.metagenome_upload[1].drag(event);' ondrop='Retina.WidgetInstances.metagenome_upload[1].fileDropped(event);'><p style='margin-top: 195px;'>drag file(s) here</p></div>";
+	widget.fileIds = {};
+
+	var html = "<div id='slotspace'><button class='btn btn-mini btn-danger pull-right' onclick='Retina.WidgetInstances.metagenome_upload[1].cancelSlots();'>&times;</button></div><div style='border-radius: 5px; border: 1px dashed gray; height: 415px; margin: 30px; text-align: center; font-weight: lighter; font-size: 20px;' id='dropzone' ondragover='Retina.WidgetInstances.metagenome_upload[1].drag(event);' ondragenter='Retina.WidgetInstances.metagenome_upload[1].drag(event);' ondrop='Retina.WidgetInstances.metagenome_upload[1].fileDropped(event);'><p style='margin-top: 195px;'>drag file(s) here<br>to<br>demultiplex<br>or<br>join paired ends</p></div>";
 
 	widget.browser.preserveDetail = true;
-	widget.browser.sections.detailSection.innerHTML = html;
+	widget.browser.sections.detailSectionContent.innerHTML = html;
+	widget.updateSlotspace();
     };
 
     widget.drag = function (event) {
@@ -241,6 +257,12 @@
 
 	for (var i=0; i<widget.testFiles.length; i++) {
 	    var f = widget.testFiles[i];
+	    if (widget.fileIds[f.info.id]) {
+		alert(f.info.file.name+ ' has already been selected, skipping');
+		continue;
+	    } else {
+		widget.fileIds[f.info.id] = true;
+	    }
 	    if (f.info.type.fileType == 'text') {
 		if (widget.slots.barcode) {
 		    if (! confirm("You have already selected a barcode file.\nUse "+f.info.file.name+" instead?")) {
@@ -311,21 +333,24 @@
 			 "sequence pair": null,
 			 "index": null,
 			 "index pair": null };
+	widget.fileIds = {};
 	widget.browser.preserveDetail = false;
 	widget.browser.selectedFiles = [];
-	widget.browser.sections.detailSection.innerHTML = "";
+	widget.browser.sections.detailSectionContent.innerHTML = "";
     };
 
     widget.updateSlotspace = function () {
 	var widget = this;
 
-	var title = "&nbsp;";
+	var title = "drag files to start";
 	if (widget.slots.barcode || widget.slots.index) {
-	    title += "demultiplex";
+	    title = "demultiplex";
 	}
 	if (widget.slots['sequence pair']) {
 	    if (widget.slots.barcode || widget.slots.index) {
 		title += " & ";
+	    } else {
+		title = "";
 	    }
 	    title += "join paired ends";
 	}
@@ -336,6 +361,8 @@
 	for (var i=0; i<slots.length; i++) {
 	    if (widget.slots[slots[i]]) {
 		html.push('<div style="display: inline-block; width: 125px;">'+slots[i]+'</div><div style="display: inline-block; width: 250px; height: 22px; border: 1px inset gray; background-color: white; margin-left: 10px; padding-left: 3px; cursor: pointer;">'+widget.slots[slots[i]].info.file.name+'</div><button class="btn btn-mini btn-danger pull-right" onclick="Retina.WidgetInstances.metagenome_upload[1].slots[\''+slots[i]+'\']=null;Retina.WidgetInstances.metagenome_upload[1].updateSlotspace();">&times;</button><div style="clear: both; height: 5px;"></div>');
+	    } else {
+		html.push('<div style="display: inline-block; width: 125px; color: gray;">'+slots[i]+'</div><div style="display: inline-block; width: 250px; height: 22px; border: 1px inset gray; background-color: white; margin-left: 10px; padding-left: 3px; cursor: pointer; color: gray;"><i>- no file selected -</i></div></div>');
 	    }
 	}
 
@@ -530,7 +557,7 @@
 	}
 	html.push('<div style="clear: both; height: 5px;"></div>')
 	if (valid) {
-	    html.push('<button class="btn btn-success pull right" onclick="Retina.WidgetInstances.metagenome_upload[1].submitSlots();">start</button>');
+	    html.push('<button class="btn btn-success pull-right" onclick="Retina.WidgetInstances.metagenome_upload[1].submitSlots();">start</button>');
 	} else {
 	    html.push(info+'<button class="btn btn-success pull-right" disabled>start</button>');
 	}
@@ -543,7 +570,7 @@
 	jQuery(s).css('padding', '10px');
 	var d = document.getElementById('dropzone');
 	jQuery(d).css('height', '150px');
-	jQuery(d.firstChild).css('margin-top', '65px');
+	jQuery(d.firstChild).css('margin-top', '25px');
     };
 
     widget.checkBarcodes = function (data, barcodes, barcodes_reverse) {
@@ -653,13 +680,13 @@
 	    success: function(data){
 		var widget = Retina.WidgetInstances.metagenome_upload[1];
 		widget.browser.preserveDetail = false;
-		widget.browser.sections.detailSection.innerHTML = '<div class="alert alert-success" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">action submitted successfully</div>';
+		widget.browser.sections.detailSectionContent.innerHTML = '<div class="alert alert-success" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">action submitted successfully</div>';
 		Retina.WidgetInstances.metagenome_upload[1].getRunningInboxActions();
 	    },
 	    error: function(jqXHR, error){
 		var widget = Retina.WidgetInstances.metagenome_upload[1];
 		widget.browser.preserveDetail = false;
-		widget.browser.sections.detailSection.innerHTML = '<div class="alert alert-error" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">action failed</div>';
+		widget.browser.sections.detailSectionContent.innerHTML = '<div class="alert alert-error" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">action failed</div>';
 		console.log(error);
 		console.log(jqXHR);
 	    },
@@ -668,7 +695,7 @@
 	    type: "POST"
 	});
 
-	widget.browser.sections.detailSection.innerHTML = '<div class="alert alert-info" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">submitting request... <img src="Retina/images/waiting.gif" style="width: 16px;"></div>';
+	widget.browser.sections.detailSectionContent.innerHTML = '<div class="alert alert-info" style="margin-top: 20px; margin-left: 15px; margin-right: 15px;">submitting request... <img src="Retina/images/waiting.gif" style="width: 16px;"></div>';
     };
 
     // do some convenience checks before the file is uploaded
