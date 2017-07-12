@@ -100,7 +100,13 @@ function showNews (result) {
 };
 
 function search (term) {
-    if (term.match(/^mgp\d+$/)) {
+    if (term.toLowerCase() == 'webkey') {
+	if (stm.user) {
+	    alert('Your current webkey is:\n\n'+stm.user.token);
+	} else {
+	    alert('you must log in to view your webkey');
+	}
+    } else if (term.match(/^mgp\d+$/)) {
 	window.location = 'mgmain.html?mgpage=project&project='+term;
     } else if (term.match(/^mgm\d+\.\d+$/)) {
 	window.location = 'mgmain.html?mgpage=overview&metagenome='+term;
