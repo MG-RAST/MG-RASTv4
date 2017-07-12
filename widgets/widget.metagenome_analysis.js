@@ -163,7 +163,7 @@
 
 	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='scalable vector graphic'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='portable network graphic'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='tab separated data'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"csv\");' title='tab separated data'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>CSV</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom\");' title='one biom file per dataset with abundance and e-value'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom_abu\");' title='biom file containing all datasets and abundance only'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom hits only</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\")){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
@@ -2810,14 +2810,14 @@
 	    } else {
 		alert('this feature is not available for this view');
 	    }
-	} else if (type == 'tsv') {
+	} else if (type == 'csv') {
 	    var exportData = widget.container2table(null,true);
 	    var exportString = [];
 	    exportString.push(exportData.header.join("\t"));
 	    for (var i=0; i<exportData.data.length; i++) {
 		exportString.push(exportData.data[i].join("\t"));
 	    }
-	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".tsv");
+	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".csv");
 	    return;
 	} else if (type == 'shock') {
 	    if (stm.user) {

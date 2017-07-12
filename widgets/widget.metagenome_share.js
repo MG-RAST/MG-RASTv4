@@ -505,7 +505,7 @@
 	if (! widget.hasOwnProperty('ebi_biomes')) {
 	    var p1 = jQuery.Deferred();
 	    promises.push(p1);
-	    jQuery.get('data/ebi.tsv').complete(function (xhr) {
+	    jQuery.get('data/ebi.csv').complete(function (xhr) {
 		var data = xhr.responseText;
 		var rows = data.split(/\n/).sort(function (a, b) {
 		    return a.toLowerCase().localeCompare(b.toLowerCase());

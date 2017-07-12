@@ -492,6 +492,8 @@
 	    document.getElementById('result_text').innerHTML = "Your search returned "+total_count.formatString()+" results. Showing "+showing+" <button class='btn btn-mini' onclick='Retina.WidgetInstances.metagenome_search[1].downloadResults()' style='position: relative; bottom: 3px; margin-left: 10px;'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download search results</button>";
 	}
 
+	widget.showing = showing + " ("+total_count+" total)";
+
 	var html = [];
 
 	html.push('<div class="dropdown" style="position: relative; right: 30px;"><a class="dropdown-toggle btn btn-mini" data-toggle="dropdown" href="#"><img src="Retina/images/settings3.png" style="height: 12px;"></a><ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" style="font-size: 12px;">');
@@ -576,6 +578,24 @@
 	}
 	data = data.sort(Retina.propSort(widget.sort, widget.sortDir == 'asc' ? false : true));
 	var exportData = [];
+	var user = "";
+	if (stm.user) {
+	    user = " by "+stm.user.firstname+" "+stm.user.lastname;
+	}
+	var currDate = new Date().toString();
+	var query_str = widget.query ? " searching all fields for \""+widget.query +"\"" : "";
+	var adv = [];
+	for (var h in widget.advancedOptions) {
+	    if (widget.advancedOptions.hasOwnProperty(h)) {
+		adv.push(h +" - "+widget.parseSearchTerms(widget.advancedOptions[h]));
+	    }
+	}
+	if (adv.length) {
+	    adv = " searchfields: "+adv.join(", ");
+	} else {
+	    adv = "";
+	}
+	exportData.push("Search performed "+currDate+user+query_str+adv+" "+widget.showing);
 	var fields = Retina.keys(data[0]).sort();
 	exportData.push(fields.join("\t"));
 	for (var i=0; i<data.length; i++) {
