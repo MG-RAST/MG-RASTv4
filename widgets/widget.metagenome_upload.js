@@ -168,11 +168,16 @@
     widget.mergeMatepairInfo = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
+	alert('please select a sequence file, then click the "join paired ends" button in the righthand window');
+	return;
 	widget.demultiplexInfo();
     };
 
     widget.demultiplexInfo = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
+
+	alert('please select a sequence file, then click the "demultiplex" button in the righthand window');
+	return;
 
 	widget.slots = { "barcode": null,
 			 "sequence": null,
