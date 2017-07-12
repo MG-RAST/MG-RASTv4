@@ -55,7 +55,6 @@
 	    var row = [ "<a href='?mgpage=project&project="+p.id+"'>"+p.name+"</a>", p.description, p.metagenomes.length || "0", p.pi, p.metadata.hasOwnProperty('PI_organization') ? p.metadata.PI_organization : "-", p.funding_source, p.id ];
 	    rows.push(row);
 	}
-	console.log(widget.data);
 	
 	Retina.Renderer.create("table", {
 	    target: document.getElementById('projectsDiv'),
@@ -64,6 +63,8 @@
 	    sort_autodetect: true,
 	    synchronous: true,
 	    sort: "name",
+	    show_export: true,
+	    export_filename: "projects.csv",
 	    minwidths: [125, 125, 80, 125, 125, 90, 80],
 	    data: { data: rows, header: [ "name", "description", "# mgs", "PI", "organization", "funding", "ID" ] }
 	}).render();
