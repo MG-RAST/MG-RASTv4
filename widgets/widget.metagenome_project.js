@@ -171,6 +171,7 @@
 		synchronous: true,
 		sort: "name",
 		show_export: true,
+		export_filename: widget.id+".csv",
 		invisible_columns: invis,
 		minwidths: [125,175,105,110,85,95,95,95,95,95,100,95,120,70,90,110],
 		data: { data: rows, header: [ "MG-RAST ID", "name", "bp count", "seq. count", "biome", "feature", "material", "sample", "library", "ENA", "location", "country", "coordinates", "type", "method", "download" ] }

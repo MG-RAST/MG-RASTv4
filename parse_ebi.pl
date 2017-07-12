@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-open(FO, ">data/ebi.tsv") or die "could not open output file: $@\n";
+open(FO, ">data/ebi.csv") or die "could not open output file: $@\n";
 
 # host associated
 open(FH, "<data/410656.xml") or die "could not open data/410656.xml: $@\n";
