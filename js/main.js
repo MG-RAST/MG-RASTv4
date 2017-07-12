@@ -77,6 +77,10 @@ function initWebApp () {
 		showNews(data);
 	    });
 	}
+
+	if (page == 'search') {
+	    document.getElementById('headerSearch').style.display = 'none';
+	}
     });
 };
 
@@ -95,3 +99,12 @@ function showNews (result) {
     document.getElementById("newsfeed").innerHTML = html;
 };
 
+function search (term) {
+    if (term.match(/^mgp\d+$/)) {
+	window.location = 'mgmain.html?mgpage=project&project='+term;
+    } else if (term.match(/^mgm\d+\.\d+$/)) {
+	window.location = 'mgmain.html?mgpage=overview&metagenome='+term;
+    } else {
+	window.location = 'mgmain.html?mgpage=search&search='+term;
+    }
+};
