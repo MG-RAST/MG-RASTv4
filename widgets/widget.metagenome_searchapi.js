@@ -222,8 +222,7 @@
     widget.keylist = [
 	{ "name": "Project",
 	  "items": [
-	      { "name": "all", "value": "all", "selected": true },
- 	      { "name": "created_on", "value": "created", "selected": true },
+	      { "name": "created_on", "value": "created", "selected": true },
 	      { "name": "PI_firstname", "value": "PI firstname" },
 	      { "name": "PI_lastname", "value": "PI lastname" },
 	      { "name": "PI_organization", "value": "PI organization" },
