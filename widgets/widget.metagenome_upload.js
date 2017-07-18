@@ -169,8 +169,6 @@
     widget.browserLoaded = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	return;
-
 	var html = '<div style="padding-left: 10px;"><h3 style="margin: 0px;">Welcome to your inbox</h3><ul><li style="margin-top: 10px; margin-bottom: 10px;">click the upload <img src="Retina/images/upload.png" style="width: 16px;"> button above to upload files</li><li style="margin-top: 10px; margin-bottom: 10px;">click a file on the left for details and options</li><li style="margin-top: 10px; margin-bottom: 10px;">click <img src="Retina/images/merge.png" style="width: 16px;"> or <img src="Retina/images/tree_rtl.png" style="width: 16px;"> above to join paired ends / demultiplex</li></ul></div>';
 	
 	widget.browser.sections.detailSectionContent.innerHTML = html;
@@ -180,18 +178,12 @@
     widget.mergeMatepairInfo = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	alert('select a sequence file on the left then click "join paired ends" on the right');
-	return;
-	
 	widget.demultiplexInfo();
     };
 
     widget.demultiplexInfo = function () {
 	var widget = Retina.WidgetInstances.metagenome_upload[1];
 
-	alert('select a sequence file on the left then click "demultiplex" on the right');
-	return;
-	
 	widget.slots = { "barcode": null,
 			 "sequence": null,
 			 "sequence pair": null,
