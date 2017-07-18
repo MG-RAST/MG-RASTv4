@@ -46,7 +46,7 @@
 	
 	html.push("</table></div>");
 
-	html.push("<h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>All functionality here is available via a front-end on the <a href='magmain.html?mgpage=search'>search page</a>.</p>");
+	html.push("<h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>All functionality here is available via a front-end on the <a href='mgmain.html?mgpage=search'>search page</a>.</p>");
 
 	if (stm.user) {
 	    html.push('<p>You are logged in and your webkey is appended to each query automatically. This is needed to access your private data. To access your current webkey type "webkey" into the search box in the header and press enter.</p>');
