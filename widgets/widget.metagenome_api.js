@@ -51,7 +51,7 @@
 
 	var data = stm.DataStore.api;
 
-	var html = [ '<h3>MG-RAST API explorer</h3>' ];
+	var html = [ '<h1 style="font-weight: 300;">MG-RAST API explorer</h1>' ];
 
 	var shortDesc = data.description.substring(0, data.description.indexOf('</p>') + 4);
 	var fullDesc = data.description.substring(data.description.indexOf('</p>') + 4);
@@ -60,9 +60,11 @@
 	html.push('<div style="text-align: center;"><button class="btn btn-mini" style="width: 50px; margin-bottom: 30px;" onclick="jQuery(\'#fullDesc\').toggle();">...</button></div>');
 	html.push('<div id="fullDesc" style="display: none;">'+fullDesc+'</div>');
 
-	html.push('<h3>access to private data</h3>');
+	html.push('<h2 style="font-weight: 300;">searching for datasets?</h2><p>Try out the <a href="mgmain.html?mgpage=searchapi">search API explorer</a>.</p>');
+	
+	html.push('<h2 style="font-weight: 300;">access to private data</h2>');
 	if (stm.user) {
-	    html.push('<p>You are logged in and your webkey is auto-filled into the forms below. This is needed to access your private data. To access your current webkey, go to the <b>myData page</b>, click the <b>user icon</b> and then the <b>show webkey</b> button. <sup onmouseover="jQuery(\'#webkey\').toggle();" onmouseout="jQuery(\'#webkey\').toggle();">[?]</sup></p><img src="images/webkey.png" style="display: none;" id="webkey">');
+	    html.push('<p>You are logged in and your webkey is auto-filled into the forms below. This is needed to access your private data. To access your current webkey type "webkey" into the search box in the header and press enter.</p>');
 	} else {
 	    html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
 	}
@@ -264,7 +266,7 @@
 		jQuery.ajax({
 		    method: request.method,
 		    url: url,
-		    button: btn,
+		    btn: btn,
 		    data: request.method == "POST" ? values : null,
 		    target: target,
 		    success: function (d) {
