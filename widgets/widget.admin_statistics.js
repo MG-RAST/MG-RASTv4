@@ -612,6 +612,10 @@
 						 data.data[h].pipeline = this.pipeline;
 						 stm.DataStore.jobs30[data.data[h].id] = data.data[h];
 					     }
+					     if (!data.data.length) {
+						 this.p.resolve();
+						 return;
+					     }
 					     jQuery.ajax( { dataType: "json",
 					     		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
 					     		    headers: stm.authHeader,
