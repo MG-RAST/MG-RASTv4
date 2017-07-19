@@ -14,7 +14,7 @@
 
     widget.examples = [ { "text": "10 marine samples, salt water", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"biome","text":"marine"},{"field":"material","text":"saline"}] },
 			{ "text": "5 marine samples from the U.S.", "offset": "0", "direction": "asc", "limit": "5", "order": "created_on", "filters": [{"field":"country","text":"usa"}] },
-			{ "text": "10 human microbiome samples", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"project_name","text":"hmp"}] },
+			{ "text": "10 human microbiome samples", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"all","text":"hmp"}] },
 			{ "text": "10 samples from animal gut", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"all","text":"gut"},{"field":"biome","text":"animal"}] },
 			{ "text": "Get samples from a city (e.g. Chicago)", "offset": "0", "direction": "asc", "limit": "5", "order": "created_on", "filters": [{"field":"location","text":"chicago"}] },
 			{ "text": "Get samples from a PI (e.g. Noah Fierer)", "offset": "0", "direction": "asc", "limit": "5", "order": "created_on", "filters": [{"field":"PI_firstname","text":"noah"},{"field":"PI_lastname","text":"fierer"}] },
@@ -38,7 +38,7 @@
 	
 	document.getElementById("pageTitle").innerHTML = "search API explorer";
 		
-	var html = ["<div class='pull-right' style='width: 300px; border: 1px solid gray; padding: 10px; border-radius: 5px; margin-left: 10px; box-shadow: 5px 5px 10px;'><h4 style='margin-top: 0px;'>examples</h4><table class='table table-hover table-condensed'>"];
+	var html = ["<div class='pull-right' style='width: 300px; border: 1px solid rgba(0,0,0,0.15); padding: 10px; border-radius: 5px; margin-left: 10px; box-shadow: 5px 5px 10px;'><h4 style='margin-top: 0px;'>examples</h4><table class='table table-hover table-condensed'>"];
 
 	for (var i=0; i<widget.examples.length; i++) {
 	    html.push('<tr><td onclick="Retina.WidgetInstances.metagenome_searchapi[1].example('+i+');" style="cursor: pointer;'+(i==0 ? ' border-top: none;':'')+'">'+widget.examples[i].text+'</td></tr>');
@@ -46,7 +46,7 @@
 	
 	html.push("</table></div>");
 
-	html.push("<h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>All functionality here is available via a front-end on the <a href='mgmain.html?mgpage=search'>search page</a>.</p>");
+	html.push("<h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>The complete set of functions is also available on the <a href='mgmain.html?mgpage=search'>search page</a>.</p>");
 
 	if (stm.user) {
 	    html.push('<p>You are logged in and your webkey is appended to each query automatically. This is needed to access your private data. To access your current webkey type "webkey" into the search box in the header and press enter.</p>');
@@ -54,7 +54,7 @@
 	    html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
 	}
 
-	html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the result from the API.</p>');
+	html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results.</p>');
 
 	html.push('<div style="text-align: center; margin-top: 25px;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
 
