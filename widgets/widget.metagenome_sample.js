@@ -62,11 +62,13 @@
 	html = ['<h3>sample '+widget.id+'<div class="btn-group pull-right"><a href="?mgpage=project&project='+sample.project[0]+'" class="btn">study</a></div></h3>'];
 
 	html.push("<div style='float: right; margin-left: 30px; margin-bottom: 20px;'><div id='myWorld' style='border: 1px solid black; width: 400px; height: 280px;'></div></div>");
-
 	
 	html.push('<table>');
 	var k = Retina.keys(sample.metadata).sort();
 	for (var i=0; i<k.length; i++) {
+	    if (k[i] == "mgrast_id") {
+		continue;
+	    }
 	    if (k[i] == "ebi_id") {
 		html.push('<tr><td style="padding-right: 20px;"><b>ENA link</b></td><td><a href="http://www.ebi.ac.uk/ena/data/view/'+sample.metadata[k[i]]+'" target=_blank>'+sample.metadata[k[i]]+"</a></td></tr>");
 	    } else {
@@ -75,7 +77,7 @@
 	}
 	k = Retina.keys(sample.env_package.metadata).sort();
 	for (var i=0; i<k.length; i++) {
-	    if (k[i] == 'env_package' || k[i] == 'sample_name') { continue; }
+	    if (k[i] == 'env_package' || k[i] == 'sample_name' || k[i] == 'mgrast_id') { continue; }
 	    html.push('<tr><td style="padding-right: 20px;"><b>'+k[i].replace(/_/ig, ' ')+'</b></td><td>'+sample.env_package.metadata[k[i]]+'</td></tr>');
 	}
 	html.push('<tr><td style="padding-right: 20px;"><b>created</b></td><td>'+sample.created+'</td></tr>');
