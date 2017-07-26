@@ -134,9 +134,9 @@
 	
 	var html = [];
 
-	var psubmit = pipeline && pipeline.error == null ? pipeline.info.submittime : download.info.submittime;
-	var pstarted = pipeline && pipeline.error == null ? pipeline.info.startedtime : download.info.startedtime;
-	var pcompleted = pipeline && pipeline.error == null ? pipeline.info.completedtime : download.info.completedtime;
+	var psubmit = pipeline && pipeline.error == null && pipeline.info ? pipeline.info.submittime : download.info.submittime;
+	var pstarted = pipeline && pipeline.error == null && pipeline.info ? pipeline.info.startedtime : download.info.startedtime;
+	var pcompleted = pipeline && pipeline.error == null && pipeline.info ? pipeline.info.completedtime : download.info.completedtime;
 
 	html.push('<a name="generalInfo" style="position: relative; bottom: 60px;"></a><h3>General Information</h3>');
 	
@@ -152,13 +152,6 @@
 		mbp += parseInt(pipeline.inputs[i].stats_info.bp_count);
 	    }
 	    html.push('<p>This dataset was part of a submission of a total of '+pipeline.inputs.length+' datasets with '+mbp.baseSize()+'.');
-	    //html.push('<button class="btn btn-mini" style="margin-left: 20px;" onclick="this.innerHTML==\'show\' ? this.innerHTML=\'hide\' : this.innerHTML=\'show\'; jQuery(\'#submissionInfo\').toggle();">show</button>');
-	    // html.push('</p><div id="submissionInfo"><table class="table table-condensed table-hover"><tr><th>dataset</th><th>filesize</th><th>basepairs</th><th>sequences</th><th>length</th></tr>');//style="display: none;" 
-	    // for (var i=0; i<pipeline.outputs.length; i++) {
-	    // 	var id = Retina.idmap(pipeline.outputs[i].metagenome_id);
-	    // 	html.push('<tr><td style="padding-right: 50px;"><a href="?mgpage=download&metagenome='+id+'">'+pipeline.outputs[i].metagenome_name+'</a></td><td>'+pipeline.inputs[i].stats_info.file_size.byteSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.bp_count).baseSize()+'</td><td>'+parseInt(pipeline.inputs[i].stats_info.sequence_count).formatString()+'</td><td>'+pipeline.inputs[i].stats_info.average_length+'bp ('+pipeline.inputs[i].stats_info.length_min+'bp - '+pipeline.inputs[i].stats_info.length_max+'bp)</td></tr>');
-	    // }
-	    // html.push('</table></div>');
 	}
 	
 	html.push('<p>You chose the following pipeline options for this submission:</p>');
@@ -273,8 +266,6 @@
 
     widget.apiDownload = function () {
 	var widget = Retina.WidgetInstances.metagenome_download[1];
-
-	//document.getElementById('download_progress').innerHTML = "<img src='Retina/images/waiting.gif' style='width: 25px; position: relative; bottom: 5px; margin-left: 15px;'>";
 
 	var ann = document.getElementById('ann_type').options[document.getElementById('ann_type').selectedIndex].value;
 	var ont = document.getElementById('ont_source').options[document.getElementById('ont_source').selectedIndex].value;
