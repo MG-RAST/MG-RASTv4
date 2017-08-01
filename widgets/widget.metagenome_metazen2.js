@@ -708,11 +708,14 @@
 	    // check for new sample names
 	    if (widget.currField.table == 'sample') {
 		if (widget.currField.field == 'sample_name') {
-		    if (widget.samples.hasOwnProperty(val)) {
+		    if (widget.samples.hasOwnProperty(val) && widget.samples[val] != row) {
 			valid = false;
 			val = '';
 			msg = 'a sample of this name already exists in this sheet';
 		    } else {
+			if (widget.currentInputElement.getAttribute('data-old') != val) {
+			    delete widget.samples[widget.currentInputElement.getAttribute('data-old')];
+			}
 			widget.samples[val] = row;
 			stm.DataStore.cv.select.sample_name.push(val);
 		    }
@@ -733,6 +736,9 @@
 	    valid = false;
 	    if (widget.metadata.hasOwnProperty(widget.currField.table) && widget.metadata[widget.currField.table].hasOwnProperty(widget.currField.field)) {
 		delete widget.metadata[widget.currField.table][widget.currField.field][row];
+		if ((widget.currField.table == 'sample') && (widget.currField.field == 'sample_name')) {
+		    delete widget.samples[widget.currentInputElement.getAttribute('data-old')];
+		}
 	    }
 	}
 
@@ -771,10 +777,10 @@
 		for (var h=0; h<cols.length - 1; h++) {
 		    empty.push("");
 		}
-		empty = '<th></th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
+		empty = '<th>'+(p.parentNode.rowIndex + 1)+'</th><td class="editable viewtext">'+empty.join('</td><td class="editable viewtext">')+'</td>';
 		var r = document.createElement('tr');
 		r.innerHTML = empty;
-		p.parentNode.parentNode.firstChild.appendChild(r);
+		p.parentNode.parentNode.parentNode.firstChild.appendChild(r);
 	    }
 
 	    // click the cell below
