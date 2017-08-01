@@ -17,7 +17,7 @@
 	       ];
     };
 
-    widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species", "strain" ];
+    widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus" ];//, "species", "strain" ];
     widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
     widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
     widget.sourcesNameMapping = { "Silva SSU": "SSU", "Silva LSU": "LSU" };
@@ -1453,7 +1453,7 @@
 	filters.push([ 4, c.parameters.alilength ]);
 	
 	// create array index lookups for taxonomy and ontology levels
-	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6, "strain": 7 };
+	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5 };//, "species": 6, "strain": 7 };
 	var flevelIndex = { "Subsystems-level1": 0, "Subsystems-level2": 1, "Subsystems-level3": 2, "Subsystems-function": 3, "KO-level1": 0, "KO-level2": 1, "KO-level3": 2, "KO-function": 3, "COG-level1": 0, "COG-level2": 1, "COG-function": 2, "NOG-level1": 0, "NOG-level2": 1, "NOG-function": 3 };
 
 	// initialize the output row hash
