@@ -533,7 +533,8 @@
 	// mapping for nice sequence type names
 	var seqTypes = { "wgs": "shotgun metagenome",
 			 "mt": "metatranscriptome",
-			 "amplicon": "amplicon metagenome" };
+			 "amplicon": "amplicon metagenome",
+			 "amplicongene": "amplicon gene" };
 	
 	for (var i=0;i<rows.length;i++) {
             html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["metagenome_id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+" mgname='"+data[rows[i][0]]["name"]+"' mgid='"+data[rows[i][0]]["metagenome_id"]+"'>");
@@ -547,7 +548,7 @@
 		} else if (cell && fields[h] == "name") {
 		    cell = "<div style='max-width: 300px;'><a href='?mgpage=overview&metagenome="+(! data[rows[i][0]]["public"] ? Retina.idmap(data[rows[i][0]]["metagenome_id"]) : data[rows[i][0]]["metagenome_id"])+"' target=_blank title='view'>"+data[rows[i][0]]["name"]+"</a><a href='?mgpage=download&metagenome="+data[rows[i][0]]["metagenome_id"]+"' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></div>";
 		} else if (cell && fields[h] == "sequence_type") {
-		    cell = seqTypes[data[rows[i][0]]["sequence_type"]]
+		    cell = seqTypes[data[rows[i][0]]["sequence_type"]] || data[rows[i][0]];
 		}
 		if (! cell) {
 		    cell = "-";
