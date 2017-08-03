@@ -17,7 +17,7 @@
 	       ];
     };
 
-    widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus" ];//, "species", "strain" ];
+    widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];//, "strain" ];
     widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
     widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
     widget.sourcesNameMapping = { "Silva SSU": "SSU", "Silva LSU": "LSU" };
@@ -617,6 +617,18 @@
 	
 	var container = stm.DataStore.dataContainer[widget.selectedContainer];
 
+	if (param == 'displayLevel' && value == 'species') {
+	    if (! confirm('Warning\n\nFor most applications using shotgun sequence data\nto infer taxonomic information below the genus level\n(while possible) is not a good idea.\n\nDo you still want to continue?') ) {
+		for (var i=0; i<widget.taxLevels.length; i++) {
+		    if (widget.taxLevels[i] == container.parameters.displayLevel) {
+			document.getElementById('displayLevelSelect').selectedIndex = i;
+			break;
+		    }
+		}
+		return;
+	    }
+	}
+	
 	if (param == 'displaySource') {
 	    container.parameters[param] = value;
 	    if (widget.sourceType[value] !== container.parameters['displayType']) {
@@ -1453,7 +1465,7 @@
 	filters.push([ 4, c.parameters.alilength ]);
 	
 	// create array index lookups for taxonomy and ontology levels
-	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5 };//, "species": 6, "strain": 7 };
+	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6 };//, "strain": 7 };
 	var flevelIndex = { "Subsystems-level1": 0, "Subsystems-level2": 1, "Subsystems-level3": 2, "Subsystems-function": 3, "KO-level1": 0, "KO-level2": 1, "KO-level3": 2, "KO-function": 3, "COG-level1": 0, "COG-level2": 1, "COG-function": 2, "NOG-level1": 0, "NOG-level2": 1, "NOG-function": 3 };
 
 	// initialize the output row hash
@@ -2089,7 +2101,7 @@
 	    var result_columns = [ "name", "ID", "project id", "project name", "PI last name", "biome", "feature", "material", "environmental package", "location", "country", "sequencing method" ];
 	    var result_attributes = { "ID": "metagenome_id", "project id": "project_id", "project name": "project_name", "PI last name": "PI_lastname","environmental package": "env_package_type", "sequencing method": "seq_method" };
 
-	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "wgs", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "amplicongene", "title": "amplicon gene", "checked": false }, { "value": "mt", "title": "metatranscriptome", "checked": false } ] } ];
+	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "wgs", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "amplicongene", "title": "amplicon gene", "checked": false }, { "value": "mt", "title": "metatranscriptome", "checked": false } ] }, { "attribute": "retry", "title": "reload<sup title='WARNING: the reload of a profile can take some time' style='cursor: help;'>[?]</sup>", "type": "checkbox", "isOption": true, "options": [ { "value": "1", "title": " ", "checked": false } ] } ];
 	    if (stm.user) {
 		specialFilters.push( { "attribute": "public", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "1", "title": "public", "checked": false }, { "value": "0", "title": "private", "checked": false } ] } );
 	    }
@@ -2406,9 +2418,13 @@
 		    if (! stm.DataStore.inprogress.hasOwnProperty('profile'+id+source)) {
 			widget.pDiv('profile'+id+source, false, ids[i].name+' '+source, name);
 			stm.DataStore.inprogress['profile'+id+source] = 1;
+			var recompute = "";
+			if (widget.mgselect.settings.specialFilters[1].options[0].checked) {
+			    recompute = "&retry=1";
+			}
 			
 			stm.DataStore.dataContainer[name].promises.push(
-			    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?format=mgrast&condensed=1&verbosity=minimal&source="+source,
+			    jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + ids[i].id + "?format=mgrast&condensed=1&verbosity=minimal&source="+source+recompute,
 					  dc: name,
 					  contentType: 'application/json',
 					  headers: stm.authHeader,
