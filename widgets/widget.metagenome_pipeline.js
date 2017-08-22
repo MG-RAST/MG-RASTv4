@@ -247,7 +247,7 @@
 		var action = "";
 		if (d.status == "suspend" || d.status == "error") {
 		    d.status = "error";
-		    action = " <button class='btn btn-mini' onclick='alert(\"There was an error during the submission. Please send a notice\\nto our support and include the following string in the email:\\n\\n"+stm.user.id+"_submission failed\");'>?</button>";
+		    action = " <button class='btn btn-mini' onclick='alert(\"There was an error during the submission. Please try again.\\nIf the problem persists, please wait 48 hours and try again before contacting support.\");'>?</button>";
 		}
 		result_data.push({ "job": "<a href='#'>-</a>",
 				   "mgid": d.id,
