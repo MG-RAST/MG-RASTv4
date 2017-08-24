@@ -146,45 +146,8 @@
 	    }
 	    
 	} else {
-	    container.innerHTML = '\
-<div id="mg_modal" class="modal show fade" tabindex="-1" style="width: 500px;" role="dialog">\
-  <div class="modal-header">\
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
-    <h3>Metagenome Selector</h3>\
-  </div>\
-  <div class="modal-body" style="padding-left: 20px;"><div id="mg_modal_body"><div style="margin-left: auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px; width: 50px;"><img style="" src="Retina/images/waiting.gif"></div></div></div>\
-  <div class="modal-footer">\
-    <button class="btn btn-danger pull-left" data-dismiss="modal" aria-hidden="true">Cancel</button>\
-  </div>\
-</div>';
-	    widget.metagenome_modal();
+	    container.innerHTML = '<div class="alert alert-error">page called without a dataset identifier</div>';
 	}
-    };
-
-    // mg selector modal, use API selectlist
-    widget.metagenome_modal = function() {
-	var widget = this;
-        jQuery('#mg_modal').modal('show');
-        if (! widget.mg_select_list) {
-            widget.mg_select_list = Retina.Widget.create('mgbrowse', {
-                target: document.getElementById('mg_modal_body'),
-                type: 'listselect',
-                wide: true,
-                multiple: false,
-                callback: function (data) {
-		    var widget = Retina.WidgetInstances.metagenome_overview[1];
-                    if ((! data) || (data.length == 0)) {
-        	        alert("You have not selected a metagenome");
-            	        return;
-        	    }
-		    jQuery('#mg_modal').modal('hide');
-		    widget.id = data['id'];
-    		    widget.display();
-                }
-            });
-        } else {
-            widget.mg_select_list.display();
-        }
     };
 
     widget.variableExtractorMetagenome = function (id) {
