@@ -15,6 +15,8 @@
     widget.examples = [ { "text": "10 marine samples, salt water", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"biome","text":"marine"},{"field":"material","text":"saline"}] },
 			{ "text": "5 marine samples from the U.S.", "offset": "0", "direction": "asc", "limit": "5", "order": "created_on", "filters": [{"field":"country","text":"usa"}] },
 			{ "text": "10 human microbiome samples", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"all","text":"hmp"}] },
+			{ "text": "10 human microbiome samples over 1GB sorted by size", "offset": "0", "direction": "asc", "limit": "10", "order": "size", "filters": [{"field":"all","text":"hmp"},{"field":"bp_count_raw","text":"[1000000000 TO *]"}] },
+			{ "text": "10 meta-transcriptomes from uk, france, italy, germany and spain", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"sequence_type","text":"mt"},{"field":"country","text":"uk france italy germany spain"}] },
 			{ "text": "10 samples from animal gut", "offset": "0", "direction": "asc", "limit": "10", "order": "created_on", "filters": [{"field":"all","text":"gut"},{"field":"biome","text":"animal"}] },
 			{ "text": "Get samples from a city (e.g. Chicago)", "offset": "0", "direction": "asc", "limit": "5", "order": "created_on", "filters": [{"field":"location","text":"chicago"}] },
 			{ "text": "Get samples from a PI (e.g. Noah Fierer)", "offset": "0", "direction": "asc", "limit": "5", "order": "created_on", "filters": [{"field":"PI_firstname","text":"noah"},{"field":"PI_lastname","text":"fierer"}] },
@@ -34,19 +36,12 @@
 	var sidebar = widget.sidebar;
 	
 	sidebar.parentNode.style.display = "none";
-	content.className = "span10 offset1";
-	
 	document.getElementById("pageTitle").innerHTML = "search API explorer";
 		
-	var html = ["<div class='pull-right' style='width: 300px; border: 1px solid rgba(0,0,0,0.15); padding: 10px; border-radius: 5px; margin-left: 10px; box-shadow: 5px 5px 10px;'><h4 style='margin-top: 0px;'>examples</h4><table class='table table-hover table-condensed'>"];
+	var html = [];
+	content.className = "";
 
-	for (var i=0; i<widget.examples.length; i++) {
-	    html.push('<tr><td onclick="Retina.WidgetInstances.metagenome_searchapi[1].example('+i+');" style="cursor: pointer;'+(i==0 ? ' border-top: none;':'')+'">'+widget.examples[i].text+'</td></tr>');
-	}
-	
-	html.push("</table></div>");
-
-	html.push("<h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>The complete set of functions is also available on the <a href='mgmain.html?mgpage=search'>search page</a>.</p>");
+	html.push("<div class='span8' style='margin-left: 70px;'><h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>The complete set of functions is also available on the <a href='mgmain.html?mgpage=search'>search page</a>.</p>");
 
 	if (stm.user) {
 	    html.push('<p>You are logged in and your webkey is appended to each query automatically. This is needed to access your private data. To access your current webkey type "webkey" into the search box in the header and press enter.</p>');
@@ -81,13 +76,28 @@
 
 	// filter fields
 	html.push('<div style="margin-top: 25px;"><h4>filter fields</h4>');
-	html.push('<div class="input-prepend input-append"><select id="filter">'+widget.fieldOptions()+'</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
+	html.push('<div class="input-prepend input-append pull-left"><select id="filter">'+widget.fieldOptions()+'</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
 	html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
 	html.push('</div>');
 	
 	html.push('<div style="clear: both;"></div><h4 style=" margin-top: 25px;">result from API</h4>');
 	
-	html.push('<div><pre id="searchresult" style="border-color: green;">- no request sent -</pre></div>');
+	html.push('<div><pre id="searchresult" style="border-color: green;">- no request sent -</pre></div></div>');
+
+	// sidebar
+	html.push("<div class='span3' style='border: 1px solid rgba(0,0,0,0.15); padding: 10px; border-radius: 5px; margin-left: 50px; box-shadow: 5px 5px 10px;'>");
+
+	// help text
+	html.push('<h4 style="margin-top: 0px;">advanced filters</h4><p>You can search for multiple terms by just space separating them. If you have a term that includes a space, put it in hyphens. To exclude a term, prepend a -.<pre>mouse house "mickey mouse" -goofy</pre></p><p>You can search for ranges like this:<pre>[abc TO def]</pre></p><p>use * for an open range, e.g. to search for everything greater than 10 do this:<pre>[10 TO *]</pre></p>');
+	
+	// examples
+	html.push("<h4 style='margin-top: 30px;'>examples <sup title='click to view' style='cursor: help;'>[?]</sup></h4><table class='table table-hover table-condensed'>");
+	for (var i=0; i<widget.examples.length; i++) {
+	    html.push('<tr><td onclick="Retina.WidgetInstances.metagenome_searchapi[1].example('+i+');" style="cursor: pointer;'+(i==0 ? ' border-top: none;':'')+'">'+widget.examples[i].text+'</td></tr>');
+	}
+	html.push('</table>');
+
+	html.push('</div>');
 	
 	content.innerHTML = html.join('');
 
