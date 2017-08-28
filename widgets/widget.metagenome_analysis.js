@@ -1047,7 +1047,7 @@
 
 	// container name
 	var html = [ "<h4><span id='containerID'>"+widget.selectedContainer+"</span><span id='containerIDEdit' style='display: none;'><input type='text' value='"+c.id+"' id='containerIDInput'></span><button class='btn btn-mini pull-right btn-danger' style='margin-left: 10px;' title='delete analysis' onclick='if(confirm(\"Really delete this analysis? (This will not remove the loaded profile data)\")){Retina.WidgetInstances.metagenome_analysis[1].removeDataContainer();};'><i class='icon icon-trash'></i></button>"+(Retina.cgiParam('admin') ? "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].showRecipeEditor();' title='create recipe'><img src='Retina/images/forkknife.png' style='width: 16px;'></button>" : "")+"<button class='btn btn-mini pull-right' id='uploadButton' onclick='Retina.WidgetInstances.metagenome_analysis[1].createAnalysisObject(true);' title='download container'><img src='Retina/images/cloud-download.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload container to myData'><img src='Retina/images/cloud-upload.png' style='width: 16px;'></button><button class='btn btn-mini pull-right' id='toggleEditContainerName' onclick='jQuery(\"#containerID\").toggle();jQuery(\"#containerIDEdit\").toggle();' title='edit container name'><i class='icon icon-edit'></i></button>" ];
-	//html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>" );
+	html.push( "<button class='btn btn-mini pull-right' onclick='Retina.WidgetInstances.metagenome_analysis[1].mergeContainer();' title='merge container into new profile'><img src='Retina/images/merge.png' style='width: 16px;'></button>" );
 	html.push("</h4>");
 
 	// cutoffs
@@ -1298,23 +1298,92 @@
 	}
 	
 	var profile = { "columns": jQuery.extend(true, [], stm.DataStore.profile[container.items[0].id].columns),
-			"created": "",
+			"created": new Date().toISOString(),
 			"id": container.id,
+			"condensed": true,
 			"type": "merge",
-			"metagenome": { "mixs": { "sequence_type": container.items[0].sequence_type }, "name": container.id, "id": container.id },
-			"sources": jQuery.extend(true, [], container.sources),
+			"metagenome": { "mixs": {}, "name": container.id, "id": container.id, "metadata": { "library": { "data": { "metagenome_name": container.id } } } },
+			"sources": jQuery.extend(true, [], container.parameters.sources),
 			"originalItems": jQuery.extend(true, [], container.items),
 			"version": 1 };
 	
-	var data = [];
+	var data = {};
 	for (var i=0; i<container.items.length; i++) {
-	    var p = stm.DataStore.profile[container.items[i].id];
-	    
+	    var p = jQuery.extend(true, {}, stm.DataStore.profile[container.items[i].id]);
+	    var rowlen = 5 + (p.sources.length * 2);
+	    var psource = {};
+	    for (var h=0; h<p.sources.length; h++) {
+		psource[p.sources[h]] = h;
+	    }
+	    for (var h=0; h<p.data.length; h+=rowlen) {
+		if (data.hasOwnProperty(p.data[h])) {
+		    var row = data[p.data[h]];
+		    row[2] = ((row[1] * row[2]) + (p.data[h+1] * p.data[h+2])) / (row[1] + p.data[h+1]);
+		    row[3] = ((row[1] * row[3]) + (p.data[h+1] * p.data[h+3])) / (row[1] + p.data[h+1]);
+		    row[4] = ((row[1] * row[4]) + (p.data[h+1] * p.data[h+4])) / (row[1] + p.data[h+1]);
+		    row[1] = row[1] + p.data[h+1];
+		    for (var j=0; j<profile.sources.length; j++) {
+		    	var idsa = row[5+(j*2)] == null ? [] : (typeof row[5+(j*2)] == "number" ? [ row[5+(j*2)] ] : row[5+(j*2)].split(","));
+		    	var idsb = p.data[h+5+(2*psource[profile.sources[j]])] == null ? [] : (typeof p.data[h+5+(2*psource[profile.sources[j]])] == "number" ? [ p.data[h+5+(2*psource[profile.sources[j]])] ] : p.data[h+5+(2*psource[profile.sources[j]])].split(","));
+		    	var idh = {};
+		    	for (var k=0; k<idsa.length; k++) {
+		    	    idh[idsa[k]] = 1;
+		    	}
+		    	for (var k=0; k<idsb.length; k++) {
+		    	    idh[idsb[k]] = 1;
+		    	}
+		    	var entry = Retina.keys(idh).join(",");
+		    	row[5+(j*2)] = entry.length ? (entry.indexOf(',') > -1 ? entry : parseInt(entry)) : null;
+			
+		    	idsa = row[5+(j*2) + 1] == null ? [] : (typeof row[5+(j*2) + 1] == "number" ? [ row[5+(j*2) + 1] ] : row[5+(j*2) + 1].split(","));
+		    	if (p.data[h+5+(2*psource[profile.sources[j]]) + 1] == null) {
+		    	    idsb = [];
+		    	} else {
+		    	    if (typeof p.data[h+5+(2*psource[profile.sources[j]]) + 1] == "number") {
+		    		idsb = [ p.data[h+5+(2*psource[profile.sources[j]]) + 1] ];
+		    	    } else {
+		    		idsb = p.data[h+5+(2*psource[profile.sources[j]]) + 1].split(",");
+		    	    }
+		    	}
+		    	idh = {};
+		    	for (var k=0; k<idsa.length; k++) {
+		    	    idh[idsa[k]] = 1;
+		    	}
+		    	for (var k=0; k<idsb.length; k++) {
+		    	    idh[idsb[k]] = 1;
+		    	}
+		    	entry = Retina.keys(idh).join(",");
+		    	row[5+(j*2)+1] = entry.length ? (entry.indexOf(',') > -1 ? entry : parseInt(entry)) : null;
+		    }
+		    data[p.data[h]] = row;
+		} else {
+		    var row = [];
+		    for (var j=0; j<5; j++) {
+			row.push(p.data[h+j]);
+		    }
+		    for (var j=0; j<profile.sources.length; j++) {
+			row.push(p.data[h+5+(2*psource[profile.sources[j]])]);
+			row.push(p.data[h+5+(2*psource[profile.sources[j]])+1]);
+		    }
+		    data[p.data[h]] = row;
+		}
+	    }
+	}
+	var dsort = [];
+	var md5s = Retina.keys(data);
+	for (var i=0; i<md5s.length; i++) {
+	    for (var h=0; h<data[md5s[i]].length; h++) {
+		dsort.push(data[md5s[i]][h]);
+	    }
 	}
 	
-	profile.data = data;
+	profile.data = dsort
+	profile.row_total = profile.data.length / (5 + (2 * profile.sources.length));
+	profile.size = JSON.stringify(profile).length;
 	stm.DataStore.profile[profile.id] = profile;
 	widget.enableLoadedProfiles();
+
+	alert("merged profile created");
     };
 
     widget.container2biom = function (container, abundanceOnly) {
@@ -2515,6 +2584,19 @@
 						  widget.updatePDiv(this.bound, 'error', data.ERROR);
 					      } else if (data.hasOwnProperty('statistics')) {
 						  data.metadata.mixs = { "data": data.mixs };
+
+						  // check if this profile has a library name
+						  if (! data.metadata.hasOwnProperty('library')) {
+						      data.metadata.library = {};
+						  }
+						  if (! data.metadata.library.hasOwnProperty('data')) {
+						      data.metadata.library.data = {};
+						  }
+						  if (! data.metadata.library.data.metagenome_name) {
+						      data.metadata.library.data.metagenome_name = data.name;
+						  }
+						  
+						  // add the metadata
 						  if (stm.DataStore.profile.hasOwnProperty(this.metagenome)) {
 						      stm.DataStore.profile[this.metagenome].metagenome = data;
 						  } else {
@@ -2804,9 +2886,14 @@
 	    // the image is svg
 	    if (document.getElementsByClassName('hasSVG').length) {
 		var source = document.getElementsByClassName('hasSVG')[0].firstChild;
-		Retina.svg2png(null, resultDiv, source.getAttribute('width'), source.getAttribute('height')).then(
+		var wh = source.getAttribute('viewBox');
+		source.setAttribute('width', wh.split(" ")[2]);
+		source.setAttribute('height', wh.split(" ")[3]);
+		Retina.svg2png(null, resultDiv, wh.split(" ")[2], wh.split(" ")[3]).then(
 		    function() {
 			Retina.WidgetInstances.metagenome_analysis[1].saveCanvas();
+			source.removeAttribute('width');
+			source.removeAttribute('height');
 		    });
 	    }
 	    // the image is html
@@ -3338,7 +3425,7 @@
 				stm.DataStore.ontology = out;
 				document.getElementById('data').innerHTML = 'loading filterlists... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 				jQuery.getJSON('data/filterlists.json', function(data) {
-				    Retina.WidgetInstances.metagenome_analysis[1].filterlists = {};//data;
+				    Retina.WidgetInstances.metagenome_analysis[1].filterlists = {};
 				    document.getElementById('data').innerHTML = 'creating local store... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 				    Retina.WidgetInstances.metagenome_analysis[1].display();
 				});
@@ -3360,7 +3447,7 @@
 	    widget.mergeProfile(id, source);
 	    return;
 	}
-
+	
 	// sort by md5
 	profile.data = profile.data.sort(Retina.propSort(0));
 	
@@ -3384,6 +3471,7 @@
 	profile.data = p;
 	profile.sources = [ profile.source ];
 	delete profile.source;
+	profile.size = JSON.stringify(profile).length;
 	stm.DataStore.profile[id] = jQuery.extend(true, {}, profile);
 	delete stm.DataStore.profile[id+"_load_"+source];
     };
@@ -3480,6 +3568,10 @@
 	
 	// set the data of the merged profile
 	previous.data = p;
+
+	previous.row_total = p.length / (5 + (previous.sources.length * 2));
+
+	previous.size = JSON.stringify(previous).length;
 
 	// delete the loaded additional data
 	delete stm.DataStore.profile[id+"_load_"+source];
