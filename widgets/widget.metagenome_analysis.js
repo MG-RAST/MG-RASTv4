@@ -21,7 +21,7 @@
     widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
     widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
     widget.sourcesNameMapping = { "Silva SSU": "SSU", "Silva LSU": "LSU" };
-    widget.sourceType = { "RefSeq": "taxonomy", "IMG": "taxonomy", "TrEMBL": "taxonomy", "SEED": "taxonomy", "KEGG": "taxonomy", "GenBank": "taxonomy", "SwissProt": "taxonomy", "PATRIC": "taxonomy", "eggNOG": "taxonomy", "RDP": "taxonomy", "Silva LSU": "taxonomy", "Silva SSU": "taxonomy", "SSU": "taxonomy", "LSU": "taxonomy", "ITS": "taxonomy", "Greengenes": "taxonomy", "Subsystems": "function","KO": "function","COG": "function","NOG": "function" };
+    widget.sourceType = { "OTU": "taxonomy", "RefSeq": "taxonomy", "IMG": "taxonomy", "TrEMBL": "taxonomy", "SEED": "taxonomy", "KEGG": "taxonomy", "GenBank": "taxonomy", "SwissProt": "taxonomy", "PATRIC": "taxonomy", "eggNOG": "taxonomy", "RDP": "taxonomy", "Silva LSU": "taxonomy", "Silva SSU": "taxonomy", "SSU": "taxonomy", "LSU": "taxonomy", "ITS": "taxonomy", "Greengenes": "taxonomy", "Subsystems": "function","KO": "function","COG": "function","NOG": "function" };
     widget.filterlists = {};
 
     widget.cutoffThresholds = {
@@ -307,13 +307,15 @@
 			var allMD = { "mixs": {}, "project": {}, "env_package": {}, "library": {}, "sample": {} };
 			for (var l=0; l<c.items.length; l++) {
 			    for (var j=0; j<g.length; j++) {
-				var d = stm.DataStore.profile[c.items[l].id].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[c.items[l].id].metagenome.metadata[g[j]].data : {};
-				var mds = Retina.keys(d);
-				for (var m=0; m<mds.length; m++) {
-				    if (! allMD[g[j]].hasOwnProperty(mds[m])) {
-					allMD[g[j]][mds[m]] = 0;
+				if (stm.DataStore.profile[c.items[l].id] && stm.DataStore.profile[c.items[l].id].metagenome && stm.DataStore.profile[c.items[l].id].metagenome.metadata) {
+				    var d = stm.DataStore.profile[c.items[l].id].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[c.items[l].id].metagenome.metadata[g[j]].data : {};
+				    var mds = Retina.keys(d);
+				    for (var m=0; m<mds.length; m++) {
+					if (! allMD[g[j]].hasOwnProperty(mds[m])) {
+					    allMD[g[j]][mds[m]] = 0;
+					}
+					allMD[g[j]][mds[m]]++;
 				    }
-				    allMD[g[j]][mds[m]]++;
 				}
 			    }
 			}
@@ -465,7 +467,11 @@
 		c.parameters.metadatum = settings.metadatum;
 		var x = settings.metadatum.split(/\|/);
 		for (var h=0; h<data.cols.length; h++) {
-		    data.cols[h] = stm.DataStore.profile[c.items[h].id].metagenome.metadata.hasOwnProperty(x[0]) && stm.DataStore.profile[c.items[h].id].metagenome.metadata[x[0]].data.hasOwnProperty(x[1]) ? stm.DataStore.profile[c.items[h].id].metagenome.metadata[x[0]].data[x[1]] : "-";
+		    var p = stm.DataStore.profile[c.items[h].id];
+		    if (! p) {
+			p = stm.DataStore.otuprofile[c.items[h].id];
+		    }
+		    data.cols[h] = p.metagenome.metadata.hasOwnProperty(x[0]) && p.metagenome.metadata[x[0]].data.hasOwnProperty(x[1]) ? p.metagenome.metadata[x[0]].data[x[1]] : "-";
 		}
 	    }
 	}
@@ -801,14 +807,22 @@
 	var items = [];
 	for (var i=0; i<c.items.length; i++) {
 	    items.push(c.items[i].id);
-	    if (! stm.DataStore.profile[c.items[i].id].hasOwnProperty('originalMetadata')) {
-		stm.DataStore.profile[c.items[i].id].originalMetadata = jQuery.extend(true, {}, stm.DataStore.profile[c.items[i].id].metagenome.metadata);
+	    var p = stm.DataStore.profile[c.items[i].id];
+	    if (! p) {
+		p = stm.DataStore.otuprofile[c.items[i].id];
+	    }
+	    if (! p.hasOwnProperty('originalMetadata')) {
+		p.originalMetadata = jQuery.extend(true, {}, p.metagenome.metadata);
 	    }
 	}
 	items = items.sort();
 	for (var l=0; l<items.length; l++) {
 	    for (var j=0; j<g.length; j++) {
-		var d = stm.DataStore.profile[items[l]].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[items[l]].metagenome.metadata[g[j]].data : {};
+		var p = stm.DataStore.profile[items[l]];
+		if (! p) {
+		    p = stm.DataStore.otuprofile[items[l]];
+		}
+		var d = p.metagenome.metadata.hasOwnProperty(g[j]) ? p.metagenome.metadata[g[j]].data : {};
 		var mds = Retina.keys(d);
 		for (var m=0; m<mds.length; m++) {
 		    if (! allMD[g[j]].hasOwnProperty(mds[m])) {
@@ -841,8 +855,12 @@
 		    html.push('<td class="editable" id="'+items[l]+'|'+g[j]+'|'+d[k]+'" data-next="'+(l == items.length - 1 ? "" : items[l+1])+'" onclick="if(!this.innerHTML.match(/^\<input/)){Retina.WidgetInstances.metagenome_analysis[1].editMDField(this);}">');
 		    
 		    // data field is present
-		    if (stm.DataStore.profile[items[l]].metagenome.metadata.hasOwnProperty(g[j]) && stm.DataStore.profile[items[l]].metagenome.metadata[g[j]].data.hasOwnProperty(d[k])) {
-			var val = stm.DataStore.profile[items[l]].metagenome.metadata[g[j]].data[d[k]];
+		    var p = stm.DataStore.profile[items[l]];
+		    if (! p) {
+			p = stm.DataStore.otuprofile[items[l]];
+		    }
+		    if (p.metagenome.metadata.hasOwnProperty(g[j]) && p.metagenome.metadata[g[j]].data.hasOwnProperty(d[k])) {
+			var val = p.metagenome.metadata[g[j]].data[d[k]];
 			html.push(val);
 		    }
 
@@ -1479,11 +1497,179 @@
 	return result;
     };
 
+    widget.OTUcontainer2matrix = function (container) {
+	var widget = this;
+
+	var c = container || stm.DataStore.dataContainer[widget.selectedContainer];
+
+	var matrix = { data: [],
+		       rows: [],
+		       cols: [],
+		       evalues: [],
+		       abundances: [],
+		       headers: [] };
+
+	var levelIndex = { "domain": 0, "phylum": 1, "className": 2, "order": 3, "family": 4, "genus": 5, "species": 6 };//, "strain": 7 };
+	var rlevelIndex = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];
+	var id = c.parameters.metadatum;
+	var displayLevel = c.parameters.displayLevel;
+	var displaySource  = c.parameters.displaySource;
+	var displayType = c.parameters.displayType;
+	var hier = {};
+	var rows = {};
+	var d = {};
+
+	var filters = [];
+	filters.push([ 2, c.parameters.evalue ]);
+	filters.push([ 3, c.parameters.identity ]);
+	filters.push([ 4, c.parameters.alilength ]);
+
+	// parse through the profiles
+	for (var i=0; i<c.items.length; i++) {
+	    var p = stm.DataStore.otuprofile[c.items[i].id];
+
+	    matrix.abundances.push(0);
+	    var x = c.parameters.metadatum.split(/\|/);
+	    var colname = "-";
+	    if (! p.hasOwnProperty('metagenome')) {
+		p.metagenome = {};
+	    }
+	    if (! p.metagenome.hasOwnProperty('metadata')) {
+		p.metagenome.metadata = {};
+	    }
+	    if (! p.metagenome.metadata.hasOwnProperty('library')) {
+		p.metagenome.metadata.library = { "data": { "metagenome_name": c.items[i].id } };
+	    }
+	    if (p.metagenome.metadata.hasOwnProperty(x[0]) && p.metagenome.metadata[x[0]].data.hasOwnProperty(x[1])) {
+		colname = p.metagenome.metadata[x[0]].data[x[1]];
+	    }
+	    matrix.cols.push(colname);
+	    var header = {};
+	    var fields = [ "mixs", 'project', 'env_package', 'library', 'sample' ];
+	    for (var h=0; h<fields.length; h++) {
+		var mds = stm.DataStore.otuprofile[c.items[i].id].metagenome.metadata.hasOwnProperty(fields[h]) ? Retina.keys(stm.DataStore.otuprofile[c.items[i].id].metagenome.metadata[fields[h]].data) : [];
+		for (var j=0; j<mds.length; j++) {
+		    header[fields[h]+"|"+mds[j]] = stm.DataStore.otuprofile[c.items[i].id].metagenome.metadata[fields[h]].data[mds[j]];
+		}
+	    }
+	    matrix.headers.push(header);
+	    
+	    for (var h=0; h<p.data.length; h++) {
+		// 0 "lca",
+		// 1 "abundance",
+		// 2 "e-value",
+		// 3 "percent identity",
+		// 4 "alignment length",
+		// 5 "md5s",
+		// 6 "level"
+		var tax = p.data[h][0].split(";");
+		var r = tax[levelIndex[displayLevel]];
+		if (p.data[h][6] <= levelIndex[displayLevel]) {
+		    r = "lower specificity hits";
+		    hier[r] = [];
+		    for (var j=0; j<levelIndex[displayLevel]; j++) {
+			hier[r].push(r);
+		    }
+		} else {
+		    hier[r] = tax.slice(0, levelIndex[displayLevel] + 1);
+		}
+
+		var stay = true;
+		
+		// check cutoff filters
+		for (var j=0; j<filters.length; j++) {
+		    if (Math.abs(p.data[h][filters[j][0]]) < filters[j][1]) {
+			stay = false;
+			break;
+		    }
+		}
+
+		if (! stay) {
+		    continue;
+		}
+
+		// test for tax filters
+		if (c.parameters.taxFilter.length) {
+
+		    // if none of the filters match, the row goes
+		    var stay = false;
+
+		    // iterate over the list of taxonomy filters
+		    for (var j=0; j<c.parameters.taxFilter.length; j++) {
+			if (c.parameters.taxFilter[j].value == tax[levelIndex[c.parameters.taxFilter[j].level]]) {
+			    stay = true;
+			    break;
+			}
+		    }
+
+		    if (! stay) {
+			continue;
+		    }
+		}
+
+		// if we get here, all filters passed
+		
+		// create / update row
+		if (! rows.hasOwnProperty(r)) {
+		    rows[r] = [];
+		    for (var j=0; j<c.items.length; j++) {
+			// abundance, evalue
+			rows[r].push([0, 0]);
+		    }
+		}
+		
+		rows[r][i][1] = ((rows[r][i][0] * rows[r][i][1]) + (p.data[h][1] * p.data[h][2])) / (rows[r][i][0] + p.data[h][1]);
+		rows[r][i][0] += p.data[h][1];
+	    }	    
+	}
+
+	var k = Retina.keys(rows).sort();
+	var mr = [];
+	for (var i=0; i<k.length; i++) {
+	    var rowIn = false;
+	    var ra = [];
+	    var re = [];
+	    for (var h=0; h<rows[k[i]].length; h++) {
+		if (rows[k[i]][h][0] >= c.parameters.abundance) {
+		    rowIn = true;
+		} else {
+		    rows[k[i]][h][0] = 0;
+		}
+		ra.push(rows[k[i]][h][0]);
+		re.push(rows[k[i]][h][1]);
+	    }
+	    if (! rowIn) {
+		continue;
+	    }
+	    for (var h=0; h<ra.length; h++) {
+		matrix.abundances[h] += ra[h];
+	    }
+	    mr.push(k[i]);
+	    matrix.data.push(ra);
+	    matrix.evalues.push(re);
+	}
+	matrix.rows = mr;
+
+	c.parameters.depth = levelIndex[displayLevel];
+	c.matrix = matrix;
+	c.matrix.itemsX = matrix.cols.length;
+	c.matrix.itemsY = matrix.rows.length;
+	c.matrix.itemsProd = matrix.cols.length * matrix.rows.length;
+	c.hierarchy = hier;
+
+	return c;
+    };
+
     widget.container2matrix = function (container, md5only) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 
 	// get the current container
 	var c = container || stm.DataStore.dataContainer[widget.selectedContainer];
+
+	// check for OTU container
+	if (c.items[0] && c.items[0].sequence_type == "otu") {
+	    return widget.OTUcontainer2matrix(c);
+	}
 
 	// check if all profiles are loaded and have the required sources
 	var missing = [];
@@ -2013,7 +2199,11 @@
 	var groups = [];
 	for (var i=0; i<c.items.length; i++) {
 	    groups.push({ name: c.matrix.cols[i], points: [] });
-	    var data = jQuery.extend(true, [], stm.DataStore.profile[c.items[i].id].metagenome.statistics[field]);
+	    var p = stm.DataStore.profile[c.items[i].id];
+	    if (! p) {
+		p = stm.DataStore.otuprofile[c.items[i].id];
+	    }
+	    var data = jQuery.extend(true, [], p.metagenome.statistics[field]);
 	    if (data.length == 0) {
 		groups[i].points.push({x: 0, y: 0 });
 	    }
@@ -2147,7 +2337,7 @@
 	    html.push('</div><div style="clear: both;"></div>');
 
 	     // metagenome selector
-	    html.push('<h5 style="margin-top: 0px;"><div style="float: left;">metagenomes</div><div style="float: left; margin-left: 443px; height: 20px;"></div><div style="float: left; margin-right: 5px;" id="collectionSpace"></div><div style="float: left;" id="loadedProfileSpace"></div></h5><div style="clear: both; height: 5px;"></div><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
+	    html.push('<h5 style="margin-top: 0px;"><div style="float: left;">metagenomes</div><div style="float: left; margin-left: 443px; height: 20px;"></div><div style="float: left; margin-right: 5px;" id="collectionSpace"></div><div style="float: left;" id="loadedProfileSpace"></div><div style="float: left;" id="loadedOTUProfileSpace"></div></h5><div style="clear: both; height: 5px;"></div><div id="mgselect"><img src="Retina/images/waiting.gif" style="margin-left: 40%; width: 24px;"></div>');
 
 	    // data progress
 	    html.push('<div id="dataprogress" style="float: left; margin-top: 25px; margin-left: 20px; width: 90%;"></div><div style="clear: both;">');
@@ -2303,13 +2493,20 @@
 	// create a profile - source mapping
 	var sourceMap = {};
 	var sources = {};
-	for (var i=0; i<c.items.length; i++) {
-	    sourceMap[c.items[i].id] = {};
-	    for (var h=0; h<c.items.length; h++) {
-		var s = stm.DataStore.profile[c.items[i].id].sources;
-		for (var j=0; j<s.length; j++) {
-		    sourceMap[c.items[i].id][s[j]] = j;
-		    sources[s[j]] = true;
+	if (c.items[0].sequence_type == 'otu') {
+	    sources = { "otu": true };
+	    for (var i=0; i<c.items.length; i++) {
+		sourceMap[c.items[i].id] = { "otu": 0 };
+	    }
+	} else {
+	    for (var i=0; i<c.items.length; i++) {
+		sourceMap[c.items[i].id] = {};
+		for (var h=0; h<c.items.length; h++) {
+		    var s = stm.DataStore.profile[c.items[i].id].sources;
+		    for (var j=0; j<s.length; j++) {
+			sourceMap[c.items[i].id][s[j]] = j;
+			sources[s[j]] = true;
+		    }
 		}
 	    }
 	}
@@ -2369,6 +2566,28 @@
 	var name = widget.isRecipe ? widget.recipe.id : collectionName || widget.dataLoadParams.name || "analysis "+(Retina.keys(stm.DataStore.dataContainer).length + 1);
 
 	if (ids.length) {
+
+	    // add special handling for OTU data
+	    if (stm.DataStore.hasOwnProperty('otuprofile')) {
+		var valid = true;
+		var missing;
+		for (var i=0; i<ids.length; i++) {
+		    if (! stm.DataStore.otuprofile.hasOwnProperty(ids[i].id)) {
+			valid = false;
+			missing = ids[i].id;
+			break;
+		    }
+		}
+		if (valid) {
+		    widget.dataLoadParams.sources = [ "OTU" ];
+		} else {
+		    alert('You are missing the data for OTU profile '+missing);
+		    return;
+		}
+		widget.cutoffThresholds.evalue = 1;
+		widget.cutoffThresholds.identity = 1;
+		widget.cutoffThresholds.alilength = 1;
+	    }
 
 	    // sanity check if there is a sequence type mix
 	    var seqTypes = {};
@@ -2454,6 +2673,12 @@
 	    stm.DataStore.inprogress = {};
 	}
 	for (var i=0;i<ids.length;i++) {
+
+	    // check if this is OTU
+	    if (ids[i].sequence_type == "otu") {
+		continue;
+	    }
+	    
 	    var id = ids[i].id;
 	    
 	    // check if the profile is already loaded
@@ -3611,7 +3836,26 @@
 
 	html.push('</ul></div>');
 
-	document.getElementById('loadedProfileSpace').innerHTML = html.join("");	
+	if (profs.length) {
+	    document.getElementById('loadedProfileSpace').innerHTML = html.join("");
+	}
+
+	if (stm.DataStore.hasOwnProperty('otuprofile')) {
+	    html = [ '<div class="btn-group"><a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#"><i class="icon icon-folder-open" style=" margin-right: 5px;"></i>add loaded profiles <span class="caret"></span></a><ul class="dropdown-menu">' ];
+	    
+	    html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addLoadedOTUProfile(null, true); return false;"><i>- all -</i></a></li>');
+	
+	    profs = Retina.keys(stm.DataStore.otuprofile).sort();
+	    for (var i=0; i<profs.length; i++) {
+		html.push('<li><a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].addLoadedOTUProfile(\''+profs[i]+'\'); return false;">'+profs[i]+'</a></li>');
+	    }
+	    
+	    html.push('</ul></div>');
+
+	    if (profs.length) {
+		document.getElementById('loadedOTUProfileSpace').innerHTML = html.join("");
+	    }
+	}
     };
 
     widget.addLoadedProfile = function (name, all) {
@@ -3630,6 +3874,25 @@
 	    stm.DataStore.profile[mgs[i]].metagenome.mixs.id = stm.DataStore.profile[mgs[i]].metagenome.id;
 	    var obj = jQuery.extend(true, {}, stm.DataStore.profile[mgs[i]].metagenome.mixs);
 	    r.settings.selection_data.push(obj);
+	    r.settings.selection[name] = 1;
+	}
+	
+	r.redrawResultlist(r.result_list);
+    };
+
+    widget.addLoadedOTUProfile = function (name, all) {
+	var widget = this;
+
+	var r = widget.mgselect;
+	var mgs = [];
+	if (all) {
+	    mgs = Retina.keys(stm.DataStore.otuprofile).sort();
+	} else {
+	    mgs = [ name ]
+	}
+
+	for (var i=0; i<mgs.length; i++) {
+	    r.settings.selection_data.push({name: mgs[i], id: mgs[i], sequence_type: "otu" });
 	    r.settings.selection[name] = 1;
 	}
 	
