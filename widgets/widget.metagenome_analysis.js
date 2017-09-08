@@ -307,8 +307,12 @@
 			var allMD = { "mixs": {}, "project": {}, "env_package": {}, "library": {}, "sample": {} };
 			for (var l=0; l<c.items.length; l++) {
 			    for (var j=0; j<g.length; j++) {
-				if (stm.DataStore.profile[c.items[l].id] && stm.DataStore.profile[c.items[l].id].metagenome && stm.DataStore.profile[c.items[l].id].metagenome.metadata) {
-				    var d = stm.DataStore.profile[c.items[l].id].metagenome.metadata.hasOwnProperty(g[j]) ? stm.DataStore.profile[c.items[l].id].metagenome.metadata[g[j]].data : {};
+				var p = stm.DataStore.profile[c.items[l].id];
+				if (! p) {
+				    p = stm.DataStore.otuprofile[c.items[l].id];
+				}
+				if (p && p.metagenome && p.metagenome.metadata) {
+				    var d = p.metagenome.metadata.hasOwnProperty(g[j]) ? p.metagenome.metadata[g[j]].data : {};
 				    var mds = Retina.keys(d);
 				    for (var m=0; m<mds.length; m++) {
 					if (! allMD[g[j]].hasOwnProperty(mds[m])) {
