@@ -894,7 +894,11 @@
 
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
 	for (var i=0; i<c.items.length; i++) {
-	    stm.DataStore.profile[c.items[i].id].metagenome.metadata = jQuery.extend(true, {}, stm.DataStore.profile[c.items[i].id].originalMetadata);
+	    var p = stm.DataStore.profile[c.items[l].id];
+	    if (! p) {
+		p = stm.DataStore.otuprofile[c.items[l].id];
+	    }
+	    p.metagenome.metadata = jQuery.extend(true, {}, p.originalMetadata);
 	}
 
 	widget.showMetadata();
@@ -970,17 +974,21 @@
 	var widget = this;
 
 	var updated = false;
-	if (! stm.DataStore.profile[id].metagenome.metadata.hasOwnProperty(cat)) {
-	    stm.DataStore.profile[id].metagenome.metadata[cat] = { "data": {} };
+	var p = stm.DataStore.profile[id];
+	if (! p) {
+	    p = stm.DataStore.otuprofile[id];
+	}
+	if (! p.metagenome.metadata.hasOwnProperty(cat)) {
+	    p.metagenome.metadata[cat] = { "data": {} };
 	    updated = true;
 	}
 
-	if (stm.DataStore.profile[id].metagenome.metadata[cat].data.hasOwnProperty(field) && stm.DataStore.profile[id].metagenome.metadata[cat].data[field] != value) {
+	if (p.metagenome.metadata[cat].data.hasOwnProperty(field) && p.metagenome.metadata[cat].data[field] != value) {
 	    updated = true;
 	}
 
 	// update the prodile data
-	stm.DataStore.profile[id].metagenome.metadata[cat].data[field] = value;
+	p.metagenome.metadata[cat].data[field] = value;
 
 	// get an id - index mapping
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
@@ -994,7 +1002,7 @@
 
 	// check if the metadata was actually updated, if so mark it in the profile
 	if (updated) {
-	    stm.DataStore.profile[id].metadataUpdated = true;
+	    p.metadataUpdated = true;
 	}
     };
 
