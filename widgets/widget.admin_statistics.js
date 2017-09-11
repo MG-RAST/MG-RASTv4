@@ -169,8 +169,6 @@
 	    var now = new Date().getTime();
 	    job.submitChicago = widget.dateString(now - (Date.parse(job.submittime) - chicago));
 
-	    console.log(job.state[0]);
-	    
 	    // completed
 	    if (job.state[0] == "completed") {
 		job.completeChicago = widget.dateString(now - (Date.parse(job.completedtime) - chicago));
