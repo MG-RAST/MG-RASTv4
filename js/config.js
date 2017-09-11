@@ -12,7 +12,7 @@ var RetinaConfig = {
 
     // server urls
     "mgrast_ftp": "ftp://ftp.metagenomics.anl.gov",
-    "mgrast_api": "http://api.metagenomics.anl.gov",
+    "mgrast_api": "http://api-dev.metagenomics.anl.gov",
     "shock_url": "http://shock.metagenomics.anl.gov",
     "awe_url": "http://awe.metagenomics.anl.gov",
     
@@ -20,5 +20,8 @@ var RetinaConfig = {
     "m5nrversion": "1",
     "serverVersion": "4.0",
     "tos": "2",
-    "pipelines": [ 'mgrast-prod-4.0', 'mgrast-prod-4.0.1', 'mgrast-prod-4.0.2' ]
+    "pipelines": [ 'mgrast-prod-4.0', 'mgrast-prod-4.0.1', 'mgrast-prod-4.0.2' ],
+
+    // admin
+    "showOTU": true
 };
