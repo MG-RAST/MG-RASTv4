@@ -746,6 +746,10 @@
     widget.makeProjectPublic = function (projectid) {
 	var widget = this;
 
+	if (! confirm('If you make a project public you will no longer be able to modify it.\n\nYou will receive stable IDs for the project and all included datasets.\n\nDo you want to continue?')) {
+	    return;
+	}
+
 	var project = stm.DataStore.project[projectid];
 	var div = document.getElementById('statusDiv'+projectid);
 	div.className = "alert alert-info";

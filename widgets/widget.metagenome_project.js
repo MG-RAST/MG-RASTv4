@@ -142,7 +142,7 @@
 		var mg = project.metagenomes[i];
 		var mgid = mg.metagenome_id.match(/^mgm/) ? mg.metagenome_id : "mgm"+mg.metagenome_id;
 		widget.metagenomes[mgid] = mg.name;
-		var row = [ project.status == "private" ? "<span title='click the share project button above to make the project public and obtain stable identifiers' style='cursor: help;'>n/a</span>" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
+		var row = [ project.status == "private" ? "<div title='This is a temporary ID. Click the share project button above to make the project public and obtain stable identifiers.' style='width: 125px; cursor: help; word-wrap: break-word; color: gray;'>"+Retina.idmap(mgid)+"</div>" : "<a href='?mgpage=overview&metagenome="+mgid+"' target=_blank>"+mgid+"</a>",
 			    mg.viewable ? ("<a href='?mgpage=overview&metagenome="+(project.status == "private" ? Retina.idmap(mgid) : mgid)+"' target=_blank>"+mg.name+"</a>") : "<a style='cursor: help;' title='This metagenome has not yet completed computation'>"+mg.name+"</a>",
 			    mg.basepairs,
 			    mg.sequences,

@@ -635,14 +635,14 @@
 					 }
 				       } ) );
 	    promises.push(jQuery.ajax( { dataType: "json",
-					 url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&state=suspend&state=in-progress&state=queued&limit=100000&userattr=bp_count",
+					 url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&active&limit=100000&userattr=bp_count",
 					 headers: stm.authHeader,
 					 p: prom,
 					 pipeline: RetinaConfig.pipelines[i],
 					 success: function(data) {
-					     for (var h=0; h<data.data.length; h++) {
-						 data.data[h].pipeline = this.pipeline;
-						 stm.DataStore.jobs30[data.data[h].id] = data.data[h];
+					     for (var h=0; h<data.length; h++) {
+						 data[h].pipeline = this.pipeline;
+						 stm.DataStore.jobs30[data[h].id] = data[h];
 					     }
 					 },
 					 error: function (xhr) {
