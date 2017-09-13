@@ -635,7 +635,7 @@
 					 }
 				       } ) );
 	    promises.push(jQuery.ajax( { dataType: "json",
-					 url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&active&limit=100000&userattr=bp_count",
+					 url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&state=in-progress&state=suspend&state=queued&limit=100000&userattr=bp_count",
 					 headers: stm.authHeader,
 					 p: prom,
 					 pipeline: RetinaConfig.pipelines[i],
