@@ -1317,7 +1317,7 @@
 	    return;
 	}
 
-	var retain = document.getElementById('jpeRetain').getAttribute('checked') ? 1 : 0;
+	var retain = document.getElementById('jpeRetain').checked ? 1 : 0;
 	var indexFile = document.getElementById('jpeIndexFile').options[document.getElementById('jpeIndexFile').selectedIndex].value;
 	var d = { "pair_file_1": fileA,
 		  "pair_file_2": fileB,
