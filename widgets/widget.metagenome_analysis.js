@@ -267,6 +267,9 @@
 	var settings = jQuery.extend(true, {}, visMap[type].settings, c.visualization[type]);
 	jQuery.extend(true, c.visualization[type], settings);
 
+	// set the data
+	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
+
 	// check if we need to adjust the control groups
 	var requireDataUpdate = false;
 	var groups = visMap[type].controlGroups;
@@ -349,12 +352,16 @@
 			    if (item.values && item.values == "counter") {
 				opt.label = j + 1;
 				opt.value = j;
+			    } else if (item.values) {
+				opt = jQuery.extend(true, {}, c.items[j][item.values]);
 			    } else { 
 				opt.value = j;
 				opt.label = c.items[j].name;
 			    }
-			    if ((settings.hasOwnProperty(item.name) && settings[item.name] == j) || (item.hasOwnProperty('default') && item['default'] == j)) {
+			    if ((settings.hasOwnProperty(item.name) && settings[item.name] == j) || (item.hasOwnProperty('default') && item['default'] == opt.value)) {
 				opt.selected = true;
+			    } else {
+				opt.selected = false;
 			    }
 			    opts.push(opt);
 			}
@@ -363,9 +370,6 @@
 		}
 	    }
 	}
-
-	// set the data
-	settings.data = visMap[type].hasOwnProperty('dataConversion') ? widget[visMap[type].dataConversion](visMap[type].dataField) : jQuery.extend(true, {}, stm.DataStore.dataContainer[widget.selectedContainer].matrix);
 
 	// perform the data callback if needed
 	if (requireDataUpdate && ! visMap[type].hasOwnProperty('dataField')) {
@@ -2183,8 +2187,9 @@
 	var cols = data ? data.cols : c.matrix.cols;
 	var pca = Retina.pca(Retina.distanceMatrix(Retina.transposeMatrix(matrix), c.visualization.pca.distance));
 	var points = [];
-	
+
 	for (var i=0; i<pca.coordinates.length; i++) {
+	    c.items[i].pca_component = { "label": i+" ("+pca.weights[i].toFixed(6)+")", "value": i };
 	    points.push( { "x": pca.coordinates[i][c.visualization.pca.pcaa], "y": pca.coordinates[i][c.visualization.pca.pcab], "name": cols[i] } );
 	}
 	

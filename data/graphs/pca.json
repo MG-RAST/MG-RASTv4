@@ -10,8 +10,8 @@
 	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project|project_name", "values": "metadata" },
 	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "sample|biome", "values": "metadata" },
-	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "counter" },
-	      { "name": "pcab", "type": "select", "description": "set the principle y-component", "title": "PC Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "counter" },
+	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "pca_component" },
+	      { "name": "pcab", "type": "select", "description": "set the principle y-component", "title": "PC Y", "adaptToData": true, "default": 1, "isDataUpdater": true, "values": "pca_component" },
 	      { "name": "distance", "type": "select", "description": "method for distance matrix", "title": "distance method", "default": "euclidean", "isDataUpdater": true, "options": [ { "label": "euclidean", "value": "euclidean" }, { "label": "manhattan", "value": "manhattan" }, { "label": "maximum", "value": "maximum" }, { "label": "braycurtis", "value": "braycurtis" }, { "label": "minkowski", "value": "minkowski" } ] },
 	      { "name": "normalize", "type": "bool", "defaultTrue": true, "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true }
 	  ]
