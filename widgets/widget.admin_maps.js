@@ -42,9 +42,7 @@
 	    Retina.Renderer.create('slider', { target: document.getElementById("yearSlider"), current: widget.year, min: 2007, max: 2017, callback: function (year) {
 		var widget = Retina.WidgetInstances.admin_maps[1];
 		widget.year = year;
-		if (widget.singleYear) {
-		    widget.showMap();
-		}
+		widget.showMap();
 	    }}).render()
 	    
 	} else {
@@ -58,6 +56,7 @@
 	document.getElementById('myWorld').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 32px;margin-left: 50%;margin-top: 200px;">';
 
 	var cd = {};
+	var rat = {};
 	var d = stm.DataStore.JobData;
 	for (var i=0; i<d.length; i++) {
 	    if (! d[i].hasOwnProperty('country')) {
@@ -72,14 +71,28 @@
 	    }
 	    if (! cd.hasOwnProperty(d[i].country)) {
 		cd[d[i].country] = 0;
-	    }
-	    if (widget.dataType == 'WGS' && d[i].sequence_type !== 'WGS') {
-		continue;
-	    }
-	    if (widget.dataType == '454' && d[i].seq_meth !== '454') {
-		continue;
+		rat[d[i].country] = 0;
 	    }
 	    if (widget.singleYear && parseInt(d[i].created.substring(0,4)) != widget.year) {
+		continue;
+	    }
+	    if (! widget.singleYear && parseInt(d[i].created.substring(0,4)) > widget.year) {
+		continue;
+	    }
+	    if (widget.dataType == '454 vs illumina') {
+		if (d[i].seq_meth == '454') {
+		    cd[d[i].country]++;
+		} else if (d[i].seq_meth == 'illumina') {
+		    rat[d[i].country]++;
+		}
+		continue;
+	    }
+	    if (widget.dataType == 'WGS') {
+		if (d[i].sequence_type == 'WGS') {
+		    cd[d[i].country]++;
+		} else if (d[i].sequence_type == 'Amplicon') {
+		    rat[d[i].country]++;
+		}
 		continue;
 	    }
 	    cd[d[i].country]++;
@@ -88,12 +101,25 @@
 	var gd = [ ['Country', 'Samples'] ];
 	var k = Retina.keys(cd);
 	for (var i=0; i<k.length; i++) {
-	    gd.push([k[i], widget.log ? Retina.log10(cd[k[i]]) : cd[k[i]] ]);
+	    var d = cd[k[i]];
+	    if (widget.dataType == '454 vs illumina' || widget.dataType == 'WGS') {
+		if (cd[k[i]] + rat[k[i]] == 0) {
+		    continue;
+		}
+		d = (cd[k[i]] / (cd[k[i]] + rat[k[i]]) * 100) - 50;
+	    } else if (d == 0) {
+		continue;
+	    }
+	    gd.push([k[i], widget.log ? Retina.log10(d) : d ]);
 	}
 	
 	var data = google.visualization.arrayToDataTable(gd);
 	
         var options = {};
+
+	if (widget.dataType !== 'all samples') {
+	    options.colorAxis = {colors: ['green', 'red']}
+	}
 	
         var chart = new google.visualization.GeoChart(document.getElementById('myWorld'));
 	
@@ -123,10 +149,34 @@
 	var html = "<table>";
 	html += "<tr><td style='padding-bottom: 5px; padding-right: 5px;'>log</td><td><input type='checkbox' onchange='Retina.WidgetInstances.admin_maps[1].log=this.checked;'></td></tr>";
 	html += "<tr><td style='padding-bottom: 5px; padding-right: 5px;'>single year</td><td><input type='checkbox' onchange='Retina.WidgetInstances.admin_maps[1].singleYear=this.checked;'></td></tr>";
-	html += "<tr><td style='padding-bottom: 5px; padding-right: 5px;'>data type</td><td><select style='margin-bottom: 0px;' onchange='Retina.WidgetInstances.admin_maps[1].dataType=this.options[this.selectedIndex].value;'><option>all samples</option><option>WGS</option><option>454</option></select></td></tr>";
-	html += "</table><button class='btn' onclick='Retina.WidgetInstances.admin_maps[1].updateData();'>set</button><button class='btn pull-right' onclick='Retina.WidgetInstances.admin_maps[1].showMap();'>show</button>";
+	html += "<tr><td style='padding-bottom: 5px; padding-right: 5px;'>data type</td><td><select style='margin-bottom: 0px;' onchange='Retina.WidgetInstances.admin_maps[1].dataType=this.options[this.selectedIndex].value;'><option>all samples</option><option>WGS</option><option>454 vs illumina</option></select></td></tr>";
+	html += "</table><button class='btn' onclick='Retina.WidgetInstances.admin_maps[1].makeScreen();'>screen</button><button class='btn pull-right' onclick='Retina.WidgetInstances.admin_maps[1].showMap();'>show</button>";
 
 	target.innerHTML = html;
+    };
+
+    widget.makeScreen = function () {
+	var widget = this;
+
+	var resultDiv = document.createElement('div');
+	resultDiv.setAttribute('style', 'display: none;');
+	resultDiv.setAttribute('id', 'canvasResult');
+	document.body.appendChild(resultDiv);
+
+	Retina.svg2png(null, resultDiv, 1000, 700).then(
+	    function() {
+		var href = document.createElement('a');
+		var canvas = document.getElementById('canvasResult').children[0];
+		href.setAttribute('href', canvas.toDataURL());
+		href.setAttribute('download', Retina.WidgetInstances.admin_maps[1].year+".png");
+		href.setAttribute('style', 'display: none;');
+		document.body.appendChild(href);
+		href.click();
+
+		// remove the elements
+		document.body.removeChild(href);
+		document.body.removeChild(document.getElementById('canvasResult'));
+	    });
     };
 
     widget.updateData = function () {
