@@ -534,7 +534,7 @@
 	var seqTypes = { "wgs": "shotgun metagenome",
 			 "mt": "metatranscriptome",
 			 "amplicon": "amplicon metagenome",
-			 "amplicongene": "amplicon gene" };
+			 "barcode": "barcode" };
 	
 	for (var i=0;i<rows.length;i++) {
             html.push("<tr"+(widget.selectedMetagenomes[data[rows[i][0]]["metagenome_id"]] ? " class='alert-info' title='this metagenome is part of your currently selected collection'" : "")+" mgname='"+data[rows[i][0]]["name"]+"' mgid='"+data[rows[i][0]]["metagenome_id"]+"'>");

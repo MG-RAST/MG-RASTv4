@@ -9,7 +9,8 @@
     });
     
     widget.setup = function () {
-	return [ Retina.load_renderer("tree") ];
+	return [ Retina.load_renderer("tree"),
+		 Retina.load_renderer("progress") ];
     };
     
     widget.metadata = {};
@@ -144,11 +145,14 @@
 	var html = [];
 
 	// info box
-	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: left; width: 600px;" id="cellInfoBox"><h3 style="margin-top: 0px;">What does MetaZen do?</h3><p>Metadata (or data about the data) has become a necessity as the community generates large quantities of data sets.</p><p>Using community generated questionnaires we capture this metadata. MG-RAST has implemented the use of <a target="_blank" href="http://gensc.org/gc_wiki/index.php/MIxS">Minimum Information about any (X) Sequence</a> (miXs) developed by the <a target="_blank" href="http://gensc.org">Genomic Standards Consortium</a> (GSC).</p><p>The best form to capture metadata is via a simple spreadsheet with 12 mandatory terms. This tool is designed to help you fill out your metadata spreadsheet. The metadata you provide, helps us to analyze your data more accurately and helps make MG-RAST a more useful resource.</p></div>');
+	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: left; width: 600px;" id="cellInfoBox"><button class="btn pull-right btn-success" onclick="Retina.WidgetInstances.metagenome_metazen2[1].showGuide();">get started</button><h3 style="margin-top: 0px;">What does MetaZen do?</h3><p>Metadata (or data about the data) has become a necessity as the community generates large quantities of data sets.</p><p>Using community generated questionnaires we capture this metadata. MG-RAST has implemented the use of <a target="_blank" href="http://gensc.org/gc_wiki/index.php/MIxS">Minimum Information about any (X) Sequence</a> (miXs) developed by the <a target="_blank" href="http://gensc.org">Genomic Standards Consortium</a> (GSC).</p><p>The best form to capture metadata is via a simple spreadsheet with 12 mandatory terms. This tool is designed to help you fill out your metadata spreadsheet. The metadata you provide, helps us to analyze your data more accurately and helps make MG-RAST a more useful resource.</p></div>');
 	
+	// compliance box
+	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: right; width: 600px; display: none;" id="complianceBox"></div>');
+
 	// tab select
-	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: right;">');
-	
+	html.push('<div style="border-radius: 5px; border: 1px solid #ddd; padding: 8px; margin-bottom: 10px; float: right;" id="tabBox">');
+
 	// libraries
 	html.push('<div style="float: left;"><div style="font-weight: bold;">libraries</div>');
 	html.push('<div style="padding-left: 15px;"><input style="position: relative; bottom: 2px;" id="library-metagenomeCheckbox" type="checkbox"'+(widget.activeTabs['library-metagenome'] ? " checked=checked" : "")+' onclick="Retina.WidgetInstances.metagenome_metazen2[1].updateTabs(this);" name="library-metagenome"> metagenome</div>');
@@ -165,8 +169,10 @@
 	}
 	html.push('</div></div>');
 
+	html.push('<br><button class="btn btn-small" style="float: right; margin-top: 35px;" onclick="Retina.WidgetInstances.metagenome_metazen2[1].showGuide();">show guide</button>');
+
 	// ENVO
-	html.push('<div style="float: left; margin-left: 20px;" id="envo_select_div"></div>');
+	html.push('<div style="float: left;" id="envo_select_div"></div>');
 
 	// linebreak
 	html.push('<div style="clear: both;"></div></div>');
@@ -794,6 +800,8 @@
 		pp[p.cellIndex + 1].click();
 	    }
 	}
+
+	widget.showGuide();
     };
 
     // ENVO
@@ -1742,5 +1750,137 @@
 	    return true;
 	}
     };
-    
+
+    widget.showGuide = function () {
+	var widget = this;
+
+	var target = document.getElementById('complianceBox');
+	document.getElementById('complianceBox').style.display = '';
+	document.getElementById('tabBox').style.display = "none";
+
+	var mixs = { "project": [ "project_name", "PI_email", "PI_firstname", "PI_lastname", "PI_organization", "PI_organization_country", "PI_organization_address" ],
+		     "sample": [ "sample_name", "latitude", "longitude", "country", "location", "collection_date", "collection_time", "collection_timezone", "biome", "feature", "material", "env_package" ],
+		     "library": [ "sample_name", "metagenome_name", "investigation_type", "seq_meth" ] };
+
+	var status = {};
+	status['MiXS'] = '<img src="Retina/images/warning.png" style="width: 16px;" title="you are not compliant">';
+	var nextStep = "";
+	var currentStep = 0;
+	var fraction = 0;
+	var statusData = [ { "name": "project", "title": "project", "content": "Your still need to complete your project data." },
+			   { "name": "sample", "title": "sample", "content": "Your still need to complete your sample data." },
+			   { "name": "library", "title": "library", "content": "Your still need to complete your library data." },
+			   { "name": "package", "title": "environmental package", "content": "Your still need to complete your environmental package data." } ];
+
+	// check for project first
+	if (Retina.keys(widget.metadata.project).length < 2) {
+	    nextStep = "You need to enter project data. Click the <a href='#' onclick='jQuery(\"#project-li\").click();'>project</a> tab and fill out at least the red marked fields.";
+	} else {
+	    var missing = 0;
+	    var firstMissing = "";
+	    for (var i=0; i<mixs.project.length; i++) {
+		if (! widget.metadata.project.hasOwnProperty(mixs.project[i])) {
+		    if (! firstMissing) {
+			firstMissing = mixs.project[i];
+		    }
+		    missing++;
+		}
+	    }
+	    if (missing > 0) {
+		nextStep = "Your project data is missing "+missing+" fields, i.e. "+firstMissing+".";
+		var complete = mixs.project.length - missing;
+		fraction = complete / mixs.project.length;
+		statusData[0].content = "You have completed "+complete+" out of "+mixs.project.length+" fields.";
+	    } else {
+
+		currentStep = 1;
+		statusData[0].content = "Your project data is complete.";
+		
+		// check for the sample next
+		if (! widget.metadata.hasOwnProperty('sample')) {
+		    nextStep = "You need to enter sample data. Click the sample tab and fill out at least the red marked fields for at least one sample.";
+		} else {
+		    missing = 0;
+		    firstMissing = "";
+		    for (var i=0; i<mixs.sample.length; i++) {
+			if (! widget.metadata.sample.hasOwnProperty(mixs.sample[i])) {
+			    if (! firstMissing) {
+				firstMissing = mixs.sample[i];
+			    }
+			    missing++;
+			}
+		    }
+		    if (missing > 0) {
+			nextStep = "Your sample data is missing "+missing+" fields, i.e. "+firstMissing+".";
+			var complete = mixs.sample.length - missing;
+			fraction = complete / mixs.sample.length;
+			statusData[1].content = "You have completed "+complete+" out of "+mixs.sample.length+" fields.";
+		    } else {
+			currentStep = 2;
+			statusData[1].content = "Your sample data is complete.";
+			if (!(widget.metadata.hasOwnProperty('library-mimarks-survey') || widget.metadata.hasOwnProperty('library-metatranscriptome') || widget.metadata.hasOwnProperty('library-metagenome'))) {
+			    nextStep = "You need to fill out a library sheet according to your data (metagenome, metatranscriptome or mimarks-survey).";
+			} else {
+			    var sheet = 'library-metagenome';
+			    if (widget.metadata.hasOwnProperty('library-metatranscriptome')) {
+				sheet = 'library-metatranscriptome';
+				mixs["library"].push("mrna_percent");
+			    } else if (widget.metadata.hasOwnProperty('library-mimarks-survey')) {
+				sheet = 'library-mimarks-survey';
+				mixs["library"].push("target_gene");
+			    }
+			    missing = 0;
+			    firstMissing = "";
+			    for (var i=0; i<mixs.library.length; i++) {
+				if (! widget.metadata[sheet].hasOwnProperty(mixs.library[i])) {
+				    if (! firstMissing) {
+					firstMissing = mixs.library[i];
+				    }
+				    missing++;
+				}
+			    }
+			    if (missing > 0) {
+				nextStep = "Your library data is missing "+missing+" fields, i.e. "+firstMissing+".";
+				var complete = mixs.library.length - missing;
+				fraction = complete / mixs.library.length;
+				statusData[2].content = "You have completed "+complete+" out of "+mixs.library.length+" fields.";
+			    } else {
+				currentStep = 3;
+				statusData[2].content = "Your library data is complete.";
+				var ep = widget.metadata.sample.env_package[0];
+				if (widget.metadata.hasOwnProperty('ep-'+ep)) {
+				    nextStep = "All mandatory data is complete. Please take the time and fill out all additional information you have. You can use the <b>upload to inbox</b> button to validate that all data is consistent.";
+				    currentStep = 4;
+				} else {
+				    nextStep = "You need to fill out the environmental package sheet ("+ep+").";
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+
+	
+	var html = ['<button class="btn btn-small pull-right" onclick="jQuery(\'#complianceBox\').toggle();jQuery(\'#tabBox\').toggle();">select packages</button>'];
+
+	
+	html.push('<h4 style="margin-top: 0px;">current status of your metadata</h4>');
+	html.push('<div id="progressContent" style="margin-left: 100px; margin-bottom: 10px;"></div>');
+	//	html.push('<table>');
+	//	html.push('<tr><th style="text-align: left; padding-right: 10px;">status</th><th style="text-align: left; padding-right: 10px;">profile</th><th style="text-align: left;">next step</th></tr>');
+	//	html.push('<tr><td style="vertical-align: top; text-align: center;">'+status['MiXS']+'</td><td style="vertical-align: top; padding-right: 10px;">MiXS</td><td>'+nextStep+'</td></tr>');
+	html.push('<p>'+nextStep+'</p>');
+	//	html.push('</table>');
+
+	target.innerHTML = html.join('');
+
+	Retina.Renderer.create("progress", { "target": document.getElementById("progressContent"),
+					     "data": statusData,
+					     "currentStep": currentStep,
+					     "fraction": fraction,
+					     "width": 300
+					   }).render();
+	
+    };
 })();
