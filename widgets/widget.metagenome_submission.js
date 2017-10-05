@@ -86,7 +86,7 @@
 	    html += "<div class='accordion-group' style='border: none;'><div class='accordion-heading stage'><a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#submit' id='submitHeader'>5. submit</a></div><div id='submit' class='accordion-body collapse'></div></div>";
 	    
 	    html += "</div></form>";
-	    
+
 	    content.innerHTML = html;
 	    
 	    widget.displayProjectSelect();
@@ -208,12 +208,28 @@
 	var widget = Retina.WidgetInstances.metagenome_submission[1];
 
 	var metadata = document.getElementById('no_metadata').checked ? "none" : (document.getElementById('metadata_file_select').selectedIndex > -1 ? document.getElementById('metadata_file_select').options[document.getElementById('metadata_file_select').selectedIndex].value : null);
+	document.getElementById('quickstartbutton').style.display = '';
+	jQuery('#priorityOption1').attr('disabled', 'disabled');
+	jQuery('#priorityOption1').parent().css('color', 'gray');
+	jQuery('#priorityOption2').attr('disabled', 'disabled');
+	jQuery('#priorityOption2').parent().css('color', 'gray');
+	jQuery('#priorityOption3').attr('disabled', 'disabled');
+	jQuery('#priorityOption3').parent().css('color', 'gray');
 	if (! metadata) {
 	    alert('if you do not want to provide metadata, please check the checkbox');
 	    widget.validSteps.metadata = false;
 	} else {
 	    widget.selectedMetadata = metadata;
 	    widget.validSteps.metadata = true;
+	    if (metadata != 'none') {
+		document.getElementById('quickstartbutton').style.display = 'none';
+		jQuery('#priorityOption1').removeAttr('disabled');
+		jQuery('#priorityOption1').parent().css('color', 'black');
+		jQuery('#priorityOption2').removeAttr('disabled');
+		jQuery('#priorityOption2').parent().css('color', 'black');
+	    	jQuery('#priorityOption3').removeAttr('disabled');
+		jQuery('#priorityOption3').parent().css('color', 'black');
+	    }
 	    document.getElementById('projectHeader').click();
 	}
 	widget.checkSubmittable();
@@ -505,11 +521,11 @@
     widget.displaySubmit = function () {
 	var html = '<p>Data will be private (only visible to the submitter) unless you choose to share it with other users or make it public. If you decide to make data public your data will be given priority for the computational queue.</p>\
 \
-<div class="control-group">\
+<button id="quickstartbutton" class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_submission[1].quickstartMetadata();" style="float: left; margin-top: 30px; margin-left: 15px;">quickstart metadata</button><div class="control-group">\
 <div class="controls">\
-<label class="radio"><input type="radio" name="priorityOption" value="immediately" id="priorityOption1">Data will be publicly accessible <b> immediately </b> after processing completion - Highest Priority</label>\
-<label class="radio"><input type="radio" name="priorityOption" value="3months" id="priorityOption2">Data will be publicly accessible <b>after 3 months</b> - High Priority</label>\
-<label class="radio"><input type="radio" name="priorityOption" value="6months" id="priorityOption3">Data will be publicly accessible <b>after 6 months</b> - Medium Priority</label>\
+<label class="radio" style="color: gray;" title="You need to provide valid metadata to use this option"><input type="radio" name="priorityOption" value="immediately" id="priorityOption1" disabled>Data will be publicly accessible <b> immediately </b> after processing completion - Highest Priority</label>\
+<label class="radio" style="color: gray;" title="You need to provide valid metadata to use this option"><input type="radio" name="priorityOption" value="3months" id="priorityOption2" disabled>Data will be publicly accessible <b>after 3 months</b> - High Priority</label>\
+<label class="radio" style="color: gray;" title="You need to provide valid metadata to use this option"><input type="radio" name="priorityOption" value="6months" id="priorityOption3" disabled>Data will be publicly accessible <b>after 6 months</b> - Medium Priority</label>\
 <label class="radio"><input type="radio" name="priorityOption" value="date" id="priorityOption4">Data will be publicly accessible <b>eventually</b> - Lower Priority</label>\
 <label class="radio"><input type="radio" name="priorityOption" value="never" checked="" id="priorityOption5"><b>Data will stay private </b> (DEFAULT) - Lowest Priority</label>\
 </div>\
@@ -541,44 +557,44 @@
 		    var widget = Retina.WidgetInstances.metagenome_submission[1];
 		    var errors = [];
 		    
-            var libfiles = {};
-            var libnames = {};
-            var numlibs  = 0;
-            
-            // get files from metadata
-            for (var i=0; i<data.metadata.samples.length; i++) {
-                for (var h=0; h<data.metadata.samples[i].libraries.length; h++) {
-                    numlibs++;
-                    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('file_name')) {
-                        libfiles[ data.metadata.samples[i].libraries[h].data.file_name.value ] = true;
-                    }
-                    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('metagenome_name')) {
-                        libnames[ data.metadata.samples[i].libraries[h].data.metagenome_name.value ] = true;
-                    }
-                }
-            }
-            
-            // check files
-            for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
-                var has_file = false;
-                var f = widget.selectedSequenceFiles[i].name;
-                if (libfiles[f]) {
-                    has_file = true;
-                }
-                if (libnames[f.substr(0, f.lastIndexOf("."))]) {
-                    has_file = true;
-                }
-                if (has_file == false) {
-                    errors.push('No library matching sequence file '+f);
-                }
-            }
-
-		    if (errors.length) {
-			    errors.push("You need to verify that either the metagenome_name field matches the sequence filename without the suffix or the file_name field is identical to the file name of the selected sequence file.\n");
+		    var libfiles = {};
+		    var libnames = {};
+		    var numlibs  = 0;
+		    
+		    // get files from metadata
+		    for (var i=0; i<data.metadata.samples.length; i++) {
+			for (var h=0; h<data.metadata.samples[i].libraries.length; h++) {
+			    numlibs++;
+			    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('file_name')) {
+				libfiles[ data.metadata.samples[i].libraries[h].data.file_name.value ] = true;
+			    }
+			    if (data.metadata.samples[i].libraries[h].data.hasOwnProperty('metagenome_name')) {
+				libnames[ data.metadata.samples[i].libraries[h].data.metagenome_name.value ] = true;
+			    }
+			}
 		    }
-
+		    
+		    // check files
+		    for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
+			var has_file = false;
+			var f = widget.selectedSequenceFiles[i].name;
+			if (libfiles[f]) {
+			    has_file = true;
+			}
+			if (libnames[f.substr(0, f.lastIndexOf("."))]) {
+			    has_file = true;
+			}
+			if (has_file == false) {
+			    errors.push('No library matching sequence file '+f);
+			}
+		    }
+		    
+		    if (errors.length) {
+			errors.push("You need to verify that either the metagenome_name field matches the sequence filename without the suffix or the file_name field is identical to the file name of the selected sequence file.\n");
+		    }
+		    
 		    if (widget.selectedSequenceFiles.length > numlibs) {
-			    errors.push('There are more files selected than entries in the metadata spreadsheet.');
+			errors.push('There are more files selected than entries in the metadata spreadsheet.');
 		    }
 
 		    // check project name
@@ -682,5 +698,28 @@
 	    headers: stm.authHeader,
 	    type: "POST"
 	});
+    };
+
+    widget.quickstartMetadata = function () {
+	var widget = this;
+
+	if (! widget.selectedProject) {
+	    alert('please first pick a project name');
+	    return;
+	}
+	
+	if (! widget.selectedSequenceFiles || ! widget.selectedSequenceFiles.length) {
+	    alert('please first select your sequence files');
+	    return;
+	}
+	
+	var loc = 'mgmain.html?mgpage=metazen2&precursor=1'+(widget.selectedProject ? "&pname="+widget.selectedProject.name : "")+'&fids=';
+	var fids = [];
+	for (var i=0; i<widget.selectedSequenceFiles.length; i++) {
+	    fids.push(widget.selectedSequenceFiles[i].id);
+	}
+	loc += fids.join("|");
+	
+	window.top.location = loc;
     };
 })();
