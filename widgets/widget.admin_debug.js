@@ -523,7 +523,7 @@
 	    headers: stm.authHeader,
 	    url: RetinaConfig.mgrast_api+'/metagenome/'+mgid,
 	    success: function (data) {
-		var types = [ "Amplicon", "MT", "WGS", "Unknown", "AmpliconGene" ];
+		var types = [ "Amplicon", "MT", "WGS", "Unknown", "Metabarcode" ];
 		var html = "";
 		for (var i=0; i<types.length; i++) {
 		    var sel = "";

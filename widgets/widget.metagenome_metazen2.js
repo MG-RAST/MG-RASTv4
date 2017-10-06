@@ -1924,7 +1924,7 @@
 			var fn = selfiles[i].filename.substring(0,selfiles[i].filename.lastIndexOf('.'));
 			widget.setCell('sample', 'sample_name', fn, i+1);
 			var type = selfiles[i].stats_info.sequence_type;
-			var tab = (type == "Amplicon" || type == "Barcode") ? "library-mimarks-survey" : (type == "MT" ? "library-metatranscriptome" : "library-metagenome");
+			var tab = (type == "Amplicon" || type == "Metabarcode") ? "library-mimarks-survey" : (type == "MT" ? "library-metatranscriptome" : "library-metagenome");
 			hasType[tab] = true;
 			widget.setCell(tab, 'sample_name', fn);
 			widget.setCell(tab, 'metagenome_name', fn);
