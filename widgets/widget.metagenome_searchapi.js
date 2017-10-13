@@ -44,14 +44,12 @@
 	html.push("<div class='span8' style='margin-left: 70px;'><h1 style='font-weight: 300;'>MG-RAST search API explorer</h1><p>The MG-RAST search API provides access to all public and all private datasets you have permissions for. It contains metadata about studies and datasets including the required identifiers to access data products through the <a href='mgmain.html?mgpage=api'>other API resources</a>. This page will guide you through some common use-cases to better understand how to utilize the programmatic interface to our search data.</p><p>The complete set of functions is also available on the <a href='mgmain.html?mgpage=search'>search page</a>.</p>");
 
 	if (stm.user) {
-	    html.push('<p>You are logged in and your webkey is appended to each query automatically. This is needed to access your private data. To access your current webkey type "webkey" into the search box in the header and press enter.</p>');
+	    html.push('<p>You are logged in and your webkey is appended to each query automatically. This is needed to access your private data. To access your current webkey type "webkey" into the search box in the header and press enter. You can disable the authentication by unchecking the box below. Data returned will only include public records then.</p><p style="text-align: center;"><input style="margin: 0px;" type="checkbox" id="useAuth" checked=checked onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"> use authentication in requests</p>');
 	} else {
 	    html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
 	}
 
 	html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results.</p>');
-
-	html.push('<div style="text-align: center; margin-top: 25px;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
 
 	html.push('<h4 style="margin-top: 25px;">HTML query</h4><div style="margin-top: 25px;"><pre id="searchtext"></pre></div>');
 
@@ -79,6 +77,8 @@
 	html.push('<div class="input-prepend input-append pull-left"><select id="filter">'+widget.fieldOptions()+'</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
 	html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
 	html.push('</div>');
+
+	html.push('<div style="text-align: center; margin-top: 25px;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
 	
 	html.push('<div style="clear: both;"></div><h4 style=" margin-top: 25px;">result from API</h4>');
 	
@@ -108,8 +108,8 @@
 	var widget = this;
 
 	var url = "http://api.metagenomics.anl.gov/search";
-	var auth = stm.user ? 'auth='+stm.user.token+'&' : '';
-	var authHeader = stm.user ? '-H "Authorization: mgrast '+stm.user.token+'" ' : '';
+	var auth = (stm.user && document.getElementById('useAuth').checked) ? 'auth='+stm.user.token+'&' : '';
+	var authHeader = (stm.user && document.getElementById('useAuth').checked) ? '-H "Authorization: mgrast '+stm.user.token+'" ' : '';
 	var offset = document.getElementById('offset').options[document.getElementById('offset').selectedIndex].value;
 	var limit = document.getElementById('limit').options[document.getElementById('limit').selectedIndex].value;
 	var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;

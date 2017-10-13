@@ -49,73 +49,77 @@
 	    }
 	    
 	    // check if required data is loaded (use stats)
-	    if (! stm.DataStore.hasOwnProperty('metagenome') || ! stm.DataStore.metagenome.hasOwnProperty(widget.id) || ! stm.DataStore.metagenome[widget.id].hasOwnProperty('computationStatus')) {
-		jQuery.getJSON(RetinaConfig.mgrast_api + '/server/MG-RAST').then(function(d) {
-		    var widget = Retina.WidgetInstances.metagenome_overview[1];
-		    widget.driseeMGRAST = { "min": d.driseemin, "max": d.driseemax, "avg": d.driseeavg, "stdv": d.driseestdv };
-		    var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full&nocache=1';
-		    jQuery.ajax( { dataType: "json",
-				   url: url,
-				   headers: stm.authHeader,
-				   success: function(data) {
-				       var widget = Retina.WidgetInstances.metagenome_overview[1]
-				       if (! stm.DataStore.hasOwnProperty('metagenome')) {
-					   stm.DataStore.metagenome = {};
+	    if (! stm.DataStore.hasOwnProperty('metagenome') || ! stm.DataStore.metagenome.hasOwnProperty(widget.id) || ! stm.DataStore.metagenome[widget.id].hasOwnProperty('computationStatus') || ! stm.DataStore.hasOwnProperty('lca')) {
+		if (! widget.loading) {
+		    widget.loading = true;
+		    widget.loadLCA();
+		    jQuery.getJSON(RetinaConfig.mgrast_api + '/server/MG-RAST').then(function(d) {
+			var widget = Retina.WidgetInstances.metagenome_overview[1];
+			widget.driseeMGRAST = { "min": d.driseemin, "max": d.driseemax, "avg": d.driseeavg, "stdv": d.driseestdv };
+			var url = RetinaConfig.mgrast_api + '/metagenome/'+widget.id+'?verbosity=full&nocache=1';
+			jQuery.ajax( { dataType: "json",
+				       url: url,
+				       headers: stm.authHeader,
+				       success: function(data) {
+					   var widget = Retina.WidgetInstances.metagenome_overview[1]
+					   if (! stm.DataStore.hasOwnProperty('metagenome')) {
+					       stm.DataStore.metagenome = {};
+					   }
+					   if (data.hasOwnProperty('statistics')) {
+					       data.computationStatus = "complete";
+					   } else {
+					       data.computationStatus = "incomplete";
+					   }
+					   if (data.pipeline_parameters.assembled == "yes") {
+					       data.sequence_type = "Assembly";
+					   }
+					   stm.DataStore.metagenome[data.id] = data;
+					   
+					   // check public / private status
+					   if (data.status == "private") {
+					       widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share'+(stm.DataStore.metagenome[data.id].project ? '&project='+stm.DataStore.metagenome[data.id].project[0] : "")+'" title="show sharing options"><i class="icon icon-share"></i> show sharing options</a></div>';
+					   }
+					   
+					   widget.variableExtractorMetagenome(data.id);
+					   var url = "data/flows/";
+					   switch (data.sequence_type) {
+					   case 'Amplicon':
+					       url += "amplicon";
+					       document.getElementById("pageTitle").innerHTML = "amplicon metagenome";
+					       break;
+					   case 'MT':
+					       url += "transcriptome";
+					       document.getElementById("pageTitle").innerHTML = "shotgun metatranscriptome";
+					       break;
+					   case 'Assembly':
+					       url += "assembly";
+					       document.getElementById("pageTitle").innerHTML = "assembled shotgun metagenome";
+					       break;
+					   case 'WGS':
+					       url += "shotgun";
+					       document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
+					       break;
+					   default:
+					       url += "shotgun";
+					       document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
+					       break;
+					   }
+					   url += "_overview.flow.json";
+					   jQuery.getJSON(url).then(function(d) {
+					       stm.DataStore.flows = { "metagenome_overview": d };
+					       Retina.WidgetInstances.metagenome_overview[1].display();
+					   });
+				       },
+				       error: function (jqxhr) {
+					   if (jqxhr.status == 500) {
+					       widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
+					   } else if (jqxhr.status == 401) {
+					       widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
+					   }
 				       }
-				       if (data.hasOwnProperty('statistics')) {
-					   data.computationStatus = "complete";
-				       } else {
-					   data.computationStatus = "incomplete";
-				       }
-				       if (data.pipeline_parameters.assembled == "yes") {
-					   data.sequence_type = "Assembly";
-				       }
-				       stm.DataStore.metagenome[data.id] = data;
-				       
-				       // check public / private status
-				       if (data.status == "private") {
-					   widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share'+(stm.DataStore.metagenome[data.id].project ? '&project='+stm.DataStore.metagenome[data.id].project[0] : "")+'" title="show sharing options"><i class="icon icon-share"></i> show sharing options</a></div>';
-				       }
-				       
-				       widget.variableExtractorMetagenome(data.id);
-				       var url = "data/flows/";
-				       switch (data.sequence_type) {
-				       case 'Amplicon':
-					   url += "amplicon";
-					   document.getElementById("pageTitle").innerHTML = "amplicon metagenome";
-					   break;
-				       case 'MT':
-					   url += "transcriptome";
-					   document.getElementById("pageTitle").innerHTML = "shotgun metatranscriptome";
-					   break;
-				       case 'Assembly':
-					   url += "assembly";
-					   document.getElementById("pageTitle").innerHTML = "assembled shotgun metagenome";
-					   break;
-				       case 'WGS':
-					   url += "shotgun";
-					   document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
-					   break;
-				       default:
-					   url += "shotgun";
-					   document.getElementById("pageTitle").innerHTML = "shotgun metagenome";
-					   break;
-				       }
-				       url += "_overview.flow.json";
-				       jQuery.getJSON(url).then(function(d) {
-					   stm.DataStore.flows = { "metagenome_overview": d };
-					   Retina.WidgetInstances.metagenome_overview[1].display();
-				       });
-				   },
-				   error: function (jqxhr) {
-				       if (jqxhr.status == 500) {
-					   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
-				       } else if (jqxhr.status == 401) {
-					   widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
-				       }
-				   }
-				 } );
-		});
+				     } );
+		    });
+		}
 		return;
 	    }
 										
@@ -193,14 +197,25 @@
 	mg.taxonomy = {};
 	try {
 	    var taxa = [ "domain", "phylum", "class", "order", "family", "genus" ];
+	    var lca = stm.DataStore.lca.data;
+	    var lcadata = { "domain": {}, "phylum": {}, "class": {}, "order": {}, "family": {}, "genus": {} };
+	    for (var h=0; h<lca.length; h++) {
+		var t = lca[h][0].split(/;/);
+		for (var j=0; j<taxa.length; j++) {
+		    if (t[j] && t[j] != "-") {
+			if (! lcadata[taxa[j]].hasOwnProperty(t[j])) {
+			    lcadata[taxa[j]][t[j]] = 0;
+			}
+			lcadata[taxa[j]][t[j]] += lca[h][1];
+		    }
+		}
+	    }
 	    for (var h=0; h<taxa.length; h++) {
 		mg.taxonomy[taxa[h]] = [];
-		var d = mg.statistics.taxonomy[taxa[h]];
-		if (d == undefined) {
-		    continue;
-		}
-		for (var j=0; j<d.length; j++) {
-		    mg.taxonomy[taxa[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source=RefSeq&browser=1&filter_level='+taxa[h]+'&type=organism&filter='+d[j][0].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
+
+		var k = Retina.keys(lcadata[taxa[h]]);
+		for (var j=0; j<k.length; j++) {
+		    mg.taxonomy[taxa[h]].push( { value: lcadata[taxa[h]][k[j]], label: k[j], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?browser=1&filter_level='+taxa[h]+'&type=organism&filter='+k[j].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
 		}
 	    }
 	} catch (error) {
@@ -427,6 +442,171 @@
 	    }
 	    mg.staticLink = 'private metagenomes cannot be linked';
 	}
+    };
+
+    widget.loadLCA = function () {
+	var widget = this;
+	
+	widget.url = RetinaConfig.mgrast_api + "/profile/" + widget.id + "?format=lca&verbosity=minimal";
+
+	jQuery.ajax({
+	    url: widget.url,
+	    contentType: 'application/json',
+	    headers: stm.authHeader,
+	    success: function (data) {
+		var widget = Retina.WidgetInstances.metagenome_overview[1];
+		if (data != null) {
+		    if (data.hasOwnProperty('ERROR')) {
+			console.log("error: "+data.ERROR);
+		    } else if (data.hasOwnProperty('status')) {
+			if (data.status == 'done') {
+			    widget.downloadComputedData(data.url);
+			} else {
+			    window.setTimeout(widget.checkDownload.bind(widget, data.url), 10 * 1000);
+			}
+		    }
+		} else {
+		    console.log("error: invalid return structure from API server");
+		    console.log(data);
+		}
+	    },
+	    error: function(jqXHR, error) {
+	    }
+	});
+    };
+
+    widget.checkDownload = function (url) {
+	var widget = this;
+	
+	return jQuery.ajax({ url: url+"?verbosity=minimal",
+			     headers: stm.authHeader,
+			     contentType: 'application/json',
+			     success: function (data) {
+				 var widget = Retina.WidgetInstances.metagenome_overview[1];
+				 if (data != null) {
+				     if (data.hasOwnProperty('ERROR')) {
+					 console.log("error: "+data.ERROR);
+					 return;
+				     } else if (data.hasOwnProperty('status')) {
+					 if (data.status == 'done') {
+					     widget.downloadComputedData(data.url);
+					 } else {
+					     if (data.status != 'submitted' && data.status != 'processing') {
+						 console.log(data);
+						 return;
+					     }
+
+					     // check for a stale process
+					     var staleTime = 1000 * 60 * 60;
+					     if (data.status == 'processing' && new Date(data.progress.updated).getTime() + staleTime < Date.now()) {
+						 
+						 retry = parseInt(data.retry || 0) + 1;
+						 jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + widget.id + "?format=lca&verbosity=minimal&retry="+retry,
+							       contentType: 'application/json',
+							       headers: stm.authHeader,
+							       success: function (data) {
+								   var widget = Retina.WidgetInstances.metagenome_overview[1];
+								   if (data != null) {
+								       if (data.hasOwnProperty('ERROR')) {
+									   console.log("error: "+data.ERROR);
+								       } else if (data.hasOwnProperty('status')) {
+									   if (data.status == 'done') {
+									       widget.downloadComputedData(data.url);
+									   } else {
+									       window.setTimeout(widget.checkDownload.bind(widget, data.url), 10 * 1000);
+									   }
+								       }
+								   } else {
+								       console.log("error: invalid return structure from API server");
+								       console.log(data);
+								   }
+							       }});
+						 return;
+					     } else {
+						 window.setTimeout(widget.checkDownload.bind(widget, data.url), 10 * 1000);
+					     }
+					 }
+				     } else {
+					 console.log("error: invalid return structure from API server");
+					 console.log(data);
+				     }
+				 }
+			     },
+			     error: function(jqXHR, error) {
+				 console.log('check');
+				 console.log(jqXHR);
+				 var errorMsg = "server error";
+				 try {
+				     errorMsg = JSON.parse(jqXHR.responseText).ERROR;
+				 }
+				 catch (e) {
+				     errorMsg = "server error";
+				 }
+				 console.log(errorMsg);
+			     }
+			   });
+    };
+
+    widget.downloadComputedData = function (url) {
+	var widget = this;
+	
+	return jQuery.ajax({ url: url,
+			     headers: stm.authHeader,
+			     dataType: "json",
+			     contentType: 'application/json',
+			     success: function(data) {
+				 var widget = Retina.WidgetInstances.metagenome_overview[1];
+				 if (data != null) {
+				     if (data.hasOwnProperty('ERROR')) {
+					 console.log("error: "+data.ERROR);
+				     } else {
+					 // check if the profile generation failed
+					 if (data.data.hasOwnProperty('ERROR')) {
+					     var retry = 1;
+					     
+					     // check if this has happened before
+					     if (data.hasOwnProperty('retry')) {
+						 retry = parseInt(data.retry) + 1;
+					     }
+					     
+					     // now send a retry request
+					     jQuery.ajax({ url: RetinaConfig.mgrast_api + "/profile/" + widget.id + "?format=lca&verbosity=minimal&retry="+retry,
+							   contentType: 'application/json',
+							   headers: stm.authHeader,
+							   success: function (data) {
+							       var widget = Retina.WidgetInstances.metagenome_overview[1];
+							       if (data != null) {
+								   if (data.hasOwnProperty('ERROR')) {
+								       console.log("error: "+data.ERROR);
+								   } else if (data.hasOwnProperty('status')) {
+								       if (data.status == 'done') {
+									   widget.downloadComputedData(data.url);
+								       } else {
+									   window.setTimeout(widget.checkDownload.bind(widget, data.url), 10 * 1000);
+								       }
+								   }
+							       } else {
+								   console.log("error: invalid return structure from API server");
+								   console.log(data);
+							       }
+							   },
+							 });
+					     return;
+					 } else {
+					     data.data.size = data.size;
+					     stm.DataStore.lca = data.data;
+					     widget.display();
+					 }
+				     }
+				 } else {
+				     console.log("error: invalid return structure from API server");
+				     console.log(data);
+				 }
+			     },
+			     error: function(jqXHR, error) {
+				 console.log(jqXHR);
+			     }
+			   });
     };
     
 })();

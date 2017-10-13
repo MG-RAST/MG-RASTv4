@@ -123,7 +123,11 @@
 	});
 	
 	jQuery.when.apply(this, promises).then(function() {
-	    Retina.WidgetInstances.metagenome_metazen2[1].showMetadata();
+	    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+	    widget.showMetadata();
+	    if (Retina.cgiParam('precursor')) {
+		widget.precursor();
+	    }
 	});
 	
 
@@ -1883,4 +1887,72 @@
 					   }).render();
 	
     };
+
+    widget.precursor = function () {
+	var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+	var fids = Retina.cgiParam('fids').split(/\|/);
+	var pname = Retina.cgiParam('pname');
+	var selfids = {};
+	for (var i=0; i<fids.length; i++) {
+	    selfids[fids[i]] = true;
+	}
+	var url = RetinaConfig.mgrast_api + "/inbox";
+	if (stm.user) {
+	    jQuery.ajax(url, {
+		success: function(data){
+		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+		    var files = data.files;
+		    var selfiles = [];
+		    for (var i=0; i<files.length; i++) {
+			if (selfids[files[i].id]) {
+			    selfiles.push(jQuery.extend(true, {}, files[i]));
+			}
+		    }
+
+		    // set all project data we know about
+		    if (pname) {
+			widget.setCell('project', 'project_name', pname, 1);
+		    }
+		    widget.setCell('project', 'PI_email', stm.user.email, 1);		    
+		    widget.setCell('project', 'PI_firstname', stm.user.firstname, 1);		    
+		    widget.setCell('project', 'PI_lastname', stm.user.lastname, 1);		    
+
+		    var hasType = {};
+		    
+		    // check the files
+		    for (var i=0; i<selfiles.length; i++) {
+			var fn = selfiles[i].filename.substring(0,selfiles[i].filename.lastIndexOf('.'));
+			widget.setCell('sample', 'sample_name', fn, i+1);
+			var type = selfiles[i].stats_info.sequence_type;
+			var tab = (type == "Amplicon" || type == "Metabarcode") ? "library-mimarks-survey" : (type == "MT" ? "library-metatranscriptome" : "library-metagenome");
+			hasType[tab] = true;
+			widget.setCell(tab, 'sample_name', fn);
+			widget.setCell(tab, 'metagenome_name', fn);
+			widget.setCell(tab, 'investigation_type', tab.substring(8));
+			widget.setCell(tab, 'seq_meth', selfiles[i].stats_info.sequencing_method_guess);
+			widget.setCell(tab, 'file_name', selfiles[i].filename);
+			widget.setCell(tab, 'file_checksum', selfiles[i].checksum);
+		    }
+
+		    var tabs = ["library-mimarks-survey","library-metatranscriptome","library-metagenome"];
+		    for (var i=0; i<tabs.length; i++) {
+			if (! hasType[tabs[i]]) {
+			    delete widget.activeTabs[tabs[i]];
+			    jQuery('#'+tabs[i]+'Checkbox').removeAttr('checked');
+			    jQuery('#'+tabs[i]+'-li').css('display', 'none');
+			}
+		    }
+		    widget.showGuide();
+		},
+		error: function(jqXHR, error){
+		    console.log(error);
+		    console.log(jqXHR);
+		},
+		crossDomain: true,
+		headers: stm.authHeader,
+		type: "GET"
+	    });
+	}
+    };
+    
 })();
