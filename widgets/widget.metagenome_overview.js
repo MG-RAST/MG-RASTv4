@@ -215,7 +215,7 @@
 
 		var k = Retina.keys(lcadata[taxa[h]]);
 		for (var j=0; j<k.length; j++) {
-		    mg.taxonomy[taxa[h]].push( { value: lcadata[taxa[h]][k[j]], label: k[j], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?browser=1&filter_level='+taxa[h]+'&type=lca&filter='+k[j].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
+		    mg.taxonomy[taxa[h]].push( { value: lcadata[taxa[h]][k[j]], label: k[j], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?browser=1&filter_level='+taxa[h]+'&type=organism&filter='+k[j].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
 		}
 	    }
 	} catch (error) {
