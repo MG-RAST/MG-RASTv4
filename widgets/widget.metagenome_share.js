@@ -1332,8 +1332,8 @@
 	    for (var i=0; i<uarray.length; i++) {
 		var mg = "";
 		if (uarray[i].id != curr) {
-		    curr = uarray[i].id;
-		    mg = mgid2name["mgm"+uarray[i].id];
+		    curr = uarray[i].id.match(/^mgm/) ? uarray[i].id : "mgm" + uarray[i].id;
+		    mg = mgid2name[curr];
 		}
 		html += "<tr><td>"+mg+"</td><td>"+uarray[i].firstname+" "+(uarray[i].hasOwnProperty('claimed') ? "(claimed "+uarray[i].claimed+" times)" : uarray[i].lastname)+"</td><td righttype='metagenome' rightid='"+uarray[i].id+"' rightname='edit' rightscope='"+uarray[i].scope+"' rightindex='"+found+"'>"+(uarray[i].edit ? okIcon : noIcon)+"</td><td righttype='metagenome' rightid='"+uarray[i].id+"' rightname='view' rightscope='"+uarray[i].scope+"' rightindex='"+found+"'>"+(uarray[i].view ? okIcon : noIcon)+"</td></tr>";
 	    }
