@@ -23,5 +23,6 @@ var RetinaConfig = {
     "pipelines": [ 'mgrast-prod-4.0', 'mgrast-prod-4.0.1', 'mgrast-prod-4.0.2', 'mgrast-prod-4.0.3' ],
 
     // admin
-    "showOTU": false
+    "showOTU": false,
+    "showProfileChooser": false
 };

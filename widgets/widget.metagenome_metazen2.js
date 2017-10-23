@@ -16,6 +16,7 @@
     widget.metadata = {};
     widget.samples = {};
     widget.miscParams = {};
+    widget.selectedProfile = null;
     
     widget.activeTabs = { "library-metagenome": true, "library-mimarks-survey": true, "library-metatranscriptome": true };
     
@@ -45,9 +46,27 @@
 	var promise4 = jQuery.Deferred();
 	var promise5 = jQuery.Deferred();
 	var promises = [ promise1, promise2, promise3, promise4, promise5 ];
+
+	
 	
 	// load excel template
 	promises.push(widget.loadExcelTemplate());
+
+	// get the profile templates
+	promises.push(jQuery.ajax({
+	    method: "GET",
+	    dataType: "json",
+	    headers: stm.authHeader,
+	    url: 'data/demo.profiles',
+	    success: function (data) {
+		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+		stm.DataStore.profiles = data;
+		widget.profileNames = [];
+		for (var i=0; i<stm.DataStore.profiles.length; i++) {
+		    widget.profileNames.push(stm.DataStore.profiles[i].name);
+		}
+	    }
+	}));
 	
 	// if there is a user, load project list
 	if (stm.user) {
@@ -1868,7 +1887,7 @@
 	
 	var html = ['<button class="btn btn-small pull-right" onclick="jQuery(\'#complianceBox\').toggle();jQuery(\'#tabBox\').toggle();">select packages</button>'];
 
-	
+	// MiXS status
 	html.push('<h4 style="margin-top: 0px;">current status of your metadata</h4>');
 	html.push('<div id="progressContent" style="margin-left: 100px; margin-bottom: 10px;"></div>');
 	//	html.push('<table>');
@@ -1877,6 +1896,24 @@
 	html.push('<p>'+nextStep+'</p>');
 	//	html.push('</table>');
 
+	var profileNames = widget.profileNames;
+	
+	// profile package chooser
+	if (RetinaConfig.showProfileChooser) {
+	    html.push('<h4 style="margin-top: 0px;">metadata profiles</h4>');
+	    html.push('<p><select id="profileChooser" style="margin-bottom: 0px;"><option>- select -</option>');
+	    for (var i=0; i<profileNames.length; i++) {
+		var sel = '';
+		if (widget.selectedProfile == profileNames[i]) {
+		    sel = ' selected=selected';
+		}
+		html.push('<option'+sel+'>'+profileNames[i]+'</option>');
+	    }
+	    html.push('</select><button class="btn" style="margin-left: 3px;" onclick="Retina.WidgetInstances.metagenome_metazen2[1].showProfile();">select</button><span id="starRating" style="margin-left: 20px;"></span></p>');
+	    html.push('<div id="profileProgressContent" style="margin-left: 100px; margin-bottom: 10px;"></div>');
+	    html.push('<p id="profileNextStep"></p>');
+	}
+	
 	target.innerHTML = html.join('');
 
 	Retina.Renderer.create("progress", { "target": document.getElementById("progressContent"),
@@ -1885,7 +1922,116 @@
 					     "fraction": fraction,
 					     "width": 300
 					   }).render();
+
+	if (widget.selectedProfile) {
+	    var profileStatusData = [{ "name": "bronze", "title": "bronze", "content": "You have not yet achieved bronze rating." },
+				     { "name": "silver", "title": "silver", "content": "You have not yet achieved silver rating." },
+				     { "name": "gold", "title": "gold", "content": "You have not yet achieved gold rating." }];
+	    var currentProfileStep = 0;
+	    var profileFraction = 0;
+
+	    // check the status of the current profile
+	    var profile;
+	    for (var i=0; i<stm.DataStore.profiles.length; i++) {
+		if (stm.DataStore.profiles[i].name == widget.selectedProfile) {
+		    profile = jQuery.extend(true, {}, stm.DataStore.profiles[i]);
+		    break;
+		}
+	    }
+	    var stars = 0;
+	    var starimage = "";
+	    var starrating = "You currently have no rating in this profile.";
+	    var okFields = [0,0,0];
+	    var missing = [[],[],[]];
+	    for (var i=0; i<profile.hierarchy.length; i++) {
+		var fields = profile.hierarchy[i];
+		for (var h=0; h<fields.length; h++) {
+		    var found = false;
+		    var pname = '';
+		    for (var j=0; j<profile.packages.length; j++) {
+			var p = 'ep-'+profile.packages[j];
+			if (widget.metadataTemplate.ep[profile.packages[j]].hasOwnProperty(fields[h])) {
+			    pname = profile.packages[j];
+			}
+			if (widget.metadata.hasOwnProperty(p) && widget.metadata[p].hasOwnProperty(fields[h]) && widget.metadata[p][fields[h]][0] != undefined) {
+			    okFields[i]++
+			    found = true;
+			    break;
+			}
+		    }
+		    if (! found) {
+			missing[i].push(fields[h]+' in the package '+pname);
+		    }
+		}
+		if (okFields[i] == fields.length) {
+		    stars = i + 1;
+		    starimage += stars == 1 ? '<img src="Retina/images/broncestar.png" style="width: 16px;">' : ( stars == 2 ? '<img src="Retina/images/silverstar.png" style="width: 16px;">' : '<img src="Retina/images/fullstar.png" style="width: 16px;">');
+		    starrating = stars == 1 ? "You have achieved bronze rating in this profile." : (stars == 2 ? "You have achieved silver rating in this profile." : "You have achieved gold rating in this profile");
+		} else {
+		    starimage += '<img src="Retina/images/emptystar.png" style="width: 16px;">';
+		}
+	    }
+	    var profileNextStep = '';
+	    var hasNext = false;
+	    for (var i=profile.hierarchy.length; i>0; i--) {
+		if (okFields[i-1] == 0) {
+		    profileNextStep = 'You have not filled out any fields for this rating, start with '+missing[i-1][0]+'.';
+		} else if (okFields[i-1] == profile.hierarchy[i-1].length) {
+		    if (! hasNext) {
+			hasNext = true;
+			profileNextStep = 'You have achieved the '+(stars == 1 ? 'bronze' : (stars == 2 ? 'silver' : 'gold'))+' rating.';
+			if (i < 3) {
+			    if (missing[i].length > 1) {
+				profileNextStep += ' You are missing '+missing[i].length+' fields for the the next rank, i.e. '+missing[i][0]+'.';
+			    } else {
+				profileNextStep += ' You are only missing the field '+missing[i][0]+' for the next rating.';
+			    }
+			}
+
+			if (i > currentProfileStep) {
+			    currentProfileStep = i;
+			}
+		    }
+		} else {
+		    profileFraction = okFields[i-1] / profile.hierarchy[i-1].length;
+		    profileNextStep = 'You have completed '+(profile.hierarchy[i-1].length - missing[i-1].length)+' out of '+profile.hierarchy[i-1].length+' fields for this rating. The next field is '+missing[i-1][0]+'.';
+		}
+	    }
+	    document.getElementById('profileNextStep').innerHTML = profileNextStep;
+	    document.getElementById('starRating').innerHTML = starimage;
+	    document.getElementById('starRating').title = starrating;
+
+	    Retina.Renderer.create("progress", { "target": document.getElementById("profileProgressContent"),
+						 "data": profileStatusData,
+						 "currentStep": currentProfileStep,
+						 "fraction": profileFraction,
+						 "width": 300
+					       }).render();
+	}
 	
+    };
+
+    widget.showProfile = function () {
+	var widget = this;
+
+	if (document.getElementById('profileChooser').selectedIndex > 0) {
+	    widget.selectedProfile = document.getElementById('profileChooser').options[document.getElementById('profileChooser').selectedIndex].value;
+	    var profile;
+	    for (var i=0; i<stm.DataStore.profiles.length; i++) {
+		if (stm.DataStore.profiles[i].name == widget.selectedProfile) {
+		    profile = jQuery.extend(true, {}, stm.DataStore.profiles[i]);
+		    break;
+		}
+	    }
+	    for (var i=0; i<profile.packages.length; i++) {
+		var tab = "ep-"+profile.packages[i];
+		widget.activeTabs[tab] = true;
+		jQuery('#'+tab+'Checkbox').attr('checked','checked');
+		jQuery('#'+tab+'-li').css('display', '');
+	    }
+	}
+
+	widget.showGuide();
     };
 
     widget.precursor = function () {
