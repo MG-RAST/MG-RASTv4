@@ -1,0 +1,68 @@
+[
+    {
+	"name": "demo 1",
+	"description": "demonstration profile 1",
+	"contact": {
+	    "organization": "Argonne National Laboratory",
+	    "organization_abbrev": "ANL",
+	    "url": "http://metagenomics.anl.gov",
+	    "email": "info@mg-rast.org",
+	    "firstname": "Tobias",
+	    "lastname": "Paczian"
+	},
+	"packages": [
+	    "air"
+	],
+	"hierarchy": [
+	    [
+		"barometric_press",
+		"carb_dioxide",
+		"carb_monoxide"
+	    ],
+	    [
+		"humidity",
+		"pollutants",
+		"samp_salinity"
+	    ],
+	    [
+		"ventilation_rate",
+		"ventilation_type",
+		"wind_direction",
+		"wind_speed"
+	    ]
+	]
+    },
+    {
+	"name": "demo 2",
+	"description": "demonstration profile 2",
+	"contact": {
+	    "organization": "Argonne National Laboratory",
+	    "organization_abbrev": "ANL",
+	    "url": "http://metagenomics.anl.gov",
+	    "email": "info@mg-rast.org",
+	    "firstname": "Tobias",
+	    "lastname": "Paczian"
+	},
+	"packages": [
+	    "host-associated"
+	],
+	"hierarchy": [
+	    [
+		"age",
+		"sex"
+	    ],
+	    [
+		"disease_stat",
+		"body_site",
+		"host_growth_cond"
+	    ],
+	    [
+		"samp_salinity",
+		"organism_count",
+		"samp_store_temp",
+		"samp_store_dur",
+		"samp_store_loc"
+	    ]
+	]
+    }
+]
