@@ -45,28 +45,45 @@
 	var promise3 = jQuery.Deferred();
 	var promise4 = jQuery.Deferred();
 	var promise5 = jQuery.Deferred();
-	var promises = [ promise1, promise2, promise3, promise4, promise5 ];
-
-	
+	var promise6 = jQuery.Deferred();
+	var promises = [ promise1, promise2, promise3, promise4, promise5, promise6 ];
 	
 	// load excel template
 	promises.push(widget.loadExcelTemplate());
 
 	// get the profile templates
-	promises.push(jQuery.ajax({
+	stm.DataStore.profiles = [];
+	jQuery.ajax({
 	    method: "GET",
 	    dataType: "json",
+	    p: promise6,
 	    headers: stm.authHeader,
-	    url: 'data/demo.profiles',
+	    url: RetinaConfig.mgrast_api+'/mixs/profile',
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-		stm.DataStore.profiles = data;
+		var prom = this.p;
+		var proms = [];
 		widget.profileNames = [];
-		for (var i=0; i<stm.DataStore.profiles.length; i++) {
-		    widget.profileNames.push(stm.DataStore.profiles[i].name);
+		for (var i=0; i<data.data.length; i++) {
+		    if (data.data[i].name == 'MG-RAST MiXS') {
+			continue;
+		    }
+		    widget.profileNames.push(data.data[i].name);
+		    proms.push(jQuery.ajax({
+			method: "GET",
+			dataType: "json",
+			headers: stm.authHeader,
+			url: RetinaConfig.mgrast_api+'/mixs/profile/'+data.data[i].id,
+			success: function (d) {
+			    stm.DataStore.profiles.push(d);
+			}
+		    }));
 		}
+		jQuery.when.apply(this, proms).then(function() {
+		    prom.resolve();
+		});
 	    }
-	}));
+	});
 	
 	// if there is a user, load project list
 	if (stm.user) {
