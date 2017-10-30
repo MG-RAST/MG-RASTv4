@@ -51,39 +51,43 @@
 	// load excel template
 	promises.push(widget.loadExcelTemplate());
 
-	// get the profile templates
-	stm.DataStore.profiles = [];
-	jQuery.ajax({
-	    method: "GET",
-	    dataType: "json",
-	    p: promise6,
-	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/mixs/profile',
-	    success: function (data) {
-		var widget = Retina.WidgetInstances.metagenome_metazen2[1];
-		var prom = this.p;
-		var proms = [];
-		widget.profileNames = [];
-		for (var i=0; i<data.data.length; i++) {
-		    if (data.data[i].name == 'MG-RAST MiXS') {
-			continue;
-		    }
-		    widget.profileNames.push(data.data[i].name);
-		    proms.push(jQuery.ajax({
-			method: "GET",
-			dataType: "json",
-			headers: stm.authHeader,
-			url: RetinaConfig.mgrast_api+'/mixs/profile/'+data.data[i].id,
-			success: function (d) {
-			    stm.DataStore.profiles.push(d);
+	if (RetinaConfig.showProfileChooser) {
+	    // get the profile templates
+	    stm.DataStore.profiles = [];
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		p: promise6,
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/mixs/profile',
+		success: function (data) {
+		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+		    var prom = this.p;
+		    var proms = [];
+		    widget.profileNames = [];
+		    for (var i=0; i<data.data.length; i++) {
+			if (data.data[i].name == 'MG-RAST MiXS') {
+			    continue;
 			}
-		    }));
+			widget.profileNames.push(data.data[i].name);
+			proms.push(jQuery.ajax({
+			    method: "GET",
+			    dataType: "json",
+			    headers: stm.authHeader,
+			    url: RetinaConfig.mgrast_api+'/mixs/profile/'+data.data[i].id,
+			    success: function (d) {
+				stm.DataStore.profiles.push(d);
+			    }
+			}));
+		    }
+		    jQuery.when.apply(this, proms).then(function() {
+			prom.resolve();
+		    });
 		}
-		jQuery.when.apply(this, proms).then(function() {
-		    prom.resolve();
-		});
-	    }
-	});
+	    });
+	} else {
+	    promise6.resolve();
+	}
 	
 	// if there is a user, load project list
 	if (stm.user) {
