@@ -24,5 +24,5 @@ var RetinaConfig = {
 
     // admin
     "showOTU": false,
-    "showProfileChooser": true
+    "showProfileChooser": false
 };
