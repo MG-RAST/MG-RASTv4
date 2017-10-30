@@ -1125,7 +1125,7 @@
 	    method: "GET",
 	    dataType: "json",
 	    headers: stm.authHeader,
-	    url: RetinaConfig.mgrast_api+'/project?'+(stm.user.admin ? 'private=1&' : '')+'edit=1&verbosity=minimal&limit=999',
+	    url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=minimal&limit=999',
 	    success: function (data) {
 		var widget = Retina.WidgetInstances.metagenome_share[1];
 		if (! stm.DataStore.hasOwnProperty('projectnames')) {
