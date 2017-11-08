@@ -69,18 +69,20 @@
 	var params = widget.params;
 
 	// get the names for the task ids and initialize the task counter
+	var tasks = Retina.keys(stm.DataStore.template.step_order);
+	var numtasks = tasks.length;
 	var tasklabels = [];
 	var tasknames = {};
-	var taskcount = {};
-	var template = stm.DataStore.templates[RetinaConfig.pipelines[RetinaConfig.pipelines.length - 1]];
-	for (var i=0; i<template.length; i++) {
-	    tasklabels[i] = template[i].cmd.description;
-	    tasknames[i] = template[i].cmd.description;
-	    taskcount[i] = [];
+	var taskcount = [];
+	var template = stm.DataStore.template;
+	for (var i=0; i<numtasks; i++) {
+	    tasklabels[template.step_order[tasks[i]]] = tasks[i];
+	    tasknames[template.step_order[tasks[i]]] = tasks[i];
+	    taskcount[template.step_order[tasks[i]]] = [];
 	}
 	tasknames["-1"] = "done";
 	tasklabels.push("done");
-
+	
 	var cdaydata = {};
 	var sdaydata = {};
 	var daysh = {};
@@ -126,9 +128,6 @@
 		       "suspend": [0] };
 
 	var pipelineIndex = {};
-	for (var i=0; i<template.length; i++) {
-	    taskcount[i].push( [ 0, 0, 0, 0 ] );
-	}
 	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
 	    pipelineIndex[RetinaConfig.pipelines[i]] = i + 1;
 	    submitted_today.push(0);
@@ -149,29 +148,32 @@
 	    states.pending.push(0);
 	    states.queued.push(0);
 	    states.suspend.push(0);
-	    for (var h=0; h<template.length; h++) {
-		taskcount[h].push( [ 0, 0, 0, 0 ] );
+	}
+	
+	for (var i=0; i<numtasks; i++) {
+	    taskcount.push([]);
+	    for (var h=0; h<RetinaConfig.pipelines.length + 1; h++) {
+		taskcount[i].push( [ 0, 0, 0, 0 ] );
 	    }
 	}
 	
 	// all jobs 
-	var jk = Retina.keys(stm.DataStore.jobs30);
-	for (var i=0;i<jk.length;i++) {
+	for (var i=0;i<stm.DataStore.jobs30.length;i++) {
 
-	    var job = stm.DataStore.jobs30[jk[i]];
+	    var job = stm.DataStore.jobs30[i];
 
-	    if (! params.activePipelines[job.pipeline]) {
+	    if (! params.activePipelines[job.info.pipeline]) {
 		continue;
 	    }
 	    
 	    // add chicago timestamps
 	    var chicago = 1000 * 60 * 60 * 6;
 	    var now = new Date().getTime();
-	    job.submitChicago = widget.dateString(now - (Date.parse(job.submittime) - chicago));
+	    job.submitChicago = widget.dateString(now - (Date.parse(job.info.submittime) - chicago));
 
 	    // completed
-	    if (job.state[0] == "completed") {
-		job.completeChicago = widget.dateString(now - (Date.parse(job.completedtime) - chicago));
+	    if (job.state == "completed") {
+		job.completeChicago = widget.dateString(now - (Date.parse(job.info.completedtime) - chicago));
 
 		var completed_day = job.completeChicago.substr(0,10);
 		if (! completed_jobs.hasOwnProperty(completed_day)) {
@@ -182,68 +184,56 @@
 			completed_bases[completed_day].push(0);
 		    }
 		}
-		completed_jobs[completed_day][pipelineIndex[job.pipeline]]++;
-		completed_bases[completed_day][pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		completed_jobs[completed_day][pipelineIndex[job.info.pipeline]]++;
+		completed_bases[completed_day][pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 		completed_jobs[completed_day][0]++;
-		completed_bases[completed_day][0] += parseInt(job.userattr.bp_count);
-		if (job.completedtime >= month) {
+		completed_bases[completed_day][0] += parseInt(job.info.userattr.bp_count);
+		if (job.info.completedtime >= month) {
 		    num_completed_month[0]++;
-		    completed_month[0] += parseInt(job.userattr.bp_count);
-		    num_completed_month[pipelineIndex[job.pipeline]]++;
-		    completed_month[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		    completed_month[0] += parseInt(job.info.userattr.bp_count);
+		    num_completed_month[pipelineIndex[job.info.pipeline]]++;
+		    completed_month[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 		}
-		if (job.completedtime >= week) {
+		if (job.info.completedtime >= week) {
 		    num_completed_week[0]++;
-		    completed_week[0] += parseInt(job.userattr.bp_count);
-		    num_completed_week[pipelineIndex[job.pipeline]]++;
-		    completed_week[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		    completed_week[0] += parseInt(job.info.userattr.bp_count);
+		    num_completed_week[pipelineIndex[job.info.pipeline]]++;
+		    completed_week[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 		}
-		if (job.completedtime >= day) {
+		if (job.info.completedtime >= day) {
 		    num_completed_today[0]++;
-		    completed_today[0] += parseInt(job.userattr.bp_count);
-		    num_completed_today[pipelineIndex[job.pipeline]]++;
-		    completed_today[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		    completed_today[0] += parseInt(job.info.userattr.bp_count);
+		    num_completed_today[pipelineIndex[job.info.pipeline]]++;
+		    completed_today[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 		}
-		if (job.completedtime >= chicagoDayStart) {
-		    completed_chicago_day[0] += parseInt(job.userattr.bp_count);
-		    completed_chicago_day[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		if (job.info.completedtime >= chicagoDayStart) {
+		    completed_chicago_day[0] += parseInt(job.info.userattr.bp_count);
+		    completed_chicago_day[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 		}
 	    }
 
 	    // in progress
 	    else {
 		num_in_pipeline[0]++;
-		size_in_pipeline[0] += parseInt(job.userattr.bp_count);
-		num_in_pipeline[pipelineIndex[job.pipeline]]++;
-		size_in_pipeline[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		size_in_pipeline[0] += parseInt(job.info.userattr.bp_count);
+		num_in_pipeline[pipelineIndex[job.info.pipeline]]++;
+		size_in_pipeline[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 		inprogress.push(job);
 		
 		// count the current tasks
-		for (var h=0; h<job.state.length; h++) {
+		for (var h=0; h<job.tasks.length; h++) {
 
-		    if (states.hasOwnProperty(job.state[h])) {
-			states[job.state[h]][0]++;
-			states[job.state[h]][pipelineIndex[job.pipeline]]++;
+		    if (states.hasOwnProperty(job.tasks[h].state)) {
+			states[job.tasks[h].state][0]++;
+			states[job.tasks[h].state][pipelineIndex[job.info.pipeline]]++;
 		    }
 		    
-		    if (job.state[h] == "in-progress") {
-			if (! taskcount.hasOwnProperty(job.task[h])) {
-			    taskcount[job.task[h]] = [];
-			    for (var j=0; j<RetinaConfig.pipelines.length; j++) {
-				taskcount[job.task[h]][j] = [ 0, 0, 0, 0 ];
-			    }
-			}
-			taskcount[job.task[h]][pipelineIndex[job.pipeline]][0]++;
-			taskcount[job.task[h]][pipelineIndex[job.pipeline]][2] += parseInt(job.userattr.bp_count);
-		    } else {
-			if (! taskcount.hasOwnProperty(job.task[h])) {
-			    taskcount[job.task[h]] = [];
-			    for (var j=0; j<RetinaConfig.pipelines.length; j++) {
-				taskcount[job.task[h]][j] = [ 0, 0, 0, 0 ];
-			    }
-			}
-			taskcount[job.task[h]][pipelineIndex[job.pipeline]][1]++;
-			taskcount[job.task[h]][pipelineIndex[job.pipeline]][3] += parseInt(job.userattr.bp_count);
+		    if (job.tasks[h].state == "in-progress") {
+			taskcount[template.step_order[template[job.info.pipeline][h]]][pipelineIndex[job.info.pipeline]][0]++;
+			taskcount[template.step_order[template[job.info.pipeline][h]]][pipelineIndex[job.info.pipeline]][2] += parseInt(job.info.userattr.bp_count);
+		    } else if (job.tasks[h].state == "queued") {
+			taskcount[template.step_order[template[job.info.pipeline][h]]][pipelineIndex[job.info.pipeline]][1]++;
+			taskcount[template.step_order[template[job.info.pipeline][h]]][pipelineIndex[job.info.pipeline]][3] += parseInt(job.info.userattr.bp_count);
 		    }
 		}
 	    }
@@ -258,26 +248,26 @@
 		}
 	    }
 	    submitted_jobs[submitted_day][0]++;
-	    submitted_bases[submitted_day][0] += parseInt(job.userattr.bp_count);
-	    submitted_jobs[submitted_day][pipelineIndex[job.pipeline]]++;
-	    submitted_bases[submitted_day][pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
-	    if (job.submittime >= month) {
+	    submitted_bases[submitted_day][0] += parseInt(job.info.userattr.bp_count);
+	    submitted_jobs[submitted_day][pipelineIndex[job.info.pipeline]]++;
+	    submitted_bases[submitted_day][pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
+	    if (job.info.submittime >= month) {
 		num_submitted_month[0]++;
-		submitted_month[0] += parseInt(job.userattr.bp_count);
-		num_submitted_month[pipelineIndex[job.pipeline]]++;
-		submitted_month[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		submitted_month[0] += parseInt(job.info.userattr.bp_count);
+		num_submitted_month[pipelineIndex[job.info.pipeline]]++;
+		submitted_month[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 	    }
-	    if (job.submittime >= week) {
+	    if (job.info.submittime >= week) {
 		num_submitted_week[0]++;
-		submitted_week[0] += parseInt(job.userattr.bp_count);
-		num_submitted_week[pipelineIndex[job.pipeline]]++;
-		submitted_week[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		submitted_week[0] += parseInt(job.info.userattr.bp_count);
+		num_submitted_week[pipelineIndex[job.info.pipeline]]++;
+		submitted_week[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 	    }
-	    if (job.submittime >= day) {
+	    if (job.info.submittime >= day) {
 		num_submitted_today[0]++;
-		submitted_today[0] += parseInt(job.userattr.bp_count);
-		num_submitted_today[pipelineIndex[job.pipeline]]++;
-		submitted_today[pipelineIndex[job.pipeline]] += parseInt(job.userattr.bp_count);
+		submitted_today[0] += parseInt(job.info.userattr.bp_count);
+		num_submitted_today[pipelineIndex[job.info.pipeline]]++;
+		submitted_today[pipelineIndex[job.info.pipeline]] += parseInt(job.info.userattr.bp_count);
 	    }
 	}
 
@@ -322,7 +312,7 @@
 
 	// display unfinished jobs
 	html += "<h4>ten oldest unfinished jobs</h4>";
-	inprogress.sort(Retina.propSort('submittime'));
+	//inprogress.sort(Retina.propSort('info.submittime'));
 	html += "<table class='table table-striped table-condensed' style='width: 550px;'><tr><th>ID</th><th>size</th><th>status</th><th>age in days</th><th>current tasks</th></tr>";
 	var iMax = 10;
 	for (var i=0; i<inprogress.length; i++) {
@@ -330,12 +320,14 @@
 		break;
 	    }
 	    var t = new Date();
-	    var daysInQueue = parseInt((t.getTime() - Date.parse(inprogress[i].submittime)) / (1000 * 60 * 60 * 24));
+	    var daysInQueue = parseInt((t.getTime() - Date.parse(inprogress[i].info.submittime)) / (1000 * 60 * 60 * 24));
 	    var ts = [];
-	    for (var j=0; j<inprogress[i].task.length; j++) {
-		ts.push(template[inprogress[i].task[j]].cmd.description);
+	    for (var j=0; j<inprogress[i].tasks.length; j++) {
+		if (inprogress[i].tasks[j].state == 'running') {
+		    ts.push(template[j]);
+		}
 	    }
-	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+inprogress[i].name+"\");' style='cursor: pointer;'>"+inprogress[i].name+"</a></td><td>"+parseInt(inprogress[i].userattr.bp_count).baseSize()+"</td><td>"+inprogress[i].state[0]+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
+	    html += "<tr><td><a onclick='window.open(\"mgmain.html?mgpage=pipeline&admin=1&job="+inprogress[i].info.name+"\");' style='cursor: pointer;'>"+inprogress[i].info.name+"</a></td><td>"+parseInt(inprogress[i].info.userattr.bp_count).baseSize()+"</td><td>"+inprogress[i].state+"</td><td style='text-align: center;'>"+daysInQueue+"</td><td>"+ts.join(", ")+"</td></tr>";
 	}
 	html += "</table>";
 
@@ -366,13 +358,14 @@
 		btemp[h] += completed_bases[days[i]][h + 1] - submitted_bases[days[i]][h + 1];
 	    }
 	}
+	
 	labels = days;
 	backlogs = backlogs.reverse();
 	days = days.reverse();
 	for (var i=0; i<backlogs.length; i++) {
 	    graphData.push(backlogs[i]);
 	}
-
+	
 	// draw the backlog graph
 	document.getElementById('graph_target').innerHTML = "";
 
@@ -441,7 +434,7 @@
 	
 	// task graph s
 	var tdatar = [];
-	for (var i=0; i<template.length; i++) {
+	for (var i=0; i<numtasks; i++) {
 	    var row = [];
 	    for (var h=1; h<taskcount[i].length; h++) {
 		row.push(taskcount[i][h][0]);
@@ -457,7 +450,7 @@
 	Retina.Renderer.create("svg2", settings3).render();
 	
 	var tdatap = [];
-	for (var i=0; i<template.length; i++) {
+	for (var i=0; i<numtasks; i++) {
 	    var row = [];
 	    for (var h=1; h<taskcount[i].length; h++) {
 		row.push(taskcount[i][h][1]);
@@ -474,7 +467,7 @@
 
 	// task GB graph s
 	var tdatars = [];
-	for (var i=0; i<template.length; i++) {
+	for (var i=0; i<numtasks; i++) {
 	    var row = [];
 	    for (var h=1; h<taskcount[i].length; h++) {
 		row.push(parseInt(taskcount[i][h][2] / 1000000000));
@@ -490,7 +483,7 @@
 	Retina.Renderer.create("svg2", settings5).render();
 
 	var tdataps = [];
-	for (var i=0; i<template.length; i++) {
+	for (var i=0; i<numtasks; i++) {
 	    var row = [];
 	    for (var h=1; h<taskcount[i].length; h++) {
 		row.push(parseInt(taskcount[i][h][3] / 1000000000));
@@ -599,57 +592,22 @@
 			  }
 			});
 	}
-	for (var i=0; i<RetinaConfig.pipelines.length; i++) {
-	    var prom = jQuery.Deferred();
-	    promises.push(prom);
-	    promises.push(jQuery.ajax( { dataType: "json",
-					 url: RetinaConfig['mgrast_api'] + "/pipeline?date_start="+timestamp+"&info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&state=completed&limit=100000&userattr=bp_count",
-					 headers: stm.authHeader,
-					 p: prom,
-					 pipeline: RetinaConfig.pipelines[i],
-					 success: function(data) {
-					     for (var h=0; h<data.data.length; h++) {
-						 data.data[h].pipeline = this.pipeline;
-						 stm.DataStore.jobs30[data.data[h].id] = data.data[h];
-					     }
-					     if (!data.data.length) {
-						 this.p.resolve();
-						 return;
-					     }
-					     jQuery.ajax( { dataType: "json",
-					     		    url: RetinaConfig['mgrast_api'] + "/pipeline/"+data.data[0].name,
-					     		    headers: stm.authHeader,
-							    p: this.p,
-							    pipeline: this.pipeline,
-					     		    success: function(data) {
-					     			stm.DataStore.templates[this.pipeline] = data.data[0].tasks;
-								this.p.resolve();
-					     		    },
-					     		    error: function (xhr) {
-					     			Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-					     		    }
-					     		  } );
-					 },
-					 error: function (xhr) {
-					     Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-					 }
-				       } ) );
-	    promises.push(jQuery.ajax( { dataType: "json",
-					 url: RetinaConfig['mgrast_api'] + "/pipeline?info.pipeline="+RetinaConfig.pipelines[i]+"&verbosity=minimal&state=in-progress&state=suspend&state=queued&limit=100000&userattr=bp_count",
-					 headers: stm.authHeader,
-					 p: prom,
-					 pipeline: RetinaConfig.pipelines[i],
-					 success: function(data) {
-					     for (var h=0; h<data.length; h++) {
-						 data[h].pipeline = this.pipeline;
-						 stm.DataStore.jobs30[data[h].id] = data[h];
-					     }
-					 },
-					 error: function (xhr) {
-					     Retina.WidgetInstances.login[1].handleAuthFailure(xhr);
-					 }
-				       } ) );
-	}
+
+	promises.push(jQuery.getJSON( "data/pipelinesteps.json", function (data) {
+	    stm.DataStore.template = data;
+	}));
+
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['awe_url'] + "/api/job?adminview",
+				     headers: stm.authHeader,
+				     success: function(data) {
+					 stm.DataStore.jobs30 = data.data;
+				     }
+				   } ) );
+
+	// promises.push(jQuery.getJSON( "data/adminjobdata.json", function (data) {
+	//     stm.DataStore.jobs30 = data.data;
+	// }));
 
 	jQuery.when.apply(this, promises).then(function() {
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
