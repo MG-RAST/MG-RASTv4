@@ -597,17 +597,17 @@
 	    stm.DataStore.template = data;
 	}));
 
-	// promises.push(jQuery.ajax( { dataType: "json",
-	// 			     url: RetinaConfig['awe_url'] + "/api/job?adminview",
-	// 			     headers: stm.authHeader,
-	// 			     success: function(data) {
-	// 				 stm.DataStore.jobs30 = data.data;
-	// 			     }
-	// 			   } ) );
+	promises.push(jQuery.ajax( { dataType: "json",
+				     url: RetinaConfig['awe_url'] + "/api/job?adminview",
+				     headers: stm.authHeader,
+				     success: function(data) {
+					 stm.DataStore.jobs30 = data.data;
+				     }
+				   } ) );
 
-	promises.push(jQuery.getJSON( "data/adminjobdata.json", function (data) {
-	    stm.DataStore.jobs30 = data.data;
-	}));
+	// promises.push(jQuery.getJSON( "data/adminjobdata.json", function (data) {
+	//     stm.DataStore.jobs30 = data.data;
+	// }));
 
 	jQuery.when.apply(this, promises).then(function() {
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
