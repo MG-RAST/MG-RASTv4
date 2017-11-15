@@ -349,13 +349,12 @@
 
 	for (var i=0; i<params.startDay; i++) {
 	    backlogs[i] = [];
-	    if (! completed_bases.hasOwnProperty(days[i])) {
-		continue;
-	    }
 	    for (var h=0; h<RetinaConfig.pipelines.length; h++) {
 		var b = String(btemp[h] / 1000000000);
 		backlogs[i][h] = parseFloat(b.substr(0, b.indexOf('.')+3));
-		btemp[h] += completed_bases[days[i]][h + 1] - submitted_bases[days[i]][h + 1];
+		if (completed_bases.hasOwnProperty(days[i])) {
+		    btemp[h] += completed_bases[days[i]][h + 1] - submitted_bases[days[i]][h + 1];
+		}
 	    }
 	}
 	
@@ -405,6 +404,7 @@
 		max: val > tick ? (val > 400 ? val : 400) : (tick > 400 ? tick : 400)
             };
 
+	    
             var chart = new google.visualization.Gauge(document.getElementById('gauge_'+gauges[i]));
             chart.draw(gauge_data, gauge_options);
 	}
@@ -597,17 +597,17 @@
 	    stm.DataStore.template = data;
 	}));
 
-	promises.push(jQuery.ajax( { dataType: "json",
-				     url: RetinaConfig['awe_url'] + "/api/job?adminview",
-				     headers: stm.authHeader,
-				     success: function(data) {
-					 stm.DataStore.jobs30 = data.data;
-				     }
-				   } ) );
+	// promises.push(jQuery.ajax( { dataType: "json",
+	// 			     url: RetinaConfig['awe_url'] + "/api/job?adminview",
+	// 			     headers: stm.authHeader,
+	// 			     success: function(data) {
+	// 				 stm.DataStore.jobs30 = data.data;
+	// 			     }
+	// 			   } ) );
 
-	// promises.push(jQuery.getJSON( "data/adminjobdata.json", function (data) {
-	//     stm.DataStore.jobs30 = data.data;
-	// }));
+	promises.push(jQuery.getJSON( "data/adminjobdata.json", function (data) {
+	    stm.DataStore.jobs30 = data.data;
+	}));
 
 	jQuery.when.apply(this, promises).then(function() {
 	    Retina.WidgetInstances.admin_statistics[1].showJobData();
