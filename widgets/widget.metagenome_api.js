@@ -92,10 +92,38 @@
 			var req = d.requests[j];
 			
 			if (req.hasOwnProperty('example')) {
+			    if (typeof req.example != 'object') {
+				console.log('invalid example structure');
+				console.log(req.example);
+				continue;
+			    }
+			    
 			    var example_description = req.example[1];
-			    var example_params = req.example[0].substr(req.example[0].lastIndexOf('/')+1).split('?');
+			    var example_params;
 			    var example_id = null;
 			    var phash = {};
+			    if (req.method == 'POST') {
+				if (req.request.indexOf('{') > -1) {
+				    var text = req.example[0];
+				    phash[req.request.substring(req.request.indexOf('{')+1, req.request.indexOf('}')).toLowerCase()] = text.substr(text.lastIndexOf('/')+1, text.lastIndexOf('"') - (text.lastIndexOf('/')+1));
+				}
+				if (req.example[0].indexOf('curl') > -1) {
+				    try {
+					var ed = req.example[0];
+					ed = JSON.parse(ed.substr(ed.indexOf("-d '")+ 4, ed.lastIndexOf("}") - ed.indexOf("-d '") -3));
+					var keys = Retina.keys(ed);
+					for (var k=0; k<keys.length; k++) {
+					    phash[keys[k]] = ed[keys[k]];
+					}
+				    } catch (e) {
+					//console.log('invalid curl in '+d.name+' '+req.name+': '+req.example[0]);
+				    }
+				    
+				}
+				example_params = phash;
+			    } else {
+				example_params = req.example[0].substr(req.example[0].lastIndexOf('/')+1).split('?');
+			    }
 			    if (example_params.length > 1) {
 				if (example_params[0] != req.name) {
 				    example_id = example_params[0];
@@ -105,15 +133,19 @@
 				} else {
 				    example_params[0] = example_params[1];
 				}
-			    }
-			    example_params = example_params[0].split('&');
-			    for (var k=0; k<example_params.length; k++) {
-				if (example_params[k].indexOf('=') > -1) {
-				    var x = example_params[k].split('=');
-				    phash[x[0]] = x[1];
+				example_params = example_params[0].split('&');
+				for (var k=0; k<example_params.length; k++) {
+				    if (example_params[k].indexOf('=') > -1) {
+					var x = example_params[k].split('=');
+					phash[x[0]] = x[1];
+				    }
 				}
+				example_params = phash;
+			    } else if (example_params.length == 1) {
+				var idfield = req.request.substring(req.request.indexOf('{')+1, req.request.indexOf('}')).toLowerCase();
+				example_params[idfield] = example_params[0];
 			    }
-			    example_params = phash;
+			    
 			    req.example = { "description": example_description,
 					    "params": example_params,
 					    "id": example_id };
@@ -243,14 +275,29 @@
 	    url = url.replace("{SERVICE}", values.service);
 	}
 
-	if (Retina.keys(values).length && request.method == 'GET') {
-	    url += "?";
-	    var p = [];
-	    for (var i in values) {
-		if (i == 'id') { continue; }
-		p.push(i+"="+values[i]);
+	if (Retina.keys(values).length) {
+	    if (request.method == 'GET') {
+		url += "?";
+		var p = [];
+		for (var i in values) {
+		    if (i == 'id') { continue; }
+		    var vals = values[i].split(/,/);
+		    if (vals.length > 1) {
+			console.log(vals);
+		    }
+		    for (var h=0; h<vals.length; h++) {
+			p.push(i+"="+vals[h]);
+		    }
+		}
+		url += p.join("&");
+	    } else {
+		for (var i in values) {
+		    var vals = values[i].split(/,/);
+		    if (vals.length > 1) {
+			values[i] = vals;
+		    }
+		}
 	    }
-	    url += p.join("&");
 	}
 	
 	if (curlOnly) {
@@ -267,7 +314,7 @@
 		    method: request.method,
 		    url: url,
 		    btn: btn,
-		    data: request.method == "POST" ? values : null,
+		    data: request.method == "POST" ? JSON.stringify(values) : null,
 		    target: target,
 		    success: function (d) {
 			this.btn.removeAttribute('disabled');
