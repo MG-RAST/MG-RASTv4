@@ -7,7 +7,7 @@
     "controls": [
 	{ "adjust graph data":
 	  [
-	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "data label", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "normalize", "type": "bool", "description": "normalize the datasets", "title": "perform normalization", "isDataUpdater": true, "defaultTrue": true }
 	  ]
 	},

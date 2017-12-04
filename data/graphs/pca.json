@@ -7,7 +7,7 @@
     "controls": [
 	{ "adjust graph data":
 	  [
-	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "metadatum", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
+	      { "name": "metadatum", "type": "select", "description": "metadatum to name the datasets by", "title": "data label", "adaptToData": true, "default": "library|metagenome_name", "isDataUpdater": true, "values": "metadata" },
 	      { "name": "items[3].parameters.headerAttribute", "type": "select", "description": "metadatum to color by", "title": "color attribute", "adaptToData": true, "default": "project|project_name", "values": "metadata" },
 	      { "name": "items[4].parameters.headerAttribute", "type": "select", "description": "metadatum to determine shape", "title": "shape attribute", "adaptToData": true, "default": "sample|biome", "values": "metadata" },
 	      { "name": "pcaa", "type": "select", "description": "set the principle x-component", "title": "PC X", "adaptToData": true, "default": 0, "isDataUpdater": true, "values": "pca_component" },
