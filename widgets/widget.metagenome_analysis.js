@@ -19,7 +19,7 @@
 
     widget.taxLevels = [ "domain", "phylum", "className", "order", "family", "genus", "species" ];//, "strain" ];
     widget.ontLevels = { "Subsystems": ["level1","level2","level3","function"], "KO": ["level1","level2","level3","function"], "COG": ["level1","level2","function"], "NOG": ["level1","level2","function"] };
-    widget.sources = { "protein": ["RefSeq", "IMG", "TrEMBL", "SEED", "KEGG", "GenBank", "SwissProt", "PATRIC", "eggNOG"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
+    widget.sources = { "taxonomy": ["RefSeq"], "RNA": ["RDP", "Silva LSU", "Silva SSU", "ITS", "Greengenes"], "hierarchical": ["Subsystems","KO","COG","NOG"] };
     widget.sourcesNameMapping = { "Silva SSU": "SSU", "Silva LSU": "LSU" };
     widget.sourceType = { "OTU": "taxonomy", "RefSeq": "taxonomy", "IMG": "taxonomy", "TrEMBL": "taxonomy", "SEED": "taxonomy", "KEGG": "taxonomy", "GenBank": "taxonomy", "SwissProt": "taxonomy", "PATRIC": "taxonomy", "eggNOG": "taxonomy", "RDP": "taxonomy", "Silva LSU": "taxonomy", "Silva SSU": "taxonomy", "SSU": "taxonomy", "LSU": "taxonomy", "ITS": "taxonomy", "Greengenes": "taxonomy", "Subsystems": "function","KO": "function","COG": "function","NOG": "function" };
     widget.filterlists = {};
@@ -308,6 +308,7 @@
 			// parse the metadata into the required structure
 			var g = [ "mixs", "project", "env_package", "library", "sample" ];
 			var allMD = { "mixs": {}, "project": {}, "env_package": {}, "library": {}, "sample": {} };
+			var allMDdiff = { "mixs": {}, "project": {}, "env_package": {}, "library": {}, "sample": {} };
 			for (var l=0; l<c.items.length; l++) {
 			    for (var j=0; j<g.length; j++) {
 				var p = stm.DataStore.profile[c.items[l].id];
@@ -320,8 +321,10 @@
 				    for (var m=0; m<mds.length; m++) {
 					if (! allMD[g[j]].hasOwnProperty(mds[m])) {
 					    allMD[g[j]][mds[m]] = 0;
+					    allMDdiff[g[j]][mds[m]] = {};
 					}
 					allMD[g[j]][mds[m]]++;
+					allMDdiff[g[j]][mds[m]][d[mds[m]]] = true;
 				    }
 				}
 			    }
@@ -343,7 +346,9 @@
 				if (item.hasOwnProperty('default') && (item["default"] == val)) {
 				    opt.selected = true;
 				}
-				opts.push(opt);
+				if (Retina.keys(allMDdiff[g[j]][mds[l]]).length > 1) {
+				    opts.push(opt);
+				}
 			    }
 			}
 		    } else {
@@ -2433,7 +2438,7 @@
     widget.showDatabases = function () {
 	var widget = this;
 
-	var types = [ 'protein', 'hierarchical', 'RNA' ];
+	var types = [ 'taxonomy', 'hierarchical', 'RNA' ];
 	var sourceNameMapping = { "SSU": "Silva SSU", "LSU": "Silva LSU" };
 	var sources = {};
 	for (var i=0; i<widget.dataLoadParams.sources.length; i++) {
@@ -3427,7 +3432,7 @@
 	}
 
 	// fill the html
-	var html = '<h4>'+data.name+'<button class="btn btn-mini pull-right" onclick="Retina.WidgetInstances.metagenome_analysis[1].restartRecipe();" title="restart this recipe"><i class="icon icon-refresh"></i></button></h4><p>'+description+'</p>';
+	var html = '<h4>'+data.name+'<button class="btn btn-mini pull-right" onclick="Retina.WidgetInstances.metagenome_analysis[1].restartRecipe();" title="select datasets"><i class="icon icon-arrow-left"></i></button></h4><p>'+description+'</p>';
 
 	widget.recipe = data;
 	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
