@@ -163,7 +163,8 @@
 
 	html += "<div style='float: left;'><img src='Retina/images/file-xml.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"svg\");' title='scalable vector graphic'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>SVG</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/image.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"png\");' title='portable network graphic'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>PNG</div></div>";
-	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"csv\");' title='tab separated data'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>CSV</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv\");' title='tab separated data'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"tsv_aeap\");' title='tab separated data with abundance, e-value, alignment length and percent identity'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>TSV detailed</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom\");' title='one biom file per dataset with abundance and e-value'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-biom.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"biom_abu\");' title='biom file containing all datasets and abundance only'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>biom hits only</div></div>";
 	html += "<div style='float: left;'><img src='Retina/images/file-fasta.png' class='tool' onclick='if(confirm(\"Download annotated reads as FASTA?\")){Retina.WidgetInstances.metagenome_analysis[1].downloadFASTA();}' title='download annotated reads as FASTA'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>FASTA</div></div>";
@@ -1943,6 +1944,8 @@
 		       rows: [],
 		       cols: [],
 		       evalues: [],
+		       percentidentities: [],
+		       alignmentlengths: [],
 		       abundances: [],
 		       headers: [] };
 
@@ -1953,6 +1956,8 @@
 
 	var d = {};
 	var e = {};
+	var alen = {};
+	var perid = {};
 	var hier = {};
 	var md5s = {};
 	var dataRow = 1;
@@ -2046,13 +2051,19 @@
 		    if (! d.hasOwnProperty(key)) {
 			d[key] = [];
 			e[key] = [];
+			alen[key] = [];
+			perid[key] = [];
 			for (var j=0;j<c.items.length;j++) {
 			    d[key][j] = 0;
 			    e[key][j] = 0;
+			    alen[key][j] = 0;
+			    perid[key][j] = 0;
 			}
 		    }
 		    d[key][i] += val;
 		    e[key][i] += val * p.data[row + dataRow + 1];
+		    perid[key][i] += val * p.data[row + dataRow + 2];
+		    alen[key][i] += val * p.data[row + dataRow + 3];
 		    matrix.abundances[i] += val;
 		}
 	    }
@@ -2084,8 +2095,12 @@
 	    matrix.data.push(d[matrix.rows[i]]);
 	    for (var h=0; h<e[matrix.rows[i]].length; h++) {
 		e[matrix.rows[i]][h] = e[matrix.rows[i]][h] / d[matrix.rows[i]][h];
+		alen[matrix.rows[i]][h] = alen[matrix.rows[i]][h] / d[matrix.rows[i]][h];
+		perid[matrix.rows[i]][h] = perid[matrix.rows[i]][h] / d[matrix.rows[i]][h];
 	    }
 	    matrix.evalues.push(e[matrix.rows[i]]);
+	    matrix.alignmentlengths.push(alen[matrix.rows[i]]);
+	    matrix.percentidentities.push(perid[matrix.rows[i]]);
 	}
 	matrix.rows = mr;
 
@@ -2132,7 +2147,7 @@
 	}
     };
 
-    widget.container2table = function (data, forExport) {
+    widget.container2table = function (data, forExport, allData) {
 	var widget = Retina.WidgetInstances.metagenome_analysis[1];
 	
 	var c = stm.DataStore.dataContainer[widget.selectedContainer];
@@ -2148,23 +2163,53 @@
 	}
 
 	var tableData = [];
-	for (var i=0; i<matrix.rows.length; i++) {
-	    var row = [];
-	    for (var h=0; h<l; h++) {
-		if (forExport) {
-		    row.push(c.hierarchy[matrix.rows[i]][h]);
-		} else {
-		    if (h == l-1 && h < document.getElementById('displayLevelSelect').options.length - 1) {
-			row.push('<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+c.hierarchy[matrix.rows[i]][h]+'\'})">'+c.hierarchy[matrix.rows[i]][h]+'</a>');
-		    } else {
+	if (allData) {
+	    tableHeaders = [ 'dataset' ];
+	    for (var i=0; i<matrix.cols.length - c.items.length; i++) {
+		tableHeaders.push(matrix.cols[i]);
+	    }
+	    tableHeaders.push('abundance');
+	    tableHeaders.push('e-value');
+	    tableHeaders.push('alignment length');
+	    tableHeaders.push('percent identity');
+	    
+	    var x = c.parameters.metadatum.split(/\|/);
+	    for (var j=0; j<c.items.length; j++) {
+		var md = stm.DataStore.profile[c.items[j].id].metagenome.metadata[x[0]].data.hasOwnProperty(x[1]) ? stm.DataStore.profile[c.items[j].id].metagenome.metadata[x[0]].data[x[1]] : "-";
+		for (var i=0; i<matrix.rows.length; i++) {
+		    var row = [ md ];
+		    for (var h=0; h<l; h++) {
 			row.push(c.hierarchy[matrix.rows[i]][h]);
 		    }
+		    
+		    row.push(matrix.data[i][j]);
+
+		    row.push(matrix.evalues[i][j]);
+		    row.push(matrix.alignmentlengths[i][j]);
+		    row.push(matrix.percentidentities[i][j]);
+		    
+		    tableData.push(row);
 		}
 	    }
-	    for (var h=0; h<matrix.data[i].length; h++) {
-		row.push(matrix.data[i][h]);
+	} else {
+	    for (var i=0; i<matrix.rows.length; i++) {
+		var row = [];
+		for (var h=0; h<l; h++) {
+		    if (forExport) {
+			row.push(c.hierarchy[matrix.rows[i]][h]);
+		    } else {
+			if (h == l-1 && h < document.getElementById('displayLevelSelect').options.length - 1) {
+			    row.push('<a href="#" onclick="Retina.WidgetInstances.metagenome_analysis[1].graphCallback({\'cellValue\': \''+c.hierarchy[matrix.rows[i]][h]+'\'})">'+c.hierarchy[matrix.rows[i]][h]+'</a>');
+			} else {
+			    row.push(c.hierarchy[matrix.rows[i]][h]);
+			}
+		    }
+		}
+		for (var h=0; h<matrix.data[i].length; h++) {
+		    row.push(matrix.data[i][h]);
+		}
+		tableData.push(row);
 	    }
-	    tableData.push(row);
 	}
 	
 	return { data: tableData, header: tableHeaders };
@@ -3160,14 +3205,23 @@
 	    } else {
 		alert('this feature is not available for this view');
 	    }
-	} else if (type == 'csv') {
-	    var exportData = widget.container2table(null,true);
+	} else if (type == 'tsv') {
+	    var exportData = widget.container2table(null, true);
 	    var exportString = [];
 	    exportString.push(exportData.header.join("\t"));
 	    for (var i=0; i<exportData.data.length; i++) {
 		exportString.push(exportData.data[i].join("\t"));
 	    }
-	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".csv");
+	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".tsv");
+	    return;
+	} else if (type == 'tsv_aeap') {
+	    var exportData = widget.container2table(null, null, true);
+	    var exportString = [];
+	    exportString.push(exportData.header.join("\t"));
+	    for (var i=0; i<exportData.data.length; i++) {
+		exportString.push(exportData.data[i].join("\t"));
+	    }
+	    stm.saveAs(exportString.join("\n"), widget.selectedContainer + ".tsv");
 	    return;
 	} else if (type == 'shock') {
 	    if (stm.user) {
