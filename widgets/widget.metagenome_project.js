@@ -85,7 +85,7 @@
 		}
 	    }
 	    if (project.status == 'private' || canEdit) {
-		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='edit / share project'><i class='icon icon-share'></i> edit / share project</button>"+(project.status == 'public' ? "" : "Private Study: ")+project.name+"</h3>";
+		html += "<h3 class='alert alert-info'><button class='btn' style='margin-right: 15px; position: relative; bottom: 3px;' onclick='window.location=\"mgmain.html?mgpage=share&project="+widget.id+"\";' title='edit / share project'><i class='icon icon-share'></i> study editor</button>"+(project.status == 'public' ? "" : "Private Study: ")+project.name+"</h3>";
 	    } else {
 		html += "<h3>"+project.name+" ("+widget.id+")</h3>";
 	    }
