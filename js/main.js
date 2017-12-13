@@ -102,7 +102,8 @@ function showNews (result) {
 function search (term) {
     if (term.toLowerCase() == 'webkey') {
 	if (stm.user) {
-	    alert('Your current webkey is:\n\n'+stm.user.token);
+	    document.getElementById('webkey_text').value=stm.user.token;
+	    jQuery("#webkey_modal").modal('show');
 	} else {
 	    alert('you must log in to view your webkey');
 	}
