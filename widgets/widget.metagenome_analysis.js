@@ -1,5 +1,5 @@
 (function () {
-    var widget = Retina.Widget.extend({ //https://support.mozilla.org/en-US/kb/warning-unresponsive-script
+    var widget = Retina.Widget.extend({
         about: {
                 title: "Metagenome Analysis Widget",
                 name: "metagenome_analysis",
@@ -90,6 +90,16 @@
 	var toolshtml = "";
 	if (Retina.cgiParam('recipe')) {
 	    widget.isRecipe = true;
+
+	    if (! widget.recipe) {
+		jQuery.getJSON('data/recipes/recipe'+Retina.cgiParam('recipe')+'.recipe.json', function (data) {
+		    var widget = Retina.WidgetInstances.metagenome_analysis[1];
+		    widget.recipe = data;
+		    widget.display();
+		});
+		return;
+	    }
+	    
 	    toolshtml += "<div id='recipeDisplay' style='border-radius: 5px;'></div>";
 	} else {
 	    toolshtml += "<h4>Analysis</h4>";
@@ -144,9 +154,7 @@
 	document.body.appendChild(recipeDiv);
 
 	if (widget.isRecipe) {
-	    jQuery.getJSON('data/recipes/recipe'+Retina.cgiParam('recipe')+'.recipe.json', function (data) {
-		Retina.WidgetInstances.metagenome_analysis[1].showRecipe(data);
-	    });
+	    Retina.WidgetInstances.metagenome_analysis[1].showRecipe(widget.recipe);
 	}
     };
 
@@ -192,7 +200,8 @@
 
 	html += "<div style='float: left;'><img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Krona</div></div>";
 	html += "<div style='float: left;'><img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>KEGGmap</div></div>";
-//	html += "<div style='float: left;'><img src='images/cytoscape_logo.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"cytoscape\");' title='Cytoscape'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Cytoscape</div></div>";
+	html += "<div style='float: left;'><img src='images/cytoscape_logo.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"cytoscape\");' title='Cytoscape'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Cytoscape</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"listmaker\");' title='List Generator'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>ListGen</div></div>";
 
 	container.innerHTML = html;
     };
@@ -2387,7 +2396,7 @@
 	    var html = [];
 
 	    if (widget.isRecipe) {
-		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Analysis Recipe: <span id='recipeTitle'></span></h3><p>To start select datasets below and click <a class='btn btn-mini btn-success' style='position: relative; left: 5px; bottom: 1px;'><i class='icon-ok icon-white'></i></a></p><p>The analysis recipe will guide you through the analysis by presetting all parameters. You only need to select the datasets you want to perform the analysis for. Use the <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"mgselect\").className=\"glow\";' onmouseout='document.getElementById(\"mgselect\").className=\"\";'>selection box</span> below to do so.</p><p>Once the data is loaded, you will immediately see the analysis results. The <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"recipeDisplay\").className=\"glow\";' onmouseout='document.getElementById(\"recipeDisplay\").className=\"\";'>recipe description</span> is always visible on the righthand side. It will also inform you about important parameters you can adjust. Hover over the highlighted terms to see where to change those parameters.</p><div>");
+		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Analysis Recipe: <span id='recipeTitle'></span></h3><p>To start select datasets below and click <a class='btn btn-mini btn-success' style='position: relative; left: 5px; bottom: 1px;'><i class='icon-ok icon-white'></i></a></p><p>The analysis recipe will guide you through the analysis by presetting all parameters. You only need to select the datasets you want to perform the analysis for. Use the <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"mgselect\").className=\"glow\";' onmouseout='document.getElementById(\"mgselect\").className=\"\";'>selection box</span> below to do so."+(widget.recipe.defaultDatasets && widget.recipe.defaultDatasets.length ? " This recipe has default datasets selected. Feel free to use these or exchange them for datasets of your choice. " : "" )+"</p><p>Once the data is loaded, you will immediately see the analysis results. The <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"recipeDisplay\").className=\"glow\";' onmouseout='document.getElementById(\"recipeDisplay\").className=\"\";'>recipe description</span> is always visible on the righthand side. It will also inform you about important parameters you can adjust. Hover over the highlighted terms to see where to change those parameters.</p><div>");
 	    } else {
 		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis</h3><p>To perform an analysis, you must first load the metagenomic profiles to analyze. A profile holds the abundance values and cutoffs for a list of database sources for a specific dataset. You can select the databases and datasets, as well as a name for your analysis below. Click the <i class='icon-ok'></i></a>-button to load the data from our server.</p><p>Profiles are generated on demand. Depending on profile size the initial calculation may take some time. Once computed they will be cached and subsequent requests will download immediately. You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p><p>Once all required data is loaded you can start the analysis.</p><div style='overflow-x: auto;'>");
 	    }
@@ -2455,6 +2464,9 @@
 		data_manipulation: Retina.WidgetInstances.metagenome_analysis[1].select_manipulation,
 		value: "id"
 	    }).render();
+	    if (widget.recipe && widget.recipe.defaultDatasets && widget.recipe.defaultDatasets.length) {
+		widget.mgselect.settings.selection_data = widget.recipe.defaultDatasets;
+	    }
 	    widget.mgselect.update();
 	}
     };
@@ -3315,6 +3327,7 @@
 	html.push("<tr><td style='vertical-align: top;'>stars</td><td><select id='recipeStars' style='width: 360px;'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>");
 	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>short description</td><td><textarea style='width: 360px; height: 90px;' id='recipeShortDescription' placeholder='a short description of what this recipe does'></textarea></td></tr>");
 	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>description</td><td><textarea style='width: 360px; height: 90px;' id='recipeDescription' placeholder='a detailed description of the recipe'></textarea></td></tr>");
+	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>keep datasets</td><td><input type='checkbox' style='position: relative; bottom: 3px;' id='recipeKeepDatasets'></td></tr>");
 	html.push("<tr><td style='vertical-align: top; padding-right: 20px;'>controls</td><td>taxonomy select <input type='checkbox' id='recipeTaxSelect' style='position: relative; bottom: 3px;'><br>recipe ontology select <input type='checkbox' id='recipeOntSelect' style='position: relative; bottom: 3px;'><br>e-value <input type='checkbox' id='recipeEvalue' style='position: relative; bottom: 3px;'><br>%-identity <input type='checkbox' id='recipeIdentity' style='position: relative; bottom: 3px;'><br>alignment length <input type='checkbox' id='recipeAlilen' style='position: relative; bottom: 3px;'><br>min. abundance <input type='checkbox' id='recipeAbundance' style='position: relative; bottom: 3px;'></td></tr>");
 	html.push("</table>");
 
@@ -3373,6 +3386,13 @@
 	c.keywords = keywords;
 	c.stars = parseInt(document.getElementById('recipeStars').options[document.getElementById('recipeStars').selectedIndex].value);
 
+	if (document.getElementById('recipeKeepDatasets').checked) {
+	    c.defaultDatasets = [];
+	    for (var i=0; i<c.items.length; i++) {
+		c.defaultDatasets.push({"id": c.items[i].id, "name": c.items[i].name});
+	    }
+	}
+	
 	c.newbOptions = [];
 	if (document.getElementById('recipeTaxSelect').checked) {
 	    c.newbOptions.push({"type":"taxSelect","params":{"level":c.parameters.taxFilter[0].level,"default":c.parameters.taxFilter[0].value}});
@@ -3488,7 +3508,6 @@
 	// fill the html
 	var html = '<h4>'+data.name+'<button class="btn btn-mini pull-right" onclick="Retina.WidgetInstances.metagenome_analysis[1].restartRecipe();" title="select datasets"><i class="icon icon-arrow-left"></i></button></h4><p>'+description+'</p>';
 
-	widget.recipe = data;
 	if (! stm.DataStore.hasOwnProperty('dataContainer')) {
 	    stm.DataStore.dataContainer = {};
 	}
@@ -4015,9 +4034,12 @@
     widget.plugin = function (which) {
 	var widget = this;
 
-	var info = { "krona": { "authors": "Ondov BD, Bergman NH, and Phillippy AM", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/21961884" },
-		     "kegg": { "authors": "Tobias Paczian" },
-		     "cytoscape": { "authors": "Franz M, Lopes CT, Huck G, Dong Y, Sumer O, Bader GD", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/26415722" } };
+	var info = {
+	    "krona": { "authors": "Ondov BD, Bergman NH, and Phillippy AM", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/21961884" },
+	    "kegg": { "authors": "Tobias Paczian" },
+	    "cytoscape": { "authors": "Franz M, Lopes CT, Huck G, Dong Y, Sumer O, Bader GD", "publication": "http://www.ncbi.nlm.nih.gov/pubmed/26415722" },
+	    "listmaker": { "authors": "Tobias Paczian" }
+	};
 	
 	var d = widget["container2"+which]();
 	if (! d) {
@@ -4161,15 +4183,132 @@
 	return data;
     };
 
+    widget.container2listmaker = function () {
+	var widget = this;
+
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+
+	if (! stm.DataStore.functionMap) {
+	    stm.DataStore.functionMap = [];
+	}
+
+	var functions = {};
+	for (var i=0; i<c.items.length; i++) {
+	    var smid = c.parameters.sourceMap[c.items[i].id].RefSeq;
+	    if (smid != null) {
+		var pid = c.items[i].id;
+    		var p = stm.DataStore.profile[pid];
+		var rl = 5 + (p.sources.length * 2);
+		for (var h=0; h<p.data.length; h+=rl) {
+		    var funcs = p.data[h + 6 + (smid * 2)];
+		    if (funcs == null) {
+			continue;
+		    } else if (typeof funcs == "number") {
+			funcs = [ funcs ];
+		    } else if (typeof funcs == "string") {
+			funcs = funcs.split(",");
+		    }
+		    for (var k=0; k<funcs.length; k++) {
+			if (! stm.DataStore.functionMap.hasOwnProperty(funcs[k])) {
+			    functions[funcs[k]] = true;
+			}
+		    }
+		}
+		if (! c.items[i].functionsLoaded) {
+		    c.items[i].functionsLoaded = true;
+		}
+	    }
+	}
+
+	var x = Retina.keys(functions).sort();
+	functions = [];
+	for (var i=0; i<x.length; i++) {
+	    functions.push(parseInt(x[i]));
+	}
+
+	if (functions.length) {
+	    jQuery("[title='List Generator']")[0].setAttribute('onclick', '');
+	    jQuery("[title='List Generator']")[0].setAttribute('src', 'Retina/images/loading.gif');
+	    jQuery.ajax({
+		url: RetinaConfig.mgrast_api + '/m5nr/function_id',
+		method: 'POST',
+		data: '{"data":'+JSON.stringify(functions)+'}',
+		success: function (result) {
+		    for (var i=0; i<result.data.length; i++) {
+			stm.DataStore.functionMap[result.data[i].function_id] = result.data[i]['function'];
+		    }
+		    Retina.WidgetInstances.metagenome_analysis[1].plugin('listmaker');
+		    jQuery("[title='List Generator']")[0].setAttribute('onclick', 'Retina.WidgetInstances.metagenome_analysis[1].plugin("listmaker")');
+		    jQuery("[title='List Generator']")[0].setAttribute('src', 'Retina/images/table.png');
+		}
+	    });
+	    
+	    return false;
+	} else {
+	    return true;
+	}
+    };
+
     /* Help texts */
     widget.help = { "distance metrics":
 		    { "euclidean": "https://en.wikipedia.org/wiki/Euclidean_distance",
 		      "minkowski": "https://en.wikipedia.org/wiki/Minkowski_distance",
 		      "canberra": "https://en.wikipedia.org/wiki/Canberra_distance",
-		      "manhattan": "https://xlinux.nist.gov/dads//HTML/manhattanDistance.html",
+		      "manhattan": "https://xlinux.nist.gov/dad/HTML/manhattanDistance.html",
 		      "maximum": "",
 		      "braycurtis": "https://en.wikipedia.org/wiki/Qualitative_variation",
 		      "jaccard": "https://en.wikipedia.org/wiki/Qualitative_variation" }
 		  };
+
+    widget.getFunctionIndices = function () {
+	var widget = this;
+
+	var c = stm.DataStore.dataContainer[widget.selectedContainer];
+
+	var functions = {};
+
+	for (var i=0; i<c.items.length; i++) {
+	    var smid = c.parameters.sourceMap[c.items[i].id].RefSeq;
+	    if (smid != null) {
+		var pid = c.items[i].id;
+    		var p = stm.DataStore.profile[pid];
+		var rl = 5 + (p.sources.length * 2);
+		for (var h=0; h<p.data.length; h+=rl) {
+		    var funcs = p.data[h + 6 + (smid * 2)];
+		    if (funcs == null) {
+			continue;
+		    } else if (typeof funcs == "number") {
+			funcs = [ funcs ];
+		    } else if (typeof funcs == "string") {
+			funcs = funcs.split(",");
+		    }
+		    for (var k=0; k<funcs.length; k++) {
+			functions[funcs[k]] = true;
+		    }
+		}
+	    }
+	}
+
+	var x = Retina.keys(functions).sort();
+	functions = [];
+	for (var i=0; i<x.length; i++) {
+	    functions.push(parseInt(x[i]));
+	}
+
+	window.selfuncs = functions;
+    };
+
+    widget.resolveFunctionIndices = function (list) {
+	var widget = this;
+
+	jQuery.ajax({
+	    url: "http://api-dev.metagenomics.anl.gov/m5nr/function_id",
+	    method: 'POST',
+	    data: '{"data":'+JSON.stringify(list)+'}',
+	    success: function (result) {
+		console.log(result);
+	    }
+	});
+    };
     
 })();
