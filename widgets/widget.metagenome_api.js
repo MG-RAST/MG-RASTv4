@@ -71,12 +71,18 @@
 	
 	for (var i=0; i<data.resources.length; i++) {
 	    var r = data.resources[i];
+	    if (r.name == 'search' || r.name == 'submission') {
+		continue;
+	    }
 	    html.push('<h3>'+r.name+'</h3><div id="resource'+r.name+'"><img src="Retina/images/waiting.gif" style="width: 16px;"> loading...</div>');
 	}
 	widget.main.innerHTML = html.join("");
 	
 	for (var i=0; i<data.resources.length; i++) {
 	    var r = data.resources[i];
+	    if (r.name == 'search' || r.name == 'submission') {
+		continue;
+	    }
 	    jQuery.ajax({
 		dataType: "json",
 		url: r.url,
@@ -137,7 +143,11 @@
 				for (var k=0; k<example_params.length; k++) {
 				    if (example_params[k].indexOf('=') > -1) {
 					var x = example_params[k].split('=');
-					phash[x[0]] = x[1];
+					if (phash.hasOwnProperty(x[0])) {
+					    phash[x[0]] += ","+x[1];
+					} else {
+					    phash[x[0]] = x[1];
+					}
 				    }
 				}
 				example_params = phash;
@@ -225,8 +235,8 @@
 	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
 	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
 	} else {
-	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
-	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
+	    var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "");
+	    h.push("<input type='text' name='"+name+"' placeholder='"+name+"' value='"+val+"'>");
 	}
 	if (p[0] !== 'cv') {
 	    h.push('<span class="help-inline">'+p[1]+'</span>');
@@ -273,6 +283,8 @@
 	    url = url.replace("{text}", values.text);
 	} else if (url.match(/\{SERVICE\}/)) {
 	    url = url.replace("{SERVICE}", values.service);
+	} else if (url.match(/\{\w+\}/) && request.example) {
+	    url = url.replace(/\{\w+\}/, request.example.params[url.match(/\{(\w+)\}/)[1]]);
 	}
 
 	if (Retina.keys(values).length) {
@@ -280,7 +292,6 @@
 		url += "?";
 		var p = [];
 		for (var i in values) {
-		    if (i == 'id') { continue; }
 		    var vals = values[i].split(/,/);
 		    if (vals.length > 1) {
 			console.log(vals);
@@ -292,9 +303,11 @@
 		url += p.join("&");
 	    } else {
 		for (var i in values) {
-		    var vals = values[i].split(/,/);
-		    if (vals.length > 1) {
+		    try {
+			var vals = JSON.parse(values[i]);
 			values[i] = vals;
+		    } catch (e) {
+
 		    }
 		}
 	    }
