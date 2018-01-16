@@ -59,10 +59,10 @@
 	html.push('<div style="margin-top: 25px;"><h4>options</h4>');
 
 	// limit
-	html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><select id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"><option>1</option><option>5</option><option>10</option><option>25</option></select></div>');
+	html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');//<select id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"><option>1</option><option>5</option><option>10</option><option>25</option></select></div>');
 
 	// offset
-	html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">number of first dataset</span><select id="offset" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"><option>0</option><option>5</option><option>10</option><option>25</option></select></div>');
+	html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">number of first dataset</span><input type="text" value="5" id="offset" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');//<select id="offset" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"><option>0</option><option>5</option><option>10</option><option>25</option></select></div>');
 
 	// direction
 	html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
@@ -110,8 +110,8 @@
 	var url = "http://api.metagenomics.anl.gov/search";
 	var auth = (stm.user && document.getElementById('useAuth').checked) ? 'auth='+stm.user.token+'&' : '';
 	var authHeader = (stm.user && document.getElementById('useAuth').checked) ? '-H "Authorization: mgrast '+stm.user.token+'" ' : '';
-	var offset = document.getElementById('offset').options[document.getElementById('offset').selectedIndex].value;
-	var limit = document.getElementById('limit').options[document.getElementById('limit').selectedIndex].value;
+	var offset = document.getElementById('offset').value;//options[document.getElementById('offset').selectedIndex].value;
+	var limit = document.getElementById('limit').value;//options[document.getElementById('limit').selectedIndex].value;
 	var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
 	var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
 

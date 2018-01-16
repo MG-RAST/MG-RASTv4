@@ -197,7 +197,7 @@
     };
     
     widget.profileSection = function () {
-	return '<div id="profileSection"><h4 style="margin-top: 0px;"><img src="Retina/images/user.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my profile<button class="btn btn-mini" style="float:right;" onclick="alert(stm.authHeader.Authorization);">show webkey</button></h4><hr style="margin-top: 2px; margin-bottom: 5px;"><div id="profileDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>'
+	return '<div id="profileSection"><h4 style="margin-top: 0px;"><img src="Retina/images/user.png" style="margin-right: 5px; width: 16px; position: relative; bottom: 2px;">my profile<button class="btn btn-mini" style="float:right;" onclick="document.getElementById(\'webkey_text\').value=stm.user.token;jQuery(\'#webkey_modal\').modal(\'show\');">show webkey</button></h4><hr style="margin-top: 2px; margin-bottom: 5px;"><div id="profileDiv"><p align=center><img src="Retina/images/waiting.gif" style="margin-top: 25px; margin-bottom: 25px;"></p></div></div>'
     };
     
     widget.newsSection = function () {
