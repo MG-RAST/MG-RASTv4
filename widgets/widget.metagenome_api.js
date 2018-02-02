@@ -4,7 +4,7 @@
                 title: "Metagenome API Widget",
                 name: "metagenome_api",
                 author: "Tobias Paczian",
-                requires: [ ]
+                requires: [ "jquery.datepicker.js" ]
         }
     });
     
@@ -196,7 +196,8 @@
 			h.push('<button class="btn pull-left" onclick="Retina.WidgetInstances.metagenome_api[1].submitForm(this, true);">show curl</button>');
 			h.push('<button class="btn pull-right" onclick="Retina.WidgetInstances.metagenome_api[1].submitForm(this);">send</button>');
 			h.push('</form>');
-
+			
+			h.push('<div id="request'+this.res+req.name+req.method+'target_curl"></div>');
 			h.push('<div id="request'+this.res+req.name+req.method+'target"></div>');
 			
 			h.push('<h5 style="clear: both;">return structure</h5>');
@@ -214,7 +215,9 @@
     widget.formField = function (name, p, req) {
 	var h = [];
 	h.push('<div class="control-group"><label class="control-label" >'+name+'</label><div class="controls">');
-	if (p[0] == 'string') {
+	if (name == 'upload') {
+	    h.push('<input type="hidden" name="'+name+'"><input type="file" name="_del_" onchange="if(this.files.length){this.previousSibling.value=this.files[0].name}">');
+	} else if (p[0] == 'string' || p[0] == 'date') {
 	    var val = "";
 	    if (name == 'auth' && stm.user) {
 		val = stm.user.token;
@@ -259,9 +262,15 @@
 	var request = resource.requests[form.getAttribute('request')];
 	var target = form.getAttribute('target');
 
+	var f;
 	var values = {};
 	for (var i=0; i<form.elements.length; i++) {
-	    if (form.elements[i].value) {
+	    if (form.elements[i].name == '_del_') {
+		continue;
+	    }
+	    if (form.elements[i].name == 'upload') {
+		f = "-d 'upload=@"+form.elements[i].value+"' ";
+	    } else if (form.elements[i].value) {
 		values[form.elements[i].name] = form.elements[i].value;
 	    }
 	}
@@ -285,19 +294,24 @@
 	    url = url.replace("{SERVICE}", values.service);
 	} else if (url.match(/\{\w+\}/) && request.example) {
 	    url = url.replace(/\{\w+\}/, request.example.params[url.match(/\{(\w+)\}/)[1]]);
+	} else if (url.match(/\{UUID\}/)) {
+	    url = url.replace("{UUID}", values.id);
 	}
 
+	var auth = stm.user ? 'mgrast '+stm.user.token : false;
+	var hasParams = false;
 	if (Retina.keys(values).length) {
 	    if (request.method == 'GET') {
 		url += "?";
 		var p = [];
 		for (var i in values) {
 		    var vals = values[i].split(/,/);
-		    if (vals.length > 1) {
-			console.log(vals);
+		    if (i == 'auth') {
+			auth = 'mgrast '+vals[0];
 		    }
 		    for (var h=0; h<vals.length; h++) {
 			p.push(i+"="+vals[h]);
+			formData.append(i,vals[h]);
 		    }
 		}
 		url += p.join("&");
@@ -306,6 +320,7 @@
 		    try {
 			var vals = JSON.parse(values[i]);
 			values[i] = vals;
+			hasParams = true;
 		    } catch (e) {
 
 		    }
@@ -314,15 +329,19 @@
 	}
 	
 	if (curlOnly) {
-	    document.getElementById(target).innerHTML = "<h5 style='clear: both; margin-top: 30px;'>curl</h5><pre style='margin-bottom: 30px;'>curl "+(stm.user ? "-H 'Authorization: mgrast "+stm.user.token+"' " : "")+"'"+(request.method == "POST" ? "-d '"+JSON.stringify(values).replace(/'/g, "\\'")+"' " : "")+""+url+"'</pre>";
+	    document.getElementById(target+'_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>curl "+(stm.user ? "-H 'Authorization: "+auth+"' " : "")+(request.method == "POST" ? (hasParams ? "-d '"+JSON.stringify(values).replace(/'/g, "\\'")+"' " : "")+f : "'")+""+url+"'</pre>";
 	} else {
 	    if (request.attributes.hasOwnProperty("streaming text")) {
 		btn.removeAttribute('disabled');
 		btn.innerHTML = 'send';
-		url += (url.indexOf('?') > -1 ? "" : "?q") + (stm.authHeader && stm.authHeader.Authorization ? "&auth="+stm.authHeader.Authorization : "")+"&browser=1";
+		url += (url.indexOf('?') > -1 ? "" : "?q") + (auth ? "&auth="+auth : "")+"&browser=1";
 		window.w = window.open(url);
 		window.setTimeout(function () { window.w.close(); }, 5000);
 	    } else {
+		if (f) {
+		    alert('This interface does not support the sending of files. Please use the curl command.');
+		    return;
+		}
 		jQuery.ajax({
 		    method: request.method,
 		    url: url,
@@ -332,11 +351,15 @@
 		    success: function (d) {
 			this.btn.removeAttribute('disabled');
 			this.btn.innerHTML = 'send';
-			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><h5>response</h5><pre style='margin-bottom: 30px;'>"+JSON.stringify(d, null, 2)+"</pre>";
+			var resp = JSON.stringify(d, null, 2);
+			if (resp.length > 10000) {
+			    resp = resp.substr(0, 10000) + "...\n(the content is longer than 10.000 characters and has been truncated)";
+			}
+			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><h5>response</h5><pre style='margin-bottom: 30px;'>"+resp+"</pre>";
 		    }}).fail(function(xhr, error) {
 			this.btn.removeAttribute('disabled');
 			this.btn.innerHTML = 'send';
-			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 30px;'></div><div class='alert alert-danger'>"+xhr.responseText+"</div>";
+			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>"+xhr.responseText+"</div>";
 			console.log(error);
 		    });
 	    }
