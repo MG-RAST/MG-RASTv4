@@ -672,7 +672,7 @@
 	}
 
 	widget.limit = howmany || widget.limit;
-	var url = api_url + "direction=" + widget.sortDir + "&limit=" + widget.limit + "&offset=" + widget.offset + "&order="+widget.sort + query_str;
+	var url = api_url + "direction=" + widget.sortDir + "&limit=" + widget.limit + (widget.sort == 'created_on' ? "&offset="+widget.offset : (widget.hasOwnProperty('lastitem') ? "&after=" + widget.lastitem : "")) + "&order="+widget.sort + query_str;
 	
 	jQuery.ajax( { dataType: "json",
 		       url: url,
@@ -683,6 +683,7 @@
 			       stm.DataStore.search[data.data[i]["metagenome_id"]] = data.data[i];
 			   }
 			   widget.total = data.total_count;
+			   widget.lastitem = data.data[data.data.length - 1][widget.sort];
 			   document.getElementById('result').innerHTML = widget.resultTable(stm.DataStore.search, data.total_count);
 			   document.getElementById('opaq').style.display = 'none';
 		       },
@@ -699,6 +700,7 @@
 
 	widget.sort = field;
 	widget.sortDir = direction;
+	delete widget.lastitem;
 
 	widget.queryAPI();
     };
