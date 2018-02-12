@@ -1,5 +1,17 @@
 function initWebApp () {
 
+    var k = Retina.keys(RetinaConfig);
+    var loc = 'http';
+    if (window.location.toString().substr(0, 5) == 'https') {
+	loc = 'https';
+    }
+    Retina.traverse(RetinaConfig, function (str) {
+	if (str.match(/^http/)) {
+	    str = str.replace(/^http(s?)/, loc);
+	}
+	return str;
+    });
+
     // check if the browser is compatible
     var features = { //"async": feature.asynch,
 		     "addEventListener": feature.addEventListener,
