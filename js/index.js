@@ -1,16 +1,14 @@
 function initWebApp () {
 
-    var k = Retina.keys(RetinaConfig);
-    var loc = 'http';
-    if (window.location.toString().substr(0, 5) == 'https') {
-	loc = 'https';
-    }
-    Retina.traverse(RetinaConfig, function (str) {
-	if (str.match(/^http/)) {
-	    str = str.replace(/^http(s?)/, loc);
-	}
-	return str;
-    });
+    (function () {
+	var k = Retina.keys(RetinaConfig);
+	Retina.traverse(RetinaConfig, function (str) {
+	    if (str.match(/^http\:/) && window.location.toString().substr(0, 5) == 'https') {
+		str = str.replace(/^http\:/, 'https\:');
+	    }
+	    return str;
+	});
+    }).call(this);
 
     // check if the browser is compatible
     var features = { //"async": feature.asynch,
