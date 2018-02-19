@@ -165,12 +165,66 @@
 	jQuery.when.apply(this, promises).then(function() {
 	    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 	    widget.showMetadata();
+	    widget.initializeTrees();
 	    if (Retina.cgiParam('precursor')) {
 		widget.precursor();
 	    }
 	});
-	
 
+    };
+
+    // pre-insert the trees into the document
+    widget.initializeTrees = function () {
+	var widget = this;
+
+	var b = document.createElement('div');
+	var f = document.createElement('div');
+	var m = document.createElement('div');
+	b.setAttribute('id','biomeTree');
+	b.setAttribute('style', 'display: none;');
+	f.setAttribute('id','featureTree');
+	f.setAttribute('style', 'display: none;');
+	m.setAttribute('id','materialTree');
+	m.setAttribute('style', 'display: none;');
+	document.body.appendChild(b);
+	document.body.appendChild(f);
+	document.body.appendChild(m);
+	
+	widget.trees = {
+	    "biome": Retina.Renderer.create('tree', {
+		target: document.getElementById('biomeTree'),
+		data: stm.DataStore.biome,
+		width: 0,
+		height: 0,
+		showGoButton: false,
+		sortNodes: true,
+		showCollapseAllButton: false,
+		showExpandAllButton: false,
+		searchDescription: true
+	    }).render(),
+	    "biome": Retina.Renderer.create('tree', {
+		target: document.getElementById('featureTree'),
+		data: stm.DataStore.feature,
+		width: 0,
+		height: 0,
+		showGoButton: false,
+		sortNodes: true,
+		showCollapseAllButton: false,
+		showExpandAllButton: false,
+		searchDescription: true
+	    }).render(),
+	    "biome": Retina.Renderer.create('tree', {
+		target: document.getElementById('materialTree'),
+		data: stm.DataStore.material,
+		width: 0,
+		height: 0,
+		showGoButton: false,
+		sortNodes: true,
+		showCollapseAllButton: false,
+		showExpandAllButton: false,
+		searchDescription: true
+	    }).render()
+	};
     };
 
     // error during loading of data
@@ -377,7 +431,6 @@
 	    // check if there is an unhandled element
 	    if (widget.currentInputElement) {
 		widget.updateCell('escape');
-		Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 	    }
 
 	    // get the column metadata
@@ -587,26 +640,20 @@
 		// check for tree
 		if (widget.currField.data.type == "ontology") {
 		    if (stm.DataStore.hasOwnProperty(widget.currField.field)) {
+			jQuery(".popover").remove();
 			var val = input.getAttribute('data-old');
 			if (! val.length) {
 			    if (cell.parentNode.rowIndex > 1 && cell.parentNode.parentNode.childNodes[cell.parentNode.rowIndex - 1].childNodes[cell.cellIndex].innerHTML.length) {
 				val = cell.parentNode.parentNode.childNodes[cell.parentNode.rowIndex - 1].childNodes[cell.cellIndex].innerHTML;
 			    }
 			}
-			Retina.Renderer.create('tree', {
-			    target: document.getElementById('currInputField'),
-			    data: stm.DataStore[widget.currField.field],
-			    width: 0,
-			    height: 0,
-			    showGoButton: false,
-			    sortNodes: true,
-			    showCollapseAllButton: false,
-			    showExpandAllButton: false,
-			    searchDescription: true
-			}).render();
+			document.getElementById('currInputField').innerHTML = document.getElementById(widget.currField.field+'Tree').innerHTML;
+			var ci = widget.currField.field == 'biome' ? 1 : (widget.currField.field == "feature" ? 2 : 3);
+			Retina.RendererInstances.tree[ci].settings.target = document.getElementById('currInputField');
+			Retina.RendererInstances.tree[ci].settings.nodeSpace = document.getElementById('currInputField').lastChild;
 			input.setAttribute('class', '');
 			cell.setAttribute('style', '');
-			var inp = document.getElementById('tree_search_input_1');
+			var inp = document.getElementById('tree_search_input_'+ci);
 			inp.setAttribute('style', 'width: 144px; height: 24px; font-size: 12px; border: 1px solid #ddd; top: 0px; padding-left: 5px;');
 			inp.value = val;
 			inp.addEventListener('keypress', function (event) {
@@ -616,7 +663,6 @@
 
 			    // escape
 			    if (event.keyCode == 27) {
-				Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 				Retina.WidgetInstances.metagenome_metazen2[1].updateCell('escape');
 			    }
 
@@ -625,7 +671,6 @@
 				event.preventDefault();
 
 				widget.currentInputElement.value = this.value;
-				Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 				widget.updateCell('enter');
 			    }
 			    
@@ -634,7 +679,6 @@
 				event.preventDefault();
 
 				widget.currentInputElement.value = this.value;
-				Retina.RendererInstances.tree = [ Retina.RendererInstances.tree[0] ];
 				widget.updateCell('tab');
 			    }
 			    
