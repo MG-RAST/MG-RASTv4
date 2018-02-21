@@ -311,7 +311,7 @@
 		    }
 		    for (var h=0; h<vals.length; h++) {
 			p.push(i+"="+vals[h]);
-			formData.append(i,vals[h]);
+			//formData.append(i,vals[h]);
 		    }
 		}
 		url += p.join("&");
