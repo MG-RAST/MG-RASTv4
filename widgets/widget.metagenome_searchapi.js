@@ -107,7 +107,7 @@
     widget.updateTexts = function () {
 	var widget = this;
 
-	var url = "http://api.metagenomics.anl.gov/search";
+	var url = RetinaConfig.mgrast_api+"/search";
 	var auth = (stm.user && document.getElementById('useAuth').checked) ? 'auth='+stm.user.token+'&' : '';
 	var authHeader = (stm.user && document.getElementById('useAuth').checked) ? '-H "Authorization: mgrast '+stm.user.token+'" ' : '';
 	var offset = document.getElementById('offset').value;//options[document.getElementById('offset').selectedIndex].value;
