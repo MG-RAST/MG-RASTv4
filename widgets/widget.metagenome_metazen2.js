@@ -324,7 +324,7 @@
 	widget.metadataTemplate.library.metatranscriptome.sample_name.type = 'select';
 	
 	// create divs
-	html.push('</ul><div class="tab-content" style="border: 1px solid #ddd; border-top: none; padding-top: 20px; padding-bottom: 20px;">');
+	html.push('</ul><div class="tab-content" style="border: 1px solid #ddd; border-top: none; padding-top: 20px; padding-bottom: 20px;" id="tab-content">');
 	html.push('<div class="tab-pane active" id="project">project</div>');
 	tables.push( { "name": "project", "data": widget.metadataTemplate.project.project } );
 	html.push('<div class="tab-pane" id="sample">sample</div>');
@@ -418,6 +418,19 @@
 	    document.getElementById('cellInfoBox').innerHTML = '<img src="Retina/images/waiting.gif" style="width: 16px; margin-right: 10px;">loading inbox data...';
 	    widget.loadInboxData(Retina.cgiParam('inbox'));
 	}
+
+	// copy-paste event listener
+	document.getElementById('tab-content').addEventListener('paste', function (e) {
+	    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
+	    e = e || window.event;
+
+	    if (widget.currentInputElement) {
+		var data = e.clipboardData.getData('Text').split(/\n/);
+		widget.currentInputElement.setAttribute('value', data.shift());
+		widget.pasteData = data;
+		widget.updateCell('enter');
+	    }
+	});						       
     };
 
     // cell edit helper
@@ -743,6 +756,14 @@
 		widget.currentInputElement = input;
 
 		jQuery(cell).toggleClass('viewtext', false);
+
+		// check if there is more paste-data
+		if (widget.pasteData && widget.pasteData.length) {
+		    input.setAttribute('value', widget.pasteData.shift());
+		    widget.updateCell('enter');
+		} else {
+		    delete widget.pasteData;
+		}
 	    }
 	}
     };
@@ -751,11 +772,14 @@
     widget.updateCell = function (action) {
 	var widget = this;
 
+	jQuery(".datepicker").remove();
+
 	if (! widget.currentInputElement) {
 	    return;
 	}
-	
-	var val = widget.currentInputElement.value;
+
+	var val = widget.currentInputElement.getAttribute('value') != null && widget.currentInputElement.getAttribute('value').length ? widget.currentInputElement.getAttribute('value') : widget.currentInputElement.value;
+
 	if (action == 'clear') {
 	    val = "";
 	} else if (action == 'escape') {
