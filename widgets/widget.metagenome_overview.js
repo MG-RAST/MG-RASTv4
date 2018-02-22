@@ -158,6 +158,7 @@
 	var widget = this;
 	
 	var mg = stm.DataStore.metagenome[id];
+	mg.api_url = RetinaConfig.mgrast_api;
 	
 	// get base numbers
         var stats = mg && mg.statistics ? mg.statistics.sequence_stats : null;
@@ -440,7 +441,7 @@
 	    }
 	}
 	if (mg.status == "public") {
-	    mg.staticLink = "<a href='http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"' title='static link'>http://metagenomics.anl.gov/linkin.cgi?metagenome="+mg.id+"</a>";
+	    mg.staticLink = "<a href='"+mgrast_url+"/linkin.cgi?metagenome="+mg.id+"' title='static link'>"+mgrast_url+"/linkin.cgi?metagenome="+mg.id+"</a>";
 	} else {
 	    mg.id = Retina.idmap(mg.id);
 	    if (mg.metadata && mg.metadata.project) {

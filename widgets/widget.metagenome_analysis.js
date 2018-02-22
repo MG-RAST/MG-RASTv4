@@ -2822,48 +2822,15 @@
 					      }
 					  },
 					  error: function(jqXHR, error) {
-					      if (this.url.match(/api\.metagenomics/)) {
-						  var pql = this.url.replace(/api\.metagenomics/, "api-pql.metagenomics");
-						  jQuery.ajax({ url: pql,
-								dc: this.dc,
-								contentType: 'application/json',
-								headers: stm.authHeader,
-								bound: this.bound,
-								success: function (data) {
-								    var widget = Retina.WidgetInstances.metagenome_analysis[1];
-								    if (data != null) {
-									if (data.hasOwnProperty('ERROR')) {
-									    console.log("error: "+data.ERROR);
-									    widget.updatePDiv(this.bound, 'error', data.ERROR);
-									} else if (data.hasOwnProperty('status')) {
-									    if (data.status == 'done') {
-										widget.downloadComputedData(this.bound, this.dc, data.url);
-									    } else {
-										widget.queueDownload(this.bound, data.url, this.dc);
-									    }
-									}
-								    } else {
-									console.log("error: invalid return structure from API server");
-									console.log(data);
-									widget.updatePDiv(this.bound, 'error', data.ERROR);
-								    }
-								},
-								error: function(jqXHR, error) {
-								    var errorMsg = "server error";
-								    try {
-									errorMsg = JSON.parse(jqXHR.responseText).ERROR;
-								    }
-								    catch (e) {
-									errorMsg = "server error";
-								    }
-								    errorMsq = errorMsg.replace(/id \d+\.\d/, "job");
-								    Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, errorMsg);
-								},
-								complete: function (jqXHR) {
-								    Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
-								}
-							      });
+					      var errorMsg = "server error";
+					      try {
+						  errorMsg = JSON.parse(jqXHR.responseText).ERROR;
 					      }
+					      catch (e) {
+						  errorMsg = "server error";
+					      }
+					      errorMsq = errorMsg.replace(/id \d+\.\d/, "job");
+					      Retina.WidgetInstances.metagenome_analysis[1].deleteProgress(this.bound, errorMsg);
 					  },
 					  complete: function (jqXHR) {
 					      Retina.WidgetInstances.metagenome_analysis[1].dataContainerReady(this.dc);
@@ -4302,7 +4269,7 @@
 	var widget = this;
 
 	jQuery.ajax({
-	    url: "http://api-dev.metagenomics.anl.gov/m5nr/function_id",
+	    url: RetinaConfig.mgrast_api+"/m5nr/function_id",
 	    method: 'POST',
 	    data: '{"data":'+JSON.stringify(list)+'}',
 	    success: function (result) {

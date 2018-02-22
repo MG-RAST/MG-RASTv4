@@ -1,4 +1,6 @@
 function initWebApp () {
+    window.mgrast_url = window.location.protocol + "//" + window.location.host;
+    
     (function () {
 	var k = Retina.keys(RetinaConfig);
 	Retina.traverse(RetinaConfig, function (str) {

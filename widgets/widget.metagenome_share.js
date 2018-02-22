@@ -1249,7 +1249,7 @@
 		    // check what kind of scope this is
 		    // this is a reviewer access token
 		    if (pperm[i][5].match(/^Reviewer/)) {
-			users[pperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": "<button class='btn btn-mini' onclick='alert(\"http://metagenomics.anl.gov/mgmain.html?mgpage=token&token="+pperm[i][4].replace(/^token\:/, "")+"\");'>reviewer token</button>", "lastname": "", "sortorder": pperm[i][5], "scope": pperm[i][4], "id": pperm[i][3], "claimed": 0 };
+			users[pperm[i][4]] = { "view": false, "edit": false, "delete": false, "firstname": "<button class='btn btn-mini' onclick='alert(\""+mgrast_url+"/mgmain.html?mgpage=token&token="+pperm[i][4].replace(/^token\:/, "")+"\");'>reviewer token</button>", "lastname": "", "sortorder": pperm[i][5], "scope": pperm[i][4], "id": pperm[i][3], "claimed": 0 };
 		    }
 		    // this is a user invitation token
 		    else if (pperm[i][4].match(/^token/)) {
