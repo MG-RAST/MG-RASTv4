@@ -96,7 +96,7 @@
 	    html += "<table>";
 	    html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>"+project.pi+", "+project.metadata.PI_organization+"</td></tr>";
 	    html += "<tr><td><b>visibility</b></td><td>"+project.status+"</td></tr>";
-	    html += "<tr><td><b>static link</b></td><td>"+(project.status == "public" ? "<a href='http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"'>http://metagenomics.anl.gov/linkin.cgi?project="+project.id+"</a>" : "private projects cannot be linked")+"</td></tr>";
+	    html += "<tr><td><b>static link</b></td><td>"+(project.status == "public" ? "<a href='"+mgrast_url+"/linkin.cgi?project="+project.id+"'>"+mgrast_url+"/linkin.cgi?project="+project.id+"</a>" : "private projects cannot be linked")+"</td></tr>";
 	    var invis = { 4: true, 5: true };
 	    if (project.metadata.hasOwnProperty('ebi_id')) {
 		html += "<tr><td><b>ENA link</b></td><td><a href='http://www.ebi.ac.uk/ena/data/view/"+project.metadata.ebi_id+"' target=_blank>"+project.metadata.ebi_id+"</a></td></tr>";
