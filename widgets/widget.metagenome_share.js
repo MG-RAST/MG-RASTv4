@@ -193,7 +193,7 @@
 	
 	details.push('</div><div id="project'+projectid+'tab2" class="tab-pane active">');
 	
-	details.push('<h4>status<a href="mgmain.html?mgpage=project&project='+project.id+'" class="btn btn-mini pull-right" title="view project page"><i class="icon icon-eye-open" style="margin-right: 5px; position: relative; top: 2px;"></i> view project page</a></h4>');
+	details.push('<h4>status<a href="mgmain.html?mgpage=project&project='+(project.status == 'public' ? project.id : Retina.idmap(project.id))+'" class="btn btn-mini pull-right" title="view project page"><i class="icon icon-eye-open" style="margin-right: 5px; position: relative; top: 2px;"></i> view project page</a></h4>');
 	if (project.status == "public") {
 	    details.push("<div class='alert alert-success'>public</div>");
 	} else {
