@@ -80,7 +80,6 @@
 					       widget.statusDiv = '<div class="alert alert-info" style="font-size: 14px;">This data is private and cannot be publicly linked. Click the share button for publication options.<a class="btn" style="position: relative; bottom: 5px; float: right;" href="mgmain.html?mgpage=share'+(stm.DataStore.metagenome[data.id].project ? '&project='+stm.DataStore.metagenome[data.id].project[0] : "")+'" title="show sharing options"><i class="icon icon-share"></i> show sharing options</a></div>';
 					   }
 					   
-					   widget.variableExtractorMetagenome(data.id);
 					   var url = "data/flows/";
 					   switch (data.sequence_type) {
 					   case 'Amplicon':
@@ -122,6 +121,7 @@
 		}
 		return;
 	    }
+	    widget.variableExtractorMetagenome(widget.id);
 										
 	    var notebook = Retina.Renderer.create('notebook', { target: document.getElementById("notebook"), showTOC: true, tocTarget: sidebar, flow: stm.DataStore.flows.metagenome_overview, dataContainer: stm.DataStore.metagenome[widget.id] }).render();
 
