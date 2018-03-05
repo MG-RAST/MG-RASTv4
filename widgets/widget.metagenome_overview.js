@@ -130,7 +130,7 @@
 	    if (mg.metadata && mg.metadata.hasOwnProperty('library') && mg.metadata.library.data.hasOwnProperty('pubmed_id')) {
 		var pubmed_ids = mg.metadata.library.data.pubmed_id.split(", ");
 	    
-		jQuery.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id="+pubmed_ids[0], function (data) {
+		jQuery.get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id="+pubmed_ids[0], function (data) {
 		    var journal, pubdate;
 		    var items = data.children[0].children[0].children;
 		    for (var i=0; i<items.length; i++) {
