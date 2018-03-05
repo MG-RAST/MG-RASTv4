@@ -683,7 +683,7 @@
 			       stm.DataStore.search[data.data[i]["metagenome_id"]] = data.data[i];
 			   }
 			   widget.total = data.total_count;
-			   widget.lastitem = data.data[data.data.length - 1][widget.sort];
+			   widget.lastitem = data.data.length ? data.data[data.data.length - 1][widget.sort] : null;
 			   document.getElementById('result').innerHTML = widget.resultTable(stm.DataStore.search, data.total_count);
 			   document.getElementById('opaq').style.display = 'none';
 		       },
