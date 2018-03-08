@@ -570,7 +570,7 @@
 	    widget.biomes = biomes;
 	    var biome_list = Retina.keys(biomes).sort();
 	    var biome_selects = [];
-	    var optTypes = Retia.keys(opts).sort();
+	    var optTypes = Retina.keys(opts).sort();
 	    for (var i=0; i<biome_list.length; i++) {
 		if (biome_list[i].length) {
 		    biome_selects.push('<tr><td><div style="margin-right: 10px; position: relative; bottom: 5px;">'+biome_list[i]+'</div></td><td><select id="biome_'+biome_list[i]+'">');
