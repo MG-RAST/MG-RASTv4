@@ -175,7 +175,7 @@
 
 	// try to automagically determine the users country
 	navigator.geolocation.getCurrentPosition(function(position){
-	    jQuery.getJSON("http://maps.googleapis.com/maps/api/geocode/json?latlng="+position.coords.latitude+","+position.coords.longitude+"&sensor=false", function(result) {
+	    jQuery.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng="+position.coords.latitude+","+position.coords.longitude+"&sensor=false", function(result) {
 		if (result.status == "OK") {
 		    var country = null;
 		    for (var i=0; i<result.results.length; i++) {
