@@ -824,7 +824,7 @@
 				if (seq.length < 75) {
 				    tooShort++;
 				}
-				if (seq.length > (1024 * 1024 * 3)) {
+				if (seq.length > (1024 * 512)) {
 				    tooLong++;
 				}
 			    }
@@ -875,7 +875,7 @@
 			    validInfo += invalidHeaders + " of them contain"+(invalidHeaders > 1 ? "" : "s")+" invalid headers (i.e. line "+(firstInvalidHeader + 1)+"). ";
 			}
 			if (tooLong) {
-			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 3Mb). ";
+			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 500kBp). ";
 			}
 			validInfo += "The "+type+" file is not in the correct format for processing.";
 			allow = false;
@@ -932,15 +932,17 @@
 	return { fileType: filetype, sequenceType: sequenceType };
     };
 
-    widget.metadataValidationResult = function (data, nodeid) {
+    widget.metadataValidationResult = function (data, nodeid, javascripterror) {
 	var widget = this;
 
 	var resultDiv = document.getElementById('metadataValidation');
 	if (resultDiv) {
-	    if (data.is_valid) {
+	    if (javascripterror) {
+		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors.</b></div>';
+	    } else if (data.is_valid) {
 		resultDiv.innerHTML = '<div class="alert alert-success">This file contains valid metadata.</div>';
 	    } else {
-		var txt = data.message.replace(/\[error\]/, "");
+		var txt = data.message.replace(/\[error\]/ig, "");
 		var messages = (data.hasOwnProperty('errors') && data.errors.length) ? "<br>"+data.errors.join("<br>") : "";
 		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors below.</b><br>'+txt+messages+'</div>';
 	    }
@@ -1007,6 +1009,7 @@
 			    Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data, node.id);
 			},
 			error: function(jqXHR, error){
+			    Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(jqXHR.responseText, node.id, true);
 			    console.log(error);
 			    console.log(jqXHR);
 			},

@@ -374,14 +374,20 @@
 	    jQuery.ajax({ url: RetinaConfig.mgrast_api+"/user/"+login.value,
 			  error: function(response) {
 			      var result = response.responseJSON;
-			      if (result && result.hasOwnProperty("ERROR") && result.ERROR == "insufficient permissions for user call") {
-				  document.getElementById('logincheck').innerHTML = "login already taken";
+			      if (result && result.hasOwnProperty("ERROR")) {
+				  if (result.ERROR == "insufficient permissions for user call") {
+				      document.getElementById('logincheck').innerHTML = "login already taken";
+				      login.parentNode.parentNode.setAttribute('class', 'control-group error');
+				      return "error";
+				  } else if (result.ERROR.match(/does not exist/)) {
+				      login.parentNode.parentNode.setAttribute('class', 'control-group success');
+				      document.getElementById('logincheck').innerHTML = "login valid";
+				      return "ok";
+				  }
+			      } else {
+				  document.getElementById('logincheck').innerHTML = "an error occurred checking the login";
 				  login.parentNode.parentNode.setAttribute('class', 'control-group error');
 				  return "error";
-			      } else {
-				  login.parentNode.parentNode.setAttribute('class', 'control-group success');
-				  document.getElementById('logincheck').innerHTML = "login valid";
-				  return "ok";
 			      }
 			  }
 			});
