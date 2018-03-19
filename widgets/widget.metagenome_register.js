@@ -265,7 +265,7 @@
 	}
 	if (valid) {
 	    document.getElementById('submit').setAttribute('disabled', 'disabled');
-	    jQuery.post(RetinaConfig.mgrast_api+"/user", {
+	    jQuery.post(RetinaConfig.mgrast_api+"/user/recaptcha", {
 	    	"email": document.getElementById('inputPrimaryEmail').value,
 		"email2": document.getElementById('inputSecondaryEmail').value,
 	    	"firstname": document.getElementById('inputFirstname').value,
