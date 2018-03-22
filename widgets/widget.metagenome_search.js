@@ -39,7 +39,7 @@
 	      { "name": "project_name", "value": "study", "selected": true },
 	      { "name": "library_name", "value": "library" },
 	      { "name": "sample_name", "value": "sample" },
-	      { "name": "name", "value": "dataset", "selected": true },
+	      { "name": "name", "value": "dataset (metagenome name)", "selected": true },
 	      { "name": "sequence_type", "value": "seq type", "selected": true },
 	      { "name": "seq_method", "value": "seq method" },
 	      { "name": "public", "value": "public" },
@@ -627,6 +627,8 @@
 	} else if (term.match(/^\d+\.\d$/)) {
 	    term = "mgm"+term;
 	}
+
+	term = term.toLowerCase();
 	
 	return term;
     };
