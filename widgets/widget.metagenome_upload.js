@@ -824,7 +824,7 @@
 				if (seq.length < 75) {
 				    tooShort++;
 				}
-				if (seq.length > (1024 * 1024 * 3)) {
+				if (seq.length > 500000) {
 				    tooLong++;
 				}
 			    }
@@ -847,17 +847,15 @@
 			    if (seq.length < 75) {
 				tooShort++;
 			    }
-			    if (seq.length > (1024 * 1024 * 3)) {
+			    if (seq.length > 500000) {
 				tooLong++;
 			    }
 			}
 		    }
 		    
-		    //numSeqs--;
-		    tooShort--;
-		    var lenInfo = "<p>All of the tested sequences fulfill the minimum length requirement of 75bp.</p>";
+		    var lenInfo = "<p>All of the tested sequences fulfill the minimum length requirement of 75 bp.</p>";
 		    if (tooShort > 0) {
-			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.</p>";
+			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75 bp. These reads cannot be processed.</p>";
 		    }
 		    var validInfo = "<p>This is a valid "+type+" file. "+numSeqs.formatString() + " sequence"+(numSeqs > 1 ? "s of this file were" : " of this file was")+" tested. ";
 		    if (invalidSeqs || numDuplicate || invalidHeaders || tooLong) {
@@ -875,7 +873,7 @@
 			    validInfo += invalidHeaders + " of them contain"+(invalidHeaders > 1 ? "" : "s")+" invalid headers (i.e. line "+(firstInvalidHeader + 1)+"). ";
 			}
 			if (tooLong) {
-			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 3Mb). ";
+			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 500 Kbp). ";
 			}
 			validInfo += "The "+type+" file is not in the correct format for processing.";
 			allow = false;
