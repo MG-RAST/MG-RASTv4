@@ -77,7 +77,7 @@
 	</div><div style="clear: both; height: 20px;"></div>';
 
 	// intro
-	html += "<p>Data submission is a two-step process. As the <b>first step</b>, data is uploaded into your private inbox on the MG-RAST server. This area is write only and accessible only to you. From the inbox data can then be submitted. Use the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/cloud-upload.png'>upload</a> function, or use <a href='"+RetinaConfig.mgrast_api+"/api.html#inbox' target=_blank>our API</a> to upload your data. To view your webkey required for using the API, click <a href='#' onclick='alert(stm.authHeader.Authorization);'>here</a>.</p><p>Submission of multiple files, sharing of data, or data publication requires metadata. You can use <a href='"+RetinaConfig.mgrast_ftp+"/data/misc/metadata/MGRAST_MetaData_template_1.9.xlsx'>this Excel template</a> and/or <a href='?mgpage=metazen2' target=_blank>the MetaZen tool</a> to fill out the metadata spreadsheet for a study.</p><p>As the <b>second step</b>, <a href='?mgpage=submission'><img style='height: 16px; margin-right: 5px; position: relative;' src='images/forward.png'>data needs to be submitted</a> for processing. At submission time you either add data to an existing study (or project) or create a new study. Upon successful submission, data is removed from the inbox. You will be notified via email once your submission has completed processing. In addition, you can monitor the progress of your submission at the <a href='?mgpage=pipeline'><img style='height: 16px; margin-right: 5px; position: relative;' src='Retina/images/settings3.png'>job status</a>.</p>";
+	html += "<h3 style='margin-top: 0px;'>upload data<button href='"+RetinaConfig.mgrast_ftp+"/data/misc/metadata/MGRAST_MetaData_template_1.9.xlsx' class='btn pull-right' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();' style='width: 140px; font-weight: 300;'><img src='Retina/images/upload.png' style='width: 16px; position: relative; bottom: 2px; right: 2px;'> upload</button><button onclick='alert(stm.authHeader.Authorization);' class='btn pull-right' style='margin-right: 25px; width: 140px; font-weight: 300;'><img src='Retina/images/key.png' style='width: 16px; position: relative; bottom: 2px; right: 2px;'> webkey</button></h3><p>Data submission is a two-step process. As the <b>first step</b>, data is uploaded into your private inbox on the MG-RAST server. This area is write only and accessible only to you. From the inbox data can then be submitted. Use the <a href='#' onclick='Retina.WidgetInstances.metagenome_upload[1].browser.uploadButton.click();'><img style='height: 16px; margin-right: 5px; position: relative; bottom: 2px;' src='Retina/images/cloud-upload.png'>upload</a> function, or use <a href='"+RetinaConfig.mgrast_api+"/api.html#inbox' target=_blank>our API</a> to upload your data. To view your webkey required for using the API, click <a href='#' onclick='alert(stm.authHeader.Authorization);'>here</a>.</p><h3>metadata<a href='"+RetinaConfig.mgrast_ftp+"/data/misc/metadata/MGRAST_MetaData_template_1.9.xlsx' class='btn pull-right' style='width: 115px;'><img src='Retina/images/file-excel.png' style='width: 16px; position: relative; bottom: 2px; right: 2px;'> Excel template</a><a href='?mgpage=metazen2' target=_blank class='btn pull-right' style='margin-right: 25px; width: 115px;'><img src='Retina/images/wrench.png' style='width: 16px; position: relative; bottom: 2px; right: 2px;'> MetaZen tool</a></h3><p>Submission of multiple files, sharing of data, or data publication requires metadata which you can provide via an Excel template or our Metazen helper tool.</p>";
 
 	// shockbrowser space
 	html += "<div id='browser'></div>";
@@ -930,15 +930,17 @@
 	return { fileType: filetype, sequenceType: sequenceType };
     };
 
-    widget.metadataValidationResult = function (data, nodeid) {
+    widget.metadataValidationResult = function (data, nodeid, javascripterror) {
 	var widget = this;
 
 	var resultDiv = document.getElementById('metadataValidation');
 	if (resultDiv) {
-	    if (data.is_valid) {
+	    if (javascripterror) {
+		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors.</b></div>';
+	    } else if (data.is_valid) {
 		resultDiv.innerHTML = '<div class="alert alert-success">This file contains valid metadata.</div>';
 	    } else {
-		var txt = data.message.replace(/\[error\]/, "");
+		var txt = data.message.replace(/\[error\]/ig, "");
 		var messages = (data.hasOwnProperty('errors') && data.errors.length) ? "<br>"+data.errors.join("<br>") : "";
 		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors below.</b><br>'+txt+messages+'</div>';
 	    }
@@ -1005,6 +1007,7 @@
 			    Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(data, node.id);
 			},
 			error: function(jqXHR, error){
+			    Retina.WidgetInstances.metagenome_upload[1].metadataValidationResult(jqXHR.responseText, node.id, true);
 			    console.log(error);
 			    console.log(jqXHR);
 			},

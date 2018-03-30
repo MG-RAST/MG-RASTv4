@@ -1,4 +1,13 @@
 function initWebApp () {
+    (function () {
+	var k = Retina.keys(RetinaConfig);
+	Retina.traverse(RetinaConfig, function (str) {
+	    if (str.match(/^http\:/) && window.location.toString().substr(0, 5) == 'https') {
+		str = str.replace(/^http\:/, 'https\:');
+	    }
+	    return str;
+	});
+    }).call(this);
     stm.init({});
     stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
     Retina.init({});
