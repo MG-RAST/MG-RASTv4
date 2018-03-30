@@ -242,13 +242,17 @@
 	var seq_file_opts = [];
 	for (var i=0; i<widget.inboxData.length; i++) {
 	    if (widget.inboxData[i].hasOwnProperty('data_type') && widget.inboxData[i].data_type == 'sequence') {
-		if (parseInt(widget.inboxData[i].stats_info.length_max) > 500000) {
-		    seq_file_opts.push("<option disabled style='color: red;' title='maximum sequence length exceeded ("+widget.inboxData[i].stats_info.length_max+", max is 500.000)'>"+widget.inboxData[i].filename+"</option>");
-		} else if (parseInt(widget.inboxData[i].stats_info.length_max) < 26) {
-		    seq_file_opts.push("<option disabled style='color: gray;' title='index file detected, cannot be selected for submission' >"+widget.inboxData[i].filename+"</option>");
-		} else {
-		    seq_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
-		}
+		    if (parseInt(widget.inboxData[i].stats_info.length_max) > 500000) {
+		        seq_file_opts.push("<option disabled style='color: red;' title='maximum sequence length exceeded ("+widget.inboxData[i].stats_info.length_max+", max is 500,000 bp)'>"+widget.inboxData[i].filename+"</option>");
+		    } else if (parseInt(widget.inboxData[i].stats_info.length_max) < 26) {
+		        seq_file_opts.push("<option disabled style='color: gray;' title='index file detected, cannot be selected for submission' >"+widget.inboxData[i].filename+"</option>");
+		    } else if (parseInt(widget.inboxData[i].stats_info.sequence_count) < 100) {
+                seq_file_opts.push("<option disabled style='color: red;' title='below minimum sequence count ("+widget.inboxData[i].stats_info.sequence_count+", minimum is 100)'>"+widget.inboxData[i].filename+"</option>");
+		    } else if (parseInt(widget.inboxData[i].stats_info.bp_count) < (1024 * 1024)) {
+                seq_file_opts.push("<option disabled style='color: red;' title='below minimum base pair count ("+widget.inboxData[i].stats_info.bp_count+", minimum is 1,000,000 bp)'>"+widget.inboxData[i].filename+"</option>");
+            } else {
+		        seq_file_opts.push("<option value='"+widget.inboxData[i].id+"'>"+widget.inboxData[i].filename+"</option>");
+		    }
 	    }
 	}
 	seq_file_opts = seq_file_opts.join("\n");
