@@ -702,8 +702,8 @@
 	var promise = jQuery.Deferred();
 
 	// check if the filename is valid
-	if (! selectedFile.name.match(/^[\w\d\.]+$/)) {
-	    var html = '<div class="alert alert-error"><strong>Invalid file name</strong> The file name may only contain letters, digits, underscore and ".".</div>';
+	if (! selectedFile.name.match(/^[\w\d\.-]+$/)) {
+	    var html = '<div class="alert alert-error"><strong>Invalid file name</strong> The file name may only contain letters, digits, underscore, hyphen(-) and ".".</div>';
 	    return promise.resolve(html, false, customIndex);
 	}
 
@@ -1313,8 +1313,8 @@
 	var outfile = document.getElementById('jpeOutfile').value;
 
 	// check if the outfile name is valid
-	if (! outfile.match(/^[\w\d\.]+$/)) {
-	    alert("The selected output file name is invalid.\nFile names may only contain letters, digits, '.' and '_' characters.");
+	if (! outfile.match(/^[\w\d\.-]+$/)) {
+	    alert("The selected output file name is invalid.\nFile names may only contain letters, digits, '.', '-',  and '_' characters.");
 	    return;
 	}
 
