@@ -262,7 +262,7 @@
 	var request = resource.requests[form.getAttribute('request')];
 	var target = form.getAttribute('target');
 
-	var f;
+	var f = "";
 	var values = {};
 	for (var i=0; i<form.elements.length; i++) {
 	    if (form.elements[i].name == '_del_') {
