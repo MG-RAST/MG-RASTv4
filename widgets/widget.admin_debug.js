@@ -325,7 +325,7 @@
 												     tos: d.tos,
 												     id: d.id,
 												     login: d.login },
-											   "token": d.token }), { expires: 7 });
+											   "token": d.token }), { expires: 14 });
 		window.location = "mgmain.html?mgpage=pipeline";
 	    }}).fail(function(xhr, error) {
 		alert('impersonation failed');
