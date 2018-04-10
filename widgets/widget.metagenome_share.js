@@ -474,9 +474,9 @@
 		html += '<div><button class="btn btn-small">re-submit this project to EBI</button></div>';
 	    }
 	} else {
-	    if (Retina.cgiParam('admin')) {
+	    //if (Retina.cgiParam('admin')) {
 		html += '<button class="btn btn-small pull-left" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">submit to EBI</button>';
-	    }
+	    //}
 	}
 
 	return html;
