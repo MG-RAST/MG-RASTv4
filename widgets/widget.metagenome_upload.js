@@ -827,6 +827,8 @@
 				if (seq.length > 500000) {
 				    tooLong++;
 				}
+			    } else {
+			        tooShort++;
 			    }
 			    seq = [];
 			}
@@ -850,6 +852,8 @@
 			    if (seq.length > 500000) {
 				tooLong++;
 			    }
+			} else {
+			    tooShort++;
 			}
 		    }
 		    
