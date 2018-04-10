@@ -114,7 +114,7 @@
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
 								       "autoUnarchive": true,
-								       "hasExpiration": "5D",
+								       "hasExpiration": "10D",
 								       "calculateMD5": true,
 								       "allowMultiselect": true,
 								       "allowMultiFileUpload": true,

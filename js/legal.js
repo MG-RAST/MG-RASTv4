@@ -44,7 +44,7 @@ function sendAgreement () {
 							       login: stm.user.login,
 							       tos: data.tos,
 							       id: stm.user.id },
-						     "token": stm.token }), { expires: 7 });
+						     "token": stm.token }), { expires: 14 });
 	    window.location = "mgmain.html?mgpage=mydata";
 	},
 	error: function (xhr) {
