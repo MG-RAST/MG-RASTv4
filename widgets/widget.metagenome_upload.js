@@ -114,7 +114,7 @@
 	    							       "showUploadPreview": false,
 	    							       "autoDecompress": true,
 								       "autoUnarchive": true,
-								       "hasExpiration": "5D",
+								       "hasExpiration": "10D",
 								       "calculateMD5": true,
 								       "allowMultiselect": true,
 								       "allowMultiFileUpload": true,
@@ -702,8 +702,8 @@
 	var promise = jQuery.Deferred();
 
 	// check if the filename is valid
-	if (! selectedFile.name.match(/^[\w\d\.]+$/)) {
-	    var html = '<div class="alert alert-error"><strong>Invalid file name</strong> The file name may only contain letters, digits, underscore and ".".</div>';
+	if (! selectedFile.name.match(/^[\w\d\.-]+$/)) {
+	    var html = '<div class="alert alert-error"><strong>Invalid file name</strong> The file name may only contain letters, digits, underscore, hyphen(-) and ".".</div>';
 	    return promise.resolve(html, false, customIndex);
 	}
 
@@ -824,9 +824,11 @@
 				if (seq.length < 75) {
 				    tooShort++;
 				}
-				if (seq.length > (1024 * 512)) {
+				if (seq.length > 500000) {
 				    tooLong++;
 				}
+			    } else {
+			        tooShort++;
 			    }
 			    seq = [];
 			}
@@ -847,17 +849,17 @@
 			    if (seq.length < 75) {
 				tooShort++;
 			    }
-			    if (seq.length > (1024 * 1024 * 3)) {
+			    if (seq.length > 500000) {
 				tooLong++;
 			    }
+			} else {
+			    tooShort++;
 			}
 		    }
 		    
-		    //numSeqs--;
-		    tooShort--;
-		    var lenInfo = "<p>All of the tested sequences fulfill the minimum length requirement of 75bp.</p>";
+		    var lenInfo = "<p>All of the tested sequences fulfill the minimum length requirement of 75 bp.</p>";
 		    if (tooShort > 0) {
-			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75bp. These reads cannot be processed.</p>";
+			lenInfo = "<p>"+tooShort.formatString() + " of the tested sequences are shorter than the minimum length of 75 bp. These reads cannot be processed.</p>";
 		    }
 		    var validInfo = "<p>This is a valid "+type+" file. "+numSeqs.formatString() + " sequence"+(numSeqs > 1 ? "s of this file were" : " of this file was")+" tested. ";
 		    if (invalidSeqs || numDuplicate || invalidHeaders || tooLong) {
@@ -875,7 +877,7 @@
 			    validInfo += invalidHeaders + " of them contain"+(invalidHeaders > 1 ? "" : "s")+" invalid headers (i.e. line "+(firstInvalidHeader + 1)+"). ";
 			}
 			if (tooLong) {
-			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 500kBp). ";
+			    validInfo += tooLong + " of them "+(tooLong > 1 ? "are" : "is")+" too long for the MG-RAST pipeline (larger than 500 Kbp). ";
 			}
 			validInfo += "The "+type+" file is not in the correct format for processing.";
 			allow = false;
@@ -1315,8 +1317,8 @@
 	var outfile = document.getElementById('jpeOutfile').value;
 
 	// check if the outfile name is valid
-	if (! outfile.match(/^[\w\d\.]+$/)) {
-	    alert("The selected output file name is invalid.\nFile names may only contain letters, digits, '.' and '_' characters.");
+	if (! outfile.match(/^[\w\d\.-]+$/)) {
+	    alert("The selected output file name is invalid.\nFile names may only contain letters, digits, '.', '-',  and '_' characters.");
 	    return;
 	}
 
