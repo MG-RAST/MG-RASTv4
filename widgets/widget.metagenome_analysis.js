@@ -201,7 +201,7 @@
 	html += "<div style='float: left;'><img src='Retina/images/krona.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"krona\");' title='krona'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Krona</div></div>";
 	html += "<div style='float: left;'><img src='images/kegg.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"kegg\");' title='KEGG Mapper'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>KEGGmap</div></div>";
 	html += "<div style='float: left;'><img src='images/cytoscape_logo.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"cytoscape\");' title='Cytoscape'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>Cytoscape</div></div>";
-	//html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"listmaker\");' title='List Generator'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>ListGen</div></div>";
+	html += "<div style='float: left;'><img src='Retina/images/table.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].plugin(\"listmaker\");' title='List Generator'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>ListGen</div></div>";
 
 	container.innerHTML = html;
     };
@@ -444,13 +444,13 @@
 	    
 	    // data normalization
 	    if (opt.name == "normalize" && settings[opt.name]) {
-		data.data = Retina.transposeMatrix(Retina.normalizeMatrix(Retina.transposeMatrix(data.data)));
+		data.data = Retina.roundMatrix(Retina.transposeMatrix(Retina.normalizeMatrix(Retina.transposeMatrix(data.data))), 4);
 	    }
 
 	    // turn data to log
 	    else if (opt.name == "log") {
 		if (settings[opt.name]) {
-		    data.data = Retina.logMatrix(data.data);
+		    data.data = Retina.roundMatrix(Retina.logMatrix(data.data), 3);
 		    if (visMap.hasOwnProperty('logAxes')) {
 			for (var h=0; h<visMap.logAxes.length; h++) {
 			    settings.items[visMap.logAxes[h]].parameters.isLog = true;
@@ -1161,14 +1161,14 @@
 	html.push('</table>');
 
 	// filters
-	html.push("<button id='filterField' class='btn btn-mini' style='margin-right: 5px;' title='add filter' onclick='jQuery(\"#addFilterDiv\").toggle();'><i class='icon icon-filter'></i></button><div style='display: none; position: relative; bottom: 10px; left: 65px;' id='addFilterDiv'>");
+	html.push("<button id='filterField' class='btn btn-mini' style='margin-right: 5px;' title='add filter' onclick='jQuery(\"#addFilterDiv\").toggle();'><i class='icon icon-filter'></i></button><div style='display: none; margin-top: 3px;' id='addFilterDiv'>");
 
 	// filter form
 
 	// list filter
 	if (widget.filterlists.hasOwnProperty(c.parameters.displaySource)) {
 	    var k = Retina.keys(widget.filterlists[c.parameters.displaySource]).sort();
-	    html.push('<div id="listFilterDiv" style="margin-bottom: 5px;">');
+	    html.push('<div id="listFilterDiv" style="margin-bottom: 5px;"><h5>list filter</h5>');
 	    html.push("<select style='margin-bottom: 2px; font-size: 12px; height: 27px;' id='displayListSelect' onchange='Retina.WidgetInstances.metagenome_analysis[1].changeContainerParam(\"listFilter\", \"add\", this.options[this.selectedIndex].value);'><optgroup label='filter list'><option value='0'>- select list -</option>");
 	    for (var i=0; i<k.length; i++) {
 		var sel = "";
@@ -1182,7 +1182,7 @@
 	}
 
 	// filter source
-	html.push("<select id='taxType' style='margin-bottom: 2px; font-size: 12px; height: 27px;'>");
+	html.push("<h5>taxonomy filter</h5><select id='taxType' style='margin-bottom: 2px; font-size: 12px; height: 27px;'>");
 	for (var i=0; i<c.parameters.sources.length; i++) {
 	    html.push("<option>"+c.parameters.sources[i]+"</option>");
 	}
@@ -1204,7 +1204,7 @@
 	html.push('</div>');
 	
 	// ont filter
-	html.push('<div id="ontFilterDiv">');
+	html.push('<div id="ontFilterDiv"><h5>function filter</h5>');
 	var ontTypeSelect = [ '<select style="margin-bottom: 2px; font-size: 12px; height: 27px;" id="ontType" onchange="' ];
 	var onts = Retina.keys(ontLevels).sort();
 	for (var i=0; i<onts.length; i++) {
@@ -2113,12 +2113,16 @@
 	}
 	matrix.rows = mr;
 
-	var hasZero = false;
+	var hasZero = 0;
 	for (var i=0; i<matrix.abundances.length; i++) {
 	    if (matrix.abundances[i] == 0) {
-		hasZero = true;
-		break;
+		hasZero++;
 	    }
+	}
+	if (matrix.abundances.length == hasZero) {
+	    hasZero = true;
+	} else {
+	    hasZero = false;
 	}
 	
 	c.parameters.depth = (displayType == "taxonomy" ? levelIndex[displayLevel] : flevelIndex[displaySource+"-"+displayLevel]) + 1;
@@ -2129,7 +2133,7 @@
 	c.hierarchy = hier;
 
 	if (hasZero) {
-	    alert("At least one of your datasets has no hits when applying the chosen cutoffs and filters.\n\nLower cutoffs may provide more hits.");
+	    alert("None of your datasets have hits when applying the chosen cutoffs and filters.\n\nLowering cutoffs and removing filters may provide more hits.");
 	}
 	
 	return c;
@@ -2398,7 +2402,14 @@
 	    if (widget.isRecipe) {
 		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Analysis Recipe: <span id='recipeTitle'></span></h3><p>To start select datasets below and click <a class='btn btn-mini btn-success' style='position: relative; left: 5px; bottom: 1px;'><i class='icon-ok icon-white'></i></a></p><p>The analysis recipe will guide you through the analysis by presetting all parameters. You only need to select the datasets you want to perform the analysis for. Use the <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"mgselect\").className=\"glow\";' onmouseout='document.getElementById(\"mgselect\").className=\"\";'>selection box</span> below to do so."+(widget.recipe.defaultDatasets && widget.recipe.defaultDatasets.length ? " This recipe has default datasets selected. Feel free to use these or exchange them for datasets of your choice. " : "" )+"</p><p>Once the data is loaded, you will immediately see the analysis results. The <span style='font-weight: bold; cursor: help;' onmouseover='document.getElementById(\"recipeDisplay\").className=\"glow\";' onmouseout='document.getElementById(\"recipeDisplay\").className=\"\";'>recipe description</span> is always visible on the righthand side. It will also inform you about important parameters you can adjust. Hover over the highlighted terms to see where to change those parameters.</p><div>");
 	    } else {
-		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis</h3><p>To perform an analysis, you must first load the metagenomic profiles to analyze. A profile holds the abundance values and cutoffs for a list of database sources for a specific dataset. You can select the databases and datasets, as well as a name for your analysis below. Click the <i class='icon-ok'></i></a>-button to load the data from our server.</p><p>Profiles are generated on demand. Depending on profile size the initial calculation may take some time. Once computed they will be cached and subsequent requests will download immediately. You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p><p>Once all required data is loaded you can start the analysis.</p><div style='overflow-x: auto;'>");
+		html.push("<div style='border: 1px solid #dddddd; border-radius: 6px; padding: 10px;'><h3 style='margin-top: 0px;'>Create a new Analysis");
+
+		/*
+		  This has been commented out and should be put back in to enable recipes
+		 */
+		//html.push("<button style='float: right;' class='btn btn-info' onclick='window.location=\"mgmain.html?mgpage=recipe\";'>Looks complicated?<br>Try out recipes!</button>");
+		
+		html.push("</h3><p>To perform an analysis, you must first load the metagenomic profiles to analyze. A profile holds the abundance values and cutoffs for a list of database sources for a specific dataset. You can select the databases and datasets, as well as a name for your analysis below. Click the <i class='icon-ok'></i></a>-button to load the data from our server.</p><p>Profiles are generated on demand. Depending on profile size the initial calculation may take some time. Once computed they will be cached and subsequent requests will download immediately. You can use the <i class=\"icon icon-folder-open\"></i>-icon in the top menu bar to store profiles on your harddrive and upload them back into your browser cache (without requiring interaction with our server).</p><p>Once all required data is loaded you can start the analysis.</p><div style='overflow-x: auto;'>");
 	    }
 
 
@@ -2621,7 +2632,7 @@
       DATA LOADING BACKEND
      */
 
-    widget.dataLoadParams = { sources: [ "RefSeq", "Subsystems" ] };
+    widget.dataLoadParams = { sources: [ "RefSeq" ] };
 
     widget.xhr = {};
 

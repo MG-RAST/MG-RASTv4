@@ -237,6 +237,9 @@
 	} else if (p[0] == 'int' || p[0] == 'integer') {
 	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
 	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
+	} else if (p[0] == 'list') {
+	    var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
+	    h.push('<input type="text" name="'+name+'" placeholder="'+name+'" value="'+val+'">');
 	} else {
 	    var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "");
 	    h.push("<input type='text' name='"+name+"' placeholder='"+name+"' value='"+val+"'>");
@@ -355,7 +358,7 @@
 			if (resp.length > 10000) {
 			    resp = resp.substr(0, 10000) + "...\n(the content is longer than 10.000 characters and has been truncated)";
 			}
-			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><h5>response</h5><pre style='margin-bottom: 30px;'>"+resp+"</pre>";
+			document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><h5>response<button class='btn btn-mini' style='margin-left: 10px;' onclick='if(this.innerHTML==\"hide\"){this.innerHTML=\"show\";this.parentNode.nextSibling.style.display=\"none\";}else{this.innerHTML=\"hide\";this.parentNode.nextSibling.style.display=\"\";}'>hide</button></h5><pre style='margin-bottom: 30px;'>"+resp.replace(/</g, '&lt;')+"</pre>";
 		    }}).fail(function(xhr, error) {
 			this.btn.removeAttribute('disabled');
 			this.btn.innerHTML = 'send';

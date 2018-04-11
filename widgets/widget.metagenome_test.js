@@ -10,19 +10,25 @@
     
     widget.setup = function () {
 	return [
-	    Retina.load_renderer("arranger"),
+	    Retina.load_renderer("table")
 	];
     };
  
-    widget.display = function (wparams) {
-        widget = this;
+    widget.display = function (params) {
+	var widget = this;
+	var target = params.main;
+	
+	var rendererTarget = document.createElement('div');
+	target.appendChild(rendererTarget);
+	
+	var myTable = Retina.Renderer.create('table',
+					     { 'target': rendererTarget,
+					       'data': Retina.RendererInstances.table[0].exampleData() } );
 
-	var container = widget.container = wparams ? wparams.main : widget.container;
-	var sidebar = widget.sidebar = wparams ? wparams.sidebar : widget.sidebar;
-
-	container.innerHTML = '<div id="hans"></div>';
-
-	widget.arranger = Retina.Renderer.create("arranger", { target: document.getElementById("hans") }).render();
+	myTable.settings.editable = { 0: true };
+	myTable.render();
+	
+	return widget;
     };
 
 })();
