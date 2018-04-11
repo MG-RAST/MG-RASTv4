@@ -140,6 +140,10 @@
 	    success: function (d) {
 		var widget = Retina.WidgetInstances.metagenome_searchapi[1];
 		document.getElementById('searchresult').innerHTML = JSON.stringify(d, null, 2);
+	    },
+	    error: function (error, xhr) {
+		var widget = Retina.WidgetInstances.metagenome_searchapi[1];
+		document.getElementById('searchresult').innerHTML = "You search could not be completed due to a server error.";
 	    }
 	});
     };

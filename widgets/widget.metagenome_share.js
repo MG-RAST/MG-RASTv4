@@ -474,9 +474,9 @@
 		html += '<div><button class="btn btn-small">re-submit this project to EBI</button></div>';
 	    }
 	} else {
-	    if (Retina.cgiParam('admin')) {
+	    //if (Retina.cgiParam('admin')) {
 		html += '<button class="btn btn-small pull-left" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">submit to EBI</button>';
-	    }
+	    //}
 	}
 
 	return html;
@@ -624,7 +624,7 @@
 	    var html = [ '\
       <div class="modal-header">\
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
-        <h3><img src="images/ENA-logo.png" style="width: 150px; margin-right: 10px;">submit to the ENA at EBI</h3>\
+        <div style="height: 40px;"><img src="images/MGRAST_logo.png" style="width: 150px; margin-left: 10px; float: left; padding: 2px; background-color: black;"><div style="float: left; margin-left: 40px; position: relative; top: 11px; left: 6px; font-size: 30px;">&#8729;&#8729;&#8729;&#8729;&#8729;&#8729;&#8729;&#8729;</div><div style="float: left; font-weight: 200; font-size: 30px; position: relative; top: 8px;">></div><img src="images/ENA-logo.png" style="width: 150px; margin-left: 40px; float: left;"></div>\
       </div>\
       <div class="modal-body">\
         <h4 style="margin-top: 0px;">'+project_name+'</h4>\
