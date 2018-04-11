@@ -185,6 +185,9 @@
 	var container = document.getElementById('toolsContainerSpace');
 	var html = "";
 
+	/*
+	  This is functional but not yet intended for public use
+	 */
 	//html += "<div style='float: left;'><img src='Retina/images/cloud-upload.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].exportData(\"shock\");' title='upload to myData in MG-RAST' id='uploadButton'><br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>myData</div></div>";
     	html += "<div style='float: left;'><img src='Retina/images/notebook.png' class='tool' onclick='Retina.WidgetInstances.metagenome_analysis[1].showMetadata();' title='show / edit metadata'<br><div style='font-size: 11px; margin-top: -10px; text-align: center;'>metadata</div></div>";
 
