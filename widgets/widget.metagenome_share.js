@@ -462,24 +462,42 @@
 
 	html = 'name<br><input type="text" value="'+project.name+'" style="width: 465px;" id="md'+projectid+'project_name"><br><br>description<br><textarea style="width: 465px;" id="md'+projectid+'project_description">'+project.description+'</textarea><br><br>funding source<br><input type="text" id="md'+projectid+'project_funding" value="'+(project.funding_source || "")+'" style="width: 465px;"><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'pi_email" value="'+(project.metadata.PI_email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'pi_firstname" value="'+(project.metadata.PI_firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'pi_lastname" value="'+(project.metadata.PI_lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'pi_organization" value="'+(project.metadata.PI_organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'pi_organization_url" value="'+(project.metadata.PI_organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'pi_organization_address" value="'+(project.metadata.PI_organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'pi_organization_country" value="'+(project.metadata.PI_organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'email" value="'+(project.metadata.email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'firstname" value="'+(project.metadata.firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'lastname" value="'+(project.metadata.lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'organization" value="'+(project.metadata.organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'organization_url" value="'+(project.metadata.organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'organization_address" value="'+(project.metadata.organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'organization_country" value="'+(project.metadata.organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><button class="btn btn-small pull-right" onclick="Retina.WidgetInstances.metagenome_share[1].updateBasicProjectMetadata(\''+projectid+'\');">update</button>';
 
-	if (project.metadata.hasOwnProperty('EBIstatus') && project.metadata.hasOwnProperty('EBIid')) {
-	    if (project.metadata.EBIstatus == 'complete') {
-		html += 'This project was submitted successfully to <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI</a>';
-	    } else {
-		if (project.metadata.EBIstatus == 'running') {
-		    html += 'This project is currently progressing through the <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI pipeline</a>';
-		} else {
-		    html += 'This project had an error during <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI submission</a>';
-		}
-		html += '<div><button class="btn btn-small">re-submit this project to EBI</button></div>';
-	    }
+	html += '<div id="'+project.id+'_ebi"></div>';
+
+	widget.checkEBIstatus(project);
+	
+	return html;
+    };
+
+    widget.checkEBIstatus = function (project) {
+	var widget = this;
+
+	var html = '';
+
+	if (project.metadata.hasOwnProperty('ebi_id')) {
+	    html = 'This project was submitted successfully to <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI</a>';
+	    html += '<div><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">re-submit this project to EBI</button></div>';
 	} else {
-	    //if (Retina.cgiParam('admin')) {
-		html += '<button class="btn btn-small pull-left" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">submit to EBI</button>';
-	    //}
+	    jQuery.ajax({
+		method: "GET",
+		dataType: "json",
+		headers: stm.authHeader,
+		url: RetinaConfig.mgrast_api+'/submission/'+project.id,
+		complete: function (jqXHR) {
+		    var data = JSON.parse(jqXHR.responseText);
+		    if (data.error == null) {
+			html = 'This project is currently progressing through the <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI pipeline</a>';
+		    } else if (data.error.match(/^No submission exists/)) {
+			html = '<button class="btn btn-small pull-left" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">submit to EBI</button>';
+		    } else {
+			html = 'This project had an error during <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI submission</a>:<br>'+data.error;
+			html += '<div><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">re-submit this project to EBI</button></div>';
+		    }
+		}
+	    });
 	}
 
-	return html;
+	document.getElementById(project.id+'_ebi').innerHTML = html;
     };
 
     widget.submitToEBIModal = function (project_name, project_id) {
@@ -582,44 +600,7 @@
 		    biome_selects.push('</select></td></tr>');
 		}
 	    }
-	    
-	    // get a list of all techs
-	    var techs = {};
-	    for (var i=0; i<stm.DataStore.project_metadata[project_id].samples.length; i++) {
-		for (var h=0; h<stm.DataStore.project_metadata[project_id].samples[i].libraries.length; h++) {
-		    var lib = stm.DataStore.project_metadata[project_id].samples[i].libraries[h];
-		    if (! lib.data.hasOwnProperty('seq_model')) {
-			lib.data.seq_model = { "value": '0' };
-		    }
-		    if (! techs.hasOwnProperty(lib.data.seq_model.value)) {
-			techs[lib.data.seq_model.value] = [];
-		    }
-		    techs[lib.data.seq_model.value].push(lib.data.metagenome_id.value);
-		}
-	    }
-	    widget.techs = techs;
-
-	    // make option lists for techs
-	    var tech_list = Retina.keys(techs).sort();
-	    var tech_selects = [];
-	    var t = widget.ebi_techs;
-	    var k = Retina.keys(t).sort();
-	    for (var i=0; i<tech_list.length; i++) {
-		var title = tech_list[i];
-		if (title == '0') {
-		    title = '<div style="text-align: center;"><img src="Retina/images/info.png" style="width: 16px; cursor: help;" title="You do not have any seq_models set in your library metadata.\nYou can update your metadata to supply these information."></div>';
-		}
-		tech_selects.push('<tr><td><div style="margin-right: 10px; position: relative; bottom: 5px;">'+title+'</div></td><td><select id="tech_'+tech_list[i]+'">');
-		for (var i=0; i<k.length; i++) {
-		    tech_selects.push('<optgroup label="'+k[i]+'">');
-		    for (var h=0; h<t[k[i]].length; h++) {
-			tech_selects.push('<option value="'+k[i]+'|'+t[k[i]][h]+'">'+t[k[i]][h]+'</option>');
-		    }
-		    tech_selects.push('</optgroup>');
-		}
-		tech_selects.push('</select></td></tr>');
-	    }
-	    
+	    	    
 	    // create the modal
 	    var html = [ '\
       <div class="modal-header">\
@@ -628,8 +609,8 @@
       </div>\
       <div class="modal-body">\
         <h4 style="margin-top: 0px;">'+project_name+'</h4>\
-        <p>To submit your project to the European Nucleotide Archive at the EBI, you need to specify the biome and sequencing technology below.</p>\
-        <table><tr><td colspan=2><div style="font-weight: bold;">sequencer model mapping</div></td></tr>'+tech_selects.join('') ];
+        <p>To submit your project to the European Nucleotide Archive at the EBI, you need to specify the biome below.</p>\
+        <table>' ];
 	    
 	    html.push('\
         <tr><td colspan=2><div style="font-weight: bold;">biome mapping</div></td></tr></tr>'+biome_selects.join('')+'</table>\
@@ -657,7 +638,7 @@
 	var widget = this;
 
 	var project = stm.DataStore.project[projectid];
-	var fd = new FormData();
+	var data = { "project_id": project.id, "metagenome_taxonomy": {} };
 	
 	var mg2biome = {};
 	var biomes = Retina.keys(widget.biomes);
@@ -666,20 +647,11 @@
 		mg2biome[widget.biomes[biomes[i]][h]] = biomes[i];
 	    }
 	}
-	var mg2tech = {};
-	var techs = Retina.keys(widget.techs);
-	for (var i=0; i<techs.length; i++) {
-	    for (var h=0; h<widget.techs[techs[i]].length; h++) {
-		mg2tech[widget.techs[techs[i]][h]] = techs[i];
-	    }
-	}
-
+	
 	for (var i=0; i<project.metagenomes.length; i++) {
 	    var selname = 'biome_' + mg2biome[project.metagenomes[i].metagenome_id];
-	    fd.append('biome'+project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].value);
-	    fd.append('biomename'+project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].text);
-	    var selname2 = 'tech_' + mg2tech[project.metagenomes[i].metagenome_id];
-	    fd.append('tech'+project.metagenomes[i].metagenome_id, document.getElementById(selname2).options[document.getElementById(selname2).selectedIndex].value);
+	    console.log(selname);
+	    data.metagenome_taxonomy[project.metagenomes[i].metagenome_id] = project.metagenomes[i].metagenome_id, document.getElementById(selname).options[document.getElementById(selname).selectedIndex].value;
 	}
 	
 	jQuery.ajax({
@@ -687,11 +659,12 @@
 	    headers: stm.authHeader,
 	    contentType: false,
 	    processData: false,
-	    data: fd,
+	    data: JSON.stringify(data),
 	    crossDomain: true,
-	    url: RetinaConfig.mgrast_api+'/project/'+project.id+"/submittoebi",
+	    url: RetinaConfig.mgrast_api+'/submission/ebi/',
 	    complete: function (jqXHR) {
 		var data = JSON.parse(jqXHR.responseText);
+		alert('your project has been submitted to EBI');
 	    }
 	});
 
