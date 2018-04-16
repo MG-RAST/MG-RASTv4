@@ -160,7 +160,8 @@
 					    "params": example_params,
 					    "id": example_id };
 			}
-			
+
+
 			req.call = req.request.substring(RetinaConfig.mgrast_api.length).replace('//', '/');
 			h.push('<div class="request" style="cursor: pointer;"><div class="requestMethod" onclick="jQuery(\'#request'+this.res+req.name+req.method+'\').toggle();"><span>'+req.method+'</span><span>'+req.call+'</span></div><div onclick="jQuery(\'#request'+this.res+req.name+req.method+'\').toggle();">'+req.description+'</div><div class="requestchild" id="request'+this.res+req.name+req.method+'" style="display: none;">');
 
@@ -201,7 +202,9 @@
 			h.push('<div id="request'+this.res+req.name+req.method+'target"></div>');
 			
 			h.push('<h5 style="clear: both;">return structure</h5>');
-			h.push('<pre>'+JSON.stringify(req.attributes == "self" ? req : req.attributes, null, 2)+'</pre>');
+			var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
+			var apiurl = RetinaConfig.mgrast_api;
+			h.push('<pre>'+JSON.stringify(req.attributes == "self" ? req : req.attributes, null, 2).replace(new RegExp(apiurl, "g"), papiurl)+'</pre>');
 			h.push('</div></div>');
 		    }
 		    document.getElementById('resource'+d.name).innerHTML = h.join("");
@@ -332,7 +335,9 @@
 	}
 	
 	if (curlOnly) {
-	    document.getElementById(target+'_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>curl "+(stm.user ? "-H 'Authorization: "+auth+"' " : "")+(request.method == "POST" ? (hasParams ? "-d '"+JSON.stringify(values).replace(/'/g, "\\'")+"' " : "")+f : "'")+""+url+"'</pre>";
+	    var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
+	    var apiurl = RetinaConfig.mgrast_api;
+	    document.getElementById(target+'_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>curl "+(stm.user ? "-H 'Authorization: "+auth+"' " : "")+(request.method == "POST" ? (hasParams ? "-d '"+JSON.stringify(values).replace(/'/g, "\\'")+"' " : "")+f : "'")+""+url.replace(new RegExp(apiurl, "g"), papiurl)+"'</pre>";
 	} else {
 	    if (request.attributes.hasOwnProperty("streaming text")) {
 		btn.removeAttribute('disabled');
