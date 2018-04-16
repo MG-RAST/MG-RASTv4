@@ -202,7 +202,7 @@
 		showExpandAllButton: false,
 		searchDescription: true
 	    }).render(),
-	    "biome": Retina.Renderer.create('tree', {
+	    "feature": Retina.Renderer.create('tree', {
 		target: document.getElementById('featureTree'),
 		data: stm.DataStore.feature,
 		width: 0,
@@ -213,7 +213,7 @@
 		showExpandAllButton: false,
 		searchDescription: true
 	    }).render(),
-	    "biome": Retina.Renderer.create('tree', {
+	    "material": Retina.Renderer.create('tree', {
 		target: document.getElementById('materialTree'),
 		data: stm.DataStore.material,
 		width: 0,
@@ -1236,7 +1236,7 @@
 	var d = widget.loadedData;
 	if (excel) {
 	    var ignoreCols = {"sample_id": true, "metagenome_id": true, "project_id": true };
-	    for (var i=0; i<d.worksheets.length; i++) {
+	    for (let i=0; i<d.worksheets.length; i++) {
 		if (d.worksheets[i].name == "README") {
 		    continue;
 		}
@@ -1253,6 +1253,8 @@
 		    }
 		}
 		var ws = d.worksheets[i];
+		ws.maxRow = ws.data.length;
+		ws.maxCol = ws.data[0].length;
 		var sheet = ws.name.replace(/\s/, "-");
 		for (var h=0; h<ws.maxCol; h++) {
 		    var col = ws.data[0][h].value;
@@ -1271,7 +1273,7 @@
 			    widget.setCell(sheet, col, val, sheet == "project" ? 0 : undefined);
 			}
 		    }
-		}
+		}	
 	    }
 	    
 	} else {
@@ -1374,7 +1376,7 @@
 	}
 	
 	var sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
-	
+
 	// check if we know this sheet
 	if (! document.getElementById(sheetID)) {
 	    console.log('unknown sheet: '+sheet);
