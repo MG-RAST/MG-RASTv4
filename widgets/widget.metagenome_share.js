@@ -462,10 +462,8 @@
 
 	html = 'name<br><input type="text" value="'+project.name+'" style="width: 465px;" id="md'+projectid+'project_name"><br><br>description<br><textarea style="width: 465px;" id="md'+projectid+'project_description">'+project.description+'</textarea><br><br>funding source<br><input type="text" id="md'+projectid+'project_funding" value="'+(project.funding_source || "")+'" style="width: 465px;"><br><br><h4>administrative contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'pi_email" value="'+(project.metadata.PI_email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'pi_firstname" value="'+(project.metadata.PI_firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'pi_lastname" value="'+(project.metadata.PI_lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'pi_organization" value="'+(project.metadata.PI_organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'pi_organization_url" value="'+(project.metadata.PI_organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'pi_organization_address" value="'+(project.metadata.PI_organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'pi_organization_country" value="'+(project.metadata.PI_organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><br><h4>technical contact</h4><table style="text-align: left;"><tbody><tr><td style="padding-bottom: 10px; padding-right: 20px;">eMail</td><td><input type="text" id="md'+projectid+'email" value="'+(project.metadata.email || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">firstname</td><td><input type="text" id="md'+projectid+'firstname" value="'+(project.metadata.firstname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">lastname</td><td><input type="text" id="md'+projectid+'lastname" value="'+(project.metadata.lastname || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization</td><td><input type="text" id="md'+projectid+'organization" value="'+(project.metadata.organization || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization url</td><td><input type="text" id="md'+projectid+'organization_url" value="'+(project.metadata.organization_url || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization address</td><td><input type="text" id="md'+projectid+'organization_address" value="'+(project.metadata.organization_address || "")+'" style="width: 300px;"></td></tr><tr><td style="padding-bottom: 10px; padding-right: 20px;">organization country</td><td><input type="text" id="md'+projectid+'organization_country" value="'+(project.metadata.organization_country || "")+'" style="width: 300px;"></td></tr></tbody></table><button class="btn btn-small pull-right" onclick="Retina.WidgetInstances.metagenome_share[1].updateBasicProjectMetadata(\''+projectid+'\');">update</button>';
 
-	html += '<div id="'+project.id+'_ebi"></div>';
+	html += '<div id="'+project.id+'_ebi">'+widget.checkEBIstatus(project)+'</div>';
 
-	widget.checkEBIstatus(project);
-	
 	return html;
     };
 
@@ -473,7 +471,6 @@
 	var widget = this;
 
 	var html = '';
-
 	if (project.metadata.hasOwnProperty('ebi_id')) {
 	    html = 'This project was submitted successfully to <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI</a>';
 	    html += '<div><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">re-submit this project to EBI</button></div>';
@@ -482,9 +479,11 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader,
+		pid: project.id,
 		url: RetinaConfig.mgrast_api+'/submission/'+project.id,
 		complete: function (jqXHR) {
 		    var data = JSON.parse(jqXHR.responseText);
+		    var html = '';
 		    if (data.error == null) {
 			html = 'This project is currently progressing through the <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI pipeline</a>';
 		    } else if (data.error.match(/^No submission exists/)) {
@@ -493,11 +492,12 @@
 			html = 'This project had an error during <a href="http://www.ebi.ac.uk/submission/" target=_blank>EBI submission</a>:<br>'+data.error;
 			html += '<div><button class="btn btn-small" onclick="Retina.WidgetInstances.metagenome_share[1].submitToEBIModal(\''+project.name+'\',\''+project.id+'\');">re-submit this project to EBI</button></div>';
 		    }
+		    document.getElementById(this.pid+'_ebi').innerHTML = html;
 		}
 	    });
 	}
 
-	document.getElementById(project.id+'_ebi').innerHTML = html;
+	return html;
     };
 
     widget.submitToEBIModal = function (project_name, project_id) {
