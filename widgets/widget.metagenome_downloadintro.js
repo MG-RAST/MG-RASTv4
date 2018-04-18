@@ -63,7 +63,7 @@
                     <h3>API & commandline-tools</h3>\
                     <p>Through our API you have programmatic access to all data in MG-RAST. Accessing private data requires the use of a webkey. In addition to full downloads, you can also filter the data or join multiple datasets.</p>\
                     <p>Our tools include an R client as well as a download tool which grants scripted access to the data.</p>\
-                    <p style="text-align: center; margin-top: 120px;"><a class="btn" href="'+RetinaConfig.mgrast_api+'/api.html">API documentation</a></p>\
+                    <p style="text-align: center; margin-top: 120px;"><a class="btn" href="'+(RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api)+'/api.html">API documentation</a></p>\
                   </div>\
                 </div>\
               </li>\

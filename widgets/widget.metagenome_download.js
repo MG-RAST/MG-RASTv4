@@ -274,7 +274,7 @@
 	if (! id.match(/^mgm/)) {
 	    id = Retina.idmap(id);
 	}
-	var url = RetinaConfig.mgrast_api + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org)+(stm.authHeader && stm.authHeader.Authorization ? "&auth="+stm.authHeader.Authorization : "")+"&browser=1";
+	var url = (RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api) + "/annotation/similarity/"+id+"?type="+ann+"&source="+(ann == "ontology" ? ont : org)+(stm.authHeader && stm.authHeader.Authorization ? "&auth="+stm.authHeader.Authorization : "")+"&browser=1";
 	window.open(url);
     };
 
@@ -285,7 +285,7 @@
     widget.apiDownloadHTML = function () {
 	return "<div class='span12' style='margin-left: 0px; margin-top: 20px;'><a name='annotationDownloads' style='position: relative; bottom: 60px;'></a><h3>Annotation Downloads</h3>\
     <table width='100%'><tr><td align='left'>\
-      <p>Annotated reads are available through the <a href='"+RetinaConfig.mgrast_api+"' target='_blank'>MG-RAST API</a>. They are built dynamicly based on the chosen annotation type and source.<span id='downloadhelp' style='cursor: help;'><sup>[?]</sup></span></p>\
+      <p>Annotated reads are available through the <a href='"+(RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api)+"' target='_blank'>MG-RAST API</a>. They are built dynamicly based on the chosen annotation type and source.<span id='downloadhelp' style='cursor: help;'><sup>[?]</sup></span></p>\
       <table>\
         <tr><td>Annotation Type</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>Data Source</td><td></td><td></td></tr>\
         <tr>\

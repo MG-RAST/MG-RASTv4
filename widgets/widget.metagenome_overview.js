@@ -217,7 +217,7 @@
 
 		var k = Retina.keys(lcadata[taxa[h]]);
 		for (var j=0; j<k.length; j++) {
-		    mg.taxonomy[taxa[h]].push( { value: lcadata[taxa[h]][k[j]], label: k[j], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?browser=1&filter_level='+taxa[h]+'&type=organism&filter='+k[j].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
+		    mg.taxonomy[taxa[h]].push( { value: lcadata[taxa[h]][k[j]], label: k[j], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+(RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api)+'/annotation/sequence/'+mg.id+'?browser=1&filter_level='+taxa[h]+'&type=organism&filter='+k[j].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
 		}
 	    }
 
@@ -239,7 +239,7 @@
 		    continue;
 		}
 		for (var j=0; j<d.length; j++) {
-		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source='+onto[h]+'&type=ontology&filter_level=level1&browser=1&filter='+d[j][0].replace(/ /g, '\%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+ '");}'} );
+		    mg.ontology[onto[h]].push( { value: d[j][1], label: d[j][0], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+(RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api)+'/annotation/sequence/'+mg.id+'?source='+onto[h]+'&type=ontology&filter_level=level1&browser=1&filter='+d[j][0].replace(/ /g, '\%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+ '");}'} );
 		}
 	    }
 	} catch (error) {
@@ -316,23 +316,6 @@
 	    console.log("could not extract nucleotide data: "+error);
 	}
 	mg.bpprofile = bpprofile;
-	
-	// var rankabundance = {};
-	// try {
-	//     var tax = [ 'domain', 'phylum', 'class', 'order', 'family', 'genus' ];
-	//     for (var h=0; h<tax.length; h++) {
-	// 	rankabundance[tax[h]] = [];
-	// 	var t = mg.statistics.taxonomy[tax[h]].sort(function(a,b) {
-	// 	    return b[1] - a[1];
-	// 	}).slice(0,50);
-	// 	for (var i=0; i<t.length; i++) {
-	// 	    rankabundance[tax[h]].push( { label: t[i][0], value: t[i][1], click: 'if(confirm("Download the annotated sequences for this segment?")){window.open("'+RetinaConfig.mgrast_api+'/annotation/sequence/'+mg.id+'?source=RefSeq&filter_level='+tax[h]+'&browser=1&type=organism&filter='+t[i][0].replace(/ /g, '%20')+(mg.status=="private" ? '&auth='+stm.authHeader.Authorization.replace(/ /, '%20') : "")+'");}' } );
-	// 	}
-	//     }
-	// } catch (error) {
-	//     console.log("could not extract rankabundance data: " + error);
-	// }
-	// mg.rankabundance = rankabundance;
 	
 	var rarefaction = [];
 	try {
