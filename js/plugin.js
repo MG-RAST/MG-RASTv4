@@ -1,5 +1,6 @@
 function initWebApp (data) {
     stm.init({"data":data});
+    stm.DataStore.plugin = data.plugin;    
     stm.add_repository({ url: stm.Config.mgrast_api, name: "MG-RAST"});
     Retina.init({});
     
