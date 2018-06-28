@@ -1468,7 +1468,7 @@
 	    };
 
 	    for (var i=0; i<container.items.length; i++) {
-		biom.columns.push( { "id": container.items[i].name } );
+		biom.columns.push( { "id": container.items[i].name, "metadata": null } );
 	    }
 	    
 	    // construct the rows and data entries
@@ -1509,8 +1509,8 @@
 		    "source_type": "protein",
 		    "data_source": c.parameters.displaySource,
 		    "shape": [ c.matrix.itemsY, 2 ],
-		    "columns": [ { "id": "abundance" },
-				 { "id": "e-value" } ],
+		    "columns": [ { "id": "abundance", "metadata": null },
+				 { "id": "e-value", "metadata": null } ],
 		    "rows": [],
 		    "data": []
 		};
