@@ -17,8 +17,11 @@ git clone --recursive https://github.com/MG-RAST/MG-RASTv4.git
 To build the image either download the Docker file into an empty directory of provide the url to Dockerfile as in this example:
 
 ```bash
+export TAG=`date +"%Y%m%d.%H%M"`
+git clone --recursive https://github.com/MG-RAST/MG-RASTv4.git
 cd MG-RASTv4
-docker build -t mgrast/v4-web .
+docker build -t mgrast/v4-web:${TAG} .
+skycore push mgrast/v4-web:${TAG}
 ```
 
 Example for manual invocation:
