@@ -75,6 +75,9 @@ function initWebApp () {
 					    "myDataLink": "mgmain.html?mgpage=mydata" });
 	});
 	if (page == 'analysis') {
+        document.title = "Analysis";
+        var new_desc = "Refine and compare MG-RAST analysis results";
+        document.querySelector('meta[name="description"]').setAttribute("content", new_desc);
 	    Retina.load_widget({"name": "profileManager", "resource": "Retina/widgets"}).then( function() {
 		Retina.Widget.create('profileManager', { "target": document.getElementById("session_space") });
 		if (Retina.WidgetInstances.metagenome_analysis && Retina.WidgetInstances.metagenome_analysis.length == 2) {
@@ -90,7 +93,16 @@ function initWebApp () {
 	}
 
 	if (page == 'search') {
+        document.title = "Search";
+        var new_desc = "Browse data sets in the MG-RAST repository";
+        document.querySelector('meta[name="description"]').setAttribute("content", new_desc);
 	    document.getElementById('headerSearch').style.display = 'none';
+	}
+    
+	if (page == 'downloadintro') {
+        document.title = "Data Access";
+        var new_desc = "Information on how to access data and results in MG-RAST";
+        document.querySelector('meta[name="description"]').setAttribute("content", new_desc);
 	}
     });
 };
