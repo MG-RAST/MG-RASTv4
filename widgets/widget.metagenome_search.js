@@ -627,8 +627,6 @@
 	} else if (term.match(/^\d+\.\d$/)) {
 	    term = "mgm"+term;
 	}
-
-	term = term.toLowerCase();
 	
 	return term;
     };
