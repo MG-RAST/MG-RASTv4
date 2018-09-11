@@ -153,13 +153,13 @@
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
 
         // order
-        html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions() + '</select></div>');
+        html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions(true) + '</select></div>');
 
         html.push('</div>');
 
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>filter fields</h4>');
-        html.push('<div class="input-prepend input-append pull-left"><select id="filter">' + widget.fieldOptions() + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
+        html.push('<div class="input-prepend input-append pull-left"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
         html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
         html.push('</div>');
 
@@ -300,13 +300,16 @@
         widget.updateTexts();
     };
 
-    widget.fieldOptions = function() {
+    widget.fieldOptions = function(isorder) {
         var widget = this;
 
         var retval = [];
         for (var i = 0; i < widget.keylist.length; i++) {
             retval.push('<optgroup label="' + widget.keylist[i].name + '">');
             for (var h = 0; h < widget.keylist[i].items.length; h++) {
+                if (isorder && widget.keylist[i].items[h].name.startsWith("all_")) {
+                    continue;
+                }
                 retval.push('<option>' + widget.keylist[i].items[h].value + '</option>');
             }
             retval.push('</optgroup>');
@@ -318,7 +321,7 @@
         "name": "Project",
         "items": [{
             "name": "created_on",
-            "value": "created",
+            "value": "created date",
             "selected": true
         }, {
             "name": "all_project",
