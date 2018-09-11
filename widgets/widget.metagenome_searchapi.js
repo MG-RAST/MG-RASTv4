@@ -32,6 +32,9 @@
         "filters": [{
             "field": "country",
             "text": "usa"
+        }, {
+            "field": "biome",
+            "text": "marine"
         }]
     }, {
         "text": "10 human microbiome samples",
@@ -39,7 +42,7 @@
         "limit": "10",
         "order": "created_on",
         "filters": [{
-            "field": "all",
+            "field": "project_name",
             "text": "hmp"
         }]
     }, {
@@ -48,7 +51,7 @@
         "limit": "10",
         "order": "size",
         "filters": [{
-            "field": "all",
+            "field": "project_name",
             "text": "hmp"
         }, {
             "field": "bp_count_raw",
@@ -64,7 +67,7 @@
             "text": "mt"
         }, {
             "field": "country",
-            "text": "uk france italy germany spain"
+            "text": "uk OR france OR italy OR germany OR spain"
         }]
     }, {
         "text": "10 samples from animal gut",
@@ -173,7 +176,7 @@
         html.push("<div class='span3' style='border: 1px solid rgba(0,0,0,0.15); padding: 10px; border-radius: 5px; margin-left: 50px; box-shadow: 5px 5px 10px;'>");
 
         // help text
-        html.push('<h4 style="margin-top: 0px;">advanced filters</h4><p>You can search for multiple terms by just space separating them. If you have a term that includes a space, put it in hyphens. To exclude a term, prepend a -.<pre>mouse house "mickey mouse" -goofy</pre></p><p>You can search for ranges like this:<pre>[abc TO def]</pre></p><p>use * for an open range, e.g. to search for everything greater than 10 do this:<pre>[10 TO *]</pre></p>');
+        html.push('<h4 style="margin-top: 0px;">advanced filters</h4><p>You can search for multiple terms by just space separating them, or for optional terms by using \'OR\' inbetween.<pre>clock (house OR mouse)</pre></p><p>To search for an exact match, put it in quotes. To exclude a term, prepend a -.<pre>"mickey mouse" -goofy</pre></p><p>You can search for ranges like this:<pre>[abc TO def]</pre></p><p>use * for an open range, e.g. to search for everything greater than 10 do this:<pre>[10 TO *]</pre></p>');
 
         // examples
         html.push("<h4 style='margin-top: 30px;'>examples <sup title='click to view' style='cursor: help;'>[?]</sup></h4><table class='table table-hover table-condensed'>");
@@ -193,13 +196,12 @@
         var widget = this;
 
         var url = RetinaConfig.mgrast_api + "/search";
-        var auth = (stm.user && document.getElementById('useAuth').checked) ? 'auth=' + stm.user.token + '&' : '';
         var authHeader = (stm.user && document.getElementById('useAuth').checked) ? '-H "Authorization: mgrast ' + stm.user.token + '" ' : '';
         var limit = document.getElementById('limit').value; //options[document.getElementById('limit').selectedIndex].value;
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
 
-        widget.searchtext = url + "?" + auth + 'limit=' + limit + '&order=' + order + '&direction=' + direction;
+        widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction;
         widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '" ';
 
         for (var i = 0; i < widget.filters.length; i++) {
@@ -215,12 +217,13 @@
 
     widget.executeSearch = function() {
         var widget = this;
-
+        var thisheader = (stm.user && document.getElementById('useAuth').checked) ? stm.authHeader : {};
         document.getElementById('searchresult').innerHTML = '<div style="text-align: center;"><img src="Retina/images/waiting.gif" style="width: 24px;"></div>';
 
         jQuery.ajax({
             dataType: "json",
             url: widget.searchtext,
+            headers: thisheader,
             success: function(d) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
                 document.getElementById('searchresult').innerHTML = JSON.stringify(d, null, 2);
@@ -355,20 +358,20 @@
             "value": "funding"
         }, {
             "name": "project_name",
-            "value": "study",
+            "value": "study name",
             "selected": true
         }, {
             "name": "sample_name",
-            "value": "sample"
+            "value": "sample name"
         }, {
             "name": "env_package_name",
             "value": "env package name"
         }, {
             "name": "library_name",
-            "value": "library"
+            "value": "library name"
         }, {
             "name": "name",
-            "value": "dataset",
+            "value": "dataset name",
             "selected": true
         }, {
             "name": "sequence_type",
@@ -385,13 +388,13 @@
         "name": "Environment",
         "items": [{
             "name": "all_sample",
-            "value": "any project field"
+            "value": "any sample field"
         }, {
             "name": "all_env_package",
-            "value": "any project field"
+            "value": "any env package field"
         }, {
             "name": "all_library",
-            "value": "any project field"
+            "value": "any library field"
         }, {
             "name": "biome",
             "value": "biome",
