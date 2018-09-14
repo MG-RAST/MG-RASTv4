@@ -97,7 +97,7 @@
                     h.push('<h4>requests</h4>');
                     for (var j = 0; j < d.requests.length; j++) {
                         var req = d.requests[j];
-                        if (! req.hasOwnProperty('example')) {
+                        if (!req.hasOwnProperty('example')) {
                             continue;
                         }
 
@@ -117,17 +117,29 @@
                                 phash[req.request.substring(req.request.indexOf('{') + 1, req.request.indexOf('}')).toLowerCase()] = text.substr(text.lastIndexOf('/') + 1, text.lastIndexOf('"') - (text.lastIndexOf('/') + 1));
                             }
                             if (req.example[0].indexOf('curl') > -1) {
-                                try {
-                                    var ed = req.example[0];
-                                    ed = JSON.parse(ed.substr(ed.indexOf("-d '") + 4, ed.lastIndexOf("}") - ed.indexOf("-d '") - 3));
-                                    var keys = Retina.keys(ed);
-                                    for (var k = 0; k < keys.length; k++) {
-                                        phash[keys[k]] = ed[keys[k]];
+                                var ed = req.example[0];
+                                if (req.example[0].indexOf("-d '") > -1) {
+                                    req.format = "json"
+                                    try {
+                                        ed = JSON.parse(ed.substr(ed.indexOf("-d '") + 4, ed.lastIndexOf("}") - ed.indexOf("-d '") - 3));
+                                        var keys = Retina.keys(ed);
+                                        for (var k = 0; k < keys.length; k++) {
+                                            phash[keys[k]] = ed[keys[k]];
+                                        }
+                                    } catch (e) {
+                                        console.log('invalid curl -d in ' + d.name + ' ' + req.name + ': ' + req.example[0]);
                                     }
-                                } catch (e) {
-                                    //console.log('invalid curl in '+d.name+' '+req.name+': '+req.example[0]);
+                                } else if (req.example[0].indexOf('-F "') > -1) {
+                                    req.format = "form"
+                                    var pattern = /-F (\".+?\")/g;
+                                    var match;
+                                    while (match = pattern.exec(ed)) {
+                                        var parts = match[1].split("=");
+                                        if (parts.length == 2) {
+                                            phash[parts[0]] = phash[parts[1]];
+                                        }
+                                    }
                                 }
-
                             }
                             example_params = phash;
                         } else {
@@ -165,7 +177,7 @@
                             "id": example_id
                         };
                         req.call = req.request.substring(RetinaConfig.mgrast_api.length).replace('//', '/');
-                        
+
                         h.push('<div class="request" style="cursor: pointer;"><div class="requestMethod" onclick="jQuery(\'#request' + this.res + req.name + req.method + '\').toggle();"><span>' + req.method + '</span><span>' + req.call + '</span></div><div onclick="jQuery(\'#request' + this.res + req.name + req.method + '\').toggle();">' + req.description + '</div><div class="requestchild" id="request' + this.res + req.name + req.method + '" style="display: none;">');
 
                         h.push('<h5>example</i></h5><p style="padding-left: 100px;">' + req.example.description + '</p>');
@@ -258,14 +270,18 @@
     widget.submitForm = function(btn, curlOnly) {
         var widget = this;
 
+        // send or show-curl button
         var form = btn.parentNode;
         if (btn.innerHTML == 'send') {
             btn.setAttribute('disabled', 'disabled');
             btn.innerHTML = '<img src="Retina/images/waiting.gif" style="width: 12px;">';
         }
 
+        // get full struct of resource by array index
         var resource = stm.DataStore.api.resources[form.getAttribute('resource')];
+        // get request struct from resource by array index
         var request = resource.requests[form.getAttribute('request')];
+        // place to put return call or curl example
         var target = form.getAttribute('target');
 
         var f = "";
@@ -360,7 +376,7 @@
                         this.btn.innerHTML = 'send';
                         var resp = JSON.stringify(d, null, 2);
                         if (resp.length > 10000) {
-                            resp = resp.substr(0, 10000) + "...\n(the content is longer than 10.000 characters and has been truncated)";
+                            resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                         }
                         document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><h5>response<button class='btn btn-mini' style='margin-left: 10px;' onclick='if(this.innerHTML==\"hide\"){this.innerHTML=\"show\";this.parentNode.nextSibling.style.display=\"none\";}else{this.innerHTML=\"hide\";this.parentNode.nextSibling.style.display=\"\";}'>hide</button></h5><pre style='margin-bottom: 30px;'>" + resp.replace(/</g, '&lt;') + "</pre>";
                     }
