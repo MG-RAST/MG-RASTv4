@@ -106,11 +106,13 @@
                             console.log(req.example);
                             continue;
                         }
+                        req.format = "url"
 
                         var example_description = req.example[1];
                         var example_params;
                         var example_id = null;
                         var phash = {};
+                        
                         if (req.method == 'POST') {
                             if (req.request.indexOf('{') > -1) {
                                 var text = req.example[0];
@@ -118,6 +120,7 @@
                             }
                             if (req.example[0].indexOf('curl') > -1) {
                                 var ed = req.example[0];
+                                // json data curl POST
                                 if (req.example[0].indexOf("-d '") > -1) {
                                     req.format = "json"
                                     try {
@@ -129,7 +132,9 @@
                                     } catch (e) {
                                         console.log('invalid curl -d in ' + d.name + ' ' + req.name + ': ' + req.example[0]);
                                     }
-                                } else if (req.example[0].indexOf('-F "') > -1) {
+                                }
+                                // multipart form curl POST
+                                else if (req.example[0].indexOf('-F "') > -1) {
                                     req.format = "form"
                                     var pattern = /-F (\".+?\")/g;
                                     var match;
@@ -284,14 +289,15 @@
         // place to put return call or curl example
         var target = form.getAttribute('target');
 
-        var f = "";
+        var hasfile = false;
         var values = {};
         for (var i = 0; i < form.elements.length; i++) {
             if (form.elements[i].name == '_del_') {
                 continue;
             }
             if (form.elements[i].name == 'upload') {
-                f = "-d 'upload=@" + form.elements[i].value + "' ";
+                values[form.elements[i].name] = '@'+form.elements[i].value;
+                hasfile = true
             } else if (form.elements[i].value) {
                 values[form.elements[i].name] = form.elements[i].value;
             }
@@ -330,7 +336,6 @@
                     }
                     for (var h = 0; h < vals.length; h++) {
                         p.push(i + "=" + vals[h]);
-                        //formData.append(i,vals[h]);
                     }
                 }
                 url += p.join("&");
@@ -350,7 +355,16 @@
         if (curlOnly) {
             var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
             var apiurl = RetinaConfig.mgrast_api;
-            document.getElementById(target + '_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>curl " + (stm.user ? "-H 'Authorization: " + auth + "' " : "") + (request.method == "POST" ? (hasParams ? "-d '" + JSON.stringify(values).replace(/'/g, "\\'") + "' " : "") + f : "'") + "" + url.replace(new RegExp(apiurl, "g"), papiurl) + "'</pre>";
+            var curlstr = "curl" + (stm.user ?  ' -H "Authorization: ' + auth + '"' : "") + " -X " + request.method;
+            if (hasParams && (request.format == "json")) {
+                curlstr += " -d '" + JSON.stringify(values).replace(/'/g, "\\'") + "'";
+            } else if (hasParams && (request.format == "form")) {
+                for (var i in values) {
+                    curlstr += ' -F "' + i + '=' + values[i] + '"';
+                }
+            }
+            curlstr += ' "' + url.replace(new RegExp(apiurl, "g"), papiurl) + '"';
+            document.getElementById(target + '_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>" + curlstr + "</pre>";
         } else {
             if (request.attributes.hasOwnProperty("streaming text")) {
                 btn.removeAttribute('disabled');
