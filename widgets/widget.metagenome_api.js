@@ -379,11 +379,29 @@
                     alert('This interface does not support the sending of files. Please use the curl command.');
                     return;
                 }
+                // set values for type of call
+                var processData = true;
+                var contentType = "application/x-www-form-urlencoded";
+                var postData = null;
+                if (hasParams && (request.format == "json")) {
+                    contentType = "application/json";
+                    postData = JSON.stringify(values);
+                } else if (hasParams && (request.format == "form")) {
+                    processData = false;
+                    contentType = false;
+                    postData = new FormData();
+                    for (var i in values) {
+                        postData.append(i, values[i]);
+                    }
+                }
+                // do call
                 jQuery.ajax({
                     method: request.method,
                     url: url,
                     btn: btn,
-                    data: request.method == "POST" ? JSON.stringify(values) : null,
+                    data: postData,
+                    contentType: contentType,
+                    processData: processData,
                     target: target,
                     success: function(d) {
                         this.btn.removeAttribute('disabled');
