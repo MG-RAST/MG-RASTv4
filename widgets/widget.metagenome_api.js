@@ -288,13 +288,10 @@
         var target = form.getAttribute('target');
 
         var values = {};
-        var hasFile = false;
         for (var i = 0; i < form.elements.length; i++) {
             if (form.elements[i].name == "upload") {
-                hasFile = true;
-                console.log(form.elements[i]);
-            }
-            if (form.elements[i].value) {
+                values[form.elements[i].name] = form.elements[i];
+            } else if (form.elements[i].value) {
                 values[form.elements[i].name] = form.elements[i].value;
             }
         }
@@ -351,7 +348,7 @@
                 curlstr += " -d '" + JSON.stringify(values).replace(/'/g, "\\'") + "'";
             } else if (hasParams && (request.format == "form")) {
                 for (var i in values) {
-                    var val = (i == 'upload') ? '@' + values[i].split('/').reverse()[0] : values[i];
+                    var val = (i == 'upload') ? '@' + values[i].value.split('\\').reverse()[0] : values[i];
                     curlstr += ' -F "' + i + '=' + val + '"';
                 }
             }
@@ -379,7 +376,11 @@
                     contentType = false;
                     postData = new FormData();
                     for (var i in values) {
-                        postData.append(i, values[i]);
+                        if (i == "upload") {
+                            postData.append(i, values[i].files[0]);
+                        } else {
+                            postData.append(i, values[i]);
+                        }
                     }
                 }
                 // do call
