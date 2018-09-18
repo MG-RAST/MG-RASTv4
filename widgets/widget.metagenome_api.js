@@ -112,7 +112,7 @@
                         var example_params;
                         var example_id = null;
                         var phash = {};
-                        
+
                         if (req.method == 'POST') {
                             if (req.request.indexOf('{') > -1) {
                                 var text = req.example[0];
@@ -258,10 +258,11 @@
             var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
             h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'list') {
-            var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
+            console.log(name, req.example.params[name]);
+            var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
             h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else {
-            var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "");
+            var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
             h.push("<input type='text' name='" + name + "' placeholder='" + name + "' value='" + val + "'>");
         }
         if (p[0] !== 'cv') {
@@ -296,7 +297,7 @@
                 continue;
             }
             if (form.elements[i].name == 'upload') {
-                values[form.elements[i].name] = '@'+form.elements[i].value;
+                values[form.elements[i].name] = '@' + form.elements[i].value;
                 hasfile = true
             } else if (form.elements[i].value) {
                 values[form.elements[i].name] = form.elements[i].value;
@@ -324,8 +325,8 @@
         }
 
         var auth = stm.user ? 'mgrast ' + stm.user.token : false;
-        var hasParams = false;
-        if (Retina.keys(values).length) {
+        var hasParams = (Retina.keys(values).length > 0) ? true : false;
+        if (hasParams) {
             if (request.method == 'GET') {
                 url += "?";
                 var p = [];
@@ -342,20 +343,19 @@
             } else {
                 for (var i in values) {
                     try {
-                        var vals = JSON.parse(values[i]);
+                        var vals = JSON.parse(decodeURIComponent(values[i]));
                         values[i] = vals;
-                        hasParams = true;
-                    } catch (e) {
-
-                    }
+                    } catch (e) {}
                 }
             }
         }
 
         if (curlOnly) {
+            console.log(request.example);
+            console.log(values, hasParams, request.format);
             var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
             var apiurl = RetinaConfig.mgrast_api;
-            var curlstr = "curl" + (stm.user ?  ' -H "Authorization: ' + auth + '"' : "") + " -X " + request.method;
+            var curlstr = "curl" + (stm.user ? ' -H "Authorization: ' + auth + '"' : "") + " -X " + request.method;
             if (hasParams && (request.format == "json")) {
                 curlstr += " -d '" + JSON.stringify(values).replace(/'/g, "\\'") + "'";
             } else if (hasParams && (request.format == "form")) {
