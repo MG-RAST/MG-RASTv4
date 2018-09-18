@@ -289,10 +289,12 @@
 
         var values = {};
         for (var i = 0; i < form.elements.length; i++) {
-            if (form.elements[i].name == "upload") {
-                values[form.elements[i].name] = form.elements[i];
-            } else if (form.elements[i].value) {
-                values[form.elements[i].name] = form.elements[i].value;
+            if (form.elements[i].value) {
+                if (form.elements[i].name == "upload") {
+                    values[form.elements[i].name] = form.elements[i];
+                } else {
+                    values[form.elements[i].name] = form.elements[i].value;
+                }
             }
         }
 
