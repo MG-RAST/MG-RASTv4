@@ -191,7 +191,7 @@
 
                         var params = Retina.keys(req.parameters.required).sort();
                         for (var k = 0; k < params.length; k++) {
-                            h.push(widget.formField(r.name, params[k], req.parameters.required[params[k]], req));
+                            h.push(widget.formField(this.res, params[k], req.parameters.required[params[k]], req));
                         }
                         if (params.length == 0) {
                             h.push('<div style="padding-left: 100px;"> - no required parameters - </div>');
@@ -201,11 +201,11 @@
 
                         params = Retina.keys(req.parameters.options).sort();
                         for (var k = 0; k < params.length; k++) {
-                            h.push(widget.formField(r.name, params[k], req.parameters.options[params[k]], req));
+                            h.push(widget.formField(this.res, params[k], req.parameters.options[params[k]], req));
                         }
                         var bparams = Retina.keys(req.parameters.body).sort();
                         for (var k = 0; k < bparams.length; k++) {
-                            h.push(widget.formField(r.name, bparams[k], req.parameters.body[bparams[k]], req));
+                            h.push(widget.formField(this.res, bparams[k], req.parameters.body[bparams[k]], req));
                         }
                         if (params.length + bparams.length == 0) {
                             h.push('<div style="padding-left: 100px;"> - no optional parameters - </div>');
