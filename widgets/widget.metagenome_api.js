@@ -236,7 +236,7 @@
         var h = [];
         h.push('<div class="control-group"><label class="control-label" >' + name + '</label><div class="controls">');
         if (name == 'upload') {
-            h.push('<input type="hidden" name="' + name + '"><input type="file" name="_del_" onchange="if(this.files.length){this.previousSibling.value=this.files[0].name}">');
+            h.push('<input type="file" name="' + name + '" onchange="if(this.files.length){this.value=this.files[0].name}">');
         } else if (p[0] == 'string' || p[0] == 'date') {
             var val = "";
             if (name == 'auth' && stm.user) {
@@ -295,16 +295,9 @@
         // place to put return call or curl example
         var target = form.getAttribute('target');
 
-        var hasfile = false;
         var values = {};
         for (var i = 0; i < form.elements.length; i++) {
-            if (form.elements[i].name == '_del_') {
-                continue;
-            }
-            if (form.elements[i].name == 'upload') {
-                values[form.elements[i].name] = '@' + form.elements[i].value;
-                hasfile = true
-            } else if (form.elements[i].value) {
+            if (form.elements[i].value) {
                 values[form.elements[i].name] = form.elements[i].value;
             }
         }
@@ -329,7 +322,6 @@
             delete values.uuid;
         }
 
-        var auth = stm.user ? 'mgrast ' + stm.user.token : false;
         var hasParams = (Retina.keys(values).length > 0) ? true : false;
         if (hasParams) {
             if (request.method == 'GET') {
@@ -337,9 +329,6 @@
                 var p = [];
                 for (var i in values) {
                     var vals = values[i].split(/,/);
-                    if (i == 'auth') {
-                        auth = 'mgrast ' + vals[0];
-                    }
                     for (var h = 0; h < vals.length; h++) {
                         p.push(i + "=" + vals[h]);
                     }
@@ -360,12 +349,13 @@
             console.log(values, hasParams, request.format);
             var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
             var apiurl = RetinaConfig.mgrast_api;
-            var curlstr = "curl" + (stm.user ? ' -H "Authorization: ' + auth + '"' : "") + " -X " + request.method;
+            var curlstr = "curl" + (stm.user ? ' -H "Authorization: mgrast ' + stm.user.token + '"' : "") + " -X " + request.method;
             if (hasParams && (request.format == "json")) {
                 curlstr += " -d '" + JSON.stringify(values).replace(/'/g, "\\'") + "'";
             } else if (hasParams && (request.format == "form")) {
                 for (var i in values) {
-                    curlstr += ' -F "' + i + '=' + values[i] + '"';
+                    var val = (i == 'upload') ? '@' + values[i] : values[i];
+                    curlstr += ' -F "' + i + '=' + val + '"';
                 }
             }
             curlstr += ' "' + url.replace(new RegExp(apiurl, "g"), papiurl) + '"';
@@ -374,16 +364,12 @@
             if (request.attributes.hasOwnProperty("streaming text")) {
                 btn.removeAttribute('disabled');
                 btn.innerHTML = 'send';
-                url += (url.indexOf('?') > -1 ? "" : "?q") + (auth ? "&auth=" + auth : "") + "&browser=1";
+                url += (url.indexOf('?') > -1 ? "" : "?q") + (stm.user ? "&auth=" + stm.user.token : "") + "&browser=1";
                 window.w = window.open(url);
                 window.setTimeout(function() {
                     window.w.close();
                 }, 5000);
             } else {
-                if (hasfile) {
-                    alert('This interface does not support the sending of files. Please use the curl command.');
-                    return;
-                }
                 // set values for type of call
                 var processData = true;
                 var contentType = "application/x-www-form-urlencoded";
