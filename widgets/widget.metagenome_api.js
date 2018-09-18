@@ -380,7 +380,7 @@
                     window.w.close();
                 }, 5000);
             } else {
-                if (f) {
+                if (hasfile) {
                     alert('This interface does not support the sending of files. Please use the curl command.');
                     return;
                 }
