@@ -264,12 +264,14 @@
             var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
             h.push("<input type='text' name='" + name + "' placeholder='" + name + "' value='" + val + "'>");
         }
-        if (typeof p[1] === 'string') {
-            h.push('<span class="help-inline">&nbsp;' + p[1] + '</span>');
-        } else if (typeof p[1][1] === 'string') {
-            h.push('<span class="help-inline">&nbsp;' + p[0] + ':&nbsp;&nbsp;' + p[1][1] + '</span>');
-        } else if (typeof p[1][1][1] === 'string') {
-            h.push('<span class="help-inline">&nbsp;' + p[0] + ':&nbsp;&nbsp;' + p[1][1][1] + '</span>');
+        if (p[0] != 'cv') {
+            if (typeof p[1] === 'string') {
+                h.push('<span class="help-inline">&nbsp;' + p[1] + '</span>');
+            } else if (typeof p[1][1] === 'string') {
+                h.push('<span class="help-inline">&nbsp;' + p[0] + ':&nbsp;&nbsp;' + p[1][1] + '</span>');
+            } else if (typeof p[1][1][1] === 'string') {
+                h.push('<span class="help-inline">&nbsp;' + p[0] + ':&nbsp;&nbsp;' + p[1][1][1] + '</span>');
+            }
         }
         h.push('</div></div>');
 
