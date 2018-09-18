@@ -236,15 +236,11 @@
         var h = [];
         h.push('<div class="control-group"><label class="control-label" >' + name + '</label><div class="controls">');
         var inputid = res + req.name + name;
+        console.log(res, req.name, name, p[0]);
         if (name == 'upload') {
             h.push('<input id="' + inputid + '" type="file" name="' + name + '">');
-        } else if (p[0] == 'string' || p[0] == 'date') {
-            var val = "";
-            if (name == 'auth' && stm.user) {
-                val = stm.user.token;
-            } else if (req.example && req.example.params.hasOwnProperty(name)) {
-                val = req.example.params[name];
-            }
+        } else if (p[0] == 'string' || p[0] == 'date' || p[0] == 'int' || p[0] == 'integer') {
+            var val = (req.example && req.example.params.hasOwnProperty(name)) ? req.example.params[name] : "";
             h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'cv') {
             h.push('<select id="' + inputid + '" name="' + name + '">');
@@ -255,9 +251,6 @@
             h.push('</select>');
         } else if (p[0] == 'boolean') {
             h.push('<select id="' + inputid + '" name="' + name + '"><option value=0>no</option><option value=1' + (req.example && req.example.params.hasOwnProperty(name) && req.example.params[name] ? ' selected="selected"' : "") + '>yes</option></select>');
-        } else if (p[0] == 'int' || p[0] == 'integer') {
-            var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
-            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'list') {
             var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
             h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
