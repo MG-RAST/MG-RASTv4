@@ -114,6 +114,7 @@
                         var phash = {};
 
                         if (req.method == 'POST') {
+                            req.format = "form";
                             if (req.request.indexOf('{') > -1) {
                                 var text = req.example[0];
                                 phash[req.request.substring(req.request.indexOf('{') + 1, req.request.indexOf('}')).toLowerCase()] = text.substr(text.lastIndexOf('/') + 1, text.lastIndexOf('"') - (text.lastIndexOf('/') + 1));
@@ -135,7 +136,6 @@
                                 }
                                 // multipart form curl POST
                                 else if (req.example[0].indexOf('-F "') > -1) {
-                                    req.format = "form"
                                     var pattern = /-F (\".+?\")/g;
                                     var match;
                                     while (match = pattern.exec(ed)) {
