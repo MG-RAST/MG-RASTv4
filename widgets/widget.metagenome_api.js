@@ -236,7 +236,7 @@
         var h = [];
         h.push('<div class="control-group"><label class="control-label" >' + name + '</label><div class="controls">');
         if (name == 'upload') {
-            h.push('<input type="file" name="' + name + '" onchange="if(this.files.length){this.value=this.files[0].name}">');
+            h.push('<input type="file" name="' + name + '">');
         } else if (p[0] == 'string' || p[0] == 'date') {
             var val = "";
             if (name == 'auth' && stm.user) {
