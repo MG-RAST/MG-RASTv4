@@ -258,15 +258,16 @@
             var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
             h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'list') {
-            console.log(name, req.example.params[name]);
             var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
             h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else {
             var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
             h.push("<input type='text' name='" + name + "' placeholder='" + name + "' value='" + val + "'>");
         }
-        if (p[0] !== 'cv') {
-            h.push('<span class="help-inline">' + p[1] + '</span>');
+        if (typeof p[1] === 'string') {
+            h.push('<span class="help-inline"> ' + p[1] + '</span>');
+        } else if (typeof p[1][1] === 'string') {
+            h.push('<span class="help-inline"> ' + name + ': ' + p[1] + '</span>');
         }
         h.push('</div></div>');
 
