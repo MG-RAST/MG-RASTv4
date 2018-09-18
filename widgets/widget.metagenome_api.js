@@ -405,6 +405,7 @@
                     url: url,
                     btn: btn,
                     data: postData,
+                    headers: stm.authHeader,
                     contentType: contentType,
                     processData: processData,
                     target: target,
