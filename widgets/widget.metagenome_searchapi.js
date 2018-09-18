@@ -310,7 +310,7 @@
         for (var i = 0; i < widget.keylist.length; i++) {
             retval.push('<optgroup label="' + widget.keylist[i].name + '">');
             for (var h = 0; h < widget.keylist[i].items.length; h++) {
-                if (isorder && widget.keylist[i].items[h].name.startsWith("all_")) {
+                if (isorder && widget.keylist[i].items[h].name.startsWith("all")) {
                     continue;
                 }
                 retval.push('<option value="'+widget.keylist[i].items[h].name+'">'+widget.keylist[i].items[h].value+'</option>');
@@ -326,6 +326,9 @@
             "name": "created_on",
             "value": "created date",
             "selected": true
+        }, {
+            "name": "all",
+            "value": "any field"
         }, {
             "name": "all_project",
             "value": "any project field"
