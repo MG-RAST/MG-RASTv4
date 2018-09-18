@@ -258,10 +258,10 @@
             var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
             h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'list') {
-            var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
+            var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
             h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else {
-            var val = encodeURIComponent(JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : ""));
+            var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
             h.push("<input type='text' name='" + name + "' placeholder='" + name + "' value='" + val + "'>");
         }
         if (p[0] != 'cv') {
@@ -348,7 +348,7 @@
             } else {
                 for (var i in values) {
                     try {
-                        var vals = JSON.parse(decodeURIComponent(values[i]));
+                        var vals = JSON.parse(values[i].replace(/&quot;/g, '"'));
                         values[i] = vals;
                     } catch (e) {}
                 }
