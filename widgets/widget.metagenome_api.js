@@ -191,7 +191,7 @@
 
                         var params = Retina.keys(req.parameters.required).sort();
                         for (var k = 0; k < params.length; k++) {
-                            h.push(widget.formField(params[k], req.parameters.required[params[k]], req));
+                            h.push(widget.formField(r.name, params[k], req.parameters.required[params[k]], req));
                         }
                         if (params.length == 0) {
                             h.push('<div style="padding-left: 100px;"> - no required parameters - </div>');
@@ -201,11 +201,11 @@
 
                         params = Retina.keys(req.parameters.options).sort();
                         for (var k = 0; k < params.length; k++) {
-                            h.push(widget.formField(params[k], req.parameters.options[params[k]], req));
+                            h.push(widget.formField(r.name, params[k], req.parameters.options[params[k]], req));
                         }
-                        bparams = Retina.keys(req.parameters.body).sort();
+                        var bparams = Retina.keys(req.parameters.body).sort();
                         for (var k = 0; k < bparams.length; k++) {
-                            h.push(widget.formField(bparams[k], req.parameters.body[bparams[k]], req));
+                            h.push(widget.formField(r.name, bparams[k], req.parameters.body[bparams[k]], req));
                         }
                         if (params.length + bparams.length == 0) {
                             h.push('<div style="padding-left: 100px;"> - no optional parameters - </div>');
@@ -232,11 +232,12 @@
         }
     };
 
-    widget.formField = function(name, p, req) {
+    widget.formField = function(res, name, p, req) {
         var h = [];
         h.push('<div class="control-group"><label class="control-label" >' + name + '</label><div class="controls">');
+        var inputid = res + req.name + name;
         if (name == 'upload') {
-            h.push('<input type="file" name="' + name + '">');
+            h.push('<input id="' + inputid + '" type="file" name="' + name + '">');
         } else if (p[0] == 'string' || p[0] == 'date') {
             var val = "";
             if (name == 'auth' && stm.user) {
@@ -244,25 +245,25 @@
             } else if (req.example && req.example.params.hasOwnProperty(name)) {
                 val = req.example.params[name];
             }
-            h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
+            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'cv') {
-            h.push('<select name="' + name + '">');
+            h.push('<select id="' + inputid + '" name="' + name + '">');
             var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : null;
             for (var l = 0; l < p[1].length; l++) {
                 h.push('<option title="' + p[1][l][1] + '"' + (val !== null && val == p[1][l][0] ? ' selected="selected"' : '') + '>' + p[1][l][0] + '</option>');
             }
             h.push('</select>');
         } else if (p[0] == 'boolean') {
-            h.push('<select name="' + name + '"><option value=0>no</option><option value=1' + (req.example && req.example.params.hasOwnProperty(name) && req.example.params[name] ? ' selected="selected"' : "") + '>yes</option></select>');
+            h.push('<select id="' + inputid + '" name="' + name + '"><option value=0>no</option><option value=1' + (req.example && req.example.params.hasOwnProperty(name) && req.example.params[name] ? ' selected="selected"' : "") + '>yes</option></select>');
         } else if (p[0] == 'int' || p[0] == 'integer') {
             var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "";
-            h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
+            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'list') {
             var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
-            h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
+            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else {
             var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
-            h.push("<input type='text' name='" + name + "' placeholder='" + name + "' value='" + val + "'>");
+            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         }
         if (p[0] != 'cv') {
             if (typeof p[1] === 'string') {
@@ -296,7 +297,12 @@
         var target = form.getAttribute('target');
 
         var values = {};
+        var hasFile = false;
         for (var i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name == "upload") {
+                hasFile = true;
+                console.log(form.elements[i]);
+            }
             if (form.elements[i].value) {
                 values[form.elements[i].name] = form.elements[i].value;
             }
@@ -354,7 +360,7 @@
                 curlstr += " -d '" + JSON.stringify(values).replace(/'/g, "\\'") + "'";
             } else if (hasParams && (request.format == "form")) {
                 for (var i in values) {
-                    var val = (i == 'upload') ? '@' + values[i] : values[i];
+                    var val = (i == 'upload') ? '@' + values[i].split('/').reverse()[0] : values[i];
                     curlstr += ' -F "' + i + '=' + val + '"';
                 }
             }
