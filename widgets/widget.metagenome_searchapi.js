@@ -313,7 +313,7 @@
                 if (isorder && widget.keylist[i].items[h].name.startsWith("all")) {
                     continue;
                 }
-                retval.push('<option value="'+widget.keylist[i].items[h].name+'">'+widget.keylist[i].items[h].value+'</option>');
+                retval.push('<option value="' + widget.keylist[i].items[h].name + '">' + widget.keylist[i].items[h].value + '</option>');
             }
             retval.push('</optgroup>');
         }
