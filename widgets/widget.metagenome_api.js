@@ -235,7 +235,6 @@
     widget.formField = function(name, p, req) {
         var h = [];
         h.push('<div class="control-group"><label class="control-label" >' + name + '</label><div class="controls">');
-        console.log(res, req.name, name, p[0]);
         if (name == 'upload') {
             h.push('<input type="file" name="' + name + '">');
         } else if (p[0] == 'string' || p[0] == 'date' || p[0] == 'int' || p[0] == 'integer') {
