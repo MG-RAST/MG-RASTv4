@@ -191,7 +191,7 @@
 
                         var params = Retina.keys(req.parameters.required).sort();
                         for (var k = 0; k < params.length; k++) {
-                            h.push(widget.formField(this.res, params[k], req.parameters.required[params[k]], req));
+                            h.push(widget.formField(params[k], req.parameters.required[params[k]], req));
                         }
                         if (params.length == 0) {
                             h.push('<div style="padding-left: 100px;"> - no required parameters - </div>');
@@ -201,11 +201,11 @@
 
                         params = Retina.keys(req.parameters.options).sort();
                         for (var k = 0; k < params.length; k++) {
-                            h.push(widget.formField(this.res, params[k], req.parameters.options[params[k]], req));
+                            h.push(widget.formField(params[k], req.parameters.options[params[k]], req));
                         }
                         var bparams = Retina.keys(req.parameters.body).sort();
                         for (var k = 0; k < bparams.length; k++) {
-                            h.push(widget.formField(this.res, bparams[k], req.parameters.body[bparams[k]], req));
+                            h.push(widget.formField(bparams[k], req.parameters.body[bparams[k]], req));
                         }
                         if (params.length + bparams.length == 0) {
                             h.push('<div style="padding-left: 100px;"> - no optional parameters - </div>');
@@ -232,31 +232,30 @@
         }
     };
 
-    widget.formField = function(res, name, p, req) {
+    widget.formField = function(name, p, req) {
         var h = [];
         h.push('<div class="control-group"><label class="control-label" >' + name + '</label><div class="controls">');
-        var inputid = res + req.name + name;
         console.log(res, req.name, name, p[0]);
         if (name == 'upload') {
-            h.push('<input id="' + inputid + '" type="file" name="' + name + '">');
+            h.push('<input type="file" name="' + name + '">');
         } else if (p[0] == 'string' || p[0] == 'date' || p[0] == 'int' || p[0] == 'integer') {
             var val = (req.example && req.example.params.hasOwnProperty(name)) ? req.example.params[name] : "";
-            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
+            h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else if (p[0] == 'cv') {
-            h.push('<select id="' + inputid + '" name="' + name + '">');
+            h.push('<select name="' + name + '">');
             var val = req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : null;
             for (var l = 0; l < p[1].length; l++) {
                 h.push('<option title="' + p[1][l][1] + '"' + (val !== null && val == p[1][l][0] ? ' selected="selected"' : '') + '>' + p[1][l][0] + '</option>');
             }
             h.push('</select>');
         } else if (p[0] == 'boolean') {
-            h.push('<select id="' + inputid + '" name="' + name + '"><option value=0>no</option><option value=1' + (req.example && req.example.params.hasOwnProperty(name) && req.example.params[name] ? ' selected="selected"' : "") + '>yes</option></select>');
+            h.push('<select name="' + name + '"><option value=0>no</option><option value=1' + (req.example && req.example.params.hasOwnProperty(name) && req.example.params[name] ? ' selected="selected"' : "") + '>yes</option></select>');
         } else if (p[0] == 'list') {
             var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
-            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
+            h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         } else {
             var val = JSON.stringify(req.example && req.example.params.hasOwnProperty(name) ? req.example.params[name] : "").replace(/"/g, '&quot;');
-            h.push('<input id="' + inputid + '" type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
+            h.push('<input type="text" name="' + name + '" placeholder="' + name + '" value="' + val + '">');
         }
         if (p[0] != 'cv') {
             if (typeof p[1] === 'string') {
