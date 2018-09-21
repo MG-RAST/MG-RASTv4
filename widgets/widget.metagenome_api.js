@@ -344,8 +344,6 @@
         }
 
         if (curlOnly) {
-            console.log(request.example);
-            console.log(values, hasParams, request.format);
             var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
             var apiurl = RetinaConfig.mgrast_api;
             var curlstr = "curl" + (stm.user ? ' -H "Authorization: mgrast ' + stm.user.token + '"' : "") + " -X " + request.method;
@@ -398,9 +396,7 @@
                         // Getting on progress streaming response
                         onprogress: function(e) {
                             var resp = e.currentTarget.response;
-                            console.log(resp.length);
                             if (resp.length >= 10000) {
-                                console.log("truncating");
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                                 truncated = true;
                                 btn.removeAttribute('disabled');
