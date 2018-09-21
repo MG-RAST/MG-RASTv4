@@ -399,10 +399,16 @@
                     contentType: contentType,
                     processData: processData,
                     target: target,
+                    rtype: request.type,
                     success: function(d) {
                         this.btn.removeAttribute('disabled');
                         this.btn.innerHTML = 'send';
-                        var resp = JSON.stringify(d, null, 2);
+                        var resp;
+                        if (this.rtype == "stream") {
+                            resp = d;
+                        } else {
+                            resp = JSON.stringify(d, null, 2);
+                        }
                         if (resp.length > 10000) {
                             resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                         }
