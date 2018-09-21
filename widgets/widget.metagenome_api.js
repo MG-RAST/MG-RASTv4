@@ -382,15 +382,7 @@
             var postResponse = "</pre>";
             if (request.type == "stream") {
                 // text stream
-                var truncated = false;
-                function abortAjaxStream(fn) {
-                    var dfd = jQuery.Deferred();
-                    if (truncated == true) {
-                        dfd.resolve( fn() );
-                    }
-                    return dfd.promise();
-                }
-                
+                var truncated = false;                
                 var ajaxStream = jQuery.ajax({
                     method: request.method,
                     url: url,
@@ -431,8 +423,14 @@
                     console.log(error);
                     console.log("completed");
                 });
-                
-                var streamPromise = abortAjaxStream(function() {
+                function abortAjaxStream(trunc) {
+                    var dfd = jQuery.Deferred();
+                    if (trunc == true) {
+                        dfd.resolve( trunc );
+                    }
+                    return dfd.promise();
+                }
+                jQuery.when( abortAjaxStream(truncated) ).then(function() {
                     ajaxStream.abort();
                     console.log("done - abort");
                 });
