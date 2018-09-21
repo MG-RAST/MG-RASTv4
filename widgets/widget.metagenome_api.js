@@ -382,8 +382,15 @@
             var postResponse = "</pre>";
             if (request.type == "stream") {
                 // text stream
-                var completed = false;
                 var truncated = false;
+                function abortAjaxStream(fn) {
+                    var dfd = jQuery.Deferred();
+                    if (truncated == true) {
+                        dfd.resolve( fn() );
+                    }
+                    return dfd.promise();
+                }
+                
                 var ajaxStream = jQuery.ajax({
                     method: request.method,
                     url: url,
@@ -416,7 +423,6 @@
                         document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
                     }
                     console.log("completed");
-                    completed = true;
                 });
                 ajaxStream.fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
@@ -424,15 +430,12 @@
                     document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
                     console.log(error);
                     console.log("completed");
-                    completed = true;
                 });
-                if (truncated) {
+                
+                var streamPromise = abortAjaxStream(function() {
                     ajaxStream.abort();
                     console.log("done - abort");
-                }
-                if (completed) {
-                    console.log("done - clean");
-                }
+                });
             } else {
                 // json result
                 jQuery.ajax({
