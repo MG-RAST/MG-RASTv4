@@ -410,7 +410,7 @@
                     }
                 });
                 ajaxStream.done(function(d) {
-                    if (! truncated) {
+                    if (!truncated) {
                         this.btn.removeAttribute('disabled');
                         this.btn.innerHTML = 'send';
                         document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
