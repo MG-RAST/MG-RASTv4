@@ -360,36 +360,70 @@
             curlstr += ' "' + url.replace(new RegExp(apiurl, "g"), papiurl) + '"';
             document.getElementById(target + '_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>" + curlstr + "</pre>";
         } else {
-            if ((request.type == "stream") && (request.method == "GET")) {
-                btn.removeAttribute('disabled');
-                btn.innerHTML = 'send';
-                var pre = (url.indexOf('?') > -1) ? '&' : '?';
-                url += (stm.user ? pre + "auth=" + stm.user.token : "");
-                window.w = window.open(url);
-                window.setTimeout(function() {
-                    window.w.close();
-                }, 5000);
-            } else {
-                // set values for type of call
-                var processData = true;
-                var contentType = "application/x-www-form-urlencoded";
-                var postData = null;
-                if (hasParams && (request.format == "json")) {
-                    contentType = "application/json";
-                    postData = JSON.stringify(values);
-                } else if (hasParams && (request.format == "form")) {
-                    processData = false;
-                    contentType = false;
-                    postData = new FormData();
-                    for (var i in values) {
-                        if (i == "upload") {
-                            postData.append(i, values[i].files[0]);
-                        } else {
-                            postData.append(i, values[i]);
-                        }
+            // set values for type of call
+            var processData = true;
+            var contentType = "application/x-www-form-urlencoded";
+            var postData = null;
+            if (hasParams && (request.format == "json")) {
+                contentType = "application/json";
+                postData = JSON.stringify(values);
+            } else if (hasParams && (request.format == "form")) {
+                processData = false;
+                contentType = false;
+                postData = new FormData();
+                for (var i in values) {
+                    if (i == "upload") {
+                        postData.append(i, values[i].files[0]);
+                    } else {
+                        postData.append(i, values[i]);
                     }
                 }
-                // do call
+            }
+            // do call
+            var preResponse = "<div style='clear: both; height: 1px;'></div><h5>response<button class='btn btn-mini' style='margin-left: 10px;' onclick='if(this.innerHTML==\"hide\"){this.innerHTML=\"show\";this.parentNode.nextSibling.style.display=\"none\";}else{this.innerHTML=\"hide\";this.parentNode.nextSibling.style.display=\"\";}'>hide</button></h5><pre style='margin-bottom: 30px;'>";
+            var postResponse = "</pre>";
+            if (request.type == "stream") {
+                // text stream
+                var truncated = false;
+                var ajaxStream = jQuery.ajax({
+                    method: request.method,
+                    url: url,
+                    btn: btn,
+                    data: postData,
+                    dataType: 'text',
+                    headers: stm.authHeader,
+                    processData: false,
+                    target: target,
+                    xhrFields: {
+                        // Getting on progress streaming response
+                        onprogress: function(e) {
+                            var resp = e.currentTarget.response;
+                            if (resp.length >= 10000) {
+                                resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
+                                truncated = true;
+                                this.btn.removeAttribute('disabled');
+                                this.btn.innerHTML = 'send';
+                                document.getElementById(this.target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
+                                return
+                            }
+                        }
+                    }
+                });
+                ajaxStream.done(function(d) {
+                    if (! truncated) {
+                        this.btn.removeAttribute('disabled');
+                        this.btn.innerHTML = 'send';
+                        document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
+                    }
+                });
+                ajaxRequest.fail(function(xhr, error) {
+                    this.btn.removeAttribute('disabled');
+                    this.btn.innerHTML = 'send';
+                    document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
+                    console.log(error);
+                });
+            } else {
+                // json result
                 jQuery.ajax({
                     method: request.method,
                     url: url,
@@ -399,20 +433,14 @@
                     contentType: contentType,
                     processData: processData,
                     target: target,
-                    rtype: request.type,
                     success: function(d) {
                         this.btn.removeAttribute('disabled');
                         this.btn.innerHTML = 'send';
-                        var resp;
-                        if (this.rtype == "stream") {
-                            resp = d;
-                        } else {
-                            resp = JSON.stringify(d, null, 2);
-                        }
+                        var resp = JSON.stringify(d, null, 2);
                         if (resp.length > 10000) {
                             resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                         }
-                        document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><h5>response<button class='btn btn-mini' style='margin-left: 10px;' onclick='if(this.innerHTML==\"hide\"){this.innerHTML=\"show\";this.parentNode.nextSibling.style.display=\"none\";}else{this.innerHTML=\"hide\";this.parentNode.nextSibling.style.display=\"\";}'>hide</button></h5><pre style='margin-bottom: 30px;'>" + resp.replace(/</g, '&lt;') + "</pre>";
+                        document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
                     }
                 }).fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
