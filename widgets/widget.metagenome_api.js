@@ -455,7 +455,7 @@
                         if (resp.length > 10000) {
                             resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                         }
-                        document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
+                        document.getElementById(this.target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
                     }
                 }).fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
