@@ -426,16 +426,12 @@
                     console.log("completed");
                     completed = true;
                 });
-                while (true) {
-                    if (truncated) {
-                        ajaxStream.abort();
-                        console.log("exit - abort");
-                        break;
-                    }
-                    if (completed) {
-                        console.log("break - clean");
-                        break;
-                    }
+                if (truncated) {
+                    ajaxStream.abort();
+                    console.log("done - abort");
+                }
+                if (completed) {
+                    console.log("done - clean");
                 }
             } else {
                 // json result
