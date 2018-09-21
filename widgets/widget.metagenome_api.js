@@ -400,12 +400,11 @@
                             console.log(resp.length);
                             if (resp.length >= 10000) {
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
-                                console.log("truncated");
-                                truncated = true;
                                 btn.removeAttribute('disabled');
                                 btn.innerHTML = 'send';
                                 document.getElementById(target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
-                                return
+                                console.log("truncated");
+                                truncated = true;
                             }
                         }
                     }
