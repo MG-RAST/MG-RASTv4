@@ -398,12 +398,14 @@
                         // Getting on progress streaming response
                         onprogress: function(e) {
                             var resp = e.currentTarget.response;
+                            console.log(resp.length);
                             if (resp.length >= 10000) {
+                                console.log("truncating");
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                                 truncated = true;
-                                this.btn.removeAttribute('disabled');
-                                this.btn.innerHTML = 'send';
-                                document.getElementById(this.target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
+                                btn.removeAttribute('disabled');
+                                btn.innerHTML = 'send';
+                                document.getElementById(target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
                                 return
                             }
                         }
