@@ -316,6 +316,9 @@
         } else if (url.match(/\{uuid\}/)) {
             url = url.replace("{uuid}", values.uuid);
             delete values.uuid;
+        } else if (url.match(/\{label\}/)) {
+            url = url.replace("{label}", values.label);
+            delete values.label;
         }
 
         var hasParams = (Retina.keys(values).length > 0) ? true : false;
@@ -357,10 +360,11 @@
             curlstr += ' "' + url.replace(new RegExp(apiurl, "g"), papiurl) + '"';
             document.getElementById(target + '_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>" + curlstr + "</pre>";
         } else {
-            if (request.attributes.hasOwnProperty("streaming text")) {
+            if ((request.type == "stream") && (request.method == "GET")) {
                 btn.removeAttribute('disabled');
                 btn.innerHTML = 'send';
-                url += (url.indexOf('?') > -1 ? "" : "?q") + (stm.user ? "&auth=" + stm.user.token : "") + "&browser=1";
+                var pre = (url.indexOf('?') > -1) ? '&' : '?';
+                url += (stm.user ? pre + "auth=" + stm.user.token : "");
                 window.w = window.open(url);
                 window.setTimeout(function() {
                     window.w.close();
