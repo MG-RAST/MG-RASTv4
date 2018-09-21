@@ -416,7 +416,7 @@
                         document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
                     }
                 });
-                ajaxRequest.fail(function(xhr, error) {
+                ajaxStream.fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
                     this.btn.innerHTML = 'send';
                     document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
