@@ -382,6 +382,7 @@
             var postResponse = "</pre>";
             if (request.type == "stream") {
                 // text stream
+                var completed = false;
                 var truncated = false;
                 var ajaxStream = jQuery.ajax({
                     method: request.method,
@@ -396,8 +397,10 @@
                         // Getting on progress streaming response
                         onprogress: function(e) {
                             var resp = e.currentTarget.response;
+                            console.log(resp.length);
                             if (resp.length >= 10000) {
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
+                                console.log("truncated")
                                 truncated = true;
                                 btn.removeAttribute('disabled');
                                 btn.innerHTML = 'send';
@@ -413,13 +416,28 @@
                         this.btn.innerHTML = 'send';
                         document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
                     }
+                    console.log("completed")
+                    completed = true;
                 });
                 ajaxStream.fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
                     this.btn.innerHTML = 'send';
                     document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
                     console.log(error);
+                    console.log("completed")
+                    completed = true;
                 });
+                while (true) {
+                    if (truncated) {
+                        ajaxStream.abort();
+                        console.log("exit - abort")
+                        break;
+                    }
+                    if (completed) {
+                        console.log("break - clean")
+                        break
+                    }
+                }
             } else {
                 // json result
                 jQuery.ajax({
