@@ -383,6 +383,13 @@
             if (request.type == "stream") {
                 // text stream
                 var ajaxStream = null;
+                function abortAjaxStream() {
+                    if (ajaxStream != null) {
+                        ajaxStream.abort();
+                        console.log("done - abort");
+                    }
+                    console.log("error - abort");
+                }
                 var truncated = false;
                 var completed = false;
                 ajaxStream = jQuery.ajax({
@@ -410,6 +417,7 @@
                                 document.getElementById(target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
                                 console.log("truncated");
                                 truncated = true;
+                                abortAjaxStream();
                             }
                         }
                     }
@@ -431,7 +439,7 @@
                     console.log("completed");
                     completed = true;
                 });
-
+/*
                 function abortAjaxStream() {
                     if ((! truncated) && (! completed)) {
                         setTimeout(abortAjaxStream, 500);
@@ -445,7 +453,7 @@
                     }
                 }
                 abortAjaxStream();
-
+*/
             } else {
                 // json result
                 jQuery.ajax({
