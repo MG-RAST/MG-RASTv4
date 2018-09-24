@@ -382,8 +382,10 @@
             var postResponse = "</pre>";
             if (request.type == "stream") {
                 // text stream
-                var truncated = false;                
-                var ajaxStream = jQuery.ajax({
+                var ajaxStream = null;
+                var truncated = false;
+                var completed = false;
+                ajaxStream = jQuery.ajax({
                     method: request.method,
                     url: url,
                     btn: btn,
@@ -396,6 +398,10 @@
                         // Getting on progress streaming response
                         onprogress: function(e) {
                             var resp = e.currentTarget.response;
+                            console.log(resp.length);
+                            if (ajaxStream != null) {
+                                console.log(ajaxStream.readyState);
+                            }
                             console.log(resp.length);
                             if (resp.length >= 10000) {
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
@@ -414,26 +420,32 @@
                         this.btn.innerHTML = 'send';
                         document.getElementById(this.target).innerHTML = preResponse + d.replace(/</g, '&lt;') + postResponse;
                     }
-                    console.log("completed");
                 });
                 ajaxStream.fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
                     this.btn.innerHTML = 'send';
                     document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
                     console.log(error);
+                });
+                ajaxStream.complete(function() {
                     console.log("completed");
+                    completed = true;
                 });
-                function abortAjaxStream(trunc) {
-                    var dfd = jQuery.Deferred();
-                    if (trunc == true) {
-                        dfd.resolve( trunc );
+
+                function abortAjaxStream() {
+                    if ((! truncated) && (! completed)) {
+                        setTimeout(abortAjaxStream, 500);
+                    } else {
+                        if (truncated && (ajaxStream != null)) {
+                            ajaxStream.abort();
+                            console.log("done wait - abort");
+                        } else {
+                            console.log("done wait - clean");
+                        }
                     }
-                    return dfd.promise();
                 }
-                jQuery.when( abortAjaxStream(truncated) ).then(function() {
-                    ajaxStream.abort();
-                    console.log("done - abort");
-                });
+                abortAjaxStream();
+
             } else {
                 // json result
                 jQuery.ajax({
@@ -444,8 +456,8 @@
                     headers: stm.authHeader,
                     contentType: contentType,
                     processData: processData,
-                    target: target,
-                    success: function(d) {
+                    target: target
+                }).done(function(d) {
                         this.btn.removeAttribute('disabled');
                         this.btn.innerHTML = 'send';
                         var resp = JSON.stringify(d, null, 2);
@@ -453,7 +465,6 @@
                             resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                         }
                         document.getElementById(this.target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
-                    }
                 }).fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
                     this.btn.innerHTML = 'send';
