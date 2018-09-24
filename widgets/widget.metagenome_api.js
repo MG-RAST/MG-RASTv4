@@ -383,12 +383,10 @@
             if (request.type == "stream") {
                 // text stream
                 var ajaxStream = null;
+
                 function abortAjaxStream() {
                     if (ajaxStream != null) {
                         ajaxStream.abort();
-                        console.log("done - abort");
-                    } else {
-                        console.log("error - abort");
                     }
                 }
                 var truncated = false;
@@ -406,16 +404,11 @@
                         onprogress: function(e) {
                             var resp = e.currentTarget.response;
                             console.log(resp.length);
-                            if (ajaxStream != null) {
-                                console.log(ajaxStream.readyState);
-                            }
-                            console.log(resp.length);
                             if (resp.length >= 10000) {
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                                 btn.removeAttribute('disabled');
                                 btn.innerHTML = 'send';
                                 document.getElementById(target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
-                                console.log("truncated");
                                 truncated = true;
                                 abortAjaxStream();
                             }
@@ -430,17 +423,13 @@
                     }
                 });
                 ajaxStream.fail(function(xhr, error) {
-                    if (! truncated) {
+                    if (!truncated) {
                         this.btn.removeAttribute('disabled');
                         this.btn.innerHTML = 'send';
                         document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
                         console.log(error);
                     }
                 });
-                ajaxStream.complete(function() {
-                    console.log("completed");
-                });
-
             } else {
                 // json result
                 jQuery.ajax({
@@ -453,13 +442,13 @@
                     processData: processData,
                     target: target
                 }).done(function(d) {
-                        this.btn.removeAttribute('disabled');
-                        this.btn.innerHTML = 'send';
-                        var resp = JSON.stringify(d, null, 2);
-                        if (resp.length > 10000) {
-                            resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
-                        }
-                        document.getElementById(this.target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
+                    this.btn.removeAttribute('disabled');
+                    this.btn.innerHTML = 'send';
+                    var resp = JSON.stringify(d, null, 2);
+                    if (resp.length > 10000) {
+                        resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
+                    }
+                    document.getElementById(this.target).innerHTML = preResponse + resp.replace(/</g, '&lt;') + postResponse;
                 }).fail(function(xhr, error) {
                     this.btn.removeAttribute('disabled');
                     this.btn.innerHTML = 'send';
