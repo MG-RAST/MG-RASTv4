@@ -403,7 +403,6 @@
                         // Getting on progress streaming response
                         onprogress: function(e) {
                             var resp = e.currentTarget.response;
-                            console.log(resp.length);
                             if (resp.length >= 10000) {
                                 resp = resp.substr(0, 10000) + "...\n(the content is longer than 10,000 characters and has been truncated)";
                                 btn.removeAttribute('disabled');
