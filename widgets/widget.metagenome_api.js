@@ -387,11 +387,11 @@
                     if (ajaxStream != null) {
                         ajaxStream.abort();
                         console.log("done - abort");
+                    } else {
+                        console.log("error - abort");
                     }
-                    console.log("error - abort");
                 }
                 var truncated = false;
-                var completed = false;
                 ajaxStream = jQuery.ajax({
                     method: request.method,
                     url: url,
@@ -430,30 +430,17 @@
                     }
                 });
                 ajaxStream.fail(function(xhr, error) {
-                    this.btn.removeAttribute('disabled');
-                    this.btn.innerHTML = 'send';
-                    document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
-                    console.log(error);
+                    if (! truncated) {
+                        this.btn.removeAttribute('disabled');
+                        this.btn.innerHTML = 'send';
+                        document.getElementById(this.target).innerHTML = "<div style='clear: both; height: 1px;'></div><div class='alert alert-danger'>" + xhr.responseText + "</div>";
+                        console.log(error);
+                    }
                 });
                 ajaxStream.complete(function() {
                     console.log("completed");
-                    completed = true;
                 });
-/*
-                function abortAjaxStream() {
-                    if ((! truncated) && (! completed)) {
-                        setTimeout(abortAjaxStream, 500);
-                    } else {
-                        if (truncated && (ajaxStream != null)) {
-                            ajaxStream.abort();
-                            console.log("done wait - abort");
-                        } else {
-                            console.log("done wait - clean");
-                        }
-                    }
-                }
-                abortAjaxStream();
-*/
+
             } else {
                 // json result
                 jQuery.ajax({
