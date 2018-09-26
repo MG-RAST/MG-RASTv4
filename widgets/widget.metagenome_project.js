@@ -107,7 +107,7 @@
             } else {
                 invis[9] = true;
             }
-            html += "<tr><td><b>metadata</b></td><td><button class='btn' style='position: relative; bottom: 5px;' onclick='Retina.WidgetInstances.metagenome_project[1].metadataDownload();'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download</button><span id='download_progress'></span></td></tr></table>";
+            html += "<tr><td><b style='position: relative; top: 5px;'>metadata</b></td><td><button class='btn' style='position: relative; top: 5px;' onclick='Retina.WidgetInstances.metagenome_project[1].metadataDownload();'><img src='Retina/images/cloud-download.png' style='width: 16px;'> download</button><span id='download_progress'></span></td></tr></table>";
             
             var custom = "<span id='custom'></span>";
             html += "<h4>description</h4>" + custom + "<p>" + project.description + "</p>";
