@@ -25,6 +25,7 @@ function initWebApp () {
 	}
     };
     Retina.errorCallback = function (jqXHR, textStatus, errorThrown) {
+        console.log([textStatus, errorThrown]);
 	var c = document.getElementById("content");
 	c.setAttribute('class', 'span8 offset2');
 	document.getElementById('sidebar').parentNode.parentNode.removeChild(document.getElementById('sidebar').parentNode);

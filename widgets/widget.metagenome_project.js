@@ -261,7 +261,7 @@
 
     };
     
-    widget.metadataDownload() = function() {
+    widget.metadataDownload = function() {
         var widget = this;
         var url = (RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api) + "/metadata/export/" + widget.id + "?format=xlsx";
         if (stm.authHeader && stm.authHeader.Authorization) {
