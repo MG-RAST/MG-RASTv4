@@ -2474,6 +2474,7 @@
 		multiple: true,
 		extra_wide: true,
 		return_object: true,
+        use_offset: false,
 		filter_attribute: 'name',
 		filter_type: 'strict',
 		specialFilters: specialFilters,
