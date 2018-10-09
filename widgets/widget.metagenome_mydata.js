@@ -742,7 +742,7 @@
 		var action = "";
 		if (d.status == "suspend" || d.status == "error") {
 		    d.status = "error";
-		    action = " <button class='btn btn-mini' onclick='alert(\"Please report this error to mg-rast@rt.mcs.anl.gov and paste the submission id: "+d.id+"\");'>?</button>";
+		    action = " <button class='btn btn-mini' onclick='alert(\"Please report this error to help@mg-rast.org and paste the submission id: "+d.id+"\");'>?</button>";
 		}
 		result_data.push({ "job": "<a href='#'>-</a>",
 				   "stage": "submission",
