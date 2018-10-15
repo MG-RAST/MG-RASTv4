@@ -157,20 +157,26 @@
 
         // options
         html.push('<div style="margin-top: 25px;"><h4>options</h4>');
-
-        // limit
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');
-        
-        // direction
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
-
-        // order
         html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions(true) + '</select></div>');
+        html.push('</div>');
 
+        // taxonomy
+        html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="taxaname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 80px;"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="taxaper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();>' + widget.annotationOptions('taxonomy') + '</select></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">level</span><select id="taxalevel" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();>' + widget.annotationOptions('levels') + '</select></div>');
+        html.push('</div>');
+        
+        // function
+        html.push('<div style="margin-top: 25px;"><h4>function</h4>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="funcname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 80px;"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="funcper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();>' + widget.annotationOptions('function') + '</select></div>');
         html.push('</div>');
 
         // filter fields
-        html.push('<div style="margin-top: 25px;"><h4>filter fields</h4>');
+        html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
         html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
         // toggle public
         if (stm.user) {
@@ -213,19 +219,43 @@
         var authHeader = '';
         var getpublic = 'true';
         if (stm.user && document.getElementById('useAuth').checked) {
-            authHeader = '-H "Authorization: mgrast ' + stm.user.token;
+            authHeader = '-H "Authorization: mgrast ' + stm.user.token + '"';
             getpublic = document.getElementById('public').options[document.getElementById('public').selectedIndex].value;
         }
         var limit = document.getElementById('limit').value;
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
-
+        
+        var queries = [];
+        var taxaname = document.getElementById('taxaname').value;
+        if (taxaname != '') {
+            queries.push(['taxonomy', taxaname]);
+            var taxaper = document.getElementById('taxaper').options[document.getElementById('taxaper').selectedIndex].value;
+            var taxalevel = document.getElementById('taxalevel').options[document.getElementById('taxalevel').selectedIndex].value;
+            if (taxaper != 'none') {
+                queries.push(['taxa_per', taxaper]);
+                queries.push(['taxa_level', taxalevel]);
+            }
+        }
+        var funcname = document.getElementById('funcname').value;
+        if (funcname != '') {
+            queries.push(['function', funcname]);
+            var funcper = document.getElementById('funcper').options[document.getElementById('funcper').selectedIndex].value;
+            if (funcper != 'none') {
+                queries.push(['func_per', funcper]);
+            }
+        }
+        
         widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction + '&public=' + getpublic;
         widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '"' + ' -F "public=' + getpublic + '" ';
 
-        for (var i = 0; i < widget.filters.length; i++) {
+        for (var i = 0; i < queries.length; i++) {
             widget.searchtext += "&" + widget.filters[i].field + "=" + widget.filters[i].text;
             widget.curltext += '-F "' + widget.filters[i].field + '=' + widget.filters[i].text + '" ';
+        }
+        for (var i = 0; i < widget.filters.length; i++) {
+            widget.searchtext += "&" + queries[i][0] + "=" + queries[i][1];
+            widget.curltext += '-F "' + queries[i][0] + '=' + queries[i][1] + '" ';
         }
 
         widget.curltext += '"' + url + '"';
@@ -285,6 +315,8 @@
                 }
             }
         }
+        
+        widget.clearAnnotations();
 
         widget.filters = jQuery.extend(true, [], ex.filters);
 
@@ -325,10 +357,26 @@
 
         widget.updateTexts();
     };
+    
+    widget.clearAnnotations = function() {
+        document.getElementById('taxaname').value = '';
+        document.getElementById('funcname').value = '';
+        document.getElementById('taxaper').selectedIndex = 0;
+        document.getElementById('taxalevel').selectedIndex = 0;
+        document.getElementById('funcper').selectedIndex = 0;
+    }
+    
+    widget.annotationOptions = function(type) {
+        var widget = this;
+        var retval = (type eq 'levels') ? [] : ['<option value="none">none</option>'];
+        for (var i = 0; i < widget.annotationInfo[type].length; i++) {
+            retval.push('<option value="' + widget.annotationInfo[type][i] + '">' + widget.annotationInfo[type][i] + '</option>');
+        }
+        return retval.join('');
+    }
 
     widget.fieldOptions = function(isorder) {
         var widget = this;
-
         var retval = [];
         for (var i = 0; i < widget.keylist.length; i++) {
             retval.push('<optgroup label="' + widget.keylist[i].name + '">');
@@ -341,6 +389,31 @@
             retval.push('</optgroup>');
         }
         return retval.join('');
+    };
+    
+    widget.annotationInfo = {
+        "levels" : [
+            "domain",
+            "phylum",
+            "class",
+            "order",
+            "family",
+            "genus"
+        ],
+        "taxonomy" : [
+	        "1",
+	        "5",
+	        "10",
+	        "15",
+	        "20",
+	        "25"
+        ],
+        "function" : [
+            "1",
+            "3",
+	        "5",
+	        "10"
+        ]
     };
 
     widget.keylist = [{
