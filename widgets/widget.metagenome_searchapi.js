@@ -17,126 +17,108 @@
         "direction": "asc",
         "limit": "10",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "biome",
             "text": "marine"
         }, {
             "field": "material",
             "text": "saline"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "5 marine samples from the U.S.",
         "direction": "asc",
         "limit": "5",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "country",
             "text": "usa"
         }, {
             "field": "biome",
             "text": "marine"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "10 human microbiome samples",
         "direction": "asc",
         "limit": "10",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "project_name",
             "text": "hmp"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "10 human microbiome samples over 1GB sorted by size",
         "direction": "asc",
         "limit": "10",
         "order": "size",
+        "public": "yes",
         "filters": [{
             "field": "project_name",
             "text": "hmp"
         }, {
             "field": "bp_count_raw",
             "text": "[1000000000 TO *]"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "10 meta-transcriptomes from uk, france, italy, germany and spain",
         "direction": "asc",
         "limit": "10",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "sequence_type",
             "text": "mt"
         }, {
             "field": "country",
             "text": "uk OR france OR italy OR germany OR spain"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "10 samples from animal gut",
         "direction": "asc",
         "limit": "10",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "all",
             "text": "gut"
         }, {
             "field": "biome",
             "text": "animal"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "Get samples from a city (e.g. Chicago)",
         "direction": "asc",
         "limit": "5",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "location",
             "text": "chicago"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "Get samples from a PI (e.g. Noah Fierer)",
         "direction": "asc",
         "limit": "5",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "PI_firstname",
             "text": "noah"
         }, {
             "field": "PI_lastname",
             "text": "fierer"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }, {
         "text": "Get all samples from a specific class e.g. building",
         "direction": "asc",
         "limit": "25",
         "order": "created_on",
+        "public": "yes",
         "filters": [{
             "field": "feature",
             "text": "building"
-        }, {
-            "field": "public",
-            "text": "yes"
         }]
     }];
 
@@ -279,12 +261,7 @@
         console.log(ex);
         var limit = document.getElementById('limit');
         limit.value = ex.limit
-            //for (var i=0; i<limit.options.length; i++) {
-            //    if (limit.options[i].value == ex.limit) {
-            //	limit.selectedIndex = i;
-            //	break;
-            //    }
-            //}
+
         var direction = document.getElementById('direction');
         for (var i = 0; i < direction.options.length; i++) {
             if (direction.options[i].value == ex.direction) {
@@ -297,6 +274,15 @@
             if (order.options[i].value == ex.order) {
                 order.selectedIndex = i;
                 break;
+            }
+        }
+        if (stm.user) {
+            var getpublic = document.getElementById('public');
+            for (var i = 0; i < getpublic.options.length; i++) {
+                if (getpublic.options[i].value == ex.public) {
+                    getpublic.selectedIndex = i;
+                    break;
+                }
             }
         }
 
