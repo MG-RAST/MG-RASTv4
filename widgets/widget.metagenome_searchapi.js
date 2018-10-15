@@ -364,7 +364,7 @@
         document.getElementById('taxaper').selectedIndex = 0;
         document.getElementById('taxalevel').selectedIndex = 0;
         document.getElementById('funcper').selectedIndex = 0;
-    }
+    };
     
     widget.annotationOptions = function(type) {
         var widget = this;
@@ -373,7 +373,7 @@
             retval.push('<option value="' + widget.annotationInfo[type][i] + '">' + widget.annotationInfo[type][i] + '</option>');
         }
         return retval.join('');
-    }
+    };
 
     widget.fieldOptions = function(isorder) {
         var widget = this;
