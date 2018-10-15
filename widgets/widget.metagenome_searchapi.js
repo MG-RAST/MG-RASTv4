@@ -23,6 +23,9 @@
         }, {
             "field": "material",
             "text": "saline"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "5 marine samples from the U.S.",
@@ -35,6 +38,9 @@
         }, {
             "field": "biome",
             "text": "marine"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "10 human microbiome samples",
@@ -44,6 +50,9 @@
         "filters": [{
             "field": "project_name",
             "text": "hmp"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "10 human microbiome samples over 1GB sorted by size",
@@ -56,6 +65,9 @@
         }, {
             "field": "bp_count_raw",
             "text": "[1000000000 TO *]"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "10 meta-transcriptomes from uk, france, italy, germany and spain",
@@ -68,6 +80,9 @@
         }, {
             "field": "country",
             "text": "uk OR france OR italy OR germany OR spain"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "10 samples from animal gut",
@@ -80,6 +95,9 @@
         }, {
             "field": "biome",
             "text": "animal"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "Get samples from a city (e.g. Chicago)",
@@ -89,6 +107,9 @@
         "filters": [{
             "field": "location",
             "text": "chicago"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "Get samples from a PI (e.g. Noah Fierer)",
@@ -101,6 +122,9 @@
         }, {
             "field": "PI_lastname",
             "text": "fierer"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }, {
         "text": "Get all samples from a specific class e.g. building",
@@ -110,6 +134,9 @@
         "filters": [{
             "field": "feature",
             "text": "building"
+        }, {
+            "field": "public",
+            "text": "true"
         }]
     }];
 
@@ -163,6 +190,7 @@
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>filter fields</h4>');
         html.push('<div class="input-prepend input-append pull-left"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
+        html.push('<div class="input-prepend"><span class="add-on">search public data</span><input type="checkbox" id="public" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();></div>');
         html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
         html.push('</div>');
 
@@ -195,14 +223,16 @@
     widget.updateTexts = function() {
         var widget = this;
 
-        var url = RetinaConfig.mgrast_api + "/search";
+        var temp = RetinaConfig.mgrast_api + "/search";
+        var url = temp.replace('-ui', '');
         var authHeader = (stm.user && document.getElementById('useAuth').checked) ? '-H "Authorization: mgrast ' + stm.user.token + '" ' : '';
         var limit = document.getElementById('limit').value; //options[document.getElementById('limit').selectedIndex].value;
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
+        var getpublic = (document.getElementById('public').checked) ? true : false;
 
-        widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction;
-        widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '" ';
+        widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction + (getpublic ? '&public=true' :'');
+        widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '" ' + (getpublic ? '-F "public=true" ' : '');
 
         for (var i = 0; i < widget.filters.length; i++) {
             widget.searchtext += "&" + widget.filters[i].field + "=" + widget.filters[i].text;
