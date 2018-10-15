@@ -164,14 +164,14 @@
 
         // taxonomy
         html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="taxaname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 220px;"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="taxaname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 215px;"></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="taxaper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('taxonomy') + '</select></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">level</span><select id="taxalevel" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('levels') + '</select></div>');
         html.push('</div>');
         
         // function
         html.push('<div style="margin-top: 25px;"><h4>function</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="funcname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 220px;"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="funcname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 215px;"></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="funcper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('function') + '</select></div>');
         html.push('</div>');
 
@@ -226,7 +226,7 @@
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
         
-        var queries = [];
+        var queries = [['index', 'metagenome_index_20180705']]; // this is a temp hack unitl databse renamed
         var taxaname = document.getElementById('taxaname').value;
         if (taxaname != '') {
             queries.push(['taxonomy', taxaname]);
