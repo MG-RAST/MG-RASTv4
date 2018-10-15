@@ -253,9 +253,9 @@
             widget.searchtext += "&" + widget.filters[i].field + "=" + widget.filters[i].text;
             widget.curltext += '-F "' + widget.filters[i].field + '=' + widget.filters[i].text + '" ';
         }
-        for (var i = 0; i < widget.filters.length; i++) {
-            widget.searchtext += "&" + queries[i][0] + "=" + queries[i][1];
-            widget.curltext += '-F "' + queries[i][0] + '=' + queries[i][1] + '" ';
+        for (var j = 0; j < widget.filters.length; j++) {
+            widget.searchtext += "&" + queries[j][0] + "=" + queries[j][1];
+            widget.curltext += '-F "' + queries[j][0] + '=' + queries[j][1] + '" ';
         }
 
         widget.curltext += '"' + url + '"';
@@ -317,7 +317,6 @@
         }
         
         widget.clearAnnotations();
-
         widget.filters = jQuery.extend(true, [], ex.filters);
 
         widget.updateFilters();
@@ -326,33 +325,26 @@
 
     widget.addFilter = function() {
         var widget = this;
-
         widget.filters.push({
             "field": document.getElementById('filter').options[document.getElementById('filter').selectedIndex].value,
             "text": document.getElementById('filtertext').value
         });
-
         widget.updateFilters();
     };
 
     widget.removeFilter = function(index) {
         var widget = this;
-
         widget.filters.splice(index, 1);
-
         widget.updateFilters();
     };
 
     widget.updateFilters = function() {
         var widget = this;
-
         var html = [];
-
         for (var i = 0; i < widget.filters.length; i++) {
             var f = widget.filters[i];
             html.push('<div style="padding: 5px; border: 1px solid gray; border-radius: 5px; cursor: pointer; margin-bottom: 3px; margin-right: 5px; float: left;" title="click to remove" onclick="Retina.WidgetInstances.metagenome_searchapi[1].removeFilter(' + i + ');">' + f.field + ' - ' + f.text + ' &times;</div>');
         }
-
         document.getElementById('activeFilters').innerHTML = html.join('');
 
         widget.updateTexts();
@@ -368,7 +360,7 @@
     
     widget.annotationOptions = function(type) {
         var widget = this;
-        var retval = (type eq 'levels') ? [] : ['<option value="none">none</option>'];
+        var retval = (type == 'levels') ? [] : ['<option value="none">none</option>'];
         for (var i = 0; i < widget.annotationInfo[type].length; i++) {
             retval.push('<option value="' + widget.annotationInfo[type][i] + '">' + widget.annotationInfo[type][i] + '</option>');
         }
