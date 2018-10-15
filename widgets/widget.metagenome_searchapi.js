@@ -25,7 +25,7 @@
             "text": "saline"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "5 marine samples from the U.S.",
@@ -40,7 +40,7 @@
             "text": "marine"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "10 human microbiome samples",
@@ -52,7 +52,7 @@
             "text": "hmp"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "10 human microbiome samples over 1GB sorted by size",
@@ -67,7 +67,7 @@
             "text": "[1000000000 TO *]"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "10 meta-transcriptomes from uk, france, italy, germany and spain",
@@ -82,7 +82,7 @@
             "text": "uk OR france OR italy OR germany OR spain"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "10 samples from animal gut",
@@ -97,7 +97,7 @@
             "text": "animal"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "Get samples from a city (e.g. Chicago)",
@@ -109,7 +109,7 @@
             "text": "chicago"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "Get samples from a PI (e.g. Noah Fierer)",
@@ -124,7 +124,7 @@
             "text": "fierer"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }, {
         "text": "Get all samples from a specific class e.g. building",
@@ -136,7 +136,7 @@
             "text": "building"
         }, {
             "field": "public",
-            "text": "true"
+            "text": "yes"
         }]
     }];
 
@@ -191,7 +191,9 @@
         html.push('<div style="margin-top: 25px;"><h4>filter fields</h4>');
         html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
         // toggle public
-        html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><input style="margin-top: 5px; type="checkbox" id="public" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();></div>');
+        if (stm.user) {
+            html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
+        }
         html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
         html.push('</div>');
 
@@ -226,14 +228,18 @@
 
         var temp = RetinaConfig.mgrast_api + "/search";
         var url = temp.replace('-ui', '');
-        var authHeader = (stm.user && document.getElementById('useAuth').checked) ? '-H "Authorization: mgrast ' + stm.user.token + '" ' : '';
-        var limit = document.getElementById('limit').value; //options[document.getElementById('limit').selectedIndex].value;
+        var authHeader = '';
+        var getpublic = 'true';
+        if (stm.user && document.getElementById('useAuth').checked) {
+            authHeader = '-H "Authorization: mgrast ' + stm.user.token;
+            getpublic = document.getElementById('public').options[document.getElementById('public').selectedIndex].value;
+        }
+        var limit = document.getElementById('limit').value;
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
-        var getpublic = (document.getElementById('public').checked) ? true : false;
 
-        widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction + (getpublic ? '&public=true' :'');
-        widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '" ' + (getpublic ? '-F "public=true" ' : '');
+        widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction + '&public=' + getpublic;
+        widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '"' + ' -F "public=' + getpublic + '" ';
 
         for (var i = 0; i < widget.filters.length; i++) {
             widget.searchtext += "&" + widget.filters[i].field + "=" + widget.filters[i].text;
