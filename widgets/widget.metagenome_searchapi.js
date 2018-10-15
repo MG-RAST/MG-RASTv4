@@ -360,7 +360,10 @@
     
     widget.annotationOptions = function(type) {
         var widget = this;
-        var retval = (type == 'levels') ? [] : ['<option value="none">none</option>'];
+        var retval = [];
+        if (type != 'levels') {
+            retval.push('<option value="none">none</option>');
+        }
         for (var i = 0; i < widget.annotationInfo[type].length; i++) {
             retval.push('<option value="' + widget.annotationInfo[type][i] + '">' + widget.annotationInfo[type][i] + '</option>');
         }
