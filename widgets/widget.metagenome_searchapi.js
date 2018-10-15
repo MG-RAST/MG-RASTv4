@@ -177,8 +177,8 @@
         html.push('<div style="margin-top: 25px;"><h4>options</h4>');
 
         // limit
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>'); //<select id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"><option>1</option><option>5</option><option>10</option><option>25</option></select></div>');
-
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');
+        
         // direction
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
 
@@ -189,8 +189,9 @@
 
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>filter fields</h4>');
-        html.push('<div class="input-prepend input-append pull-left"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
-        html.push('<div class="input-prepend"><span class="add-on">search public data</span><input type="checkbox" id="public" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();></div>');
+        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
+        // toggle public
+        html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><input style="margin-top: 5px; type="checkbox" id="public" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();></div>');
         html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
         html.push('</div>');
 
