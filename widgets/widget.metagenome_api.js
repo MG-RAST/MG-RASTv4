@@ -187,7 +187,8 @@
                             "params": example_params,
                             "id": example_id
                         };
-                        req.call = req.request.substring(RetinaConfig.mgrast_api.length).replace('//', '/');
+                        var cleanurl = RetinaConfig.mgrast_api.replace('-ui', '');
+                        req.call = req.request.substring(cleanurl.length).replace('//', '/');
 
                         h.push('<div class="request" style="cursor: pointer;"><div class="requestMethod" onclick="jQuery(\'#request' + this.res + req.name + req.method + '\').toggle();"><span>' + req.method + '</span><span>' + req.call + '</span></div><div onclick="jQuery(\'#request' + this.res + req.name + req.method + '\').toggle();">' + req.description + '</div><div class="requestchild" id="request' + this.res + req.name + req.method + '" style="display: none;">');
 
