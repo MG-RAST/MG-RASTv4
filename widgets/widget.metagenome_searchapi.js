@@ -120,6 +120,34 @@
             "field": "feature",
             "text": "building"
         }]
+    }, {
+        "text": "Get samples from animal gut with 20% or more abundace of Bacteroides (genus)",
+        "direction": "asc",
+        "limit": "10",
+        "order": "created_on",
+        "public": "yes",
+        "taxaname": "Bacteroides",
+        "taxaper": "20",
+        "taxalevel": "genus",
+        "filters": [{
+            "field": "all",
+            "text": "gut"
+        }, {
+            "field": "biome",
+            "text": "animal"
+        }]
+    }, {
+        "text": "Get samples from wastewater containing 'Cysteine desulfurase'",
+        "direction": "asc",
+        "limit": "10",
+        "order": "created_on",
+        "public": "yes",
+        "funcname": "Cysteine desulfurase",
+        "funcper": "none",
+        "filters": [{
+            "field": "feature",
+            "text": "wastewater treatment plant"
+        }]
     }];
 
     widget.filters = [];
@@ -290,7 +318,7 @@
         var ex = widget.examples[index];
         console.log(ex);
         var limit = document.getElementById('limit');
-        limit.value = ex.limit
+        limit.value = ex.limit;
 
         var direction = document.getElementById('direction');
         for (var i = 0; i < direction.options.length; i++) {
@@ -316,9 +344,41 @@
             }
         }
         
-        widget.clearAnnotations();
-        widget.filters = jQuery.extend(true, [], ex.filters);
+        if (ex.hasOwnProperty('taxaname')) {
+            var taxaname = document.getElementById('taxaname');
+            taxaname.value = ex.taxaname;
+            var taxaper = document.getElementById('taxaper');
+            for (var i = 0; i < taxaper.options.length; i++) {
+                if (taxaper.options[i].value == ex.taxaper) {
+                    taxaper.selectedIndex = i;
+                    break;
+                }
+            }
+            var taxalevel = document.getElementById('taxalevel');
+            for (var i = 0; i < taxalevel.options.length; i++) {
+                if (taxalevel.options[i].value == ex.taxalevel) {
+                    taxalevel.selectedIndex = i;
+                    break;
+                }
+            }
+        } else {
+            widget.clearTaxonomy();
+        }
+        if (ex.hasOwnProperty('funcname')) {
+            var funcname = document.getElementById('funcname');
+            funcname.value = ex.funcname;
+            var funcper = document.getElementById('funcper');
+            for (var i = 0; i < funcper.options.length; i++) {
+                if (funcper.options[i].value == ex.funcper) {
+                    funcper.selectedIndex = i;
+                    break;
+                }
+            }
+        } else {
+            widget.clearFunction();
+        }
 
+        widget.filters = jQuery.extend(true, [], ex.filters);
         widget.updateFilters();
         widget.executeSearch();
     };
@@ -350,11 +410,14 @@
         widget.updateTexts();
     };
     
-    widget.clearAnnotations = function() {
+    widget.clearTaxonomy = function() {
         document.getElementById('taxaname').value = '';
-        document.getElementById('funcname').value = '';
         document.getElementById('taxaper').selectedIndex = 0;
         document.getElementById('taxalevel').selectedIndex = 0;
+    };
+    
+    widget.clearFunction = function() {
+        document.getElementById('funcname').value = '';
         document.getElementById('funcper').selectedIndex = 0;
     };
     
