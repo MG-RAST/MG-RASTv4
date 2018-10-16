@@ -107,6 +107,12 @@
                             continue;
                         }
                         req.format = "url"
+                        
+                        // url cleaning
+                        var tempreq = req.request.replace('-ui', '');
+                        req.request = tempreq;
+                        var tempex = req.example[0].replace('-ui', '');
+                        req.example[0] = tempex;
 
                         var example_description = req.example[1];
                         var example_params;
@@ -218,9 +224,7 @@
                         h.push('<div id="request' + this.res + req.name + req.method + 'target"></div>');
 
                         h.push('<h5 style="clear: both;">return structure</h5>');
-                        var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
-                        var apiurl = RetinaConfig.mgrast_api;
-                        h.push('<pre>' + JSON.stringify(req.attributes == "self" ? req : req.attributes, null, 2).replace(new RegExp(apiurl, "g"), papiurl) + '</pre>');
+                        h.push('<pre>' + JSON.stringify(req.attributes == "self" ? req : req.attributes, null, 2) + '</pre>');
                         h.push('</div></div>');
                     }
                     document.getElementById('resource' + d.name).innerHTML = h.join("");
@@ -344,8 +348,6 @@
         }
 
         if (curlOnly) {
-            var papiurl = RetinaConfig.public_mgrast_api || RetinaConfig.mgrast_api;
-            var apiurl = RetinaConfig.mgrast_api;
             var curlstr = "curl" + (stm.user ? ' -H "Authorization: mgrast ' + stm.user.token + '"' : "") + " -X " + request.method;
             if (hasParams && (request.format == "json")) {
                 curlstr += " -d '" + JSON.stringify(values).replace(/'/g, "\\'") + "'";
@@ -355,7 +357,7 @@
                     curlstr += ' -F "' + i + '=' + val + '"';
                 }
             }
-            curlstr += ' "' + url.replace(new RegExp(apiurl, "g"), papiurl) + '"';
+            curlstr += ' "' + url + '"';
             document.getElementById(target + '_curl').innerHTML = "<div style='clear: both; height: 10px;'></div><pre>" + curlstr + "</pre>";
         } else {
             // set values for type of call
