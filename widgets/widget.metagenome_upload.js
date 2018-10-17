@@ -942,9 +942,17 @@
 	    } else if (data.is_valid) {
 		resultDiv.innerHTML = '<div class="alert alert-success">This file contains valid metadata.</div>';
 	    } else {
-		var txt = data.message.replace(/\[error\]/ig, "");
-		var messages = (data.hasOwnProperty('errors') && data.errors.length) ? "<br>"+data.errors.join("<br>") : "";
-		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors below.</b><br>'+txt+messages+'</div>';
+            var message = "";
+            if (data.hasOwnProperty('errors') && data.errors.length) {
+                for (var i=0; i<data.errors.length; i++) {
+                    if (data.errors[i].length == 5) {
+                        message += "<br>in "+data.errors[i][0]+" '"+data.errors[i][2]+"' field "+data.errors[i][1]+" with value '"+data.errors[i][3]+"' is "+data.errors[i][4];
+                    }
+                }
+            } else {
+                message = '<br>'+data.message.replace(/\[error\]/ig, "");
+            }
+		resultDiv.innerHTML = '<div class="alert alert-error"><b>This is not valid metadata. You can use <a href="mgmain.html?mgpage=metazen2&inbox='+nodeid+'" target=_blank>MetaZen</a> to resolve the errors below.</b>'+message+'</div>';
 	    }
 	}
     };
