@@ -254,7 +254,7 @@
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
         
-        var queries = [['index', 'metagenome_index_20180705']]; // this is a temp hack unitl databse renamed
+        var queries = [['index', 'metagenome_index_20180705']]; // this is a temp hack unitl database renamed
         var taxaname = document.getElementById('taxaname').value;
         if (taxaname != '') {
             queries.push(['taxonomy', taxaname]);
@@ -535,12 +535,15 @@
             "value": "sequence type",
             "selected": true
         }, {
+            "name": "seq_method",
+            "value": "sequencing method"
+        }, {
             "name": "public",
             "value": "public"
         }, {
             "name": "mixs_compliant",
             "value": "MiXS"
-        }, ]
+        }]
     }, {
         "name": "Environment",
         "items": [{
@@ -618,7 +621,7 @@
         }, {
             "name": "ncbi_taxonomy_scientific_name",
             "value": "ncbi taxonomy scientific name"
-        }, ]
+        }]
     }, {
         "name": "IDs",
         "items": [{

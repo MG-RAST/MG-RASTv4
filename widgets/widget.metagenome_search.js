@@ -23,8 +23,8 @@
     widget.selectedMetagenomes = {};
     widget.addingMetagenomes = false;
     widget.specialKeyMapping = {
-        "created_on": "creation date",
-        "name": "metagenome name",
+        "created_on": "created date",
+        "name": "dataset (metagenome name)",
         "seq_method": "sequencing method",
         "job": "job id",
         "id": "metagenome id"
@@ -33,8 +33,14 @@
         "name": "Project",
         "items": [{
             "name": "created_on",
-            "value": "created",
+            "value": "created date",
             "selected": true
+        }, {
+            "name": "all",
+            "value": "any field"
+        }, {
+            "name": "all_project",
+            "value": "any project field"
         }, {
             "name": "PI_firstname",
             "value": "PI firstname"
@@ -48,6 +54,18 @@
             "name": "PI_organization_country",
             "value": "PI org country"
         }, {
+            "name": "firstname",
+            "value": "submitter firstname"
+        }, {
+            "name": "lastname",
+            "value": "submitter lastname"
+        }, {
+            "name": "organization",
+            "value": "submitter organization"
+        }, {
+            "name": "organization_country",
+            "value": "submitter org country"
+        }, {
             "name": "project_funding",
             "value": "funding"
         }, {
@@ -55,50 +73,62 @@
             "value": "study",
             "selected": true
         }, {
+            "name": "sample_name",
+            "value": "sample name"
+        }, {
+            "name": "env_package_name",
+            "value": "env package name"
+        }, {
             "name": "library_name",
             "value": "library"
-        }, {
-            "name": "sample_name",
-            "value": "sample"
         }, {
             "name": "name",
             "value": "dataset (metagenome name)",
             "selected": true
         }, {
             "name": "sequence_type",
-            "value": "seq type",
+            "value": "sequence type",
             "selected": true
         }, {
             "name": "seq_method",
-            "value": "seq method"
+            "value": "sequencing method"
         }, {
             "name": "public",
             "value": "public"
         }, {
             "name": "mixs_compliant",
             "value": "MiXS"
-        }, ]
+        }]
     }, {
         "name": "Environment",
         "items": [{
+            "name": "all_sample",
+            "value": "any sample field"
+        }, {
+            "name": "all_env_package",
+            "value": "any env package field"
+        }, {
+            "name": "all_library",
+            "value": "any library field"
+        }, {
+            "name": "biome",
+            "value": "biome",
+            "selected": true
+        }, {
             "name": "feature",
             "value": "feature"
         }, {
             "name": "material",
             "value": "material"
         }, {
-            "name": "biome",
-            "value": "biome",
-            "selected": true
-        }, {
-            "name": "env_package_name",
-            "value": "env package name"
+            "name": "env_package",
+            "value": "env package"
         }, {
             "name": "env_package_type",
             "value": "env package type"
         }, {
             "name": "investigation_type",
-            "value": "investigation type"
+            "value": "library investigation type"
         }, {
             "name": "target_gene",
             "value": "target gene"
@@ -137,12 +167,15 @@
         }, {
             "name": "collection_date",
             "value": "collection date"
+        }, {
+            "name": "ncbi_taxonomy_scientific_name",
+            "value": "ncbi taxonomy scientific name"
         }]
     }, {
         "name": "IDs",
         "items": [{
-            "name": "job_id",
-            "value": "job id"
+            "name": "metagenome_id",
+            "value": "metagenome id"
         }, {
             "name": "project_id",
             "value": "project id"
@@ -150,23 +183,50 @@
             "name": "sample_id",
             "value": "sample id"
         }, {
+            "name": "env_package_id",
+            "value": "env package id"
+        }, {
             "name": "library_id",
             "value": "library id"
         }, {
-            "name": "metagenome_id",
-            "value": "metagenome id"
+            "name": "job_id",
+            "value": "job id"
+        }, {
+            "name": "biome_id",
+            "value": "biome id"
+        }, {
+            "name": "feature_id",
+            "value": "feature id"
+        }, {
+            "name": "material_id",
+            "value": "material id"
+        }, {
+            "name": "envo_id",
+            "value": "sample envo id"
+        }, {
+            "name": "ncbi_taxonomy_id",
+            "value": "ncbi taxonomy id"
+        }, {
+            "name": "metagenome_taxonomy_id",
+            "value": "metagenome taxonomy id"
+        }, {
+            "name": "ncbi_id",
+            "value": "project ncbi id"
+        }, {
+            "name": "project_ebi_id",
+            "value": "project ebi id"
+        }, {
+            "name": "sample_ebi_id",
+            "value": "sample ebi id"
+        }, {
+            "name": "library_ebi_id",
+            "value": "library ebi id"
         }, {
             "name": "pubmed_id",
             "value": "pubmed id"
         }, {
             "name": "gold_id",
             "value": "gold id"
-        }, {
-            "name": "ebi_id",
-            "value": "ebi id"
-        }, {
-            "name": "ncbi_id",
-            "value": "ncbi id"
         }, {
             "name": "greengenes_id",
             "value": "greengenes id"
@@ -330,6 +390,21 @@
     <div class="controls input-append">\
       <input type="text" id="advanced_search_value" placeholder="enter searchterm">\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].refineSearch(\'add\');">add</button>\
+    </div>\
+  </div>\
+  <p>Add a taxonomy and / or function name to refine your search.</p>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_taxonomy_name">taxonomy</label>\
+    <div class="controls input-append">\
+      <input type="text" id="advanced_taxonomy_name" style="width: 170px; margin-left: 35px;" placeholder="enter text">\
+      <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">add</button>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_function_name">function</label>\
+    <div class="controls input-append">\
+      <input type="text" id="advanced_function_name" style="width: 170px; margin-left: 35px;" placeholder="enter text">\
+      <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'function\');">add</button>\
     </div>\
   </div>\
   <div id="refine_search_terms"></div>\
@@ -498,6 +573,16 @@
     /* 
        ADVANCED SEARCH
     */
+    widget.addAnnotation = function(atype) {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var item = {
+            "key": atype,
+            "name": atype,
+            "val": document.getElementById('advanced_'+atype+'_name').value
+        };
+        widget.refineSearch('add', item);
+    };
+    
     widget.refineSearch = function(action, item) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
 
@@ -530,7 +615,7 @@
                 clear.addEventListener('click', function() {
                     Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
                 });
-                clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 20px; margin-top: -15px;");
+                clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 15px; margin-top: -5px;");
                 target.appendChild(clear);
             }
 
@@ -842,6 +927,7 @@
         }        
         
         var url = api_url + "direction=" + widget.sortDir + "&order=" + widget.sort + "&limit=" + (howmany || widget.limit) + get_after + query_str;
+        url += "&index=metagenome_index_20180705"; // this is a temp hack unitl database renamed
 
         jQuery.ajax({
             dataType: "json",
