@@ -398,9 +398,9 @@
   </div>\
   <p>Add a taxonomy and / or function name to refine your search.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_rank">taxa rank</label>\
+    <label class="control-label" for="advanced_taxonomy_rank">taxa&nbsp;rank</label>\
     <div class="controls input-append">\
-      <select id="advanced_taxonomy_rank" style="width: 215px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
+      <select id="advanced_taxonomy_rank" style="width: 225px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
         <option disabled selected value> -- select a rank -- </option>\
         <option value="domain">Domain</option>\
         <option value="phylum">Phylum</option>\
@@ -412,9 +412,9 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_name">taxa name</label>\
+    <label class="control-label" for="advanced_taxonomy_name">taxa&nbsp;name</label>\
     <div class="controls input-append">\
-      <select id="advanced_taxonomy_name" style="width: 215px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">\
+      <select id="advanced_taxonomy_name" style="width: 225px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">\
         <option disabled selected value> -- select rank first -- </option>\
       </select>\
     </div>\
@@ -422,7 +422,7 @@
   <div class="control-group">\
     <label class="control-label" for="advanced_function_name">function</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_function_name" style="width: 180px; margin-left: 30px;" placeholder="enter text">\
+      <input type="text" id="advanced_function_name" style="width: 175px; margin-left: 30px;" placeholder="enter text">\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'function\');">add</button>\
     </div>\
   </div>\
