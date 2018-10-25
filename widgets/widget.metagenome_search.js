@@ -675,23 +675,25 @@
             			    throw err; // or handle err
             			}
             			var zip = new JSZip();
-                        zip.file("ontology.json").async("string").then(function (ont) {
-                            ont = JSON.parse(ont);
-                            var out = { "Subsystems": [], "KO": [] };
-                            for (var o in ont) {
-                                if ((o != "Subsystems") || (o != "KO")) {
-                                    continue;
-                                }
-                                for (var l1 in ont[o]) {
-            					    if (ont[o].hasOwnProperty(l1)) {
-                                        for (var l2 in ont[o][l1]) {
-                                            if (ont[o][l1].hasOwnProperty(l2)) {
-                                                for (var l3 in ont[o][l1][l2]) {
-                                                    if (ont[o][l1][l2].hasOwnProperty(l3)) {
-                                                        for (var func in ont[o][l1][l2][l3]) {
-                                                            if (ont[o][l1][l2].hasOwnProperty(func)) {
-                                                                if (func.toLowerCase().indexOf('hypothetical') == -1) {
-                                                                    out[o].push(func);
+                        zip.loadAsync(data).then(function(zip) {
+                            zip.file("ontology.json").async("string").then(function (ont) {
+                                ont = JSON.parse(ont);
+                                var out = { "Subsystems": [], "KO": [] };
+                                for (var o in ont) {
+                                    if ((o != "Subsystems") || (o != "KO")) {
+                                        continue;
+                                    }
+                                    for (var l1 in ont[o]) {
+            					        if (ont[o].hasOwnProperty(l1)) {
+                                            for (var l2 in ont[o][l1]) {
+                                                if (ont[o][l1].hasOwnProperty(l2)) {
+                                                    for (var l3 in ont[o][l1][l2]) {
+                                                        if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                            for (var func in ont[o][l1][l2][l3]) {
+                                                                if (ont[o][l1][l2].hasOwnProperty(func)) {
+                                                                    if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                                        out[o].push(func);
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -701,13 +703,13 @@
                                         }
                                     }
                                 }
-                            }
-                            for (var h in out) {
-                                console.log(t+" "+out[h].length);
-                                out[h].sort();
-                            }
-                            stm.DataStore.functions = out;
-                            Retina.WidgetInstances.metagenome_search[1].display();
+                                for (var h in out) {
+                                    console.log(t+" "+out[h].length);
+                                    out[h].sort();
+                                }
+                                stm.DataStore.functions = out;
+                                Retina.WidgetInstances.metagenome_search[1].display();
+                            });
                         });
                     });
                 });
