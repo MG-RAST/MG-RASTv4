@@ -414,8 +414,9 @@
   <div class="control-group">\
     <label class="control-label" for="advanced_taxonomy_name">taxa&nbsp;name</label>\
     <div class="controls input-append">\
-      <select id="advanced_taxonomy_name" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">\
-        <option disabled selected value> -- select rank first -- </option>\
+      input type="text" id="advanced_taxonomy_name" list="advanced_taxonomy_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select rank first -- " readonly>\
+      <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">add</button>\
+      <datalist id="advanced_taxonomy_list"></datalist>\
       </select>\
     </div>\
   </div>\
@@ -622,22 +623,34 @@
                                                         if (tax[d][p][c][o].hasOwnProperty(f)) {
                                                             for (var g in tax[d][p][c][o][f]) {
                                                                 if (tax[d][p][c][o][f].hasOwnProperty(g)) {
-                                                                    out.genus.push(g);
+                                                                    if (! (g.startsWith('unknown') || g.startswith('unclassified'))) {
+                                                                        out.genus.push(g);
+                                                                    }
                                                                 }
                                                             }
-                                                            out.family.push(f);
+                                                            if (! (f.startsWith('unknown') || f.startswith('unclassified'))) {
+                                                                out.family.push(f);
+                                                            }
                                                         }
                                                     }
-                                                    out.order.push(o);
+                                                    if (! (o.startsWith('unknown') || o.startswith('unclassified'))) {
+                                                        out.order.push(o);
+                                                    }
                                                 }
                                             }
-                                            out.className.push(c);
+                                            if (! (c.startsWith('unknown') || c.startswith('unclassified'))) {
+                                                out.className.push(c);
+                                            }
                                         }
                                     }
-                                    out.phylum.push(p);
+                                    if (! (p.startsWith('unknown') || p.startswith('unclassified'))) {
+                                        out.phylum.push(p);
+                                    }
                                 }
                             }
-                            out.domain.push(d);
+                            if (! (d.startsWith('unknown') || d.startswith('unclassified'))) {
+                                out.domain.push(d);
+                            }
                         }
                     }
                     for (var i = 0; i < out.length; i++) {
@@ -655,28 +668,22 @@
         var rankList = document.getElementById('advanced_taxonomy_rank');
         var rank = rankList.options[rankList.selectedIndex].value;
         if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
-            var taxaList = document.getElementById('advanced_taxonomy_name');
-            var taxaListHtml = "<option disabled selected value> -- select a name -- </option>";
+            var taxaList = document.getElementById('advanced_taxonomy_list');
+            var taxaListHtml = "";
             for (var i = 0; i < stm.DataStore.taxonomy[rank].length; i++) {
-                taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>" + stm.DataStore.taxonomy[rank][i] + "</option>";
+                taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>";
             }
             taxaList.innerHTML = taxaListHtml;
+            document.getElementById('advanced_taxonomy_name').readOnly = false;
         }
     };
 
     widget.addAnnotation = function(atype) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
-        var val = "";
-        if (atype == "function") {
-            val = document.getElementById('advanced_function_name').value;
-        } else if (atype == "taxonomy") {
-            var taxaList = document.getElementById('advanced_taxonomy_name');
-            val = taxaList.options[taxaList.selectedIndex].value;
-        }
         var item = {
             "key": atype,
             "name": atype,
-            "val": val
+            "val": document.getElementById('advanced_'+atype+'_name').value;
         };
         widget.refineSearch('add', item);
     };
