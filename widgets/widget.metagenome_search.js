@@ -623,40 +623,34 @@
                                                         if (tax[d][p][c][o].hasOwnProperty(f)) {
                                                             for (var g in tax[d][p][c][o][f]) {
                                                                 if (tax[d][p][c][o][f].hasOwnProperty(g)) {
-                                                                    if (g.startsWith('unknown') || g.startswith('unclassified')) {
-                                                                        continue;
+                                                                    if (! g.startsWith('unknown') || g.startsWith('unclassified'))) {
+                                                                        out.genus.push(g);
                                                                     }
-                                                                    out.genus.push(g);
                                                                 }
                                                             }
-                                                            if (f.startsWith('unknown') || f.startswith('unclassified')) {
-                                                                continue;
+                                                            if (! (f.startsWith('unknown') || f.startsWith('unclassified'))) {
+                                                                out.family.push(f);
                                                             }
-                                                            out.genus.push(f);
                                                         }
                                                     }
-                                                    if (o.startsWith('unknown') || o.startswith('unclassified')) {
-                                                        continue;
+                                                    if (! (o.startsWith('unknown') || o.startsWith('unclassified'))) {
+                                                        out.order.push(o);
                                                     }
-                                                    out.genus.push(o);
                                                 }
                                             }
-                                            if (c.startsWith('unknown') || c.startswith('unclassified')) {
-                                                continue;
+                                            if (! (c.startsWith('unknown') || c.startsWith('unclassified'))) {
+                                                out.className.push(c);
                                             }
-                                            out.genus.push(c);
                                         }
                                     }
-                                    if (p.startsWith('unknown') || p.startswith('unclassified')) {
-                                        continue;
+                                    if (! (p.startsWith('unknown') || p.startsWith('unclassified'))) {
+                                        out.phylum.push(p);
                                     }
-                                    out.genus.push(p);
                                 }
                             }
-                            if (d.startsWith('unknown') || d.startswith('unclassified')) {
-                                continue;
+                            if (! (d.startsWith('unknown') || d.startsWith('unclassified'))) {
+                                out.domain.push(d);
                             }
-                            out.genus.push(d);
                         }
                     }
                     for (var i = 0; i < out.length; i++) {
