@@ -412,7 +412,7 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_name">taxa&nbsp;name</label>\
+    <label class="control-label" for="advanced_taxonomy_name">taxonomy</label>\
     <div class="controls input-append">\
       <input type="text" id="advanced_taxonomy_name" list="advanced_taxonomy_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select rank first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">add</button>\
@@ -421,10 +421,21 @@
     </div>\
   </div>\
   <div class="control-group">\
+    <label class="control-label" for="advanced_function_hier">functional hierarchy</label>\
+    <div class="controls input-append">\
+      <select id="advanced_function_hier" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateFunc();">\
+        <option disabled selected value> -- select a hierarchy -- </option>\
+        <option value="Subsystems">Subsystems</option>\
+        <option value="KO">KEGG KO</option>\
+      </select>\
+    </div>\
+  </div>\
+  <div class="control-group">\
     <label class="control-label" for="advanced_function_name">function</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_function_name" style="width: 165px; margin-left: 40px;" placeholder="enter text">\
+      <input type="text" id="advanced_function_name" list="advanced_function_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select hierarchy first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'function\');">add</button>\
+      <datalist id="advanced_function_list"></datalist>\
     </div>\
   </div>\
   <div id="refine_search_terms"></div>\
@@ -653,11 +664,48 @@
                             }
                         }
                     }
-                    for (var i = 0; i < out.length; i++) {
-                        out[i].sort();
+                    for (var t in out) {
+                        console.log(t+" "+out[t].length);
+                        out[t].sort();
                     }
                     stm.DataStore.taxonomy = out;
-                    Retina.WidgetInstances.metagenome_search[1].display();
+        		    document.getElementById('data').innerHTML = 'loading functional data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+        		    JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+                        zip.file("ontology.json").async("string").then(function (ont) {
+                            ont = JSON.parse(ont);
+                            var out = { "Subsystems": [], "KO": [] };
+                            for (var o in ont) {
+                                if ((o != "Subsystems") || (o != "KO")) {
+                                    continue;
+                                }
+                                for (var l1 in ont[o]) {
+            					    if (ont[o].hasOwnProperty(l1)) {
+                                        for (var l2 in ont[o][l1]) {
+                                            if (ont[o][l1].hasOwnProperty(l2)) {
+                                                for (var l3 in ont[o][l1][l2]) {
+                                                    if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                        for (var func in ont[o][l1][l2][l3]) {
+                                                            if (ont[o][l1][l2].hasOwnProperty(func)) {
+                                                                if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                                    out[o].push(func);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            for (var h in out) {
+                                console.log(t+" "+out[h].length);
+                                out[h].sort();
+                            }
+                            stm.DataStore.functions = out;
+                            Retina.WidgetInstances.metagenome_search[1].display();
+                        });
+                    });
                 });
             });
         });
@@ -674,7 +722,26 @@
                 taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>";
             }
             taxaList.innerHTML = taxaListHtml;
+            document.getElementById('advanced_taxonomy_name').value = "";
+            document.getElementById('advanced_taxonomy_name').placeholder = " -- enter text -- ";
             document.getElementById('advanced_taxonomy_name').readOnly = false;
+        }
+    };
+    
+    widget.updateFunc = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var hierList = document.getElementById('advanced_function_hier');
+        var hier = hierList.options[hierList.selectedIndex].value;
+        if (stm.DataStore.functions.hasOwnProperty(hier)) {
+            var funcList = document.getElementById('advanced_function_list');
+            var funcListHtml = "";
+            for (var i = 0; i < stm.DataStore.functions[hier].length; i++) {
+                funcListHtml += "<option value='" + stm.DataStore.functions[[hier]][i] + "'>";
+            }
+            funcList.innerHTML = funcListHtml;
+            document.getElementById('advanced_function_name').value = "";
+            document.getElementById('advanced_function_name').placeholder = " -- enter text -- ";
+            document.getElementById('advanced_function_name').readOnly = false;
         }
     };
 
@@ -889,7 +956,7 @@
             "wgs": "shotgun metagenome",
             "mt": "metatranscriptome",
             "amplicon": "amplicon metagenome",
-            "metabarcode": "barcode"
+            "metabarcode": "metabarcode"
         };
 
         for (var i = 0; i < rows.length; i++) {
@@ -904,7 +971,7 @@
                 } else if (cell && fields[h] == "name") {
                     cell = "<div style='max-width: 300px;'><a href='?mgpage=overview&metagenome=" + (!data[rows[i][0]]["public"] ? Retina.idmap(data[rows[i][0]]["metagenome_id"]) : data[rows[i][0]]["metagenome_id"]) + "' rel='nofollow' target=_blank title='view'>" + data[rows[i][0]]["name"] + "</a><a href='?mgpage=download&metagenome=" + data[rows[i][0]]["metagenome_id"] + "' rel='nofollow' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></div>";
                 } else if (cell && fields[h] == "sequence_type") {
-                    cell = seqTypes[data[rows[i][0]]["sequence_type"]] || data[rows[i][0]];
+                    cell = seqTypes[data[rows[i][0]]["sequence_type"].toLowerCase()] || data[rows[i][0]];
                 }
                 if (!cell) {
                     cell = "-";
