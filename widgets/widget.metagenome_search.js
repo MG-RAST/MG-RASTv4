@@ -414,7 +414,7 @@
   <div class="control-group">\
     <label class="control-label" for="advanced_taxonomy_name">taxa&nbsp;name</label>\
     <div class="controls input-append">\
-      input type="text" id="advanced_taxonomy_name" list="advanced_taxonomy_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select rank first -- " readonly>\
+      <input type="text" id="advanced_taxonomy_name" list="advanced_taxonomy_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select rank first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">add</button>\
       <datalist id="advanced_taxonomy_list"></datalist>\
       </select>\
