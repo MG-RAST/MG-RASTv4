@@ -623,7 +623,7 @@
                                                         if (tax[d][p][c][o].hasOwnProperty(f)) {
                                                             for (var g in tax[d][p][c][o][f]) {
                                                                 if (tax[d][p][c][o][f].hasOwnProperty(g)) {
-                                                                    if (! g.startsWith('unknown') || g.startsWith('unclassified'))) {
+                                                                    if (! (g.startsWith('unknown') || g.startsWith('unclassified'))) {
                                                                         out.genus.push(g);
                                                                     }
                                                                 }
