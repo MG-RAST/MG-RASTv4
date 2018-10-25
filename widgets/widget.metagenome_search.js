@@ -606,6 +606,7 @@
     */
 
     widget.loadTaxaData = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
         JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
             if (err) {
                 throw err; // or handle err
@@ -666,7 +667,7 @@
                     }
                     for (var t in out) {
                         console.log(t+" "+out[t].length);
-                        out[t].sort();
+                        out[t] = widget.uniqueSortList(out[t]);
                     }
                     stm.DataStore.taxonomy = out;
         		    document.getElementById('data').innerHTML = 'loading functional data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
@@ -680,7 +681,7 @@
                                 ont = JSON.parse(ont);
                                 var out = { "Subsystems": [], "KO": [] };
                                 for (var o in ont) {
-                                    if ((o != "Subsystems") || (o != "KO")) {
+                                    if ((o != "Subsystems") && (o != "KO")) {
                                         continue;
                                     }
                                     for (var l1 in ont[o]) {
@@ -690,7 +691,7 @@
                                                     for (var l3 in ont[o][l1][l2]) {
                                                         if (ont[o][l1][l2].hasOwnProperty(l3)) {
                                                             for (var func in ont[o][l1][l2][l3]) {
-                                                                if (ont[o][l1][l2].hasOwnProperty(func)) {
+                                                                if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
                                                                     if (func.toLowerCase().indexOf('hypothetical') == -1) {
                                                                         out[o].push(func);
                                                                     }
@@ -704,8 +705,8 @@
                                     }
                                 }
                                 for (var h in out) {
-                                    console.log(t+" "+out[h].length);
-                                    out[h].sort();
+                                    console.log(h+" "+out[h].length);
+                                    out[h] = widget.uniqueSortList(out[h]);
                                 }
                                 stm.DataStore.functions = out;
                                 Retina.WidgetInstances.metagenome_search[1].display();
@@ -715,6 +716,17 @@
                 });
             });
         });
+    };
+    
+    widget.uniqueSortList = function(arr) {
+        var u = {}, a = [];
+        for (var i = 0; i < arr.length; i++) {
+            if(!u.hasOwnProperty(arr[i])) {
+                a.push(arr[i]);
+                u[arr[i]] = 1;
+            }
+        }
+        return a.sort();
     };
 
     widget.updateTaxa = function() {
