@@ -683,7 +683,7 @@
         var item = {
             "key": atype,
             "name": atype,
-            "val": document.getElementById('advanced_'+atype+'_name').value;
+            "val": document.getElementById('advanced_'+atype+'_name').value
         };
         widget.refineSearch('add', item);
     };
