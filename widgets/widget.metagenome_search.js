@@ -93,9 +93,6 @@
             "name": "seq_method",
             "value": "sequencing method"
         }, {
-            "name": "public",
-            "value": "public"
-        }, {
             "name": "mixs_compliant",
             "value": "MiXS"
         }]
@@ -331,6 +328,13 @@
 
         document.getElementById("pageTitle").innerHTML = "search";
 
+        // get taxa data
+        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
+            widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
+            widget.loadTaxaData();
+            return;
+        }
+
         // set the output area
         // search field
         var html = "\
@@ -394,10 +398,25 @@
   </div>\
   <p>Add a taxonomy and / or function name to refine your search.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_name">taxonomy</label>\
+    <label class="control-label" for="advanced_taxonomy_rank">taxa rank</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_taxonomy_name" style="width: 170px; margin-left: 35px;" placeholder="enter text">\
-      <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">add</button>\
+      <select id="advanced_taxonomy_rank" style="width: 210px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
+        <option disabled selected value>- select a rank -</option>\
+        <option value="domain">Domain</option>\
+        <option value="phylum">Phylum</option>\
+        <option value="className">Class</option>\
+        <option value="order">Order</option>\
+        <option value="family">Family</option>\
+        <option value="genus">Genus</option>\
+      </select>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_taxonomy_name">taxa name</label>\
+    <div class="controls input-append">\
+      <select id="advanced_taxonomy_name" style="width: 210px;" onchange="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">\
+        <option disabled selected value>- select rank first -</option>\
+      </select>\
     </div>\
   </div>\
   <div class="control-group">\
@@ -573,16 +592,96 @@
     /* 
        ADVANCED SEARCH
     */
+
+    widget.loadTaxaData = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
+            if (err) {
+                throw err; // or handle err
+            }
+            var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("taxonomy.json").async("string").then(function(tax) {
+                    tax = JSON.parse(tax);
+                    var out = {
+                        "domain": [],
+                        "phylum": [],
+                        "className": [],
+                        "order": [],
+                        "family": [],
+                        "genus": []
+                    };
+                    for (var d in tax) {
+                        if (tax.hasOwnProperty(d)) {
+                            for (var p in tax[d]) {
+                                if (tax[d].hasOwnProperty(p)) {
+                                    for (var c in tax[d][p]) {
+                                        if (tax[d][p].hasOwnProperty(c)) {
+                                            for (var o in tax[d][p][c]) {
+                                                if (tax[d][p][c].hasOwnProperty(o)) {
+                                                    for (var f in tax[d][p][c][o]) {
+                                                        if (tax[d][p][c][o].hasOwnProperty(f)) {
+                                                            for (var g in tax[d][p][c][o][f]) {
+                                                                if (tax[d][p][c][o][f].hasOwnProperty(g)) {
+                                                                    out.genus.push(g)
+                                                                }
+                                                            }
+                                                            out.family.push(f);
+                                                        }
+                                                    }
+                                                    out.order.push(o);
+                                                }
+                                            }
+                                            out.className.push(c);
+                                        }
+                                    }
+                                    out.phylum.push(p);
+                                }
+                            }
+                            out.domain.push(d);
+                        }
+                    }
+                    for (var i = 0; i < out.length; i++) {
+                        out[i].sort();
+                    }
+                    stm.DataStore.taxonomy = out;
+                    Retina.WidgetInstances.metagenome_search[1].display();
+                });
+            });
+        });
+    };
+
+    widget.updateTaxa = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var rankList = document.getElementById('advanced_taxonomy_rank');
+        var rank = rankList.options[rankList.selectedIndex].value;
+        if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
+            var taxaList = document.getElementById('advanced_taxonomy_name');
+            var taxaListHtml = "";
+            for (var i = 0; i < stm.DataStore.taxonomy[rank].length; i++) {
+                taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>" + stm.DataStore.taxonomy[rank][i] + "</option>";
+            }
+            taxaList.innerHTML = taxaListHtml;
+        }
+    };
+
     widget.addAnnotation = function(atype) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        var val = "";
+        if (atype == "function") {
+            val = document.getElementById('advanced_function_name').value;
+        } else if (atype == "taxonomy") {
+            var taxaList = document.getElementById('advanced_taxonomy_name');
+            val = taxaList.options[taxaList.selectedIndex].value;
+        }
         var item = {
             "key": atype,
             "name": atype,
-            "val": document.getElementById('advanced_'+atype+'_name').value
+            "val": val
         };
         widget.refineSearch('add', item);
     };
-    
+
     widget.refineSearch = function(action, item) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
 
@@ -901,7 +1000,7 @@
             stm.DataStore.search = {};
         }
 
-        var api_url = RetinaConfig.mgrast_api + '/search?';
+        var api_url = RetinaConfig.mgrast_api + '/search?public=yes&'; // also search public and private
         var query_str = "";
         if (widget.query) {
             var items = widget.query.split(/\s/);
@@ -917,17 +1016,17 @@
                 query_str += "=" + widget.parseSearchTerms(widget.advancedOptions[h]);
             }
         }
-        
+
         var get_after = "";
         if (more && (widget.lastitem != null)) {
             get_after = "&after=" + widget.lastitem;
         } else {
             stm.DataStore.search = {};
             widget.lastitem = null;
-        }        
-        
+        }
+
         var url = api_url + "direction=" + widget.sortDir + "&order=" + widget.sort + "&limit=" + (howmany || widget.limit) + get_after + query_str;
-        url += "&index=metagenome_index_20180705"; // this is a temp hack unitl database renamed
+        url += "&index=metagenome_index_20180705"; // this is a temp hack until database renamed
 
         jQuery.ajax({
             dataType: "json",
