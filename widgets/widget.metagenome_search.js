@@ -671,6 +671,10 @@
                     stm.DataStore.taxonomy = out;
         		    document.getElementById('data').innerHTML = 'loading functional data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
         		    JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+            			if (err) {
+            			    throw err; // or handle err
+            			}
+            			var zip = new JSZip();
                         zip.file("ontology.json").async("string").then(function (ont) {
                             ont = JSON.parse(ont);
                             var out = { "Subsystems": [], "KO": [] };
