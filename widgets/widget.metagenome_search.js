@@ -4,7 +4,7 @@
             title: "Metagenome Search Widget",
             name: "metagenome_search",
             author: "Tobias Paczian",
-            requires: []
+            requires: ["jszip.min.js"]
         }
     });
 
@@ -92,9 +92,6 @@
         }, {
             "name": "seq_method",
             "value": "sequencing method"
-        }, {
-            "name": "public",
-            "value": "public"
         }, {
             "name": "mixs_compliant",
             "value": "MiXS"
@@ -331,6 +328,13 @@
 
         document.getElementById("pageTitle").innerHTML = "search";
 
+        // get taxa data
+        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
+            widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
+            widget.loadTaxaData();
+            return;
+        }
+
         // set the output area
         // search field
         var html = "\
@@ -394,17 +398,44 @@
   </div>\
   <p>Add a taxonomy and / or function name to refine your search.</p>\
   <div class="control-group">\
+    <label class="control-label" for="advanced_taxonomy_rank">taxa&nbsp;rank</label>\
+    <div class="controls input-append">\
+      <select id="advanced_taxonomy_rank" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
+        <option disabled selected value> -- select a rank -- </option>\
+        <option value="domain">Domain</option>\
+        <option value="phylum">Phylum</option>\
+        <option value="className">Class</option>\
+        <option value="order">Order</option>\
+        <option value="family">Family</option>\
+        <option value="genus">Genus</option>\
+      </select>\
+    </div>\
+  </div>\
+  <div class="control-group">\
     <label class="control-label" for="advanced_taxonomy_name">taxonomy</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_taxonomy_name" style="width: 170px; margin-left: 35px;" placeholder="enter text">\
+      <input type="text" id="advanced_taxonomy_name" list="advanced_taxonomy_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select rank first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">add</button>\
+      <datalist id="advanced_taxonomy_list"></datalist>\
+      </select>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_function_hier">functional hierarchy</label>\
+    <div class="controls input-append">\
+      <select id="advanced_function_hier" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateFunc();">\
+        <option disabled selected value> -- select a hierarchy -- </option>\
+        <option value="Subsystems">Subsystems</option>\
+        <option value="KO">KEGG KO</option>\
+      </select>\
     </div>\
   </div>\
   <div class="control-group">\
     <label class="control-label" for="advanced_function_name">function</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_function_name" style="width: 170px; margin-left: 35px;" placeholder="enter text">\
+      <input type="text" id="advanced_function_name" list="advanced_function_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select hierarchy first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'function\');">add</button>\
+      <datalist id="advanced_function_list"></datalist>\
     </div>\
   </div>\
   <div id="refine_search_terms"></div>\
@@ -573,6 +604,165 @@
     /* 
        ADVANCED SEARCH
     */
+
+    widget.loadTaxaData = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
+            if (err) {
+                throw err; // or handle err
+            }
+            var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("taxonomy.json").async("string").then(function(tax) {
+                    tax = JSON.parse(tax);
+                    var out = {
+                        "domain": [],
+                        "phylum": [],
+                        "className": [],
+                        "order": [],
+                        "family": [],
+                        "genus": []
+                    };
+                    for (var d in tax) {
+                        if (tax.hasOwnProperty(d)) {
+                            for (var p in tax[d]) {
+                                if (tax[d].hasOwnProperty(p)) {
+                                    for (var c in tax[d][p]) {
+                                        if (tax[d][p].hasOwnProperty(c)) {
+                                            for (var o in tax[d][p][c]) {
+                                                if (tax[d][p][c].hasOwnProperty(o)) {
+                                                    for (var f in tax[d][p][c][o]) {
+                                                        if (tax[d][p][c][o].hasOwnProperty(f)) {
+                                                            for (var g in tax[d][p][c][o][f]) {
+                                                                if (tax[d][p][c][o][f].hasOwnProperty(g)) {
+                                                                    if (! (g.startsWith('unknown') || g.startsWith('unclassified'))) {
+                                                                        out.genus.push(g);
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (! (f.startsWith('unknown') || f.startsWith('unclassified'))) {
+                                                                out.family.push(f);
+                                                            }
+                                                        }
+                                                    }
+                                                    if (! (o.startsWith('unknown') || o.startsWith('unclassified'))) {
+                                                        out.order.push(o);
+                                                    }
+                                                }
+                                            }
+                                            if (! (c.startsWith('unknown') || c.startsWith('unclassified'))) {
+                                                out.className.push(c);
+                                            }
+                                        }
+                                    }
+                                    if (! (p.startsWith('unknown') || p.startsWith('unclassified'))) {
+                                        out.phylum.push(p);
+                                    }
+                                }
+                            }
+                            if (! (d.startsWith('unknown') || d.startsWith('unclassified'))) {
+                                out.domain.push(d);
+                            }
+                        }
+                    }
+                    for (var t in out) {
+                        console.log(t+" "+out[t].length);
+                        out[t] = widget.uniqueSortList(out[t]);
+                    }
+                    stm.DataStore.taxonomy = out;
+        		    document.getElementById('data').innerHTML = 'loading functional data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+        		    JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+            			if (err) {
+            			    throw err; // or handle err
+            			}
+            			var zip = new JSZip();
+                        zip.loadAsync(data).then(function(zip) {
+                            zip.file("ontology.json").async("string").then(function (ont) {
+                                ont = JSON.parse(ont);
+                                var out = { "Subsystems": [], "KO": [] };
+                                for (var o in ont) {
+                                    if ((o != "Subsystems") && (o != "KO")) {
+                                        continue;
+                                    }
+                                    for (var l1 in ont[o]) {
+            					        if (ont[o].hasOwnProperty(l1)) {
+                                            for (var l2 in ont[o][l1]) {
+                                                if (ont[o][l1].hasOwnProperty(l2)) {
+                                                    for (var l3 in ont[o][l1][l2]) {
+                                                        if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                            for (var func in ont[o][l1][l2][l3]) {
+                                                                if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
+                                                                    if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                                        out[o].push(func);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                for (var h in out) {
+                                    console.log(h+" "+out[h].length);
+                                    out[h] = widget.uniqueSortList(out[h]);
+                                }
+                                stm.DataStore.functions = out;
+                                Retina.WidgetInstances.metagenome_search[1].display();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    };
+    
+    widget.uniqueSortList = function(arr) {
+        var u = {}, a = [];
+        for (var i = 0; i < arr.length; i++) {
+            if(!u.hasOwnProperty(arr[i])) {
+                a.push(arr[i]);
+                u[arr[i]] = 1;
+            }
+        }
+        return a.sort();
+    };
+
+    widget.updateTaxa = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var rankList = document.getElementById('advanced_taxonomy_rank');
+        var rank = rankList.options[rankList.selectedIndex].value;
+        if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
+            var taxaList = document.getElementById('advanced_taxonomy_list');
+            var taxaListHtml = "";
+            for (var i = 0; i < stm.DataStore.taxonomy[rank].length; i++) {
+                taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>";
+            }
+            taxaList.innerHTML = taxaListHtml;
+            document.getElementById('advanced_taxonomy_name').value = "";
+            document.getElementById('advanced_taxonomy_name').placeholder = " -- enter text -- ";
+            document.getElementById('advanced_taxonomy_name').readOnly = false;
+        }
+    };
+    
+    widget.updateFunc = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var hierList = document.getElementById('advanced_function_hier');
+        var hier = hierList.options[hierList.selectedIndex].value;
+        if (stm.DataStore.functions.hasOwnProperty(hier)) {
+            var funcList = document.getElementById('advanced_function_list');
+            var funcListHtml = "";
+            for (var i = 0; i < stm.DataStore.functions[hier].length; i++) {
+                funcListHtml += "<option value='" + stm.DataStore.functions[[hier]][i] + "'>";
+            }
+            funcList.innerHTML = funcListHtml;
+            document.getElementById('advanced_function_name').value = "";
+            document.getElementById('advanced_function_name').placeholder = " -- enter text -- ";
+            document.getElementById('advanced_function_name').readOnly = false;
+        }
+    };
+
     widget.addAnnotation = function(atype) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
         var item = {
@@ -582,7 +772,7 @@
         };
         widget.refineSearch('add', item);
     };
-    
+
     widget.refineSearch = function(action, item) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
 
@@ -784,7 +974,7 @@
             "wgs": "shotgun metagenome",
             "mt": "metatranscriptome",
             "amplicon": "amplicon metagenome",
-            "metabarcode": "barcode"
+            "metabarcode": "metabarcode"
         };
 
         for (var i = 0; i < rows.length; i++) {
@@ -799,7 +989,7 @@
                 } else if (cell && fields[h] == "name") {
                     cell = "<div style='max-width: 300px;'><a href='?mgpage=overview&metagenome=" + (!data[rows[i][0]]["public"] ? Retina.idmap(data[rows[i][0]]["metagenome_id"]) : data[rows[i][0]]["metagenome_id"]) + "' rel='nofollow' target=_blank title='view'>" + data[rows[i][0]]["name"] + "</a><a href='?mgpage=download&metagenome=" + data[rows[i][0]]["metagenome_id"] + "' rel='nofollow' target=_blank title='download'><img src='Retina/images/cloud-download.png' style='width: 16px; margin-left: 10px; float: right;'></a></div>";
                 } else if (cell && fields[h] == "sequence_type") {
-                    cell = seqTypes[data[rows[i][0]]["sequence_type"]] || data[rows[i][0]];
+                    cell = seqTypes[data[rows[i][0]]["sequence_type"].toLowerCase()] || data[rows[i][0]];
                 }
                 if (!cell) {
                     cell = "-";
@@ -901,7 +1091,7 @@
             stm.DataStore.search = {};
         }
 
-        var api_url = RetinaConfig.mgrast_api + '/search?';
+        var api_url = RetinaConfig.mgrast_api + '/search?public=yes&'; // also search public and private
         var query_str = "";
         if (widget.query) {
             var items = widget.query.split(/\s/);
@@ -917,17 +1107,17 @@
                 query_str += "=" + widget.parseSearchTerms(widget.advancedOptions[h]);
             }
         }
-        
+
         var get_after = "";
         if (more && (widget.lastitem != null)) {
             get_after = "&after=" + widget.lastitem;
         } else {
             stm.DataStore.search = {};
             widget.lastitem = null;
-        }        
-        
+        }
+
         var url = api_url + "direction=" + widget.sortDir + "&order=" + widget.sort + "&limit=" + (howmany || widget.limit) + get_after + query_str;
-        url += "&index=metagenome_index_20180705"; // this is a temp hack unitl database renamed
+        url += "&index=metagenome_index_20180705"; // this is a temp hack until database renamed
 
         jQuery.ajax({
             dataType: "json",

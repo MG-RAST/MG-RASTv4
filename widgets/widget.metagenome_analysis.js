@@ -2455,7 +2455,7 @@
 
 	    var specialFilters = [ { "attribute": "sequence_type", "title": "sequence type", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "wgs", "title": "shotgun", "checked": false }, { "value": "amplicon", "title": "amplicon", "checked": false }, { "value": "Metabarcode", "title": "metabarcode", "checked": false }, { "value": "mt", "title": "metatranscriptome", "checked": false } ] }, { "attribute": "retry", "title": "reload<sup title='WARNING: the reload of a profile can take some time' style='cursor: help;'>[?]</sup>", "type": "checkbox", "isOption": true, "options": [ { "value": "1", "title": " ", "checked": false } ] } ];
 	    if (stm.user) {
-		specialFilters.push( { "attribute": "public", "title": "status", "type": "radio", "options": [ { "value": "all", "title": "all", "checked": true }, { "value": "1", "title": "public", "checked": false }, { "value": "0", "title": "private", "checked": false } ] } );
+		specialFilters.push( { "attribute": "public", "title": "status", "type": "radio", "options": [ { "value": "1", "title": "all", "checked": true }, { "value": "0", "title": "private", "checked": false } ] } );
 	    }
 
 	    widget.mgselect = Retina.Renderer.create("listselect", {

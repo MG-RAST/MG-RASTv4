@@ -245,7 +245,7 @@
         var temp = RetinaConfig.mgrast_api + "/search";
         var url = temp.replace('-ui', '');
         var authHeader = '';
-        var getpublic = 'true';
+        var getpublic = 'yes';
         if (stm.user && document.getElementById('useAuth').checked) {
             authHeader = '-H "Authorization: mgrast ' + stm.user.token + '"';
             getpublic = document.getElementById('public').options[document.getElementById('public').selectedIndex].value;
@@ -537,9 +537,6 @@
         }, {
             "name": "seq_method",
             "value": "sequencing method"
-        }, {
-            "name": "public",
-            "value": "public"
         }, {
             "name": "mixs_compliant",
             "value": "MiXS"
