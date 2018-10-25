@@ -4,7 +4,7 @@
             title: "Metagenome Search Widget",
             name: "metagenome_search",
             author: "Tobias Paczian",
-            requires: []
+            requires: ["jszip.min.js"]
         }
     });
 
@@ -400,8 +400,8 @@
   <div class="control-group">\
     <label class="control-label" for="advanced_taxonomy_rank">taxa rank</label>\
     <div class="controls input-append">\
-      <select id="advanced_taxonomy_rank" style="width: 210px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
-        <option disabled selected value>- select a rank -</option>\
+      <select id="advanced_taxonomy_rank" style="width: 215px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
+        <option disabled selected value> -- select a rank -- </option>\
         <option value="domain">Domain</option>\
         <option value="phylum">Phylum</option>\
         <option value="className">Class</option>\
@@ -414,15 +414,15 @@
   <div class="control-group">\
     <label class="control-label" for="advanced_taxonomy_name">taxa name</label>\
     <div class="controls input-append">\
-      <select id="advanced_taxonomy_name" style="width: 210px;" onchange="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">\
-        <option disabled selected value>- select rank first -</option>\
+      <select id="advanced_taxonomy_name" style="width: 215px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'taxonomy\');">\
+        <option disabled selected value> -- select rank first -- </option>\
       </select>\
     </div>\
   </div>\
   <div class="control-group">\
     <label class="control-label" for="advanced_function_name">function</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_function_name" style="width: 170px; margin-left: 35px;" placeholder="enter text">\
+      <input type="text" id="advanced_function_name" style="width: 180px; margin-left: 30px;" placeholder="enter text">\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'function\');">add</button>\
     </div>\
   </div>\
@@ -594,7 +594,6 @@
     */
 
     widget.loadTaxaData = function() {
-        var widget = Retina.WidgetInstances.metagenome_search[1];
         JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
             if (err) {
                 throw err; // or handle err
@@ -623,7 +622,7 @@
                                                         if (tax[d][p][c][o].hasOwnProperty(f)) {
                                                             for (var g in tax[d][p][c][o][f]) {
                                                                 if (tax[d][p][c][o][f].hasOwnProperty(g)) {
-                                                                    out.genus.push(g)
+                                                                    out.genus.push(g);
                                                                 }
                                                             }
                                                             out.family.push(f);
@@ -657,7 +656,7 @@
         var rank = rankList.options[rankList.selectedIndex].value;
         if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
             var taxaList = document.getElementById('advanced_taxonomy_name');
-            var taxaListHtml = "";
+            var taxaListHtml = "<option disabled selected value> -- select a name -- </option>";
             for (var i = 0; i < stm.DataStore.taxonomy[rank].length; i++) {
                 taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>" + stm.DataStore.taxonomy[rank][i] + "</option>";
             }
