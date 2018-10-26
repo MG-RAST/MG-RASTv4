@@ -398,7 +398,7 @@
   </div>\
   <p>Add a taxonomy and / or function name to refine your search.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_rank">taxa&nbsp;rank</label>\
+    <label class="control-label" for="advanced_taxonomy_rank">taxonomic rank</label>\
     <div class="controls input-append">\
       <select id="advanced_taxonomy_rank" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
         <option disabled selected value> -- select a rank -- </option>\
