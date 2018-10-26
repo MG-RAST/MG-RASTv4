@@ -386,19 +386,19 @@
   <div class="control-group">\
     <label class="control-label" for="advanced_search_key">field</label>\
     <div class="controls">\
-      <select id="advanced_search_key" style="width: 270px;"></select>\
+      <select id="advanced_search_key" style="width: 270px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateField();"></select>\
     </div>\
   </div>\
   <div class="control-group">\
     <label class="control-label" for="advanced_search_value">term</label>\
     <div class="controls input-append">\
-      <input type="text" id="advanced_search_value" placeholder="enter searchterm">\
+      <input type="text" id="advanced_search_value" placeholder=" -- select field first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].refineSearch(\'add\');">add</button>\
     </div>\
   </div>\
   <p>Add a taxonomy and / or function name to refine your search.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_rank">taxa&nbsp;rank</label>\
+    <label class="control-label" for="advanced_taxonomy_rank">taxonomic rank</label>\
     <div class="controls input-append">\
       <select id="advanced_taxonomy_rank" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
         <option disabled selected value> -- select a rank -- </option>\
@@ -556,7 +556,7 @@
             }
         });
 
-        var keyselect_html = "";
+        var keyselect_html = "<option disabled selected value> -- select a field -- </option>";
         for (var i = 0; i < keylist.length; i++) {
             keyselect_html += "<optgroup label='" + keylist[i].name + "'>"
             for (var h = 0; h < keylist[i].items.length; h++) {
@@ -728,6 +728,12 @@
         }
         return a.sort();
     };
+    
+    widget.updateField = function() {
+        document.getElementById('advanced_search_value').value = "";
+        document.getElementById('advanced_search_value').placeholder = " -- enter text -- ";
+        document.getElementById('advanced_search_value').readOnly = false;
+    }
 
     widget.updateTaxa = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
