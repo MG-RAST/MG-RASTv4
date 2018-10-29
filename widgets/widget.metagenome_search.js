@@ -740,6 +740,7 @@
         var widget = Retina.WidgetInstances.metagenome_search[1];
         if (!stm.DataStore.hasOwnProperty('taxonomy')) {
             widget.loadTaxaData();
+            return;
         }
         var rankList = document.getElementById('advanced_taxonomy_rank');
         var rank = rankList.options[rankList.selectedIndex].value;
@@ -760,6 +761,7 @@
         var widget = Retina.WidgetInstances.metagenome_search[1];
         if (!stm.DataStore.hasOwnProperty('functions')) {
             widget.loadFuncData();
+            return;
         }
         var hierList = document.getElementById('advanced_function_hier');
         var hier = hierList.options[hierList.selectedIndex].value;

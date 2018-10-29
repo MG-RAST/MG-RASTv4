@@ -295,6 +295,7 @@
         var widget = this;
         if (!stm.DataStore.hasOwnProperty('taxonomy')) {
             widget.loadTaxaData();
+            return;
         }
         var rankList = document.getElementById('taxarank');
         var rank = rankList.options[rankList.selectedIndex].value;
@@ -315,6 +316,7 @@
         var widget = this;
         if (!stm.DataStore.hasOwnProperty('functions')) {
             widget.loadFuncData();
+            return;
         }
         var sourceList = document.getElementById('funcsource');
         var source = sourceList.options[sourceList.selectedIndex].value;
