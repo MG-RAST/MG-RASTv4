@@ -178,17 +178,17 @@
         }
 
         html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results.</p>');
-        
+
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
         html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
-            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">'
-            + widget.fieldOptions(false) +
+            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">' +
+            widget.fieldOptions(false) +
             '</select>\
             <input type="text" id="filtertext" placeholder=" -- select field first -- " readonly>\
             <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button>\
         </div>');
-        
+
         // toggle public
         if (stm.user) {
             html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
@@ -247,14 +247,14 @@
             <option value="10">10</option>\
         </select></div>');
         html.push('</div>');
-        
+
         // options
         html.push('<div style="margin-top: 25px;"><h4>options</h4>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
         html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions(true) + '</select></div>');
         html.push('</div>');
-        
+
         html.push('<h4 style="margin-top: 25px;">HTML query</h4><div style="margin-top: 25px;"><pre id="searchtext"></pre></div>');
         html.push('<h4 style="margin-top: 25px;">cURL query</h4><div style="margin-top: 25px; margin-bottom: 25px;"><pre id="curltext"></pre></div>');
         html.push('<div style="text-align: center; margin-top: 25px; clear: both;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
@@ -282,13 +282,13 @@
 
         widget.updateTexts();
     };
-    
+
     widget.updateField = function() {
         document.getElementById('filtertext').value = "";
         document.getElementById('filtertext').placeholder = " -- enter text -- ";
         document.getElementById('filtertext').readOnly = false;
     }
-    
+
     widget.updateTaxa = function() {
         var widget = this;
         if (!stm.DataStore.hasOwnProperty('taxonomy')) {
@@ -309,7 +309,7 @@
             document.getElementById('taxaname').readOnly = false;
         }
     };
-    
+
     widget.updateFunc = function() {
         var widget = this;
         if (!stm.DataStore.hasOwnProperty('functions')) {
@@ -345,8 +345,10 @@
         var limit = document.getElementById('limit').value;
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
-        
-        var queries = [['index', 'metagenome_index_20180705']]; // this is a temp hack unitl database renamed
+
+        var queries = [
+            ['index', 'metagenome_index_20180705']
+        ]; // this is a temp hack unitl database renamed
         var taxaname = document.getElementById('taxaname').value;
         if (taxaname != '') {
             queries.push(['taxonomy', taxaname]);
@@ -365,7 +367,7 @@
                 queries.push(['func_per', funcper]);
             }
         }
-        
+
         widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction + '&public=' + getpublic;
         widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '"' + ' -F "public=' + getpublic + '" ';
 
@@ -406,7 +408,7 @@
                     if (err_msg.indexOf('search_phase_execution_exception') != -1) {
                         msg += ", your query syntax was invalid."
                     } else {
-                        msg += " due to the following error: "+err_msg;
+                        msg += " due to the following error: " + err_msg;
                     }
                 } else {
                     msg += " due to a server error.";
@@ -447,7 +449,7 @@
                 }
             }
         }
-        
+
         if (ex.hasOwnProperty('taxaname')) {
             var taxaname = document.getElementById('taxaname');
             taxaname.value = ex.taxaname;
@@ -493,7 +495,7 @@
         if (document.getElementById('filtertext').value == "") {
             return;
         }
-        
+
         var widget = this;
         widget.filters.push({
             "field": document.getElementById('filter').options[document.getElementById('filter').selectedIndex].value,
@@ -525,13 +527,13 @@
 
         widget.updateTexts();
     };
-    
+
     widget.clearTaxonomy = function() {
         document.getElementById('taxaname').value = '';
         document.getElementById('taxaper').selectedIndex = 0;
         document.getElementById('taxarank').selectedIndex = 0;
     };
-    
+
     widget.clearFunction = function() {
         document.getElementById('funcname').value = '';
         document.getElementById('funcper').selectedIndex = 0;
@@ -553,23 +555,24 @@
         }
         return retval.join('');
     };
-    
+
     widget.sortObjByKey = function(value) {
-      return (typeof value === 'object') ?
-        (Array.isArray(value) ?
-          value.map(sortObjByKey) :
-          Object.keys(value).sort().reverse().reduce(
-            (o, key) => {
-              const v = value[key];
-              o[key] = sortObjByKey(v);
-              return o;
-            }, {})
-        ) :
-        value;
+        var widget = this;
+        return (typeof value === 'object') ?
+            (Array.isArray(value) ?
+                value.map(sortObjByKey) :
+                Object.keys(value).sort().reverse().reduce(
+                    (o, key) => {
+                        const v = value[key];
+                        o[key] = widget.sortObjByKey(v);
+                        return o;
+                    }, {})
+            ) :
+            value;
     };
-    
+
     /// DATA LOAD
-    
+
     widget.loadTaxaData = function() {
         var widget = this;
         document.getElementById('taxalabel').innerHTML = 'taxonomy loading ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
@@ -601,38 +604,38 @@
                                                         if (tax[d][p][c][o].hasOwnProperty(f)) {
                                                             for (var g in tax[d][p][c][o][f]) {
                                                                 if (tax[d][p][c][o][f].hasOwnProperty(g)) {
-                                                                    if (! (g.startsWith('unknown') || g.startsWith('unclassified'))) {
+                                                                    if (!(g.startsWith('unknown') || g.startsWith('unclassified'))) {
                                                                         out.genus.push(g);
                                                                     }
                                                                 }
                                                             }
-                                                            if (! (f.startsWith('unknown') || f.startsWith('unclassified'))) {
+                                                            if (!(f.startsWith('unknown') || f.startsWith('unclassified'))) {
                                                                 out.family.push(f);
                                                             }
                                                         }
                                                     }
-                                                    if (! (o.startsWith('unknown') || o.startsWith('unclassified'))) {
+                                                    if (!(o.startsWith('unknown') || o.startsWith('unclassified'))) {
                                                         out.order.push(o);
                                                     }
                                                 }
                                             }
-                                            if (! (c.startsWith('unknown') || c.startsWith('unclassified'))) {
+                                            if (!(c.startsWith('unknown') || c.startsWith('unclassified'))) {
                                                 out.className.push(c);
                                             }
                                         }
                                     }
-                                    if (! (p.startsWith('unknown') || p.startsWith('unclassified'))) {
+                                    if (!(p.startsWith('unknown') || p.startsWith('unclassified'))) {
                                         out.phylum.push(p);
                                     }
                                 }
                             }
-                            if (! (d.startsWith('unknown') || d.startsWith('unclassified'))) {
+                            if (!(d.startsWith('unknown') || d.startsWith('unclassified'))) {
                                 out.domain.push(d);
                             }
                         }
                     }
                     for (var t in out) {
-                        console.log(t+" "+out[t].length);
+                        console.log(t + " " + out[t].length);
                         out[t] = widget.uniqueSortList(out[t]);
                     }
                     stm.DataStore.taxonomy = out;
@@ -642,26 +645,29 @@
             });
         });
     };
-    
+
     widget.loadFuncData = function() {
-            var widget = this
-        
-            document.getElementById('funclabel').innerHTML = 'function loading ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
-            JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
-			if (err) {
-			    throw err; // or handle err
-			}
-			var zip = new JSZip();
+        var widget = this
+
+        document.getElementById('funclabel').innerHTML = 'function loading ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+        JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+            if (err) {
+                throw err; // or handle err
+            }
+            var zip = new JSZip();
             zip.loadAsync(data).then(function(zip) {
-                zip.file("ontology.json").async("string").then(function (ont) {
+                zip.file("ontology.json").async("string").then(function(ont) {
                     ont = JSON.parse(ont);
-                    var out = { "Subsystems": [], "KO": [] };
+                    var out = {
+                        "Subsystems": [],
+                        "KO": []
+                    };
                     for (var o in ont) {
                         if ((o != "Subsystems") && (o != "KO")) {
                             continue;
                         }
                         for (var l1 in ont[o]) {
-					        if (ont[o].hasOwnProperty(l1)) {
+                            if (ont[o].hasOwnProperty(l1)) {
                                 for (var l2 in ont[o][l1]) {
                                     if (ont[o][l1].hasOwnProperty(l2)) {
                                         for (var l3 in ont[o][l1][l2]) {
@@ -681,7 +687,7 @@
                         }
                     }
                     for (var h in out) {
-                        console.log(h+" "+out[h].length);
+                        console.log(h + " " + out[h].length);
                         out[h] = widget.uniqueSortList(out[h]);
                     }
                     stm.DataStore.functions = out;
@@ -691,11 +697,12 @@
             });
         });
     };
-    
+
     widget.uniqueSortList = function(arr) {
-        var u = {}, a = [];
+        var u = {},
+            a = [];
         for (var i = 0; i < arr.length; i++) {
-            if(!u.hasOwnProperty(arr[i])) {
+            if (!u.hasOwnProperty(arr[i])) {
                 a.push(arr[i]);
                 u[arr[i]] = 1;
             }
