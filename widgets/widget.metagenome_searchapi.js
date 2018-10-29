@@ -245,7 +245,7 @@
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
         html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
-            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();>'
+            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">'
             + widget.fieldOptions(false) +
             '</select>\
             <input type="text" id="filtertext" placeholder=" -- select field first -- " readonly>\
@@ -521,6 +521,7 @@
     widget.clearFunction = function() {
         document.getElementById('funcname').value = '';
         document.getElementById('funcper').selectedIndex = 0;
+        document.getElementById('funcsource').selectedIndex = 0;
     };
 
     widget.fieldOptions = function(isorder) {
