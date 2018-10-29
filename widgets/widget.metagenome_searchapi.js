@@ -191,21 +191,67 @@
         html.push('</div>');
 
         // taxonomy
-        html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="taxaname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 215px;"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="taxaper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('taxonomy') + '</select></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">level</span><select id="taxalevel" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('levels') + '</select></div>');
+        html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4><div id="taxaload"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank</span>\
+        <select id="taxarank" style="width: 100px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
+            <option disabled selected value> -- select a rank -- </option>\
+            <option value="domain">Domain</option>\
+            <option value="phylum">Phylum</option>\
+            <option value="className">Class</option>\
+            <option value="order">Order</option>\
+            <option value="family">Family</option>\
+            <option value="genus">Genus</option>\
+        </select></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span>\
+            <input type="text" id="taxaname" list="taxalist" style="width: 215px; margin-right: 20px;" placeholder=" -- select rank first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">add</button>\
+            <datalist id="taxalist"></datalist>\
+        </div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span>\
+        <select id="taxaper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">\
+            <option value="none">none</option>\
+            <option value="1">1</option>\
+            <option value="5">5</option>\
+            <option value="10">10</option>\
+            <option value="15">15</option>\
+            <option value="20">20</option>\
+            <option value="25">25</option>\
+        </select></div>');
         html.push('</div>');
-        
+
         // function
-        html.push('<div style="margin-top: 25px;"><h4>function</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="funcname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 215px;"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="funcper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('function') + '</select></div>');
+        html.push('<div style="margin-top: 25px;"><h4>function</h4><div id="funcload"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">source</span>\
+        <select id="funcsource" style="width: 100px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateFunc();">\
+            <option disabled selected value> -- select a source -- </option>\
+            <option value="Subsystems">Subsystems</option>\
+            <option value="KO">KEGG KO</option>\
+        </select></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span>\
+            <input type="text" id="funcname" list="funclist" style="width: 215px; margin-right: 20px;" placeholder=" -- select source first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">add</button>\
+            <datalist id="funclist"></datalist>\
+        </div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span>\
+        <select id="funcper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">\
+            <option value="none">none</option>\
+            <option value="1">1</option>\
+            <option value="3">3</option>\
+            <option value="5">5</option>\
+            <option value="10">10</option>\
+        </select></div>');
         html.push('</div>');
 
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
-        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
+        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
+            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();>'
+            + widget.fieldOptions(false) +
+            '</select>\
+            <input type="text" id="filtertext" placeholder=" -- select field first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button>\
+        </div>');
+        
         // toggle public
         if (stm.user) {
             html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
@@ -238,6 +284,52 @@
 
         widget.updateTexts();
     };
+    
+    widget.updateField = function() {
+        document.getElementById('filtertext').value = "";
+        document.getElementById('filtertext').placeholder = " -- enter text -- ";
+        document.getElementById('filtertext').readOnly = false;
+    }
+    
+    widget.updateTaxa = function() {
+        var widget = this;
+        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
+            widget.loadTaxaData();
+        }
+        var rankList = document.getElementById('taxarank');
+        var rank = rankList.options[rankList.selectedIndex].value;
+        if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
+            var taxaList = document.getElementById('taxalist');
+            var taxaListHtml = "";
+            for (var i = 0; i < stm.DataStore.taxonomy[rank].length; i++) {
+                taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>";
+            }
+            taxaList.innerHTML = taxaListHtml;
+            document.getElementById('taxaname').value = "";
+            document.getElementById('taxaname').placeholder = " -- enter text -- ";
+            document.getElementById('taxaname').readOnly = false;
+        }
+    };
+    
+    widget.updateFunc = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        if (!stm.DataStore.hasOwnProperty('functions')) {
+            widget.loadFuncData();
+        }
+        var sourceList = document.getElementById('funcsource');
+        var source = hierList.options[sourceList.selectedIndex].value;
+        if (stm.DataStore.functions.hasOwnProperty(hier)) {
+            var funcList = document.getElementById('funclist');
+            var funcListHtml = "";
+            for (var i = 0; i < stm.DataStore.functions[source].length; i++) {
+                funcListHtml += "<option value='" + stm.DataStore.functions[[source]][i] + "'>";
+            }
+            funcList.innerHTML = funcListHtml;
+            document.getElementById('funcname').value = "";
+            document.getElementById('funcname').placeholder = " -- enter text -- ";
+            document.getElementById('funcname').readOnly = false;
+        }
+    };
 
     widget.updateTexts = function() {
         var widget = this;
@@ -259,10 +351,10 @@
         if (taxaname != '') {
             queries.push(['taxonomy', taxaname]);
             var taxaper = document.getElementById('taxaper').options[document.getElementById('taxaper').selectedIndex].value;
-            var taxalevel = document.getElementById('taxalevel').options[document.getElementById('taxalevel').selectedIndex].value;
+            var taxarank = document.getElementById('taxarank').options[document.getElementById('taxarank').selectedIndex].value;
             if (taxaper != 'none') {
                 queries.push(['taxa_per', taxaper]);
-                queries.push(['taxa_level', taxalevel]);
+                queries.push(['taxa_level', taxarank]);
             }
         }
         var funcname = document.getElementById('funcname').value;
@@ -354,10 +446,10 @@
                     break;
                 }
             }
-            var taxalevel = document.getElementById('taxalevel');
-            for (var i = 0; i < taxalevel.options.length; i++) {
-                if (taxalevel.options[i].value == ex.taxalevel) {
-                    taxalevel.selectedIndex = i;
+            var taxarank = document.getElementById('taxarank');
+            for (var i = 0; i < taxarank.options.length; i++) {
+                if (taxarank.options[i].value == ex.taxarank) {
+                    taxarank.selectedIndex = i;
                     break;
                 }
             }
@@ -384,6 +476,10 @@
     };
 
     widget.addFilter = function() {
+        if (document.getElementById('filtertext').value == "") {
+            return;
+        }
+        
         var widget = this;
         widget.filters.push({
             "field": document.getElementById('filter').options[document.getElementById('filter').selectedIndex].value,
@@ -406,6 +502,7 @@
             html.push('<div style="padding: 5px; border: 1px solid gray; border-radius: 5px; cursor: pointer; margin-bottom: 3px; margin-right: 5px; float: left;" title="click to remove" onclick="Retina.WidgetInstances.metagenome_searchapi[1].removeFilter(' + i + ');">' + f.field + ' - ' + f.text + ' &times;</div>');
         }
         document.getElementById('activeFilters').innerHTML = html.join('');
+        document.getElementById('filtertext').innerHTML = ""; // cleanup
 
         widget.updateTexts();
     };
@@ -413,24 +510,12 @@
     widget.clearTaxonomy = function() {
         document.getElementById('taxaname').value = '';
         document.getElementById('taxaper').selectedIndex = 0;
-        document.getElementById('taxalevel').selectedIndex = 0;
+        document.getElementById('taxarank').selectedIndex = 0;
     };
     
     widget.clearFunction = function() {
         document.getElementById('funcname').value = '';
         document.getElementById('funcper').selectedIndex = 0;
-    };
-    
-    widget.annotationOptions = function(type) {
-        var widget = this;
-        var retval = [];
-        if (type != 'levels') {
-            retval.push('<option value="none">none</option>');
-        }
-        for (var i = 0; i < widget.annotationInfo[type].length; i++) {
-            retval.push('<option value="' + widget.annotationInfo[type][i] + '">' + widget.annotationInfo[type][i] + '</option>');
-        }
-        return retval.join('');
     };
 
     widget.fieldOptions = function(isorder) {
@@ -449,29 +534,138 @@
         return retval.join('');
     };
     
-    widget.annotationInfo = {
-        "levels" : [
-            "domain",
-            "phylum",
-            "class",
-            "order",
-            "family",
-            "genus"
-        ],
-        "taxonomy" : [
-	        "1",
-	        "5",
-	        "10",
-	        "15",
-	        "20",
-	        "25"
-        ],
-        "function" : [
-            "1",
-            "3",
-	        "5",
-	        "10"
-        ]
+    /// DATA LOAD
+    
+    widget.loadTaxaData = function() {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        document.getElementById('taxaload').innerHTML = 'loading taxonomy ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+        JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
+            if (err) {
+                throw err; // or handle err
+            }
+            var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("taxonomy.json").async("string").then(function(tax) {
+                    tax = JSON.parse(tax);
+                    var out = {
+                        "domain": [],
+                        "phylum": [],
+                        "className": [],
+                        "order": [],
+                        "family": [],
+                        "genus": []
+                    };
+                    for (var d in tax) {
+                        if (tax.hasOwnProperty(d)) {
+                            for (var p in tax[d]) {
+                                if (tax[d].hasOwnProperty(p)) {
+                                    for (var c in tax[d][p]) {
+                                        if (tax[d][p].hasOwnProperty(c)) {
+                                            for (var o in tax[d][p][c]) {
+                                                if (tax[d][p][c].hasOwnProperty(o)) {
+                                                    for (var f in tax[d][p][c][o]) {
+                                                        if (tax[d][p][c][o].hasOwnProperty(f)) {
+                                                            for (var g in tax[d][p][c][o][f]) {
+                                                                if (tax[d][p][c][o][f].hasOwnProperty(g)) {
+                                                                    if (! (g.startsWith('unknown') || g.startsWith('unclassified'))) {
+                                                                        out.genus.push(g);
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (! (f.startsWith('unknown') || f.startsWith('unclassified'))) {
+                                                                out.family.push(f);
+                                                            }
+                                                        }
+                                                    }
+                                                    if (! (o.startsWith('unknown') || o.startsWith('unclassified'))) {
+                                                        out.order.push(o);
+                                                    }
+                                                }
+                                            }
+                                            if (! (c.startsWith('unknown') || c.startsWith('unclassified'))) {
+                                                out.className.push(c);
+                                            }
+                                        }
+                                    }
+                                    if (! (p.startsWith('unknown') || p.startsWith('unclassified'))) {
+                                        out.phylum.push(p);
+                                    }
+                                }
+                            }
+                            if (! (d.startsWith('unknown') || d.startsWith('unclassified'))) {
+                                out.domain.push(d);
+                            }
+                        }
+                    }
+                    for (var t in out) {
+                        console.log(t+" "+out[t].length);
+                        out[t] = widget.uniqueSortList(out[t]);
+                    }
+                    stm.DataStore.taxonomy = out;
+                    document.getElementById('taxaload').innerHTML = "";
+                    widget.updateTaxa();
+                });
+            });
+        });
+    };
+    
+    widget.loadFuncData = function() {
+            var widget = Retina.WidgetInstances.metagenome_search[1];
+            document.getElementById('funcload').innerHTML = 'loading functions ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+            JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+			if (err) {
+			    throw err; // or handle err
+			}
+			var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("ontology.json").async("string").then(function (ont) {
+                    ont = JSON.parse(ont);
+                    var out = { "Subsystems": [], "KO": [] };
+                    for (var o in ont) {
+                        if ((o != "Subsystems") && (o != "KO")) {
+                            continue;
+                        }
+                        for (var l1 in ont[o]) {
+					        if (ont[o].hasOwnProperty(l1)) {
+                                for (var l2 in ont[o][l1]) {
+                                    if (ont[o][l1].hasOwnProperty(l2)) {
+                                        for (var l3 in ont[o][l1][l2]) {
+                                            if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                for (var func in ont[o][l1][l2][l3]) {
+                                                    if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
+                                                        if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                            out[o].push(func);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (var h in out) {
+                        console.log(h+" "+out[h].length);
+                        out[h] = widget.uniqueSortList(out[h]);
+                    }
+                    stm.DataStore.functions = out;
+                    document.getElementById('funcload').innerHTML = "";
+                    widget.updateFunc();
+                });
+            });
+        });
+    };
+    
+    widget.uniqueSortList = function(arr) {
+        var u = {}, a = [];
+        for (var i = 0; i < arr.length; i++) {
+            if(!u.hasOwnProperty(arr[i])) {
+                a.push(arr[i]);
+                u[arr[i]] = 1;
+            }
+        }
+        return a.sort();
     };
 
     widget.keylist = [{

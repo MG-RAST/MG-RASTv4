@@ -799,6 +799,10 @@
             var skey = item ? item.key : skeyList.options[skeyList.selectedIndex].value;
             var sname = item ? item.name : skeyList.options[skeyList.selectedIndex].text;
             var sval = item ? item.val : document.getElementById('advanced_search_value').value;
+            // skip empty value
+            if (sval == "") {
+                return;
+            }
 
             // check if we already have a filter for this key
             if (widget.advancedOptions.hasOwnProperty(skey)) {
