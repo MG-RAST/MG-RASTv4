@@ -556,19 +556,21 @@
         return retval.join('');
     };
 
-    widget.sortObjByKey = function(value) {
-        var widget = this;
-        return (typeof value === 'object') ?
-            (Array.isArray(value) ?
-                value.map(widget.sortObjByKey) :
-                Object.keys(value).sort().reverse().reduce(
-                    (o, key) => {
-                        const v = value[key];
-                        o[key] = widget.sortObjByKey(v);
-                        return o;
-                    }, {})
-            ) :
-            value;
+    widget.sortObjByKey = function(obj) {
+        keys = [];
+        if (obj) {
+            for (var key in obj) {
+                keys.push(key);
+            }
+        }
+        keys.sort();
+        var tObj = {};
+        var key;
+        for (var index in keys) {
+            key = keys[index];
+            tObj[key] = obj[key];
+        }
+        return tObj;
     };
 
     /// DATA LOAD
