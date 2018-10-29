@@ -848,6 +848,12 @@
         } else if (action == "clear") {
             widget.advancedOptions = {};
             target.innerHTML = "";
+            document.getElementById('advanced_search_key').selectedIndex = 0;
+            document.getElementById('advanced_search_value').value = "";
+            document.getElementById('advanced_taxonomy_rank').selectedIndex = 0;
+            document.getElementById('advanced_taxonomy_name').value = "";
+            document.getElementById('advanced_function_hier').selectedIndex = 0;
+            document.getElementById('advanced_function_name').value = "";
         } else if (action == "restore" && item) {
             widget.advancedOptions = item.advancedOptions;
             target.innerHTML = "";
@@ -1153,9 +1159,20 @@
                 document.getElementById('result').innerHTML = widget.resultTable(stm.DataStore.search, data.total_count);
                 document.getElementById('opaq').style.display = 'none';
             },
-            error: function() {
+            error: function(xhr, error) {
                 var widget = Retina.WidgetInstances.metagenome_search[1];
-                widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error accessing the database.</div>";
+                var msg = "Your search could not be completed";
+                if (xhr.responseJSON && xhr.responseJSON.hasOwnProperty('ERROR')) {
+                    var err_msg = xhr.responseJSON['ERROR'];
+                    if (err_msg.indexOf('search_phase_execution_exception') != -1) {
+                        msg += ", your query syntax was invalid."
+                    } else {
+                        msg += " due to the following error: "+err_msg;
+                    }
+                } else {
+                    msg += " due to a server error.";
+                }
+                document.getElementById('result').innerHTML = '<div class="alert alert-error" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">'+msg+'</div>';
             }
         });
         return;
