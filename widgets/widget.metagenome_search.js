@@ -313,6 +313,7 @@
             "value": "prefix length"
         }]
     }];
+    widget.loading = '<div id="data">loading data ... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 
     widget.display = function(params) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
@@ -325,15 +326,7 @@
         var sidebar = widget.sidebar;
 
         jQuery.extend(widget, params);
-
         document.getElementById("pageTitle").innerHTML = "search";
-
-        // get taxa data
-        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
-            widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
-            widget.loadTaxaData();
-            return;
-        }
 
         // set the output area
         // search field
@@ -398,7 +391,7 @@
   </div>\
   <p>Add a taxonomy and / or function name to refine your search.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_rank">taxonomic rank</label>\
+    <label class="control-label" for="advanced_taxonomy_rank" id="advanced_taxonomy_label">taxonomic rank</label>\
     <div class="controls input-append">\
       <select id="advanced_taxonomy_rank" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
         <option disabled selected value> -- select a rank -- </option>\
@@ -421,7 +414,7 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_function_hier">functional hierarchy</label>\
+    <label class="control-label" for="advanced_function_hier" id="advanced_function_label">functional hierarchy</label>\
     <div class="controls input-append">\
       <select id="advanced_function_hier" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateFunc();">\
         <option disabled selected value> -- select a hierarchy -- </option>\
@@ -607,6 +600,7 @@
 
     widget.loadTaxaData = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        document.getElementById('advanced_taxonomy_label').innerHTML = widget.loading;
         JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
             if (err) {
                 throw err; // or handle err
@@ -670,33 +664,38 @@
                         out[t] = widget.uniqueSortList(out[t]);
                     }
                     stm.DataStore.taxonomy = out;
-        		    document.getElementById('data').innerHTML = 'loading functional data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
-        		    JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
-            			if (err) {
-            			    throw err; // or handle err
-            			}
-            			var zip = new JSZip();
-                        zip.loadAsync(data).then(function(zip) {
-                            zip.file("ontology.json").async("string").then(function (ont) {
-                                ont = JSON.parse(ont);
-                                var out = { "Subsystems": [], "KO": [] };
-                                for (var o in ont) {
-                                    if ((o != "Subsystems") && (o != "KO")) {
-                                        continue;
-                                    }
-                                    for (var l1 in ont[o]) {
-            					        if (ont[o].hasOwnProperty(l1)) {
-                                            for (var l2 in ont[o][l1]) {
-                                                if (ont[o][l1].hasOwnProperty(l2)) {
-                                                    for (var l3 in ont[o][l1][l2]) {
-                                                        if (ont[o][l1][l2].hasOwnProperty(l3)) {
-                                                            for (var func in ont[o][l1][l2][l3]) {
-                                                                if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
-                                                                    if (func.toLowerCase().indexOf('hypothetical') == -1) {
-                                                                        out[o].push(func);
-                                                                    }
-                                                                }
-                                                            }
+                    document.getElementById('advanced_taxonomy_label').innerHTML = "taxonomic rank";
+                });
+            });
+        });
+    };
+    
+    widget.loadFuncData = function() {
+            var widget = Retina.WidgetInstances.metagenome_search[1];
+            document.getElementById('advanced_function_label').innerHTML = widget.loading;
+            JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+			if (err) {
+			    throw err; // or handle err
+			}
+			var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("ontology.json").async("string").then(function (ont) {
+                    ont = JSON.parse(ont);
+                    var out = { "Subsystems": [], "KO": [] };
+                    for (var o in ont) {
+                        if ((o != "Subsystems") && (o != "KO")) {
+                            continue;
+                        }
+                        for (var l1 in ont[o]) {
+					        if (ont[o].hasOwnProperty(l1)) {
+                                for (var l2 in ont[o][l1]) {
+                                    if (ont[o][l1].hasOwnProperty(l2)) {
+                                        for (var l3 in ont[o][l1][l2]) {
+                                            if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                for (var func in ont[o][l1][l2][l3]) {
+                                                    if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
+                                                        if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                            out[o].push(func);
                                                         }
                                                     }
                                                 }
@@ -704,15 +703,15 @@
                                         }
                                     }
                                 }
-                                for (var h in out) {
-                                    console.log(h+" "+out[h].length);
-                                    out[h] = widget.uniqueSortList(out[h]);
-                                }
-                                stm.DataStore.functions = out;
-                                Retina.WidgetInstances.metagenome_search[1].display();
-                            });
-                        });
-                    });
+                            }
+                        }
+                    }
+                    for (var h in out) {
+                        console.log(h+" "+out[h].length);
+                        out[h] = widget.uniqueSortList(out[h]);
+                    }
+                    stm.DataStore.functions = out;
+                    document.getElementById('advanced_function_label').innerHTML = "functional hierarchy";
                 });
             });
         });
@@ -737,6 +736,9 @@
 
     widget.updateTaxa = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
+            widget.loadTaxaData();
+        }
         var rankList = document.getElementById('advanced_taxonomy_rank');
         var rank = rankList.options[rankList.selectedIndex].value;
         if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
@@ -754,6 +756,9 @@
     
     widget.updateFunc = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        if (!stm.DataStore.hasOwnProperty('functions')) {
+            widget.loadFuncData();
+        }
         var hierList = document.getElementById('advanced_function_hier');
         var hier = hierList.options[hierList.selectedIndex].value;
         if (stm.DataStore.functions.hasOwnProperty(hier)) {
