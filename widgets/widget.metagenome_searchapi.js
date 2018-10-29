@@ -398,10 +398,20 @@
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
                 document.getElementById('searchresult').innerHTML = JSON.stringify(d, Object.keys(d).sort().reverse(), 2);
             },
-            error: function(error, xhr) {
+            error: function(xhr, error) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
-                document.getElementById('searchresult').innerHTML = "Your search could not be completed due to a server error.";
-                console.log(xhr);
+                var msg = "Your search could not be completed";
+                if (xhr.responseJSON && xhr.responseJSON.hasOwnProperty('ERROR')) {
+                    var err_msg = xhr.responseJSON['ERROR'];
+                    if (err_msg.indexOf('search_phase_execution_exception') != -1) {
+                        msg += ", your query syntax was invalid."
+                    } else {
+                        msg += " due to the following error: "+err_msg;
+                    }
+                } else {
+                    msg += " due to a server error.";
+                }
+                document.getElementById('searchresult').innerHTML = msg;
             }
         });
     };
