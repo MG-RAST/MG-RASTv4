@@ -399,11 +399,11 @@
             success: function(d) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
                 // clean urls
-                if (data.hasOwnProperty('url')) {
-                    data.url = data.url.replace(/ /g, "%20");
+                if (d.hasOwnProperty('url')) {
+                    d.url = d.url.replace(/ /g, "%20");
                 }
-                if (data.hasOwnProperty('next')) {
-                    data.next = data.next.replace(/ /g, "%20");
+                if (d.hasOwnProperty('next')) {
+                    d.next = d.next.replace(/ /g, "%20");
                 }
                 document.getElementById('searchresult').innerHTML = JSON.stringify(widget.sortObjByKey(d), null, 2);
             },
