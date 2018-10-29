@@ -563,7 +563,7 @@
                 keys.push(key);
             }
         }
-        keys.sort();
+        keys.sort().reverse();
         var tObj = {};
         var key;
         for (var index in keys) {
