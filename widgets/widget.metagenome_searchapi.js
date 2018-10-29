@@ -317,7 +317,7 @@
             widget.loadFuncData();
         }
         var sourceList = document.getElementById('funcsource');
-        var source = hierList.options[sourceList.selectedIndex].value;
+        var source = sourceList.options[sourceList.selectedIndex].value;
         if (stm.DataStore.functions.hasOwnProperty(hier)) {
             var funcList = document.getElementById('funclist');
             var funcListHtml = "";
@@ -378,6 +378,7 @@
             widget.curltext += '-F "' + queries[j][0] + '=' + queries[j][1] + '" ';
         }
 
+        widget.searchtext = widget.searchtext.replace(/ /g, "%20");
         widget.curltext += '"' + url + '"';
 
         document.getElementById('searchtext').innerHTML = widget.searchtext;
