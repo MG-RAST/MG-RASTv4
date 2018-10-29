@@ -4,7 +4,7 @@
             title: "Metagenome search API Widget",
             name: "metagenome_searchapi",
             author: "Tobias Paczian",
-            requires: []
+            requires: ["jszip.min.js"]
         }
     });
 
