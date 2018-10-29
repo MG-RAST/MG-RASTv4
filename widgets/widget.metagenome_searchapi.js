@@ -396,7 +396,7 @@
             headers: thisheader,
             success: function(d) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
-                document.getElementById('searchresult').innerHTML = JSON.stringify(d, Object.keys(d).sort().reverse(), 2);
+                document.getElementById('searchresult').innerHTML = JSON.stringify(widget.sortObjByKey(d), null, 2);
             },
             error: function(xhr, error) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
@@ -552,6 +552,20 @@
             retval.push('</optgroup>');
         }
         return retval.join('');
+    };
+    
+    widget.sortObjByKey = function(value) {
+      return (typeof value === 'object') ?
+        (Array.isArray(value) ?
+          value.map(sortObjByKey) :
+          Object.keys(value).sort().reverse().reduce(
+            (o, key) => {
+              const v = value[key];
+              o[key] = sortObjByKey(v);
+              return o;
+            }, {})
+        ) :
+        value;
     };
     
     /// DATA LOAD
