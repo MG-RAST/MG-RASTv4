@@ -560,7 +560,7 @@
         var widget = this;
         return (typeof value === 'object') ?
             (Array.isArray(value) ?
-                value.map(sortObjByKey) :
+                value.map(widget.sortObjByKey) :
                 Object.keys(value).sort().reverse().reduce(
                     (o, key) => {
                         const v = value[key];
