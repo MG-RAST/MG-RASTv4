@@ -1172,6 +1172,7 @@
                 } else {
                     msg += " due to a server error.";
                 }
+                document.getElementById('opaq').style.display = 'none';
                 document.getElementById('result').innerHTML = '<div class="alert alert-error" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">'+msg+'</div>';
             }
         });
