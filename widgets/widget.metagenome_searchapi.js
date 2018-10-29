@@ -192,9 +192,9 @@
 
         // taxonomy
         html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4><div id="taxaload"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank</span>\
-        <select id="taxarank" style="width: 100px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
-            <option disabled selected value> -- select a rank -- </option>\
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank&nbsp;&nbsp;</span>\
+        <select id="taxarank" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
+            <option disabled selected value>select rank</option>\
             <option value="domain">Domain</option>\
             <option value="phylum">Phylum</option>\
             <option value="className">Class</option>\
@@ -203,7 +203,7 @@
             <option value="genus">Genus</option>\
         </select></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span>\
-            <input type="text" id="taxaname" list="taxalist" style="width: 215px; margin-right: 20px;" placeholder=" -- select rank first -- " readonly>\
+            <input type="text" id="taxaname" list="taxalist" style="width: 215px;" placeholder=" -- select rank first -- " readonly>\
             <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">add</button>\
             <datalist id="taxalist"></datalist>\
         </div>');
@@ -222,13 +222,13 @@
         // function
         html.push('<div style="margin-top: 25px;"><h4>function</h4><div id="funcload"></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">source</span>\
-        <select id="funcsource" style="width: 100px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateFunc();">\
-            <option disabled selected value> -- select a source -- </option>\
+        <select id="funcsource" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateFunc();">\
+            <option disabled selected value>select source</option>\
             <option value="Subsystems">Subsystems</option>\
             <option value="KO">KEGG KO</option>\
         </select></div>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span>\
-            <input type="text" id="funcname" list="funclist" style="width: 215px; margin-right: 20px;" placeholder=" -- select source first -- " readonly>\
+            <input type="text" id="funcname" list="funclist" style="width: 215px;" placeholder=" -- select source first -- " readonly>\
             <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">add</button>\
             <datalist id="funclist"></datalist>\
         </div>');
