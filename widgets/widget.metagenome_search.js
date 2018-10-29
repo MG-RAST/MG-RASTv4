@@ -313,7 +313,7 @@
             "value": "prefix length"
         }]
     }];
-    widget.loading = '<div id="data">loading data ... <img src="Retina/images/waiting.gif" style="width: 16px;">';
+    widget.loading = '<div id="data">loading... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 
     widget.display = function(params) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
@@ -665,6 +665,7 @@
                     }
                     stm.DataStore.taxonomy = out;
                     document.getElementById('advanced_taxonomy_label').innerHTML = "taxonomic rank";
+                    widget.updateTaxa();
                 });
             });
         });
@@ -712,6 +713,7 @@
                     }
                     stm.DataStore.functions = out;
                     document.getElementById('advanced_function_label').innerHTML = "functional hierarchy";
+                    widget.updateFunc();
                 });
             });
         });
