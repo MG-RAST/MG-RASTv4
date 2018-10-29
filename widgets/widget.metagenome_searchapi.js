@@ -177,7 +177,7 @@
             html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
         }
 
-        html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results. The results are paginated, use the url in the <b>next<b/> field to get the next page.</p>');
+        html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results. The results are paginated, use the url in the <b>next</b> field to get the next page.</p>');
 
         // filter fields
         html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
