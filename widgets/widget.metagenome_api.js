@@ -338,6 +338,7 @@
                     }
                 }
                 url += p.join("&");
+                url = url.replace(/ /g, "%20");
             } else {
                 for (var i in values) {
                     try {
