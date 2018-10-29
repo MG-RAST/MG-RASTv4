@@ -320,7 +320,7 @@
         }
         var sourceList = document.getElementById('funcsource');
         var source = sourceList.options[sourceList.selectedIndex].value;
-        if (stm.DataStore.functions.hasOwnProperty(hier)) {
+        if (stm.DataStore.functions.hasOwnProperty(source)) {
             var funcList = document.getElementById('funclist');
             var funcListHtml = "";
             for (var i = 0; i < stm.DataStore.functions[source].length; i++) {
