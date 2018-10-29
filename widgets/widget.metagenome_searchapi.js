@@ -180,7 +180,7 @@
         html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results.</p>');
         
         // filter fields
-        html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
+        html.push('<div style="margin-top: 25px; clear: left;"><h4>metadata fields</h4>');
         html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
             <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">'
             + widget.fieldOptions(false) +
@@ -197,7 +197,7 @@
         html.push('</div>');
 
         // taxonomy
-        html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4><div id="taxaload"></div>');
+        html.push('<div style="margin-top: 25px;"><h4 id="taxalabel">taxonomy</h4>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank&nbsp;&nbsp;&nbsp;</span>\
         <select id="taxarank" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
             <option disabled selected value>select rank</option>\
@@ -226,7 +226,7 @@
         html.push('</div>');
 
         // function
-        html.push('<div style="margin-top: 25px;"><h4>function</h4><div id="funcload"></div>');
+        html.push('<div style="margin-top: 25px;"><h4 id="funclabel">function</h4>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">source</span>\
         <select id="funcsource" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateFunc();">\
             <option disabled selected value>select source</option>\
@@ -542,7 +542,7 @@
     
     widget.loadTaxaData = function() {
         var widget = this;
-        document.getElementById('taxaload').innerHTML = 'loading taxonomy ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+        document.getElementById('taxalabel').innerHTML = 'taxonomy loading <img src="Retina/images/waiting.gif" style="width: 16px;">'
         JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
             if (err) {
                 throw err; // or handle err
@@ -606,7 +606,7 @@
                         out[t] = widget.uniqueSortList(out[t]);
                     }
                     stm.DataStore.taxonomy = out;
-                    document.getElementById('taxaload').innerHTML = "";
+                    document.getElementById('taxalabel').innerHTML = "taxonomy";
                     widget.updateTaxa();
                 });
             });
@@ -616,7 +616,7 @@
     widget.loadFuncData = function() {
             var widget = this
         
-            document.getElementById('funcload').innerHTML = 'loading functions ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+            document.getElementById('funclabel').innerHTML = 'function loading ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
             JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
 			if (err) {
 			    throw err; // or handle err
@@ -655,7 +655,7 @@
                         out[h] = widget.uniqueSortList(out[h]);
                     }
                     stm.DataStore.functions = out;
-                    document.getElementById('funcload').innerHTML = "";
+                    document.getElementById('funclabel').innerHTML = "function";
                     widget.updateFunc();
                 });
             });
