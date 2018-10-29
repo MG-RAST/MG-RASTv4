@@ -128,7 +128,7 @@
         "public": "yes",
         "taxaname": "Bacteroides",
         "taxaper": "20",
-        "taxalevel": "genus",
+        "taxarank": "genus",
         "filters": [{
             "field": "all",
             "text": "gut"
@@ -192,7 +192,7 @@
 
         // taxonomy
         html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4><div id="taxaload"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank&nbsp;&nbsp;</span>\
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank&nbsp;&nbsp;&nbsp;</span>\
         <select id="taxarank" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
             <option disabled selected value>select rank</option>\
             <option value="domain">Domain</option>\
@@ -312,7 +312,7 @@
     };
     
     widget.updateFunc = function() {
-        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var widget = this;
         if (!stm.DataStore.hasOwnProperty('functions')) {
             widget.loadFuncData();
         }
@@ -439,6 +439,7 @@
         if (ex.hasOwnProperty('taxaname')) {
             var taxaname = document.getElementById('taxaname');
             taxaname.value = ex.taxaname;
+            taxaname.readOnly = false;
             var taxaper = document.getElementById('taxaper');
             for (var i = 0; i < taxaper.options.length; i++) {
                 if (taxaper.options[i].value == ex.taxaper) {
@@ -459,6 +460,7 @@
         if (ex.hasOwnProperty('funcname')) {
             var funcname = document.getElementById('funcname');
             funcname.value = ex.funcname;
+            funcname.readOnly = false;
             var funcper = document.getElementById('funcper');
             for (var i = 0; i < funcper.options.length; i++) {
                 if (funcper.options[i].value == ex.funcper) {
@@ -537,7 +539,7 @@
     /// DATA LOAD
     
     widget.loadTaxaData = function() {
-        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var widget = this;
         document.getElementById('taxaload').innerHTML = 'loading taxonomy ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
         JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
             if (err) {
@@ -610,7 +612,8 @@
     };
     
     widget.loadFuncData = function() {
-            var widget = Retina.WidgetInstances.metagenome_search[1];
+            var widget = this
+        
             document.getElementById('funcload').innerHTML = 'loading functions ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
             JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
 			if (err) {
