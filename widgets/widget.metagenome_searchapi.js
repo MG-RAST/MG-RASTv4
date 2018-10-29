@@ -507,7 +507,7 @@
             html.push('<div style="padding: 5px; border: 1px solid gray; border-radius: 5px; cursor: pointer; margin-bottom: 3px; margin-right: 5px; float: left;" title="click to remove" onclick="Retina.WidgetInstances.metagenome_searchapi[1].removeFilter(' + i + ');">' + f.field + ' - ' + f.text + ' &times;</div>');
         }
         document.getElementById('activeFilters').innerHTML = html.join('');
-        document.getElementById('filtertext').innerHTML = ""; // cleanup
+        document.getElementById('filtertext').value = ""; // cleanup
 
         widget.updateTexts();
     };
