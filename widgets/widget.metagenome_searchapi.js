@@ -197,7 +197,7 @@
         html.push('</div>');
 
         // taxonomy
-        html.push('<div style="margin-top: 25px; clear: left;"><h4 id="taxalabel">taxonomy</h4>');
+        html.push('<div style="margin-top: 25px; clear: left;" id="taxadiv"><h4 id="taxalabel">taxonomy</h4>');
         html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank&nbsp;&nbsp;&nbsp;</span>\
         <select id="taxarank" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
             <option disabled selected value>select rank</option>\
@@ -396,11 +396,12 @@
             headers: thisheader,
             success: function(d) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
-                document.getElementById('searchresult').innerHTML = JSON.stringify(d, null, 2);
+                document.getElementById('searchresult').innerHTML = JSON.stringify(d, Object.keys(d).sort().reverse(), 2);
             },
             error: function(error, xhr) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
-                document.getElementById('searchresult').innerHTML = "You search could not be completed due to a server error.";
+                document.getElementById('searchresult').innerHTML = "Your search could not be completed due to a server error.";
+                console.log(xhr);
             }
         });
     };
@@ -505,7 +506,12 @@
             html.push('<div style="padding: 5px; border: 1px solid gray; border-radius: 5px; cursor: pointer; margin-bottom: 3px; margin-right: 5px; float: left;" title="click to remove" onclick="Retina.WidgetInstances.metagenome_searchapi[1].removeFilter(' + i + ');">' + f.field + ' - ' + f.text + ' &times;</div>');
         }
         document.getElementById('activeFilters').innerHTML = html.join('');
-        document.getElementById('filtertext').value = ""; // cleanup
+        document.getElementById('filtertext').value = "";
+        if (widget.filters.length > 0) {
+            document.getElementById('taxadiv').style['margin-top'] = "50px";
+        } else {
+            document.getElementById('taxadiv').style['margin-top'] = "25px";
+        }
 
         widget.updateTexts();
     };
