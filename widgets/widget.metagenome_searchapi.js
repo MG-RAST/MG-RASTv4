@@ -178,16 +178,22 @@
         }
 
         html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results.</p>');
-
-        html.push('<h4 style="margin-top: 25px;">HTML query</h4><div style="margin-top: 25px;"><pre id="searchtext"></pre></div>');
-
-        html.push('<h4 style="margin-top: 25px;">cURL query</h4><div style="margin-top: 25px; margin-bottom: 25px;"><pre id="curltext"></pre></div>');
-
-        // options
-        html.push('<div style="margin-top: 25px;"><h4>options</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
-        html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions(true) + '</select></div>');
+        
+        // filter fields
+        html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
+        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
+            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">'
+            + widget.fieldOptions(false) +
+            '</select>\
+            <input type="text" id="filtertext" placeholder=" -- select field first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button>\
+        </div>');
+        
+        // toggle public
+        if (stm.user) {
+            html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
+        }
+        html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
         html.push('</div>');
 
         // taxonomy
@@ -241,25 +247,17 @@
             <option value="10">10</option>\
         </select></div>');
         html.push('</div>');
-
-        // filter fields
-        html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
-        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
-            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">'
-            + widget.fieldOptions(false) +
-            '</select>\
-            <input type="text" id="filtertext" placeholder=" -- select field first -- " readonly>\
-            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button>\
-        </div>');
         
-        // toggle public
-        if (stm.user) {
-            html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
-        }
-        html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
+        // options
+        html.push('<div style="margin-top: 25px;"><h4>options</h4>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">maximum number of datasets</span><input type="text" value="5" id="limit" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 60px;"></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">sort direction</span><select id="direction" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>asc</option><option>desc</option></select></div>');
+        html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions(true) + '</select></div>');
         html.push('</div>');
-
-        html.push('<div style="text-align: center; margin-top: 25px;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
+        
+        html.push('<h4 style="margin-top: 25px;">HTML query</h4><div style="margin-top: 25px;"><pre id="searchtext"></pre></div>');
+        html.push('<h4 style="margin-top: 25px;">cURL query</h4><div style="margin-top: 25px; margin-bottom: 25px;"><pre id="curltext"></pre></div>');
+        html.push('<div style="text-align: center; margin-top: 25px; clear: both;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
 
         html.push('<div style="clear: both;"></div><h4 style=" margin-top: 25px;">result from API</h4>');
 
