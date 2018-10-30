@@ -313,6 +313,7 @@
             "value": "prefix length"
         }]
     }];
+    widget.loading = '<div id="data">loading... <img src="Retina/images/waiting.gif" style="width: 16px;">';
 
     widget.display = function(params) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
@@ -325,15 +326,7 @@
         var sidebar = widget.sidebar;
 
         jQuery.extend(widget, params);
-
         document.getElementById("pageTitle").innerHTML = "search";
-
-        // get taxa data
-        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
-            widget.main.innerHTML = '<div id="data">loading taxonomy data... <img src="Retina/images/waiting.gif" style="width: 16px;"></div><div id="visualize"></div>';
-            widget.loadTaxaData();
-            return;
-        }
 
         // set the output area
         // search field
@@ -342,7 +335,7 @@
   <div style='margin-top: -5px; width: 300px; float: left;'>\
     <div class='input-append'>\
       <input type='text' id='searchtext' style='border-radius: 15px 0 0 15px;' placeholder='enter search term'>\
-      <button class='btn' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
+      <button class='btn btn-success' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
     </div>\
   </div>";
 
@@ -379,7 +372,7 @@
 </style>\
 <h4 style="margin-left: 10px;">\
   <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/filter.png">\
-  Refine Search\
+  Advanced Search\
 </h4>\
 <div id="advanced_div" style="margin-left: 10px; margin-right: 10px;">\
   <p>Add a search term for a specific metadata field to refine your search. You can use the asterisk (*) symbol as a wildcard.</p>\
@@ -396,9 +389,9 @@
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].refineSearch(\'add\');">add</button>\
     </div>\
   </div>\
-  <p>Add a taxonomy and / or function name to refine your search.</p>\
+  <p>Add a taxonomy and / or function name to refine your search. Optionally you may add a cutoff of minimum percent abundance for the presence of the taxonomy or function.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_rank">taxonomic rank</label>\
+    <label class="control-label" for="advanced_taxonomy_rank" id="advanced_taxonomy_label" style="top: -4px;">taxonomic rank</label>\
     <div class="controls input-append">\
       <select id="advanced_taxonomy_rank" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
         <option disabled selected value> -- select a rank -- </option>\
@@ -421,7 +414,21 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_function_hier">functional hierarchy</label>\
+    <label class="control-label" for="advanced_taxa_per" style="top: -4px;">taxonomy&nbsp;minimum percent&nbsp;abundance</label>\
+    <div class="controls input-append">\
+      <select id="advanced_taxa_per" style="width: 80px; margin-left: 100px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'taxa\');">\
+        <option value="none">none</option>\
+        <option value="1">1</option>\
+        <option value="5">5</option>\
+        <option value="10">10</option>\
+        <option value="15">15</option>\
+        <option value="20">20</option>\
+        <option value="25">25</option>\
+      </select>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_function_hier" id="advanced_function_label" style="top: -4px;">functional hierarchy</label>\
     <div class="controls input-append">\
       <select id="advanced_function_hier" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateFunc();">\
         <option disabled selected value> -- select a hierarchy -- </option>\
@@ -438,6 +445,19 @@
       <datalist id="advanced_function_list"></datalist>\
     </div>\
   </div>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_func_per" style="top: -4px;">function&nbsp;minimum percent&nbsp;abundance</label>\
+    <div class="controls input-append">\
+      <select id="advanced_func_per" style="width: 80px; margin-left: 100px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'func\');">\
+        <option value="none">none</option>\
+        <option value="1">1</option>\
+        <option value="3">3</option>\
+        <option value="5">5</option>\
+        <option value="10">10</option>\
+      </select>\
+    </div>\
+  </div>\
+  <button class="btn btn-success" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI();" style="width: 35%; float: left; margin-left: 20px; border-radius: 15px 15px 15px 15px; margin-bottom: 20px;">search</button>\
   <div id="refine_search_terms"></div>\
 </div>\
 <div style="clear: both;"></div>\
@@ -597,8 +617,8 @@
         } else if (Retina.cgiParam("stored") != "") {
             widget.showStoredSearch(Retina.cgiParam("stored"));
         }
-
-        Retina.WidgetInstances.metagenome_search[1].queryAPI();
+        
+        widget.queryAPI();
     };
 
     /* 
@@ -607,6 +627,7 @@
 
     widget.loadTaxaData = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        document.getElementById('advanced_taxonomy_label').innerHTML = widget.loading;
         JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
             if (err) {
                 throw err; // or handle err
@@ -670,33 +691,39 @@
                         out[t] = widget.uniqueSortList(out[t]);
                     }
                     stm.DataStore.taxonomy = out;
-        		    document.getElementById('data').innerHTML = 'loading functional data... <img src="Retina/images/waiting.gif" style="width: 16px;">';
-        		    JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
-            			if (err) {
-            			    throw err; // or handle err
-            			}
-            			var zip = new JSZip();
-                        zip.loadAsync(data).then(function(zip) {
-                            zip.file("ontology.json").async("string").then(function (ont) {
-                                ont = JSON.parse(ont);
-                                var out = { "Subsystems": [], "KO": [] };
-                                for (var o in ont) {
-                                    if ((o != "Subsystems") && (o != "KO")) {
-                                        continue;
-                                    }
-                                    for (var l1 in ont[o]) {
-            					        if (ont[o].hasOwnProperty(l1)) {
-                                            for (var l2 in ont[o][l1]) {
-                                                if (ont[o][l1].hasOwnProperty(l2)) {
-                                                    for (var l3 in ont[o][l1][l2]) {
-                                                        if (ont[o][l1][l2].hasOwnProperty(l3)) {
-                                                            for (var func in ont[o][l1][l2][l3]) {
-                                                                if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
-                                                                    if (func.toLowerCase().indexOf('hypothetical') == -1) {
-                                                                        out[o].push(func);
-                                                                    }
-                                                                }
-                                                            }
+                    document.getElementById('advanced_taxonomy_label').innerHTML = "taxonomic rank";
+                    widget.updateTaxa();
+                });
+            });
+        });
+    };
+    
+    widget.loadFuncData = function() {
+            var widget = Retina.WidgetInstances.metagenome_search[1];
+            document.getElementById('advanced_function_label').innerHTML = widget.loading;
+            JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+			if (err) {
+			    throw err; // or handle err
+			}
+			var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("ontology.json").async("string").then(function (ont) {
+                    ont = JSON.parse(ont);
+                    var out = { "Subsystems": [], "KO": [] };
+                    for (var o in ont) {
+                        if ((o != "Subsystems") && (o != "KO")) {
+                            continue;
+                        }
+                        for (var l1 in ont[o]) {
+					        if (ont[o].hasOwnProperty(l1)) {
+                                for (var l2 in ont[o][l1]) {
+                                    if (ont[o][l1].hasOwnProperty(l2)) {
+                                        for (var l3 in ont[o][l1][l2]) {
+                                            if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                for (var func in ont[o][l1][l2][l3]) {
+                                                    if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
+                                                        if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                            out[o].push(func);
                                                         }
                                                     }
                                                 }
@@ -704,15 +731,16 @@
                                         }
                                     }
                                 }
-                                for (var h in out) {
-                                    console.log(h+" "+out[h].length);
-                                    out[h] = widget.uniqueSortList(out[h]);
-                                }
-                                stm.DataStore.functions = out;
-                                Retina.WidgetInstances.metagenome_search[1].display();
-                            });
-                        });
-                    });
+                            }
+                        }
+                    }
+                    for (var h in out) {
+                        console.log(h+" "+out[h].length);
+                        out[h] = widget.uniqueSortList(out[h]);
+                    }
+                    stm.DataStore.functions = out;
+                    document.getElementById('advanced_function_label').innerHTML = "functional hierarchy";
+                    widget.updateFunc();
                 });
             });
         });
@@ -737,6 +765,10 @@
 
     widget.updateTaxa = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
+            widget.loadTaxaData();
+            return;
+        }
         var rankList = document.getElementById('advanced_taxonomy_rank');
         var rank = rankList.options[rankList.selectedIndex].value;
         if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
@@ -754,6 +786,10 @@
     
     widget.updateFunc = function() {
         var widget = Retina.WidgetInstances.metagenome_search[1];
+        if (!stm.DataStore.hasOwnProperty('functions')) {
+            widget.loadFuncData();
+            return;
+        }
         var hierList = document.getElementById('advanced_function_hier');
         var hier = hierList.options[hierList.selectedIndex].value;
         if (stm.DataStore.functions.hasOwnProperty(hier)) {
@@ -778,6 +814,36 @@
         };
         widget.refineSearch('add', item);
     };
+    
+    widget.addPerAbundance = function(atype) {
+        if (((atype == 'taxa') && (document.getElementById('advanced_taxonomy_name').value == "")) || ((atype == 'func') && (document.getElementById('advanced_function_name').value == ""))) {
+            return;
+        }
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var target = document.getElementById('advanced_'+atype+'_per');
+        if (target.options[target.selectedIndex].value == 'none') {
+            widget.refineSearch('remove', atype+'_per');
+            if (atype == "taxa") {
+                widget.refineSearch('remove', 'taxa_level');
+            }
+            return;
+        }
+        var item = {
+            "key": atype+'_per',
+            "name": atype+'_per',
+            "val": target.options[target.selectedIndex].value
+        };
+        widget.refineSearch('add', item);
+        if (atype == "taxa") {
+            target = document.getElementById('advanced_taxonomy_rank');
+            item = {
+                "key": 'taxa_level',
+                "name": 'taxa_level',
+                "val": target.options[target.selectedIndex].value
+            };
+            widget.refineSearch('add', item);
+        }
+    };
 
     widget.refineSearch = function(action, item) {
         var widget = Retina.WidgetInstances.metagenome_search[1];
@@ -792,6 +858,10 @@
             var skey = item ? item.key : skeyList.options[skeyList.selectedIndex].value;
             var sname = item ? item.name : skeyList.options[skeyList.selectedIndex].text;
             var sval = item ? item.val : document.getElementById('advanced_search_value').value;
+            // skip empty value
+            if (sval == "") {
+                return;
+            }
 
             // check if we already have a filter for this key
             if (widget.advancedOptions.hasOwnProperty(skey)) {
@@ -806,12 +876,12 @@
                 // create a 'clear' button
 
                 var clear = document.createElement('button');
-                clear.className = "btn btn-small btn-danger";
+                clear.className = "btn btn-danger";
                 clear.innerHTML = "clear filters";
                 clear.addEventListener('click', function() {
                     Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
                 });
-                clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 15px; margin-top: -5px;");
+                clear.setAttribute('style', "width: 35%; float: right; margin-right: 20px; margin-bottom: 20px; border-radius: 15px 15px 15px 15px;");
                 target.appendChild(clear);
             }
 
@@ -835,16 +905,24 @@
         } else if (action == "clear") {
             widget.advancedOptions = {};
             target.innerHTML = "";
+            document.getElementById('advanced_search_key').selectedIndex = 0;
+            document.getElementById('advanced_search_value').value = "";
+            document.getElementById('advanced_taxonomy_rank').selectedIndex = 0;
+            document.getElementById('advanced_taxonomy_name').value = "";
+            document.getElementById('advanced_taxa_per').selectedIndex = 0;
+            document.getElementById('advanced_function_hier').selectedIndex = 0;
+            document.getElementById('advanced_function_name').value = "";
+            document.getElementById('advanced_func_per').selectedIndex = 0;
         } else if (action == "restore" && item) {
             widget.advancedOptions = item.advancedOptions;
             target.innerHTML = "";
             var clear = document.createElement('button');
-            clear.className = "btn btn-small btn-danger";
+            clear.className = "btn btn-danger";
             clear.innerHTML = "clear filters";
             clear.addEventListener('click', function() {
                 Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
             });
-            clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 20px; margin-top: -15px;");
+            clear.setAttribute('style', "width: 35%; float: right; margin-right: 20px; margin-bottom: 20px; border-radius: 15px 15px 15px 15px;");
             target.appendChild(clear);
             for (var i in widget.advancedOptions) {
                 var skey = i;
@@ -866,7 +944,6 @@
             console.log("undefined action for refineSearch");
             return;
         }
-        widget.queryAPI();
     };
 
     /* 
@@ -1097,7 +1174,7 @@
             stm.DataStore.search = {};
         }
 
-        var api_url = RetinaConfig.mgrast_api + '/search?public=yes&'; // also search public and private
+        var api_url = RetinaConfig.mgrast_api + '/search?public=yes&'; // always search public and private
         var query_str = "";
         if (widget.query) {
             var items = widget.query.split(/\s/);
@@ -1140,9 +1217,21 @@
                 document.getElementById('result').innerHTML = widget.resultTable(stm.DataStore.search, data.total_count);
                 document.getElementById('opaq').style.display = 'none';
             },
-            error: function() {
+            error: function(xhr, error) {
                 var widget = Retina.WidgetInstances.metagenome_search[1];
-                widget.target.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error accessing the database.</div>";
+                var msg = "Your search could not be completed";
+                if (xhr.responseJSON && xhr.responseJSON.hasOwnProperty('ERROR')) {
+                    var err_msg = xhr.responseJSON['ERROR'];
+                    if (err_msg.indexOf('search_phase_execution_exception') != -1) {
+                        msg += ", your query syntax was invalid."
+                    } else {
+                        msg += " due to the following error: "+err_msg;
+                    }
+                } else {
+                    msg += " due to a server error.";
+                }
+                document.getElementById('opaq').style.display = 'none';
+                document.getElementById('result').innerHTML = '<div class="alert alert-error" style="margin-top: 200px; margin-bottom: 200px; width: 300px; margin-left: auto; margin-right: auto;">'+msg+'</div>';
             }
         });
         return;

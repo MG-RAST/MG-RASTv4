@@ -4,7 +4,7 @@
             title: "Metagenome search API Widget",
             name: "metagenome_searchapi",
             author: "Tobias Paczian",
-            requires: []
+            requires: ["jszip.min.js"]
         }
     });
 
@@ -128,7 +128,7 @@
         "public": "yes",
         "taxaname": "Bacteroides",
         "taxaper": "20",
-        "taxalevel": "genus",
+        "taxarank": "genus",
         "filters": [{
             "field": "all",
             "text": "gut"
@@ -177,11 +177,76 @@
             html.push('<p>You are not logged in and do not have access to private data. Use the <b>login</b> button at the top right of the page to log in.</p><p>If you do not yet have an account, obtain one by clicking the <b>register</b> button next to the login button.</p>');
         }
 
-        html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results.</p>');
+        html.push('<h3>Try it!</h3><p>Adjust the <b>options</b> and <b>filter fields</b> below to see how the HTML and cURL queries change. Click the <b>search</b> button to view the API results. The results are paginated, use the url in the <b>next</b> field to get the next page.</p>');
 
-        html.push('<h4 style="margin-top: 25px;">HTML query</h4><div style="margin-top: 25px;"><pre id="searchtext"></pre></div>');
+        // filter fields
+        html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
+        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;">\
+            <select id="filter" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateField();">' +
+            widget.fieldOptions(false) +
+            '</select>\
+            <input type="text" id="filtertext" placeholder=" -- select field first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button>\
+        </div>');
 
-        html.push('<h4 style="margin-top: 25px;">cURL query</h4><div style="margin-top: 25px; margin-bottom: 25px;"><pre id="curltext"></pre></div>');
+        // toggle public
+        if (stm.user) {
+            html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
+        }
+        html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
+        html.push('</div>');
+
+        // taxonomy
+        html.push('<div style="margin-top: 25px; clear: left;" id="taxadiv"><h4 id="taxalabel">taxonomy</h4>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">rank&nbsp;&nbsp;&nbsp;</span>\
+        <select id="taxarank" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTaxa();">\
+            <option disabled selected value>select rank</option>\
+            <option value="domain">Domain</option>\
+            <option value="phylum">Phylum</option>\
+            <option value="className">Class</option>\
+            <option value="order">Order</option>\
+            <option value="family">Family</option>\
+            <option value="genus">Genus</option>\
+        </select></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span>\
+            <input type="text" id="taxaname" list="taxalist" style="width: 215px;" placeholder=" -- select rank first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">add</button>\
+            <datalist id="taxalist"></datalist>\
+        </div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span>\
+        <select id="taxaper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">\
+            <option value="none">none</option>\
+            <option value="1">1</option>\
+            <option value="5">5</option>\
+            <option value="10">10</option>\
+            <option value="15">15</option>\
+            <option value="20">20</option>\
+            <option value="25">25</option>\
+        </select></div>');
+        html.push('</div>');
+
+        // function
+        html.push('<div style="margin-top: 25px;"><h4 id="funclabel">function</h4>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">source</span>\
+        <select id="funcsource" style="width: 120px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateFunc();">\
+            <option disabled selected value>select source</option>\
+            <option value="Subsystems">Subsystems</option>\
+            <option value="KO">KEGG KO</option>\
+        </select></div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span>\
+            <input type="text" id="funcname" list="funclist" style="width: 215px;" placeholder=" -- select source first -- " readonly>\
+            <button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">add</button>\
+            <datalist id="funclist"></datalist>\
+        </div>');
+        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span>\
+        <select id="funcper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">\
+            <option value="none">none</option>\
+            <option value="1">1</option>\
+            <option value="3">3</option>\
+            <option value="5">5</option>\
+            <option value="10">10</option>\
+        </select></div>');
+        html.push('</div>');
 
         // options
         html.push('<div style="margin-top: 25px;"><h4>options</h4>');
@@ -190,30 +255,9 @@
         html.push('<div class="input-prepend"><span class="add-on">order field</span><select id="order" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.fieldOptions(true) + '</select></div>');
         html.push('</div>');
 
-        // taxonomy
-        html.push('<div style="margin-top: 25px;"><h4>taxonomy</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="taxaname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 215px;"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="taxaper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('taxonomy') + '</select></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">level</span><select id="taxalevel" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('levels') + '</select></div>');
-        html.push('</div>');
-        
-        // function
-        html.push('<div style="margin-top: 25px;"><h4>function</h4>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">name</span><input type="text" value="" id="funcname" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();" style="width: 215px;"></div>');
-        html.push('<div class="input-prepend" style="margin-right: 20px;"><span class="add-on">&percnt; abundance of</span><select id="funcper" style="width: 60px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();">' + widget.annotationOptions('function') + '</select></div>');
-        html.push('</div>');
-
-        // filter fields
-        html.push('<div style="margin-top: 25px;"><h4>metadata fields</h4>');
-        html.push('<div class="input-prepend input-append pull-left" style="margin-right: 20px;"><select id="filter">' + widget.fieldOptions(false) + '</select><input type="text" id="filtertext"><button class="btn" onclick="Retina.WidgetInstances.metagenome_searchapi[1].addFilter();">add</button></div>');
-        // toggle public
-        if (stm.user) {
-            html.push('<div class="input-prepend"><span class="add-on" style="margin-right: 5px;">search public data</span><select id="public" style="width: 80px;" onchange="Retina.WidgetInstances.metagenome_searchapi[1].updateTexts();"><option>yes</option><option>no</option></select></div>');
-        }
-        html.push('<div style="clear: both;"></div><div id="activeFilters"></div>');
-        html.push('</div>');
-
-        html.push('<div style="text-align: center; margin-top: 25px;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
+        html.push('<h4 style="margin-top: 25px;">HTML query</h4><div style="margin-top: 25px;"><pre id="searchtext"></pre></div>');
+        html.push('<h4 style="margin-top: 25px;">cURL query</h4><div style="margin-top: 25px; margin-bottom: 25px;"><pre id="curltext"></pre></div>');
+        html.push('<div style="text-align: center; margin-top: 25px; clear: both;"><button class="btn btn-large btn-success" onclick="Retina.WidgetInstances.metagenome_searchapi[1].executeSearch();">search</button></div>');
 
         html.push('<div style="clear: both;"></div><h4 style=" margin-top: 25px;">result from API</h4>');
 
@@ -239,6 +283,54 @@
         widget.updateTexts();
     };
 
+    widget.updateField = function() {
+        document.getElementById('filtertext').value = "";
+        document.getElementById('filtertext').placeholder = " -- enter text -- ";
+        document.getElementById('filtertext').readOnly = false;
+    }
+
+    widget.updateTaxa = function() {
+        var widget = this;
+        if (!stm.DataStore.hasOwnProperty('taxonomy')) {
+            widget.loadTaxaData();
+            return;
+        }
+        var rankList = document.getElementById('taxarank');
+        var rank = rankList.options[rankList.selectedIndex].value;
+        if (stm.DataStore.taxonomy.hasOwnProperty(rank)) {
+            var taxaList = document.getElementById('taxalist');
+            var taxaListHtml = "";
+            for (var i = 0; i < stm.DataStore.taxonomy[rank].length; i++) {
+                taxaListHtml += "<option value='" + stm.DataStore.taxonomy[rank][i] + "'>";
+            }
+            taxaList.innerHTML = taxaListHtml;
+            document.getElementById('taxaname').value = "";
+            document.getElementById('taxaname').placeholder = " -- enter text -- ";
+            document.getElementById('taxaname').readOnly = false;
+        }
+    };
+
+    widget.updateFunc = function() {
+        var widget = this;
+        if (!stm.DataStore.hasOwnProperty('functions')) {
+            widget.loadFuncData();
+            return;
+        }
+        var sourceList = document.getElementById('funcsource');
+        var source = sourceList.options[sourceList.selectedIndex].value;
+        if (stm.DataStore.functions.hasOwnProperty(source)) {
+            var funcList = document.getElementById('funclist');
+            var funcListHtml = "";
+            for (var i = 0; i < stm.DataStore.functions[source].length; i++) {
+                funcListHtml += "<option value='" + stm.DataStore.functions[[source]][i] + "'>";
+            }
+            funcList.innerHTML = funcListHtml;
+            document.getElementById('funcname').value = "";
+            document.getElementById('funcname').placeholder = " -- enter text -- ";
+            document.getElementById('funcname').readOnly = false;
+        }
+    };
+
     widget.updateTexts = function() {
         var widget = this;
 
@@ -253,16 +345,18 @@
         var limit = document.getElementById('limit').value;
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
-        
-        var queries = [['index', 'metagenome_index_20180705']]; // this is a temp hack unitl database renamed
+
+        var queries = [
+            ['index', 'metagenome_index_20180705']
+        ]; // this is a temp hack unitl database renamed
         var taxaname = document.getElementById('taxaname').value;
         if (taxaname != '') {
             queries.push(['taxonomy', taxaname]);
             var taxaper = document.getElementById('taxaper').options[document.getElementById('taxaper').selectedIndex].value;
-            var taxalevel = document.getElementById('taxalevel').options[document.getElementById('taxalevel').selectedIndex].value;
+            var taxarank = document.getElementById('taxarank').options[document.getElementById('taxarank').selectedIndex].value;
             if (taxaper != 'none') {
                 queries.push(['taxa_per', taxaper]);
-                queries.push(['taxa_level', taxalevel]);
+                queries.push(['taxa_level', taxarank]);
             }
         }
         var funcname = document.getElementById('funcname').value;
@@ -273,7 +367,7 @@
                 queries.push(['func_per', funcper]);
             }
         }
-        
+
         widget.searchtext = url + '?limit=' + limit + '&order=' + order + '&direction=' + direction + '&public=' + getpublic;
         widget.curltext = 'curl ' + authHeader + ' -F "limit=' + limit + '"' + ' -F "order=' + order + '"' + ' -F "direction=' + direction + '"' + ' -F "public=' + getpublic + '" ';
 
@@ -286,6 +380,7 @@
             widget.curltext += '-F "' + queries[j][0] + '=' + queries[j][1] + '" ';
         }
 
+        widget.searchtext = widget.searchtext.replace(/ /g, "%20");
         widget.curltext += '"' + url + '"';
 
         document.getElementById('searchtext').innerHTML = widget.searchtext;
@@ -303,11 +398,29 @@
             headers: thisheader,
             success: function(d) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
-                document.getElementById('searchresult').innerHTML = JSON.stringify(d, null, 2);
+                // clean urls
+                if (d.hasOwnProperty('url')) {
+                    d.url = d.url.replace(/ /g, "%20");
+                }
+                if (d.hasOwnProperty('next')) {
+                    d.next = d.next.replace(/ /g, "%20");
+                }
+                document.getElementById('searchresult').innerHTML = JSON.stringify(widget.sortObjByKey(d), null, 2);
             },
-            error: function(error, xhr) {
+            error: function(xhr, error) {
                 var widget = Retina.WidgetInstances.metagenome_searchapi[1];
-                document.getElementById('searchresult').innerHTML = "You search could not be completed due to a server error.";
+                var msg = "Your search could not be completed";
+                if (xhr.responseJSON && xhr.responseJSON.hasOwnProperty('ERROR')) {
+                    var err_msg = xhr.responseJSON['ERROR'];
+                    if (err_msg.indexOf('search_phase_execution_exception') != -1) {
+                        msg += ", your query syntax was invalid."
+                    } else {
+                        msg += " due to the following error: " + err_msg;
+                    }
+                } else {
+                    msg += " due to a server error.";
+                }
+                document.getElementById('searchresult').innerHTML = msg;
             }
         });
     };
@@ -343,10 +456,11 @@
                 }
             }
         }
-        
+
         if (ex.hasOwnProperty('taxaname')) {
             var taxaname = document.getElementById('taxaname');
             taxaname.value = ex.taxaname;
+            taxaname.readOnly = false;
             var taxaper = document.getElementById('taxaper');
             for (var i = 0; i < taxaper.options.length; i++) {
                 if (taxaper.options[i].value == ex.taxaper) {
@@ -354,10 +468,10 @@
                     break;
                 }
             }
-            var taxalevel = document.getElementById('taxalevel');
-            for (var i = 0; i < taxalevel.options.length; i++) {
-                if (taxalevel.options[i].value == ex.taxalevel) {
-                    taxalevel.selectedIndex = i;
+            var taxarank = document.getElementById('taxarank');
+            for (var i = 0; i < taxarank.options.length; i++) {
+                if (taxarank.options[i].value == ex.taxarank) {
+                    taxarank.selectedIndex = i;
                     break;
                 }
             }
@@ -367,6 +481,7 @@
         if (ex.hasOwnProperty('funcname')) {
             var funcname = document.getElementById('funcname');
             funcname.value = ex.funcname;
+            funcname.readOnly = false;
             var funcper = document.getElementById('funcper');
             for (var i = 0; i < funcper.options.length; i++) {
                 if (funcper.options[i].value == ex.funcper) {
@@ -384,6 +499,10 @@
     };
 
     widget.addFilter = function() {
+        if (document.getElementById('filtertext').value == "") {
+            return;
+        }
+
         var widget = this;
         widget.filters.push({
             "field": document.getElementById('filter').options[document.getElementById('filter').selectedIndex].value,
@@ -406,31 +525,26 @@
             html.push('<div style="padding: 5px; border: 1px solid gray; border-radius: 5px; cursor: pointer; margin-bottom: 3px; margin-right: 5px; float: left;" title="click to remove" onclick="Retina.WidgetInstances.metagenome_searchapi[1].removeFilter(' + i + ');">' + f.field + ' - ' + f.text + ' &times;</div>');
         }
         document.getElementById('activeFilters').innerHTML = html.join('');
+        document.getElementById('filtertext').value = "";
+        if (widget.filters.length > 0) {
+            document.getElementById('taxadiv').style['margin-top'] = "50px";
+        } else {
+            document.getElementById('taxadiv').style['margin-top'] = "25px";
+        }
 
         widget.updateTexts();
     };
-    
+
     widget.clearTaxonomy = function() {
         document.getElementById('taxaname').value = '';
         document.getElementById('taxaper').selectedIndex = 0;
-        document.getElementById('taxalevel').selectedIndex = 0;
+        document.getElementById('taxarank').selectedIndex = 0;
     };
-    
+
     widget.clearFunction = function() {
         document.getElementById('funcname').value = '';
         document.getElementById('funcper').selectedIndex = 0;
-    };
-    
-    widget.annotationOptions = function(type) {
-        var widget = this;
-        var retval = [];
-        if (type != 'levels') {
-            retval.push('<option value="none">none</option>');
-        }
-        for (var i = 0; i < widget.annotationInfo[type].length; i++) {
-            retval.push('<option value="' + widget.annotationInfo[type][i] + '">' + widget.annotationInfo[type][i] + '</option>');
-        }
-        return retval.join('');
+        document.getElementById('funcsource').selectedIndex = 0;
     };
 
     widget.fieldOptions = function(isorder) {
@@ -448,30 +562,161 @@
         }
         return retval.join('');
     };
-    
-    widget.annotationInfo = {
-        "levels" : [
-            "domain",
-            "phylum",
-            "class",
-            "order",
-            "family",
-            "genus"
-        ],
-        "taxonomy" : [
-	        "1",
-	        "5",
-	        "10",
-	        "15",
-	        "20",
-	        "25"
-        ],
-        "function" : [
-            "1",
-            "3",
-	        "5",
-	        "10"
-        ]
+
+    widget.sortObjByKey = function(obj) {
+        keys = [];
+        if (obj) {
+            for (var key in obj) {
+                keys.push(key);
+            }
+        }
+        keys.sort().reverse();
+        var tObj = {};
+        var key;
+        for (var index in keys) {
+            key = keys[index];
+            tObj[key] = obj[key];
+        }
+        return tObj;
+    };
+
+    /// DATA LOAD
+
+    widget.loadTaxaData = function() {
+        var widget = this;
+        document.getElementById('taxalabel').innerHTML = 'taxonomy loading ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+        JSZipUtils.getBinaryContent('data/tax.v1.json.zip', function(err, data) {
+            if (err) {
+                throw err; // or handle err
+            }
+            var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("taxonomy.json").async("string").then(function(tax) {
+                    tax = JSON.parse(tax);
+                    var out = {
+                        "domain": [],
+                        "phylum": [],
+                        "className": [],
+                        "order": [],
+                        "family": [],
+                        "genus": []
+                    };
+                    for (var d in tax) {
+                        if (tax.hasOwnProperty(d)) {
+                            for (var p in tax[d]) {
+                                if (tax[d].hasOwnProperty(p)) {
+                                    for (var c in tax[d][p]) {
+                                        if (tax[d][p].hasOwnProperty(c)) {
+                                            for (var o in tax[d][p][c]) {
+                                                if (tax[d][p][c].hasOwnProperty(o)) {
+                                                    for (var f in tax[d][p][c][o]) {
+                                                        if (tax[d][p][c][o].hasOwnProperty(f)) {
+                                                            for (var g in tax[d][p][c][o][f]) {
+                                                                if (tax[d][p][c][o][f].hasOwnProperty(g)) {
+                                                                    if (!(g.startsWith('unknown') || g.startsWith('unclassified'))) {
+                                                                        out.genus.push(g);
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (!(f.startsWith('unknown') || f.startsWith('unclassified'))) {
+                                                                out.family.push(f);
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!(o.startsWith('unknown') || o.startsWith('unclassified'))) {
+                                                        out.order.push(o);
+                                                    }
+                                                }
+                                            }
+                                            if (!(c.startsWith('unknown') || c.startsWith('unclassified'))) {
+                                                out.className.push(c);
+                                            }
+                                        }
+                                    }
+                                    if (!(p.startsWith('unknown') || p.startsWith('unclassified'))) {
+                                        out.phylum.push(p);
+                                    }
+                                }
+                            }
+                            if (!(d.startsWith('unknown') || d.startsWith('unclassified'))) {
+                                out.domain.push(d);
+                            }
+                        }
+                    }
+                    for (var t in out) {
+                        console.log(t + " " + out[t].length);
+                        out[t] = widget.uniqueSortList(out[t]);
+                    }
+                    stm.DataStore.taxonomy = out;
+                    document.getElementById('taxalabel').innerHTML = "taxonomy";
+                    widget.updateTaxa();
+                });
+            });
+        });
+    };
+
+    widget.loadFuncData = function() {
+        var widget = this
+
+        document.getElementById('funclabel').innerHTML = 'function loading ... <img src="Retina/images/waiting.gif" style="width: 16px;">'
+        JSZipUtils.getBinaryContent('data/ont.v1.json.zip', function(err, data) {
+            if (err) {
+                throw err; // or handle err
+            }
+            var zip = new JSZip();
+            zip.loadAsync(data).then(function(zip) {
+                zip.file("ontology.json").async("string").then(function(ont) {
+                    ont = JSON.parse(ont);
+                    var out = {
+                        "Subsystems": [],
+                        "KO": []
+                    };
+                    for (var o in ont) {
+                        if ((o != "Subsystems") && (o != "KO")) {
+                            continue;
+                        }
+                        for (var l1 in ont[o]) {
+                            if (ont[o].hasOwnProperty(l1)) {
+                                for (var l2 in ont[o][l1]) {
+                                    if (ont[o][l1].hasOwnProperty(l2)) {
+                                        for (var l3 in ont[o][l1][l2]) {
+                                            if (ont[o][l1][l2].hasOwnProperty(l3)) {
+                                                for (var func in ont[o][l1][l2][l3]) {
+                                                    if (ont[o][l1][l2][l3].hasOwnProperty(func)) {
+                                                        if (func.toLowerCase().indexOf('hypothetical') == -1) {
+                                                            out[o].push(func);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (var h in out) {
+                        console.log(h + " " + out[h].length);
+                        out[h] = widget.uniqueSortList(out[h]);
+                    }
+                    stm.DataStore.functions = out;
+                    document.getElementById('funclabel').innerHTML = "function";
+                    widget.updateFunc();
+                });
+            });
+        });
+    };
+
+    widget.uniqueSortList = function(arr) {
+        var u = {},
+            a = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (!u.hasOwnProperty(arr[i])) {
+                a.push(arr[i]);
+                u[arr[i]] = 1;
+            }
+        }
+        return a.sort();
     };
 
     widget.keylist = [{
