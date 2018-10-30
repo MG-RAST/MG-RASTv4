@@ -335,7 +335,7 @@
   <div style='margin-top: -5px; width: 300px; float: left;'>\
     <div class='input-append'>\
       <input type='text' id='searchtext' style='border-radius: 15px 0 0 15px;' placeholder='enter search term'>\
-      <button class='btn' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
+      <button class='btn btn-success' onclick='Retina.WidgetInstances.metagenome_search[1].queryAPI();' style='border-radius: 0 15px 15px 0;'>search</button>\
     </div>\
   </div>";
 
@@ -373,8 +373,9 @@
 <h4 style="margin-left: 10px;">\
   <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/filter.png">\
   Refine Search\
+  <button class="btn btn-success" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI();" style="float: right; margin-right: 30px; border-radius: 15px 15px 15px 15px;">search</button>\
 </h4>\
-<div id="advanced_div" style="margin-left: 10px; margin-right: 10px;">\
+<div id="advanced_div" style="margin-top: 20px; margin-left: 10px; margin-right: 10px;">\
   <p>Add a search term for a specific metadata field to refine your search. You can use the asterisk (*) symbol as a wildcard.</p>\
   <div class="control-group">\
     <label class="control-label" for="advanced_search_key">field</label>\
@@ -389,9 +390,9 @@
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].refineSearch(\'add\');">add</button>\
     </div>\
   </div>\
-  <p>Add a taxonomy and / or function name to refine your search. Optinally you may add a cutoff of minimum percent abundance for the presence of the taxonomy or function.</p>\
+  <p>Add a taxonomy and / or function name to refine your search. Optionally you may add a cutoff of minimum percent abundance for the presence of the taxonomy or function.</p>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxonomy_rank" id="advanced_taxonomy_label">taxonomic rank</label>\
+    <label class="control-label" for="advanced_taxonomy_rank" id="advanced_taxonomy_label" style="top: -4px;">taxonomic rank</label>\
     <div class="controls input-append">\
       <select id="advanced_taxonomy_rank" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateTaxa();">\
         <option disabled selected value> -- select a rank -- </option>\
@@ -414,9 +415,9 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_taxa_per">taxonomy minimum percent abundance</label>\
+    <label class="control-label" for="advanced_taxa_per" style="top: -4px;">taxonomy&nbsp;minimum percent&nbsp;abundance</label>\
     <div class="controls input-append">\
-      <select id="advanced_taxa_per" style="width: 80px; margin-left: 140px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'taxa\');">\
+      <select id="advanced_taxa_per" style="width: 80px; margin-left: 100px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'taxa\');">\
         <option value="none">none</option>\
         <option value="1">1</option>\
         <option value="5">5</option>\
@@ -428,7 +429,7 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_function_hier" id="advanced_function_label">functional hierarchy</label>\
+    <label class="control-label" for="advanced_function_hier" id="advanced_function_label" style="top: -4px;">functional hierarchy</label>\
     <div class="controls input-append">\
       <select id="advanced_function_hier" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateFunc();">\
         <option disabled selected value> -- select a hierarchy -- </option>\
@@ -446,9 +447,9 @@
     </div>\
   </div>\
   <div class="control-group">\
-    <label class="control-label" for="advanced_func_per">function minimum percent abundance</label>\
+    <label class="control-label" for="advanced_func_per" style="top: -4px;">function&nbsp;minimum percent&nbsp;abundance</label>\
     <div class="controls input-append">\
-      <select id="advanced_func_per" style="width: 80px; margin-left: 140px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'func\');">\
+      <select id="advanced_func_per" style="width: 80px; margin-left: 100px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'func\');">\
         <option value="none">none</option>\
         <option value="1">1</option>\
         <option value="3">3</option>\
@@ -616,8 +617,6 @@
         } else if (Retina.cgiParam("stored") != "") {
             widget.showStoredSearch(Retina.cgiParam("stored"));
         }
-
-        Retina.WidgetInstances.metagenome_search[1].queryAPI();
     };
 
     /* 
@@ -815,8 +814,18 @@
     };
     
     widget.addPerAbundance = function(atype) {
+        if (((atype == 'taxa') && (document.getElementById('advanced_taxonomy_name').value == "")) || ((atype == 'func') && (document.getElementById('advanced_function_name').value == ""))) {
+            return;
+        }
         var widget = Retina.WidgetInstances.metagenome_search[1];
         var target = document.getElementById('advanced_'+atype+'_per');
+        if (target.options[target.selectedIndex].value == 'none') {
+            widget.refineSearch('remove', atype+'_per');
+            if (atype == "taxa") {
+                widget.refineSearch('remove', 'taxa_level');
+            }
+            return;
+        }
         var item = {
             "key": atype+'_per',
             "name": atype+'_per',
@@ -826,8 +835,8 @@
         if (atype == "taxa") {
             target = document.getElementById('advanced_taxonomy_rank');
             item = {
-                "key": 'advanced_taxonomy_rank',
-                "name": 'advanced_taxonomy_rank',
+                "key": 'taxa_level',
+                "name": 'taxa_level',
                 "val": target.options[target.selectedIndex].value
             };
             widget.refineSearch('add', item);
@@ -898,8 +907,10 @@
             document.getElementById('advanced_search_value').value = "";
             document.getElementById('advanced_taxonomy_rank').selectedIndex = 0;
             document.getElementById('advanced_taxonomy_name').value = "";
+            document.getElementById('advanced_taxa_per').selectedIndex = 0;
             document.getElementById('advanced_function_hier').selectedIndex = 0;
             document.getElementById('advanced_function_name').value = "";
+            document.getElementById('advanced_func_per').selectedIndex = 0;
         } else if (action == "restore" && item) {
             widget.advancedOptions = item.advancedOptions;
             target.innerHTML = "";
@@ -931,7 +942,6 @@
             console.log("undefined action for refineSearch");
             return;
         }
-        widget.queryAPI();
     };
 
     /* 
@@ -1162,7 +1172,7 @@
             stm.DataStore.search = {};
         }
 
-        var api_url = RetinaConfig.mgrast_api + '/search?public=yes&'; // also search public and private
+        var api_url = RetinaConfig.mgrast_api + '/search?public=yes&'; // always search public and private
         var query_str = "";
         if (widget.query) {
             var items = widget.query.split(/\s/);
