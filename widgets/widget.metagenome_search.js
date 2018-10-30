@@ -25,7 +25,7 @@
     widget.specialKeyMapping = {
         "created_on": "created date",
         "name": "dataset (metagenome name)",
-        "seq_method": "sequencing method",
+        "seq_meth": "sequencing method",
         "job": "job id",
         "id": "metagenome id"
     };
@@ -90,7 +90,7 @@
             "value": "sequence type",
             "selected": true
         }, {
-            "name": "seq_method",
+            "name": "seq_meth",
             "value": "sequencing method"
         }, {
             "name": "mixs_compliant",
