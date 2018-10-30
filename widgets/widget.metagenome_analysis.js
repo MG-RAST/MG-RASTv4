@@ -30,7 +30,7 @@
 	"alilength": 15
     };
 
-    widget.graphs = {};
+    widget.graph = {};
 
     widget.context = "none";
     widget.currentType = "barchart";
@@ -2329,39 +2329,39 @@
 			   },
 		 'heatmap': { title: 'heatmap',
 			      renderer: "svg2",
-			      settings: widget.graphs.heatmap,
-			      controlGroups: widget.graphs.heatmap.controls
+			      settings: widget.graph.heatmap,
+			      controlGroups: widget.graph.heatmap.controls
 			    },
 		 'piechart': { title: 'pie-chart',
 			       renderer: "svg2",
-			       settings: widget.graphs.pie,
-			       controlGroups: widget.graphs.pie.controls
+			       settings: widget.graph.pie,
+			       controlGroups: widget.graph.pie.controls
 			     },
 		 'donutchart': { title: 'donut-chart',
 				 renderer: "svg2",
-				 settings: widget.graphs.donut,
-				 controlGroups: widget.graphs.donut.controls
+				 settings: widget.graph.donut,
+				 controlGroups: widget.graph.donut.controls
 			     },
 		 'barchart': { title: 'stacked bar-chart',
 			       renderer: "svg2",
-			       settings: widget.graphs.stackedBar,
-			       controlGroups: widget.graphs.stackedBar.controls
+			       settings: widget.graph.stackedBar,
+			       controlGroups: widget.graph.stackedBar.controls
 			     },
 		 'barchart2': { title: 'grouped barchart',
 				renderer: "svg2",
-				settings: widget.graphs.bar,
-				controlGroups: widget.graphs.bar.controls,
+				settings: widget.graph.bar,
+				controlGroups: widget.graph.bar.controls,
 				logAxes: [ 0 ]
 			     },
 		 'pca': { title: 'PCoA',
 			  renderer: 'svg2',
-			  settings: widget.graphs.pca,
-			  controlGroups: widget.graphs.pca.controls,
+			  settings: widget.graph.pca,
+			  controlGroups: widget.graph.pca.controls,
 			  dataConversion: 'container2pca' },
 		 'differential': { title: 'differential coverage',
 				   renderer: 'svg2',
-				   settings: widget.graphs.differential,
-				   controlGroups: widget.graphs.differential.controls,
+				   settings: widget.graph.differential,
+				   controlGroups: widget.graph.differential.controls,
 				   dataConversion: 'container2differential' },
 		 'table': { title: 'table',
 			    renderer: 'table',
@@ -2382,8 +2382,8 @@
 			  },
 		 'rarefaction': { title: 'rarefaction plot',
 				  renderer: 'svg2',
-				  settings: widget.graphs.rarefaction,
-				  controlGroups: widget.graphs.rarefaction.controls,
+				  settings: widget.graph.rarefaction,
+				  controlGroups: widget.graph.rarefaction.controls,
 				  dataConversion: "container2plot",
 				  dataField: "rarefaction"
 				}
@@ -3893,7 +3893,7 @@
 			  complete: function (xhr) {
 			      var widget = Retina.WidgetInstances.metagenome_analysis[1];
 			      
-			      widget.graphs[this.graph] = JSON.parse(xhr.responseText);
+			      widget.graph[this.graph] = JSON.parse(xhr.responseText);
 			  }
 			});
 	}
