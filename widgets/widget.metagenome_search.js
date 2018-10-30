@@ -372,7 +372,7 @@
 </style>\
 <h4 style="margin-left: 10px;">\
   <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/filter.png">\
-  Refine Search\
+  Advanced Search\
   <button class="btn btn-success" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI();" style="float: right; margin-right: 30px; border-radius: 15px 15px 15px 15px;">search</button>\
 </h4>\
 <div id="advanced_div" style="margin-top: 20px; margin-left: 10px; margin-right: 10px;">\
@@ -617,6 +617,8 @@
         } else if (Retina.cgiParam("stored") != "") {
             widget.showStoredSearch(Retina.cgiParam("stored"));
         }
+        
+        widget.queryAPI();
     };
 
     /* 
