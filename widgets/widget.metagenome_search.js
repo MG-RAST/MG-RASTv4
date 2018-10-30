@@ -373,9 +373,8 @@
 <h4 style="margin-left: 10px;">\
   <img style="height: 16px; position: relative; bottom: 3px; margin-right: 10px;" src="Retina/images/filter.png">\
   Advanced Search\
-  <button class="btn btn-success" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI();" style="float: right; margin-right: 30px; border-radius: 15px 15px 15px 15px;">search</button>\
 </h4>\
-<div id="advanced_div" style="margin-top: 20px; margin-left: 10px; margin-right: 10px;">\
+<div id="advanced_div" style="margin-left: 10px; margin-right: 10px;">\
   <p>Add a search term for a specific metadata field to refine your search. You can use the asterisk (*) symbol as a wildcard.</p>\
   <div class="control-group">\
     <label class="control-label" for="advanced_search_key">field</label>\
@@ -458,6 +457,7 @@
       </select>\
     </div>\
   </div>\
+  <button class="btn btn-success" onclick="Retina.WidgetInstances.metagenome_search[1].queryAPI();" style="width: 35%; float: left; margin-left: 20px; border-radius: 15px 15px 15px 15px; margin-bottom: 20px;">search</button>\
   <div id="refine_search_terms"></div>\
 </div>\
 <div style="clear: both;"></div>\
@@ -876,12 +876,12 @@
                 // create a 'clear' button
 
                 var clear = document.createElement('button');
-                clear.className = "btn btn-small btn-danger";
+                clear.className = "btn btn-danger";
                 clear.innerHTML = "clear filters";
                 clear.addEventListener('click', function() {
                     Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
                 });
-                clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 15px; margin-top: -5px;");
+                clear.setAttribute('style', "width: 35%; float: right; margin-right: 20px; margin-bottom: 20px; border-radius: 15px 15px 15px 15px;");
                 target.appendChild(clear);
             }
 
@@ -917,12 +917,12 @@
             widget.advancedOptions = item.advancedOptions;
             target.innerHTML = "";
             var clear = document.createElement('button');
-            clear.className = "btn btn-small btn-danger";
+            clear.className = "btn btn-danger";
             clear.innerHTML = "clear filters";
             clear.addEventListener('click', function() {
                 Retina.WidgetInstances.metagenome_search[1].refineSearch("clear");
             });
-            clear.setAttribute('style', "width: 100%; clear: both; margin-bottom: 20px; margin-top: -15px;");
+            clear.setAttribute('style', "width: 35%; float: right; margin-right: 20px; margin-bottom: 20px; border-radius: 15px 15px 15px 15px;");
             target.appendChild(clear);
             for (var i in widget.advancedOptions) {
                 var skey = i;
