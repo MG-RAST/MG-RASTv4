@@ -389,7 +389,7 @@
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].refineSearch(\'add\');">add</button>\
     </div>\
   </div>\
-  <p>Add a taxonomy and / or function name to refine your search.</p>\
+  <p>Add a taxonomy and / or function name to refine your search. Optinally you may add a cutoff of minimum percent abundance for the presence of the taxonomy or function.</p>\
   <div class="control-group">\
     <label class="control-label" for="advanced_taxonomy_rank" id="advanced_taxonomy_label">taxonomic rank</label>\
     <div class="controls input-append">\
@@ -414,6 +414,20 @@
     </div>\
   </div>\
   <div class="control-group">\
+    <label class="control-label" for="advanced_taxa_per">taxonomy minimum percent abundance</label>\
+    <div class="controls input-append">\
+      <select id="advanced_taxa_per" style="width: 80px; margin-left: 140px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'taxa\');">\
+        <option value="none">none</option>\
+        <option value="1">1</option>\
+        <option value="5">5</option>\
+        <option value="10">10</option>\
+        <option value="15">15</option>\
+        <option value="20">20</option>\
+        <option value="25">25</option>\
+      </select>\
+    </div>\
+  </div>\
+  <div class="control-group">\
     <label class="control-label" for="advanced_function_hier" id="advanced_function_label">functional hierarchy</label>\
     <div class="controls input-append">\
       <select id="advanced_function_hier" style="width: 230px; margin-left: 40px;" onchange="Retina.WidgetInstances.metagenome_search[1].updateFunc();">\
@@ -429,6 +443,18 @@
       <input type="text" id="advanced_function_name" list="advanced_function_list" style="width: 165px; margin-left: 40px;" placeholder=" -- select hierarchy first -- " readonly>\
       <button class="btn" onclick="Retina.WidgetInstances.metagenome_search[1].addAnnotation(\'function\');">add</button>\
       <datalist id="advanced_function_list"></datalist>\
+    </div>\
+  </div>\
+  <div class="control-group">\
+    <label class="control-label" for="advanced_func_per">function minimum percent abundance</label>\
+    <div class="controls input-append">\
+      <select id="advanced_func_per" style="width: 80px; margin-left: 140px;" onchange="Retina.WidgetInstances.metagenome_search[1].addPerAbundance(\'func\');">\
+        <option value="none">none</option>\
+        <option value="1">1</option>\
+        <option value="3">3</option>\
+        <option value="5">5</option>\
+        <option value="10">10</option>\
+      </select>\
     </div>\
   </div>\
   <div id="refine_search_terms"></div>\
@@ -786,6 +812,26 @@
             "val": document.getElementById('advanced_'+atype+'_name').value
         };
         widget.refineSearch('add', item);
+    };
+    
+    widget.addPerAbundance = function(atype) {
+        var widget = Retina.WidgetInstances.metagenome_search[1];
+        var target = document.getElementById('advanced_'+atype+'_per');
+        var item = {
+            "key": atype+'_per',
+            "name": atype+'_per',
+            "val": target.options[target.selectedIndex].value
+        };
+        widget.refineSearch('add', item);
+        if (atype == "taxa") {
+            target = document.getElementById('advanced_taxonomy_rank');
+            item = {
+                "key": 'advanced_taxonomy_rank',
+                "name": 'advanced_taxonomy_rank',
+                "val": target.options[target.selectedIndex].value
+            };
+            widget.refineSearch('add', item);
+        }
     };
 
     widget.refineSearch = function(action, item) {
