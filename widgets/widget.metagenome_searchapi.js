@@ -780,7 +780,7 @@
             "value": "sequence type",
             "selected": true
         }, {
-            "name": "seq_method",
+            "name": "seq_meth",
             "value": "sequencing method"
         }, {
             "name": "mixs_compliant",
