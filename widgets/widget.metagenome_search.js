@@ -1200,7 +1200,6 @@
         }
 
         var url = api_url + "direction=" + widget.sortDir + "&order=" + widget.sort + "&limit=" + (howmany || widget.limit) + get_after + query_str;
-        url += "&index=metagenome_index_20180705"; // this is a temp hack until database renamed
 
         jQuery.ajax({
             dataType: "json",
