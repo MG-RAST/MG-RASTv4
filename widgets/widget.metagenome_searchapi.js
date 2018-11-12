@@ -346,9 +346,7 @@
         var direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].value;
         var order = document.getElementById('order').options[document.getElementById('order').selectedIndex].value;
 
-        var queries = [
-            ['index', 'metagenome_index_20180705']
-        ]; // this is a temp hack unitl database renamed
+        var queries = [];
         var taxaname = document.getElementById('taxaname').value;
         if (taxaname != '') {
             queries.push(['taxonomy', taxaname]);
