@@ -63,9 +63,13 @@
 							  widget.displayMetagenomeDownloads();
 						      }
 						  },
-						  error: function (xhr, data) {
-						      
-						  }
+   				          error: function (jqxhr) {
+   					          if (jqxhr.status == 500) {
+   					              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
+   					          } else if (jqxhr.status == 401) {
+   					              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
+   					          }
+   				           }
 						} );
 			       } else {
 				   widget.pipelineInfo = false;
@@ -86,9 +90,13 @@
 				   widget.displayMetagenomeDownloads();
 			       }
 			   },
-			   error: function (xhr, data) {
-
-			   }
+	           error: function (jqxhr) {
+		          if (jqxhr.status == 500) {
+		              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
+		          } else if (jqxhr.status == 401) {
+		              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
+		          }
+	           }
 			 } );
 	} else {
 	    html += "<h3>Available Projects</h3><p>The following data sets are available for analysis and download. Note that downloading complete analysis might take significant time.</p><div id='projects_table'></div>";
