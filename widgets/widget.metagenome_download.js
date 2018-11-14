@@ -65,9 +65,9 @@
 						  },
    				          error: function (jqxhr) {
    					          if (jqxhr.status == 500) {
-   					              widget.main.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
+   					              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
    					          } else if (jqxhr.status == 401) {
-   					              widget.main.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
+   					              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
    					          }
    				           }
 						} );
@@ -92,9 +92,9 @@
 			   },
 	           error: function (jqxhr) {
 		          if (jqxhr.status == 500) {
-		              widget.main.innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
+		              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>There was an error on the server: <br><br><pre>"+JSON.parse(jqxhr.responseText).ERROR+"</pre></div>";
 		          } else if (jqxhr.status == 401) {
-		              widget.main.innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
+		              document.getElementById("content").innerHTML = "<div class='alert alert-error' style='width: 50%;'>You do not have the permission to view this data.</div>";
 		          }
 	           }
 			 } );
