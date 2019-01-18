@@ -95,7 +95,7 @@
 
 
             html += "<table>";
-            html += "<tr><td style='padding-right: 10px;'><b>principle investigator</b></td><td>" + project.pi + ", " + project.metadata.PI_organization + "</td></tr>";
+            html += "<tr><td style='padding-right: 10px;'><b>principal investigator</b></td><td>" + project.pi + ", " + project.metadata.PI_organization + "</td></tr>";
             html += "<tr><td><b>visibility</b></td><td>" + project.status + "</td></tr>";
             html += "<tr><td><b>static link</b></td><td>" + (project.status == "public" ? "<a href='" + mgrast_url + "/linkin.cgi?project=" + project.id + "'>" + mgrast_url + "/linkin.cgi?project=" + project.id + "</a>" : "private projects cannot be linked") + "</td></tr>";
             var invis = {
