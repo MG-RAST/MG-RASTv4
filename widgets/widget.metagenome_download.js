@@ -328,7 +328,9 @@
     };
 
     widget.authenticatedDownload = function(url) {
-        window.location = url + "&auth=" + stm.authHeader.Authorization + "&browser=1";
+        window.location = url + 
+            (stm.authHeader && stm.authHeader.Authorization ? "&auth=" + stm.authHeader.Authorization : "") +
+            "&browser=1";
     };
 
     widget.apiDownloadHTML = function() {
