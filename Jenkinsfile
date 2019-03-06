@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Test') { 
             steps {
-                sh 'docker run -t --rm  mgrast/ui:testing ' 
+                sh 'docker run -t --rm  mgrast/ui:testing echo success' 
             }
         }
     }
