@@ -5,8 +5,6 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'Setup/check-and-load-docker-volume.sh'
-                // sh 'CWL/Inputs/DBs/getpredata.sh CWL/Inputs/DBs/' 
                 sh 'docker build -t mgrast/ui:testing .' 
             }
         }
