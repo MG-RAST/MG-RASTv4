@@ -369,6 +369,7 @@
 							{ "value": "a_thaliana", "text": "A. thaliana, TAIR, TAIR9" },
 							{ "value": "e_coli", "text": "E. coli, NCBI, st. 536" },
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
+							{ "value" : "d_rerio" , "text" : "Danio rerio GRCz11"} , 
 							{ "value": "none", "text": "none" } ] }
 				     ] },
 				   { "name": "dynamic trimming",
@@ -424,6 +425,7 @@
 							{ "value": "a_thaliana", "text": "A. thaliana, TAIR, TAIR9" },
 							{ "value": "e_coli", "text": "E. coli, NCBI, st. 536" },
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
+							{ "value" : "d_rerio" , "text" : "Danio rerio GRCz11"} ,
 							{ "value": "none", "text": "none" } ] }
 				     ] },
 				   { "name": "length filtering",
@@ -452,7 +454,7 @@
 					 { "id": "max_ambig",
 					   "name": "max_ambig",
 					   "class": "text",
-					   "value": "5",
+					   "value": "5", 
 					   "width": "span1",
 					   "text": 'Specify the maximum allowed number of ambiguous basepairs. ' }
 				     ] }
