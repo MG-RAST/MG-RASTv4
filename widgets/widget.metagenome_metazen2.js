@@ -95,7 +95,7 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=999',
+		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=500',
 		success: function (data) {
 		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		    widget.projectData = [];
@@ -390,7 +390,7 @@
 	    }
 	    empty = empty.join('</td><td class="editable viewtext">');
 	    var thtml = [];
-	    thtml.push('<table class="excel" onclick="Retina.WidgetInstances.metagenome_metazen2[1].tableClicked(event,\''+tables[i].name+'\');">');
+		thtml.push('<table class="excel" onclick="Retina.WidgetInstances.metagenome_metazen2[1].tableClicked(event,\''+tables[i].name+'\');">');
 	    thtml.push('<tr><th>&nbsp</th><th>'+colheaders.join('</th><th>')+'</th>');
 
 	    // misc params
@@ -435,11 +435,14 @@
 
     // cell edit helper
     widget.tableClicked = function (event, tablename) {
+		
 	var widget = this;
 	event = event || window.event;
-	
+
+
 	var cell = event.target;
 	if (cell.nodeName == 'TD') {
+		
 
 	    // check if there is an unhandled element
 	    if (widget.currentInputElement) {
@@ -451,12 +454,13 @@
 		jQuery('#cellInfoBox').toggle();
 	    }
 	    var fieldname = widget.tables[tablename].order[cell.cellIndex - 1];
-
+	
 	    if (fieldname == 'envo_release') {
 		return;
 	    }
 	    
-	    var md = widget.tables[tablename][fieldname];
+		var md = widget.tables[tablename][fieldname];
+		// alert(md)
 	    if (! md) {
 		return;
 	    }
@@ -778,7 +782,10 @@
 	    return;
 	}
 
-	var val = widget.currentInputElement.getAttribute('value') != null && widget.currentInputElement.getAttribute('value').length ? widget.currentInputElement.getAttribute('value') : widget.currentInputElement.value;
+	//  var val = widget.currentInputElement.getAttribute('value') != null && widget.currentInputElement.getAttribute('value').length ? widget.currentInputElement.getAttribute('value') : widget.currentInputElement.value;
+
+	// use always the current/updated value
+	var val = widget.currentInputElement.value 
 
 	if (action == 'clear') {
 	    val = "";
@@ -816,6 +823,7 @@
 		msg = 'project names may only contain word characters';
 		val = '';
 		valid = false;
+		alert('Wrong project name')
 	    }
 	    if (widget.currField.field == 'file_name' && val.match(/\.gz$/)) {
 		msg = 'file names must be of the decompressed file';
@@ -825,38 +833,38 @@
 
 	    // check for new sample names
 	    if (widget.currField.table == 'sample') {
-		if (widget.currField.field == 'sample_name') {
-		    if (widget.samples.hasOwnProperty(val) && widget.samples[val] != row) {
-			valid = false;
-			val = '';
-			msg = 'a sample of this name already exists in this sheet';
-		    } else {
-			if (widget.currentInputElement.getAttribute('data-old') != val) {
-			    delete widget.samples[widget.currentInputElement.getAttribute('data-old')];
+			if (widget.currField.field == 'sample_name') {
+				if (widget.samples.hasOwnProperty(val) && widget.samples[val] != row) {
+				valid = false;
+				val = '';
+				msg = 'a sample of this name already exists in this sheet';
+				} else {
+				if (widget.currentInputElement.getAttribute('data-old') != val) {
+					delete widget.samples[widget.currentInputElement.getAttribute('data-old')];
+				}
+				widget.samples[val] = row;
+				stm.DataStore.cv.select.sample_name.push(val);
+				}
 			}
-			widget.samples[val] = row;
-			stm.DataStore.cv.select.sample_name.push(val);
-		    }
-		}
-		else if (widget.currField.field == 'env_package') {
-		    var sheet = 'ep-'+val;
-		    var sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
-		    if (! widget.activeTabs[sheet]) {
-			widget.activeTabs[sheet] = true;
-			document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
-			var name = sheetID.replace(/\|/g, "-");
-			jQuery('#'+name+"-li").toggle();
-		    }
-		}
+			else if (widget.currField.field == 'env_package') {
+				var sheet = 'ep-'+val;
+				var sheetID = sheet.replace(/\|/g, "-").replace(/\s/g, "-");
+				if (! widget.activeTabs[sheet]) {
+				widget.activeTabs[sheet] = true;
+				document.getElementById(sheetID+"Checkbox").setAttribute('checked', 'checked');
+				var name = sheetID.replace(/\|/g, "-");
+				jQuery('#'+name+"-li").toggle();
+				}
+			}
 	    }
 	    
 	} else {
 	    valid = false;
 	    if (widget.metadata.hasOwnProperty(widget.currField.table) && widget.metadata[widget.currField.table].hasOwnProperty(widget.currField.field)) {
-		delete widget.metadata[widget.currField.table][widget.currField.field][row];
-		if ((widget.currField.table == 'sample') && (widget.currField.field == 'sample_name')) {
-		    delete widget.samples[widget.currentInputElement.getAttribute('data-old')];
-		}
+			delete widget.metadata[widget.currField.table][widget.currField.field][row];
+			if ((widget.currField.table == 'sample') && (widget.currField.field == 'sample_name')) {
+				delete widget.samples[widget.currentInputElement.getAttribute('data-old')];
+			}
 	    }
 	}
 
