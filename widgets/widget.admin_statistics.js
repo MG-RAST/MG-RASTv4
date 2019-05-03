@@ -160,11 +160,15 @@
 	// all jobs 
 	for (var i=0;i<stm.DataStore.jobs30.length;i++) {
 
-	    var job = stm.DataStore.jobs30[i];
-
-	    if (! params.activePipelines[job.info.pipeline]) {
-		continue;
-	    }
+		var job = stm.DataStore.jobs30[i];
+		
+		// prevent dirty input from braking page
+		if (! job.hasOwnProperty('info') ) {
+			continue;
+		}
+		if (! (job.info.hasOwnProperty("pipeline") && params.activePipelines[job.info.pipeline] )) {
+			continue;
+		}
 	    
 	    // add chicago timestamps
 	    var chicago = 1000 * 60 * 60 * 6;
