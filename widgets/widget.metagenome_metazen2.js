@@ -95,7 +95,7 @@
 		method: "GET",
 		dataType: "json",
 		headers: stm.authHeader,
-		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=500',
+		url: RetinaConfig.mgrast_api+'/project?private=1&edit=1&verbosity=summary&limit=999',
 		success: function (data) {
 		    var widget = Retina.WidgetInstances.metagenome_metazen2[1];
 		    widget.projectData = [];
@@ -821,9 +821,12 @@
 	    }
 	    if (widget.currField.field == 'project_name' && ! val.match(/^[\w\s]+$/)) {
 		msg = 'project names may only contain word characters';
-		val = '';
+		var invalid_name = val
+		// Needs debugging - mark field instead of deleting value for now
+		// val = '';
+		p.bgColor='red' ;
 		valid = false;
-		alert('Wrong project name')
+		alert('Wrong project name ' + invalid_name)
 	    }
 	    if (widget.currField.field == 'file_name' && val.match(/\.gz$/)) {
 		msg = 'file names must be of the decompressed file';
@@ -869,10 +872,13 @@
 	}
 
 	p.innerHTML = val;
+
 	jQuery(p).toggleClass('viewtext', true);
 	widget.currentInputElement = null;
 	p.setAttribute('style','');
-	
+	// highlite field if not valid
+	p.bgColor= valid ? '' : "LIGHTCORAL" ; 
+
 	if (valid) {
 	    if (! widget.metadata.hasOwnProperty(widget.currField.table)) {
 		widget.metadata[widget.currField.table] = {};
