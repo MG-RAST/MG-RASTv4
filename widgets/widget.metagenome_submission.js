@@ -684,7 +684,7 @@
 	    success: function(data){
 		    document.getElementById('submit_job_button').removeAttribute('disabled');	
 		    if (data.hasOwnProperty('info')) {
-		        alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor it\'s progress.');
+		        alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor its progress.');
 		        window.location = "?mgpage=pipeline";
 		    } else {
 		        alert("There was an error with your submission:\n"+data.ERROR);
