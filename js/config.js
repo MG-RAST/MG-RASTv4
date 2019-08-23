@@ -5,16 +5,16 @@ var RetinaConfig = {
 		       "MG-RAST": { "icon": "MGRAST_favicon.ico",
 		       		    "prefix": "mggo4711",
 		       		    "keyword": "Authorization",
-		       		    "url": "https://api.metagenomics.anl.gov?verbosity=verbose",
+		       		    "url": "https://api.mg-rast.org?verbosity=verbose",
 		       		    "useHeader": true,
 				    "loginField": "login" }
 		     },
 
     // server urls
-    "mgrast_ftp": "ftp://ftp.metagenomics.anl.gov",
-    "mgrast_api": "http://api-dev.metagenomics.anl.gov",
-    "shock_url": "http://shock.metagenomics.anl.gov",
-    "awe_url": "http://awe.metagenomics.anl.gov",
+    "mgrast_ftp": "ftp://ftp.mg-rast.org",
+    "mgrast_api": "http://api-dev.mg-rast.org",
+    "shock_url": "http://shock.mg-rast.org",
+    "awe_url": "http://awe.mg-rast.org",
     
     // versions
     "m5nrversion": "1",

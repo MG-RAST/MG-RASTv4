@@ -26,7 +26,7 @@ function uploadMD() {
 
 function validateMD() {
   if (validationData === null) {
-    var response = UrlFetchApp.fetch("http://api.metagenomics.anl.gov/metadata/cv");
+    var response = UrlFetchApp.fetch("http://api.mg-rast.org/metadata/cv");
     validationData = JSON.parse(response.getContentText());
     
     // turn ontologies into simple arrays
@@ -42,7 +42,7 @@ function validateMD() {
   }
   
   if (validationTemplate === null) {
-    var response = UrlFetchApp.fetch("http://api.metagenomics.anl.gov/metadata/template");
+    var response = UrlFetchApp.fetch("http://api.mg-rast.org/metadata/template");
     validationTemplate = JSON.parse(response.getContentText());
   }
   
@@ -207,8 +207,8 @@ function authCallback(request) {
 
 function getMGRASTService() {
   return OAuth2.createService('mgrast')
-   .setAuthorizationBaseUrl('https://metagenomics.anl.gov/oAuthPPO.cgi?action=dialog')
-   .setTokenUrl('https://metagenomics.anl.gov/oAuthPPO.cgi')
+   .setAuthorizationBaseUrl('https://mg-rast.org/oAuthPPO.cgi?action=dialog')
+   .setTokenUrl('https://mg-rast.org/oAuthPPO.cgi')
    .setClientId('GoogleDocs')
    .setClientSecret('XUrGfCFE2aPxSnm7eXrQjwu5b')
    .setCallbackFunction('authCallback')
@@ -238,7 +238,7 @@ function loadMD() {
   }
   
   // get the data from the API
-  var response = UrlFetchApp.fetch("http://api.metagenomics.anl.gov/metadata/export/mgp"+projectID, {
+  var response = UrlFetchApp.fetch("http://api.mg-rast.org/metadata/export/mgp"+projectID, {
     headers: {
       Authorization: token
     },

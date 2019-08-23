@@ -401,7 +401,7 @@
 					 "value": "assembled",
 					 "class": "checkbox",
 					 "checked": false,
-					 "text": 'Select this option if your input sequence file(s) contain assembled data and include the coverage information within each sequence header as described <a target="blank" href="http://blog.mg-rast.orgv/mg-rast-v3-2-faq/#assembled_pipeline">here</a>.' } ] },
+					 "text": 'Select this option if your input sequence file(s) contain assembled data and include the coverage information within each sequence header as described <a target="blank" href="http://blog.mg-rast.org/mg-rast-v3-2-faq/#assembled_pipeline">here</a>.' } ] },
 				   { "name": "dereplication",
 				     "fields": [
 					 { "id": "dereplication",
