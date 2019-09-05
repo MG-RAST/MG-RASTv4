@@ -370,6 +370,7 @@
 							{ "value": "e_coli", "text": "E. coli, NCBI, st. 536" },
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
 							{ "value" : "d_rerio" , "text" : "Danio rerio GRCz11"} , 
+							{ "value" : "p_maniculatus" , "text" : "Peromyscus maniculatus 1.0"} , 
 							{ "value": "none", "text": "none" } ] }
 				     ] },
 				   { "name": "dynamic trimming",
@@ -426,6 +427,7 @@
 							{ "value": "e_coli", "text": "E. coli, NCBI, st. 536" },
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
 							{ "value" : "d_rerio" , "text" : "Danio rerio GRCz11"} ,
+							{ "value" : "p_maniculatus" , "text" : "Peromyscus maniculatus 1.0"} , 
 							{ "value": "none", "text": "none" } ] }
 				     ] },
 				   { "name": "length filtering",
