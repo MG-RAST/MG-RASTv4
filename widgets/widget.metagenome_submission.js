@@ -370,6 +370,7 @@
 							{ "value": "e_coli", "text": "E. coli, NCBI, st. 536" },
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
 							{ "value" : "d_rerio" , "text" : "Danio rerio GRCz11"} , 
+							{ "value" : "p_maniculatus" , "text" : "Peromyscus maniculatus 1.0"} , 
 							{ "value": "none", "text": "none" } ] }
 				     ] },
 				   { "name": "dynamic trimming",
@@ -401,7 +402,7 @@
 					 "value": "assembled",
 					 "class": "checkbox",
 					 "checked": false,
-					 "text": 'Select this option if your input sequence file(s) contain assembled data and include the coverage information within each sequence header as described <a target="blank" href="http://blog.mg-rast.orgv/mg-rast-v3-2-faq/#assembled_pipeline">here</a>.' } ] },
+					 "text": 'Select this option if your input sequence file(s) contain assembled data and include the coverage information within each sequence header as described <a target="blank" href="http://blog.mg-rast.org/mg-rast-v3-2-faq/#assembled_pipeline">here</a>.' } ] },
 				   { "name": "dereplication",
 				     "fields": [
 					 { "id": "dereplication",
@@ -426,6 +427,7 @@
 							{ "value": "e_coli", "text": "E. coli, NCBI, st. 536" },
 							{ "value": "s_scrofa", "text": "Sus scrofa, NCBI v10.2" },
 							{ "value" : "d_rerio" , "text" : "Danio rerio GRCz11"} ,
+							{ "value" : "p_maniculatus" , "text" : "Peromyscus maniculatus 1.0"} , 
 							{ "value": "none", "text": "none" } ] }
 				     ] },
 				   { "name": "length filtering",
@@ -684,7 +686,7 @@
 	    success: function(data){
 		    document.getElementById('submit_job_button').removeAttribute('disabled');	
 		    if (data.hasOwnProperty('info')) {
-		        alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor it\'s progress.');
+		        alert('Your job was submitted successfully. You are being forwarded to the status page that allows you to monitor its progress.');
 		        window.location = "?mgpage=pipeline";
 		    } else {
 		        alert("There was an error with your submission:\n"+data.ERROR);

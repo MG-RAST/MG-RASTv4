@@ -5,7 +5,7 @@
     <![CDATA[
 	     <div style="height: 40px; background-color: #3c444a; padding-top: 10px;">
 	       <input style="padding-left: 10px;border-radius: 14px 0 0 14px; height: 25px; border: 1px solid #ccc;" id="searchtext" type="text">
-	       <input type="button" style="border-radius: 0 14px 14px 0; border: 1px solid #ccc; margin-left: -6px; height: 25px;" onclick="window.open('http://metagenomics.anl.gov/mgmain.html?mgpage=search&amp;search='+document.getElementById('searchtext').value);" value="search">
+	       <input type="button" style="border-radius: 0 14px 14px 0; border: 1px solid #ccc; margin-left: -6px; height: 25px;" onclick="window.open('http://mg-rast.org/mgmain.html?mgpage=search&amp;search='+document.getElementById('searchtext').value);" value="search">
 	     </div>
     ]]>
   </Content>
