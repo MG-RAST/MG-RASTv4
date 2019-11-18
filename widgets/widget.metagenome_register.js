@@ -87,14 +87,14 @@
 <form class="form-horizontal">\
   <div class="control-group">\
     <label class="control-label" for="inputFirstname">First Name</label><span class="help-inline">
-    <div class="controls">please Note: initials are not acceptable</span>\
-      <input type="text" id="inputFirstname" placeholder="firstname" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline" id="namecheck"></span>\
+    <div class="controls"></span>\
+      <input type="text" id="inputFirstname" placeholder="firstname" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);"><span class="help-inline" id="namecheck">please Note: initials are not acceptable</span>\
     </div>\
   </div>\
   <div class="control-group">\
     <label class="control-label" for="inputLastname">Last Name</label><span class="help-inline">\
-    <div class="controls">please Note: initials are not acceptable</span>\
-      <input type="text" id="inputLastname" placeholder="lastname" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);">\
+    <div class="controls"></span>\
+      <input type="text" id="inputLastname" placeholder="lastname" class="span4" onblur="Retina.WidgetInstances.metagenome_register[1].checkNotEmpty(this);">please Note: initials are not acceptable\
     </div>\
   </div>\
   <div class="control-group">\
