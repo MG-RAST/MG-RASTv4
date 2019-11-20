@@ -819,7 +819,7 @@
 		val = "";
 		valid = false;
 	    }
-	    if (widget.currField.field == 'project_name' && ! val.match(/^[\w\s]+$/)) {
+	    if (widget.currField.field == 'project_name' && ! val.match(/^[\w\s\-\_]+$/)) {
 		msg = 'project names may only contain word characters';
 		var invalid_name = val
 		// Needs debugging - mark field instead of deleting value for now
