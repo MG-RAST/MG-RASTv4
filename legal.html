@@ -1,10 +1,116 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
   <head>
-	<meta http-equiv="Refresh" content="0; url="https://blog.mg-rast.org/p/terms-of-service-for-mg-rast.html" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <!-- title and icon -->
+    <title>Terms of Service</title>
+    <link rel="icon" href="images/MGRAST_favicon.ico" type="image/x-icon">
+
+    <!-- default js -->
+    <script type="text/javascript" src="Retina/js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="Retina/js/stm.js"></script>
+    <script type="text/javascript" src="Retina/js/retina.js"></script>
+
+    <!-- page init js -->
+    <script type="text/javascript" src="js/legal.js"></script>
+    
+    <!-- bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="Retina/css/bootstrap.min.css">
+
+    <!-- webapp initialization -->
+    <script type="text/javascript">
+      jQuery( window ).load(function(){
+      initWebApp();
+      });
+    </script>
+
   </head>
+
   <body>
-    <p>Please follow <a href="https://blog.mg-rast.org/p/terms-of-service-for-mg-rast.html">this link</a>.</p>
+    
+    <!-- header bar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" style="box-shadow: 0 3px 3px #BBBBBB;">
+      <div class="navbar-inner">
+	<div class="container" style="width: 100%;">
+
+	  <!-- logo and title -->
+          <img src="images/MGRAST_logo.png" style="float: left; height: 59px; margin-top: 3px; cursor: pointer;" onclick="window.location='mgmain.html';">
+	  
+	  <h3 style="color: white; padding-left: 350px; font-size: 20px; font-weight: 200;">Terms of Service and Funding Information</h3>
+	  
+	</div>
+      </div>
+    </div>
+
+    <div style="width: 800px; margin-left: auto; margin-right: auto; margin-top: 100px;">
+
+      <h3>Terms of Service</h3>
+
+      <p>
+	<ul>
+	  <li>
+	    MG-RAST is a web-based computational metagenome analysis service provided on a best-effort basis. We strive to provide correct analysis and privacy, but we cannot guarantee correctness of results, integrity of data, or privacy. We are not responsible for any HIPAA regulations regarding human samples uploaded by users. We will try to provide results quickly and will try to inform users about wait times. We will inform users about changes to the system and the underlying data.
+	  </li>
+	  <li>
+	    We reserve the right to delete non-public data sets after 120 days.
+	  </li>
+	  <li>
+	    We reserve the right to reject data sets that are not complying with the purpose of MG-RAST.
+	  </li>
+	  <li>
+	    We reserve the right to perform additional data analysis (e.g., search for novel sequence errors to improve our sequence quality detection, clustering to improve sequence similarity searches.), in certain cases, utilize the results. We will <b>never</b> release user-provided data without consent or publish user data before the user.
+	  </li>
+	  <li>
+	    The user acknowledges the restrictions stated above and will cite MG-RAST when reporting on work.
+	  </li>
+	  <li>
+	    The user acknowledges the fact that data sharing on MG-RAST is meant as a pre-publication mechanism. We strongly encourage users to make data publicly accessible in MG-RAST once published in a journal (or after 120 days).
+	  </li>
+	  <li>
+	    The user acknowledges that data (including metadata) provided is correct and that the user either owns the data or has the permission of the owner to upload data and or publish data on MG-RAST.
+	  </li>
+	  <li>
+	    We reserve the right to curate and update public metadata.
+	  </li>
+	  <li>
+	    We reserve the right at any time to modify this Agreement. Such modifications and additional terms and conditions will be effective immediately and incorporated into this Agreement. MG-RAST will make a reasonable effort to contact users via email of any changes. Your continued use of MG-RAST will be deemed acceptance thereof.
+	  </li>
+	  <li>Data publicly available in MG-RAST is available without restrictions (<a href="https://creativecommons.org/share-your-work/public-domain/cc0/" target="_blank">CC0 license</a>), provided that both MG-RAST and the original authors are cited.</li>
+	  <li>
+	    Users agree not to share their account credentials, we reserve the right to disable accounts when there is evidence of account sharing.
+	    </li>
+	</ul>
+      </p>
+
+      <div id="agreement" style="text-align: center; padding-top: 20px; padding-bottom: 20px;"></div>
+
+      <h3>Funding</h3>
+
+      <p>This project is funded by the NIH grant R01AI123037 and by NSF grant 1645609.</p>
+
+      <p>This work used the Magellan machine (U.S.Department of Energy, Office of Science, Advanced Scientific Computing Research, under contract  DE-AC02-06CH11357) at Argonne National Laboratory, and the PADS resource (National Science Foundation grant OCI-0821678) at the Argonne National Laboratory/University of Chicago Computation Institute.</p>
+
+      <p>In the past the following sources contributed to MG-RAST development:</p>
+      
+      <ul>
+	<li>U.S. Dept. of Energy under Contract DE-AC02-06CH11357</li>
+	<li>Sloan Foundation (SLOAN \#2010-12)</li>
+	<li>NIH NIAID (HHSN272200900040C)</li>
+	<li>NIH Roadmap HMP program (1UH2DK083993-01)</li>
+      </ul>
+
+      <h3>Citations</h3>
+      
+      <p>If you are using this site in your research please use the following citation:</p>
+
+      <p><a href="http://www.biomedcentral.com/1471-2105/9/386" target=_blank>The metagenomics RAST server – a public resource for the automatic phylogenetic and functional analysis of metagenomes</a><br>F Meyer, D Paarmann, M D'Souza, R Olson, EM Glass, M Kubal, T Paczian, A Rodriguez, R Stevens, A Wilke, J Wilkening and RA Edwards<br>BMC Bioinformatics 2008, 9:386</p>
+
+    </div>
+
+    <div style="height: 200px;"></div>
+
+    <div id="login_space" style="display: none;"></div>
   </body>
 </html>
-
