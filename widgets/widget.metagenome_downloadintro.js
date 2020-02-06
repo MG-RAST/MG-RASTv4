@@ -30,7 +30,7 @@
 
 	// create the html
 	var html = [ "<h3><img src='Retina/images/cloud-download.png' style='width: 24px; margin-right: 10px; position: relative; bottom: 3px;'>Access data in MG-RAST</h3>" ];
-	html.push("<p>MG-RAST hosts over 100 Tbp of metagenomic data which can be downloaded in multiple ways described in detail below. Access to private data requires the use of a webkey. The owner of a dataset has control over sharing access to their data with individuals or the public.</p><p>Data in MG-RAST can be accessed in a variety of ways. Not all data is publicly accessible. Details on data access are available in the <a href='https://help.mg-rast.org/user_manual.html' target='_blank'>manual <img src='Retina/images/file-pdf.png' style='width: 16px; position: relative; bottom: 3px;'></a>. Below are three main routes for data access.</p><p>The <a href='?mgpage=analysis'>analysis page <img src='Retina/images/bar-chart.png' style='width: 16px; position: relative; bottom: 3px;'></a> allows analysis of data, comparison of data and extraction of subsets as well as combinations of the former.</p>");
+	html.push("<p>MG-RAST hosts over 200 Tbp of metagenomic data which can be downloaded via the <a href="https://api.mg-rast.org/api.html">API</a>. Access to private data requires the use of a webkey. The owner of a dataset has control over sharing access to their data with individuals or the public.</p><p>Data in MG-RAST can be accessed in a variety of ways. Not all data is publicly accessible. Details on data access are available in the <a href='https://help.mg-rast.org/user_manual.html' target='_blank'>manual <img src='Retina/images/file-pdf.png' style='width: 16px; position: relative; bottom: 3px;'></a>. Below are three main routes for data access.</p><p>The <a href='?mgpage=analysis'>analysis page <img src='Retina/images/bar-chart.png' style='width: 16px; position: relative; bottom: 3px;'></a> allows analysis of data, comparison of data and extraction of subsets as well as combinations of the former.</p>");
 
 	html.push('<div class="row-fluid">\
             <ul class="thumbnails">\
@@ -48,16 +48,6 @@
               </li>\
               <li class="span4">\
                 <div class="thumbnail" style="min-height: 520px;">\
-                  <img src="Retina/images/ftp.png" style="margin-top: 15px;">\
-                  <div class="caption">\
-                    <h3>FTP site</h3>\
-                    <p>Our FTP site features downloads for all public projects as well as our non-redundant MD5 database.</p>\
-                    <p style="text-align: center; margin-top: 190px;"><a class="btn" href="'+RetinaConfig.mgrast_ftp+'">visit FTP site</a></p>\
-                  </div>\
-                </div>\
-              </li>\
-              <li class="span4">\
-                <div class="thumbnail" style="min-height: 520px;">\
                   <img src="Retina/images/api.png" style="margin-top: 15px;">\
                   <div class="caption">\
                     <h3>API & commandline-tools</h3>\
@@ -70,7 +60,7 @@
             </ul>\
           </div>');
 
-	html.push('<h3><img style="width: 32px; position: relative; bottom: 4px;" src="Retina/images/github.png"> Source Code</h3><p>The MG-RAST source code is available on <a href="https://github.com/MG-RAST/MG-RASTv4" target=_blank>github</a>.</p>');
+	html.push('<h3><img style="width: 32px; position: relative; bottom: 4px;" src="Retina/images/github.png"> Source Code</h3><p>The MG-RAST source code is available on <a href="https://github.com/MG-RAST/" target=_blank>github</a>.</p>');
 	
 	content.innerHTML = html.join("");
     };
