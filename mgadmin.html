@@ -66,6 +66,7 @@
 					  "sidebar": document.getElementById("sidebar") });
 			    return;
 			}
+
 			stm.user = data.user;
 			stm.authHeader = { "Authorization": "mgrast "+data.token};
 			mgp.display({ "main": document.getElementById("content"),
